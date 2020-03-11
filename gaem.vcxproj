@@ -22,19 +22,19 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{DD692F54-6DEA-4A3F-A5C9-D6C1D7E488A7}</ProjectGuid>
     <RootNamespace>Gaem</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -140,25 +140,26 @@
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui_sfml\imgui-SFML.cpp" />
+    <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\rand.cpp" />
+    <ClCompile Include="src\tilemap.cpp" />
+    <ClCompile Include="src\transition.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui_sfml\imconfig-SFML.h" />
-    <ClInclude Include="imgui_sfml\imgui-SFML.h" />
-    <ClInclude Include="imgui_sfml\imgui-SFML_export.h" />
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\anim_data.h" />
     <ClInclude Include="src\bounds.h" />
+    <ClInclude Include="src\character.h" />
     <ClInclude Include="src\cleaner.h" />
     <ClInclude Include="src\collider.h" />
     <ClInclude Include="src\door.h" />
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\extremity.h" />
     <ClInclude Include="src\intro_scene.h" />
+    <ClInclude Include="src\jumpman.h" />
     <ClInclude Include="src\lever.h" />
     <ClInclude Include="src\magic_enum.h" />
     <ClInclude Include="src\main_scene.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\cadaver.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\popupText.h" />
+    <ClInclude Include="src\scene_jumpman.h" />
     <ClInclude Include="src\scene_manager.h" />
     <ClInclude Include="src\selfregister.h" />
     <ClInclude Include="src\entity_system.h" />
@@ -177,6 +179,8 @@
     <ClInclude Include="src\rand.h" />
     <ClInclude Include="src\spawner.h" />
     <ClInclude Include="src\tile.h" />
+    <ClInclude Include="src\tilemap.h" />
+    <ClInclude Include="src\transition.h" />
     <ClInclude Include="src\vector.h" />
   </ItemGroup>
   <ItemGroup>

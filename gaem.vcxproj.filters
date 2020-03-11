@@ -8,13 +8,12 @@
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\rand.cpp" />
+    <ClCompile Include="src\character.cpp" />
+    <ClCompile Include="src\jumpman.cpp" />
+    <ClCompile Include="src\tilemap.cpp" />
+    <ClCompile Include="src\transition.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui_sfml\imconfig-SFML.h" />
-    <ClInclude Include="imgui_sfml\imgui-SFML.h" />
-    <ClInclude Include="imgui_sfml\imgui-SFML_export.h" />
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\anim_data.h" />
     <ClInclude Include="src\bounds.h" />
@@ -37,12 +36,17 @@
     <ClInclude Include="src\popupText.h" />
     <ClInclude Include="src\door.h" />
     <ClInclude Include="src\tile.h" />
+    <ClInclude Include="src\character.h" />
     <ClInclude Include="src\intro_scene.h" />
-    <ClInclude Include="src\magic_enum.h" />
+    <ClInclude Include="src\jumpman.h" />
     <ClInclude Include="src\main_scene.h" />
     <ClInclude Include="src\main_scene_collider.h" />
     <ClInclude Include="src\main_scene_tile.h" />
     <ClInclude Include="src\scene_manager.h" />
+    <ClInclude Include="src\tilemap.h" />
+    <ClInclude Include="src\transition.h" />
+    <ClInclude Include="src\magic_enum.h" />
+    <ClInclude Include="src\scene_jumpman.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\cinta.h" />

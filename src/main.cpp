@@ -13,6 +13,7 @@
 #include "input.h"
 #include "mates.h"
 #include "intro_scene.h"
+#include "scene_jumpman.h"
 #include "main_scene.h"
 
 Scene* SceneManager::currentScene = nullptr;
@@ -39,7 +40,8 @@ int main()
 
 	sf::Clock dtClock;
 
-	Scene* currentScene = new IntroScene();
+	//Scene* currentScene = new IntroScene();
+	Scene* currentScene = new JumpScene();
 	SceneManager::SetScene(currentScene);
 	currentScene->EnterScene();
 	while (window.isOpen())
