@@ -237,7 +237,7 @@ struct Cadaver : SortedDrawable, Cintable, EntS<Cadaver>
 		else //DrawEfectito() de la mesa (TODO: mover a la mesa)
 		{
 			sf::RectangleShape shape;
-			int color = std::max(std::min(1.0f, abs(sin(0.75f*isLetClock.getElapsedTime().asSeconds()))) * 255, 64.0f);
+			float color = std::max(std::min(1.0f, abs(sin(0.75f*isLetClock.getElapsedTime().asSeconds()))) * 255, 64.0f);
 			shape.setFillColor(sf::Color(0, (color*3)/4, color));
 			shape.setPosition(pos.x - 7.5f, pos.y - 8.5f);
 			shape.setSize(sf::Vector2f(15, 15));

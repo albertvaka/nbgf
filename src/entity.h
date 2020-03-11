@@ -23,11 +23,11 @@ const float CINTA_SPEED = 8/320.f;
 
 vec DirToVec(EntityDirection dir) {
 	switch(dir) {
-		case  EntityDirection::RIGHT: return vec(1,0);
-		case  EntityDirection::LEFT: return vec(-1,0);
-		case  EntityDirection::UP: return vec(0,-1);
-		case  EntityDirection::DOWN: return vec(0,1);
-		case EntityDirection::NONE: return vec(0,0);
+		case EntityDirection::RIGHT: return vec(1,0);
+		case EntityDirection::LEFT: return vec(-1,0);
+		case EntityDirection::UP: return vec(0,-1);
+		case EntityDirection::DOWN: return vec(0,1);
+		default: return vec(0,0);
 	}
 }
 
