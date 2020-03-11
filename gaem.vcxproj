@@ -140,7 +140,6 @@
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui_sfml\imgui-SFML.cpp" />
-    <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -152,7 +151,6 @@
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\anim_data.h" />
     <ClInclude Include="src\bounds.h" />
-    <ClInclude Include="src\character.h" />
     <ClInclude Include="src\cleaner.h" />
     <ClInclude Include="src\collider.h" />
     <ClInclude Include="src\door.h" />

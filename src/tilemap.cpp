@@ -7,7 +7,6 @@ void TileMap::Init(int seed, sf::Vector2i s, float upt)
 {
 	sizes = s;
 	unitsPerTile = upt;
-	fail = false;
 
 	srand(seed);
 	tiles.clear();
@@ -30,13 +29,7 @@ bool TileMap::isColl(sf::Vector2i pos)
 bool TileMap::isColl(int x, int y)
 {
 	if ( x < 0 || x >= sizes.x ) return true;
-	if ( y < 0)
-	{
-		fail = true;
-		return true;
-	}
-	if ( y >= sizes.y ) return true;
-
+	if ( y < 0 || y >= sizes.y ) return true;
 	return getTile(x, y);
 }
 
@@ -66,22 +59,29 @@ bool TileMap::getTile(int x, int y)
 	return tiles[y*sizes.x + x];
 }
 
-void TileMap::Draw(sf::RenderTarget& window)
+void TileMap::Draw(sf::Sprite& sprite, sf::RenderTarget& window)
 {
-	// Fixme: optimise to bounds
-	//Bounds screen = Camera::GetCameraBounds();
-	for (int x = 0; x < sizes.x + 1; x++)
+	Bounds screen = Camera::GetCameraBounds();
+	int left = screen.Left() / unitsPerTile;
+	int right = screen.Right() / unitsPerTile;
+	int top = screen.Top() / unitsPerTile;
+	int bottom = screen.Bottom() / unitsPerTile;
+	for (int x = left - 1; x < right + 1; x++)
 	{
-		for (int y = 0; y < sizes.y+1; y++)
+		for (int y = top - 1; y < bottom + 1; y++)
 		{
-			Bounds b(vec(x,y)*unitsPerTile,
-				vec(x+1,y+1)*unitsPerTile);
- 
-			sf::Color color(255*0.200f, 255 * 0.100f, 255 * 0.100f);
-			if (y > sizes.y) color = sf::Color(255 * 1.0f, 255 * 0.075f, 255 * 0.0f);
-			else if(isColl(x,y)) sf::Color(255 * 0.400f, 255 * 0.275f, 255 * 0.195f);
-			
-			b.Draw(window, color, color);
+			if (y >= sizes.y) {
+				//lava
+				sprite.setTextureRect(sf::Rect((8 + ((100+x) % 3)) * 16, 13 * 16, 16, 16));
+			} else if (isColl(x, y)) {
+				sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
+			}
+			else {
+				continue;
+			}
+			sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+			window.draw(sprite);
+
 		}
 	}
 	

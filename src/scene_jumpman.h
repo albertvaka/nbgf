@@ -42,7 +42,7 @@ struct JumpScene : Scene {
 
 		player.pos = vec(170, 160);
 		player.Reset();
-		map.Init(42, sf::Vector2i(1000, 25), 24);
+		map.Init(time(NULL), sf::Vector2i(1000, 25), 16);
 
 		sf::Vector2i pos = map.tilePos(vec(160, 160));
 		map.set(pos.x, pos.y - 1, true);
@@ -60,23 +60,21 @@ struct JumpScene : Scene {
 		player.Update(dt);
 
 		Camera::ChangeZoomWithPlusAndMinus(10.f, dt);
-		Camera::MoveCameraWithArrows(10.f, dt);
+		Camera::MoveCameraWithArrows(50.f, dt);
 		if (!transition.reached()) {
 			Camera::SetZoom(transition.getPos());
 		}
 		Camera::SetCameraCenter(player.pos);
 
-		//if (map.playerHasFailed()) EnterScene();
+		//if (fail) EnterScene();
 	}
 
 	void Draw(sf::RenderTarget& window) override
 	{
-		//window.clear(sf::Color::Black);
+		window.clear(sf::Color(255*0.200f, 255 * 0.100f, 255 * 0.100f));
 
-		map.Draw(window);
+		map.Draw(sprite, window);
 		player.Draw(sprite, window);
-
-
 	}
 
 };

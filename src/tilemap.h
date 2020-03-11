@@ -9,7 +9,7 @@ class TileMap
 {
 public:
 	void Init(int seed, sf::Vector2i sizes, float unitsPerTile);
-	void Draw(sf::RenderTarget& window);
+	void Draw(sf::Sprite& sprite, sf::RenderTarget& window);
 
 	void set(int x, int y, bool col); //set tile collisionable
 	bool isColl(sf::Vector2i pos); //is collisionable
@@ -26,14 +26,10 @@ public:
 	float Left(int x);
 	float Right(int x);
 
-	bool playerHasFailed() { return fail; }
-
 private:
 	float unitsPerTile;
 	sf::Vector2i sizes;
 	int width, height;
 	std::vector<bool> tiles;
 	bool getTile(int i, int j);
-
-	bool fail;
 };
