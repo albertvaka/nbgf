@@ -19,7 +19,7 @@ void JumpScene::EnterScene()
 	sprite.setTextureRect(sf::IntRect(16, 16, 16, 16));
 
 	transition.setTime(2.0f);
-	transition.setPos(0.1f* GameData::GAME_ZOOM);
+	transition.setPos(0.6f* GameData::GAME_ZOOM);
 	transition.goPos(GameData::GAME_ZOOM);
 
 	player.pos = vec(160, 160);
@@ -46,13 +46,28 @@ void JumpScene::Update(int dtMilis) {
 	player.Update(dt);
 
 	Camera::ChangeZoomWithPlusAndMinus(10.f, dt);
-	Camera::MoveCameraWithArrows(50.f, dt);
 	if (!transition.reached()) {
 		Camera::SetZoom(transition.getPos());
 	}
-	Camera::SetCameraCenter(player.pos);
+	//Camera::MoveCameraWithArrows(50.f, dt);
+	vec camPos = player.pos;
+	float minY = (Camera::GetCameraBounds().height / 2.f) - (1 * 16);
+	float maxY = ((25 + 1) * 16) - (Camera::GetCameraBounds().height / 2.f);
+	if (maxY < minY) {
+		minY = maxY - 1;
+	}
+	Mates::Clamp(camPos.y, minY, maxY);
+	float minX = (Camera::GetCameraBounds().width / 2.f) - (1 * 16);
+	float maxX = ((1000 + 1) * 16) - (Camera::GetCameraBounds().width / 2.f);
+	if (maxX < minX) {
+		minX = maxX - 1;
+	}
+	Mates::Clamp(camPos.x, minX, maxX);
+	Camera::SetCameraCenter(camPos);
 
-	//if (player.pos.y < 0) EnterScene();
+	if (player.grounded && map.tilePos(player.pos + vec(0.1f, 0)).y == 24) {
+		EnterScene();
+	}
 }
 
 void JumpScene::Draw(sf::RenderTarget& window) 

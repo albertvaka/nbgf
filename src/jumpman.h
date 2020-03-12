@@ -5,9 +5,8 @@
 #include "tilemap.h"
 #include <iostream>
 
-class JumpMan
+struct JumpMan
 {
-public:
     JumpMan(TileMap* map);
     void Update(float GameTime);
     void Draw(sf::Sprite& spr, sf::RenderTarget& window) {
@@ -31,9 +30,7 @@ public:
     vec siz;
     vec cen;
     
-private:
     enum { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
-
 
     bool grounded;
     short onWall;
