@@ -4,9 +4,9 @@
 const vec run_acc(1400, 0); //aceleracion corriendo
 const vec air_acc(400, 0);  //aceleracion en el aire
 const vec fri_acc(1000, 800); //aceleracion de la friccion
-const vec gra_acc(0, -600); //aceleracion de la gravedad
+const vec gra_acc(0, 600); //aceleracion de la gravedad
 const vec vel_max(225, 200); //velocidad maxima que adquiere un personaje
-const vec vel_jmp(150, 150); //velocidad que adquiere un personaje al saltar
+const vec vel_jmp(150, -150); //velocidad que adquiere un personaje al saltar
 
 JumpMan::JumpMan(TileMap* _map)
 	: acc(0, 0)
@@ -145,6 +145,7 @@ void JumpMan::Update(float GameTime)
 	vec direction = posf - pos0;
 	if (direction.y < 0) //Vamos hacia abajo
 	{
+		grounded = false;
 		//le restamos a la Y la mitad de su tamaño para obtener la Y inferior del sprite
 		int yo = map->tilePosY(pos0.y - csiz.y),
 			yn = map->tilePosY(posf.y - csiz.y),
@@ -158,17 +159,15 @@ void JumpMan::Update(float GameTime)
 				{
 					posf.y = map->Top(y) + csiz.y;
 					vel.y = 0;
-					grounded = true;
+					jumpTimeLeft = 0;
 					goto vert_exit;
 				}
 			}
 		}
-		grounded = false;
 
 	}
 	else if (direction.y > 0) //Vamos hacia arriba
 	{
-		grounded = false;
 		//le sumamos a la Y la mitad de su tamaño para obtener la Y superior del sprite
 		int yo = map->tilePosY(pos0.y + cen.y),
 			yn = map->tilePosY(posf.y + cen.y),
@@ -182,11 +181,12 @@ void JumpMan::Update(float GameTime)
 				{
 					posf.y = map->Bottom(y) - cen.y;
 					vel.y = 0;
-					jumpTimeLeft = 0;
+					grounded = true;
 					goto vert_exit;
 				}
 			}
 		}
+		grounded = false;
 
 	}
 
