@@ -144,6 +144,7 @@
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\rand.cpp" />
+    <ClCompile Include="src\scene_jumpman.cpp" />
     <ClCompile Include="src\tilemap.cpp" />
     <ClCompile Include="src\transition.cpp" />
   </ItemGroup>

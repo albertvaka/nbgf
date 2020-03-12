@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector.h"
+#include "bounds.h"
 #include "tilemap.h"
 #include <iostream>
 
@@ -19,15 +20,20 @@ public:
         vel = vec(0, 0);
     }
 
+    Bounds bounds() {
+        return Bounds(pos, siz, true);
+    }
+
     vec pos;
     vec acc;
     vec vel;
+
+    vec siz;
+    vec cen;
     
 private:
     enum { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
 
-    vec siz;
-    vec cen;
 
     bool grounded;
     short onWall;

@@ -11,6 +11,7 @@
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\tilemap.cpp" />
     <ClCompile Include="src\transition.cpp" />
+    <ClCompile Include="src\scene_jumpman.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\animation.h" />
