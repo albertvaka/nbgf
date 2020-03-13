@@ -30,7 +30,7 @@ struct TextMolest : Entity, EntS<TextMolest>
 		speed.y = -16* 1.8f;
 	}
 
-	bool descansito = false;
+	bool rotatzione = false;
 	int descansito_rot = 0;
 
 	void Update(int dt)
@@ -39,22 +39,18 @@ struct TextMolest : Entity, EntS<TextMolest>
 
 		pos += (dt/1000.0f) * speed;
 
-		if (timer > 5800)
-		{
-			speed = vec(0, 0);
-			descansito = true;
-			descansito_rot += dt;
-		}
-		if (timer > 9000)
-		{
-			speed.y = +16 * 3.0f;
-			descansito = true;
-			descansito_rot += dt;
-		}
 		if (timer > 22000)
 		{
 			alive = false;
-			descansito = true;
+		}
+		else if (timer > 9000)
+		{
+			speed.y = 16 * 3.0f;
+			descansito_rot += 2 * dt;
+		} else if (timer > 5800)
+		{
+			speed = vec(0, 0);
+			rotatzione = true;
 			descansito_rot += dt;
 		}
 	}
@@ -69,8 +65,8 @@ struct TextMolest : Entity, EntS<TextMolest>
 		if (m_type == GOOD)
 		{
 			spr.setOrigin(16 * 2.5f, 8);
-		}
-		if (m_type == BAD)
+		} 
+		else if (m_type == BAD)
 		{
 			spr.setOrigin(16 * 1.5f, 8);
 		}
@@ -79,7 +75,7 @@ struct TextMolest : Entity, EntS<TextMolest>
 		spr.setScale(scx, scy);
 
 
-		if (descansito)
+		if (rotatzione)
 		{
 			rot = sin(5800 / 100.0f) * 5 + (360.0f * descansito_rot/3000.0f);
 		}

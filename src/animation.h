@@ -31,19 +31,14 @@ struct Animation
 		if (anim_timer > anim_data->timer[current_frame])
 		{
 			anim_timer -= anim_data->timer[current_frame];
-			current_frame++;
-			if (current_frame >= anim_data->frames)
+			if (current_frame < anim_data->frames-1)
 			{
-
-				if (loopable)
-				{
-					current_frame = 0;
-					anim_timer = anim_timer % anim_data->timer[0];
-				}
-				else
-				{
-					current_frame--;
-				}
+				current_frame++;
+			}
+			else if (loopable)
+			{
+				current_frame = 0;
+				anim_timer = anim_timer % anim_data->timer[0];
 			}
 		}
 	}
