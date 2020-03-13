@@ -223,7 +223,7 @@ vert_exit:
 				if (map->isColl(x, y))
 				{
 					posf.x = map->Right(x) + cen.x;
-					vel.x = 0;
+					vel.x = -3.f;
 					onWall = ONWALL_LEFT;
 					goto horz_exit;
 				}
@@ -243,7 +243,7 @@ vert_exit:
 				if (map->isColl(x, y))
 				{
 					posf.x = map->Left(x) - csiz.x;
-					vel.x = 0;
+					vel.x = 3.f;
 					onWall = ONWALL_RIGHT;
 					goto horz_exit;
 				}
