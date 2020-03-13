@@ -119,7 +119,7 @@ void JumpMan::Update(float dt)
 			vel.y += fri.y * dt;
 			if (vel.y > 0) vel.y = 0;
 		}
-		else if (vel.x > 0)
+		else if (vel.y > 0)
 		{
 			vel.y -= fri.y * dt;
 			if (vel.y < 0) vel.y = 0;
