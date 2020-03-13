@@ -3,17 +3,14 @@
 #include "vector.h"
 #include "bounds.h"
 #include "tilemap.h"
+#include "animation.h"
 #include <iostream>
 
 struct JumpMan
 {
     JumpMan(TileMap* map);
     void Update(float GameTime);
-    void Draw(sf::Sprite& spr, sf::RenderTarget& window) {
-        spr.setTextureRect(sf::Rect(0, 0, 16, 16));
-        spr.setPosition(pos.x-cen.x, pos.y-cen.y);
-        window.draw(spr);
-    }
+    void Draw(sf::Sprite& spr, sf::RenderTarget& window);
     void Reset() {
         acc = vec(0, 0);
         vel = vec(0, 0);
@@ -26,6 +23,8 @@ struct JumpMan
     vec pos;
     vec acc;
     vec vel;
+
+    Animation animation;
 
     vec siz;
     vec cen;
@@ -41,12 +40,5 @@ struct JumpMan
 
     TileMap* map;
 
-    void ensureAnim(std::string name) {
-        // TODO: Change anim and set size and center to new anim frame
-        siz.x = 16;
-        siz.y = 16;
-        cen.x = 8;
-        cen.y = 8;
-    }
 };
 

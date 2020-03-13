@@ -12,6 +12,7 @@
     <ClCompile Include="src\tilemap.cpp" />
     <ClCompile Include="src\transition.cpp" />
     <ClCompile Include="src\scene_jumpman.cpp" />
+    <ClCompile Include="src\anim_data.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\animation.h" />

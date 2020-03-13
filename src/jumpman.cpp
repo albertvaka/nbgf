@@ -8,6 +8,7 @@ const vec gra_acc(0, 600); //aceleracion de la gravedad
 const vec vel_max(225, 200); //velocidad maxima que adquiere un personaje
 const vec vel_jmp(150, -150); //velocidad que adquiere un personaje al saltar
 
+
 JumpMan::JumpMan(TileMap* _map)
 	: acc(0, 0)
 	, vel(0, 0)
@@ -17,10 +18,28 @@ JumpMan::JumpMan(TileMap* _map)
 	, crouched(false)
 	, map(_map)
 {
-	ensureAnim("Idle");
+	animation.Ensure(MARIO_IDLE);
+	siz.x = 16;
+	siz.y = 32;
+	cen.x = 8;
+	cen.y = 16;
 }
 
-void JumpMan::Update(float GameTime)
+void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
+	spr.setTextureRect(animation.CurrentFrame());
+	if (lookingLeft) {
+		spr.setScale(-1.f, 1.f);
+		spr.setPosition(pos.x + cen.x, pos.y - cen.y);
+	}
+	else {
+		spr.setScale(1.f, 1.f);
+		spr.setPosition(pos.x - cen.x, pos.y - cen.y);
+	}
+	window.draw(spr);
+	spr.setScale(1.f, 1.f);
+}
+
+void JumpMan::Update(float dt)
 {
 	acc = vec(0,0);
 	crouched = ((crouched||grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched&&!grounded);
@@ -83,12 +102,12 @@ void JumpMan::Update(float GameTime)
 	{
 		if (vel.x < 0)
 		{
-			vel.x += fri.x * GameTime;
+			vel.x += fri.x * dt;
 			if (vel.x > 0) vel.x = 0;
 		}
 		else if (vel.x > 0)
 		{
-			vel.x -= fri.x * GameTime;
+			vel.x -= fri.x * dt;
 			if (vel.x < 0) vel.x = 0;
 		}
 
@@ -97,24 +116,24 @@ void JumpMan::Update(float GameTime)
 	{
 		if (vel.y < 0)
 		{
-			vel.y += fri.y * GameTime;
+			vel.y += fri.y * dt;
 			if (vel.y > 0) vel.y = 0;
 		}
 		else if (vel.x > 0)
 		{
-			vel.y -= fri.y * GameTime;
+			vel.y -= fri.y * dt;
 			if (vel.y < 0) vel.y = 0;
 		}
 
 	}
 
 	if (jumpTimeLeft <= 0) acc += gra_acc; //La gravedad afecta mientras no salte
-	else jumpTimeLeft -= GameTime; //Se le resta el tiempo mientras salta
+	else jumpTimeLeft -= dt; //Se le resta el tiempo mientras salta
 	vec pos0 = pos; //pos0: posicion inicial
 
 	//uniformly accelerated linear motion, posf: posicion final
-	vec posf = pos0 + vel * GameTime + acc * GameTime * GameTime * 0.5f;
-	vel = vel + acc * GameTime;
+	vec posf = pos0 + vel * dt + acc * dt * dt * 0.5f;
+	vel = vel + acc * dt;
 
 	//Hacemos clamp de las velocidades
 	if (vel.x > vel_max.x) vel.x = vel_max.x;
@@ -236,11 +255,11 @@ vert_exit:
 horz_exit:
 	pos = posf; //asignamos la posicion final a pos
 
-	//SpriteAnim::Update(GameTime);
+	animation.Update((int)(dt*1000));
 
 	if (crouched)
 	{
-		ensureAnim("Crouch");
+		animation.Ensure(MARIO_CROUCH);
 	}
 	else
 	{
@@ -248,23 +267,23 @@ horz_exit:
 		{
 			if (Keyboard::IsKeyPressed(GameKeys::LEFT) && !Keyboard::IsKeyPressed(GameKeys::RIGHT))
 			{
-				if (vel.x > 0) ensureAnim("Turn");
-				else ensureAnim("Walk");
+				if (vel.x > 0) animation.Ensure(MARIO_TURN);
+				else animation.Ensure(MARIO_WALK);
 			}
 			else if (Keyboard::IsKeyPressed(GameKeys::RIGHT) && !Keyboard::IsKeyPressed(GameKeys::LEFT))
 			{
-				if (vel.x < 0) ensureAnim("Turn");
-				else ensureAnim("Walk");
+				if (vel.x < 0) animation.Ensure(MARIO_TURN);
+				else animation.Ensure(MARIO_WALK);
 			}
 			else
 			{
-				ensureAnim("Idle");
+				animation.Ensure(MARIO_IDLE);
 			}
 		}
 		else
 		{
-			if (onWall) ensureAnim("OnWall");
-			else ensureAnim("Jump");
+			if (onWall) animation.Ensure(MARIO_ONWALL);
+			else animation.Ensure(MARIO_JUMP);
 		}
 	}
 }

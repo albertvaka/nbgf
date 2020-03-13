@@ -140,6 +140,7 @@
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui_sfml\imgui-SFML.cpp" />
+    <ClCompile Include="src\anim_data.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\main.cpp" />

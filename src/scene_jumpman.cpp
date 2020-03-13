@@ -16,7 +16,9 @@ void JumpScene::EnterScene()
 
 	texture.loadFromFile("data/spritesheet.png");
 	sprite.setTexture(texture);
-	sprite.setTextureRect(sf::IntRect(16, 16, 16, 16));
+	
+	marioTexture.loadFromFile("data/mario.png");
+	marioSprite.setTexture(marioTexture);
 
 	transition.setTime(2.0f);
 	transition.setPos(0.6f* GameData::GAME_ZOOM);
@@ -76,7 +78,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 
 	map.Draw(sprite, window);
 
-	player.Draw(sprite, window);
+	player.Draw(marioSprite, window);
 	//player.bounds().Draw(window);
 
 }

@@ -15,7 +15,9 @@ struct JumpScene : Scene {
 	JumpMan player;
 
 	sf::Texture texture;
+	sf::Texture marioTexture;
 	sf::Sprite sprite;
+	sf::Sprite marioSprite;
 	sf::Font font;
 	sf::Text text;
 
