@@ -3,7 +3,7 @@
 
 const vec run_acc(1400, 0); //aceleracion corriendo
 const vec air_acc(400, 0);  //aceleracion en el aire
-const vec fri_acc(1000, 800); //aceleracion de la friccion
+const vec fri_acc(1000, 450); //aceleracion de la friccion
 const vec gra_acc(0, 600); //aceleracion de la gravedad
 const vec vel_max(225, 200); //velocidad maxima que adquiere un personaje
 const vec vel_jmp(150, -150); //velocidad que adquiere un personaje al saltar
