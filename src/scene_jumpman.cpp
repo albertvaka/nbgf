@@ -37,6 +37,10 @@ void JumpScene::EnterScene()
 	map.set(pos.x - 1, pos.y - 1, false);
 	map.set(pos.x    , pos.y - 1, false);
 
+	//Setup per debugar fallo raro al colisionar
+	map.set(pos.x-1, pos.y - 4, true);
+	map.set(pos.x-2, pos.y - 1, true);
+
 }
 
 void JumpScene::ExitScene()  
