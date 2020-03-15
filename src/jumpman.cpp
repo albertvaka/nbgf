@@ -12,14 +12,15 @@ const vec vel_jmp(150, -150); //velocidad que adquiere un personaje al saltar
 JumpMan::JumpMan(TileMap* _map)
 	: acc(0, 0)
 	, vel(0, 0)
-	, siz(16, 32)
-	, cen(siz/2)
 	, jumpTimeLeft(0.0f)
 	, grounded(false)
 	, crouched(false)
 	, map(_map)
 {
 	animation.Ensure(MARIO_IDLE);
+	sf::Rect rect = animation.CurrentFrame();
+	siz = vec(rect.width, rect.height);
+	cen = siz / 2;
 }
 
 void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
