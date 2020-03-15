@@ -75,6 +75,13 @@ void JumpScene::Update(int dtMilis) {
 	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.grounded && map.tilePos(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
 		EnterScene();
 	}
+
+	if (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right)) {
+		bool what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left);
+		vec pos = Mouse::GetPositionInWorld();
+		sf::Vector2i tile = map.tilePos(pos);
+		map.set(tile.x, tile.y, what_to_set);
+	}
 }
 
 void JumpScene::Draw(sf::RenderTarget& window) 
