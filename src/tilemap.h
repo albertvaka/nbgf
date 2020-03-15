@@ -26,7 +26,6 @@ public:
 	float Left(int x);
 	float Right(int x);
 
-private:
 	float unitsPerTile;
 	sf::Vector2i sizes;
 	int width, height;

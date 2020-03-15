@@ -17,6 +17,10 @@ struct Bounds : public sf::Rect<float>
     explicit Bounds(const vec& pos, vec size, bool centered = false) : sf::Rect<float>(pos.x,pos.y,size.x,size.y) {
         if (centered) { left -= size.x/2; top -= size.y/2; }
     }
+    explicit Bounds(const vec& pos, vec size, vec origin) : sf::Rect<float>(pos.x, pos.y, size.x, size.y) {
+        left -= origin.x;
+        top -= origin.y;
+    }
     explicit Bounds(float x, float y, float w, float h) : sf::Rect<float>(x,y,w,h) { }
 
     //Expands arround the center by an amount

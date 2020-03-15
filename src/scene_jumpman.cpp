@@ -26,7 +26,8 @@ void JumpScene::EnterScene()
 
 	player.pos = vec(160, 160);
 	player.Reset();
-	map.Init(time(NULL), sf::Vector2i(1000, 25), 16);
+	sf::Vector2i mapSize(1000, 25);
+	map.Init(time(NULL), mapSize, 16);
 
 	sf::Vector2i pos = map.tilePos(player.pos);
 	map.set(pos.x - 1, pos.y + 1, true);
@@ -67,7 +68,7 @@ void JumpScene::Update(int dtMilis) {
 	Mates::Clamp(camPos.x, minX, maxX);
 	Camera::SetCameraCenter(camPos);
 
-	if (player.grounded && map.tilePos(player.pos + vec(0.1f, 0)).y == 24) {
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.grounded && map.tilePos(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
 		EnterScene();
 	}
 }
@@ -80,6 +81,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 
 	player.Draw(marioSprite, window);
 	//player.bounds().Draw(window);
+	//Bounds(player.pos, vec(1, 1)).Draw(window, sf::Color::White);
 
 }
 

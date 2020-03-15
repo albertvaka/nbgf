@@ -17,7 +17,7 @@ struct JumpMan
     }
 
     Bounds bounds() {
-        return Bounds(pos, siz, true);
+        return Bounds(pos, siz, vec(siz.x/2, siz.y));
     }
 
     vec pos;

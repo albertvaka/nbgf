@@ -12,28 +12,25 @@ const vec vel_jmp(150, -150); //velocidad que adquiere un personaje al saltar
 JumpMan::JumpMan(TileMap* _map)
 	: acc(0, 0)
 	, vel(0, 0)
-	, siz(1, 1)
+	, siz(16, 32)
+	, cen(siz/2)
 	, jumpTimeLeft(0.0f)
 	, grounded(false)
 	, crouched(false)
 	, map(_map)
 {
 	animation.Ensure(MARIO_IDLE);
-	siz.x = 16;
-	siz.y = 32;
-	cen.x = 8;
-	cen.y = 16;
 }
 
 void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
 	spr.setTextureRect(animation.CurrentFrame());
 	if (lookingLeft) {
 		spr.setScale(-1.f, 1.f);
-		spr.setPosition(pos.x + cen.x, pos.y - cen.y);
+		spr.setPosition(pos.x + cen.x, pos.y - siz.y);
 	}
 	else {
 		spr.setScale(1.f, 1.f);
-		spr.setPosition(pos.x - cen.x, pos.y - cen.y);
+		spr.setPosition(pos.x - cen.x, pos.y - siz.y);
 	}
 	window.draw(spr);
 	spr.setScale(1.f, 1.f);
@@ -162,21 +159,20 @@ void JumpMan::Update(float dt)
 	// significa que estaremos grounded, en caso de subir significia que estabamos
 	// saltando y que ya no podremos saltar mas.
 	vec direction = posf - pos0;
-	if (direction.y < 0) //Vamos hacia abajo
+	if (direction.y < 0) //Vamos hacia arriba
 	{
 		grounded = false;
-		//le restamos a la Y la mitad de su tamaño para obtener la Y inferior del sprite
-		int yo = map->tilePosY(pos0.y - csiz.y),
-			yn = map->tilePosY(posf.y - csiz.y),
-			xl = map->tilePosX(pos0.x - cen.x + 2),
-			xr = map->tilePosX(pos0.x + csiz.x - 2);
+		int yo = map->tilePosY(pos0.y - siz.y); // usamos la y superior del sprite
+		int yn = map->tilePosY(posf.y - siz.y);
+		int xl = map->tilePosX(pos0.x - cen.x + 2);
+		int xr = map->tilePosX(pos0.x + csiz.x - 2);
 		for (int y = yo; y >= yn; y--)
 		{
 			for (int x = xl; x <= xr; x++)
 			{
 				if (map->isColl(x, y))
 				{
-					posf.y = map->Top(y) + csiz.y;
+					posf.y = map->Top(y) + siz.y;
 					vel.y = 0;
 					jumpTimeLeft = 0;
 					goto vert_exit;
@@ -185,20 +181,19 @@ void JumpMan::Update(float dt)
 		}
 
 	}
-	else if (direction.y > 0) //Vamos hacia arriba
+	else if (direction.y > 0) //Vamos hacia abajo
 	{
-		//le sumamos a la Y la mitad de su tamaño para obtener la Y superior del sprite
-		int yo = map->tilePosY(pos0.y + cen.y),
-			yn = map->tilePosY(posf.y + cen.y),
-			xl = map->tilePosX(pos0.x - cen.x + 2),
-			xr = map->tilePosX(pos0.x + csiz.x - 2);
+		int yo = map->tilePosY(pos0.y); // usamos la y inferior del sprite
+		int yn = map->tilePosY(posf.y);
+		int xl = map->tilePosX(pos0.x - cen.x + 2);
+		int xr = map->tilePosX(pos0.x + csiz.x - 2);
 		for (int y = yo; y <= yn; y++)
 		{
 			for (int x = xl; x <= xr; x++)
 			{
 				if (map->isColl(x, y))
 				{
-					posf.y = map->Bottom(y) - cen.y;
+					posf.y = map->Bottom(y);
 					vel.y = 0;
 					grounded = true;
 					goto vert_exit;
@@ -212,13 +207,13 @@ void JumpMan::Update(float dt)
 vert_exit:
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
-		int xo = map->tilePosX(pos0.x - cen.x),
-			xn = map->tilePosX(posf.x - cen.x),
-			yb = map->tilePosY(pos0.y - csiz.y + 2),
-			yt = map->tilePosY(pos0.y + cen.y - 2);
+		int xo = map->tilePosX(pos0.x - cen.x);
+		int xn = map->tilePosX(posf.x - cen.x);
+		int yTop = map->tilePosY(pos0.y - siz.y + 2);
+		int yBottom = map->tilePosY(pos0.y - 2);
 		for (int x = xo; x >= xn; x--)
 		{
-			for (int y = yb; y <= yt; y++)
+			for (int y = yTop; y <= yBottom; y++)
 			{
 				if (map->isColl(x, y))
 				{
@@ -232,13 +227,13 @@ vert_exit:
 	}
 	else if (direction.x > 0) //Vamos hacia la derecha
 	{
-		int xo = map->tilePosX(pos0.x + csiz.x),
-			xn = map->tilePosX(posf.x + csiz.x),
-			yb = map->tilePosY(pos0.y - csiz.y + 2),
-			yt = map->tilePosY(pos0.y + cen.y - 2);
+		int xo = map->tilePosX(pos0.x + csiz.x);
+		int xn = map->tilePosX(posf.x + csiz.x);
+		int yTop = map->tilePosY(pos0.y - siz.y + 2);
+		int yBottom = map->tilePosY(pos0.y - 2);
 		for (int x = xo; x <= xn; x++)
 		{
-			for (int y = yb; y <= yt; y++)
+			for (int y = yTop; y <= yBottom; y++)
 			{
 				if (map->isColl(x, y))
 				{
@@ -259,10 +254,12 @@ horz_exit:
 
 	if (crouched)
 	{
+		siz.y = 22;
 		animation.Ensure(MARIO_CROUCH);
 	}
 	else
 	{
+		siz.y = 32;
 		if (grounded)
 		{
 			if (Keyboard::IsKeyPressed(GameKeys::LEFT) && !Keyboard::IsKeyPressed(GameKeys::RIGHT))
