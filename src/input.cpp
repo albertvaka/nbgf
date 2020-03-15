@@ -259,7 +259,7 @@ sf::Vector2i Mouse::GetPositionInWindow()
 vec Mouse::GetPositionInWorld()
 {
     vec displacement = Camera::gameView.getCenter() - (Camera::gameView.getSize() / 2.f);
-    return vec(GetPositionInWindow()) + displacement;
+    return (vec(GetPositionInWindow())/Camera::zoom) + displacement;
 }
 void GamePad::_UpdateInputState()
     {
