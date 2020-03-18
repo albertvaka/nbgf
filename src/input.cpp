@@ -14,6 +14,7 @@ GamePad::Trigger::RightTrigger GamePad::Trigger::Right;
 KeyStates GamePad::button_states[GamePad::JoystickCountMax][sf::Joystick::ButtonCount];
 KeyStates Mouse::button_states[sf::Mouse::ButtonCount];
 KeyStates Keyboard::key_states[magic_enum::enum_count<GameKeys>()];
+float Keyboard::key_times[magic_enum::enum_count<GameKeys>()];
 sf::Keyboard::Key key_map[magic_enum::enum_count<GameKeys>()];
 
 
@@ -305,7 +306,7 @@ void GamePad::_UpdateInputState()
 
 }
 
-void Keyboard::_UpdateInputState()
+void Keyboard::_UpdateInputState(float dt)
 {
     for (int i = 0; i < magic_enum::enum_count<GameKeys>(); i++)
 	{
@@ -314,10 +315,12 @@ void Keyboard::_UpdateInputState()
             if (key_states[i] == JUST_PRESSED || key_states[i] == PRESSED)
 			{
                 key_states[i] = PRESSED;
+                key_times[i] += dt;
             }
             else
 			{
                 key_states[i] = JUST_PRESSED;
+                key_times[i] = dt;
             }
         }
         else
@@ -325,10 +328,12 @@ void Keyboard::_UpdateInputState()
             if (key_states[i] == JUST_RELEASED || key_states[i] == RELEASED)
 			{
                 key_states[i] = RELEASED;
+                key_times[i] += dt;
             }
             else
 			{
                 key_states[i] = JUST_RELEASED;
+                key_times[i] = dt;
             }
         }
     }
@@ -374,7 +379,7 @@ namespace Input
         _ProcessWindowEvents();
         ImGuiIO& io = ImGui::GetIO();
         if (!io.WantCaptureKeyboard) {
-            Keyboard::_UpdateInputState();
+            Keyboard::_UpdateInputState(deltaTime.asSeconds());
         }
         if (!io.WantCaptureMouse) {
             Mouse::_UpdateInputState();

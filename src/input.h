@@ -157,6 +157,7 @@ struct Keyboard
 {
 
 	static KeyStates key_states[magic_enum::enum_count<GameKeys>()];
+	static float key_times[magic_enum::enum_count<GameKeys>()];
 
 	static bool IsKeyPressed(GameKeys k) {
 		return (key_states[k] == PRESSED || key_states[k] == JUST_PRESSED);
@@ -164,6 +165,10 @@ struct Keyboard
 
 	static bool IsKeyJustPressed(GameKeys k) {
 		return (key_states[k] == JUST_PRESSED);
+	}
+
+	static bool IsKeyJustPressed(GameKeys k, float interval) {
+		return IsKeyPressed(k) && key_times[k] < interval;
 	}
 
 	static bool IsKeyReleased(GameKeys k) {
@@ -174,7 +179,11 @@ struct Keyboard
 		return (key_states[k] == JUST_RELEASED);
 	}
 
-	static void _UpdateInputState();
+	static bool IsKeyJustReleased(GameKeys k, float interval) {
+		return IsKeyReleased(k) && key_times[k] < interval;
+	}
+
+	static void _UpdateInputState(float dt);
 };
 
 //CAMERA MANAGEMENT
