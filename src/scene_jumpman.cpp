@@ -2,6 +2,7 @@
 
 #include "scene_jumpman.h"
 #include "input.h"
+#include "imgui.h"
 
 JumpScene::JumpScene()
 	: player(&map)
@@ -72,7 +73,7 @@ void JumpScene::Update(int dtMilis) {
 	Mates::Clamp(camPos.x, minX, maxX);
 	Camera::SetCameraCenter(camPos);
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.grounded && map.tilePos(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.tilePos(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
 		EnterScene();
 	}
 
@@ -82,6 +83,8 @@ void JumpScene::Update(int dtMilis) {
 		sf::Vector2i tile = map.tilePos(pos);
 		map.set(tile.x, tile.y, what_to_set);
 	}
+
+
 }
 
 void JumpScene::Draw(sf::RenderTarget& window) 
@@ -94,5 +97,13 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	//player.bounds().Draw(window);
 	//Bounds(player.pos, vec(1, 1)).Draw(window, sf::Color::White);
 
+
+
+
+	ImGui::Begin(GameData::GAME_TITLE.c_str());
+	ImGui::SliderFloat("x", &player.pos.x, 0.f, 10 * 16.f);
+	ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
+
+	ImGui::End();
 }
 

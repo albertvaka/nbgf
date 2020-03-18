@@ -162,6 +162,9 @@ KeyStates GamePad::calculateJustPressed(bool pressed, KeyStates state)
 {
     if (pressed)
 	{
+        //FIXME: No hauria d'anar per frames, sino per temps.
+        // Si porta apretat < X milis, esta justpressed
+        // Per fer tricks com deixar saltar "tard" podriem incrementar aquest temps (parametre extra a justpressed?)
         if (state == JUST_PRESSED || state == PRESSED)
 		{
             state = PRESSED;

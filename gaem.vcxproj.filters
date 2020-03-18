@@ -47,6 +47,7 @@
     <ClInclude Include="src\transition.h" />
     <ClInclude Include="src\magic_enum.h" />
     <ClInclude Include="src\scene_jumpman.h" />
+    <ClInclude Include="imgui\imgui.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\cinta.h" />

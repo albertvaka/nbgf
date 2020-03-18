@@ -1,19 +1,30 @@
 #include "jumpman.h"
 #include "input.h"
 
-const vec run_acc(1400, 0); //aceleracion corriendo
-const vec air_acc(400, 0);  //aceleracion en el aire
-const vec fri_acc(1000, 450); //aceleracion de la friccion
-const vec gra_acc(0, 600); //aceleracion de la gravedad
-const vec vel_max(225, 200); //velocidad maxima que adquiere un personaje
-const vec vel_jmp(150, -150); //velocidad que adquiere un personaje al saltar
+// accel
+const float run_acc = 1400;
+const float run_acc_onair = 400;
+const float gravity_acc = 600;
 
+// friction X
+const float fri_acc_floor = 1000;
+const float fri_acc_floor_crouched = 450;
+const float fri_acc_air = 1000 / 8.f;
+
+// friction Y
+const float fri_acc_wall_up = 1000;
+const float fri_acc_wall_down = 450;
+
+// jump
+const float vel_jump = -150;
+const float vel_walljump = 130;
+
+const vec vel_max(225, 200);
 
 JumpMan::JumpMan(TileMap* _map)
 	: acc(0, 0)
 	, vel(0, 0)
 	, jumpTimeLeft(0.0f)
-	, grounded(false)
 	, crouched(false)
 	, map(_map)
 {
@@ -39,21 +50,56 @@ void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
 
 void JumpMan::Update(float dt)
 {
+	float marginGrounded = 3.f; //in pixels
+	bool grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1, pos.y + marginGrounded);
+
 	acc = vec(0,0);
 	crouched = ((crouched||grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched&&!grounded);
 	if (Keyboard::IsKeyPressed(GameKeys::LEFT)) {
 		lookingLeft = true;
 		if (grounded) {
-			if (!crouched) acc -= run_acc;
+			if (!crouched) acc.x -= run_acc;
 		}
-		else acc -= air_acc;
+		else acc.x -= run_acc_onair;
 	}
 	if (Keyboard::IsKeyPressed(GameKeys::RIGHT)) {
 		lookingLeft = false;
 		if (grounded) {
-			if (!crouched) acc += run_acc;
+			if (!crouched) acc.x += run_acc;
 		}
-		else acc += air_acc;
+		else acc.x += run_acc_onair;
+	}
+
+	//Si en el frame anterior estaba tocando el suelo, inicializando
+	//jumpTimeLeft a mas de 0 permite al jugador saltar durante ese rato
+	if (Keyboard::IsKeyJustPressed(GameKeys::UP)) {
+		std::cout << grounded << " " << pos << std::endl;
+	}
+	if (Keyboard::IsKeyJustPressed(GameKeys::UP) && (grounded || (onWall && !crouched)))
+	{
+		jumpTimeLeft = 0.35f;
+		if (onWall && !grounded && !crouched) {
+			vel.x = vel_walljump * -1.0f * float(onWall);
+			lookingLeft = !lookingLeft;
+		}
+	}
+
+	if (Keyboard::IsKeyPressed(GameKeys::UP) && jumpTimeLeft > 0)
+	{
+		vel.y = vel_jump;
+	}
+	else
+	{
+		jumpTimeLeft = 0; //A la que deja de pulsarse el boton de saltar cae de inmediato
+	}
+
+	if (jumpTimeLeft > 0)
+	{
+		jumpTimeLeft -= dt; //Se le resta el tiempo mientras salta
+	}
+	else
+	{
+		acc.y += gravity_acc; //La gravedad afecta mientras no salte
 	}
 
 	//FRICTION
@@ -62,53 +108,37 @@ void JumpMan::Update(float dt)
 	{
 		if (crouched) 
 		{
-			fri.x = fri_acc.x / 2;
+			fri.x = fri_acc_floor_crouched;
 		}
 		else 
 		{
-			fri.x = fri_acc.x;
+			fri.x = fri_acc_floor;
 		}
 	}
 	else
 	{
-		fri.x = fri_acc.x/8;
+		fri.x = fri_acc_air;
 	}
 
 	if (!crouched && onWall)
 	{
-		fri.y = fri_acc.y;
-	}
-
-	//Si en el frame anterior estaba tocando el suelo, inicializando
-	//jumpTimeLeft a mas de 0 permite al jugador saltar durante ese rato
-	if (Keyboard::IsKeyJustPressed(GameKeys::UP) && (grounded||(onWall&&!crouched)))
-	{
-		jumpTimeLeft = 0.35f;
-		if (onWall && !grounded && !crouched) {
-			vel.x = vel_jmp.x * -1.0f * float(onWall);
+		if (vel.y < 0) { //Vamos hacia arriba
+			fri.y = fri_acc_wall_up;
+		} else {
+			fri.y = fri_acc_wall_down;
 		}
 	}
 
-	if (Keyboard::IsKeyPressed(GameKeys::UP) && jumpTimeLeft > 0)
-		vel.y = vel_jmp.y;
-	else //A la que deja de pulsarse el boton de saltar cae de inmediato
-		jumpTimeLeft = 0;
-
-	//obtenemos las constantes de World
-
-	if (fri.x != 0) //friccion
+	// Apply friction
+	if (vel.x < 0)
 	{
-		if (vel.x < 0)
-		{
-			vel.x += fri.x * dt;
-			if (vel.x > 0) vel.x = 0;
-		}
-		else if (vel.x > 0)
-		{
-			vel.x -= fri.x * dt;
-			if (vel.x < 0) vel.x = 0;
-		}
-
+		vel.x += fri.x * dt;
+		if (vel.x > 0) vel.x = 0;
+	}
+	else if (vel.x > 0)
+	{
+		vel.x -= fri.x * dt;
+		if (vel.x < 0) vel.x = 0;
 	}
 	if (fri.y != 0)
 	{
@@ -125,12 +155,6 @@ void JumpMan::Update(float dt)
 
 	}
 
-	if (jumpTimeLeft <= 0) acc += gra_acc; //La gravedad afecta mientras no salte
-	else jumpTimeLeft -= dt; //Se le resta el tiempo mientras salta
-	vec pos0 = pos; //pos0: posicion inicial
-
-	//uniformly accelerated linear motion, posf: posicion final
-	vec posf = pos0 + vel * dt + acc * dt * dt * 0.5f;
 	vel = vel + acc * dt;
 
 	//Hacemos clamp de las velocidades
@@ -139,8 +163,10 @@ void JumpMan::Update(float dt)
 	if (vel.y > vel_max.y) vel.y = vel_max.y;
 	if (vel.y < -vel_max.y) vel.y = -vel_max.y;
 
+	//uniformly accelerated linear motion
+	vec pos0 = pos;
+	vec posf = pos0 + vel * dt; //posicion final
 
-	vec csiz = siz - cen;
 	//Obtenemos el vector direccion para saber hacia donde nos dirigimos
 
 	// El funcionamiento de las colisiones es el siguiente:
@@ -159,14 +185,15 @@ void JumpMan::Update(float dt)
 	// y le quitamos su velocidad Y. En caso de que estuviesemos cayendo
 	// significa que estaremos grounded, en caso de subir significia que estabamos
 	// saltando y que ya no podremos saltar mas.
+	vec csiz = siz - cen;
 	vec direction = posf - pos0;
+	const int N = 1;
 	if (direction.y < 0) //Vamos hacia arriba
 	{
-		grounded = false;
 		int yo = map->tilePosY(pos0.y - siz.y); // usamos la y superior del sprite
 		int yn = map->tilePosY(posf.y - siz.y);
-		int xl = map->tilePosX(pos0.x - cen.x + 2);
-		int xr = map->tilePosX(pos0.x + csiz.x - 2);
+		int xl = map->tilePosX(pos0.x - cen.x + N);
+		int xr = map->tilePosX(pos0.x + csiz.x - N);
 		for (int y = yo; y >= yn; y--)
 		{
 			for (int x = xl; x <= xr; x++)
@@ -186,8 +213,8 @@ void JumpMan::Update(float dt)
 	{
 		int yo = map->tilePosY(pos0.y); // usamos la y inferior del sprite
 		int yn = map->tilePosY(posf.y);
-		int xl = map->tilePosX(pos0.x - cen.x + 2);
-		int xr = map->tilePosX(pos0.x + csiz.x - 2);
+		int xl = map->tilePosX(pos0.x - cen.x + N);
+		int xr = map->tilePosX(pos0.x + csiz.x - N);
 		for (int y = yo; y <= yn; y++)
 		{
 			for (int x = xl; x <= xr; x++)
@@ -196,13 +223,10 @@ void JumpMan::Update(float dt)
 				{
 					posf.y = map->Bottom(y);
 					vel.y = 0;
-					grounded = true;
 					goto vert_exit;
 				}
 			}
 		}
-		grounded = false;
-
 	}
 
 vert_exit:
@@ -210,8 +234,8 @@ vert_exit:
 	{
 		int xo = map->tilePosX(pos0.x - cen.x);
 		int xn = map->tilePosX(posf.x - cen.x);
-		int yTop = map->tilePosY(pos0.y - siz.y + 2);
-		int yBottom = map->tilePosY(pos0.y - 2);
+		int yTop = map->tilePosY(pos0.y - siz.y + N);
+		int yBottom = map->tilePosY(pos0.y - N);
 		for (int x = xo; x >= xn; x--)
 		{
 			for (int y = yTop; y <= yBottom; y++)
@@ -219,7 +243,7 @@ vert_exit:
 				if (map->isColl(x, y))
 				{
 					posf.x = map->Right(x) + cen.x;
-					vel.x = -3.f;
+					vel.x = -3.f; //stay against wall
 					onWall = ONWALL_LEFT;
 					goto horz_exit;
 				}
@@ -230,8 +254,8 @@ vert_exit:
 	{
 		int xo = map->tilePosX(pos0.x + csiz.x);
 		int xn = map->tilePosX(posf.x + csiz.x);
-		int yTop = map->tilePosY(pos0.y - siz.y + 2);
-		int yBottom = map->tilePosY(pos0.y - 2);
+		int yTop = map->tilePosY(pos0.y - siz.y + N);
+		int yBottom = map->tilePosY(pos0.y - N);
 		for (int x = xo; x <= xn; x++)
 		{
 			for (int y = yTop; y <= yBottom; y++)
@@ -239,7 +263,7 @@ vert_exit:
 				if (map->isColl(x, y))
 				{
 					posf.x = map->Left(x) - csiz.x;
-					vel.x = 3.f;
+					vel.x = 3.f; //stay against wall
 					onWall = ONWALL_RIGHT;
 					goto horz_exit;
 				}

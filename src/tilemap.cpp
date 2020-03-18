@@ -30,7 +30,7 @@ bool TileMap::isColl(int x, int y)
 {
 	if ( x < 0 || x >= sizes.x ) return true;
 	if ( y < 0 || y >= sizes.y ) return true;
-	return getTile(x, y);
+	return tiles[y * sizes.x + x];
 }
 
 sf::Vector2i TileMap::tilePos(vec pos)
@@ -53,10 +53,6 @@ unsigned int TileMap::tilePosX(float x)
 unsigned int TileMap::tilePosY(float y)
 {
 	return floor(y/unitsPerTile);
-}
-bool TileMap::getTile(int x, int y)
-{
-	return tiles[y*sizes.x + x];
 }
 
 void TileMap::Draw(sf::Sprite& sprite, sf::RenderTarget& window)

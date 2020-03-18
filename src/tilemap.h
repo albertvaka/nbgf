@@ -30,5 +30,6 @@ public:
 	sf::Vector2i sizes;
 	int width, height;
 	std::vector<bool> tiles;
-	bool getTile(int i, int j);
+	bool isCollInWorldCoordinates(vec p) { return isColl(tilePos(p)); }
+	bool isCollInWorldCoordinates(float x, float y) { return isColl(tilePos(x,y)); }
 };

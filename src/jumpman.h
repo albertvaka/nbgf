@@ -31,7 +31,6 @@ struct JumpMan
     
     enum { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
 
-    bool grounded;
     short onWall;
     float jumpTimeLeft;
     
