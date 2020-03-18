@@ -244,24 +244,24 @@ namespace Mates
 	}
 
 	//compares two real numbers. Returns true if they are equal
-	inline bool isEqual(float a, float b)
+	inline bool isNearlyEqual(float a, float b, float margin = 1E-12)
 	{
-	if (fabs(a - b) < 1E-12)
-	{
-		return true;
+		if (fabs(a - b) < margin)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
-	return false;
-	}
-
-	inline bool isEqual(double a, double b)
+	inline bool isNearlyEqual(double a, double b, double margin = 1E-12)
 	{
-	if (fabs(a - b) < 1E-12)
-	{
-		return true;
-	}
+		if (fabs(a - b) < margin)
+		{
+			return true;
+		}
 
-	return false;
+		return false;
 	}
 
 

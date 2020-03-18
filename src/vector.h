@@ -118,7 +118,7 @@ struct vec : public sf::Vector2f
 
   bool operator==(const vec& rhs) const
   {
-    return (Mates::isEqual(x, rhs.x) && Mates::isEqual(y,rhs.y) );
+    return (Mates::isNearlyEqual(x, rhs.x) && Mates::isNearlyEqual(y,rhs.y) );
   }
 
   bool operator!=(const vec& rhs) const
