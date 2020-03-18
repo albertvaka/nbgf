@@ -5,10 +5,15 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
 
-class TileMap
+struct TileMap
 {
-public:
-	void Init(int seed, sf::Vector2i sizes, float unitsPerTile);
+	TileMap(sf::Vector2i _sizes, float _unitsPerTile)
+		: sizes(_sizes)
+		, unitsPerTile(_unitsPerTile)
+		, tiles(new bool[_sizes.x * _sizes.y]{})
+	{
+	}
+	void Randomize(int seed);
 	void Draw(sf::Sprite& sprite, sf::RenderTarget& window);
 
 	void set(int x, int y, bool col); //set tile collisionable
@@ -28,8 +33,8 @@ public:
 
 	float unitsPerTile;
 	sf::Vector2i sizes;
-	int width, height;
-	std::vector<bool> tiles;
+	bool* tiles;
+
 	bool isCollInWorldCoordinates(vec p) { return isColl(tilePos(p)); }
 	bool isCollInWorldCoordinates(float x, float y) { return isColl(tilePos(x,y)); }
 };

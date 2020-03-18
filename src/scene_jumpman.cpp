@@ -5,7 +5,8 @@
 #include "imgui.h"
 
 JumpScene::JumpScene()
-	: player(&map)
+	: map(sf::Vector2i(1000, 25), 16)
+	, player(&map)
 {
 
 }
@@ -27,8 +28,7 @@ void JumpScene::EnterScene()
 
 	player.pos = vec(160, 160);
 	player.Reset();
-	sf::Vector2i mapSize(1000, 25);
-	map.Init(time(NULL), mapSize, 16);
+	map.Randomize(time(NULL));
 
 	sf::Vector2i pos = map.tilePos(player.pos);
 	map.set(pos.x - 1, pos.y + 1, true);

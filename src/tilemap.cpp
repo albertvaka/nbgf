@@ -3,15 +3,13 @@
 #include <cstdlib>
 #include "input.h"
 
-void TileMap::Init(int seed, sf::Vector2i s, float upt)
+void TileMap::Randomize(int seed)
 {
-	sizes = s;
-	unitsPerTile = upt;
-
 	srand(seed);
-	tiles.clear();
 	int total = sizes.x * sizes.y;
-	while(total--) tiles.push_back((rand()%32) > 29);
+	for (int i = 0; i < total; i++) {
+		tiles[i] = ((rand() % 32) > 29);
+	}
 }
 
 void TileMap::set(int x, int y, bool col)
