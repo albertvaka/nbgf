@@ -166,6 +166,7 @@ void JumpMan::Update(float dt)
 	//uniformly accelerated linear motion
 	vec pos0 = pos;
 	vec posf = pos0 + vel * dt; //posicion final
+	std::cout << abs(pos0.x - posf.x) / dt << std::endl;
 
 	//Obtenemos el vector direccion para saber hacia donde nos dirigimos
 
