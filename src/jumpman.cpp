@@ -50,7 +50,7 @@ void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
 
 void JumpMan::Update(float dt)
 {
-	float marginGrounded = 3.f; //in pixels
+	float marginGrounded = 1.f; //in pixels
 	bool grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1, pos.y + marginGrounded);
 
 	acc = vec(0,0);
@@ -72,11 +72,9 @@ void JumpMan::Update(float dt)
 
 	//Si en el frame anterior estaba tocando el suelo, inicializando
 	//jumpTimeLeft a mas de 0 permite al jugador saltar durante ese rato
-	if (Keyboard::IsKeyJustPressed(GameKeys::UP)) {
-		std::cout << grounded << " " << pos << std::endl;
-	}
-	if (Keyboard::IsKeyJustPressed(GameKeys::UP) && (grounded || (onWall && !crouched)))
+	if (Keyboard::IsKeyJustPressed(GameKeys::UP, 0.15f) && (grounded || (onWall && !crouched)))
 	{
+		//if (!Keyboard::IsKeyJustPressed(GameKeys::UP)) std::cout << "cheats" << std::endl;
 		jumpTimeLeft = 0.35f;
 		if (onWall && !grounded && !crouched) {
 			vel.x = vel_walljump * -1.0f * float(onWall);
@@ -166,7 +164,7 @@ void JumpMan::Update(float dt)
 	//uniformly accelerated linear motion
 	vec pos0 = pos;
 	vec posf = pos0 + vel * dt; //posicion final
-	std::cout << abs(pos0.x - posf.x) / dt << std::endl;
+	//std::cout << abs(pos0.x - posf.x) / dt << std::endl;
 
 	//Obtenemos el vector direccion para saber hacia donde nos dirigimos
 
