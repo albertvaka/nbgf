@@ -46,6 +46,14 @@ struct vec : public sf::Vector2f
 
   inline float    Cross(const vec& v2) const;
 
+  void Clamp(const vec& minv, const vec& maxv) 
+  {
+      if (x > maxv.x) x = maxv.x;
+      else if (x < minv.x) x = minv.x;
+      if (y > maxv.y) y = maxv.y;
+      else if (y < minv.y) y = minv.y;
+  }
+
   std::string ToString() const {
       std::stringstream stream;
       stream << std::fixed << std::setprecision(2) << x << "," << y;
