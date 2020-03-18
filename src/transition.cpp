@@ -200,14 +200,13 @@ void TransitionInertial::update(float fTime)
 	else if (m_fPos > m_fPosToGo) fAcc = -1 * m_fAcc;
 	else return;
 
-	register float TimeToStop = (float)fabs(m_fVel)/m_fAcc;
-	register float DistToStop =
-		(fabs(m_fVel)*TimeToStop) + (-m_fAcc*TimeToStop*TimeToStop/2);
-	register float DistLeft   = fabs(m_fPos-m_fPosToGo);
+	float TimeToStop = (float)fabs(m_fVel)/m_fAcc;
+	float DistToStop = (fabs(m_fVel)*TimeToStop) + (-m_fAcc*TimeToStop*TimeToStop/2);
+	float DistLeft   = fabs(m_fPos-m_fPosToGo);
 
 	if((m_fVel*fAcc) > 0 &&  DistLeft <= DistToStop) fAcc *= -1.0;
 
-	register float fVel = m_fVel + (fTime * fAcc);
+	float fVel = m_fVel + (fTime * fAcc);
 	if (fVel * m_fVel < 0) fVel = 0;
 	if (fVel >= m_fVelMax) fVel = (fVel/fabs(fVel)) * m_fVelMax;
 	m_fVel = fVel;
