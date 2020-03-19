@@ -168,7 +168,7 @@ struct Keyboard
 	}
 
 	static bool IsKeyJustPressed(GameKeys k, float interval) {
-		return IsKeyPressed(k) && key_times[k] < interval;
+		return key_states[k] == JUST_PRESSED || (key_states[k] == PRESSED && key_times[k] < interval);
 	}
 
 	static bool IsKeyReleased(GameKeys k) {
@@ -180,7 +180,7 @@ struct Keyboard
 	}
 
 	static bool IsKeyJustReleased(GameKeys k, float interval) {
-		return IsKeyReleased(k) && key_times[k] < interval;
+		return key_states[k] == JUST_RELEASED || (key_states[k] == RELEASED && key_times[k] < interval);
 	}
 
 	static void _UpdateInputState(float dt);
