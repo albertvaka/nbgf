@@ -74,6 +74,8 @@ void JumpScene::Update(int dtMilis) {
 		minX = maxX - 1;
 	}
 	Mates::Clamp(camPos.x, minX, maxX);
+	
+	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
 	Camera::SetCameraCenter(camPos);
 
 	if (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right)) {
