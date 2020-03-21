@@ -6,7 +6,7 @@
 #include "cinta.h"
 #include "cleaner.h"
 
-bool Collision(Entity* entity_a, Entity* entity_b)
+bool inline Collision(Entity* entity_a, Entity* entity_b)
 {
 	vec sz_a = entity_a->size;
 	vec sz_b = entity_b->size;
@@ -21,7 +21,7 @@ bool Collision(Entity* entity_a, Entity* entity_b)
 			((a.y + sz_a.y) > b.y);
 }
 
-bool Collision(Cintable* entity_a, Cinta* entity_b)
+bool inline Collision(Cintable* entity_a, Cinta* entity_b)
 {
 	vec sz_a = entity_a->sizePlz();
 	vec sz_b = entity_b->size;
@@ -36,7 +36,7 @@ bool Collision(Cintable* entity_a, Cinta* entity_b)
 			((a.y + sz_a.y) > b.y);
 }
 
-bool Collision(Cintable* entity_a, Cleaner* entity_b)
+bool inline Collision(Cintable* entity_a, Cleaner* entity_b)
 {
 	vec sz_a = entity_a->sizePlz();
 	vec sz_b = entity_b->size;

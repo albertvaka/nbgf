@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity.h"
+#include "cadaver.h"
 #include "animation.h"
 #include "rand.h"
 #include "vector.h"
@@ -13,7 +14,6 @@ struct Spawner : Entity, EntS<Spawner>
 	int timer = INTERVAL;
 	Spawner(vec position) {
 		pos = position;
-		
 	}
 
 	void Update(int dt)
@@ -38,6 +38,7 @@ struct Spawner : Entity, EntS<Spawner>
 	}
 
 };
+
 struct Detector : Entity, EntS<Detector>
 {
 	Spawner* spawner;
@@ -45,12 +46,14 @@ struct Detector : Entity, EntS<Detector>
 		pos = position;
 		spawner = s;
 	}
-	void Update(int dt)
+
+	void Update(int dt) override
 	{
 
 	}
 
 };
+
 struct Despawner : Entity, EntS<Despawner>
 {
 	Despawner(vec position) {

@@ -1,12 +1,19 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
+#include "scene_manager.h"
 #include "game_data.h"
+#include "collider.h"
 #include "mates.h"
 #include "input.h"
 #include "entity.h"
-#include "main_scene.h"
 
+#include "main_scene.h"
 #include "cleaner.h"
+
+extern std::vector< std::vector<bool> > passableCleaner;
 
 struct IntroScene : Scene {
 
@@ -24,7 +31,7 @@ struct IntroScene : Scene {
 		sprite.setTexture(texture);
 		sprite.setTextureRect(sf::IntRect(16, 16, 16, 16));
 
-		passableCleaner.resize(mapita_inicial[0].size(), std::vector<bool>(mapita_inicial.size(), false));
+		passableCleaner.resize(23, std::vector<bool>(17, false));
 		for (int x = 0; x < passableCleaner.size(); x++){
 			for (int y = 0; y < passableCleaner[x].size(); y++){
 				bool borde = (x == 0 || y == 0 || x == passableCleaner.size()-1 || y == passableCleaner[x].size() -2);
