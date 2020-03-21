@@ -23,6 +23,10 @@ struct vec : public sf::Vector2f
       return vec(Random::rollf(minX, maxX), Random::rollf(minY, maxY));
   }
   
+  static vec Rand(vec min, vec max) {
+      return vec(Random::rollf(min.x, max.x), Random::rollf(min.y, max.y));
+  }
+
   bool Equals(float px, float py) 
   {
       return x == px && y == py;
