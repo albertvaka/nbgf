@@ -315,7 +315,7 @@ void Keyboard::_UpdateInputState(float dt)
             if (key_states[i] == JUST_PRESSED || key_states[i] == PRESSED)
 			{
                 key_states[i] = PRESSED;
-                key_times[i] += dt;
+                if (key_times[i] < 1000.f) key_times[i] += dt;
             }
             else
 			{
@@ -328,7 +328,7 @@ void Keyboard::_UpdateInputState(float dt)
             if (key_states[i] == JUST_RELEASED || key_states[i] == RELEASED)
 			{
                 key_states[i] = RELEASED;
-                key_times[i] += dt;
+                if (key_times[i] < 1000.f) key_times[i] += dt;
             }
             else
 			{

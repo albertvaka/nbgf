@@ -183,6 +183,16 @@ struct Keyboard
 		return key_states[k] == JUST_RELEASED || (key_states[k] == RELEASED && key_times[k] < interval);
 	}
 
+	static void ConsumeJustPressed(GameKeys k) {
+		key_states[k] = PRESSED;
+		key_times[k] += 1000.f;
+	}
+
+	static void ConsumeJustReleased(GameKeys k) {
+		key_states[k] = RELEASED;
+		key_times[k] += 1000.f;
+	}
+
 	static void _UpdateInputState(float dt);
 };
 
