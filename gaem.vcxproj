@@ -158,11 +158,17 @@
     <ClInclude Include="src\door.h" />
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\extremity.h" />
+    <ClInclude Include="src\intro_scene.h" />
     <ClInclude Include="src\lever.h" />
+    <ClInclude Include="src\magic_enum.h" />
+    <ClInclude Include="src\main_scene.h" />
+    <ClInclude Include="src\main_scene_collider.h" />
+    <ClInclude Include="src\main_scene_tile.h" />
     <ClInclude Include="src\mesa.h" />
     <ClInclude Include="src\cadaver.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\popupText.h" />
+    <ClInclude Include="src\scene_manager.h" />
     <ClInclude Include="src\selfregister.h" />
     <ClInclude Include="src\entity_system.h" />
     <ClInclude Include="src\game_data.h" />
