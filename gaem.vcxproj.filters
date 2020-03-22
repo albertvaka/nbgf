@@ -144,6 +144,9 @@
     <ClInclude Include="src\magic_enum.h">
       <Filter>Bundled Dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="src\partsys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rand.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Bundled Dependencies\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\partsys.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

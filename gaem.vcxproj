@@ -49,6 +49,7 @@
     <ClInclude Include="src\main_scene_tile.h" />
     <ClInclude Include="src\mates.h" />
     <ClInclude Include="src\mesa.h" />
+    <ClInclude Include="src\partsys.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\popupText.h" />
     <ClInclude Include="src\rand.h" />
@@ -71,6 +72,7 @@
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\partsys.cpp" />
     <ClCompile Include="src\rand.cpp" />
     <ClCompile Include="src\scene_jumpman.cpp" />
     <ClCompile Include="src\tilemap.cpp" />
