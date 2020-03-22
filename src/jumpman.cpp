@@ -102,6 +102,7 @@ void JumpMan::Update(float dt)
 	//jumpTimeLeft a mas de 0 permite al jugador saltar durante ese rato
 	if (Keyboard::IsKeyJustPressed(GameKeys::UP, 0.15f) && (grounded || (onWall && !crouched)))
 	{
+		Keyboard::ConsumeJustPressed(GameKeys::UP);
 		//if (!Keyboard::IsKeyJustPressed(GameKeys::UP)) std::cout << "cheats" << std::endl;
 		jumpTimeLeft = 0.35f;
 		if (onWall && !grounded && !crouched) {
