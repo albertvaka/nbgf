@@ -21,6 +21,32 @@ const float vel_walljump = 130;
 
 const vec vel_max(225, 200);
 
+void JumpMan::InitPolvito() {
+	polvito.min_interval = 0.02f;
+	polvito.max_interval = 0.05f;
+
+	polvito.min_ttl = 0.1f;
+	polvito.max_ttl = 0.4f;
+
+	polvito.min_vel.x = 9; //it's swapped when changing direction
+	polvito.max_vel.x = 18;
+
+	polvito.min_vel.y = -50.f;
+	polvito.max_vel.y = -20.f;
+
+	polvito.acc.y = 120.f;
+
+	polvito.min_scale = 1.0f;
+	polvito.max_scale = 1.8f;
+	polvito.scale_vel = -3.5f;
+
+	polvito.min_rotation = 0.f;
+	polvito.max_rotation = 360.f;
+	polvito.rotation_vel = 160.f;
+
+	polvito.alpha_vel = -1.8f;
+}
+
 JumpMan::JumpMan(TileMap* _map)
 	: acc(0, 0)
 	, vel(0, 0)
@@ -32,9 +58,11 @@ JumpMan::JumpMan(TileMap* _map)
 	sf::Rect rect = animation.CurrentFrame();
 	siz = vec(rect.width, rect.height);
 	cen = siz / 2;
+	InitPolvito();
 }
 
 void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
+	polvito.Draw(window);
 	spr.setTextureRect(animation.CurrentFrame());
 	if (lookingLeft) {
 		spr.setScale(-1.f, 1.f);
@@ -276,6 +304,8 @@ horz_exit:
 
 	animation.Update((int)(dt*1000));
 
+	bool isWalking = false;
+	bool isTurning = false;
 	if (crouched)
 	{
 		siz.y = 22;
@@ -288,12 +318,22 @@ horz_exit:
 		{
 			if (Keyboard::IsKeyPressed(GameKeys::LEFT) && !Keyboard::IsKeyPressed(GameKeys::RIGHT))
 			{
-				if (vel.x > 0) animation.Ensure(MARIO_TURN);
-				else animation.Ensure(MARIO_WALK);
+				isWalking = true;
+				if (vel.x > 0) {
+					animation.Ensure(MARIO_TURN);
+					isTurning = true;
+				}
+				else {
+					animation.Ensure(MARIO_WALK);
+				}
 			}
 			else if (Keyboard::IsKeyPressed(GameKeys::RIGHT) && !Keyboard::IsKeyPressed(GameKeys::LEFT))
 			{
-				if (vel.x < 0) animation.Ensure(MARIO_TURN);
+				isWalking = true;
+				if (vel.x < 0) {
+					animation.Ensure(MARIO_TURN);
+					isTurning = true;
+				}
 				else animation.Ensure(MARIO_WALK);
 			}
 			else
@@ -307,4 +347,30 @@ horz_exit:
 			else animation.Ensure(MARIO_JUMP);
 		}
 	}
+
+	// Particulitas
+	if (isWalking) {
+		if (acc.x < 0) {
+			polvito.pos = pos + vec(4.f, -0.5f);
+			if (polvito.min_vel.x < 0) {
+				float aux = polvito.max_vel.x;
+				polvito.max_vel.x = -polvito.min_vel.x;
+				polvito.min_vel.x = -aux;
+			}
+		}
+		else {
+			polvito.pos = pos + vec(-4.f, -0.5f);
+			if (polvito.min_vel.x > 0) {
+				float aux = polvito.max_vel.x;
+				polvito.max_vel.x = -polvito.min_vel.x;
+				polvito.min_vel.x = -aux;
+			}
+		}
+		if (isTurning) {
+			polvito.AddParticle();
+			polvito.AddParticle();
+		}
+		polvito.Spawn(dt);
+	}
+	polvito.UpdateParticles(dt);
 }

@@ -3,6 +3,7 @@
 #include "vector.h"
 #include "bounds.h"
 #include "tilemap.h"
+#include "partsys.h"
 #include "animation.h"
 #include <iostream>
 
@@ -37,7 +38,11 @@ struct JumpMan
     bool crouched;
     bool lookingLeft;
 
+    PartSys polvito;
+
     TileMap* map;
+
+    void InitPolvito();
 
 };
 
