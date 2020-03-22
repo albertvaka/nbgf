@@ -57,13 +57,9 @@ struct RndEngine
 	inline uint roll_1d20() { return distr_1d20(gen); }
 
 	inline uint roll(uint min, uint max) { return std::uniform_int_distribution<uint>(min, max)(gen); }
-	inline uint roll(uint max) { return roll(0, max-1); }
-
 	inline uint64_t roll64(uint64_t min, uint64_t max) { return std::uniform_int_distribution<uint64_t>(min, max)(gen); }
-	inline uint64_t roll64(uint64_t max) { return roll(1, (uint)max); }
-
 	inline float rollf(float min, float max) { return std::uniform_real_distribution<float>(min, max)(gen); }
-	inline float rollf(float max) { return rollf(1, max); }
+
 	inline float rollf() { return uniform(gen); }
 
 	template<typename _T>
