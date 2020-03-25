@@ -39,6 +39,7 @@ int main()
 	sf::Clock fpsClock;
 	int fps_counter = 0;
 #endif
+	bool frameByFrame = false;
 
 	sf::Clock dtClock;
 
@@ -59,10 +60,17 @@ int main()
 
 		Input::Update(time);
 
-		int dt = time.asMilliseconds();
-		Mates::ClampMax(dt, 90); //Slow game down instead of epic jumps
+		if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
+			frameByFrame = !frameByFrame;
+		}
 
-		currentScene->Update(dt);
+		if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT)) {
+			int dt = time.asMilliseconds();
+			Mates::ClampMax(dt, 90); //Slow game down instead of epic jumps
+
+			currentScene->Update(dt);
+		}
+
 		currentScene->Draw(window);
 
 		Camera::StartGuiDraw();
