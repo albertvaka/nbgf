@@ -24,8 +24,7 @@ const float vel_walljump = 130;
 const vec vel_max(225, 200);
 
 JumpMan::JumpMan(TileMap* _map)
-	: acc(0, 0)
-	, vel(0, 0)
+	: vel(0, 0)
 	, jumpTimeLeft(0.0f)
 	, crouched(false)
 	, map(_map)
@@ -57,7 +56,6 @@ void JumpMan::Update(float dt)
 	float marginGrounded = 1.f; //in pixels
 	bool grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1, pos.y + marginGrounded);
 
-	acc = vec(0, 0);
 	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
 
 	//Si en el frame anterior estaba tocando el suelo, inicializando
@@ -77,6 +75,7 @@ void JumpMan::Update(float dt)
 		}
 	}
 
+	vec acc = vec(0, 0);
 	if (Keyboard::IsKeyPressed(GameKeys::LEFT)) {
 		lookingLeft = true;
 		if (grounded) {
@@ -337,7 +336,7 @@ horz_exit:
 		}
 	}
 	if (isWalking) {
-		DoPolvitoRun(dt, isTurning);
+		DoPolvitoRun(dt, acc, isTurning);
 	}
 	polvito.UpdateParticles(dt);
 }
@@ -376,7 +375,7 @@ void JumpMan::InitPolvito() {
 	polvito.alpha_vel = -1.8f;
 }
 
-void JumpMan::DoPolvitoJump() {
+inline void JumpMan::DoPolvitoJump() {
 	// Pluf cap als dos costats
 	polvito.pos = pos + vec(-1.5f, -1.5f);
 	if (polvito.min_vel.x > 0) {
@@ -388,7 +387,7 @@ void JumpMan::DoPolvitoJump() {
 	polvito.AddParticle(2);
 }
 
-void JumpMan::DoPolvitoWallJump() {
+inline void JumpMan::DoPolvitoWallJump() {
 	// Pluf cap als dos costats
 	if (vel.x > 0) {
 		polvito.pos = pos + vec(-7.f, -16.f);
@@ -403,7 +402,7 @@ void JumpMan::DoPolvitoWallJump() {
 	polvito.AddParticle(5);
 }
 
-void JumpMan::DoPolvitoLand() {
+inline void JumpMan::DoPolvitoLand() {
 
 	if (vel.y > 50) {
 		// Pluf cap als dos costats
@@ -418,7 +417,7 @@ void JumpMan::DoPolvitoLand() {
 	}
 }
 
-void JumpMan::DoPolvitoRun(float dt, bool isTurning) {
+inline void JumpMan::DoPolvitoRun(float dt, vec acc, bool isTurning) {
 	if (acc.x < 0) {
 		polvito.pos = pos + vec(4.f, -0.5f);
 		if (polvito.min_vel.x < 0) {

@@ -13,7 +13,6 @@ struct JumpMan
     void Update(float GameTime);
     void Draw(sf::Sprite& spr, sf::RenderTarget& window);
     void Reset() {
-        acc = vec(0, 0);
         vel = vec(0, 0);
     }
 
@@ -22,7 +21,6 @@ struct JumpMan
     }
 
     vec pos;
-    vec acc;
     vec vel;
 
     Animation animation;
@@ -43,10 +41,10 @@ struct JumpMan
     TileMap* map;
 
     void InitPolvito();
-    void DoPolvitoJump();
-    void DoPolvitoWallJump();
-    void DoPolvitoLand();
-    void DoPolvitoRun(float dt, bool isTurning);
+    inline void DoPolvitoJump();
+    inline void DoPolvitoWallJump();
+    inline void DoPolvitoLand();
+    inline void DoPolvitoRun(float dt, vec acc, bool isTurning);
 
 };
 
