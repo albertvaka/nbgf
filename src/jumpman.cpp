@@ -59,20 +59,6 @@ void JumpMan::Update(float dt)
 
 	acc = vec(0, 0);
 	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
-	if (Keyboard::IsKeyPressed(GameKeys::LEFT)) {
-		lookingLeft = true;
-		if (grounded) {
-			if (!crouched) acc.x -= run_acc;
-		}
-		else acc.x -= run_acc_onair;
-	}
-	if (Keyboard::IsKeyPressed(GameKeys::RIGHT)) {
-		lookingLeft = false;
-		if (grounded) {
-			if (!crouched) acc.x += run_acc;
-		}
-		else acc.x += run_acc_onair;
-	}
 
 	//Si en el frame anterior estaba tocando el suelo, inicializando
 	//jumpTimeLeft a mas de 0 permite al jugador saltar durante ese rato
@@ -89,6 +75,21 @@ void JumpMan::Update(float dt)
 		else {
 			DoPolvitoJump();
 		}
+	}
+
+	if (Keyboard::IsKeyPressed(GameKeys::LEFT)) {
+		lookingLeft = true;
+		if (grounded) {
+			if (!crouched) acc.x -= run_acc;
+		}
+		else acc.x -= run_acc_onair;
+	}
+	if (Keyboard::IsKeyPressed(GameKeys::RIGHT)) {
+		lookingLeft = false;
+		if (grounded) {
+			if (!crouched) acc.x += run_acc;
+		}
+		else acc.x += run_acc_onair;
 	}
 
 	if (Keyboard::IsKeyPressed(GameKeys::UP) && jumpTimeLeft > 0)
