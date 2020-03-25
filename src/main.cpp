@@ -19,6 +19,8 @@
 Scene* SceneManager::currentScene = nullptr;
 sf::Clock mainClock;
 
+#define _FPS_COUNTER
+
 int main()
 {
 
@@ -28,7 +30,7 @@ int main()
 	ImGui::SFML::Init(window);
 	Input::Init(window);
 
-#ifdef _DEBUG
+#ifdef _FPS_COUNTER
 	sf::Font font;
 	font.loadFromFile("data/PressStart2P.ttf");
 	sf::Text txt_fps;
@@ -65,7 +67,7 @@ int main()
 
 		Camera::StartGuiDraw();
 
-#ifdef _DEBUG
+#ifdef _FPS_COUNTER
 		fps_counter++;
 		if (fpsClock.getElapsedTime().asSeconds() > 0.5f)
 		{
