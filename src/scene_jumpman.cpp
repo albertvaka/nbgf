@@ -99,10 +99,10 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	//player.bounds().Draw(window);
 	//Bounds(player.pos, vec(1, 1)).Draw(window, sf::Color::White);
 
-	ImGui::Begin(GameData::GAME_TITLE.c_str());
-	ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
-	ImGui::End();
+	//ImGui::Begin(GameData::GAME_TITLE.c_str());
+	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
+	//ImGui::End();
 
-	player.polvito.DrawImGUI("Polvito");
+	//player.polvito.DrawImGUI("Polvito");
 }
 
