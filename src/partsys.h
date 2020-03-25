@@ -44,9 +44,16 @@ struct PartSys {
 	void UpdateParticles(float dt); //Doesn't create new particles, use Spawn() 
 	void Draw(sf::RenderTarget& rt);
 
-	void AddParticle();
+	void AddParticle(int n=1);
 
 	void DrawImGUI(const char* title = "Particles");
+
+	void FlipX() {
+		float aux = max_vel.x;
+		max_vel.x = -min_vel.x;
+		min_vel.x = -aux;
+		acc.x = -acc.x;
+	}
 
 private:
 	struct Particle {
