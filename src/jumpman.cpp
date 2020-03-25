@@ -55,7 +55,7 @@ void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
 void JumpMan::Update(float dt)
 {
 	float marginGrounded = 1.f; //in pixels
-	bool grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1, pos.y + marginGrounded);
+	bool grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1.f, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1.f, pos.y + marginGrounded);
 
 	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
 
@@ -72,7 +72,10 @@ void JumpMan::Update(float dt)
 			DoPolvitoWallJump();
 		}
 		else {
-			DoPolvitoJump();
+			bool ceiling = map->isCollInWorldCoordinates(pos.x - cen.x + 1.f, pos.y - siz.y - 1.f) || map->isCollInWorldCoordinates(pos.x + cen.x - 1.f, pos.y - siz.y - 1.f);
+			if (!ceiling) {
+				DoPolvitoJump();
+			}
 		}
 	}
 
