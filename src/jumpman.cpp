@@ -20,6 +20,7 @@ const float fri_acc_wall_down = 450;
 // jump
 const float vel_jump = -150;
 const float vel_walljump = 130;
+const float jump_time = 0.35f;
 
 const vec vel_max(225, 200);
 
@@ -64,7 +65,7 @@ void JumpMan::Update(float dt)
 	{
 		Keyboard::ConsumeJustPressed(GameKeys::UP);
 		//if (!Keyboard::IsKeyJustPressed(GameKeys::UP)) std::cout << "cheats" << std::endl;
-		jumpTimeLeft = 0.35f;
+		jumpTimeLeft = jump_time;
 		if (onWall && !grounded && !crouched) {
 			vel.x = vel_walljump * -1.0f * float(onWall);
 			lookingLeft = !lookingLeft;
