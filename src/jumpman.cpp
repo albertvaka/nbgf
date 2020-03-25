@@ -173,9 +173,8 @@ void JumpMan::Update(float dt)
 	if (vel.y < -vel_max.y) vel.y = -vel_max.y;
 
 	//uniformly accelerated linear motion
-	vec pos0 = pos;
-	vec posf = pos0 + vel * dt; //posicion final
-	//std::cout << abs(pos0.x - posf.x) / dt << std::endl;
+	vec posf = pos + vel * dt; //posicion final
+	//std::cout << abs(pos.x - posf.x) / dt << std::endl;
 
 	//Obtenemos el vector direccion para saber hacia donde nos dirigimos
 
@@ -196,14 +195,14 @@ void JumpMan::Update(float dt)
 	// significa que estaremos grounded, en caso de subir significia que estabamos
 	// saltando y que ya no podremos saltar mas.
 	vec csiz = siz - cen;
-	vec direction = posf - pos0;
+	vec direction = posf - pos;
 	const int N = 1;
 	if (direction.y < 0) //Vamos hacia arriba
 	{
-		int yo = map->tilePosY(pos0.y - siz.y); // usamos la y superior del sprite
+		int yo = map->tilePosY(pos.y - siz.y); // usamos la y superior del sprite
 		int yn = map->tilePosY(posf.y - siz.y);
-		int xl = map->tilePosX(pos0.x - cen.x + N);
-		int xr = map->tilePosX(pos0.x + csiz.x - N);
+		int xl = map->tilePosX(pos.x - cen.x + N);
+		int xr = map->tilePosX(pos.x + csiz.x - N);
 		for (int y = yo; y >= yn; y--)
 		{
 			for (int x = xl; x <= xr; x++)
@@ -221,10 +220,10 @@ void JumpMan::Update(float dt)
 	}
 	else if (direction.y > 0) //Vamos hacia abajo
 	{
-		int yo = map->tilePosY(pos0.y); // usamos la y inferior del sprite
+		int yo = map->tilePosY(pos.y); // usamos la y inferior del sprite
 		int yn = map->tilePosY(posf.y);
-		int xl = map->tilePosX(pos0.x - cen.x + N);
-		int xr = map->tilePosX(pos0.x + csiz.x - N);
+		int xl = map->tilePosX(pos.x - cen.x + N);
+		int xr = map->tilePosX(pos.x + csiz.x - N);
 		for (int y = yo; y <= yn; y++)
 		{
 			for (int x = xl; x <= xr; x++)
@@ -241,13 +240,14 @@ void JumpMan::Update(float dt)
 		//No collision down
 	}
 
+	pos.y = posf.y;
 vert_exit:
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
-		int xo = map->tilePosX(pos0.x - cen.x);
+		int xo = map->tilePosX(pos.x - cen.x);
 		int xn = map->tilePosX(posf.x - cen.x);
-		int yTop = map->tilePosY(pos0.y - siz.y + N);
-		int yBottom = map->tilePosY(pos0.y - N);
+		int yTop = map->tilePosY(pos.y - siz.y + N);
+		int yBottom = map->tilePosY(pos.y - N);
 		for (int x = xo; x >= xn; x--)
 		{
 			for (int y = yTop; y <= yBottom; y++)
@@ -266,10 +266,10 @@ vert_exit:
 	}
 	else if (direction.x > 0) //Vamos hacia la derecha
 	{
-		int xo = map->tilePosX(pos0.x + csiz.x);
+		int xo = map->tilePosX(pos.x + csiz.x);
 		int xn = map->tilePosX(posf.x + csiz.x);
-		int yTop = map->tilePosY(pos0.y - siz.y + N);
-		int yBottom = map->tilePosY(pos0.y - N);
+		int yTop = map->tilePosY(pos.y - siz.y + N);
+		int yBottom = map->tilePosY(pos.y - N);
 		for (int x = xo; x <= xn; x++)
 		{
 			for (int y = yTop; y <= yBottom; y++)
