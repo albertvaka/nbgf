@@ -1,4 +1,6 @@
 #include "jumpman.h"
+//Based on the work of: Jordi Santiago
+
 #include "input.h"
 
 // accel
@@ -20,32 +22,6 @@ const float vel_jump = -150;
 const float vel_walljump = 130;
 
 const vec vel_max(225, 200);
-
-void JumpMan::InitPolvito() {
-	polvito.min_interval = 0.02f;
-	polvito.max_interval = 0.05f;
-
-	polvito.min_ttl = 0.1f;
-	polvito.max_ttl = 0.4f;
-
-	polvito.min_vel.x = 9; //it's swapped when changing direction
-	polvito.max_vel.x = 18;
-
-	polvito.min_vel.y = -50.f;
-	polvito.max_vel.y = -20.f;
-
-	polvito.acc.y = 120.f;
-
-	polvito.min_scale = 1.0f;
-	polvito.max_scale = 1.8f;
-	polvito.scale_vel = -3.5f;
-
-	polvito.min_rotation = 0.f;
-	polvito.max_rotation = 360.f;
-	polvito.rotation_vel = 160.f;
-
-	polvito.alpha_vel = -1.8f;
-}
 
 JumpMan::JumpMan(TileMap* _map)
 	: acc(0, 0)
@@ -81,8 +57,8 @@ void JumpMan::Update(float dt)
 	float marginGrounded = 1.f; //in pixels
 	bool grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1, pos.y + marginGrounded);
 
-	acc = vec(0,0);
-	crouched = ((crouched||grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched&&!grounded);
+	acc = vec(0, 0);
+	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
 	if (Keyboard::IsKeyPressed(GameKeys::LEFT)) {
 		lookingLeft = true;
 		if (grounded) {
@@ -108,6 +84,10 @@ void JumpMan::Update(float dt)
 		if (onWall && !grounded && !crouched) {
 			vel.x = vel_walljump * -1.0f * float(onWall);
 			lookingLeft = !lookingLeft;
+			DoPolvitoWallJump();
+		}
+		else {
+			DoPolvitoJump();
 		}
 	}
 
@@ -130,14 +110,14 @@ void JumpMan::Update(float dt)
 	}
 
 	//FRICTION
-	vec fri = vec(0,0);
+	vec fri = vec(0, 0);
 	if (grounded)
 	{
-		if (crouched) 
+		if (crouched)
 		{
 			fri.x = fri_acc_floor_crouched;
 		}
-		else 
+		else
 		{
 			fri.x = fri_acc_floor;
 		}
@@ -151,7 +131,8 @@ void JumpMan::Update(float dt)
 	{
 		if (vel.y < 0) { //Vamos hacia arriba
 			fri.y = fri_acc_wall_up;
-		} else {
+		}
+		else {
 			fri.y = fri_acc_wall_down;
 		}
 	}
@@ -235,7 +216,7 @@ void JumpMan::Update(float dt)
 				}
 			}
 		}
-
+		//No collision up
 	}
 	else if (direction.y > 0) //Vamos hacia abajo
 	{
@@ -250,11 +231,13 @@ void JumpMan::Update(float dt)
 				if (map->isColl(x, y))
 				{
 					posf.y = map->Bottom(y);
+					DoPolvitoLand();
 					vel.y = 0;
 					goto vert_exit;
 				}
 			}
 		}
+		//No collision down
 	}
 
 vert_exit:
@@ -273,10 +256,12 @@ vert_exit:
 					posf.x = map->Right(x) + cen.x;
 					vel.x = -3.f; //stay against wall
 					onWall = ONWALL_LEFT;
+					lookingLeft = true;
 					goto horz_exit;
 				}
 			}
 		}
+		//No collision left
 	}
 	else if (direction.x > 0) //Vamos hacia la derecha
 	{
@@ -293,17 +278,19 @@ vert_exit:
 					posf.x = map->Left(x) - csiz.x;
 					vel.x = 3.f; //stay against wall
 					onWall = ONWALL_RIGHT;
+					lookingLeft = false;
 					goto horz_exit;
 				}
 			}
 		}
+		//No collision right
 	}
 	onWall = ONWALL_NO;
 
 horz_exit:
 	pos = posf; //asignamos la posicion final a pos
 
-	animation.Update((int)(dt*1000));
+	animation.Update((int)(dt * 1000));
 
 	bool isWalking = false;
 	bool isTurning = false;
@@ -348,30 +335,103 @@ horz_exit:
 			else animation.Ensure(MARIO_JUMP);
 		}
 	}
-
-	// Particulitas
 	if (isWalking) {
-		if (acc.x < 0) {
-			polvito.pos = pos + vec(4.f, -0.5f);
-			if (polvito.min_vel.x < 0) {
-				float aux = polvito.max_vel.x;
-				polvito.max_vel.x = -polvito.min_vel.x;
-				polvito.min_vel.x = -aux;
-			}
-		}
-		else {
-			polvito.pos = pos + vec(-4.f, -0.5f);
-			if (polvito.min_vel.x > 0) {
-				float aux = polvito.max_vel.x;
-				polvito.max_vel.x = -polvito.min_vel.x;
-				polvito.min_vel.x = -aux;
-			}
-		}
-		if (isTurning) {
-			polvito.AddParticle();
-			polvito.AddParticle();
-		}
-		polvito.Spawn(dt);
+		DoPolvitoRun(dt, isTurning);
 	}
 	polvito.UpdateParticles(dt);
+}
+
+
+
+
+
+
+
+// PARTICULITAS
+
+void JumpMan::InitPolvito() {
+	polvito.min_interval = 0.02f;
+	polvito.max_interval = 0.05f;
+
+	polvito.min_ttl = 0.1f;
+	polvito.max_ttl = 0.4f;
+
+	polvito.min_vel.x = 9; //it's swapped when changing direction
+	polvito.max_vel.x = 18;
+
+	polvito.min_vel.y = -50.f;
+	polvito.max_vel.y = -20.f;
+
+	polvito.acc.y = 120.f;
+
+	polvito.min_scale = 1.0f;
+	polvito.max_scale = 1.8f;
+	polvito.scale_vel = -3.5f;
+
+	polvito.min_rotation = 0.f;
+	polvito.max_rotation = 360.f;
+	polvito.rotation_vel = 160.f;
+
+	polvito.alpha_vel = -1.8f;
+}
+
+void JumpMan::DoPolvitoJump() {
+	// Pluf cap als dos costats
+	polvito.pos = pos + vec(-1.5f, -1.5f);
+	if (polvito.min_vel.x > 0) {
+		polvito.FlipX();
+	}
+	polvito.AddParticle(2);
+	polvito.pos = pos + vec(1.5f, -1.5f);
+	polvito.FlipX();
+	polvito.AddParticle(2);
+}
+
+void JumpMan::DoPolvitoWallJump() {
+	// Pluf cap als dos costats
+	if (vel.x > 0) {
+		polvito.pos = pos + vec(-7.f, -16.f);
+	}
+	else {
+		polvito.pos = pos + vec(7.f, -16.f);
+	}
+
+	if (vel.x < 0 && polvito.min_vel.x > 0 || vel.x > 0 && polvito.min_vel.x < 0) {
+		polvito.FlipX();
+	}
+	polvito.AddParticle(5);
+}
+
+void JumpMan::DoPolvitoLand() {
+
+	if (vel.y > 50) {
+		// Pluf cap als dos costats
+		polvito.pos = pos + vec(-8.f, -0.5f);
+		if (polvito.min_vel.x > 0) {
+			polvito.FlipX();
+		}
+		polvito.AddParticle(3);
+		polvito.pos = pos + vec(8.f, -0.5f);
+		polvito.FlipX();
+		polvito.AddParticle(3);
+	}
+}
+
+void JumpMan::DoPolvitoRun(float dt, bool isTurning) {
+	if (acc.x < 0) {
+		polvito.pos = pos + vec(4.f, -0.5f);
+		if (polvito.min_vel.x < 0) {
+			polvito.FlipX();
+		}
+	}
+	else {
+		polvito.pos = pos + vec(-4.f, -0.5f);
+		if (polvito.min_vel.x > 0) {
+			polvito.FlipX();
+		}
+	}
+	if (isTurning) {
+		polvito.AddParticle(2);
+	}
+	polvito.Spawn(dt);
 }

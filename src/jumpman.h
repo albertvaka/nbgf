@@ -43,6 +43,10 @@ struct JumpMan
     TileMap* map;
 
     void InitPolvito();
+    void DoPolvitoJump();
+    void DoPolvitoWallJump();
+    void DoPolvitoLand();
+    void DoPolvitoRun(float dt, bool isTurning);
 
 };
 
