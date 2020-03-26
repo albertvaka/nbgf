@@ -75,6 +75,7 @@ void JumpMan::Update(float dt)
 			bool ceiling = map->isCollInWorldCoordinates(pos.x - cen.x + 1.f, pos.y - siz.y - 1.f) || map->isCollInWorldCoordinates(pos.x + cen.x - 1.f, pos.y - siz.y - 1.f);
 			if (!ceiling) {
 				DoPolvitoJump();
+				grounded = false;
 			}
 		}
 	}
