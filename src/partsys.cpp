@@ -6,8 +6,8 @@
 void PartSys::Spawn(float dt) {
 	time -= dt;
 	while (time < 0) {
-		AddParticle(1);
 		time += Random::rollf(min_interval, max_interval);
+		Particle& p = AddParticle();
 	}
 }
 
@@ -37,18 +37,17 @@ void PartSys::Draw(sf::RenderTarget& rt) {
 	}
 }
 
-void PartSys::AddParticle(int n) {
-	while (n-- > 0) {
-		particles.push_back({});
-		Particle& p = particles.back();
-		p.ttl = Random::rollf(min_ttl, max_ttl);
-		p.pos = pos;
-		p.vel = vec::Rand(min_vel, max_vel);
-		p.sprite = Random::roll(sprites.size() - 1);
-		p.rotation = Random::rollf(min_rotation, max_rotation);
-		p.scale = Random::rollf(min_scale, max_scale);
-		p.alpha = alpha;
-	}
+PartSys::Particle& PartSys::AddParticle() {
+	particles.push_back({});
+	Particle& p = particles.back();
+	p.ttl = Random::rollf(min_ttl, max_ttl);
+	p.pos = pos;
+	p.vel = vec::Rand(min_vel, max_vel);
+	p.sprite = Random::roll(sprites.size() - 1);
+	p.rotation = Random::rollf(min_rotation, max_rotation);
+	p.scale = Random::rollf(min_scale, max_scale);
+	p.alpha = alpha;
+	return p;
 }
 
 void PartSys::DrawImGUI(const char* title) {

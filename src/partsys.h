@@ -7,6 +7,16 @@
 
 struct PartSys {
 
+	struct Particle {
+		int sprite;
+		vec pos;
+		vec vel;
+		float ttl;
+		float scale;
+		float rotation;
+		float alpha;
+	};
+
 	vec pos = vec();
 
 	vec max_vel = vec();
@@ -44,7 +54,12 @@ struct PartSys {
 	void UpdateParticles(float dt); //Doesn't create new particles, use Spawn() 
 	void Draw(sf::RenderTarget& rt);
 
-	void AddParticle(int n=1);
+	Particle& AddParticle();
+	inline void AddParticles(int n) {
+		while (n-- > 0) {
+			AddParticle();
+		}
+	}
 
 	void DrawImGUI(const char* title = "Particles");
 
@@ -56,16 +71,6 @@ struct PartSys {
 	}
 
 private:
-	struct Particle {
-		int sprite;
-		vec pos;
-		vec vel;
-		float ttl;
-		float scale;
-		float rotation;
-		float alpha;
-	};
-
 	std::vector<Particle> particles;
 	std::vector<sf::Sprite> sprites;
 };

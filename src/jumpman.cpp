@@ -391,10 +391,10 @@ inline void JumpMan::DoPolvitoJump() {
 	if (polvito.min_vel.x > 0) {
 		polvito.FlipX();
 	}
-	polvito.AddParticle(2);
+	polvito.AddParticles(2);
 	polvito.pos = pos + vec(1.5f, -1.5f);
 	polvito.FlipX();
-	polvito.AddParticle(2);
+	polvito.AddParticles(2);
 }
 
 inline void JumpMan::DoPolvitoWallJump() {
@@ -409,7 +409,7 @@ inline void JumpMan::DoPolvitoWallJump() {
 	if (vel.x < 0 && polvito.min_vel.x > 0 || vel.x > 0 && polvito.min_vel.x < 0) {
 		polvito.FlipX();
 	}
-	polvito.AddParticle(5);
+	polvito.AddParticles(5);
 }
 
 inline void JumpMan::DoPolvitoLand() {
@@ -420,10 +420,10 @@ inline void JumpMan::DoPolvitoLand() {
 		if (polvito.min_vel.x > 0) {
 			polvito.FlipX();
 		}
-		polvito.AddParticle(3);
+		polvito.AddParticles(3);
 		polvito.pos = pos + vec(8.f, -0.5f);
 		polvito.FlipX();
-		polvito.AddParticle(3);
+		polvito.AddParticles(3);
 	}
 }
 
@@ -441,7 +441,7 @@ inline void JumpMan::DoPolvitoRun(float dt, vec acc, bool isTurning) {
 		}
 	}
 	if (isTurning) {
-		polvito.AddParticle(2);
+		polvito.AddParticles(2);
 	}
 	polvito.Spawn(dt);
 }
