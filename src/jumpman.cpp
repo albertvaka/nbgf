@@ -287,13 +287,13 @@ horz_exit:
 					posf.y = map->Bottom(y);
 					DoPolvitoLand();
 					vel.y = 0;
+					onWall = ONWALL_NO;
 					goto vert_exit;
 				}
 			}
 		}
 		//No collision down
 	}
-
 vert_exit:
 	pos = posf; //asignamos la posicion final a pos
 
