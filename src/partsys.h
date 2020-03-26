@@ -15,6 +15,16 @@ struct PartSys {
 		float scale;
 		float rotation;
 		float alpha;
+		inline void Update(float dt, const PartSys& system) {
+			ttl -= dt;
+			vel += system.acc * dt;
+			pos += vel * dt;
+			scale += system.scale_vel * dt;
+			Mates::ClampMin(scale, 0.0001f);
+			rotation += system.rotation_vel * dt;
+			alpha += system.alpha_vel * dt;
+			Mates::Clamp(alpha, 0.f, 1.f);
+		}
 	};
 
 	vec pos = vec();

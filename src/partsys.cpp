@@ -3,28 +3,23 @@
 #include "imgui.h"
 #include "rand.h"
 
+#include <iostream>
+
 void PartSys::Spawn(float dt) {
-	time -= dt;
-	while (time < 0) {
-		time += Random::rollf(min_interval, max_interval);
+	time += dt;
+	while (time > 0) {
 		Particle& p = AddParticle();
+		//p.Update(time, *this);
+		time -= Random::rollf(min_interval, max_interval);
 	}
 }
 
 void PartSys::UpdateParticles(float dt) {
 	for (Particle& p : particles) {
-		p.ttl -= dt;
-		p.vel += acc * dt;
-		p.pos += p.vel * dt;
-		p.scale += scale_vel * dt;
-		Mates::ClampMin(p.scale, 0.0001f);
-		p.rotation += rotation_vel * dt;
-		p.alpha += alpha_vel * dt;
-		Mates::Clamp(p.alpha, 0.f, 1.f);
+		p.Update(dt, *this);
 	}
 	particles.erase(std::remove_if(particles.begin(), particles.end(), [](const Particle& p) { return p.ttl < 0; }), particles.end());
 }
-
 
 void PartSys::Draw(sf::RenderTarget& rt) {
 	for (const Particle& p : particles) {
