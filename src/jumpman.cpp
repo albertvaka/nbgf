@@ -11,7 +11,7 @@ const float gravity_acc = 600;
 // friction X
 const float fri_acc_floor = 1000;
 const float fri_acc_floor_crouched = 450;
-const float fri_acc_air = 1000 / 7.f;
+const float fri_acc_air = 145;
 
 // friction Y
 const float fri_acc_wall_up = 1200;
@@ -19,10 +19,10 @@ const float fri_acc_wall_down = 450;
 
 // jump
 const float vel_jump = -150;
-const float vel_walljump = 100;
+const float vel_walljump = 90;
 const float jump_time = 0.35f;
 
-const vec vel_max(225, 200);
+const vec vel_max(220, 200);
 
 JumpMan::JumpMan(TileMap* _map)
 	: vel(0, 0)
