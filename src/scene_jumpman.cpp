@@ -47,6 +47,11 @@ void JumpScene::ExitScene()
 }
 
 void JumpScene::Update(int dtMilis) {
+
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.tilePos(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
+		EnterScene();
+	}
+
 	float dt = dtMilis / 1000.f;
 	transition.update(dt);
 	player.Update(dt);
@@ -71,17 +76,12 @@ void JumpScene::Update(int dtMilis) {
 	Mates::Clamp(camPos.x, minX, maxX);
 	Camera::SetCameraCenter(camPos);
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.tilePos(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
-		EnterScene();
-	}
-
 	if (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right)) {
 		bool what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left);
 		vec pos = Mouse::GetPositionInWorld();
 		sf::Vector2i tile = map.tilePos(pos);
 		map.set(tile.x, tile.y, what_to_set);
 	}
-
 
 }
 
