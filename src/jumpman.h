@@ -14,6 +14,7 @@ struct JumpMan
     void Draw(sf::Sprite& spr, sf::RenderTarget& window);
     void Reset() {
         vel = vec(0, 0);
+        polvito.Clear();
     }
 
     Bounds bounds() {

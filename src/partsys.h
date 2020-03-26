@@ -72,6 +72,7 @@ struct PartSys {
 	}
 
 	void DrawImGUI(const char* title = "Particles");
+	void Clear() { particles.clear(); }
 
 	void FlipX() {
 		float aux = max_vel.x;
