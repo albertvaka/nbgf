@@ -38,6 +38,7 @@ int main()
 	txt_fps.setPosition(10, 10);
 	sf::Clock fpsClock;
 	int fps_counter = 0;
+	bool slowDown = false;
 #endif
 	bool frameByFrame = false;
 
@@ -66,8 +67,11 @@ int main()
 
 		if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT)) {
 			int dt = time.asMilliseconds();
-			Mates::ClampMax(dt, 90); //Slow game down instead of epic jumps
-
+			if (dt> 60) // less than 17 FPS
+			{
+				dt = 60; //Slow game down instead of epic jumps
+				slowDown = true;
+			}
 			currentScene->Update(dt);
 		}
 
@@ -79,7 +83,8 @@ int main()
 		fps_counter++;
 		if (fpsClock.getElapsedTime().asSeconds() > 0.5f)
 		{
-			txt_fps.setString(std::to_string(int(fps_counter / fpsClock.restart().asSeconds())));
+			txt_fps.setString(std::to_string(int(fps_counter / fpsClock.restart().asSeconds())) + (slowDown ? "!" : ""));
+			slowDown = false;
 			fps_counter = 0;
 		}
 		window.draw(txt_fps);
