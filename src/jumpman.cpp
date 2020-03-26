@@ -288,6 +288,7 @@ horz_exit:
 					DoPolvitoLand();
 					vel.y = 0;
 					onWall = ONWALL_NO;
+					grounded = true;
 					goto vert_exit;
 				}
 			}
@@ -308,8 +309,6 @@ vert_exit:
 	}
 	else
 	{
-		// re-eval grounded after moving for animation purposes (prevents one-frame animation changes)
-		grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1.f, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1.f, pos.y + marginGrounded);
 
 		siz.y = 32;
 		if (grounded)
