@@ -416,12 +416,12 @@ inline void JumpMan::DoPolvitoLand() {
 
 	if (vel.y > 50) {
 		// Pluf cap als dos costats
-		polvito.pos = pos + vec(-8.f, -0.5f);
+		polvito.pos = pos + vec(-8.f, -0.3f);
 		if (polvito.min_vel.x > 0) {
 			polvito.FlipX();
 		}
 		polvito.AddParticles(3);
-		polvito.pos = pos + vec(8.f, -0.5f);
+		polvito.pos = pos + vec(8.f, -0.3f);
 		polvito.FlipX();
 		polvito.AddParticles(3);
 	}
