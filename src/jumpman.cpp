@@ -200,51 +200,8 @@ void JumpMan::Update(float dt)
 	vec csiz = siz - cen;
 	vec direction = posf - pos;
 	const int N = 1;
-	if (direction.y < 0) //Vamos hacia arriba
-	{
-		int yo = map->tilePosY(pos.y - siz.y); // usamos la y superior del sprite
-		int yn = map->tilePosY(posf.y - siz.y);
-		int xl = map->tilePosX(pos.x - cen.x + N);
-		int xr = map->tilePosX(pos.x + csiz.x - N);
-		for (int y = yo; y >= yn; y--)
-		{
-			for (int x = xl; x <= xr; x++)
-			{
-				if (map->isColl(x, y))
-				{
-					posf.y = map->Top(y) + siz.y;
-					vel.y = 0;
-					jumpTimeLeft = 0;
-					goto vert_exit;
-				}
-			}
-		}
-		//No collision up
-	}
-	else if (direction.y > 0) //Vamos hacia abajo
-	{
-		int yo = map->tilePosY(pos.y); // usamos la y inferior del sprite
-		int yn = map->tilePosY(posf.y);
-		int xl = map->tilePosX(pos.x - cen.x + N);
-		int xr = map->tilePosX(pos.x + csiz.x - N);
-		for (int y = yo; y <= yn; y++)
-		{
-			for (int x = xl; x <= xr; x++)
-			{
-				if (map->isColl(x, y))
-				{
-					posf.y = map->Bottom(y);
-					DoPolvitoLand();
-					vel.y = 0;
-					goto vert_exit;
-				}
-			}
-		}
-		//No collision down
-	}
 
-	pos.y = posf.y;
-vert_exit:
+
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
 		int xo = map->tilePosX(pos.x - cen.x);
@@ -292,6 +249,52 @@ vert_exit:
 	onWall = ONWALL_NO;
 
 horz_exit:
+	pos.x = posf.x;
+
+	if (direction.y < 0) //Vamos hacia arriba
+	{
+		int yo = map->tilePosY(pos.y - siz.y); // usamos la y superior del sprite
+		int yn = map->tilePosY(posf.y - siz.y);
+		int xl = map->tilePosX(pos.x - cen.x + N);
+		int xr = map->tilePosX(pos.x + csiz.x - N);
+		for (int y = yo; y >= yn; y--)
+		{
+			for (int x = xl; x <= xr; x++)
+			{
+				if (map->isColl(x, y))
+				{
+					posf.y = map->Top(y) + siz.y;
+					vel.y = 0;
+					jumpTimeLeft = 0;
+					goto vert_exit;
+				}
+			}
+		}
+		//No collision up
+	}
+	else if (direction.y > 0) //Vamos hacia abajo
+	{
+		int yo = map->tilePosY(pos.y); // usamos la y inferior del sprite
+		int yn = map->tilePosY(posf.y);
+		int xl = map->tilePosX(pos.x - cen.x + N);
+		int xr = map->tilePosX(pos.x + csiz.x - N);
+		for (int y = yo; y <= yn; y++)
+		{
+			for (int x = xl; x <= xr; x++)
+			{
+				if (map->isColl(x, y))
+				{
+					posf.y = map->Bottom(y);
+					DoPolvitoLand();
+					vel.y = 0;
+					goto vert_exit;
+				}
+			}
+		}
+		//No collision down
+	}
+
+vert_exit:
 	pos = posf; //asignamos la posicion final a pos
 
 	animation.Update((int)(dt * 1000));
