@@ -360,13 +360,13 @@ vert_exit:
 // PARTICULITAS
 
 void JumpMan::InitPolvito() {
-	polvito.min_interval = 0.02f;
+	polvito.min_interval = 0.01f;
 	polvito.max_interval = 0.05f;
 
 	polvito.min_ttl = 0.1f;
-	polvito.max_ttl = 0.4f;
+	polvito.max_ttl = 0.3f;
 
-	polvito.min_vel.x = 9; //it's swapped when changing direction
+	polvito.min_vel.x = 3;
 	polvito.max_vel.x = 18;
 
 	polvito.min_vel.y = -50.f;
