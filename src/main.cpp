@@ -41,10 +41,6 @@ int main()
 	bool slowDown = false;
 #endif
 
-#ifdef _DEBUG
-	bool frameByFrame = false;
-#endif
-
 	sf::Clock dtClock;
 
 	//Scene* currentScene = new IntroScene();
@@ -66,12 +62,14 @@ int main()
 
 
 #ifdef _DEBUG
+		static bool frameByFrame = false;
 		if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
 			frameByFrame = !frameByFrame;
 		}
 
-		if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT) || Keyboard::IsKeyJustPressed(RESTART)) {
+		if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT) || Keyboard::IsKeyJustPressed(RESTART))
 #endif
+		{
 			int dt = time.asMilliseconds();
 			if (dt> 60) // less than 17 FPS
 			{
@@ -79,9 +77,7 @@ int main()
 				slowDown = true;
 			}
 			currentScene->Update(dt);
-#ifdef _DEBUG
 		}
-#endif
 
 		currentScene->Draw(window);
 
