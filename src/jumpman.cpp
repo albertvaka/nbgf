@@ -215,7 +215,7 @@ void JumpMan::Update(float dt)
 				if (map->isColl(x, y))
 				{
 					posf.x = map->Right(x) + cen.x;
-					vel.x = -3.f; //stay against wall
+					vel.x = -10.f; //stay against wall
 					onWall = ONWALL_LEFT;
 					lookingLeft = true;
 					goto horz_exit;
@@ -237,7 +237,7 @@ void JumpMan::Update(float dt)
 				if (map->isColl(x, y))
 				{
 					posf.x = map->Left(x) - csiz.x;
-					vel.x = 3.f; //stay against wall
+					vel.x = 10.f; //stay against wall
 					onWall = ONWALL_RIGHT;
 					lookingLeft = false;
 					goto horz_exit;
