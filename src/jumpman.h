@@ -22,7 +22,7 @@ struct JumpMan
     }
 
     vec pos;
-    vec vel;
+    vec vel = vec(0.f,0.f);
 
     Animation animation;
 
@@ -31,11 +31,11 @@ struct JumpMan
     
     enum { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
 
-    short onWall;
-    float jumpTimeLeft;
+    short onWall = ONWALL_NO;
+    float jumpTimeLeft = 0.0f;
     
-    bool crouched;
-    bool lookingLeft;
+    bool crouched = false;
+    bool lookingLeft = false;
 
     PartSys polvito;
 

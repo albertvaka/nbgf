@@ -25,10 +25,7 @@ const float jump_time = 0.35f;
 const vec vel_max(220, 200);
 
 JumpMan::JumpMan(TileMap* _map)
-	: vel(0, 0)
-	, jumpTimeLeft(0.0f)
-	, crouched(false)
-	, map(_map)
+	: map(_map)
 {
 	animation.Ensure(MARIO_IDLE);
 	sf::Rect rect = animation.CurrentFrame();
