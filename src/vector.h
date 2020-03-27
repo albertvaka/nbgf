@@ -70,11 +70,13 @@ struct vec : public sf::Vector2f
   //X axis to right like a Window app)
   inline int       Sign(const vec& v2) const;
 
+
+  // Angle in Degrees between the lines (origin to point a) and (origin to point b)
   float Angle(const vec& other) const
   {
     float deltaY = other.y - y;
-	float deltaX = other.x - x;
-    return atan2(deltaY, deltaX);
+    float deltaX = other.x - x;
+    return Mates::RadsToDegs(atan2(deltaY, deltaX));
   }
 
   //returns the vector that is perpendicular to this one.
