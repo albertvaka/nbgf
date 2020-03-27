@@ -99,6 +99,6 @@ void PartSys::DrawImGUI(const char* title) {
 	ImGui::SliderFloat("alpha_vel", &alpha_vel, -4.f, 4.f);
 	ImGui::SliderFloat("rotation_vel", &rotation_vel, -360.f, 360.f);
 	ImGui::SliderFloat2("accel", &acc.x, -32.f, 32.f);
-	ImGui::Text("Count: %d", particles.size());
+	ImGui::Text("Count: %lu", particles.size());
 	ImGui::End();
 }

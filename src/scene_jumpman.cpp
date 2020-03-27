@@ -1,5 +1,3 @@
-#pragma once
-
 #include "scene_jumpman.h"
 #include "input.h"
 #include "imgui.h"

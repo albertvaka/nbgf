@@ -403,7 +403,7 @@ inline void JumpMan::DoPolvitoWallJump() {
 		polvito.pos = pos + vec(7.f, -16.f);
 	}
 
-	if (vel.x < 0 && polvito.min_vel.x > 0 || vel.x > 0 && polvito.min_vel.x < 0) {
+	if ((vel.x < 0 && polvito.min_vel.x > 0) || (vel.x > 0 && polvito.min_vel.x < 0)) {
 		polvito.FlipX();
 	}
 	polvito.AddParticles(5);

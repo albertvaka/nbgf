@@ -31,8 +31,8 @@ struct TileMap
 	float Left(int x);
 	float Right(int x);
 
-	float unitsPerTile;
 	sf::Vector2i sizes;
+	float unitsPerTile;
 	bool* tiles;
 
 	bool isCollInWorldCoordinates(vec p) { return isColl(tilePos(p)); }

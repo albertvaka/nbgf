@@ -312,7 +312,7 @@ void GamePad::_UpdateInputState()
 
 void Keyboard::_UpdateInputState(float dt)
 {
-    for (int i = 0; i < magic_enum::enum_count<GameKeys>(); i++)
+    for (size_t i = 0; i < magic_enum::enum_count<GameKeys>(); i++)
 	{
         if (sf::Keyboard::isKeyPressed(key_map[i]) && Window::WindowHasFocus())
 		{
@@ -397,8 +397,8 @@ namespace Input
         Camera::ResetCamera();
         Camera::ResetGuiCamera();
         RemapInput();
-        for (int i = 0; i < magic_enum::enum_count<GameKeys>(); i++) Keyboard::key_states[i] = RELEASED;
-        for (int i = 0; i < sf::Mouse::ButtonCount; i++) Mouse::button_states[i] = RELEASED;
+        for (size_t i = 0; i < magic_enum::enum_count<GameKeys>(); i++) Keyboard::key_states[i] = RELEASED;
+        for (size_t i = 0; i < sf::Mouse::ButtonCount; i++) Mouse::button_states[i] = RELEASED;
 
     }
 }
