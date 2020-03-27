@@ -254,7 +254,6 @@ void Mouse::_UpdateInputState()
 
 }
 
-
 sf::Vector2i Mouse::GetPositionInWindow()
 {
     return sf::Mouse::getPosition(*Window::window); //window arg is needed for relative coords
@@ -265,6 +264,8 @@ vec Mouse::GetPositionInWorld()
     vec displacement = Camera::gameView.getCenter() - (Camera::gameView.getSize() / 2.f);
     return (vec(GetPositionInWindow())/Camera::zoom) + displacement;
 }
+
+
 void GamePad::_UpdateInputState()
     {
         int player = 0;

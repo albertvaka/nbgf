@@ -296,6 +296,7 @@ struct Mouse
 	static sf::Vector2i GetPositionInWindow();
 
 	static vec GetPositionInWorld();
+
 };
 
 namespace Input

@@ -39,12 +39,12 @@ namespace Mates
 
 	inline float DegsToRads(float degs)
 	{
-	return TwoPi * (degs / 360.0f);
+		return TwoPi * (degs / 360.0f);
 	}
 
 	inline float RadsToDegs(float rads)
 	{
-	return (rads * 360.0f) / TwoPi;
+		return (rads * 360.0f) / TwoPi;
 	}
 
 	//returns true if the parameter is equal to zero
