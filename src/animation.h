@@ -10,10 +10,15 @@ struct Animation
 	int current_frame;
 
 	bool loopable = true;
+	bool complete = false;
 
 	Animation()
 	{
 		Reset();
+	}
+
+	AnimationType GetCurrentAnim() {
+		return anim_type;
 	}
 
 	void Update(int dt)
@@ -40,6 +45,9 @@ struct Animation
 				current_frame = 0;
 				anim_timer = anim_timer % anim_data->timer[0];
 			}
+			else {
+				complete = true;
+			}
 		}
 	}
 
@@ -48,6 +56,7 @@ struct Animation
 		anim_timer = 0;
 		current_frame = 0;
 		loopable = true;
+		complete = false;
 	}
 
 	void Ensure(AnimationType type)
