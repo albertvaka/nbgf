@@ -31,6 +31,7 @@
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\anim_data.h" />
     <ClInclude Include="src\bounds.h" />
+    <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\cadaver.h" />
     <ClInclude Include="src\cinta.h" />
     <ClInclude Include="src\cleaner.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\extremity.h" />
     <ClInclude Include="src\game_data.h" />
+    <ClInclude Include="src\hospital_entity.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\intro_scene.h" />
     <ClInclude Include="src\jumpman.h" />

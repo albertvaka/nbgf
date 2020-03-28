@@ -1,12 +1,12 @@
 #pragma once
 
-#include "entity.h"
+#include "hospital_entity.h"
 #include "cadaver.h"
 #include "animation.h"
 #include "rand.h"
 #include "vector.h"
 
-struct Spawner : Entity, EntS<Spawner>
+struct Spawner : HospitalEntity, EntS<Spawner>
 {
 
 	const int INTERVAL = 6000;
@@ -39,7 +39,7 @@ struct Spawner : Entity, EntS<Spawner>
 
 };
 
-struct Detector : Entity, EntS<Detector>
+struct Detector : HospitalEntity, EntS<Detector>
 {
 	Spawner* spawner;
 	Detector(vec position, Spawner *s) {
@@ -47,14 +47,9 @@ struct Detector : Entity, EntS<Detector>
 		spawner = s;
 	}
 
-	void Update(int dt) override
-	{
-
-	}
-
 };
 
-struct Despawner : Entity, EntS<Despawner>
+struct Despawner : HospitalEntity, EntS<Despawner>
 {
 	Despawner(vec position) {
 		pos = position;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entity.h"
+#include "hospital_entity.h"
 #include "mates.h"
 
 struct Door : SortedDrawable, EntS<Door>
@@ -21,11 +21,6 @@ struct Door : SortedDrawable, EntS<Door>
 		pos = _pos;
 		pos.y += 2;
 		sign = _sign;
-	}
-
-	void Update(int dt)
-	{
-
 	}
 
 	void Draw(sf::Sprite& spr, sf::RenderTarget& window)
@@ -62,7 +57,7 @@ struct Door : SortedDrawable, EntS<Door>
 	}
 };
 
-struct DoorSensor : Entity, EntS<DoorSensor>
+struct DoorSensor : HospitalEntity, EntS<DoorSensor>
 {
 	Door* door;
 

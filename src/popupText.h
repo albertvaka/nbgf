@@ -1,11 +1,11 @@
 #pragma once
 
-#include "entity.h"
+#include "hospital_entity.h"
 #include "animation.h"
 #include "rand.h"
 #include "vector.h"
 
-struct TextMolest : Entity, EntS<TextMolest>
+struct TextMolest : HospitalEntity, EntS<TextMolest>
 {
 	enum Type
 	{

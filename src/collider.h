@@ -6,49 +6,41 @@
 #include "cinta.h"
 #include "cleaner.h"
 
-bool inline Collision(Entity* entity_a, Entity* entity_b)
+bool inline Collision(CircleEntity* entity_a, CircleEntity* entity_b)
 {
-	vec sz_a = entity_a->size;
-	vec sz_b = entity_b->size;
+	float radiuses = entity_a->radius +  entity_b->radius;
+	return entity_a->pos.Distance(entity_b->pos) < radiuses;
+}
 
-	vec a = entity_a->pos - vec(sz_a / 2);
-	vec b = entity_b->pos - vec(sz_b / 2);
-
-	//rectangle colision
+bool inline rectangleCollision(vec pos_a, vec pos_b, vec sz_a, vec sz_b)
+{
+	vec a = pos_a - vec(sz_a / 2);
+	vec b = pos_b - vec(sz_b / 2);
 	return	(a.x < (b.x + sz_b.x)) &&
-			((a.x + sz_a.x) > b.x) &&
-			(a.y < (b.y + sz_b.y)) &&
-			((a.y + sz_a.y) > b.y);
+		((a.x + sz_a.x) > b.x) &&
+		(a.y < (b.y + sz_b.y)) &&
+		((a.y + sz_a.y) > b.y);
+}
+
+bool inline Collision(CircleEntity* entity_a, BoxEntity* entity_b)
+{
+	vec sz_a = vec(entity_a->radius, entity_a->radius);
+	return rectangleCollision(entity_a->pos, entity_b->pos, sz_a, entity_b->size);
+}
+
+bool inline Collision(BoxEntity* entity_a, BoxEntity* entity_b)
+{
+	return rectangleCollision(entity_a->pos, entity_b->pos, entity_a->size, entity_b->size);
 }
 
 bool inline Collision(Cintable* entity_a, Cinta* entity_b)
 {
-	vec sz_a = entity_a->sizePlz();
-	vec sz_b = entity_b->size;
-
-	vec a = entity_a->positionPlz() - vec(sz_a / 2);
-	vec b = entity_b->pos - vec(sz_b / 2);
-
-	//rectangle colision
-	return	(a.x < (b.x + sz_b.x)) &&
-			((a.x + sz_a.x) > b.x) &&
-			(a.y < (b.y + sz_b.y)) &&
-			((a.y + sz_a.y) > b.y);
+	return rectangleCollision(entity_a->positionPlz(), entity_b->pos, entity_a->sizePlz(), entity_b->size);
 }
 
 bool inline Collision(Cintable* entity_a, Cleaner* entity_b)
 {
-	vec sz_a = entity_a->sizePlz();
-	vec sz_b = entity_b->size;
-
-	vec a = entity_a->positionPlz() - vec(sz_a / 2);
-	vec b = entity_b->pos - vec(sz_b / 2);
-
-	//rectangle colision
-	return	(a.x < (b.x + sz_b.x)) &&
-			((a.x + sz_a.x) > b.x) &&
-			(a.y < (b.y + sz_b.y)) &&
-			((a.y + sz_a.y) > b.y);
+	return rectangleCollision(entity_a->positionPlz(), entity_b->pos, entity_a->sizePlz(), entity_b->size);
 }
 
 template <typename S, typename E, typename X, typename Y>

@@ -3,7 +3,7 @@
 #include <vector>
 #include "rand.h"
 
-#include "entity.h"
+#include "hospital_entity.h"
 #include "lever.h"
 #include "extremity.h"
 

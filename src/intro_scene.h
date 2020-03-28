@@ -63,7 +63,7 @@ struct IntroScene : Scene {
 	}
 
 	void ExitScene() override {
-		EntS<Entity>::deleteAll();
+		EntS<Cleaner>::deleteAll();
 	}
 
 	void Update(int dt) override {
@@ -72,12 +72,10 @@ struct IntroScene : Scene {
 			// Hack to make sure the vector of Entities doesn't grow while we iterate it
 			EntS<Entity>::getAll().reserve(EntS<Entity>::getAll().size() * 2);
 		}
-		for (Entity* e : EntS<Entity>::getAll())
+		for (HospitalEntity* e : EntS<HospitalEntity>::getAll())
 		{
 			e->Update(dt);
-			if (e->anim.anim_type != AnimationType::NADA) {
-				e->anim.Update(dt);
-			}
+			e->UpdateAnim(dt);
 		}
 
 		if (Keyboard::IsKeyJustPressed(GameKeys::START) || GamePad::IsButtonJustPressed(0, GamePad::Button::A)) {

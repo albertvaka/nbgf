@@ -15,6 +15,15 @@ extern std::vector< std::vector<bool> > passable;
 
 struct Player : SortedDrawable, EntS<Player>
 {
+	enum class EntityState
+	{
+		IDLE,
+		MOVING,
+	};
+
+	EntityState state;
+	EntityDirection dir = EntityDirection::DOWN;
+
 	Animation actionButton;
 
 	int player;
@@ -362,7 +371,7 @@ struct Player : SortedDrawable, EntS<Player>
 		}
 
 		if (Keyboard::IsKeyJustPressed(GameKeys::SHOOT)) {
-			new Bullet(pos, DirToVec(dir));
+			new Bullet(pos, DirToVec(dir)*100.f);
 		}
 		Move(dt);
 

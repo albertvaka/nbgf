@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entity.h"
+#include "hospital_entity.h"
 #include "animation.h"
 #include "rand.h"
 
@@ -8,6 +8,14 @@ extern std::vector< std::vector<bool> > passableCleaner;
 
 struct Cleaner : SortedDrawable, EntS<Cleaner>
 {
+	enum class EntityState
+	{
+		IDLE,
+		MOVING,
+	};
+
+	EntityState state;
+	EntityDirection dir = EntityDirection::DOWN;
 	bool naixement = true;
 
 	float pos_y_spawn;

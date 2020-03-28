@@ -3,7 +3,7 @@
 #include "game_data.h"
 #include "mates.h"
 #include "input.h"
-#include "entity.h"
+#include "hospital_entity.h"
 #include "main_scene_collider.h"
 #include "main_scene_tile.h"
 
@@ -52,7 +52,7 @@ struct MainScene : Scene {
 	}
 
 	void ExitScene() override {
-		EntS<Entity>::deleteAll();
+		EntS<HospitalEntity>::deleteAll();
 		EntS<Cintable>::deleteAll();
 	}
 
@@ -62,21 +62,25 @@ struct MainScene : Scene {
 		main_scene_collisions();
 
 		// Update all entities
-		if (EntS<Entity>::getAll().size() * 2 > EntS<Entity>::getAll().capacity()) {
+		if (EntS<HospitalEntity>::getAll().size() * 2 > EntS<HospitalEntity>::getAll().capacity()) {
 			// Hack to make sure the vector of Entities doesn't grow while we iterate it
-			EntS<Entity>::getAll().reserve(EntS<Entity>::getAll().size() * 2);
+			EntS<HospitalEntity>::getAll().reserve(EntS<HospitalEntity>::getAll().size() * 2);
 		}
-		for (Entity* e : EntS<Entity>::getAll())
+		for (HospitalEntity* e : EntS<HospitalEntity>::getAll())
 		{
 			e->Update(dt);
-			if (e->anim.anim_type != AnimationType::NADA) {
-				e->anim.Update(dt);
-			}
+			e->UpdateAnim(dt);
 		}
 		for (Taca* e : EntS<Taca>::getAll())
 		{
 			e->Update(dt);
 		}
+
+		for (Bullet* e : EntS<Bullet>::getAll())
+		{
+			e->Update(dt/1000.f);
+		}
+
 
 		//Spawn roombas
 		int num_tacs = EntS<Taca>::getAll().size();
@@ -91,7 +95,8 @@ struct MainScene : Scene {
 
 		// Do the deletes
 		EntS<Taca>::deleteNotAlive();
-		EntS<Entity>::deleteNotAlive();
+		EntS<HospitalEntity>::deleteNotAlive();
+		EntS<Bullet>::deleteNotAlive();
 
 		if (Keyboard::IsKeyJustPressed(GameKeys::RESTART)) {
 			SceneManager::SetScene(new MainScene());

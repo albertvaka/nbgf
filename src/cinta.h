@@ -1,12 +1,13 @@
 #pragma once
 
-#include "entity.h"
+#include "hospital_entity.h"
 #include "animation.h"
 #include "rand.h"
 
 
 struct Cinta : SortedDrawable, EntS<Cinta>
 {
+	EntityDirection dir = EntityDirection::DOWN;
 
 	Cinta(vec position, EntityDirection direction) {
 		pos = position;
