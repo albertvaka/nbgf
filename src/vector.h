@@ -79,6 +79,13 @@ struct vec : public sf::Vector2f
     return Mates::RadsToDegs(atan2(deltaY, deltaX));
   }
 
+  void RotateAroundOrigin(float rads) {
+      float cs = cos(rads);
+      float sn = sin(rads);
+      x = x * cs - y * sn;
+      y = x * sn + y * cs;
+  }
+
   //returns the vector that is perpendicular to this one.
   inline vec  Perp() const;
 
