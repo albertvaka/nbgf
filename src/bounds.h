@@ -109,6 +109,26 @@ struct Bounds : public sf::Rect<float>
 
 };
 
+struct CircleBounds
+{
+    CircleBounds(vec pos, float radius) : pos(pos), radius(radius) {}
+    vec pos;
+    float radius;
+
+    void Draw(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent)
+    {
+        sf::CircleShape cs(radius);
+        cs.setRadius(radius);
+        cs.setOrigin(vec(radius, radius));
+        cs.setPosition(pos);
+
+        cs.setFillColor(fillColor);
+        cs.setOutlineColor(color);
+        cs.setOutlineThickness(1);
+
+        window.draw(cs);
+    }
+};
 inline bool Collide(Bounds a, Bounds b) {
 
      return

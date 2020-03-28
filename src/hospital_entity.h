@@ -1,6 +1,8 @@
 #pragma once
 
 #include "entity.h"
+#include "animation.h"
+#include "selfregister.h"
 
 // Entities specific to the hospital gaem
 

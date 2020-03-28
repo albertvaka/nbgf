@@ -1,9 +1,7 @@
 #pragma once
 
-#include "mates.h"
 #include "vector.h"
-#include "selfregister.h"
-#include "animation.h"
+#include "bounds.h"
 
 struct Entity
 {
@@ -26,17 +24,13 @@ struct BoxEntity : Entity {
 
 struct CircleEntity : Entity {
 	float radius = 8.f;
+	
+	CircleBounds bounds() {
+		return CircleBounds(pos, radius);
+	}
+
 	void drawBounds(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) {
-		sf::CircleShape cs(radius);
-		cs.setRadius(radius);
-		cs.setOrigin(vec(radius,radius));
-		cs.setPosition(pos);
-
-		cs.setFillColor(fillColor);
-		cs.setOutlineColor(color);
-		cs.setOutlineThickness(1);
-
-		window.draw(cs);
+		bounds().Draw(window, color, fillColor);
 	}
 };
 
