@@ -21,7 +21,7 @@ enum class EntityDirection
 
 const float CINTA_SPEED = 8/320.f;
 
-vec DirToVec(EntityDirection dir) {
+inline vec DirToVec(EntityDirection dir) {
 	switch(dir) {
 		case EntityDirection::RIGHT: return vec(1,0);
 		case EntityDirection::LEFT: return vec(-1,0);
@@ -29,10 +29,6 @@ vec DirToVec(EntityDirection dir) {
 		case EntityDirection::DOWN: return vec(0,1);
 		default: return vec(0,0);
 	}
-}
-
-bool IsOutOfScreen(vec pos) {
-	return (pos.x < 0 || pos.y < 0 || pos.x > GameData::WINDOW_WIDTH/GameData::GAME_ZOOM || pos.y > GameData::WINDOW_HEIGHT/GameData::GAME_ZOOM);
 }
 
 struct Entity : EntS<Entity>
