@@ -1,6 +1,7 @@
 #include "scene_jumpman.h"
 #include "input.h"
 #include "imgui.h"
+#include "bullet.h"
 
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 25), 16)
@@ -42,6 +43,7 @@ void JumpScene::EnterScene()
 
 void JumpScene::ExitScene()  
 {
+	EntS<Bullet>::deleteAll();
 }
 
 void JumpScene::Update(int dtMilis) {
@@ -59,7 +61,7 @@ void JumpScene::Update(int dtMilis) {
 		Camera::SetZoom(transition.getPos());
 	}
 	//Camera::MoveCameraWithArrows(50.f, dt);
-	vec camPos = player.pos;
+	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
 	float minY = (Camera::GetCameraBounds().height / 2.f) - (1 * 16);
 	float maxY = ((25 + 1) * 16) - (Camera::GetCameraBounds().height / 2.f);
 	if (maxY < minY) {
@@ -76,6 +78,11 @@ void JumpScene::Update(int dtMilis) {
 	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
 	Camera::SetCameraCenter(camPos);
 
+	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
+	for (Bullet* e  : EntS<Bullet>::getAll()) {
+		e->Update(dt);
+	}
+	EntS<Bullet>::deleteNotAlive();
 
 	if (Keyboard::IsKeyPressed(DEBUG_EDIT_MODE) && (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right))) {
 		bool what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left);
@@ -92,7 +99,12 @@ void JumpScene::Draw(sf::RenderTarget& window)
 
 	map.Draw(sprite, window);
 
+	for (Bullet* e : EntS<Bullet>::getAll()) {
+		e->Draw(sprite, window);
+	}
+
 	player.Draw(marioSprite, window);
+
 	//player.bounds().Draw(window);
 	//Bounds(player.pos, vec(1, 1)).Draw(window, sf::Color::White);
 

@@ -34,6 +34,10 @@ struct JumpMan
     short onWall = ONWALL_NO;
     float jumpTimeLeft = 0.0f;
     
+    float bfgAngle;
+    vec bfgPos;
+    float bfgCooldownTimer = 0.f;
+    
     bool crouched = false;
     bool lookingLeft = false;
 
@@ -45,7 +49,7 @@ struct JumpMan
     inline void DoPolvitoJump();
     inline void DoPolvitoWallJump();
     inline void DoPolvitoLand();
-    inline void DoPolvitoRun(float dt, vec acc, bool isTurning);
+    inline void DoPolvitoRun(float dt, bool toTheLeft, bool doTheExtraPolvitoLikeYouKnowItsDone);
 
 };
 

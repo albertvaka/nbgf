@@ -2,6 +2,7 @@
 //Based on the work of: Jordi Santiago
 
 #include "input.h"
+#include "bullet.h"
 
 // accel
 const float run_acc = 1400;
@@ -24,6 +25,12 @@ const float jump_time = 0.35f;
 
 const vec vel_max(220, 200);
 
+const float bulletSpeed = 280.f;
+const float bfgCooldown = 0.6f;
+const float bfgPushBack = 150.f;
+
+extern sf::Clock mainClock;
+
 JumpMan::JumpMan(TileMap* _map)
 	: map(_map)
 {
@@ -35,18 +42,44 @@ JumpMan::JumpMan(TileMap* _map)
 }
 
 void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
+
 	polvito.Draw(window);
+
 	spr.setTextureRect(animation.CurrentFrame());
+	spr.setOrigin(cen.x, siz.y);
+	spr.setPosition(pos.x, pos.y);
 	if (lookingLeft) {
 		spr.setScale(-1.f, 1.f);
-		spr.setPosition(pos.x + cen.x, pos.y - siz.y);
 	}
 	else {
 		spr.setScale(1.f, 1.f);
-		spr.setPosition(pos.x - cen.x, pos.y - siz.y);
 	}
 	window.draw(spr);
+
+	//BFG
+	if (bfgCooldownTimer > (bfgCooldown-bfgCooldown/4.f)) {
+		bool blink = ((mainClock.getElapsedTime().asMilliseconds() / 10) % 2);
+		spr.setTextureRect(sf::IntRect(blink ? 32 * 3: 32 * 2, 3 * 16, 2 * 16, 16));
+	}
+	else {
+		bool blink = ((mainClock.getElapsedTime().asMilliseconds() / 160) % 10) > 8;
+		spr.setTextureRect(sf::IntRect(blink ? 32 : 0, 3 * 16, 2 * 16, 16));
+	}
+	spr.setOrigin(10, 8);
+	float scale =  (0.333f + (Mates::MaxOf(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
+	spr.setPosition(bfgPos);
+	if (bfgAngle < 270 || bfgAngle  > 450) {
+		spr.setScale(scale, -scale);
+	} else {
+		spr.setScale(scale, scale);
+	}
+	spr.setRotation(bfgAngle);
+	window.draw(spr);
+
+	//Restore everything
 	spr.setScale(1.f, 1.f);
+	spr.setOrigin(0.f, 0.f);
+	spr.setRotation(0.f);
 }
 
 void JumpMan::Update(float dt)
@@ -283,7 +316,7 @@ horz_exit:
 				if (map->isColl(x, y))
 				{
 					posf.y = map->Bottom(y);
-					DoPolvitoLand();
+					if (vel.y > 50) DoPolvitoLand();
 					vel.y = 0;
 					onWall = ONWALL_NO;
 					grounded = true;
@@ -343,9 +376,35 @@ vert_exit:
 		}
 	}
 	if (isWalking) {
-		DoPolvitoRun(dt, acc, isTurning);
+		DoPolvitoRun(dt, (acc.x < 0), isTurning);
 	}
 	polvito.UpdateParticles(dt);
+
+	bfgPos = vec(pos.x, pos.y - 16);
+	bfgAngle = bfgPos.Angle(Mouse::GetPositionInWorld());
+	bfgAngle = (int(bfgAngle + 360 + (45.f / 2)) / 45) * 45.f;
+	if (bfgCooldownTimer > 0.f) {
+		bfgCooldownTimer -= dt;
+		if (bfgCooldownTimer < 0.f) {
+			bfgCooldownTimer = 0.f;
+		}
+	} 
+	else if (Mouse::IsPressed() && !Keyboard::IsKeyPressed(DEBUG_EDIT_MODE)) {
+		float angleInRads = Mates::DegsToRads(bfgAngle);
+		bfgCooldownTimer = bfgCooldown;
+		vec speed(bulletSpeed, 0);
+		new Bullet(bfgPos, speed.RotatedAroundOrigin(angleInRads), 3.f);
+		vel -= vec(bfgPushBack, 0).RotatedAroundOrigin(angleInRads);
+		jumpTimeLeft = 0; // Overrides jump impulse 
+		if (grounded) {
+			if (abs(vel.x) < 0.1) {
+				DoPolvitoLand();
+			} else {
+				DoPolvitoRun(dt, vel.x < 0, true);
+				DoPolvitoRun(dt, vel.x < 0, true);
+			}
+		}
+	}
 }
 
 
@@ -411,21 +470,19 @@ inline void JumpMan::DoPolvitoWallJump() {
 
 inline void JumpMan::DoPolvitoLand() {
 
-	if (vel.y > 50) {
-		// Pluf cap als dos costats
-		polvito.pos = pos + vec(-8.f, -0.3f);
-		if (polvito.min_vel.x > 0) {
-			polvito.FlipX();
-		}
-		polvito.AddParticles(3);
-		polvito.pos = pos + vec(8.f, -0.3f);
+	// Pluf cap als dos costats
+	polvito.pos = pos + vec(-8.f, -0.3f);
+	if (polvito.min_vel.x > 0) {
 		polvito.FlipX();
-		polvito.AddParticles(3);
 	}
+	polvito.AddParticles(3);
+	polvito.pos = pos + vec(8.f, -0.3f);
+	polvito.FlipX();
+	polvito.AddParticles(3);
 }
 
-inline void JumpMan::DoPolvitoRun(float dt, vec acc, bool isTurning) {
-	if (acc.x < 0) {
+inline void JumpMan::DoPolvitoRun(float dt, bool toTheLeft, bool doTheExtraPolvitoLikeYouKnowItsDone) {
+	if (toTheLeft) {
 		polvito.pos = pos + vec(4.f, -0.5f);
 		if (polvito.min_vel.x < 0) {
 			polvito.FlipX();
@@ -437,7 +494,7 @@ inline void JumpMan::DoPolvitoRun(float dt, vec acc, bool isTurning) {
 			polvito.FlipX();
 		}
 	}
-	if (isTurning) {
+	if (doTheExtraPolvitoLikeYouKnowItsDone) {
 		polvito.AddParticles(2);
 	}
 	polvito.Spawn(dt);
