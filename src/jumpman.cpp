@@ -25,6 +25,7 @@ const float jump_time = 0.35f;
 
 const vec vel_max(220, 200);
 
+// bfg
 const float bulletSpeed = 300.f;
 const float bfgCooldown = 0.6f;
 const float bfgPushBack = 150.f;
@@ -380,7 +381,12 @@ vert_exit:
 	}
 	polvito.UpdateParticles(dt);
 
-	bfgPos = vec(pos.x, pos.y - 16);
+	if (crouched) {
+		bfgPos = vec(pos.x, pos.y - 10);
+	}
+	else {
+		bfgPos = vec(pos.x, pos.y - 16);
+	}
 	bfgAngle = bfgPos.Angle(Mouse::GetPositionInWorld());
 	bfgAngle = (int(bfgAngle + 360 + (45.f / 2)) / 45) * 45.f;
 	if (bfgCooldownTimer > 0.f) {
@@ -454,7 +460,6 @@ inline void JumpMan::DoPolvitoJump() {
 }
 
 inline void JumpMan::DoPolvitoWallJump() {
-	// Pluf cap als dos costats
 	if (vel.x > 0) {
 		polvito.pos = pos + vec(-7.f, -16.f);
 	}
@@ -469,7 +474,6 @@ inline void JumpMan::DoPolvitoWallJump() {
 }
 
 inline void JumpMan::DoPolvitoLand() {
-
 	// Pluf cap als dos costats
 	polvito.pos = pos + vec(-8.f, -0.3f);
 	if (polvito.min_vel.x > 0) {
