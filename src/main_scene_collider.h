@@ -96,6 +96,7 @@ void coll_ent_doorsensor(Entity* _, DoorSensor* ds)
 
 
 void coll_bullet_cadaver(Bullet* b, Cadaver* c) {
+	if (b->explode) return;
 	if (c->isLet || c->isCarried) {
 		return;
 	}
