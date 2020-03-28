@@ -20,10 +20,26 @@ struct PartSys {
 			vel += system.acc * dt;
 			pos += vel * dt;
 			scale += system.scale_vel * dt;
-			Mates::ClampMin(scale, 0.0001f);
+			if (scale < 0.f) {
+				if (system.scale_vel < 0.f) {
+					ttl = -1.f;
+				}
+				else {
+					scale = 0.0001f;
+				}
+			}
 			rotation += system.rotation_vel * dt;
 			alpha += system.alpha_vel * dt;
-			Mates::Clamp(alpha, 0.f, 1.f);
+			if (alpha < 0.f) {
+				if (system.alpha_vel < 0.f) {
+					ttl = -1.f;
+				} else {
+					alpha = 0.f;
+				}
+			}
+			else if (alpha > 1.f) {
+				alpha = 1.f;
+			}
 		}
 	};
 
@@ -55,9 +71,11 @@ struct PartSys {
 
 	float time = 0.f;
 
-	void AddSprite(const sf::Texture& texture, const sf::IntRect& rect) {
+	sf::Sprite& AddSprite(const sf::Texture& texture, const sf::IntRect& rect) {
 		sprites.emplace_back(texture, rect);
-		sprites.back().setOrigin(rect.width/2,rect.height/2);
+		sf::Sprite& sprite = sprites.back();
+		sprite.setOrigin(rect.width/2,rect.height/2);
+		return sprite;
 	}
 
 	void Spawn(float dt);

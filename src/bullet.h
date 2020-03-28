@@ -16,7 +16,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 	Bullet(vec position, vec velocity, float _scale = 1.f) {
 		pos = position;
 		speed = velocity;
-		radius = _scale;
+		radius = 2*_scale;
 		scale = _scale;
 	}
 
@@ -48,15 +48,23 @@ struct Bullet : CircleEntity, EntS<Bullet>
 	void Draw(sf::Sprite& spr, sf::RenderTarget& window)
 	{
 		spr.setScale(scale, scale);
-		int frame = 0;
-		if (timer_explosion > 0) {
-			frame += (timer_explosion*6);
-		}
+
 		spr.setOrigin(8, 8);
-		spr.setTextureRect(sf::IntRect((9+frame) * 16, 10 * 16, 16, 16));
-		spr.setPosition(pos.x, pos.y);
-		window.draw(spr);
+		if (!explode) {
+			spr.setTextureRect(sf::IntRect(8 * 16, 10 * 16, 16, 16));
+			spr.setRotation(Random::roll(0, 360));
+			spr.setPosition(pos + vec::Rand(-1, -1, 1, 1));
+			window.draw(spr);
+		}
+		else {
+			int frame = (timer_explosion * 7);
+			spr.setTextureRect(sf::IntRect((9 + frame) * 16, 10 * 16, 16, 16));
+			spr.setPosition(pos);
+			window.draw(spr);
+		}
+
 		spr.setOrigin(0, 0);
 		spr.setScale(1.f, 1.f);
+		spr.setRotation(0);
 	}
 };

@@ -29,6 +29,22 @@ void JumpScene::EnterScene()
 	player.polvito.AddSprite(texture, sf::IntRect(69, 50, 2, 2));
 	player.Reset();
 
+	bulletPartSys.AddSprite(marioTexture, sf::IntRect(0, 2 * 16, 16, 16)).setColor(sf::Color(255,255,255,200));
+	
+	float vel = 15;
+	bulletPartSys.max_vel = vec(vel, vel);
+	bulletPartSys.min_vel = vec(-vel, -vel);
+	bulletPartSys.min_ttl = 0.5f;
+	bulletPartSys.max_ttl = 1.f;
+	bulletPartSys.min_interval = 0.03f;
+	bulletPartSys.max_interval = 0.06f;
+	bulletPartSys.min_scale = 0.5f;
+	bulletPartSys.max_scale = 0.9f;
+	bulletPartSys.scale_vel = -2.5f;
+	bulletPartSys.min_rotation = 0.f;
+	bulletPartSys.max_rotation = 360.f;
+	bulletPartSys.rotation_vel = 180.f;
+
 	map.Randomize(time(NULL));
 
 	sf::Vector2i pos = map.tilePos(player.pos);
@@ -43,12 +59,14 @@ void JumpScene::EnterScene()
 
 void JumpScene::ExitScene()  
 {
+	bulletPartSys.Clear();
 	EntS<Bullet>::deleteAll();
 }
 
 void JumpScene::Update(int dtMilis) {
 
 	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.tilePos(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
+		ExitScene();
 		EnterScene();
 	}
 
@@ -81,6 +99,8 @@ void JumpScene::Update(int dtMilis) {
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : EntS<Bullet>::getAll()) {
 		e->Update(dt);
+		bulletPartSys.pos = e->pos + vec::Rand(-4, -4, 4, 4);
+		bulletPartSys.Spawn(dt);
 	}
 	EntS<Bullet>::deleteNotAlive();
 
@@ -91,6 +111,7 @@ void JumpScene::Update(int dtMilis) {
 		map.set(tile.x, tile.y, what_to_set);
 	}
 
+	bulletPartSys.UpdateParticles(dt);
 }
 
 void JumpScene::Draw(sf::RenderTarget& window) 
@@ -99,6 +120,8 @@ void JumpScene::Draw(sf::RenderTarget& window)
 
 	map.Draw(sprite, window);
 
+	bulletPartSys.Draw(window);
+	//bulletPartSys.DrawImGUI("BulletTrail");
 	for (Bullet* e : EntS<Bullet>::getAll()) {
 		e->Draw(sprite, window);
 	}

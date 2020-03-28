@@ -13,6 +13,7 @@ struct JumpScene : Scene {
 
 	TileMap map;
 	JumpMan player;
+	PartSys bulletPartSys;
 
 	sf::Texture texture;
 	sf::Texture marioTexture;
