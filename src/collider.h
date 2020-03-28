@@ -1,64 +1,67 @@
 #pragma once
 
-#include "selfregister.h"
 #include <functional>
+
+#include "bounds.h"
 #include "entity.h"
-#include "cinta.h"
-#include "cleaner.h"
+#include "selfregister.h"
 
-bool inline Collision(CircleEntity* entity_a, CircleEntity* entity_b)
+// Boxes with box
+inline bool Collide(const Bounds& a, const Bounds& b) {
+    return (a.left < b.left + b.width &&
+        a.left + a.width > b.left &&
+        a.top < b.top + b.height &&
+        a.top + a.height > b.top);
+}
+// Circle with circle
+inline bool Collide(const CircleBounds& a, const CircleBounds& b)
 {
-	float radiuses = entity_a->radius +  entity_b->radius;
-	return entity_a->pos.Distance(entity_b->pos) < radiuses;
+    float radiuses = a.radius + b.radius;
+    return a.pos.DistanceSq(b.pos) < (radiuses * radiuses);
 }
 
-bool inline rectangleCollision(vec pos_a, vec pos_b, vec sz_a, vec sz_b)
+// Circle with box
+inline bool Collide(const CircleBounds& a, const Bounds& b)
 {
-	vec a = pos_a - vec(sz_a / 2);
-	vec b = pos_b - vec(sz_b / 2);
-	return	(a.x < (b.x + sz_b.x)) &&
-		((a.x + sz_a.x) > b.x) &&
-		(a.y < (b.y + sz_b.y)) &&
-		((a.y + sz_a.y) > b.y);
+    return Collide(Bounds(a.pos, vec(a.radius, a.radius), true), b);
+    //TODO
+    //vec distance = b.Center() - a.pos;
+    //distance.Clamp(-b.Size(), b.Size());
+    //vec closestPoint = b.Center() + distance;
+    //return (closestPoint - a.pos).LengthSq() > (a.radius * a.radius);
+}
+inline bool Collide(const Bounds& a, const CircleBounds& b)
+{
+    return Collide(b, a);
 }
 
-bool inline Collision(CircleEntity* entity_a, BoxEntity* entity_b)
-{
-	vec sz_a = vec(entity_a->radius, entity_a->radius);
-	return rectangleCollision(entity_a->pos, entity_b->pos, sz_a, entity_b->size);
+// Entities
+inline bool Collide(BoxEntity* a, BoxEntity* b) {
+    return Collide(a->bounds(), b->bounds());
 }
-
-bool inline Collision(BoxEntity* entity_a, BoxEntity* entity_b)
-{
-	return rectangleCollision(entity_a->pos, entity_b->pos, entity_a->size, entity_b->size);
+inline bool Collide(CircleEntity* a, CircleEntity* b) {
+    return Collide(a->bounds(), b->bounds());
 }
-
-bool inline Collision(Cintable* entity_a, Cinta* entity_b)
-{
-	return rectangleCollision(entity_a->positionPlz(), entity_b->pos, entity_a->sizePlz(), entity_b->size);
-}
-
-bool inline Collision(Cintable* entity_a, Cleaner* entity_b)
-{
-	return rectangleCollision(entity_a->positionPlz(), entity_b->pos, entity_a->sizePlz(), entity_b->size);
+inline bool Collide(CircleEntity* a, BoxEntity* b) {
+    return Collide(a->bounds(), b->bounds());
 }
 
 template <typename S, typename E, typename X, typename Y>
 void collide(const std::vector<S*>& setA, const std::vector<E*>& setB, void (*callback)(X*, Y*))
 {
-	size_t sa = setA.size();
-	for (size_t i = 0; i < sa; ++i)
-	{
-		S* a = setA[i];
-		size_t sb = setB.size();
-		for (size_t j = 0; j < sb; ++j)
-		{
-			E* b = setB[j];
-			if ((void*)a == (void*)b) continue;
-			if (Collision(a, b))
-			{
-				callback(a, b);
-			}
-		}
-	}
+    size_t sa = setA.size();
+    for (size_t i = 0; i < sa; ++i)
+    {
+        S* a = setA[i];
+        size_t sb = setB.size();
+        for (size_t j = 0; j < sb; ++j)
+        {
+            E* b = setB[j];
+            if ((void*)a == (void*)b) continue;
+            if (Collide(a, b))
+            {
+                callback(a, b);
+            }
+        }
+    }
 }

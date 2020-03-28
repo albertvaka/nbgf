@@ -104,6 +104,10 @@ struct Bounds : public sf::Rect<float>
 		return true;
     }
 
+    vec Size() const {
+        return vec(width, height);
+    }
+
     //TODO
     //void ExpandToInclude(vec point);
 
@@ -129,12 +133,7 @@ struct CircleBounds
         window.draw(cs);
     }
 };
-inline bool Collide(Bounds a, Bounds b) {
 
-     return
-            (a.left < b.left + b.width && a.left + a.width > b.left &&
-                a.top < b.top + b.height && a.top + a.height > b.top);
-}
 
 inline std::ostream& operator<<(std::ostream& os, const Bounds& rhs)
 {

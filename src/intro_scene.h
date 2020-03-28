@@ -46,7 +46,7 @@ struct IntroScene : Scene {
 				if (a == other) continue;
 				if (!other->alive) continue;
 				auto xy = PosToTile(a->pos);
-				if (Collision(a, other) || !passableCleaner[xy.x][xy.y]) {
+				if (Collide(a, other) || !passableCleaner[xy.x][xy.y]) {
 					a->alive = false;
 					//i--;
 				}
