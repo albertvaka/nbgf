@@ -4,11 +4,6 @@
 #include "animation.h"
 #include "rand.h"
 
-#include "input.h"
-
-#include "cadaver.h"
-#include "mesa.h"
-
 extern std::vector< std::vector<bool> > passableCleaner;
 
 struct Cleaner : SortedDrawable, EntS<Cleaner>
