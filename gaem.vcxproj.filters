@@ -147,6 +147,9 @@
     <ClInclude Include="src\partsys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\bat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -195,6 +198,9 @@
       <Filter>Bundled Dependencies\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\partsys.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

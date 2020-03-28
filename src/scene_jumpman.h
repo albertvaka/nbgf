@@ -6,6 +6,7 @@
 #include "jumpman.h"
 #include "scene_manager.h"
 #include "transition.h"
+#include "bat.h"
 
 struct JumpScene : Scene {
 

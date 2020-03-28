@@ -45,6 +45,10 @@ void JumpScene::EnterScene()
 	bulletPartSys.max_rotation = 360.f;
 	bulletPartSys.rotation_vel = 180.f;
 
+	new Bat(vec(60, 10));
+	new Bat(vec(100, 50));
+	new Bat(vec(1000, 50));
+
 	map.Randomize(time(NULL));
 
 	sf::Vector2i pos = map.tilePos(player.pos);
@@ -57,10 +61,11 @@ void JumpScene::EnterScene()
 
 }
 
-void JumpScene::ExitScene()  
+void JumpScene::ExitScene()
 {
 	bulletPartSys.Clear();
 	EntS<Bullet>::deleteAll();
+	EntS<Bat>::deleteAll();
 }
 
 void JumpScene::Update(int dtMilis) {
@@ -99,10 +104,25 @@ void JumpScene::Update(int dtMilis) {
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : EntS<Bullet>::getAll()) {
 		e->Update(dt);
-		bulletPartSys.pos = e->pos + vec::Rand(-4, -4, 4, 4);
-		bulletPartSys.Spawn(dt);
+		if (!e->explode) {
+			bulletPartSys.pos = e->pos + vec::Rand(-4, -4, 4, 4);
+			bulletPartSys.Spawn(dt);
+		}
 	}
 	EntS<Bullet>::deleteNotAlive();
+
+	for (Bat* e : EntS<Bat>::getAll()) {
+		e->Update(&player, dt);
+		for (Bullet* b : EntS<Bullet>::getAll()) {
+			if (e->explode) continue;
+			if (Collide(e, b)) {
+				b->pos = e->pos;
+				b->explode = true;
+				e->alive = false;
+			}
+		}
+	}
+	EntS<Bat>::deleteNotAlive();
 
 	if (Keyboard::IsKeyPressed(DEBUG_EDIT_MODE) && (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right))) {
 		bool what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left);
@@ -116,20 +136,40 @@ void JumpScene::Update(int dtMilis) {
 
 void JumpScene::Draw(sf::RenderTarget& window) 
 {
+
+	static bool debugDraw = false;
+	if (Keyboard::IsKeyJustPressed(DEBUG_BOUNDS)) {
+		debugDraw = !debugDraw;
+	}
 	window.clear(sf::Color(255*0.200f, 255 * 0.100f, 255 * 0.100f));
 
 	map.Draw(sprite, window);
 
+	for (Bat* e : EntS<Bat>::getAll()) {
+		e->Draw(marioSprite, window);
+		if (debugDraw) {
+			e->drawBounds(window);
+			e->DrawSenseArea(window);
+		}
+	}
+
 	bulletPartSys.Draw(window);
 	//bulletPartSys.DrawImGUI("BulletTrail");
+
 	for (Bullet* e : EntS<Bullet>::getAll()) {
 		e->Draw(sprite, window);
+		if (debugDraw) {
+			e->drawBounds(window);
+		}
 	}
 
 	player.Draw(marioSprite, window);
 
-	//player.bounds().Draw(window);
-	//Bounds(player.pos, vec(1, 1)).Draw(window, sf::Color::White);
+	if (debugDraw) {
+		player.bounds().Draw(window);
+		Bounds(player.pos, vec(1, 1)).Draw(window, sf::Color::White);
+		Bounds(player.center(), vec(1, 1)).Draw(window, sf::Color::White);
+	}
 
 	//ImGui::Begin(GameData::GAME_TITLE.c_str());
 	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);

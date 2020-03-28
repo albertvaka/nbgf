@@ -20,6 +20,9 @@ struct JumpMan
     Bounds bounds() {
         return Bounds(pos, siz, vec(siz.x/2, siz.y));
     }
+    vec center() {
+        return pos + vec(0, -siz.y/2.f);
+    }
 
     vec pos;
     vec vel = vec(0.f,0.f);
