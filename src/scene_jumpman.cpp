@@ -76,7 +76,8 @@ void JumpScene::Update(int dtMilis) {
 	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
 	Camera::SetCameraCenter(camPos);
 
-	if (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right)) {
+
+	if (Keyboard::IsKeyPressed(DEBUG_EDIT_MODE) && (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right))) {
 		bool what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left);
 		vec pos = Mouse::GetPositionInWorld();
 		sf::Vector2i tile = map.tilePos(pos);
