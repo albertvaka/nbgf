@@ -4,6 +4,7 @@
 #include "animation.h"
 #include "rand.h"
 #include "collider.h"
+#include "input.h"
 
 extern std::vector<std::vector<bool>> passableCleaner;
 
