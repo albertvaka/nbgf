@@ -151,6 +151,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 		if (debugDraw) {
 			e->drawBounds(window);
 			e->DrawSenseArea(window);
+			Bounds(e->pos, vec(1, 1)).Draw(window, sf::Color::White);
 		}
 	}
 

@@ -51,6 +51,11 @@ struct Animation
 		}
 	}
 
+	int GetCurrentAnimDuration() {
+		AnimationData* anim_data = &anim_lib[(int)anim_type];
+		return anim_data->timer[current_frame];
+	}
+
 	void Reset()
 	{
 		anim_timer = 0;

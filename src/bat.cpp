@@ -19,6 +19,7 @@ Bat::Bat(vec pos)
 	, state(State::SIESTA)
 {
 	anim.Ensure(BAT_SIESTA);
+	anim.Update(Random::roll(0, anim.GetCurrentAnimDuration())); // Start blink anim at different positions
 	vel = vec(50, 0);
 }
 
@@ -45,6 +46,7 @@ void Bat::Update(JumpMan* jumpman, float dt)
 		else {
 			if (pos.DistanceSq(jumpman->center()) < (awake_player_distance * awake_player_distance) || awakened) {
 				anim.Ensure(BAT_AWAKE);
+				anim.Update(Random::roll(0, anim.GetCurrentAnimDuration()/2)); // Start blink anim at different positions
 				anim.loopable = false;
 			}
 		}
