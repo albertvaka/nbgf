@@ -14,13 +14,10 @@ struct Bat : CircleEntity, EntS<Bat>
 		FLYING,
 	};
 
+	Animation anim;
 	State state = State::FLYING;
-	bool explode = false;
-	int timer_explosion = 0;
 	float timeToAwake = 1000.f; //Does nothing if > 999
 	bool awakened = false;
-
-	Animation anim;
 
 	Bat(vec position);
 

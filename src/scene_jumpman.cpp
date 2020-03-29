@@ -114,7 +114,7 @@ void JumpScene::Update(int dtMilis) {
 	for (Bat* e : EntS<Bat>::getAll()) {
 		e->Update(&player, dt);
 		for (Bullet* b : EntS<Bullet>::getAll()) {
-			if (e->explode) continue;
+			if (b->explode) continue;
 			if (Collide(e, b)) {
 				b->pos = e->pos;
 				b->explode = true;
