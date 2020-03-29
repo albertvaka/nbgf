@@ -1,10 +1,14 @@
 #pragma once
 //Based on the work of: Mat Buckland (fup@ai-junkie.com)
 
-#include <math.h>
 #include <iosfwd>
 #include <limits>
+#include <string>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #include <SFML/System/Vector2.hpp>
 

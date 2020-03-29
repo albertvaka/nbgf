@@ -1,11 +1,8 @@
 #pragma once
 
-#define _USE_MATH_DEFINES
-
 #include <random>
-#include <functional>
 #include <algorithm>
-
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 typedef int unsigned uint;

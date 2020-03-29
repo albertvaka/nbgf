@@ -1,8 +1,7 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
 #include <math.h>
-#include <iosfwd>
-#include <limits>
 #include <iostream>
 
 #include <SFML/Graphics.hpp>

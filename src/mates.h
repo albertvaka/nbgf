@@ -1,13 +1,11 @@
 #pragma once
 //Based on the work of: Mat Buckland (fup@ai-junkie.com)
 
-#include <math.h>
-#include <sstream>
-#include <string>
 #include <vector>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <limits>
 #include <cassert>
-#include <iomanip>
 
 namespace Mates
 {
