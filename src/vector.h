@@ -48,7 +48,7 @@ struct vec : public sf::Vector2f
   inline float    LengthSq()const;
 
   inline void      Normalize();
-  inline vec      Normalized();
+  inline vec      Normalized() const;
 
   inline float    Dot(const vec& v2) const;
 
@@ -101,11 +101,8 @@ struct vec : public sf::Vector2f
   //squared version of above.
   inline float    DistanceSq(const vec &v2) const;
 
-  inline void      Reflect(const vec& norm);
-
   //returns the vector that is the reverse of this vector
   inline vec  GetReverse() const;
-
 
   //we need some overloaded operators
   const vec& operator+=(const vec &rhs)
@@ -249,7 +246,7 @@ inline void vec::Normalize()
     this->y /= vector_length;
   }
 }
-inline vec vec::Normalized()
+inline vec vec::Normalized() const
 {
 	float vector_length = this->Length();
 
