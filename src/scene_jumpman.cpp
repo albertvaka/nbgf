@@ -7,12 +7,11 @@ JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 25), 16)
 	, player(&map)
 {
-
 }
 
 void JumpScene::EnterScene() 
 {
-	Camera::SetZoom(GameData::GAME_ZOOM);
+	Camera::SetZoom(GameData::JUMPMAN_ZOOM);
 	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
 
 	texture.loadFromFile("data/spritesheet.png");
@@ -21,11 +20,11 @@ void JumpScene::EnterScene()
 	marioTexture.loadFromFile("data/mario.png");
 	marioSprite.setTexture(marioTexture);
 
-	transition.setTime(2.0f);
-	transition.setPos(0.6f* GameData::GAME_ZOOM);
-	transition.goPos(GameData::GAME_ZOOM);
+	//transition.setTime(2.0f);
+	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
+	//transition.goPos(GameData::JUMPMAN_ZOOM);
 
-	player.pos = vec(160, 160);
+	player.pos = vec(192, 160);
 	player.polvito.AddSprite(texture, sf::IntRect(69, 50, 2, 2));
 	player.Reset();
 
@@ -76,13 +75,13 @@ void JumpScene::Update(int dtMilis) {
 	}
 
 	float dt = dtMilis / 1000.f;
-	transition.update(dt);
+	//transition.update(dt);
 	player.Update(dt);
 
 	Camera::ChangeZoomWithPlusAndMinus(10.f, dt);
-	if (!transition.reached()) {
-		Camera::SetZoom(transition.getPos());
-	}
+	//if (!transition.reached()) {
+	//	Camera::SetZoom(transition.getPos());
+	//}
 	//Camera::MoveCameraWithArrows(50.f, dt);
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
 	float minY = (Camera::GetCameraBounds().height / 2.f) - (1 * 16);
