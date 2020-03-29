@@ -14,10 +14,10 @@ void AwakeNearbyBats(vec pos) {
 	}
 }
 
-Bat::Bat(vec position) {
-	pos = position;
-	radius = 8.f;
-	state = State::SIESTA;
+Bat::Bat(vec pos)
+	: CircleEntity(pos, 8.f)
+	, state(State::SIESTA)
+{
 	anim.Ensure(BAT_SIESTA);
 	vel = vec(50, 0);
 }

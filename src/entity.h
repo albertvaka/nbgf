@@ -5,13 +5,18 @@
 
 struct Entity
 {
-	vec pos = vec(0.f, 0.f);
+	Entity() : pos (0.f,0.f) {}
+	Entity(vec pos) : pos(pos) {}
+	vec pos;
 	vec vel = vec(0.f,0.f);
 	bool alive = true;
 };
 
 struct BoxEntity : Entity {
-	vec size = vec(16, 16);
+	BoxEntity() : size(16, 16) {}
+	BoxEntity(vec pos, vec size) : Entity(pos), size(size) {}
+
+	vec size;
 
 	Bounds bounds() {
 		return Bounds(pos, size, true);
@@ -23,7 +28,10 @@ struct BoxEntity : Entity {
 };
 
 struct CircleEntity : Entity {
-	float radius = 8.f;
+	CircleEntity() : radius(8.f) {}
+	CircleEntity(vec pos, float radius) : Entity(pos), radius(radius) {}
+
+	float radius;
 	
 	CircleBounds bounds() {
 		return CircleBounds(pos, radius);
