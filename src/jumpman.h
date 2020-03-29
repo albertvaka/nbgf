@@ -1,5 +1,6 @@
 #pragma once
 
+#include "entity.h"
 #include "vector.h"
 #include "bounds.h"
 #include "tilemap.h"
@@ -7,7 +8,7 @@
 #include "animation.h"
 #include <iostream>
 
-struct JumpMan
+struct JumpMan : Entity
 {
     JumpMan(TileMap* map);
     void Update(float GameTime);
@@ -23,9 +24,6 @@ struct JumpMan
     vec center() {
         return pos + vec(0, -siz.y/2.f);
     }
-
-    vec pos;
-    vec vel = vec(0.f,0.f);
 
     Animation animation;
 

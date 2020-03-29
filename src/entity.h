@@ -5,8 +5,8 @@
 
 struct Entity
 {
-	vec pos;
-	vec vel;
+	vec pos = vec(0.f, 0.f);
+	vec vel = vec(0.f,0.f);
 	bool alive = true;
 };
 
