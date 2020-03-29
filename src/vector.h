@@ -11,6 +11,7 @@
 #include <math.h>
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Color.hpp>
 
 #include "mates.h"
 #include "rand.h"
@@ -146,9 +147,17 @@ struct vec : public sf::Vector2f
   {
     return (x != rhs.x) || (y != rhs.y);
   }
-  
+
+#ifdef _DEBUG
+    void Debuggerino(sf::Color color = sf::Color::White);
+#endif
 };
 
+#ifdef _DEBUG
+namespace sf { class RenderTarget; }
+void DrawDebugVecs(sf::RenderTarget* window);
+void ClearDebugVecs();
+#endif
 
 //------------------------------------------------------------------------member functions
 

@@ -81,6 +81,7 @@
     <ClCompile Include="src\scene_jumpman.cpp" />
     <ClCompile Include="src\tilemap.cpp" />
     <ClCompile Include="src\transition.cpp" />
+    <ClCompile Include="src\vector.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

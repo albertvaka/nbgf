@@ -70,6 +70,9 @@ int main()
 		if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT) || Keyboard::IsKeyJustPressed(RESTART))
 #endif
 		{
+#ifdef _DEBUG
+			ClearDebugVecs();
+#endif
 			int dt = time.asMilliseconds();
 			if (dt> 60) // less than 17 FPS
 			{
@@ -80,6 +83,10 @@ int main()
 		}
 
 		currentScene->Draw(window);
+
+#ifdef _DEBUG
+		DrawDebugVecs(&window);
+#endif
 
 		Camera::StartGuiDraw();
 
