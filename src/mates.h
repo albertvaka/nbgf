@@ -104,31 +104,31 @@ namespace Mates
 	//http://www.taygeta.com/random/gaussian.html
 	inline float RandGaussian(float mean = 0.0, float standard_deviation = 1.0)
 	{
-	float x1, x2, w, y1;
-	static float y2;
-	static int use_last = 0;
+		float x1, x2, w, y1;
+		static float y2;
+		static int use_last = 0;
 
-	if (use_last)		        /* use value from previous call */
-	{
-		y1 = y2;
-		use_last = 0;
-	}
-	else
-	{
-		do
+		if (use_last)		        /* use value from previous call */
 		{
-			x1 = 2.0f * RandFloat() - 1.0f;
-			x2 = 2.0f * RandFloat() - 1.0f;
-			w = x1 * x1 + x2 * x2;
-		} while (w >= 1.0f);
+			y1 = y2;
+			use_last = 0;
+		}
+		else
+		{
+			do
+			{
+				x1 = 2.0f * RandFloat() - 1.0f;
+				x2 = 2.0f * RandFloat() - 1.0f;
+				w = x1 * x1 + x2 * x2;
+			} while (w >= 1.0f);
 
-		w = sqrt((-2.0f * log(w)) / w);
-		y1 = x1 * w;
-		y2 = x2 * w;
-		use_last = 1;
-	}
+			w = sqrt((-2.0f * log(w)) / w);
+			y1 = x1 * w;
+			y2 = x2 * w;
+			use_last = 1;
+		}
 
-	return(mean + y1 * standard_deviation);
+		return(mean + y1 * standard_deviation);
 	}
 
 
@@ -141,7 +141,7 @@ namespace Mates
 
 	inline float Sigmoid(float input, float response = 1.0)
 	{
-	return (1.0f / (1.0f + exp(-input / response)));
+		return (1.0f / (1.0f + exp(-input / response)));
 	}
 
 
@@ -149,16 +149,16 @@ namespace Mates
 	template <class T>
 	inline T MaxOf(const T& a, const T& b)
 	{
-	if (a > b) return a;
-	return b;
+		if (a > b) return a;
+		return b;
 	}
 
 	//returns the minimum of two values
 	template <class T>
 	inline T MinOf(const T& a, const T& b)
 	{
-	if (a < b) return a;
-	return b;
+		if (a < b) return a;
+		return b;
 	}
 
 
@@ -209,36 +209,36 @@ namespace Mates
 	//rounds a float up or down depending on its value
 	inline int Rounded(float val)
 	{
-	int    integral = (int)val;
-	float mantissa = val - integral;
+		int    integral = (int)val;
+		float mantissa = val - integral;
 
-	if (mantissa < 0.5)
-	{
-		return integral;
-	}
+		if (mantissa < 0.5)
+		{
+			return integral;
+		}
 
-	else
-	{
-		return integral + 1;
-	}
+		else
+		{
+			return integral + 1;
+		}
 	}
 
 	//rounds a double up or down depending on whether its 
 	//mantissa is higher or lower than offset
 	inline int RoundUnderOffset(float val, float offset)
 	{
-	int    integral = (int)val;
-	float mantissa = val - integral;
+		int    integral = (int)val;
+		float mantissa = val - integral;
 
-	if (mantissa < offset)
-	{
-		return integral;
-	}
+		if (mantissa < offset)
+		{
+			return integral;
+		}
 
-	else
-	{
-		return integral + 1;
-	}
+		else
+		{
+			return integral + 1;
+		}
 	}
 
 	//compares two real numbers. Returns true if they are equal
@@ -266,29 +266,29 @@ namespace Mates
 	template <class T>
 	inline double Average(const std::vector<T>& v)
 	{
-	double average = 0.0;
+		double average = 0.0;
 
-	for (unsigned int i = 0; i < v.size(); ++i)
-	{
-		average += (double)v[i];
-	}
+		for (unsigned int i = 0; i < v.size(); ++i)
+		{
+			average += (double)v[i];
+		}
 
-	return average / (double)v.size();
+		return average / (double)v.size();
 	}
 
 
 	inline double StandardDeviation(const std::vector<double>& v)
 	{
-	double sd = 0.0;
-	double average = Average(v);
+		double sd = 0.0;
+		double average = Average(v);
 
-	for (unsigned int i = 0; i < v.size(); ++i)
-	{
-		sd += (v[i] - average) * (v[i] - average);
-	}
+		for (unsigned int i = 0; i < v.size(); ++i)
+		{
+			sd += (v[i] - average) * (v[i] - average);
+		}
 
-	sd = sd / v.size();
+		sd = sd / v.size();
 
-	return sqrt(sd);
+		return sqrt(sd);
 	}
 }
