@@ -3,7 +3,7 @@
 #include "jumpman.h"
 
 const float awake_player_distance = 100.f;
-const float awake_nearby_distance = 60.f;
+const float awake_nearby_distance = 100.f;
 const float awake_nearby_time = 1.f;
 
 void AwakeNearbyBats(vec pos) {

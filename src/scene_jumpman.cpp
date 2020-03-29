@@ -44,19 +44,19 @@ void JumpScene::EnterScene()
 	bulletPartSys.max_rotation = 360.f;
 	bulletPartSys.rotation_vel = 180.f;
 
-	new Bat(vec(60, 10));
-	new Bat(vec(100, 50));
-	new Bat(vec(1000, 50));
-
 	map.Randomize(time(NULL));
 
 	sf::Vector2i pos = map.tilePos(player.pos);
 	map.set(pos.x - 1, pos.y + 1, true);
-	map.set(pos.x    , pos.y + 1, true);
-	map.set(pos.x - 1, pos.y    , false);
-	map.set(pos.x    , pos.y    , false);
+	map.set(pos.x,     pos.y + 1, true);
+	map.set(pos.x - 1, pos.y,     false);
+	map.set(pos.x,     pos.y,     false);
 	map.set(pos.x - 1, pos.y - 1, false);
-	map.set(pos.x    , pos.y - 1, false);
+	map.set(pos.x,     pos.y - 1, false);
+
+	for (int i = 0; i < 50; i++) {
+		new Bat(vec(12 + (i) * (4 * 24), 0));
+	}
 
 }
 
