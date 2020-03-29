@@ -7,6 +7,8 @@
 
 class JumpMan;
 
+void AwakeNearbyBats(vec pos);
+
 struct Bat : CircleEntity, EntS<Bat>
 {
 	enum class State {

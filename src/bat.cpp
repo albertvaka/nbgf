@@ -6,6 +6,14 @@ const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 60.f;
 const float awake_nearby_time = 1.f;
 
+void AwakeNearbyBats(vec pos) {
+	for (Bat* bat : EntS<Bat>::getAll()) {
+		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
+			bat->awakened = true;
+		}
+	}
+}
+
 Bat::Bat(vec position) {
 	pos = position;
 	radius = 8.f;
@@ -18,14 +26,6 @@ void Bat::DrawSenseArea(sf::RenderTarget& window)
 {
 	CircleBounds(pos, awake_player_distance).Draw(window, sf::Color::Yellow);
 	CircleBounds(pos, awake_nearby_distance).Draw(window, sf::Color::Cyan);
-}
-
-void AwakeNearbyBats(vec pos) {
-	for (Bat* bat : EntS<Bat>::getAll()) {
-		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
-			bat->awakened = true;
-		}
-	}
 }
 
 void Bat::Update(JumpMan* jumpman, float dt)

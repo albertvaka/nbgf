@@ -119,6 +119,7 @@ void JumpScene::Update(int dtMilis) {
 				b->pos = e->pos;
 				b->explode = true;
 				e->alive = false;
+				AwakeNearbyBats(e->pos);
 			}
 		}
 	}
