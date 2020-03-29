@@ -37,8 +37,8 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 		oldPos = position;
 		pos = position;
 
-		speed.x = 0;
-		speed.y = 0;
+		vel.x = 0;
+		vel.y = 0;
 
 		parent = _parent;
 		pos_y_spawn = pos.y;
@@ -54,20 +54,20 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 		switch (newdir)
 		{
 		case 0:
-			speed.x = 0.05;
+			vel.x = 0.05;
 			break;
 		case 1:
-			speed.x = -0.05;
+			vel.x = -0.05;
 			break;
 		}
 		newdir = Random::roll(1);
 		switch (newdir)
 		{
 		case 0:
-			speed.y = 0.05;
+			vel.y = 0.05;
 			break;
 		case 1:
-			speed.y = -0.05;
+			vel.y = -0.05;
 			break;
 		}
 	}
@@ -131,7 +131,7 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 	{
 		bool moved = false;
 
-		vec newPos = pos + speed * dt;
+		vec newPos = pos + vel * dt;
 
 		float dd = size.x/2;
 
@@ -146,7 +146,7 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 		Mates::xy BR_y = PosToTile(vec(pos.x, newPos.y) + vec(dd, dd));
 
 		//Right
-		if (speed.x > 0)
+		if (vel.x > 0)
 		{
 			if (passableCleaner[TR_x.x][TR_x.y] && passableCleaner[BR_x.x][BR_x.y])
 			{
@@ -156,7 +156,7 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 		}
 
 		//Left
-		if (speed.x < 0)
+		if (vel.x < 0)
 		{
 			if (passableCleaner[TL_x.x][TL_x.y] && passableCleaner[BL_x.x][BL_x.y])
 			{
@@ -166,7 +166,7 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 		}
 
 		//Down
-		if (speed.y > 0)
+		if (vel.y > 0)
 		{
 			if (passableCleaner[BL_y.x][BL_y.y] && passableCleaner[BR_y.x][BR_y.y])
 			{
@@ -176,7 +176,7 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 		}
 
 		//Up
-		if (speed.y < 0)
+		if (vel.y < 0)
 		{
 			if (passableCleaner[TL_y.x][TL_y.y] && passableCleaner[TR_y.x][TR_y.y])
 			{

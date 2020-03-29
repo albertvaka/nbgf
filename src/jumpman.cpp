@@ -26,7 +26,7 @@ const float jump_time = 0.35f;
 const vec vel_max(220, 200);
 
 // bfg
-const float bulletSpeed = 300.f;
+const float bulletVel = 300.f;
 const float bfgCooldown = 0.6f;
 const float bfgPushBack = 150.f;
 
@@ -398,8 +398,8 @@ vert_exit:
 	else if (Mouse::IsPressed() && !Keyboard::IsKeyPressed(DEBUG_EDIT_MODE)) {
 		float angleInRads = Mates::DegsToRads(bfgAngle);
 		bfgCooldownTimer = bfgCooldown;
-		vec speed(bulletSpeed, 0);
-		new Bullet(bfgPos, speed.RotatedAroundOrigin(angleInRads), 1.5f);
+		vec vel(bulletVel, 0);
+		new Bullet(bfgPos, vel.RotatedAroundOrigin(angleInRads), 1.5f);
 		vel -= vec(bfgPushBack, 0).RotatedAroundOrigin(angleInRads);
 		jumpTimeLeft = 0; // Overrides jump impulse 
 		if (grounded) {

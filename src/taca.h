@@ -8,7 +8,7 @@ struct Taca : Cintable, EntS<Taca>
 	//Note: need to re-define some attrs since it's not an entity
 	bool alive = true;
 	vec pos;
-	vec speed;
+	vec vel;
 	sf::Color m_color = sf::Color(200,0,0);
 	vec m_offset;
 	float counter;
@@ -86,8 +86,8 @@ struct Taca : Cintable, EntS<Taca>
 		}
 		else
 		{
-			onCinta = SetSpeedWithCinta(speed);
-			speed = speed * 0.8f;
+			onCinta = SetVelWithCinta(vel);
+			vel = vel * 0.8f;
 			if (onCinta) {
 				counter -= dt;
 				if (counter < 0)
@@ -98,8 +98,8 @@ struct Taca : Cintable, EntS<Taca>
 		}
 
 
-		pos += speed * dt;
-		speed.Zero();
+		pos += vel * dt;
+		vel.Zero();
 		if (pos.y > GameData::WINDOW_HEIGHT/GameData::GAME_ZOOM) {
 			alive = false;
 		}

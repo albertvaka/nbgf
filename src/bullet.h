@@ -15,7 +15,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 
 	Bullet(vec position, vec velocity, float _scale = 1.f) {
 		pos = position;
-		speed = velocity;
+		vel = velocity;
 		radius = 4*_scale;
 		scale = _scale;
 	}
@@ -31,7 +31,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 		}
 
 		if (explode) {
-			speed = vec(0,0);
+			vel = vec(0,0);
 			timer_explosion += dt;
 			if (timer_explosion > 1.f) {
 				alive = false;
@@ -39,7 +39,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 			return;
 		}
 
-		pos += speed * dt;
+		pos += vel * dt;
 		if (!Camera::GetCameraBounds().IsInside(pos)) {
 			alive = false;
 		}

@@ -19,7 +19,7 @@ Bat::Bat(vec position) {
 	radius = 8.f;
 	state = State::SIESTA;
 	anim.Ensure(BAT_SIESTA);
-	speed = vec(50, 0);
+	vel = vec(50, 0);
 }
 
 void Bat::DrawSenseArea(sf::RenderTarget& window)
@@ -50,10 +50,10 @@ void Bat::Update(JumpMan* jumpman, float dt)
 		}
 
 	} else if (state == State::FLYING) {
-		pos += speed * dt;
-		if ((pos.x < 50 && speed.x < 0) || (pos.x > 200 && speed.x > 0))
+		pos += vel * dt;
+		if ((pos.x < 50 && vel.x < 0) || (pos.x > 200 && vel.x > 0))
 		{
-			speed = -speed;
+			vel = -vel;
 			anim.Ensure(BAT_FLIP);
 			anim.loopable = false;
 		}
@@ -66,7 +66,7 @@ void Bat::Update(JumpMan* jumpman, float dt)
 
 void Bat::Draw(sf::Sprite& spr, sf::RenderTarget& window)
 {
-	if (speed.x > 0) {
+	if (vel.x > 0) {
 		spr.setScale(-1.f, 1.f);
 	} else {
 		spr.setScale(1.f, 1.f);

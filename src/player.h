@@ -49,12 +49,12 @@ struct Player : SortedDrawable, EntS<Player>
 		state = EntityState::MOVING;
 
 		pos = position;
-		speed.x = 0;
-		speed.y = 0;
+		vel.x = 0;
+		vel.y = 0;
 		sizeToCollideWithTilemap = vec(10.f, 10.f);
 		size = vec(16.f,16.f); //Bigger than the previous one so we can interact with objects further away
 	}
-	void SetSpeedWithPlayerInput()
+	void SetVelWithPlayerInput()
 	{
 		float deadZone = 20;
 		sf::Vector2f anal = vec(GamePad::AnalogStick::Left.get(player, deadZone));
@@ -81,7 +81,7 @@ struct Player : SortedDrawable, EntS<Player>
 		}
 
 
-		speed = anal * 0.0008f;
+		vel = anal * 0.0008f;
 
 		if (anal.x > deadZone)
 		{
@@ -223,7 +223,7 @@ struct Player : SortedDrawable, EntS<Player>
 	{
 		bool moved = false;
 
-		vec newPos = pos + speed * dt;
+		vec newPos = pos + vel * dt;
 
 		float dd = sizeToCollideWithTilemap.x/2;
 
@@ -238,7 +238,7 @@ struct Player : SortedDrawable, EntS<Player>
 		Mates::xy BR_y = PosToTile(vec(pos.x, newPos.y) + vec(dd, dd));
 
 		//Right
-		if (speed.x > 0)
+		if (vel.x > 0)
 		{
 			if (passable[TR_x.x][TR_x.y] && passable[BR_x.x][BR_x.y])
 			{
@@ -248,7 +248,7 @@ struct Player : SortedDrawable, EntS<Player>
 		}
 
 		//Left
-		if (speed.x < 0)
+		if (vel.x < 0)
 		{
 			if (passable[TL_x.x][TL_x.y] && passable[BL_x.x][BL_x.y])
 			{
@@ -258,7 +258,7 @@ struct Player : SortedDrawable, EntS<Player>
 		}
 
 		//Down
-		if (speed.y > 0)
+		if (vel.y > 0)
 		{
 			if (passable[BL_y.x][BL_y.y] && passable[BR_y.x][BR_y.y])
 			{
@@ -268,7 +268,7 @@ struct Player : SortedDrawable, EntS<Player>
 		}
 
 		//Up
-		if (speed.y < 0)
+		if (vel.y < 0)
 		{
 			if (passable[TL_y.x][TL_y.y] && passable[TR_y.x][TR_y.y])
 			{
@@ -357,8 +357,8 @@ struct Player : SortedDrawable, EntS<Player>
 
 	void Update(int dt)
 	{
-		SetSpeedWithPlayerInput();
-		//SetSpeedWithCinta(speed);
+		SetVelWithPlayerInput();
+		//SetVelWithCinta(vel);
 
 		if ((Keyboard::IsKeyJustPressed(GameKeys::ACTION) && player == 3) || GamePad::IsButtonJustPressed(player, GamePad::Button::A))
 		{

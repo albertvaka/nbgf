@@ -55,15 +55,15 @@ struct Cintable : EntS<Cintable>
 	virtual vec positionPlz() = 0;
 	virtual vec sizePlz() = 0;
 
-	bool SetSpeedWithCinta(vec& speed)
+	bool SetVelWithCinta(vec& vel)
 	{
 		bool onCinta = false;
 		if (currCintaDirection != EntityDirection::NONE)
 		{
-			speed.x += (EntityDirection::RIGHT == currCintaDirection) * CINTA_SPEED;
-			speed.x -= (EntityDirection::LEFT == currCintaDirection) * CINTA_SPEED;
-			speed.y -= (EntityDirection::UP == currCintaDirection) * CINTA_SPEED;
-			speed.y += (EntityDirection::DOWN == currCintaDirection) * CINTA_SPEED;
+			vel.x += (EntityDirection::RIGHT == currCintaDirection) * CINTA_SPEED;
+			vel.x -= (EntityDirection::LEFT == currCintaDirection) * CINTA_SPEED;
+			vel.y -= (EntityDirection::UP == currCintaDirection) * CINTA_SPEED;
+			vel.y += (EntityDirection::DOWN == currCintaDirection) * CINTA_SPEED;
 			onCinta = true;
 		}
 		prevCintaDirection = currCintaDirection;

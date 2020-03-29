@@ -26,8 +26,8 @@ struct TextMolest : HospitalEntity, EntS<TextMolest>
 			pos.x = 16 * 11.5f;
 		}
 
-		speed.x = 0;// 16 * 2.5f;
-		speed.y = -16* 1.8f;
+		vel.x = 0;// 16 * 2.5f;
+		vel.y = -16* 1.8f;
 	}
 
 	bool rotatzione = false;
@@ -37,7 +37,7 @@ struct TextMolest : HospitalEntity, EntS<TextMolest>
 	{
 		timer += dt;
 
-		pos += (dt/1000.0f) * speed;
+		pos += (dt/1000.0f) * vel;
 
 		if (timer > 22000)
 		{
@@ -45,11 +45,11 @@ struct TextMolest : HospitalEntity, EntS<TextMolest>
 		}
 		else if (timer > 9000)
 		{
-			speed.y = 16 * 3.0f;
+			vel.y = 16 * 3.0f;
 			descansito_rot += 2 * dt;
 		} else if (timer > 5800)
 		{
-			speed = vec(0, 0);
+			vel = vec(0, 0);
 			rotatzione = true;
 			descansito_rot += dt;
 		}

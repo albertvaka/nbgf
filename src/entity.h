@@ -6,7 +6,7 @@
 struct Entity
 {
 	vec pos;
-	vec speed;
+	vec vel;
 	bool alive = true;
 };
 

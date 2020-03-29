@@ -205,11 +205,11 @@ struct Cadaver : SortedDrawable, Cintable, EntS<Cadaver>
 
 	void Move(int dt)
 	{
-		SetSpeedWithCinta(speed);
-		pos += speed * dt;
+		SetVelWithCinta(vel);
+		pos += vel * dt;
 
-		speed.x = 0;
-		speed.y = 0;
+		vel.x = 0;
+		vel.y = 0;
 
 	}
 

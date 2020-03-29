@@ -63,9 +63,9 @@ struct Extremity : SortedDrawable, Cintable, EntS<Extremity>
 
 	void Update(int dt) override
 	{
-		SetSpeedWithCinta(speed);
-		pos += speed * dt;
-		speed.Zero();
+		SetVelWithCinta(vel);
+		pos += vel * dt;
+		vel.Zero();
 	}
 
 
