@@ -84,7 +84,7 @@ struct IntroScene : Scene {
 		}
 	}
 
-	void Draw(sf::RenderTarget& window) override
+	void Draw(sf::RenderTarget& window, bool debug) override
 	{
 		window.clear(sf::Color::Black);
 

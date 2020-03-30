@@ -61,11 +61,15 @@ int main()
 
 		Input::Update(time);
 
-
 #ifdef _DEBUG
 		static bool frameByFrame = false;
 		if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
 			frameByFrame = !frameByFrame;
+		}
+
+		static bool debugDraw = false;
+		if (Keyboard::IsKeyJustPressed(DEBUG_BOUNDS)) {
+			debugDraw = !debugDraw;
 		}
 
 		if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT) || Keyboard::IsKeyJustPressed(RESTART))
@@ -83,10 +87,12 @@ int main()
 			currentScene->Update(dt);
 		}
 
-		currentScene->Draw(window);
 
 #ifdef _DEBUG
-		DrawDebugVecs(&window);
+		currentScene->Draw(window, debugDraw);
+		if (debugDraw) DrawDebugVecs(&window);
+#else
+		currentScene->Draw(window, false);
 #endif
 
 		Camera::StartGuiDraw();

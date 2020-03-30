@@ -129,7 +129,7 @@ struct MainScene : Scene {
 	#endif
 	}
 
-	void Draw(sf::RenderTarget& window) override
+	void Draw(sf::RenderTarget& window, bool debug) override
 	{
 		sf::Sprite& sprite = Assets::hospitalSprite;
 

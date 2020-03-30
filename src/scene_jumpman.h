@@ -20,6 +20,6 @@ struct JumpScene : Scene {
 	void EnterScene() override;
 	void ExitScene() override;
 	void Update(int dtMilis) override;
-	void Draw(sf::RenderTarget& window) override;
+	void Draw(sf::RenderTarget& window, bool debug) override;
 
 };

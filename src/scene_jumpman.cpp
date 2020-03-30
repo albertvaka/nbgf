@@ -133,13 +133,8 @@ void JumpScene::Update(int dtMilis) {
 	bulletPartSys.UpdateParticles(dt);
 }
 
-void JumpScene::Draw(sf::RenderTarget& window) 
+void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 {
-
-	static bool debugDraw = false;
-	if (Keyboard::IsKeyJustPressed(DEBUG_BOUNDS)) {
-		debugDraw = !debugDraw;
-	}
 	window.clear(sf::Color(255*0.200f, 255 * 0.100f, 255 * 0.100f));
 
 	map.Draw(window);
