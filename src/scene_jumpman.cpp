@@ -49,7 +49,7 @@ void JumpScene::EnterScene()
 	map.set(pos.x - 1, pos.y - 1, false);
 	map.set(pos.x,     pos.y - 1, false);
 
-	for (int i = 0; i < 50; i++) {
+	for (int i = 1; i < 3; i++) {
 		new Bat(vec(12 + (i) * (4 * 24), 0));
 	}
 
