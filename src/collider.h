@@ -16,24 +16,19 @@ inline bool Collide(const Bounds& a, const Bounds& b) {
 // Circle with circle
 inline bool Collide(const CircleBounds& a, const CircleBounds& b)
 {
-    float radiuses = a.radius + b.radius;
-    return a.pos.DistanceSq(b.pos) < (radiuses * radiuses);
+    return a.DistanceSq(b) < 0;
 }
 
 // Circle with box
 inline bool Collide(const CircleBounds& a, const Bounds& b)
 {
-    vec distance = b.Center() - a.pos;
-    distance.Clamp(-b.Size() / 2, b.Size() / 2);
-    vec closestPoint = b.Center() - distance;
-    closestPoint.Debuggerino(sf::Color::Blue);
-    return closestPoint.DistanceSq(a.pos) < (a.radius * a.radius);
+    return b.DistanceSq(a) < 0;
 }
-
 inline bool Collide(const Bounds& a, const CircleBounds& b)
 {
-    return Collide(b, a);
+    return b.DistanceSq(a) < 0;
 }
+
 
 // Entities
 inline bool Collide(BoxEntity* a, BoxEntity* b) {

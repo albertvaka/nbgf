@@ -8,6 +8,8 @@
 
 #include "vector.h"
 
+struct CircleBounds;
+
 struct Bounds : public sf::Rect<float>
 {
     explicit Bounds() : sf::Rect<float>(0,0,0,0) { }
@@ -107,6 +109,12 @@ struct Bounds : public sf::Rect<float>
         return vec(width, height);
     }
 
+
+    float DistanceSq(const Bounds& a) const;
+    float DistanceSq(const CircleBounds& a) const;
+    float Distance(const Bounds& a) const;
+    float Distance(const CircleBounds& a) const;
+
     //TODO
     //void ExpandToInclude(vec point);
 
@@ -131,8 +139,56 @@ struct CircleBounds
 
         window.draw(cs);
     }
+
+    float DistanceSq(const Bounds& a) const { return a.DistanceSq(*this); };
+    float Distance(const Bounds& a) const { return sqrt(Distance(a)); }
+    
+    float DistanceSq(const CircleBounds& a) const {
+        return a.pos.DistanceSq(this->pos) - (a.radius + this->radius) * (a.radius + this->radius);
+    }
+    float Distance(const CircleBounds& a) const { 
+        return a.pos.Distance(this->pos) - (a.radius+ this->radius);
+    }
 };
 
+inline float Bounds::DistanceSq(const Bounds& a) const {
+    float sqrDist = 0;
+    if (a.Right() < this->left) {
+        float d = a.Right() - this->left;
+        sqrDist += d * d;
+    } else if (a.left > this->Right()) {
+        float d = a.left - this->Right();
+        sqrDist += d * d;
+    }
+    if (a.Bottom() < this->top) {
+        float d = a.Bottom() - this->top;
+        sqrDist += d * d;
+    }
+    else if (a.top > this->Bottom()) {
+        float d = a.top - this->Bottom();
+        sqrDist += d * d;
+    }
+    return sqrDist;
+}
+
+
+inline float Bounds::DistanceSq(const CircleBounds& a) const {
+    vec distance = this->Center() - a.pos;
+    distance.Clamp(-this->Size() / 2, this->Size() / 2);
+    vec closestPoint = this->Center() - distance;
+    closestPoint.Debuggerino(sf::Color::Blue);
+    return closestPoint.DistanceSq(a.pos) - (a.radius * a.radius);
+}
+
+inline float Bounds::Distance(const Bounds& a) const
+{
+    return sqrt(DistanceSq(a));
+}
+
+inline float Bounds::Distance(const CircleBounds& a) const
+{
+    return sqrt(DistanceSq(a));
+}
 
 inline std::ostream& operator<<(std::ostream& os, const Bounds& rhs)
 {
