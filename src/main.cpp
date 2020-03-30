@@ -15,6 +15,7 @@
 #include "intro_scene.h"
 #include "scene_jumpman.h"
 #include "main_scene.h"
+#include "assets.h"
 
 Scene* SceneManager::currentScene = nullptr;
 sf::Clock mainClock;
@@ -30,11 +31,11 @@ int main()
 	ImGui::SFML::Init(window);
 	Input::Init(window);
 
+	Assets::LoadAll();
+
 #ifdef _FPS_COUNTER
-	sf::Font font;
-	font.loadFromFile("data/PressStart2P.ttf");
 	sf::Text txt_fps;
-	txt_fps.setFont(font);
+	txt_fps.setFont(Assets::font);
 	txt_fps.setPosition(10, 10);
 	sf::Clock fpsClock;
 	int fps_counter = 0;

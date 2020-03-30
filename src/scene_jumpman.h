@@ -16,13 +16,6 @@ struct JumpScene : Scene {
 	JumpMan player;
 	PartSys bulletPartSys;
 
-	sf::Texture texture;
-	sf::Texture marioTexture;
-	sf::Sprite sprite;
-	sf::Sprite marioSprite;
-	sf::Font font;
-	sf::Text text;
-
 	JumpScene();
 	void EnterScene() override;
 	void ExitScene() override;

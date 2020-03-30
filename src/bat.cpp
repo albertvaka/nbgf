@@ -1,6 +1,7 @@
 #include "bat.h"
 
 #include "jumpman.h"
+#include "assets.h"
 
 const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 100.f;
@@ -66,8 +67,10 @@ void Bat::Update(JumpMan* jumpman, float dt)
 	}
 }
 
-void Bat::Draw(sf::Sprite& spr, sf::RenderTarget& window)
+void Bat::Draw(sf::RenderTarget& window)
 {
+	sf::Sprite& spr = Assets::marioSprite;
+
 	if (vel.x > 0) {
 		spr.setScale(-1.f, 1.f);
 	} else {

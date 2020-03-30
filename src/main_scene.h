@@ -15,21 +15,14 @@
 #include "lever.h"
 #include "mesa.h"
 #include "door.h"
+#include "assets.h"
 
 struct MainScene : Scene {
-
-	sf::Texture texture;
-	sf::Sprite sprite;
 
 	void EnterScene() override
 	{
 		Camera::SetZoom(GameData::GAME_ZOOM);
 		Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
-
-		texture.loadFromFile("data/spritesheet.png");
-
-		sprite.setTexture(texture);
-		sprite.setTextureRect(sf::IntRect(16, 16, 16, 16));
 
 		LoadMap();
 
@@ -138,6 +131,8 @@ struct MainScene : Scene {
 
 	void Draw(sf::RenderTarget& window) override
 	{
+		sf::Sprite& sprite = Assets::hospitalSprite;
+
 		window.clear(sf::Color(64, 64, 64));
 
 		//Tilemap
@@ -167,7 +162,7 @@ struct MainScene : Scene {
 
 		for (Bullet* e : EntS<Bullet>::getAll())
 		{
-			e->Draw(sprite, window);
+			e->Draw(window);
 		}
 
 		for (TextMolest* e : EntS<TextMolest>::getAll())

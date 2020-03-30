@@ -5,6 +5,7 @@
 #include "rand.h"
 #include "collider.h"
 #include "input.h"
+#include "assets.h"
 
 extern std::vector<std::vector<bool>> passableCleaner;
 
@@ -23,7 +24,6 @@ struct Bullet : CircleEntity, EntS<Bullet>
 
 	void Update(float dt)
 	{
-
 		auto tile = PosToTile(pos);
 		if (passableCleaner.size() > tile.x && passableCleaner[tile.x].size() > tile.y) {
 			if (!passableCleaner[tile.x][tile.y]) {
@@ -46,8 +46,10 @@ struct Bullet : CircleEntity, EntS<Bullet>
 		}
 	}
 
-	void Draw(sf::Sprite& spr, sf::RenderTarget& window)
+	void Draw(sf::RenderTarget& window)
 	{
+		sf::Sprite& spr = Assets::hospitalSprite;
+
 		spr.setScale(scale, scale);
 
 		spr.setOrigin(8, 8);

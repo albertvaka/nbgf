@@ -24,7 +24,7 @@ struct Bat : CircleEntity, EntS<Bat>
 	Bat(vec position);
 
 	void Update(JumpMan* jumpman, float dt);
-	void Draw(sf::Sprite& spr, sf::RenderTarget& window);
+	void Draw(sf::RenderTarget& window);
 
 	void DrawSenseArea(sf::RenderTarget& window);
 };

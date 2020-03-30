@@ -3,6 +3,7 @@
 
 #include "input.h"
 #include "bullet.h"
+#include "assets.h"
 
 // accel
 const float run_acc = 1400;
@@ -42,9 +43,11 @@ JumpMan::JumpMan(TileMap* _map)
 	InitPolvito();
 }
 
-void JumpMan::Draw(sf::Sprite& spr, sf::RenderTarget& window) {
+void JumpMan::Draw(sf::RenderTarget& window) {
 
 	polvito.Draw(window);
+	
+	sf::Sprite& spr = Assets::marioSprite;
 
 	spr.setTextureRect(animation.CurrentFrame());
 	spr.setOrigin(cen.x, siz.y);

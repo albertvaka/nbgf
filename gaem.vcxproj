@@ -30,6 +30,7 @@
     <ClInclude Include="imgui_sfml\imgui-SFML_export.h" />
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\anim_data.h" />
+    <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bat.h" />
     <ClInclude Include="src\bounds.h" />
     <ClInclude Include="src\bullet.h" />
@@ -72,6 +73,7 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui_sfml\imgui-SFML.cpp" />
     <ClCompile Include="src\anim_data.cpp" />
+    <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\bat.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\jumpman.cpp" />

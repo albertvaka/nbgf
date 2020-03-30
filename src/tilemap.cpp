@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include "input.h"
+#include "assets.h"
 
 void TileMap::Randomize(int seed)
 {
@@ -53,8 +54,10 @@ unsigned int TileMap::tilePosY(float y)
 	return floor(y/unitsPerTile);
 }
 
-void TileMap::Draw(sf::Sprite& sprite, sf::RenderTarget& window)
+void TileMap::Draw(sf::RenderTarget& window)
 {
+	sf::Sprite& sprite = Assets::hospitalSprite;
+
 	Bounds screen = Camera::GetCameraBounds();
 	int left = screen.Left() / unitsPerTile;
 	int right = screen.Right() / unitsPerTile;

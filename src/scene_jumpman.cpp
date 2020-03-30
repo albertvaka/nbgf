@@ -2,6 +2,7 @@
 #include "input.h"
 #include "imgui.h"
 #include "bullet.h"
+#include "assets.h"
 
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 25), 16)
@@ -14,21 +15,15 @@ void JumpScene::EnterScene()
 	Camera::SetZoom(GameData::JUMPMAN_ZOOM);
 	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
 
-	texture.loadFromFile("data/spritesheet.png");
-	sprite.setTexture(texture);
-	
-	marioTexture.loadFromFile("data/mario.png");
-	marioSprite.setTexture(marioTexture);
-
 	//transition.setTime(2.0f);
 	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
 	//transition.goPos(GameData::JUMPMAN_ZOOM);
 
 	player.pos = vec(192, 160);
-	player.polvito.AddSprite(texture, sf::IntRect(69, 50, 2, 2));
+	player.polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
 	player.Reset();
 
-	bulletPartSys.AddSprite(marioTexture, sf::IntRect(0, 2 * 16, 16, 16)).setColor(sf::Color(255,255,255,200));
+	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(0, 2 * 16, 16, 16)).setColor(sf::Color(255,255,255,200));
 	
 	float vel = 15;
 	bulletPartSys.max_vel = vec(vel, vel);
@@ -143,10 +138,10 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	}
 	window.clear(sf::Color(255*0.200f, 255 * 0.100f, 255 * 0.100f));
 
-	map.Draw(sprite, window);
+	map.Draw(window);
 
 	for (Bat* e : EntS<Bat>::getAll()) {
-		e->Draw(marioSprite, window);
+		e->Draw(window);
 		if (debugDraw) {
 			e->drawBounds(window);
 			e->DrawSenseArea(window);
@@ -158,13 +153,13 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	//bulletPartSys.DrawImGUI("BulletTrail");
 
 	for (Bullet* e : EntS<Bullet>::getAll()) {
-		e->Draw(sprite, window);
+		e->Draw(window);
 		if (debugDraw) {
 			e->drawBounds(window);
 		}
 	}
 
-	player.Draw(marioSprite, window);
+	player.Draw(window);
 
 	if (debugDraw) {
 		player.bounds().Draw(window);

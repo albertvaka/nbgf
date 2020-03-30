@@ -14,7 +14,7 @@ struct TileMap
 	{
 	}
 	void Randomize(int seed);
-	void Draw(sf::Sprite& sprite, sf::RenderTarget& window);
+	void Draw(sf::RenderTarget& window);
 
 	void set(int x, int y, bool col); //set tile collisionable
 	bool isColl(sf::Vector2i pos); //is collisionable
