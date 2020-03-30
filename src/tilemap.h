@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "vector.h"
+#include "bounds.h"
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -16,25 +17,38 @@ struct TileMap
 	void Randomize(int seed);
 	void Draw(sf::RenderTarget& window);
 
-	void set(int x, int y, bool col); //set tile collisionable
-	bool isColl(sf::Vector2i pos); //is collisionable
-	bool isColl(int x, int y); //is collisionable
+	bool inBounds(int x, int y) {
+		return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y);
+	}
+	void set(int x, int y, bool col) {
+		if (!inBounds(x, y)) return;
+		tiles[y * sizes.x + x] = col;
+	}
+	bool isColl(sf::Vector2i pos) { return isColl(pos.x, pos.y); }
 
-	sf::Vector2i tilePos(vec pos); //what tile is in world coordinate
-	sf::Vector2i tilePos(float x, float y);
-	unsigned int tilePosX(float x);
-	unsigned int tilePosY(float y);
+	//TODO: Add unsafe version that doesn't check bounds
+	bool isColl(int x, int y) {
+		if (!inBounds(x, y)) return true;
+		return tiles[y * sizes.x + x];
+	}
 
-	float Top(int y);
-	float Bottom(int y);
+	sf::Vector2i toTiles(vec pos) const { return toTiles(pos.x, pos.y); }
+	sf::Vector2i toTiles(float x, float y) const { return sf::Vector2i(toTiles(x), toTiles(y)); }
+	int toTiles(float x) const { return floor(x / unitsPerTile); }
 
-	float Left(int x);
-	float Right(int x);
+	float Top(int y) const { return float(y + 1) * unitsPerTile; }
+	float Bottom(int y) const { return float(y) * unitsPerTile; }
+	float Left(int x) const { return float(x) * unitsPerTile;  }
+	float Right(int x) const { return float(x + 1) * unitsPerTile; }
+
+	Bounds tileBounds(int x, int y) const {
+		return Bounds(x * unitsPerTile, y * unitsPerTile, unitsPerTile, unitsPerTile);
+	}
 
 	sf::Vector2i sizes;
 	float unitsPerTile;
 	bool* tiles;
 
-	bool isCollInWorldCoordinates(vec p) { return isColl(tilePos(p)); }
-	bool isCollInWorldCoordinates(float x, float y) { return isColl(tilePos(x,y)); }
+	bool isCollInWorldCoordinates(vec p) { return isColl(toTiles(p)); }
+	bool isCollInWorldCoordinates(float x, float y) { return isColl(toTiles(x,y)); }
 };

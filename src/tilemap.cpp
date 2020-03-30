@@ -13,47 +13,6 @@ void TileMap::Randomize(int seed)
 	}
 }
 
-void TileMap::set(int x, int y, bool col)
-{
-	if ( x < 0 || x >= sizes.x ) return;
-	if ( y < 0 || y >= sizes.y ) return;
-
-	tiles[y*sizes.x + x] = col;
-}
-bool TileMap::isColl(sf::Vector2i pos)
-{
-	return isColl(pos.x, pos.y);
-}
-
-bool TileMap::isColl(int x, int y)
-{
-	if ( x < 0 || x >= sizes.x ) return true;
-	if ( y < 0 || y >= sizes.y ) return true;
-	return tiles[y * sizes.x + x];
-}
-
-sf::Vector2i TileMap::tilePos(vec pos)
-{
-	return tilePos(pos.x, pos.y);
-}
-
-sf::Vector2i TileMap::tilePos(float x, float y)
-{
-	return sf::Vector2i(
-		floor(x/unitsPerTile),
-		floor(y/unitsPerTile));
-}
-
-unsigned int TileMap::tilePosX(float x)
-{
-	return floor(x/unitsPerTile);
-}
-
-unsigned int TileMap::tilePosY(float y)
-{
-	return floor(y/unitsPerTile);
-}
-
 void TileMap::Draw(sf::RenderTarget& window)
 {
 	sf::Sprite& sprite = Assets::hospitalSprite;
@@ -82,24 +41,4 @@ void TileMap::Draw(sf::RenderTarget& window)
 		}
 	}
 	
-}
-
-float TileMap::Top(int y)
-{
-	return float(y+1)*unitsPerTile;
-}
-
-float TileMap::Bottom(int y)
-{
-	return float(y)*unitsPerTile;
-}
-
-float TileMap::Left(int x)
-{
-	return float(x)*unitsPerTile;
-}
-
-float TileMap::Right(int x)
-{
-	return float(x+1)*unitsPerTile;
 }

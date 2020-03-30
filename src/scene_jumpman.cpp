@@ -41,7 +41,7 @@ void JumpScene::EnterScene()
 
 	map.Randomize(time(NULL));
 
-	sf::Vector2i pos = map.tilePos(player.pos);
+	sf::Vector2i pos = map.toTiles(player.pos);
 	map.set(pos.x - 1, pos.y + 1, true);
 	map.set(pos.x,     pos.y + 1, true);
 	map.set(pos.x - 1, pos.y,     false);
@@ -64,7 +64,7 @@ void JumpScene::ExitScene()
 
 void JumpScene::Update(int dtMilis) {
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.tilePos(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.toTiles(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
 		ExitScene();
 		EnterScene();
 	}
@@ -126,7 +126,7 @@ void JumpScene::Update(int dtMilis) {
 	if (Keyboard::IsKeyPressed(DEBUG_EDIT_MODE) && (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right))) {
 		bool what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left);
 		vec pos = Mouse::GetPositionInWorld();
-		sf::Vector2i tile = map.tilePos(pos);
+		sf::Vector2i tile = map.toTiles(pos);
 		map.set(tile.x, tile.y, what_to_set);
 	}
 

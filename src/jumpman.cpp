@@ -244,10 +244,10 @@ void JumpMan::Update(float dt)
 
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
-		int xo = map->tilePosX(pos.x - cen.x);
-		int xn = map->tilePosX(posf.x - cen.x);
-		int yTop = map->tilePosY(pos.y - siz.y + N);
-		int yBottom = map->tilePosY(pos.y - N);
+		int xo = map->toTiles(pos.x - cen.x);
+		int xn = map->toTiles(posf.x - cen.x);
+		int yTop = map->toTiles(pos.y - siz.y + N);
+		int yBottom = map->toTiles(pos.y - N);
 		for (int x = xo; x >= xn; x--)
 		{
 			for (int y = yTop; y <= yBottom; y++)
@@ -266,10 +266,10 @@ void JumpMan::Update(float dt)
 	}
 	else if (direction.x > 0) //Vamos hacia la derecha
 	{
-		int xo = map->tilePosX(pos.x + csiz.x);
-		int xn = map->tilePosX(posf.x + csiz.x);
-		int yTop = map->tilePosY(pos.y - siz.y + N);
-		int yBottom = map->tilePosY(pos.y - N);
+		int xo = map->toTiles(pos.x + csiz.x);
+		int xn = map->toTiles(posf.x + csiz.x);
+		int yTop = map->toTiles(pos.y - siz.y + N);
+		int yBottom = map->toTiles(pos.y - N);
 		for (int x = xo; x <= xn; x++)
 		{
 			for (int y = yTop; y <= yBottom; y++)
@@ -293,10 +293,10 @@ horz_exit:
 
 	if (direction.y < 0) //Vamos hacia arriba
 	{
-		int yo = map->tilePosY(pos.y - siz.y); // usamos la y superior del sprite
-		int yn = map->tilePosY(posf.y - siz.y);
-		int xl = map->tilePosX(pos.x - cen.x + N);
-		int xr = map->tilePosX(pos.x + csiz.x - N);
+		int yo = map->toTiles(pos.y - siz.y); // usamos la y superior del sprite
+		int yn = map->toTiles(posf.y - siz.y);
+		int xl = map->toTiles(pos.x - cen.x + N);
+		int xr = map->toTiles(pos.x + csiz.x - N);
 		for (int y = yo; y >= yn; y--)
 		{
 			for (int x = xl; x <= xr; x++)
@@ -314,10 +314,10 @@ horz_exit:
 	}
 	else if (direction.y > 0) //Vamos hacia abajo
 	{
-		int yo = map->tilePosY(pos.y); // usamos la y inferior del sprite
-		int yn = map->tilePosY(posf.y);
-		int xl = map->tilePosX(pos.x - cen.x + N);
-		int xr = map->tilePosX(pos.x + csiz.x - N);
+		int yo = map->toTiles(pos.y); // usamos la y inferior del sprite
+		int yn = map->toTiles(posf.y);
+		int xl = map->toTiles(pos.x - cen.x + N);
+		int xr = map->toTiles(pos.x + csiz.x - N);
 		for (int y = yo; y <= yn; y++)
 		{
 			for (int x = xl; x <= xr; x++)
