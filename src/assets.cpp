@@ -10,6 +10,9 @@ sf::Sprite Assets::marioSprite;
 
 sf::Font Assets::font;
 
+sf::Shader Assets::tintShader;
+
+
 void Assets::LoadAll() {
 
     hospitalTexture.loadFromFile("data/spritesheet.png");
@@ -19,5 +22,7 @@ void Assets::LoadAll() {
     marioSprite.setTexture(marioTexture);
 
     font.loadFromFile("data/PressStart2P.ttf");
+
+    tintShader.loadFromFile("data/tint.frag", sf::Shader::Fragment);
 
 }

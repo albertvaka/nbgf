@@ -17,5 +17,7 @@ struct Assets
 
 	static sf::Font font;
 
+	static sf::Shader tintShader;
+
 };
 
