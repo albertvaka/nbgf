@@ -23,13 +23,13 @@ inline bool Collide(const CircleBounds& a, const CircleBounds& b)
 // Circle with box
 inline bool Collide(const CircleBounds& a, const Bounds& b)
 {
-    return Collide(Bounds(a.pos, vec(a.radius, a.radius), true), b);
-    //TODO
-    //vec distance = b.Center() - a.pos;
-    //distance.Clamp(-b.Size(), b.Size());
-    //vec closestPoint = b.Center() + distance;
-    //return (closestPoint - a.pos).LengthSq() > (a.radius * a.radius);
+    vec distance = b.Center() - a.pos;
+    distance.Clamp(-b.Size() / 2, b.Size() / 2);
+    vec closestPoint = b.Center() - distance;
+    closestPoint.Debuggerino(sf::Color::Blue);
+    return closestPoint.DistanceSq(a.pos) < (a.radius * a.radius);
 }
+
 inline bool Collide(const Bounds& a, const CircleBounds& b)
 {
     return Collide(b, a);

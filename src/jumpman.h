@@ -30,6 +30,8 @@ struct JumpMan : Entity
     vec siz;
     vec cen;
     
+    bool colliding = false;
+
     enum { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
 
     short onWall = ONWALL_NO;

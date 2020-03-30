@@ -48,6 +48,11 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 	polvito.Draw(window);
 	
 	sf::Sprite& spr = Assets::marioSprite;
+	sf::Shader* shader = nullptr;
+	if (colliding) {
+		shader = &Assets::tintShader;
+		shader->setUniform("flashColor", sf::Glsl::Vec4(1, 0, 0, 0.7));
+	}
 
 	spr.setTextureRect(animation.CurrentFrame());
 	spr.setOrigin(cen.x, siz.y);
@@ -58,7 +63,7 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 	else {
 		spr.setScale(1.f, 1.f);
 	}
-	window.draw(spr);
+	window.draw(spr,shader);
 
 	//BFG
 	if (bfgCooldownTimer > (bfgCooldown-bfgCooldown/4.f)) {
@@ -78,7 +83,7 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 		spr.setScale(scale, scale);
 	}
 	spr.setRotation(bfgAngle);
-	window.draw(spr);
+	window.draw(spr,shader);
 
 	//Restore everything
 	spr.setScale(1.f, 1.f);
