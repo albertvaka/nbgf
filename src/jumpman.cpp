@@ -27,9 +27,13 @@ const float jump_time = 0.35f;
 const vec vel_max(220, 200);
 
 // bfg
-const float bulletVel = 300.f;
+const float bulletVel = 400.f;
 const float bfgCooldown = 0.6f;
 const float bfgPushBack = 150.f;
+
+// damage
+const vec vel_hit(200.f, -300.f);
+const float invencibleTimeAfterHit = 0.5f;
 
 extern sf::Clock mainClock;
 
@@ -49,7 +53,7 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 	
 	sf::Sprite& spr = Assets::marioSprite;
 	sf::Shader* shader = nullptr;
-	if (colliding) {
+	if (isHit() > 0.f) {
 		shader = &Assets::tintShader;
 		shader->setUniform("flashColor", sf::Glsl::Vec4(1, 0, 0, 0.7));
 	}
@@ -94,7 +98,7 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 void JumpMan::Update(float dt)
 {
 	float marginGrounded = 1.f; //in pixels
-	bool grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1.f, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1.f, pos.y + marginGrounded);
+	grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1.f, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1.f, pos.y + marginGrounded);
 
 	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
 
@@ -125,14 +129,18 @@ void JumpMan::Update(float dt)
 		if (grounded) {
 			if (!crouched) acc.x -= run_acc;
 		}
-		else acc.x -= run_acc_onair;
+		else {
+			acc.x -= run_acc_onair;
+		}
 	}
 	if (Keyboard::IsKeyPressed(GameKeys::RIGHT)) {
 		lookingLeft = false;
 		if (grounded) {
 			if (!crouched) acc.x += run_acc;
 		}
-		else acc.x += run_acc_onair;
+		else {
+			acc.x += run_acc_onair;
+		}
 	}
 
 	if (Keyboard::IsKeyPressed(GameKeys::UP) && jumpTimeLeft > 0)
@@ -256,7 +264,9 @@ void JumpMan::Update(float dt)
 				{
 					posf.x = map->Right(x) + cen.x;
 					vel.x = -10.f; //stay against wall
-					onWall = ONWALL_LEFT;
+					if (!isHit()) {
+						onWall = ONWALL_LEFT;
+					}
 					lookingLeft = true;
 					goto horz_exit;
 				}
@@ -278,7 +288,9 @@ void JumpMan::Update(float dt)
 				{
 					posf.x = map->Left(x) - csiz.x;
 					vel.x = 10.f; //stay against wall
-					onWall = ONWALL_RIGHT;
+					if (!isHit()) {
+						onWall = ONWALL_RIGHT;
+					}
 					lookingLeft = false;
 					goto horz_exit;
 				}
@@ -419,9 +431,27 @@ vert_exit:
 			}
 		}
 	}
+
+	if (invencibleTimer > 0.f) {
+		invencibleTimer -= dt;
+	}
 }
 
-
+void JumpMan::takeDamage(vec src) {
+	invencibleTimer = invencibleTimeAfterHit;
+	std::cout << pos.x << " vs " << src.x << std::endl;
+	if (pos.x > src.x) {
+		vel.x = vel_hit.x;
+	}
+	else {
+		vel.x = -vel_hit.x;
+	}
+	if (grounded) {
+		vel.y = vel_hit.y;
+	}
+	jumpTimeLeft = 0;
+	onWall = ONWALL_NO;
+}
 
 
 

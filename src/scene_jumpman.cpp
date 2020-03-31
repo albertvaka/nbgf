@@ -105,7 +105,6 @@ void JumpScene::Update(int dtMilis) {
 	}
 	EntS<Bullet>::deleteNotAlive();
 
-	player.colliding = false;
 	for (Bat* e : EntS<Bat>::getAll()) {
 		e->Update(dt);
 		for (Bullet* b : EntS<Bullet>::getAll()) {
@@ -119,7 +118,11 @@ void JumpScene::Update(int dtMilis) {
 			}
 		}
 		if (!e->alive) continue;
-		player.colliding = player.colliding || Collide(player.bounds(), e->bounds());
+		if (!player.isInvencible()) {
+			if (Collide(player.bounds(), e->bounds())) {
+				player.takeDamage(e->pos);
+			}
+		}
 	}
 	EntS<Bat>::deleteNotAlive();
 
