@@ -90,6 +90,8 @@ struct vec : public sf::Vector2f
       return vec(x * cs - y * sn, x * sn + y * cs);
   }
 
+  inline vec RotatedToFacePosition(vec target, float maxTurnRateRads = 900.f);
+
   //returns the vector that is perpendicular to this one.
   inline vec  Perp() const;
 
@@ -421,6 +423,62 @@ inline bool isSecondInFOVOfFirst(vec posFirst,
 
 
 
+//-------------------- LineIntersection2D-------------------------
+//
+//	Given 2 lines in 2D space AB, CD this returns true if an 
+//	intersection occurs and sets dist to the distance the intersection
+//  occurs along AB. Also sets the 2d vector point to the point of
+//  intersection
+//----------------------------------------------------------------- 
+inline bool LineIntersection2D(vec A, vec B, vec C, vec D, float& dist, vec& point)
+{
+
+	float rTop = (A.y-C.y)*(D.x-C.x)-(A.x-C.x)*(D.y-C.y);
+	float rBot = (B.x-A.x)*(D.y-C.y)-(B.y-A.y)*(D.x-C.x);
+
+	float sTop = (A.y-C.y)*(B.x-A.x)-(A.x-C.x)*(B.y-A.y);
+	float sBot = (B.x-A.x)*(D.y-C.y)-(B.y-A.y)*(D.x-C.x);
+
+	if ( (rBot == 0) || (sBot == 0))
+	{
+		//lines are parallel
+		return false;
+	}
+
+	float r = rTop/rBot;
+	float s = sTop/sBot;
+
+	if( (r > 0) && (r < 1) && (s > 0) && (s < 1) )
+	{
+		dist = A.Distance(B) * r;
+		point = A + r * (B - A);
+		return true;
+	}
+	else
+	{
+		dist = 0;
+		return false;
+	}
+}
+
+inline vec vec::RotatedToFacePosition(vec target, float maxTurnRateRads)
+{
+    vec toTarget = (target - *this).Normalized();
+    vec heading = Normalized();
+
+    //first determine the angle between the heading vector and the target
+    float angle = acos(heading.Dot(toTarget));
+
+    //return true if already facing the target
+    if (angle < 0.00001) {
+        return *this;
+    }
+
+    //clamp the amount to turn to the max turn rate
+    if (fabs(angle) > maxTurnRateRads) angle = maxTurnRateRads;
+
+    return RotatedAroundOrigin(angle * heading.Sign(toTarget));
+}
 
 //-----------------------------------------------------------------------------
 //  printing
