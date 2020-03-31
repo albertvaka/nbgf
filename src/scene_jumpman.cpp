@@ -49,8 +49,8 @@ void JumpScene::EnterScene()
 	map.set(pos.x - 1, pos.y - 1, false);
 	map.set(pos.x,     pos.y - 1, false);
 
-	for (int i = 1; i < 3; i++) {
-		new Bat(vec(12 + (i) * (4 * 24), 0));
+	for (int i = 1; i < 100; i++) {
+		new Bat(vec(12 + (i) * (4 * 24), 0), &player, &map);
 	}
 
 }
@@ -107,7 +107,7 @@ void JumpScene::Update(int dtMilis) {
 
 	player.colliding = false;
 	for (Bat* e : EntS<Bat>::getAll()) {
-		e->Update(&player, dt);
+		e->Update(dt);
 		for (Bullet* b : EntS<Bullet>::getAll()) {
 			if (b->explode) continue;
 			if (Collide(e, b)) {

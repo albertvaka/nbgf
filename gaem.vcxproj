@@ -52,7 +52,10 @@
     <ClInclude Include="src\main_scene_collider.h" />
     <ClInclude Include="src\main_scene_tile.h" />
     <ClInclude Include="src\mates.h" />
+    <ClInclude Include="src\matrix2d.h" />
     <ClInclude Include="src\mesa.h" />
+    <ClInclude Include="src\steering_behavior_applier.h" />
+    <ClInclude Include="src\steering_entity.h" />
     <ClInclude Include="src\partsys.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\popupText.h" />
@@ -61,6 +64,7 @@
     <ClInclude Include="src\scene_manager.h" />
     <ClInclude Include="src\selfregister.h" />
     <ClInclude Include="src\spawner.h" />
+    <ClInclude Include="src\steering_behavior.h" />
     <ClInclude Include="src\taca.h" />
     <ClInclude Include="src\tilemap.h" />
     <ClInclude Include="src\transition.h" />
@@ -81,6 +85,7 @@
     <ClCompile Include="src\partsys.cpp" />
     <ClCompile Include="src\rand.cpp" />
     <ClCompile Include="src\scene_jumpman.cpp" />
+    <ClCompile Include="src\steering_behavior.cpp" />
     <ClCompile Include="src\tilemap.cpp" />
     <ClCompile Include="src\transition.cpp" />
     <ClCompile Include="src\vector.cpp" />

@@ -109,7 +109,7 @@ struct Bounds : public sf::Rect<float>
         return vec(width, height);
     }
 
-
+    vec ClosesPointInBounds(const vec& target) const;
     float DistanceSq(const Bounds& a) const;
     float DistanceSq(const CircleBounds& a) const;
     float Distance(const Bounds& a) const;
@@ -171,11 +171,15 @@ inline float Bounds::DistanceSq(const Bounds& a) const {
     return sqrDist;
 }
 
-
-inline float Bounds::DistanceSq(const CircleBounds& a) const {
-    vec distance = this->Center() - a.pos;
+inline vec Bounds::ClosesPointInBounds(const vec& target) const {
+    vec distance = this->Center() - target;
     distance.Clamp(-this->Size() / 2, this->Size() / 2);
     vec closestPoint = this->Center() - distance;
+    return closestPoint;
+}
+
+inline float Bounds::DistanceSq(const CircleBounds& a) const {
+    vec closestPoint = ClosesPointInBounds(a.pos);
     closestPoint.Debuggerino(sf::Color::Blue);
     return closestPoint.DistanceSq(a.pos) - (a.radius * a.radius);
 }

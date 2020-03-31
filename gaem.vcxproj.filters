@@ -19,6 +19,9 @@
     <Filter Include="Bundled Dependencies\Imgui">
       <UniqueIdentifier>{f04c1d6a-03a0-4b9a-9a0b-c44f562282ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Steering">
+      <UniqueIdentifier>{334872e3-915f-4e65-b016-64a8104431c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\player.h">
@@ -147,6 +150,9 @@
     <ClInclude Include="src\partsys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\matrix2d.h">
+      <Filter>Steering</Filter>
+    </ClInclude>
     <ClInclude Include="src\bat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -155,6 +161,15 @@
     </ClInclude>
     <ClInclude Include="src\hospital_entity.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_entity.h">
+      <Filter>Steering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_behavior_applier.h">
+      <Filter>Steering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_behavior.h">
+      <Filter>Steering</Filter>
     </ClInclude>
     <ClInclude Include="src\assets.h">
       <Filter>Header Files</Filter>
@@ -205,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="src\bat.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\steering_behavior.cpp">
+      <Filter>Steering</Filter>
     </ClCompile>
     <ClCompile Include="src\vector.cpp">
       <Filter>Source Files</Filter>
