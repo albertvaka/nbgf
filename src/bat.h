@@ -17,6 +17,7 @@ struct Bat : SteeringEntity, EntS<Bat>
 	enum class State {
 		SIESTA,
 		FLYING,
+		SEEKING,
 	};
 
 	SteeringBehaviorApplier steering;
@@ -26,6 +27,7 @@ struct Bat : SteeringEntity, EntS<Bat>
 	float timeToAwake = 1000.f; //Does nothing if > 999
 	bool awakened = false;
 	JumpMan* jumpman;
+	bool aggresive = false;
 
 	Bat(vec position, JumpMan* jumpman, TileMap* tilemap);
 

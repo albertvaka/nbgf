@@ -28,7 +28,7 @@ public:
 	float m_dWeightHide = 1;
 	float m_dWeightTileMapAvoidance = 2;
 
-private:
+//private:
 
 	Entity* pursuitTarget = nullptr;
 	Entity* seekTarget = nullptr;

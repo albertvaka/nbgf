@@ -40,7 +40,8 @@ vec SteeringBehavior::Seek(vec TargetPos)
 {
 	vec DesiredVelocity = (TargetPos - steeringEntity->pos).Normalized() * steeringEntity->max_speed;
 
-	return (DesiredVelocity - steeringEntity->vel);
+	//return (DesiredVelocity - steeringEntity->vel);
+	return DesiredVelocity; // FIXME: Since we are overriding the velocity, we can't use the calculation above
 }
 
 //----------------------------- Flee -------------------------------------
@@ -60,7 +61,8 @@ vec SteeringBehavior::Flee(vec TargetPos)
 
 	vec DesiredVelocity = (steeringEntity->pos - TargetPos).Normalized() * steeringEntity->max_speed;
 
-	return (DesiredVelocity - steeringEntity->vel);
+	//return (DesiredVelocity - steeringEntity->vel);
+	return DesiredVelocity; // FIXME: Since we are overriding the velocity, we can't use the calculation above
 }
 
 //--------------------------- Arrive -------------------------------------
@@ -365,9 +367,8 @@ im_inside:
 	//closestObstacle.Debuggerino(sf::Color::Red);
 
 	vec steeringForce;
-
-	if (minDistToCenterSq < Mates::MaxFloat)
-	{
+	avoidingTileMap = (minDistToCenterSq < Mates::MaxFloat);
+	if (avoidingTileMap) {
 		float dist = sqrt(minDistToCenterSq) - me.radius;
 		float multiplier;
 		if (dist < 0) { //touching

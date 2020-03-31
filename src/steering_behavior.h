@@ -65,6 +65,8 @@ struct SteeringBehavior
     //side of an obstacle to the pursuer
     vec GetHidingPosition(const vec& posOb, const float radiusOb, const vec& posHunter);
 
+	bool avoidingTileMap = false;
+
 //protected:
 
   //a pointer to the owner of this instance

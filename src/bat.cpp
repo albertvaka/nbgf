@@ -17,7 +17,7 @@ void AwakeNearbyBats(vec pos) {
 }
 
 Bat::Bat(vec pos, JumpMan* jumpman, TileMap* tilemap)
-	: SteeringEntity(pos + vec(0.f, 16.f), 8.f, 90.f, vec(max_speed, 0.f))
+	: SteeringEntity(pos + vec(0.f, 16.f), 8.f, 90.f, vec(1.f, 0.f))
 	, state(State::SIESTA)
 	, steering(this)
 	, jumpman(jumpman)
@@ -28,6 +28,11 @@ Bat::Bat(vec pos, JumpMan* jumpman, TileMap* tilemap)
 	steering.TileMapAvoidanceOn(tilemap);
 	steering.ForwardOn();
 	steering.WanderOn();
+
+	aggresive = (Random::rollf(1.f) < 0.2f);
+	if (aggresive) {
+		max_speed *= 1.4f;
+	}
 }
 
 void Bat::DrawSenseArea(sf::RenderTarget& window)
@@ -40,8 +45,9 @@ void Bat::Update(float dt)
 {
 	anim.Update(dt * 1000);
 
-	if (state == State::SIESTA) {
-
+	switch (state) {
+	case State::SIESTA:
+	{
 		if (anim.GetCurrentAnim() == BAT_AWAKE) {
 			if (anim.complete) {
 				state = State::FLYING;
@@ -57,8 +63,11 @@ void Bat::Update(float dt)
 				anim.loopable = false;
 			}
 		}
-
-	} else if (state == State::FLYING) {
+		break;
+	}
+	break;
+	case State::FLYING:
+	{
 
 		vec oldVel = vel;
 
@@ -82,8 +91,42 @@ void Bat::Update(float dt)
 			anim.Ensure(BAT_FLYING);
 			anim.loopable = true;
 		}
+
+		if (aggresive) {
+			if (Random::roll(90) == 30) {
+				anim.Ensure(BAT_FLYING);
+				state = State::SEEKING;
+			}
+			if (steering.isFleeOn() && !jumpman->isHit()) {
+				steering.FleeOff();
+			}
+		}
 	}
+    break;
+	case State::SEEKING:
+	{
+		vel = steering.CalculatePrioritized(dt);
+		if (steering.avoidingTileMap) {
+			state = State::FLYING;
+		} else {
+			vel = steering.Seek(jumpman->center());
+		}
+
+		vel = vel.Normalized() * max_speed;
+		pos += vel * dt;
+
+		if (jumpman->isHit() || steering.avoidingTileMap) {
+			state = State::FLYING;
+			if (jumpman->isHit()) {
+				steering.FleeOn(jumpman);
+			}
+		}
+	}
+	break;
+	}
+
 }
+
 
 void Bat::Draw(sf::RenderTarget& window)
 {
@@ -97,6 +140,13 @@ void Bat::Draw(sf::RenderTarget& window)
 	spr.setOrigin(16.f, 16.f);
 	spr.setTextureRect(anim.CurrentFrame());
 	spr.setPosition(pos.x, pos.y);
-	window.draw(spr);
+
+	if (aggresive) {
+		sf::Shader *tintShader = &Assets::tintShader;
+		tintShader->setUniform("flashColor", sf::Glsl::Vec4(0.7, 0.1, 0.2, 0.4));
+		window.draw(spr, tintShader);
+	} else {
+		window.draw(spr);
+	}
 }
 
