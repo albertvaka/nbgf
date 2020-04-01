@@ -152,6 +152,7 @@ inline bool SteeringBehaviorApplier::AccumulateForce(vec& RunningTot, vec ForceT
 	{
 		//add it to the steering force
 		RunningTot += (ForceToAdd.Normalized() * MagnitudeRemaining);
+		return false;
 	}
 
 	return true;
