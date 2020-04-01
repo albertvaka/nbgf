@@ -62,16 +62,16 @@ int main()
 		Input::Update(time);
 
 #ifdef _DEBUG
-		static bool frameByFrame = false;
-		if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
-			frameByFrame = !frameByFrame;
-		}
-
 		static bool debugDraw = false;
 		if (Keyboard::IsKeyJustPressed(DEBUG_BOUNDS)) {
 			debugDraw = !debugDraw;
 		}
 
+		static bool frameByFrame = false;
+		if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
+			frameByFrame = !frameByFrame;
+		}
+	
 		if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT) || Keyboard::IsKeyJustPressed(RESTART))
 #endif
 		{
