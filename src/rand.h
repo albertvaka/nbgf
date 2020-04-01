@@ -89,7 +89,8 @@ namespace Random
 	inline uint64_t roll64(uint64_t max) { return roll(0, (uint)max); }
 
 	inline float rollf(float min, float max) { return action.rollf(min, max); }
-	inline float rollf(float max) { return rollf(0, max); }
+	inline float rollf(float max) { return rollf(0.f, max); }
+	inline float rollf() { return rollf(0.f, 1.f); }
 
 	template<typename _T>
 	void shuffle(_T *values, size_t count)
@@ -112,6 +113,37 @@ namespace Random
 
 		x = r * std::cos(rads);
 		y = r * std::sin(rads);
+	}
+
+	//returns a random number with a normal distribution. See method at
+	//http://www.taygeta.com/random/gaussian.html
+	inline float Gaussian(float mean = 0.0, float standard_deviation = 1.0)
+	{
+		float x1, x2, w, y1;
+		static float y2;
+		static int use_last = 0;
+
+		if (use_last)		        /* use value from previous call */
+		{
+			y1 = y2;
+			use_last = 0;
+		}
+		else
+		{
+			do
+			{
+				x1 = 2.0f * rollf() - 1.0f;
+				x2 = 2.0f * rollf() - 1.0f;
+				w = x1 * x1 + x2 * x2;
+			} while (w >= 1.0f);
+
+			w = sqrt((-2.0f * log(w)) / w);
+			y1 = x1 * w;
+			y2 = x2 * w;
+			use_last = 1;
+		}
+
+		return(mean + y1 * standard_deviation);
 	}
 
 }

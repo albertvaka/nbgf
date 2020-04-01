@@ -19,7 +19,7 @@ const float WanderJitterPerSec = 45.f; //Trompicones que dona (the maximum amoun
 SteeringBehavior::SteeringBehavior(SteeringEntity* agent) : steeringEntity(agent)
 {
 	//create a vector to a target position on the wander circle
-	float theta = Mates::RandFloat() * Mates::TwoPi;
+	float theta = Random::rollf() * Mates::TwoPi;
 	m_vWanderTarget = vec(WanderRad * cos(theta), WanderRad * sin(theta));
 }
 
@@ -143,9 +143,12 @@ vec SteeringBehavior::Wander(float dt)
 	//be included when using time independent framerate.
 	float JitterThisTimeSlice = WanderJitterPerSec * dt;
 
+	//Random between -1 and 1 with more weight at 0.
+	float x = (Random::rollf() - Random::rollf());
+	float y = (Random::rollf() - Random::rollf());
+
 	//first, add a small random vector to the target's position
-	m_vWanderTarget += vec(Mates::RandomClamped() * JitterThisTimeSlice,
-		Mates::RandomClamped() * JitterThisTimeSlice);
+	m_vWanderTarget += vec(x * JitterThisTimeSlice, y * JitterThisTimeSlice);
 
 	//reproject this new vector back on to a unit circle
 	m_vWanderTarget.Normalize();
