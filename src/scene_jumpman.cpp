@@ -144,10 +144,9 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 
 	for (Bat* e : EntS<Bat>::getAll()) {
 		e->Draw(window);
-		if (debugDraw) {
+		if (debugDraw && Camera::GetCameraBounds().IsInside(e->pos)) {
 			e->drawBounds(window);
 			e->DrawSenseArea(window);
-			Bounds(e->pos, vec(1, 1)).Draw(window, sf::Color::White);
 		}
 	}
 

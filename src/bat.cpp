@@ -148,5 +148,9 @@ void Bat::Draw(sf::RenderTarget& window)
 	} else {
 		window.draw(spr);
 	}
+
+	if (state == State::SEEKING) {
+		pos.Debuggerino();
+	}
 }
 
