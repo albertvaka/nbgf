@@ -1,6 +1,6 @@
 #include "rand.h"
 
-namespace Random
+namespace GoodRandom
 {
-	RndEngine action;
+	RndEngine r;
 }

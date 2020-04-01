@@ -38,7 +38,7 @@ PartSys::Particle& PartSys::AddParticle() {
 	p.ttl = Random::rollf(min_ttl, max_ttl);
 	p.pos = pos;
 	p.vel = vec::Rand(min_vel, max_vel);
-	p.sprite = Random::roll(sprites.size() - 1);
+	p.sprite = Random::roll(sprites.size());
 	p.rotation = Random::rollf(min_rotation, max_rotation);
 	p.scale = Random::rollf(min_scale, max_scale);
 	p.alpha = alpha;

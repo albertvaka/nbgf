@@ -25,11 +25,11 @@ enum class ExtremityColor
 
 inline ExtremityType RandomExtremityType() {
 
-	return ExtremityType(Random::roll(magic_enum::enum_count<ExtremityType>() - 2) + 1);
+	return ExtremityType(Random::roll(magic_enum::enum_count<ExtremityType>() - 1) + 1);
 };
 
 inline ExtremityColor RandomExtremityColor() {
-	return ExtremityColor(Random::roll(magic_enum::enum_count<ExtremityColor>() - 2) + 1);
+	return ExtremityColor(Random::roll(magic_enum::enum_count<ExtremityColor>() - 1) + 1);
 };
 
 std::map<ExtremityColor, std::map<ExtremityType, sf::IntRect>> extremitySprPos;

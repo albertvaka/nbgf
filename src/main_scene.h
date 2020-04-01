@@ -81,7 +81,7 @@ struct MainScene : Scene {
 		if (num_tacs/(num_rumbs + 1) > 1300 && num_rumbs < 3) {
 			int spawners_count = EntS<CleanerSpawner>::getAll().size();
 
-			int sp = Random::roll(0, spawners_count-1);
+			int sp = Random::roll(0, spawners_count);
 
 			EntS<CleanerSpawner>::getAll()[sp]->TreuElGos();
 		}
@@ -119,7 +119,7 @@ struct MainScene : Scene {
 		{
 			int spawners_count = EntS<CleanerSpawner>::getAll().size();
 
-			int sp = Random::roll(0, spawners_count - 1);
+			int sp = Random::roll(0, spawners_count);
 
 			EntS<CleanerSpawner>::getAll()[sp]->TreuElGos();
 

@@ -195,7 +195,7 @@ struct Cadaver : SortedDrawable, Cintable, EntS<Cadaver>
 
 	void Update(int dt) override
 	{
-		counterBloodTimeLeft -= dt * Random::roll(0, 3);
+		counterBloodTimeLeft -= dt * Random::roll(0, 4);
 		if (counterBloodTimeLeft < 0 && withTaca)
 		{
 			SpawnBlood();

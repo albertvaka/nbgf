@@ -50,7 +50,7 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 	}
 	void DecideNextAction() {
 		decisionCounter = 1000.f;
-		int newdir = Random::roll(1);
+		int newdir = Random::roll(2);
 		switch (newdir)
 		{
 		case 0:
@@ -60,7 +60,7 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 			vel.x = -0.05;
 			break;
 		}
-		newdir = Random::roll(1);
+		newdir = Random::roll(2);
 		switch (newdir)
 		{
 		case 0:
