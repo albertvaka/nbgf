@@ -8,23 +8,10 @@ JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 25), 16)
 	, player(&map)
 {
-}
 
-void JumpScene::EnterScene() 
-{
-	Camera::SetZoom(GameData::JUMPMAN_ZOOM);
-	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
-
-	//transition.setTime(2.0f);
-	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
-	//transition.goPos(GameData::JUMPMAN_ZOOM);
-
-	player.pos = vec(192, 160);
 	player.polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
-	player.Reset();
+	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(0, 2 * 16, 16, 16)).setColor(sf::Color(255, 255, 255, 200));
 
-	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(0, 2 * 16, 16, 16)).setColor(sf::Color(255,255,255,200));
-	
 	float vel = 15;
 	bulletPartSys.max_vel = vec(vel, vel);
 	bulletPartSys.min_vel = vec(-vel, -vel);
@@ -38,6 +25,19 @@ void JumpScene::EnterScene()
 	bulletPartSys.min_rotation = 0.f;
 	bulletPartSys.max_rotation = 360.f;
 	bulletPartSys.rotation_vel = 180.f;
+}
+
+void JumpScene::EnterScene() 
+{
+	Camera::SetZoom(GameData::JUMPMAN_ZOOM);
+	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
+
+	//transition.setTime(2.0f);
+	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
+	//transition.goPos(GameData::JUMPMAN_ZOOM);
+
+	player.pos = vec(192, 160);
+	player.Reset();
 
 	map.Randomize(time(NULL));
 
