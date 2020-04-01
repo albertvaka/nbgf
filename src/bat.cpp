@@ -17,7 +17,7 @@ void AwakeNearbyBats(vec pos) {
 }
 
 Bat::Bat(vec pos, JumpMan* jumpman, TileMap* tilemap)
-	: SteeringEntity(pos + vec(0.f, 16.f), 8.f, 90.f, vec(1.f, 0.f))
+	: SteeringEntity(pos + vec(0.f, 16.f), 8.f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
 	, state(State::SIESTA)
 	, steering(this)
 	, jumpman(jumpman)
