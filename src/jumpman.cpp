@@ -32,7 +32,7 @@ const float bfgCooldown = 0.6f;
 const float bfgPushBack = 150.f;
 
 // damage
-const vec vel_hit(200.f, -300.f);
+const vec vel_hit(180.f, -150.f);
 const float invencibleTimeAfterHit = 0.5f;
 
 extern sf::Clock mainClock;
@@ -439,7 +439,6 @@ vert_exit:
 
 void JumpMan::takeDamage(vec src) {
 	invencibleTimer = invencibleTimeAfterHit;
-	std::cout << pos.x << " vs " << src.x << std::endl;
 	if (pos.x > src.x) {
 		vel.x = vel_hit.x;
 	}
@@ -451,6 +450,7 @@ void JumpMan::takeDamage(vec src) {
 	}
 	jumpTimeLeft = 0;
 	onWall = ONWALL_NO;
+	crouched = false;
 }
 
 
