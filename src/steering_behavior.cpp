@@ -164,8 +164,7 @@ vec SteeringBehavior::Wander(float dt)
 	vec Origin = steeringEntity->pos;
 	vec Ret = Target - Origin;
 
-
-	//(steeringEntity->pos + m_vWanderTarget * 20).Debuggerino(sf::Color::Green);
+	(steeringEntity->pos + m_vWanderTarget * 20).Debuggerino(sf::Color::Green);
 
 	return Ret;
 }
