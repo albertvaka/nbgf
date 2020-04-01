@@ -8,6 +8,10 @@ const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 100.f;
 const float awake_nearby_time = 1.f;
 
+float RandomSeekingTime() {
+	return Random::rollf(0.2f, 1.6f) + Random::rollf(0.2f, 1.6f); // Random between 0.4 and 3.2, with values closer to 1.7 more likely
+}
+
 void AwakeNearbyBats(vec pos) {
 	for (Bat* bat : EntS<Bat>::getAll()) {
 		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
@@ -29,9 +33,10 @@ Bat::Bat(vec pos, JumpMan* jumpman, TileMap* tilemap)
 	steering.ForwardOn();
 	steering.WanderOn();
 
-	aggresive = (Random::rollf(1.f) < 0.2f);
+	aggresive = (Random::rollf() < 0.2f);
 	if (aggresive) {
 		max_speed *= 1.4f;
+		seekingTimer = RandomSeekingTime();
 	}
 }
 
@@ -93,7 +98,9 @@ void Bat::Update(float dt)
 		}
 
 		if (aggresive) {
-			if (Random::roll(90) == 30) {
+			seekingTimer -= dt;
+			if (seekingTimer <= 0.f) {
+				seekingTimer = RandomSeekingTime();
 				anim.Ensure(BAT_FLYING);
 				state = State::SEEKING;
 			}

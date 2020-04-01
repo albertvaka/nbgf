@@ -28,6 +28,7 @@ struct Bat : SteeringEntity, EntS<Bat>
 	bool awakened = false;
 	JumpMan* jumpman;
 	bool aggresive = false;
+	float seekingTimer; //They will start seeking
 
 	Bat(vec position, JumpMan* jumpman, TileMap* tilemap);
 
