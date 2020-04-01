@@ -18,18 +18,45 @@ void TileMap::Draw(sf::RenderTarget& window)
 	sf::Sprite& sprite = Assets::hospitalSprite;
 
 	Bounds screen = Camera::GetCameraBounds();
-	int left = screen.Left() / unitsPerTile;
-	int right = screen.Right() / unitsPerTile;
-	int top = screen.Top() / unitsPerTile;
-	int bottom = screen.Bottom() / unitsPerTile;
-	for (int x = left - 1; x < right + 1; x++)
+	int left = (screen.Left() / unitsPerTile) - 1;
+	int right = (screen.Right() / unitsPerTile) + 1;
+	int top = (screen.Top() / unitsPerTile) - 1;
+	int bottom = (screen.Bottom() / unitsPerTile) + 1;
+
+	if (left < 0) {
+		sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
+		for (int x = left - 1; x < 0; x++)
+		{
+			for (int y = top - 1; y < bottom + 1; y++)
+			{
+				sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+				window.draw(sprite);
+			}
+		}
+		left = 0;
+	}
+
+	if (right >= sizes.x) {
+		sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
+		for (int x = sizes.x; x < right; x++)
+		{
+			for (int y = top - 1; y < bottom + 1; y++)
+			{
+				sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+				window.draw(sprite);
+			}
+		}
+		right = sizes.x - 1;
+	}
+
+	for (int x = left; x < right; x++)
 	{
-		for (int y = top - 1; y < bottom + 1; y++)
+		for (int y = top; y < bottom; y++)
 		{
 			if (y >= sizes.y) {
 				//lava
 				sprite.setTextureRect(sf::Rect((8 + ((100+x) % 3)) * 16, 13 * 16, 16, 16));
-			} else if (isColl(x, y)) {
+			} else if (y < 0 || isCollUnsafe(x, y)) {
 				sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
 			}
 			else {
@@ -37,7 +64,6 @@ void TileMap::Draw(sf::RenderTarget& window)
 			}
 			sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
 			window.draw(sprite);
-
 		}
 	}
 	

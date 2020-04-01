@@ -22,14 +22,17 @@ struct TileMap
 	}
 	void set(int x, int y, bool col) {
 		if (!inBounds(x, y)) return;
-		tiles[y * sizes.x + x] = col;
+		tiles[x * sizes.y + y] = col;
 	}
 	bool isColl(sf::Vector2i pos) { return isColl(pos.x, pos.y); }
 
-	//TODO: Add unsafe version that doesn't check bounds
 	bool isColl(int x, int y) {
 		if (!inBounds(x, y)) return true;
-		return tiles[y * sizes.x + x];
+		return isCollUnsafe(x,y);
+	}
+
+	bool isCollUnsafe(int x, int y) {
+		return tiles[x * sizes.y + y];
 	}
 
 	sf::Vector2i toTiles(vec pos) const { return toTiles(pos.x, pos.y); }
