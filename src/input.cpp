@@ -363,11 +363,19 @@ static void _ProcessWindowEvents()
             break;
         case sf::Event::Resized: //To disable sfml's automatic scaling
         {
+            // GameView: scale from center
             vec currentCenter = Camera::gameView.getCenter();
             Camera::gameView.setSize(sf::Vector2f(Window::window->getSize()));
             Camera::gameView.setCenter(currentCenter);
             Camera::gameView.zoom(1.f / Camera::zoom);
-            Window::window->setView(Camera::gameView);
+        }
+        {
+            // GuiView: scale from top-left corner
+            vec oldSize = Camera::guiView.getSize() * (GameData::GUI_ZOOM);
+            vec newSize = sf::Vector2f(Window::window->getSize());
+            Camera::guiView.setSize(newSize);
+            Camera::guiView.zoom(1.f / GameData::GUI_ZOOM);
+            Camera::guiView.setCenter(vec(Camera::guiView.getCenter()) + (newSize-oldSize)/(2*GameData::GUI_ZOOM));
         }
         break;
         default:
