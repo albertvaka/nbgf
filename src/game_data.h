@@ -16,7 +16,6 @@ namespace GameData
 #else
 	const int GUI_ZOOM = 1;
 	const int GAME_ZOOM = 4;
-	const int JUMPMAN_ZOOM = 3;
 	const int WINDOW_WIDTH = 1472;
 	const int WINDOW_HEIGHT = 1000;
 #endif

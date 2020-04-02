@@ -6,6 +6,7 @@
 #include "simplexnoise.h"
 
 const float batClusterSize = 24.f;
+const float sceneZoom = 2.5;
 
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 25), 16)
@@ -32,7 +33,7 @@ JumpScene::JumpScene()
 
 void JumpScene::EnterScene() 
 {
-	Camera::SetZoom(GameData::JUMPMAN_ZOOM);
+	Camera::SetZoom(sceneZoom);
 	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
 
 	//transition.setTime(2.0f);
