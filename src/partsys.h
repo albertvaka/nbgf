@@ -44,6 +44,7 @@ struct PartSys {
 	};
 
 	vec pos = vec();
+	float spawn_radius = 0.f; // TODO: Implement
 
 	vec max_vel = vec();
 	vec min_vel = vec();
