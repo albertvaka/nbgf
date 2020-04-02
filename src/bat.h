@@ -30,7 +30,7 @@ struct Bat : SteeringEntity, EntS<Bat>
 	bool aggresive = false;
 	float seekingTimer; //They will start seeking
 
-	Bat(vec position, JumpMan* jumpman, TileMap* tilemap);
+	Bat(vec position, JumpMan* jumpman, TileMap* tilemap, bool aggresive = (Random::rollf() < 0.2f));
 
 	void Update(float dt);
 	void Draw(sf::RenderTarget& window);
