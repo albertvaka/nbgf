@@ -506,9 +506,7 @@ inline std::ifstream& operator>>(std::ifstream& is, vec& lhs)
     return is;
 }
 
-
-
-inline Mates::xy PosToTile(vec pos)
+inline sf::Vector2i PosToTile(vec pos)
 {
 	return
 	{
@@ -516,5 +514,3 @@ inline Mates::xy PosToTile(vec pos)
 		int((pos.y) / 16)
 	};
 }
-
-

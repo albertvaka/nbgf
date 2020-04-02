@@ -9,18 +9,6 @@
 
 namespace Mates
 {
-	struct xy
-	{
-		int x = 0;
-		int y = 0;
-		xy() {}
-		xy(int _x_, int _y_)
-		{
-			x = _x_;
-			y = _y_;
-		}
-	};
-
 
 	//a few useful constants
 	const int     MaxInt = (std::numeric_limits<int>::max)();
@@ -51,8 +39,7 @@ namespace Mates
 	return ((-MinFloat < val) && (val < MinFloat));
 	}
 
-	//returns true is the third parameter is in the range described by the
-	//first two
+	//returns true is the third parameter is in the range described by the first two
 	inline bool InRange(float start, float end, float val)
 	{
 	if (start < end)

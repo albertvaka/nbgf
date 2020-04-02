@@ -135,15 +135,15 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 
 		float dd = size.x/2;
 
-		Mates::xy TL_x = PosToTile(vec(newPos.x, pos.y) + vec(-dd, -dd));
-		Mates::xy TR_x = PosToTile(vec(newPos.x, pos.y) + vec(dd, -dd));
-		Mates::xy BL_x = PosToTile(vec(newPos.x, pos.y) + vec(-dd, dd));
-		Mates::xy BR_x = PosToTile(vec(newPos.x, pos.y) + vec(dd, dd));
+		sf::Vector2i TL_x = PosToTile(vec(newPos.x, pos.y) + vec(-dd, -dd));
+		sf::Vector2i TR_x = PosToTile(vec(newPos.x, pos.y) + vec(dd, -dd));
+		sf::Vector2i BL_x = PosToTile(vec(newPos.x, pos.y) + vec(-dd, dd));
+		sf::Vector2i BR_x = PosToTile(vec(newPos.x, pos.y) + vec(dd, dd));
 
-		Mates::xy TL_y = PosToTile(vec(pos.x, newPos.y) + vec(-dd, -dd));
-		Mates::xy TR_y = PosToTile(vec(pos.x, newPos.y) + vec(dd, -dd));
-		Mates::xy BL_y = PosToTile(vec(pos.x, newPos.y) + vec(-dd, dd));
-		Mates::xy BR_y = PosToTile(vec(pos.x, newPos.y) + vec(dd, dd));
+		sf::Vector2i TL_y = PosToTile(vec(pos.x, newPos.y) + vec(-dd, -dd));
+		sf::Vector2i TR_y = PosToTile(vec(pos.x, newPos.y) + vec(dd, -dd));
+		sf::Vector2i BL_y = PosToTile(vec(pos.x, newPos.y) + vec(-dd, dd));
+		sf::Vector2i BR_y = PosToTile(vec(pos.x, newPos.y) + vec(dd, dd));
 
 		//Right
 		if (vel.x > 0)
