@@ -9,7 +9,7 @@ const float batClusterSize = 24.f;
 const float sceneZoom = 2.5;
 
 JumpScene::JumpScene()
-	: map(sf::Vector2i(1000, 25), 16)
+	: map(sf::Vector2i(1000, 23), 16)
 	, player(&map)
 {
 
@@ -102,12 +102,13 @@ void JumpScene::Update(int dtMilis) {
 	//	Camera::SetZoom(transition.getPos());
 	//}
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
-	float minY = (Camera::GetCameraBounds().height / 2.f) - (1 * 16);
-	float maxY = ((25 + 1) * 16) - (Camera::GetCameraBounds().height / 2.f);
-	if (maxY < minY) {
-		minY = maxY - 1;
-	}
-	Mates::Clamp(camPos.y, minY, maxY);
+	//float minY = (Camera::GetCameraBounds().height / 2.f) - (1 * 16);
+	//float maxY = ((25 + 1) * 16) - (Camera::GetCameraBounds().height / 2.f);
+	//if (maxY < minY) {
+	//	minY = maxY - 1;
+	//}
+	//Mates::Clamp(camPos.y, minY, maxY);
+	camPos.y = (Camera::GetCameraBounds().height / 2.f) - map.unitsPerTile; //fixed Y axis
 	float minX = (Camera::GetCameraBounds().width / 2.f) - (1 * 16);
 	float maxX = ((1000 + 1) * 16) - (Camera::GetCameraBounds().width / 2.f);
 	if (maxX < minX) {
