@@ -3,6 +3,9 @@
 #include "imgui.h"
 #include "bullet.h"
 #include "assets.h"
+#include "simplexnoise.h"
+
+const float batClusterSize = 24.f;
 
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 25), 16)
@@ -38,10 +41,30 @@ void JumpScene::EnterScene()
 
 	randomSeed = Random::roll(0,10000);
 
-	player.pos = vec(192, 160);
+	player.pos = vec(160, 160);
 	player.Reset();
 
 	map.Randomize(randomSeed);
+
+	for (int x = 20; x < map.sizes.x; x+=2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
+		for (int y = 1; y < map.sizes.y-5; y++) { //don't spawn at the bottom rows
+			if (map.isColl(x, y)) {
+				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
+				if (noise > 0.f) { 
+					bool angry = noise > 0.66f;
+					new Bat(vec((x+0.5f) * map.unitsPerTile, (y+1.5f) * map.unitsPerTile), &player, &map, angry);
+					map.set(x - 1, y + 1, false);
+					map.set(x, y + 1, false);
+					map.set(x + 1, y + 1, false);
+					map.set(x - 1, y + 2, false);
+					map.set(x, y + 2, false);
+					map.set(x + 1, y + 2, false);
+				}
+			}
+		}
+	}
+
+	std::cout << "seed=" << randomSeed << ", bats=" << Bat::getAll().size() << std::endl;
 
 	sf::Vector2i pos = map.toTiles(player.pos);
 	map.set(pos.x - 1, pos.y + 1, true);
@@ -50,10 +73,6 @@ void JumpScene::EnterScene()
 	map.set(pos.x,     pos.y,     false);
 	map.set(pos.x - 1, pos.y - 1, false);
 	map.set(pos.x,     pos.y - 1, false);
-
-	for (int i = 1; i < 100; i++) {
-		new Bat(vec(12 + (i) * (4 * 24), 0), &player, &map);
-	}
 
 }
 
@@ -139,7 +158,13 @@ void JumpScene::Update(int dtMilis) {
 
 void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 {
-	window.clear(sf::Color(255*0.200f, 255 * 0.100f, 255 * 0.100f));
+	window.clear(sf::Color(255 * 0.200f, 255 * 0.100f, 255 * 0.100f));
+
+	if (debugDraw) {
+		Simplex::DebugDraw(window, map.unitsPerTile, [this](int x, int y) {
+			return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
+		});
+	}
 
 	map.Draw(window);
 
