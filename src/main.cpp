@@ -33,6 +33,8 @@ int main()
 
 	Assets::LoadAll();
 
+	srand(time(NULL));
+
 #ifdef _FPS_COUNTER
 	sf::Text txt_fps;
 	txt_fps.setFont(Assets::font);
