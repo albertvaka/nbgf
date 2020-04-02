@@ -28,7 +28,7 @@ struct Bat : SteeringEntity, EntS<Bat>
 	bool awakened = false;
 	JumpMan* jumpman;
 	bool aggresive = false;
-	float seekingTimer; //They will start seeking
+	float seekingTimer; // Aggresive bats will start seeking when this gets to 0
 
 	Bat(vec position, JumpMan* jumpman, TileMap* tilemap, bool aggresive = (Random::rollf() < 0.2f));
 
