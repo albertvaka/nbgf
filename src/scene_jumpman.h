@@ -12,6 +12,7 @@ struct JumpScene : Scene {
 
 	TransitionSinusFadeOut transition;
 
+	int randomSeed;
 	TileMap map;
 	JumpMan player;
 	PartSys bulletPartSys;

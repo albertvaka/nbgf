@@ -36,10 +36,12 @@ void JumpScene::EnterScene()
 	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
 	//transition.goPos(GameData::JUMPMAN_ZOOM);
 
+	randomSeed = Random::roll(0,10000);
+
 	player.pos = vec(192, 160);
 	player.Reset();
 
-	map.Randomize(time(NULL));
+	map.Randomize(randomSeed);
 
 	sf::Vector2i pos = map.toTiles(player.pos);
 	map.set(pos.x - 1, pos.y + 1, true);
