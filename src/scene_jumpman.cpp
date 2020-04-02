@@ -74,6 +74,8 @@ void JumpScene::EnterScene()
 	map.set(pos.x,     pos.y,     false);
 	map.set(pos.x - 1, pos.y - 1, false);
 	map.set(pos.x,     pos.y - 1, false);
+	map.set(pos.x - 1, pos.y - 2, false);
+	map.set(pos.x,     pos.y - 2, false);
 
 }
 
