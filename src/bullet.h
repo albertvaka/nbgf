@@ -18,7 +18,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 	Bullet(vec position, vec velocity, float _scale = 1.f) {
 		pos = position;
 		vel = velocity;
-		radius = 4*_scale;
+		radius = 5 * _scale;
 		scale = _scale;
 	}
 
