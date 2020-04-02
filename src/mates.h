@@ -213,4 +213,6 @@ namespace Mates
 
 		return sqrt(sd);
 	}
+
+	inline int fastfloor(const float x) { return x > 0 ? (int)x : (int)x - 1; }
 }

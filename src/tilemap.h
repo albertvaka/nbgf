@@ -37,7 +37,7 @@ struct TileMap
 
 	sf::Vector2i toTiles(vec pos) const { return toTiles(pos.x, pos.y); }
 	sf::Vector2i toTiles(float x, float y) const { return sf::Vector2i(toTiles(x), toTiles(y)); }
-	int toTiles(float x) const { return floor(x / unitsPerTile); }
+	int toTiles(float x) const { return Mates::fastfloor(x / unitsPerTile); } // floor could be just a cast to int if we know we will never get < 0
 
 	float Top(int y) const { return float(y + 1) * unitsPerTile; }
 	float Bottom(int y) const { return float(y) * unitsPerTile; }
