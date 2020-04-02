@@ -10,6 +10,7 @@ void TileMap::Randomize(int seed)
 	int total = sizes.x * sizes.y;
 	for (int i = 0; i < total; i++) {
 		tiles[i] = ((rand() % 32) > 29);
+		if (i > sizes.y && tiles[i] && ((rand() % 32) > 20)) tiles[i - sizes.y] = true;
 	}
 }
 
