@@ -72,6 +72,10 @@ int main()
 			frameByFrame = !frameByFrame;
 		}
 	
+		if (frameByFrame) {
+			Camera::MoveCameraWithArrows(100.f, time.asSeconds());
+		}
+
 		if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT) || Keyboard::IsKeyJustPressed(RESTART))
 #endif
 		{

@@ -79,7 +79,6 @@ void JumpScene::Update(int dtMilis) {
 	//if (!transition.reached()) {
 	//	Camera::SetZoom(transition.getPos());
 	//}
-	//Camera::MoveCameraWithArrows(50.f, dt);
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
 	float minY = (Camera::GetCameraBounds().height / 2.f) - (1 * 16);
 	float maxY = ((25 + 1) * 16) - (Camera::GetCameraBounds().height / 2.f);
