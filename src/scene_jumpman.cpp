@@ -51,9 +51,10 @@ void JumpScene::EnterScene()
 	Bat::jumpman = &player;
 	Bat::tilemap = &map;
 	for (int x = 20; x < map.sizes.x; x+=2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
-		for (int y = 1; y < map.sizes.y-5; y++) { //don't spawn at the bottom rows
+		for (int y = -1; y < map.sizes.y-5; y++) { //don't spawn at the bottom rows
 			if (map.isColl(x, y)) {
 				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
+				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) { 
 					bool angry = (Random::rollf() < chanceAngryBat);
 					new Bat(vec((x+0.5f) * map.unitsPerTile, (y+1.5f) * map.unitsPerTile), angry);
