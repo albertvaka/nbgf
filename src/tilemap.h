@@ -17,6 +17,8 @@ struct TileMap
 	void Randomize(int seed);
 	void Draw(sf::RenderTarget& window);
 
+	Bounds boundsInWorld() { return Bounds(0.f, 0.f, sizes.x * unitsPerTile, sizes.y * unitsPerTile); }
+
 	bool inBounds(int x, int y) {
 		return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y);
 	}

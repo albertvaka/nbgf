@@ -79,7 +79,7 @@ void PartSys::DrawImGUI(const char* title) {
 			min_ttl = max_ttl;
 		}
 	}
-	if (ImGui::SliderFloat2("min_vel", &min_vel.x, -32.f, 32.f)) {
+	if (ImGui::SliderFloat2("min_vel", &min_vel.x, -50.f, 50.f)) {
 		if (min_vel.x > max_vel.x) {
 			max_vel.x = min_vel.x;
 		}
@@ -87,7 +87,7 @@ void PartSys::DrawImGUI(const char* title) {
 			max_vel.y = min_vel.y;
 		}
 	}
-	if (ImGui::SliderFloat2("max_vel", &max_vel.x, -32.f, 32.f)) {
+	if (ImGui::SliderFloat2("max_vel", &max_vel.x, -50.f, 50.f)) {
 		if (min_vel.x > max_vel.x) {
 			min_vel.x = max_vel.x;
 		}
@@ -98,7 +98,7 @@ void PartSys::DrawImGUI(const char* title) {
 	ImGui::SliderFloat("alpha", &alpha, 0.f, 1.f);
 	ImGui::SliderFloat("alpha_vel", &alpha_vel, -4.f, 4.f);
 	ImGui::SliderFloat("rotation_vel", &rotation_vel, -360.f, 360.f);
-	ImGui::SliderFloat2("accel", &acc.x, -32.f, 32.f);
+	ImGui::SliderFloat2("accel", &acc.x, -50.f, 50.f);
 	ImGui::Text("Count: %lu", particles.size());
 	ImGui::End();
 }

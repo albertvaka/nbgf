@@ -6,16 +6,31 @@
 #include "simplexnoise.h"
 
 const float batClusterSize = 22.f;
-const float sceneZoom = 2.5f;
+const float sceneZoom = 3.f;
 const float chanceAngryBat = 0.2f;
 
 JumpScene::JumpScene()
-	: map(sf::Vector2i(1000, 23), 16)
+	: map(sf::Vector2i(1000, 25), 16)
 	, player(&map)
 {
+	Window::SetWindowSize(sf::Vector2u(2272, 1280));
 
 	player.polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
-	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(0, 2 * 16, 16, 16)).setColor(sf::Color(255, 255, 255, 200));
+	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
+	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5+16, 37, 6, 6));
+	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(38, 37, 5, 5));
+
+	float yBottom = map.boundsInWorld().Bottom();
+	lavaPartSys.pos.y = yBottom;
+	lavaPartSys.min_interval = 5.f;
+	lavaPartSys.max_interval = 10.f;
+	lavaPartSys.min_vel = vec(-15, -50);
+	lavaPartSys.max_vel = vec(15, -30);
+	lavaPartSys.min_ttl = 2.f;
+	lavaPartSys.max_ttl = 2.f;
+	lavaPartSys.alpha_vel = -0.5f;
+	lavaPartSys.scale_vel = -0.4f;
+	lavaPartSys.acc = vec(0,60.f);
 
 	float vel = 15;
 	bulletPartSys.max_vel = vec(vel, vel);
@@ -30,6 +45,7 @@ JumpScene::JumpScene()
 	bulletPartSys.min_rotation = 0.f;
 	bulletPartSys.max_rotation = 360.f;
 	bulletPartSys.rotation_vel = 180.f;
+	bulletPartSys.alpha = 0.75f;
 }
 
 void JumpScene::EnterScene() 
@@ -92,7 +108,7 @@ void JumpScene::ExitScene()
 
 void JumpScene::Update(int dtMilis) {
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.toTiles(player.pos + vec(0.01f, 0)).y >= map.sizes.y)) {
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.toTiles(player.pos + vec(0.1f, 0)).y >= map.sizes.y)) {
 		ExitScene();
 		EnterScene();
 	}
@@ -162,6 +178,17 @@ void JumpScene::Update(int dtMilis) {
 	}
 
 	bulletPartSys.UpdateParticles(dt);
+
+	const float chunkSize = 15.f;
+	Bounds screen = Camera::GetCameraBounds();
+	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
+	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
+	for (float x = left; x < right; x += chunkSize) {
+		lavaPartSys.pos.x = x;
+
+		lavaPartSys.Spawn(dt);
+	}
+	lavaPartSys.UpdateParticles(dt);
 }
 
 void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
@@ -196,11 +223,18 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 
 	player.Draw(window);
 
+	lavaPartSys.Draw(window);
+	if (!debugDraw) {
+		DrawLava(window);
+	}
+
 	if (debugDraw) {
 		player.bounds().Draw(window);
 		Bounds(player.pos, vec(1, 1)).Draw(window, sf::Color::White);
 		Bounds(player.center(), vec(1, 1)).Draw(window, sf::Color::White);
 	}
+
+	//lavaPartSys.DrawImGUI("Lava");
 
 	//ImGui::Begin(GameData::GAME_TITLE.c_str());
 	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
@@ -209,3 +243,39 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 	//player.polvito.DrawImGUI("Polvito");
 }
 
+extern sf::Clock mainClock;
+void JumpScene::DrawLava(sf::RenderTarget& window)
+{
+	const float chunkSize = 5.f;
+	const float waveHeight = 1.2f;
+	const float waveAmplitude = 5.f;
+	const float height = 20;
+
+	float time = mainClock.getElapsedTime().asSeconds() * 2;
+	Bounds screen = Camera::GetCameraBounds();
+	float yBottom = map.boundsInWorld().Bottom() + 16;
+
+	sf::ConvexShape poly;
+	poly.setPointCount(4);
+
+	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
+	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
+	for (float x0 = left; x0 < right; x0 += chunkSize)
+	{
+		float xf = x0 + chunkSize;
+		poly.setPosition(vec(0, yBottom));
+		poly.setPoint(0, vec(x0, 0));
+		poly.setPoint(1, vec(x0, - height - waveHeight * sin(x0/waveAmplitude + time)));
+		poly.setPoint(2, vec(xf, - height - waveHeight * sin(xf/waveAmplitude + time)));
+		poly.setPoint(3, vec(xf, 0));
+
+		poly.setPosition(vec(0, yBottom));
+		poly.setFillColor(sf::Color(220, 10, 10)); // Top layer
+		window.draw(poly);
+
+		poly.setPosition(vec(0, yBottom + 4.f));
+		poly.setFillColor(sf::Color(250, 150, 100)); // Bottom layer
+		window.draw(poly);
+	}
+
+}

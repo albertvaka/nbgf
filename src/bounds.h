@@ -96,6 +96,14 @@ struct Bounds : public sf::Rect<float>
         return left + width;
     }
 
+    vec TopLeft() {
+        return vec(Left(), Top());
+    }
+
+    vec BottomRight() {
+        return vec(Right(), Bottom());
+    }
+
 	bool IsInside(vec point) const
 	{
         if (point.x < left) return false;
