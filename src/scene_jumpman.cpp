@@ -9,6 +9,8 @@ const float batClusterSize = 22.f;
 const float sceneZoom = 3.f;
 const float chanceAngryBat = 0.2f;
 
+extern sf::Clock mainClock;
+
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 19), 16)
 	, player(&map)
@@ -21,13 +23,15 @@ JumpScene::JumpScene()
 	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(38, 37, 5, 5));
 
 	float yBottom = map.boundsInWorld().Bottom();
-	lavaPartSys.pos.y = yBottom;
+	lavaPartSys.pos.y = yBottom - 2;
 	lavaPartSys.min_interval = 4.f;
-	lavaPartSys.max_interval = 8.f;
-	lavaPartSys.min_vel = vec(-15, -50);
-	lavaPartSys.max_vel = vec(15, -30);
+	lavaPartSys.max_interval = 6.5f;
+	lavaPartSys.min_vel = vec(-15, -55);
+	lavaPartSys.max_vel = vec(15, -40);
 	lavaPartSys.min_ttl = 2.f;
 	lavaPartSys.max_ttl = 2.f;
+	lavaPartSys.min_scale = 1.f;
+	lavaPartSys.max_scale = 1.5f;
 	lavaPartSys.alpha_vel = -0.5f;
 	lavaPartSys.scale_vel = -0.4f;
 	lavaPartSys.acc = vec(0,60.f);
@@ -185,7 +189,6 @@ void JumpScene::Update(int dtMilis) {
 	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
 	for (float x = left; x < right; x += chunkSize) {
 		lavaPartSys.pos.x = x;
-
 		lavaPartSys.Spawn(dt);
 	}
 	lavaPartSys.UpdateParticles(dt);
@@ -234,7 +237,8 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 		Bounds(player.center(), vec(1, 1)).Draw(window, sf::Color::White);
 	}
 
-	//lavaPartSys.DrawImGUI("Lava");
+	lavaPartSys.DrawImGUI("Lava");
+
 
 	//ImGui::Begin(GameData::GAME_TITLE.c_str());
 	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
@@ -243,15 +247,25 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 	//player.polvito.DrawImGUI("Polvito");
 }
 
-extern sf::Clock mainClock;
 void JumpScene::DrawLava(sf::RenderTarget& window)
 {
-	const float chunkSize = 5.f;
-	const float waveHeight = 1.2f;
-	const float waveAmplitude = 5.f;
-	const float height = 19;
+	static float waveAmplitude = 1.f;
+	static float chunkSize = 5.4f;
+	static float waveHeight = 2.8f;
+	static float height = 22.f;
+	static float speed = 3.0f;
+	static bool blockyWaves = true;
 
-	float time = mainClock.getElapsedTime().asSeconds() * 2;
+	ImGui::Begin("Waves");
+	ImGui::SliderFloat("speed", &speed, 0.f, 10.f);
+	ImGui::SliderFloat("height", &height, 0.f, 40.f);
+	ImGui::SliderFloat("waveHeight", &waveHeight, 0.f, 10.f);
+	ImGui::SliderFloat("chunkSize", &chunkSize, 0.1f, 10.f);
+	ImGui::SliderFloat("waveAmplitude", &waveAmplitude, 0.f, 5.f);
+	ImGui::Checkbox("blockyWaves", &blockyWaves);
+	ImGui::End();
+
+	float time = mainClock.getElapsedTime().asSeconds() * speed;
 	Bounds screen = Camera::GetCameraBounds();
 	float yBottom = map.boundsInWorld().Bottom() + 16;
 
@@ -263,18 +277,24 @@ void JumpScene::DrawLava(sf::RenderTarget& window)
 	for (float x0 = left; x0 < right; x0 += chunkSize)
 	{
 		float xf = x0 + chunkSize;
+		float xf4sin = blockyWaves ? x0 : xf;
+		//float iF = blockyWaves ? i0 : i0 + 1.f;
 		poly.setPosition(vec(0, yBottom));
 		poly.setPoint(0, vec(x0, 0));
-		poly.setPoint(1, vec(x0, - height - waveHeight * sin(x0/waveAmplitude + time)));
-		poly.setPoint(2, vec(xf, - height - waveHeight * sin(xf/waveAmplitude + time)));
+		poly.setPoint(1, vec(x0, - height - waveHeight * sin(x0 * waveAmplitude + time)));
+		poly.setPoint(2, vec(xf, - height - waveHeight * sin(xf4sin * waveAmplitude + time)));
 		poly.setPoint(3, vec(xf, 0));
 
 		poly.setPosition(vec(0, yBottom));
 		poly.setFillColor(sf::Color(220, 10, 10)); // Top layer
 		window.draw(poly);
 
-		poly.setPosition(vec(0, yBottom + 4.f));
-		poly.setFillColor(sf::Color(250, 150, 100)); // Bottom layer
+		poly.setPosition(vec(0, yBottom + 5.f));
+		poly.setFillColor(sf::Color(120, 0, 0)); // Line
+		window.draw(poly);
+
+		poly.setPosition(vec(0, yBottom + 6.f));
+		poly.setFillColor(sf::Color(250, 140, 50)); // Bottom layer
 		window.draw(poly);
 	}
 
