@@ -10,13 +10,14 @@ void TileMap::Randomize(int seed)
 	int total = sizes.x * sizes.y;
 	for (int i = 0; i < total; i++) {
 		tiles[i] = (rand() % 32) > 29 ? Tile::SOLID : Tile::NONE;
-		if (i > sizes.y && (int)tiles[i] && ((rand() % 32) > 20)) tiles[i - sizes.y] = Tile::SOLID;
+		if ((int)tiles[i] && (rand() % 30) < 10) tiles[i] = Tile::BREAKABLE;
+		if (i > sizes.y && (int)tiles[i] && ((rand() % 32) > 20)) tiles[i - sizes.y] = tiles[i];
 	}
 }
 
 void TileMap::Draw(sf::RenderTarget& window)
 {
-	sf::Sprite& sprite = Assets::hospitalSprite;
+	sf::Sprite& sprite = Assets::marioSprite;
 
 	Bounds screen = Camera::GetCameraBounds();
 	int left = (screen.Left() / unitsPerTile) - 1;
@@ -24,7 +25,7 @@ void TileMap::Draw(sf::RenderTarget& window)
 	int top = (screen.Top() / unitsPerTile) - 1;
 	int bottom = (screen.Bottom() / unitsPerTile) + 1;
 
-	sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
+	sprite.setTextureRect(sf::Rect(3 * 16, 2 * 16, 16, 16));
 
 	if (left < 0) {
 		for (int x = left - 1; x < 0; x++)
@@ -78,7 +79,14 @@ void TileMap::Draw(sf::RenderTarget& window)
 	{
 		for (int y = top; y < bottom; y++)
 		{
-			if (!isSolid(x, y)) {
+			switch (getTile(x,y)) {
+			case Tile::SOLID:
+				sprite.setTextureRect(sf::Rect(3 * 16, 2 * 16, 16, 16));
+				break;
+			case Tile::BREAKABLE:
+				sprite.setTextureRect(sf::Rect(4 * 16, 2 * 16, 16, 16));
+				break;
+			case Tile::NONE:
 				continue;
 			}
 			sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
