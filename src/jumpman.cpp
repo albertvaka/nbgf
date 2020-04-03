@@ -421,7 +421,7 @@ vert_exit:
 	else if (Mouse::IsPressed() && !Keyboard::IsKeyPressed(DEBUG_EDIT_MODE)) {
 		float angleInRads = Mates::DegsToRads(bfgAngle);
 		bfgCooldownTimer = bfgCooldown;
-		vec tipOfTheGun = bfgPos + vec(20, 0).RotatedAroundOrigin(angleInRads);
+		vec tipOfTheGun = bfgPos + vec(17, 0).RotatedAroundOrigin(angleInRads);
 		new Bullet(tipOfTheGun, vec(bulletVel, 0).RotatedAroundOrigin(angleInRads), 1.5f);
 		vel -= vec(bfgPushBack, 0).RotatedAroundOrigin(angleInRads);
 		jumpTimeLeft = 0; // Overrides jump impulse 
