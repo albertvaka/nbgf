@@ -249,13 +249,13 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 
 void JumpScene::DrawLava(sf::RenderTarget& window)
 {
-	static float waveAmplitude = 1.f;
-	static float chunkSize = 5.4f;
-	static float waveHeight = 2.8f;
-	static float height = 22.f;
-	static float speed = 3.0f;
-	static bool blockyWaves = true;
-
+	const float waveAmplitude = 1.f;
+	const float chunkSize = 5.4f;
+	const float waveHeight = 2.8f;
+	const float height = 22.f;
+	const float speed = 3.0f;
+	const bool blockyWaves = true;
+	/*
 	ImGui::Begin("Waves");
 	ImGui::SliderFloat("speed", &speed, 0.f, 10.f);
 	ImGui::SliderFloat("height", &height, 0.f, 40.f);
@@ -264,7 +264,7 @@ void JumpScene::DrawLava(sf::RenderTarget& window)
 	ImGui::SliderFloat("waveAmplitude", &waveAmplitude, 0.f, 5.f);
 	ImGui::Checkbox("blockyWaves", &blockyWaves);
 	ImGui::End();
-
+	*/
 	float time = mainClock.getElapsedTime().asSeconds() * speed;
 	Bounds screen = Camera::GetCameraBounds();
 	float yBottom = map.boundsInWorld().Bottom() + 16;
