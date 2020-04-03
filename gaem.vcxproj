@@ -38,6 +38,7 @@
     <ClInclude Include="src\cinta.h" />
     <ClInclude Include="src\cleaner.h" />
     <ClInclude Include="src\collider.h" />
+    <ClInclude Include="src\destroyedtiles.h" />
     <ClInclude Include="src\door.h" />
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\extremity.h" />
@@ -82,6 +83,7 @@
     <ClCompile Include="src\anim_data.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\bat.cpp" />
+    <ClCompile Include="src\destroyedtiles.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\lava.cpp" />

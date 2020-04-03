@@ -90,6 +90,7 @@ void JumpScene::ExitScene()
 	EntS<Bullet>::deleteAll();
 	EntS<Bat>::deleteAll();
 	lava.Clear();
+	destroyedTiles.Clear();
 }
 
 void JumpScene::Update(float dt) {
@@ -147,7 +148,7 @@ void JumpScene::Update(float dt) {
 		}
 		if (tile != Tile::NONE) {
 			if (tile == Tile::BREAKABLE) {
-				map.setTile(t.x, t.y, Tile::NONE);
+				destroyedTiles.Destroy(t.x, t.y);
 			}
 			AwakeNearbyBats(e->pos);
 			bulletPartSys.pos = e->pos;
@@ -200,6 +201,7 @@ void JumpScene::Update(float dt) {
 
 	bulletPartSys.UpdateParticles(dt);
 
+	destroyedTiles.Update(dt);
 	lava.Update(dt);
 }
 
@@ -214,6 +216,7 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 	}
 
 	map.Draw(window);
+	destroyedTiles.Draw(window);
 
 	for (Bat* e : EntS<Bat>::getAll()) {
 		e->Draw(window);
