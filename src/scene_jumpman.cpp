@@ -62,12 +62,12 @@ void JumpScene::EnterScene()
 				if (noise > 0.f) { 
 					bool angry = (Random::rollf() < chanceAngryBat);
 					new Bat(vec((x+0.5f) * map.unitsPerTile, (y+1.5f) * map.unitsPerTile), angry);
-					map.set(x - 1, y + 1, Tile::NONE);
-					map.set(x, y + 1, Tile::NONE);
-					map.set(x + 1, y + 1, Tile::NONE);
-					map.set(x - 1, y + 2, Tile::NONE);
-					map.set(x, y + 2, Tile::NONE);
-					map.set(x + 1, y + 2, Tile::NONE);
+					map.setTile(x - 1, y + 1, Tile::NONE);
+					map.setTile(x, y + 1, Tile::NONE);
+					map.setTile(x + 1, y + 1, Tile::NONE);
+					map.setTile(x - 1, y + 2, Tile::NONE);
+					map.setTile(x, y + 2, Tile::NONE);
+					map.setTile(x + 1, y + 2, Tile::NONE);
 				}
 			}
 		}
@@ -76,14 +76,14 @@ void JumpScene::EnterScene()
 	std::cout << "seed=" << randomSeed << ", bats=" << Bat::getAll().size() << std::endl;
 
 	sf::Vector2i pos = map.toTiles(player.pos);
-	map.set(pos.x - 1, pos.y + 1, Tile::SOLID);
-	map.set(pos.x,     pos.y + 1, Tile::SOLID);
-	map.set(pos.x - 1, pos.y,     Tile::NONE);
-	map.set(pos.x,     pos.y,     Tile::NONE);
-	map.set(pos.x - 1, pos.y - 1, Tile::NONE);
-	map.set(pos.x,     pos.y - 1, Tile::NONE);
-	map.set(pos.x - 1, pos.y - 2, Tile::NONE);
-	map.set(pos.x,     pos.y - 2, Tile::NONE);
+	map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x,     pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x - 1, pos.y,     Tile::NONE);
+	map.setTile(pos.x,     pos.y,     Tile::NONE);
+	map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
+	map.setTile(pos.x,     pos.y - 1, Tile::NONE);
+	map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
+	map.setTile(pos.x,     pos.y - 2, Tile::NONE);
 
 }
 
@@ -150,7 +150,7 @@ void JumpScene::Update(float dt) {
 		}
 		if (tile != Tile::NONE) {
 			if (tile == Tile::BREAKABLE) {
-				map.set(t.x, t.y, Tile::NONE);
+				map.setTile(t.x, t.y, Tile::NONE);
 			}
 			AwakeNearbyBats(e->pos);
 			bulletPartSys.pos = e->pos;
@@ -197,7 +197,7 @@ void JumpScene::Update(float dt) {
 		Tile what_to_set = left? Tile::SOLID : middle? Tile::BREAKABLE : Tile::NONE;
 		vec pos = Mouse::GetPositionInWorld();
 		sf::Vector2i tile = map.toTiles(pos);
-		map.set(tile.x, tile.y, what_to_set);
+		map.setTile(tile.x, tile.y, what_to_set);
 	}
 #endif
 

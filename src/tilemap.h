@@ -28,7 +28,7 @@ struct TileMap
 	bool inBounds(int x, int y) {
 		return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y);
 	}
-	void set(int x, int y, Tile col) {
+	void setTile(int x, int y, Tile col) {
 		if (!inBounds(x, y)) return;
 		tiles[x * sizes.y + y] = col;
 	}
