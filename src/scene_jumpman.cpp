@@ -133,6 +133,7 @@ void JumpScene::Update(int dtMilis) {
 		if (e->explode) continue;
 
 		if (e->pos.y > map.boundsInWorld().Bottom()) {
+			AwakeNearbyBats(e->pos);
 			lava.Plof(e->pos.x);
 			e->alive = false;
 			continue;
@@ -144,6 +145,7 @@ void JumpScene::Update(int dtMilis) {
 			if (tile == Tile::BREAKABLE) {
 				map.set(t.x, t.y, Tile::NONE);
 			}
+			AwakeNearbyBats(e->pos);
 			bulletPartSys.pos = e->pos;
 			for (int i = 0; i < 5; i++) {
 				auto& p = bulletPartSys.AddParticle();
