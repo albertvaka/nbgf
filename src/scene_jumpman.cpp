@@ -189,12 +189,17 @@ void JumpScene::Update(int dtMilis) {
 	}
 	EntS<Bat>::deleteNotAlive();
 
-	if (Keyboard::IsKeyPressed(DEBUG_EDIT_MODE) && (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right))) {
-		Tile what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left) ? Tile::SOLID : Tile::NONE;
+#ifdef _DEBUG
+	bool left = Mouse::IsPressed(sf::Mouse::Button::Left);
+	bool middle = Mouse::IsPressed(sf::Mouse::Button::Middle);
+	bool right = Mouse::IsPressed(sf::Mouse::Button::Right);
+	if (Keyboard::IsKeyPressed(DEBUG_EDIT_MODE) && (left || middle || right)) {
+		Tile what_to_set = left? Tile::SOLID : middle? Tile::BREAKABLE : Tile::NONE;
 		vec pos = Mouse::GetPositionInWorld();
 		sf::Vector2i tile = map.toTiles(pos);
 		map.set(tile.x, tile.y, what_to_set);
 	}
+#endif
 
 	bulletPartSys.UpdateParticles(dt);
 
