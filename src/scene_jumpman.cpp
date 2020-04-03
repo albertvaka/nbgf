@@ -139,8 +139,15 @@ void JumpScene::Update(int dtMilis) {
 			continue;
 		}
 
-		sf::Vector2i t = map.toTiles(e->pos);
+		vec toTheOutside = e->vel.Perp().Normalized()* e->radius * 0.85f;
+		//(e->pos + toTheOutside).Debuggerino(sf::Color::White);
+		//(e->pos - toTheOutside).Debuggerino(sf::Color::White);
+		sf::Vector2i t = map.toTiles(e->pos+ toTheOutside);
 		Tile tile = map.getTile(t);
+		if (tile == Tile::NONE) {
+			t = map.toTiles(e->pos - toTheOutside);
+			tile = map.getTile(t);
+		}
 		if (tile != Tile::NONE) {
 			if (tile == Tile::BREAKABLE) {
 				map.set(t.x, t.y, Tile::NONE);

@@ -22,6 +22,7 @@ void DrawDebugVecs(sf::RenderTarget* window) {
     sf::RectangleShape rs(sf::Vector2f(1, 1));
     rs.setFillColor(sf::Color::Transparent);
     rs.setOutlineThickness(1);
+    rs.setOrigin(0.5f, 0.5f);
     for (debugvec v : debugvecs) {
         rs.setOutlineColor(v.c);
         rs.setPosition(v.v);
