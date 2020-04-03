@@ -15,6 +15,8 @@ enum class Tile : unsigned char {
 
 struct TileMap : SingleInstance<TileMap>
 {
+	static const sf::IntRect tileToTextureRect[];
+
 	TileMap(sf::Vector2i _sizes, float _unitsPerTile)
 		: sizes(_sizes)
 		, unitsPerTile(_unitsPerTile)

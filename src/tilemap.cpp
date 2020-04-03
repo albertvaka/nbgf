@@ -4,6 +4,12 @@
 #include "input.h"
 #include "assets.h"
 
+const sf::IntRect TileMap::tileToTextureRect[] = {
+	{},	//NONE
+	{3 * 16, 2 * 16, 16, 16}, // SOLID
+	{4 * 16, 2 * 16, 16, 16}, // BREAKABLE
+};
+
 void TileMap::Randomize(int seed)
 {
 	srand(seed);
@@ -88,16 +94,7 @@ void TileMap::Draw(sf::RenderTarget& window)
 	{
 		for (int y = top; y < bottom; y++)
 		{
-			switch (getTile(x,y)) {
-			case Tile::SOLID:
-				sprite.setTextureRect(sf::Rect(3 * 16, 2 * 16, 16, 16));
-				break;
-			case Tile::BREAKABLE:
-				sprite.setTextureRect(sf::Rect(4 * 16, 2 * 16, 16, 16));
-				break;
-			case Tile::NONE:
-				continue;
-			}
+			sprite.setTextureRect(tileToTextureRect[(int)getTileUnsafe(x, y)]);
 			sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
 			window.draw(sprite);
 		}
