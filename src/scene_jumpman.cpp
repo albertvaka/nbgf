@@ -12,7 +12,7 @@ const float chanceAngryBat = 0.2f;
 extern sf::Clock mainClock;
 
 JumpScene::JumpScene()
-	: map(sf::Vector2i(1000, 19), 16)
+	: map(sf::Vector2i(1000, 20), 16)
 	, lava(19*16)
 	, player(&map)
 {
@@ -97,7 +97,7 @@ void JumpScene::ExitScene()
 
 void JumpScene::Update(float dt) {
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.toTiles(player.pos + vec(0.1f, 0)).y >= map.sizes.y)) {
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.pos.y > map.boundsInWorld().Bottom()-map.unitsPerTile)) {
 		ExitScene();
 		EnterScene();
 	}
@@ -132,7 +132,7 @@ void JumpScene::Update(float dt) {
 		e->Update(dt);
 		if (e->explode) continue;
 
-		if (e->pos.y > map.boundsInWorld().Bottom()) {
+		if (e->pos.y > map.boundsInWorld().Bottom()-map.unitsPerTile) {
 			AwakeNearbyBats(e->pos);
 			lava.Plof(e->pos.x);
 			e->alive = false;

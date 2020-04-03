@@ -7,11 +7,20 @@
 void TileMap::Randomize(int seed)
 {
 	srand(seed);
-	int total = sizes.x * sizes.y;
-	for (int i = 0; i < total; i++) {
-		tiles[i] = (rand() % 32) > 29 ? Tile::SOLID : Tile::NONE;
-		if ((int)tiles[i] && (rand() % 30) < 10) tiles[i] = Tile::BREAKABLE;
-		if (i > sizes.y && (int)tiles[i] && ((rand() % 32) > 20)) tiles[i - sizes.y] = tiles[i];
+	for (int x = 0; x < sizes.x; x++) {
+		for (int y = 0; y < sizes.y; y++) {
+			Tile t = Tile::NONE;
+			if (y != sizes.y-1 && (rand() % 32) > 29) {
+				if ((rand() % 30) < 10) {
+					t = Tile::BREAKABLE;
+				}
+				else {
+					t = Tile::SOLID;
+				}
+				if (x > 0 && ((rand() % 32) > 20)) t = getTile(x - 1, y);
+			}
+			setTile(x, y, t);
+		}
 	}
 }
 
