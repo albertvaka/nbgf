@@ -7,6 +7,7 @@
 #include "scene_manager.h"
 #include "transition.h"
 #include "bat.h"
+#include "lava.h"
 
 struct JumpScene : Scene {
 
@@ -16,13 +17,12 @@ struct JumpScene : Scene {
 	TileMap map;
 	JumpMan player;
 	PartSys bulletPartSys;
-	PartSys lavaPartSys;
+	Lava lava;
 
 	JumpScene();
 	void EnterScene() override;
 	void ExitScene() override;
 	void Update(int dtMilis) override;
 	void Draw(sf::RenderTarget& window, bool debug) override;
-	void DrawLava(sf::RenderTarget& window);
 
 };

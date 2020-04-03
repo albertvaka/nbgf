@@ -46,6 +46,7 @@
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\intro_scene.h" />
     <ClInclude Include="src\jumpman.h" />
+    <ClInclude Include="src\lava.h" />
     <ClInclude Include="src\lever.h" />
     <ClInclude Include="src\magic_enum.h" />
     <ClInclude Include="src\main_scene.h" />
@@ -82,6 +83,7 @@
     <ClCompile Include="src\bat.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
+    <ClCompile Include="src\lava.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\partsys.cpp" />
     <ClCompile Include="src\rand.cpp" />

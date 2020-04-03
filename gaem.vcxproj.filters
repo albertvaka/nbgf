@@ -177,6 +177,9 @@
     <ClInclude Include="src\simplexnoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\lava.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rand.cpp">
@@ -234,6 +237,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\simplexnoise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lava.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

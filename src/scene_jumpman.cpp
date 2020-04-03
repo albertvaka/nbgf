@@ -13,27 +13,12 @@ extern sf::Clock mainClock;
 
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 19), 16)
+	, lava(19*16)
 	, player(&map)
 {
 	Window::SetWindowSize(sf::Vector2u(21*16 * sceneZoom * 16.f / 9, 21*16* sceneZoom));
 
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
-	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5+16, 37, 6, 6));
-	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(38, 37, 5, 5));
-
-	float yBottom = map.boundsInWorld().Bottom();
-	lavaPartSys.pos.y = yBottom - 2;
-	lavaPartSys.min_interval = 4.f;
-	lavaPartSys.max_interval = 6.5f;
-	lavaPartSys.min_vel = vec(-15, -55);
-	lavaPartSys.max_vel = vec(15, -40);
-	lavaPartSys.min_ttl = 2.f;
-	lavaPartSys.max_ttl = 2.f;
-	lavaPartSys.min_scale = 1.f;
-	lavaPartSys.max_scale = 1.5f;
-	lavaPartSys.alpha_vel = -0.5f;
-	lavaPartSys.scale_vel = -0.4f;
-	lavaPartSys.acc = vec(0,60.f);
 
 	float vel = 15;
 	bulletPartSys.max_vel = vec(vel, vel);
@@ -182,15 +167,7 @@ void JumpScene::Update(int dtMilis) {
 
 	bulletPartSys.UpdateParticles(dt);
 
-	const float chunkSize = 15.f;
-	Bounds screen = Camera::GetCameraBounds();
-	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
-	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
-	for (float x = left; x < right; x += chunkSize) {
-		lavaPartSys.pos.x = x;
-		lavaPartSys.Spawn(dt);
-	}
-	lavaPartSys.UpdateParticles(dt);
+	lava.Update(dt);
 }
 
 void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
@@ -225,10 +202,8 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 
 	player.Draw(window);
 
-	lavaPartSys.Draw(window);
-	if (!debugDraw) {
-		DrawLava(window);
-	}
+
+	lava.Draw(window, debugDraw);
 
 	if (debugDraw) {
 		player.bounds().Draw(window);
@@ -236,7 +211,6 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 		Bounds(player.center(), vec(1, 1)).Draw(window, sf::Color::White);
 	}
 
-	lavaPartSys.DrawImGUI("Lava");
 
 
 	//ImGui::Begin(GameData::GAME_TITLE.c_str());
@@ -244,57 +218,4 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 	//ImGui::End();
 
 	//player.polvito.DrawImGUI("Polvito");
-}
-
-void JumpScene::DrawLava(sf::RenderTarget& window)
-{
-	const float waveAmplitude = 1.f;
-	const float chunkSize = 5.4f;
-	const float waveHeight = 2.8f;
-	const float height = 22.f;
-	const float speed = 3.0f;
-	const bool blockyWaves = true;
-	/*
-	ImGui::Begin("Waves");
-	ImGui::SliderFloat("speed", &speed, 0.f, 10.f);
-	ImGui::SliderFloat("height", &height, 0.f, 40.f);
-	ImGui::SliderFloat("waveHeight", &waveHeight, 0.f, 10.f);
-	ImGui::SliderFloat("chunkSize", &chunkSize, 0.1f, 10.f);
-	ImGui::SliderFloat("waveAmplitude", &waveAmplitude, 0.f, 5.f);
-	ImGui::Checkbox("blockyWaves", &blockyWaves);
-	ImGui::End();
-	*/
-	float time = mainClock.getElapsedTime().asSeconds() * speed;
-	Bounds screen = Camera::GetCameraBounds();
-	float yBottom = map.boundsInWorld().Bottom() + 16;
-
-	sf::ConvexShape poly;
-	poly.setPointCount(4);
-
-	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
-	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
-	for (float x0 = left; x0 < right; x0 += chunkSize)
-	{
-		float xf = x0 + chunkSize;
-		float xf4sin = blockyWaves ? x0 : xf;
-		//float iF = blockyWaves ? i0 : i0 + 1.f;
-		poly.setPosition(vec(0, yBottom));
-		poly.setPoint(0, vec(x0, 0));
-		poly.setPoint(1, vec(x0, - height - waveHeight * sin(x0 * waveAmplitude + time)));
-		poly.setPoint(2, vec(xf, - height - waveHeight * sin(xf4sin * waveAmplitude + time)));
-		poly.setPoint(3, vec(xf, 0));
-
-		poly.setPosition(vec(0, yBottom));
-		poly.setFillColor(sf::Color(220, 10, 10)); // Top layer
-		window.draw(poly);
-
-		poly.setPosition(vec(0, yBottom + 5.f));
-		poly.setFillColor(sf::Color(120, 0, 0)); // Line
-		window.draw(poly);
-
-		poly.setPosition(vec(0, yBottom + 6.f));
-		poly.setFillColor(sf::Color(250, 140, 50)); // Bottom layer
-		window.draw(poly);
-	}
-
 }
