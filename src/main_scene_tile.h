@@ -159,7 +159,7 @@ void LoadMap()
 	mapita.resize(mapita_inicial[0].size(), std::vector<TileType>(mapita_inicial.size()));
 
 	int x = 0, y = 0;
-	for (auto row : mapita_inicial)
+	for (auto& row : mapita_inicial)
 	{
 		for (char c : row)
 		{

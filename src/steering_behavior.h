@@ -88,13 +88,10 @@ vec SteeringBehavior::Hide(Entity* hideTarget, const std::vector<T*>& obstacles)
 	float DistToClosest = Mates::MaxFloat;
 	vec   BestHidingSpot;
 
-	auto curOb = obstacles.cbegin();
-	auto closest = curOb;
-
-	while (curOb != obstacles.cend())
+	for (const CircleEntity* ob : obstacles)
 	{
 		//calculate the position of the hiding spot for this obstacle
-		vec HidingSpot = GetHidingPosition((*curOb)->pos, (*curOb)->radius, hideTarget->pos);
+		vec HidingSpot = GetHidingPosition(ob->pos, ob->radius, hideTarget->pos);
 
 		//work in distance-squared space to find the closest hiding
 		//spot to the agent
@@ -104,12 +101,8 @@ vec SteeringBehavior::Hide(Entity* hideTarget, const std::vector<T*>& obstacles)
 		{
 			DistToClosest = dist;
 			BestHidingSpot = HidingSpot;
-			closest = curOb;
 		}
-
-		++curOb;
-
-	}//end while
+	}
 
 	//if no suitable obstacles found then Evade the hunter
 	if (DistToClosest == Mates::MaxFloat)
@@ -134,7 +127,7 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
 	float realBoxLength = steeringEntity->radius + margin; //FIXME: Take into account current speed
 
 	//this will keep track of the closest intersecting obstacle (CIB)
-	CircleEntity* ClosestIntersectingObstacle = NULL;
+	const CircleEntity* ClosestIntersectingObstacle = nullptr;
 
 	//this will be used to track the distance to the CIB
 	float DistToClosestIP = Mates::MaxFloat;
@@ -142,13 +135,8 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
 	//this will record the transformed local coordinates of the CIB
 	vec LocalPosOfClosestObstacle;
 
-	auto curOb = obstacles.cbegin();
-
-	while (curOb != obstacles.cend())
+	for (const CircleEntity* obst : obstacles)
 	{
-
-		CircleEntity* obst = (*curOb);
-
 		vec to = obst->pos - steeringEntity->pos;
 
 		//the bounding radius of the other is taken into account by adding it 
@@ -203,8 +191,6 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
 			}
 			//}
 		}
-
-		++curOb;
 	}
 
 	//if we have found an intersecting obstacle, calculate a steering 

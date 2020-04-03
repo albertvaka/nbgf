@@ -57,14 +57,13 @@ struct Bullet : CircleEntity, EntS<Bullet>
 			spr.setTextureRect(sf::IntRect(8 * 16, 10 * 16, 16, 16));
 			spr.setRotation(Random::roll(0, 360));
 			spr.setPosition(pos + vec::Rand(-1, -1, 1, 1));
-			window.draw(spr);
 		}
 		else {
 			int frame = (timer_explosion * 7);
 			spr.setTextureRect(sf::IntRect((9 + frame) * 16, 10 * 16, 16, 16));
 			spr.setPosition(pos);
-			window.draw(spr);
 		}
+		window.draw(spr);
 
 		spr.setOrigin(0, 0);
 		spr.setScale(1.f, 1.f);

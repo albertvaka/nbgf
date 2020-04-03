@@ -398,7 +398,7 @@ struct Player : SortedDrawable, EntS<Player>
 		//bounds().Draw(window, sf::Color::Magenta);
 		//Bounds(pos, size, true).Draw(window);
 
-		auto a = spr.getScale();
+		auto prev = spr.getScale();
 		spr.setScale(1.25, 1.25);
 		spr.setPosition(pos.x + 5.f, pos.y - 5.f);
 
@@ -407,7 +407,7 @@ struct Player : SortedDrawable, EntS<Player>
 		spr.setTextureRect(frame);
 
 		window.draw(spr);
-		spr.setScale(a);
+		spr.setScale(prev);
 
 		if (((cadaver || extremity) && !isCarrying) || (lever && lever->is_connected) || (isCarrying && cadaver && mesa && !mesa->cadaver) || (collector && collector->extremity) || (isCarrying && extremity && collector && !collector->extremity))
 		{

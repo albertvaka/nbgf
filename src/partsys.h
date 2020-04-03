@@ -15,14 +15,15 @@ struct PartSys {
 		float scale;
 		float rotation;
 		float alpha;
-		inline void Update(float dt, const PartSys& system) {
+		inline bool Update(float dt, const PartSys& system) {
 			ttl -= dt;
+			if (ttl < 0) return true;
 			vel += system.acc * dt;
 			pos += vel * dt;
 			scale += system.scale_vel * dt;
 			if (scale < 0.f) {
 				if (system.scale_vel < 0.f) {
-					ttl = -1.f;
+					return true;
 				}
 				else {
 					scale = 0.0001f;
@@ -32,7 +33,7 @@ struct PartSys {
 			alpha += system.alpha_vel * dt;
 			if (alpha < 0.f) {
 				if (system.alpha_vel < 0.f) {
-					ttl = -1.f;
+					return true;
 				} else {
 					alpha = 0.f;
 				}
@@ -40,6 +41,7 @@ struct PartSys {
 			else if (alpha > 1.f) {
 				alpha = 1.f;
 			}
+			return false;
 		}
 	};
 
@@ -101,6 +103,7 @@ struct PartSys {
 	}
 
 private:
+	//TODO: Turn into static arrays
 	std::vector<Particle> particles;
 	std::vector<sf::Sprite> sprites;
 };

@@ -15,10 +15,9 @@ void PartSys::Spawn(float dt) {
 }
 
 void PartSys::UpdateParticles(float dt) {
-	for (Particle& p : particles) {
-		p.Update(dt, *this);
-	}
-	particles.erase(std::remove_if(particles.begin(), particles.end(), [](const Particle& p) { return p.ttl < 0; }), particles.end());
+	particles.erase(std::remove_if(particles.begin(), particles.end(), [this, dt](Particle& p) { 
+		return p.Update(dt, *this);
+	}), particles.end());
 }
 
 void PartSys::Draw(sf::RenderTarget& rt) {
