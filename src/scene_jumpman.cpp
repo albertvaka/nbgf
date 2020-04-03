@@ -5,8 +5,9 @@
 #include "assets.h"
 #include "simplexnoise.h"
 
-const float batClusterSize = 24.f;
-const float sceneZoom = 2.5;
+const float batClusterSize = 22.f;
+const float sceneZoom = 2.5f;
+const float chanceAngryBat = 0.2f;
 
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 23), 16)
@@ -52,7 +53,7 @@ void JumpScene::EnterScene()
 			if (map.isColl(x, y)) {
 				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
 				if (noise > 0.f) { 
-					bool angry = noise > 0.66f;
+					bool angry = (Random::rollf() < chanceAngryBat);
 					new Bat(vec((x+0.5f) * map.unitsPerTile, (y+1.5f) * map.unitsPerTile), &player, &map, angry);
 					map.set(x - 1, y + 1, false);
 					map.set(x, y + 1, false);
