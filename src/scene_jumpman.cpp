@@ -92,6 +92,7 @@ void JumpScene::ExitScene()
 	bulletPartSys.Clear();
 	EntS<Bullet>::deleteAll();
 	EntS<Bat>::deleteAll();
+	lava.Clear();
 }
 
 void JumpScene::Update(float dt) {

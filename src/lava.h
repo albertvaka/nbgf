@@ -20,5 +20,9 @@ struct Lava
 		}
 	}
 
+	void Clear() {
+		lavaPartSys.Clear();
+	}
+
 };
 
