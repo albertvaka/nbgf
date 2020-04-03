@@ -421,6 +421,9 @@ vert_exit:
 		new Bullet(bfgPos, vec(bulletVel, 0).RotatedAroundOrigin(angleInRads), 1.5f);
 		vel -= vec(bfgPushBack, 0).RotatedAroundOrigin(angleInRads);
 		jumpTimeLeft = 0; // Overrides jump impulse 
+		if (onWall) {
+			vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
+		}
 		if (grounded) {
 			if (abs(vel.x) < 0.1) {
 				DoPolvitoLand();
