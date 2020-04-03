@@ -14,6 +14,9 @@ void AwakeNearbyBats(vec pos);
 
 struct Bat : SteeringEntity, EntS<Bat>
 {
+	static JumpMan* jumpman; // Set me!
+	static TileMap* tilemap; // Set me!
+
 	enum class State {
 		SIESTA,
 		FLYING,
@@ -26,11 +29,10 @@ struct Bat : SteeringEntity, EntS<Bat>
 	State state = State::FLYING;
 	float timeToAwake = 1000.f; //Does nothing if > 999
 	bool awakened = false;
-	JumpMan* jumpman;
 	bool aggresive = false;
 	float seekingTimer; // Aggresive bats will start seeking when this gets to 0
 
-	Bat(vec position, JumpMan* jumpman, TileMap* tilemap, bool aggresive);
+	Bat(vec position, bool aggresive);
 
 	void Update(float dt);
 	void Draw(sf::RenderTarget& window);

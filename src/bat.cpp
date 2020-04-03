@@ -20,11 +20,13 @@ void AwakeNearbyBats(vec pos) {
 	}
 }
 
-Bat::Bat(vec pos, JumpMan* jumpman, TileMap* tilemap, bool aggresive)
+JumpMan* Bat::jumpman;
+TileMap* Bat::tilemap;
+
+Bat::Bat(vec pos, bool aggresive)
 	: SteeringEntity(pos + vec(0.f, 6.f), 8.0f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
 	, state(State::SIESTA)
 	, steering(this)
-	, jumpman(jumpman)
 	, aggresive(aggresive)
 {
 	anim.Ensure(BAT_SIESTA);
