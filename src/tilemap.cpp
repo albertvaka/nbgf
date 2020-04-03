@@ -9,8 +9,8 @@ void TileMap::Randomize(int seed)
 	srand(seed);
 	int total = sizes.x * sizes.y;
 	for (int i = 0; i < total; i++) {
-		tiles[i] = ((rand() % 32) > 29);
-		if (i > sizes.y && tiles[i] && ((rand() % 32) > 20)) tiles[i - sizes.y] = true;
+		tiles[i] = (rand() % 32) > 29 ? Tile::SOLID : Tile::NONE;
+		if (i > sizes.y && (int)tiles[i] && ((rand() % 32) > 20)) tiles[i - sizes.y] = Tile::SOLID;
 	}
 }
 
@@ -78,7 +78,7 @@ void TileMap::Draw(sf::RenderTarget& window)
 	{
 		for (int y = top; y < bottom; y++)
 		{
-			if (!isCollUnsafe(x, y)) {
+			if (!isSolid(x, y)) {
 				continue;
 			}
 			sprite.setPosition(x * unitsPerTile, y * unitsPerTile);

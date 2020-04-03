@@ -56,18 +56,18 @@ void JumpScene::EnterScene()
 	Bat::tilemap = &map;
 	for (int x = 20; x < map.sizes.x; x+=2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
 		for (int y = -1; y < map.sizes.y-5; y++) { //don't spawn at the bottom rows
-			if (map.isColl(x, y)) {
+			if (map.isSolid(x, y)) {
 				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) { 
 					bool angry = (Random::rollf() < chanceAngryBat);
 					new Bat(vec((x+0.5f) * map.unitsPerTile, (y+1.5f) * map.unitsPerTile), angry);
-					map.set(x - 1, y + 1, false);
-					map.set(x, y + 1, false);
-					map.set(x + 1, y + 1, false);
-					map.set(x - 1, y + 2, false);
-					map.set(x, y + 2, false);
-					map.set(x + 1, y + 2, false);
+					map.set(x - 1, y + 1, Tile::NONE);
+					map.set(x, y + 1, Tile::NONE);
+					map.set(x + 1, y + 1, Tile::NONE);
+					map.set(x - 1, y + 2, Tile::NONE);
+					map.set(x, y + 2, Tile::NONE);
+					map.set(x + 1, y + 2, Tile::NONE);
 				}
 			}
 		}
@@ -76,14 +76,14 @@ void JumpScene::EnterScene()
 	std::cout << "seed=" << randomSeed << ", bats=" << Bat::getAll().size() << std::endl;
 
 	sf::Vector2i pos = map.toTiles(player.pos);
-	map.set(pos.x - 1, pos.y + 1, true);
-	map.set(pos.x,     pos.y + 1, true);
-	map.set(pos.x - 1, pos.y,     false);
-	map.set(pos.x,     pos.y,     false);
-	map.set(pos.x - 1, pos.y - 1, false);
-	map.set(pos.x,     pos.y - 1, false);
-	map.set(pos.x - 1, pos.y - 2, false);
-	map.set(pos.x,     pos.y - 2, false);
+	map.set(pos.x - 1, pos.y + 1, Tile::SOLID);
+	map.set(pos.x,     pos.y + 1, Tile::SOLID);
+	map.set(pos.x - 1, pos.y,     Tile::NONE);
+	map.set(pos.x,     pos.y,     Tile::NONE);
+	map.set(pos.x - 1, pos.y - 1, Tile::NONE);
+	map.set(pos.x,     pos.y - 1, Tile::NONE);
+	map.set(pos.x - 1, pos.y - 2, Tile::NONE);
+	map.set(pos.x,     pos.y - 2, Tile::NONE);
 
 }
 
@@ -159,7 +159,7 @@ void JumpScene::Update(int dtMilis) {
 	EntS<Bat>::deleteNotAlive();
 
 	if (Keyboard::IsKeyPressed(DEBUG_EDIT_MODE) && (Mouse::IsPressed(sf::Mouse::Button::Left) || Mouse::IsPressed(sf::Mouse::Button::Right))) {
-		bool what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left);
+		Tile what_to_set = Mouse::IsPressed(sf::Mouse::Button::Left) ? Tile::SOLID : Tile::NONE;
 		vec pos = Mouse::GetPositionInWorld();
 		sf::Vector2i tile = map.toTiles(pos);
 		map.set(tile.x, tile.y, what_to_set);

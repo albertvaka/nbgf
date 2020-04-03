@@ -100,7 +100,7 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 void JumpMan::Update(float dt)
 {
 	float marginGrounded = 1.f; //in pixels
-	grounded = map->isCollInWorldCoordinates(pos.x - cen.x + 1.f, pos.y + marginGrounded) || map->isCollInWorldCoordinates(pos.x + cen.x - 1.f, pos.y + marginGrounded);
+	grounded = map->isSolidInWorldCoordinates(pos.x - cen.x + 1.f, pos.y + marginGrounded) || map->isSolidInWorldCoordinates(pos.x + cen.x - 1.f, pos.y + marginGrounded);
 
 	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
 
@@ -117,7 +117,7 @@ void JumpMan::Update(float dt)
 			DoPolvitoWallJump();
 		}
 		else {
-			bool ceiling = map->isCollInWorldCoordinates(pos.x - cen.x + 1.f, pos.y - siz.y - 1.f) || map->isCollInWorldCoordinates(pos.x + cen.x - 1.f, pos.y - siz.y - 1.f);
+			bool ceiling = map->isSolidInWorldCoordinates(pos.x - cen.x + 1.f, pos.y - siz.y - 1.f) || map->isSolidInWorldCoordinates(pos.x + cen.x - 1.f, pos.y - siz.y - 1.f);
 			if (!ceiling) {
 				DoPolvitoJump();
 				grounded = false;
@@ -262,7 +262,7 @@ void JumpMan::Update(float dt)
 		{
 			for (int y = yTop; y <= yBottom; y++)
 			{
-				if (map->isColl(x, y))
+				if (map->isSolid(x, y))
 				{
 					posf.x = map->Right(x) + cen.x;
 					vel.x = -10.f; //stay against wall
@@ -286,7 +286,7 @@ void JumpMan::Update(float dt)
 		{
 			for (int y = yTop; y <= yBottom; y++)
 			{
-				if (map->isColl(x, y))
+				if (map->isSolid(x, y))
 				{
 					posf.x = map->Left(x) - csiz.x;
 					vel.x = 10.f; //stay against wall
@@ -315,7 +315,7 @@ horz_exit:
 		{
 			for (int x = xl; x <= xr; x++)
 			{
-				if (map->isColl(x, y))
+				if (map->isSolid(x, y))
 				{
 					posf.y = map->Top(y) + siz.y;
 					vel.y = 0;
@@ -336,7 +336,7 @@ horz_exit:
 		{
 			for (int x = xl; x <= xr; x++)
 			{
-				if (map->isColl(x, y))
+				if (map->isSolid(x, y))
 				{
 					posf.y = map->Bottom(y);
 					if (vel.y > 50) DoPolvitoLand();

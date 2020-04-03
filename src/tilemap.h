@@ -6,12 +6,18 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
 
+enum class Tile : unsigned char {
+	NONE = 0,
+	SOLID = 1,
+	BREAKABLE = 2,
+};
+
 struct TileMap
 {
 	TileMap(sf::Vector2i _sizes, float _unitsPerTile)
 		: sizes(_sizes)
 		, unitsPerTile(_unitsPerTile)
-		, tiles(new bool[_sizes.x * _sizes.y]{})
+		, tiles(new Tile[_sizes.x * _sizes.y]{})
 	{
 	}
 	void Randomize(int seed);
@@ -22,20 +28,21 @@ struct TileMap
 	bool inBounds(int x, int y) {
 		return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y);
 	}
-	void set(int x, int y, bool col) {
+	void set(int x, int y, Tile col) {
 		if (!inBounds(x, y)) return;
 		tiles[x * sizes.y + y] = col;
 	}
-	bool isColl(sf::Vector2i pos) { return isColl(pos.x, pos.y); }
+	Tile getTile(sf::Vector2i pos) { return getTile(pos.x, pos.y); }
 
-	bool isColl(int x, int y) {
-		if (!inBounds(x, y)) return true;
-		return isCollUnsafe(x,y);
+	Tile getTile(int x, int y) {
+		if (!inBounds(x, y)) return Tile::SOLID;
+		return getTileUnsafe(x,y);
 	}
 
-	bool isCollUnsafe(int x, int y) {
-		return tiles[x * sizes.y + y];
-	}
+	bool isSolid(sf::Vector2i pos) { return isSolid(pos.x, pos.y); }
+	bool isSolid(int x, int y) { return getTile(x, y) != Tile::NONE; }
+
+	Tile getTileUnsafe(int x, int y) { return tiles[x * sizes.y + y]; }
 
 	sf::Vector2i toTiles(vec pos) const { return toTiles(pos.x, pos.y); }
 	sf::Vector2i toTiles(float x, float y) const { return sf::Vector2i(toTiles(x), toTiles(y)); }
@@ -52,8 +59,10 @@ struct TileMap
 
 	sf::Vector2i sizes;
 	float unitsPerTile;
-	bool* tiles;
+	Tile* tiles;
 
-	bool isCollInWorldCoordinates(vec p) { return isColl(toTiles(p)); }
-	bool isCollInWorldCoordinates(float x, float y) { return isColl(toTiles(x,y)); }
+	bool isSolidInWorldCoordinates(vec p) { return isSolid(toTiles(p)); }
+	bool isSolidInWorldCoordinates(float x, float y) { return isSolid(toTiles(x,y)); }
+	Tile getTilenWorldCoordinates(vec p) { return getTile(toTiles(p)); }
+	Tile getTileInWorldCoordinates(float x, float y) { return getTile(toTiles(x, y)); }
 };
