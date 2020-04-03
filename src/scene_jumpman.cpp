@@ -130,10 +130,32 @@ void JumpScene::Update(int dtMilis) {
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : EntS<Bullet>::getAll()) {
 		e->Update(dt);
-		if (!e->explode) {
-			bulletPartSys.pos = e->pos + vec::Rand(-4, -4, 4, 4);
-			bulletPartSys.Spawn(dt);
+		if (e->explode) continue;
+
+		if (e->pos.y > map.boundsInWorld().Bottom()) {
+			lava.Plof(e->pos.x);
+			e->alive = false;
+			continue;
 		}
+
+		sf::Vector2i t = map.toTiles(e->pos);
+		Tile tile = map.getTile(t);
+		if (tile != Tile::NONE) {
+			if (tile == Tile::BREAKABLE) {
+				map.set(t.x, t.y, Tile::NONE);
+			}
+			bulletPartSys.pos = e->pos;
+			for (int i = 0; i < 5; i++) {
+				auto& p = bulletPartSys.AddParticle();
+				p.scale = 1.7f;
+				p.vel *= 1.5f;
+			}
+			e->alive = false;
+			continue;
+		}
+
+		bulletPartSys.pos = e->pos + vec::Rand(-4, -4, 4, 4);
+		bulletPartSys.Spawn(dt);
 	}
 	EntS<Bullet>::deleteNotAlive();
 
