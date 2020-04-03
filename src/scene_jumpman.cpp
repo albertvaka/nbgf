@@ -10,10 +10,10 @@ const float sceneZoom = 3.f;
 const float chanceAngryBat = 0.2f;
 
 JumpScene::JumpScene()
-	: map(sf::Vector2i(1000, 25), 16)
+	: map(sf::Vector2i(1000, 19), 16)
 	, player(&map)
 {
-	Window::SetWindowSize(sf::Vector2u(2272, 1280));
+	Window::SetWindowSize(sf::Vector2u(21*16 * sceneZoom * 16.f / 9, 21*16* sceneZoom));
 
 	player.polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
