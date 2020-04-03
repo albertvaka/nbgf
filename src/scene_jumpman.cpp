@@ -22,8 +22,8 @@ JumpScene::JumpScene()
 
 	float yBottom = map.boundsInWorld().Bottom();
 	lavaPartSys.pos.y = yBottom;
-	lavaPartSys.min_interval = 5.f;
-	lavaPartSys.max_interval = 10.f;
+	lavaPartSys.min_interval = 4.f;
+	lavaPartSys.max_interval = 8.f;
 	lavaPartSys.min_vel = vec(-15, -50);
 	lavaPartSys.max_vel = vec(15, -30);
 	lavaPartSys.min_ttl = 2.f;
@@ -193,7 +193,7 @@ void JumpScene::Update(int dtMilis) {
 
 void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 {
-	window.clear(sf::Color(255 * 0.200f, 255 * 0.100f, 255 * 0.100f));
+	window.clear(sf::Color(50, 25, 25));
 
 	if (debugDraw) {
 		Simplex::DebugDraw(window, map.unitsPerTile, [this](int x, int y) {
@@ -249,7 +249,7 @@ void JumpScene::DrawLava(sf::RenderTarget& window)
 	const float chunkSize = 5.f;
 	const float waveHeight = 1.2f;
 	const float waveAmplitude = 5.f;
-	const float height = 20;
+	const float height = 19;
 
 	float time = mainClock.getElapsedTime().asSeconds() * 2;
 	Bounds screen = Camera::GetCameraBounds();
