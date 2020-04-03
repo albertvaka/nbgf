@@ -139,7 +139,6 @@ public:
 	~TransitionInertial();
 
 	void update(float _GameTime);
-	void update(int   _GameTime) {update(float(_GameTime)/1000.f);}
 	bool reached() {return (m_fPosToGo == m_fPos) && m_fVel == 0;}
 
 	void setAcc(float _fUnitsPerSec) {m_fAcc = _fUnitsPerSec;}

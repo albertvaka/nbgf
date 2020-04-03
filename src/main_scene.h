@@ -49,7 +49,11 @@ struct MainScene : Scene {
 		EntS<Cintable>::deleteAll();
 	}
 
-	void Update(int dt) override {
+	void Update(float dt) override {
+		UpdateInt(dt * 1000);
+	}
+
+	void UpdateInt(int dt) {
 
 		//Collisions computed in main_scene_collider.h
 		main_scene_collisions();

@@ -84,10 +84,10 @@ int main()
 #ifdef _DEBUG
 			ClearDebugVecs();
 #endif
-			int dt = time.asMilliseconds();
-			if (dt> 60) // less than 17 FPS
+			float dt = time.asSeconds();
+			if (dt> 0.06) // less than 17 FPS
 			{
-				dt = 60; //Slow game down instead of epic jumps
+				dt = 0.06; //Slow game down instead of epic jumps
 				slowDown = true;
 			}
 			currentScene->Update(dt);

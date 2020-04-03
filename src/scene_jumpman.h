@@ -22,7 +22,7 @@ struct JumpScene : Scene {
 	JumpScene();
 	void EnterScene() override;
 	void ExitScene() override;
-	void Update(int dtMilis) override;
+	void Update(float dt) override;
 	void Draw(sf::RenderTarget& window, bool debug) override;
 
 };

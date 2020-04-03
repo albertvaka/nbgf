@@ -94,14 +94,13 @@ void JumpScene::ExitScene()
 	EntS<Bat>::deleteAll();
 }
 
-void JumpScene::Update(int dtMilis) {
+void JumpScene::Update(float dt) {
 
 	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (map.toTiles(player.pos + vec(0.1f, 0)).y >= map.sizes.y)) {
 		ExitScene();
 		EnterScene();
 	}
 
-	float dt = dtMilis / 1000.f;
 	//transition.update(dt);
 	player.Update(dt);
 

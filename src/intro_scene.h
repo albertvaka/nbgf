@@ -66,7 +66,11 @@ struct IntroScene : Scene {
 		EntS<Cleaner>::deleteAll();
 	}
 
-	void Update(int dt) override {
+	void Update(float dt) override {
+		UpdateInt(dt * 1000);
+	}
+
+	void UpdateInt(int dt) {
 		// Update all entities
 		if (EntS<Entity>::getAll().size() * 2 > EntS<Entity>::getAll().capacity()) {
 			// Hack to make sure the vector of Entities doesn't grow while we iterate it
