@@ -24,8 +24,9 @@ void TileMap::Draw(sf::RenderTarget& window)
 	int top = (screen.Top() / unitsPerTile) - 1;
 	int bottom = (screen.Bottom() / unitsPerTile) + 1;
 
+	sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
+
 	if (left < 0) {
-		sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
 		for (int x = left - 1; x < 0; x++)
 		{
 			for (int y = top - 1; y < bottom + 1; y++)
@@ -38,7 +39,6 @@ void TileMap::Draw(sf::RenderTarget& window)
 	}
 
 	if (right >= sizes.x) {
-		sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
 		for (int x = sizes.x; x < right; x++)
 		{
 			for (int y = top - 1; y < bottom + 1; y++)
@@ -47,20 +47,38 @@ void TileMap::Draw(sf::RenderTarget& window)
 				window.draw(sprite);
 			}
 		}
-		right = sizes.x - 1;
+		right = sizes.x;
+	}
+
+	if (top < 0) {
+		for (int x = left; x < right; x++)
+		{
+			for (int y = top - 1; y < 0; y++)
+			{
+				sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+				window.draw(sprite);
+			}
+		}
+		top = 0;
+	}
+
+	if (bottom >= sizes.y) {
+		for (int x = left; x < right; x++)
+		{
+			for (int y = sizes.y; y < bottom; y++)
+			{
+				sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+				window.draw(sprite);
+			}
+		}
+		bottom = sizes.y;
 	}
 
 	for (int x = left; x < right; x++)
 	{
 		for (int y = top; y < bottom; y++)
 		{
-			if (y >= sizes.y) {
-				//lava
-				sprite.setTextureRect(sf::Rect((8 + ((100+x) % 3)) * 16, 13 * 16, 16, 16));
-			} else if (y < 0 || isCollUnsafe(x, y)) {
-				sprite.setTextureRect(sf::Rect(4 * 16, 3 * 16, 16, 16));
-			}
-			else {
+			if (!isCollUnsafe(x, y)) {
 				continue;
 			}
 			sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
