@@ -40,6 +40,8 @@ extern sf::Clock mainClock;
 JumpMan::JumpMan(TileMap* _map)
 	: map(_map)
 {
+	polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
+
 	animation.Ensure(MARIO_IDLE);
 	sf::Rect rect = animation.CurrentFrame();
 	siz = vec(rect.width, rect.height);

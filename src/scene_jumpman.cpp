@@ -17,7 +17,6 @@ JumpScene::JumpScene()
 {
 	Window::SetWindowSize(sf::Vector2u(21*16 * sceneZoom * 16.f / 9, 21*16* sceneZoom));
 
-	player.polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
 	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5+16, 37, 6, 6));
 	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(38, 37, 5, 5));
