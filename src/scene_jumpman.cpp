@@ -14,7 +14,6 @@ extern sf::Clock mainClock;
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 20), 16)
 	, lava(19*16)
-	, player(&map)
 {
 	Window::SetWindowSize(sf::Vector2u(21*16 * sceneZoom * 16.f / 9, 21*16* sceneZoom));
 
@@ -52,8 +51,6 @@ void JumpScene::EnterScene()
 
 	map.Randomize(randomSeed);
 
-	Bat::jumpman = &player;
-	Bat::tilemap = &map;
 	for (int x = 20; x < map.sizes.x; x+=2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
 		for (int y = -1; y < map.sizes.y-5; y++) { //don't spawn at the bottom rows
 			if (map.isSolid(x, y)) {

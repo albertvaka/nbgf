@@ -56,6 +56,7 @@
     <ClInclude Include="src\matrix2d.h" />
     <ClInclude Include="src\mesa.h" />
     <ClInclude Include="src\simplexnoise.h" />
+    <ClInclude Include="src\singleinstance.h" />
     <ClInclude Include="src\steering_behavior_applier.h" />
     <ClInclude Include="src\steering_entity.h" />
     <ClInclude Include="src\partsys.h" />

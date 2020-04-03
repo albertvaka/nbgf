@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "vector.h"
+#include "singleinstance.h"
 #include "bounds.h"
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
@@ -12,7 +13,7 @@ enum class Tile : unsigned char {
 	BREAKABLE = 2,
 };
 
-struct TileMap
+struct TileMap : SingleInstance<TileMap>
 {
 	TileMap(sf::Vector2i _sizes, float _unitsPerTile)
 		: sizes(_sizes)

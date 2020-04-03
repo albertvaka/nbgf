@@ -37,8 +37,7 @@ const float invencibleTimeAfterHit = 0.5f;
 
 extern sf::Clock mainClock;
 
-JumpMan::JumpMan(TileMap* _map)
-	: map(_map)
+JumpMan::JumpMan()
 {
 	polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
 
@@ -99,6 +98,8 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 
 void JumpMan::Update(float dt)
 {
+	TileMap* map = TileMap::instance();
+
 	float marginGrounded = 1.f; //in pixels
 	grounded = map->isSolidInWorldCoordinates(pos.x - cen.x + 1.f, pos.y + marginGrounded) || map->isSolidInWorldCoordinates(pos.x + cen.x - 1.f, pos.y + marginGrounded);
 

@@ -180,6 +180,9 @@
     <ClInclude Include="src\lava.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\singleinstance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rand.cpp">

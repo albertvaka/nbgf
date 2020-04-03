@@ -6,11 +6,12 @@
 #include "tilemap.h"
 #include "partsys.h"
 #include "animation.h"
+#include "singleinstance.h"
 #include <iostream>
 
-struct JumpMan : Entity
+struct JumpMan : Entity, SingleInstance<JumpMan>
 {
-    JumpMan(TileMap* map);
+    JumpMan();
     void Update(float GameTime);
     void Draw(sf::RenderTarget& window);
     void Reset() {
@@ -49,8 +50,6 @@ struct JumpMan : Entity
     bool lookingLeft = false;
 
     PartSys polvito;
-
-    TileMap* map;
 
     void InitPolvito();
     inline void DoPolvitoJump();

@@ -14,9 +14,6 @@ void AwakeNearbyBats(vec pos);
 
 struct Bat : SteeringEntity, EntS<Bat>
 {
-	static JumpMan* jumpman; // Set me!
-	static TileMap* tilemap; // Set me!
-
 	enum class State {
 		SIESTA,
 		FLYING,

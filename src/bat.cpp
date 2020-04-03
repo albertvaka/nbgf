@@ -20,9 +20,6 @@ void AwakeNearbyBats(vec pos) {
 	}
 }
 
-JumpMan* Bat::jumpman;
-TileMap* Bat::tilemap;
-
 Bat::Bat(vec pos, bool aggresive)
 	: SteeringEntity(pos + vec(0.f, 6.f), 8.0f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
 	, state(State::SIESTA)
@@ -32,7 +29,7 @@ Bat::Bat(vec pos, bool aggresive)
 	anim.Ensure(BAT_SIESTA);
 	anim.Update(Random::roll(0, anim.GetCurrentAnimDuration())); // Start blink anim at different time intervals
 
-	steering.TileMapAvoidanceOn(tilemap);
+	steering.TileMapAvoidanceOn(TileMap::instance());
 	steering.ForwardOn();
 	steering.WanderOn();
 
@@ -64,7 +61,7 @@ void Bat::Update(float dt)
 			}
 		}
 		else {
-			if (pos.DistanceSq(jumpman->center()) < (awake_player_distance * awake_player_distance) || awakened) {
+			if (pos.DistanceSq(JumpMan::instance()->center()) < (awake_player_distance * awake_player_distance) || awakened) {
 				anim.Ensure(BAT_AWAKE);
 				anim.Update(Random::roll(0, anim.GetCurrentAnimDuration()/2)); // Start flying at different time intervals
 				anim.loopable = false;
@@ -106,7 +103,7 @@ void Bat::Update(float dt)
 				anim.Ensure(BAT_FLYING);
 				state = State::SEEKING;
 			}
-			if (steering.isFleeOn() && !jumpman->isHit()) {
+			if (steering.isFleeOn() && !JumpMan::instance()->isHit()) {
 				steering.FleeOff();
 			}
 		}
@@ -114,6 +111,7 @@ void Bat::Update(float dt)
     break;
 	case State::SEEKING:
 	{
+		JumpMan* jumpman = JumpMan::instance();
 		vel = steering.CalculatePrioritized(dt);
 		if (steering.avoidingTileMap) {
 			state = State::FLYING;
