@@ -257,17 +257,18 @@ void JumpMan::Update(float dt)
 	// y le quitamos su velocidad Y. En caso de que estuviesemos cayendo
 	// significa que estaremos grounded, en caso de subir significia que estabamos
 	// saltando y que ya no podremos saltar mas.
+
 	vec centerFromRight = size - center;
 	vec direction = posf - pos;
-	const int N = 1;
 
+	const float E = 1;
 
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
 		int xo = map->toTiles(pos.x - center.x);
 		int xn = map->toTiles(posf.x - center.x);
-		int yTop = map->toTiles(pos.y - size.y + N);
-		int yBottom = map->toTiles(pos.y - N);
+		int yTop = map->toTiles(pos.y - size.y + E);
+		int yBottom = map->toTiles(pos.y - E);
 		for (int x = xo; x >= xn; x--)
 		{
 			for (int y = yTop; y <= yBottom; y++)
@@ -290,8 +291,8 @@ void JumpMan::Update(float dt)
 	{
 		int xo = map->toTiles(pos.x + centerFromRight.x);
 		int xn = map->toTiles(posf.x + centerFromRight.x);
-		int yTop = map->toTiles(pos.y - size.y + N);
-		int yBottom = map->toTiles(pos.y - N);
+		int yTop = map->toTiles(pos.y - size.y + E);
+		int yBottom = map->toTiles(pos.y - E);
 		for (int x = xo; x <= xn; x++)
 		{
 			for (int y = yTop; y <= yBottom; y++)
@@ -319,8 +320,8 @@ horz_exit:
 	{
 		int yo = map->toTiles(pos.y - size.y); // usamos la y superior del sprite
 		int yn = map->toTiles(posf.y - size.y);
-		int xl = map->toTiles(pos.x - center.x + N);
-		int xr = map->toTiles(pos.x + centerFromRight.x - N);
+		int xl = map->toTiles(pos.x - center.x + E);
+		int xr = map->toTiles(pos.x + centerFromRight.x - E);
 		for (int y = yo; y >= yn; y--)
 		{
 			for (int x = xl; x <= xr; x++)
@@ -340,8 +341,8 @@ horz_exit:
 	{
 		int yo = map->toTiles(pos.y); // usamos la y inferior del sprite
 		int yn = map->toTiles(posf.y);
-		int xl = map->toTiles(pos.x - center.x + N);
-		int xr = map->toTiles(pos.x + centerFromRight.x - N);
+		int xl = map->toTiles(pos.x - center.x + E);
+		int xr = map->toTiles(pos.x + centerFromRight.x - E);
 		for (int y = yo; y <= yn; y++)
 		{
 			for (int x = xl; x <= xr; x++)
