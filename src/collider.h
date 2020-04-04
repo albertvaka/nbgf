@@ -31,13 +31,13 @@ inline bool Collide(const Bounds& a, const CircleBounds& b)
 
 
 // Entities
-inline bool Collide(BoxEntity* a, BoxEntity* b) {
+inline bool Collide(const BoxEntity* a, const BoxEntity* b) {
     return Collide(a->bounds(), b->bounds());
 }
-inline bool Collide(CircleEntity* a, CircleEntity* b) {
+inline bool Collide(const CircleEntity* a, const CircleEntity* b) {
     return Collide(a->bounds(), b->bounds());
 }
-inline bool Collide(CircleEntity* a, BoxEntity* b) {
+inline bool Collide(const CircleEntity* a, const BoxEntity* b) {
     return Collide(a->bounds(), b->bounds());
 }
 

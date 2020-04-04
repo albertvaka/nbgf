@@ -9,6 +9,7 @@
 struct HospitalEntity : BoxEntity, EntS<HospitalEntity>
 {
 	Animation anim;
+	HospitalEntity() : BoxEntity(vec(), vec()) { }
 	virtual void Update(int dt) { }
 	void UpdateAnim(int dt) {
 		if (anim.anim_type != AnimationType::NADA) {

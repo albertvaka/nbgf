@@ -62,7 +62,7 @@ struct Bounds : public sf::Rect<float>
         SetCenter(center.x, center.y);
     }
 
-	void Draw(sf::RenderTarget &rt, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent)
+	void Draw(sf::RenderTarget &rt, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) const
 	{
 		sf::RectangleShape rs;
 
@@ -96,11 +96,11 @@ struct Bounds : public sf::Rect<float>
         return left + width;
     }
 
-    vec TopLeft() {
+    vec TopLeft() const {
         return vec(Left(), Top());
     }
 
-    vec BottomRight() {
+    vec BottomRight() const {
         return vec(Right(), Bottom());
     }
 
@@ -134,7 +134,7 @@ struct CircleBounds
     vec pos;
     float radius;
 
-    void Draw(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent)
+    void Draw(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) const
     {
         sf::CircleShape cs(radius);
         cs.setRadius(radius);

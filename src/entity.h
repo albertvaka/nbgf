@@ -13,16 +13,16 @@ struct Entity
 };
 
 struct BoxEntity : Entity {
-	BoxEntity() : size(16, 16) {}
 	BoxEntity(vec pos, vec size) : Entity(pos), size(size) {}
+	BoxEntity(Bounds b) : Entity(b.TopLeft()), size(b.Size()) {}
 
 	vec size;
 
-	Bounds bounds() {
+	Bounds bounds() const {
 		return Bounds(pos, size, true);
 	}
 
-	void drawBounds(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) {
+	void drawBounds(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) const {
 		bounds().Draw(window, color, fillColor);
 	}
 };
@@ -33,11 +33,11 @@ struct CircleEntity : Entity {
 
 	float radius;
 	
-	CircleBounds bounds() {
+	CircleBounds bounds() const {
 		return CircleBounds(pos, radius);
 	}
 
-	void drawBounds(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) {
+	void drawBounds(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) const {
 		bounds().Draw(window, color, fillColor);
 	}
 };
