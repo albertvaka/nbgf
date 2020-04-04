@@ -339,16 +339,16 @@ vec SteeringBehavior::TileMapAvoidance(TileMap* map)
 	float minDistToCenterSq = Mates::MaxFloat;
 	vec closestObstacle;
 
-	int xLeft = map->toTiles(steeringEntity->pos.x - steeringEntity->radius - map->unitsPerTile / 2);
-	int xRight = map->toTiles(steeringEntity->pos.x + steeringEntity->radius + map->unitsPerTile/2);
-	int yTop = map->toTiles(steeringEntity->pos.y - steeringEntity->radius - map->unitsPerTile / 2);
-	int yBottom = map->toTiles(steeringEntity->pos.y + steeringEntity->radius + map->unitsPerTile / 2);
+	int xLeft = map->toTiles(steeringEntity->pos.x - steeringEntity->radius - Tile::size / 2);
+	int xRight = map->toTiles(steeringEntity->pos.x + steeringEntity->radius + Tile::size /2);
+	int yTop = map->toTiles(steeringEntity->pos.y - steeringEntity->radius - Tile::size / 2);
+	int yBottom = map->toTiles(steeringEntity->pos.y + steeringEntity->radius + Tile::size / 2);
 	CircleBounds me = steeringEntity->bounds();
 	for (int x = xLeft; x <= xRight; x++) {
 		for (int y = yTop; y <= yBottom; y++) {
 			//vec(x * 16 + 8, y * 16 + 8).Debuggerino(sf::Color::White);
 			if (map->isSolid(x, y)) {
-				Bounds tile = map->tileBounds(x, y);
+				Bounds tile = map->getTileBounds(x, y);
 				if (tile.contains(me.pos)) {
 					minDistToCenterSq = 0;
 					closestObstacle = tile.Center();

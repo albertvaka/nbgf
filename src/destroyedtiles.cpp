@@ -2,13 +2,15 @@
 
 #include "destroyedtiles.h"
 
+#include "magic_enum.h"
+#include "assets.h"
+
+const float timeToRespawn = 10.f;
+
 DestroyedTiles::DestroyedTiles() {
-	for (int i = 0; i < magic_enum::enum_count<Tile>(); ++i) {
-		destroyedParticles.AddSprite(Assets::marioTexture, TileMap::tileToTextureRect[i]);
+	for (int i = 0; i < magic_enum::enum_count<Tile::Value>(); ++i) {
+		destroyedParticles.AddSprite(Assets::marioTexture, Tile::tileToTextureRect[i]);
 	}
-	//destroyedParticles.min_rotation = 0.f;
-	//destroyedParticles.rotation_vel = 360.f;
-	//destroyedParticles.max_rotation = 360.f;
 	destroyedParticles.acc.y = 50.f;
 	destroyedParticles.min_ttl = 0.5f;
 	destroyedParticles.max_ttl = 0.5f;
@@ -36,27 +38,21 @@ void DestroyedTiles::Destroy(int x, int y) {
 	TileMap* map = TileMap::instance();
 
 	Tile t = map->getTile(x, y);
-	destroyedParticles.pos = map->tileBounds(x, y).Center();
+	destroyedParticles.pos = map->getTileBounds(x, y).Center();
 	for (int i = 0; i < 4; i++) {
 		PartSys::Particle& p = destroyedParticles.AddParticle();
 		p.pos += displace[i];
 		p.vel = vel[i];
 		p.sprite = int(t);
 	}
-
 	map->setTile(x, y, Tile::NONE);
 
-	destroyed.emplace_back(x, y, 10.f);
+	toSpawn.emplace_back(x, y, t, timeToRespawn);
 }
 
 void DestroyedTiles::Update(float dt) {
 	destroyedParticles.UpdateParticles(dt);
-	destroyed.erase(std::remove_if(destroyed.begin(), destroyed.end(), [this, dt](Destroyed& p) { 
-		p.time -= dt;
-		if (p.time < 0.f) {
-			TileMap::instance()->setTile(p.x, p.y, Tile::BREAKABLE);
-			return true;
-		}
-		return false;
-	}), destroyed.end());
+	toSpawn.erase(std::remove_if(toSpawn.begin(), toSpawn.end(), [dt](SpawningTile& t) {
+		return t.Update(dt);
+	}), toSpawn.end());
 }

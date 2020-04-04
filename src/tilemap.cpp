@@ -4,8 +4,9 @@
 #include "input.h"
 #include "assets.h"
 
-const sf::IntRect TileMap::tileToTextureRect[] = {
+const sf::IntRect Tile::tileToTextureRect[] = {
 	{},	//NONE
+	{},	//SOLID_TRANSPARENT
 	{3 * 16, 2 * 16, 16, 16}, // SOLID
 	{4 * 16, 2 * 16, 16, 16}, // BREAKABLE
 };
@@ -30,15 +31,15 @@ void TileMap::Randomize(int seed)
 	}
 }
 
-void TileMap::Draw(sf::RenderTarget& window)
+void TileMap::Draw(sf::RenderTarget& window) const
 {
 	sf::Sprite& sprite = Assets::marioSprite;
 
 	Bounds screen = Camera::GetCameraBounds();
-	int left = (screen.Left() / unitsPerTile) - 1;
-	int right = (screen.Right() / unitsPerTile) + 1;
-	int top = (screen.Top() / unitsPerTile) - 1;
-	int bottom = (screen.Bottom() / unitsPerTile) + 1;
+	int left = (screen.Left() / Tile::size) - 1;
+	int right = (screen.Right() / Tile::size) + 1;
+	int top = (screen.Top() / Tile::size) - 1;
+	int bottom = (screen.Bottom() / Tile::size) + 1;
 
 	sprite.setTextureRect(sf::Rect(3 * 16, 2 * 16, 16, 16));
 
@@ -47,7 +48,7 @@ void TileMap::Draw(sf::RenderTarget& window)
 		{
 			for (int y = top - 1; y < bottom + 1; y++)
 			{
-				sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
 			}
 		}
@@ -59,7 +60,7 @@ void TileMap::Draw(sf::RenderTarget& window)
 		{
 			for (int y = top - 1; y < bottom + 1; y++)
 			{
-				sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
 			}
 		}
@@ -71,7 +72,7 @@ void TileMap::Draw(sf::RenderTarget& window)
 		{
 			for (int y = top - 1; y < 0; y++)
 			{
-				sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
 			}
 		}
@@ -83,7 +84,7 @@ void TileMap::Draw(sf::RenderTarget& window)
 		{
 			for (int y = sizes.y; y < bottom; y++)
 			{
-				sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
 			}
 		}
@@ -94,8 +95,12 @@ void TileMap::Draw(sf::RenderTarget& window)
 	{
 		for (int y = top; y < bottom; y++)
 		{
-			sprite.setTextureRect(tileToTextureRect[(int)getTileUnsafe(x, y)]);
-			sprite.setPosition(x * unitsPerTile, y * unitsPerTile);
+			Tile t = getTileUnsafe(x, y);
+			if (t.isTransparent()) {
+				continue;
+			}
+			sprite.setTextureRect(t.textureRect());
+			sprite.setPosition(x * Tile::size, y * Tile::size);
 			window.draw(sprite);
 		}
 	}

@@ -12,7 +12,7 @@ const float chanceAngryBat = 0.2f;
 extern sf::Clock mainClock;
 
 JumpScene::JumpScene()
-	: map(sf::Vector2i(1000, 20), 16)
+	: map(sf::Vector2i(1000, 20))
 	, lava(19*16)
 {
 	Window::SetWindowSize(sf::Vector2u(21*16 * sceneZoom * 16.f / 9, 21*16* sceneZoom));
@@ -58,7 +58,7 @@ void JumpScene::EnterScene()
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) { 
 					bool angry = (Random::rollf() < chanceAngryBat);
-					new Bat(vec((x+0.5f) * map.unitsPerTile, (y+1.5f) * map.unitsPerTile), angry);
+					new Bat(vec((x+0.5f) * Tile::size, (y+1.5f) * Tile::size), angry);
 					map.setTile(x - 1, y + 1, Tile::NONE);
 					map.setTile(x, y + 1, Tile::NONE);
 					map.setTile(x + 1, y + 1, Tile::NONE);
@@ -95,7 +95,7 @@ void JumpScene::ExitScene()
 
 void JumpScene::Update(float dt) {
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.pos.y > map.boundsInWorld().Bottom()-map.unitsPerTile)) {
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.pos.y > map.boundsInWorld().Bottom()- Tile::size)) {
 		ExitScene();
 		EnterScene();
 	}
@@ -114,7 +114,7 @@ void JumpScene::Update(float dt) {
 	//	minY = maxY - 1;
 	//}
 	//Mates::Clamp(camPos.y, minY, maxY);
-	camPos.y = (Camera::GetCameraBounds().height / 2.f) - map.unitsPerTile; //fixed Y axis
+	camPos.y = (Camera::GetCameraBounds().height / 2.f) - Tile::size; //fixed Y axis
 	float minX = (Camera::GetCameraBounds().width / 2.f) - (1 * 16);
 	float maxX = ((1000 + 1) * 16) - (Camera::GetCameraBounds().width / 2.f);
 	if (maxX < minX) {
@@ -130,7 +130,7 @@ void JumpScene::Update(float dt) {
 		e->Update(dt);
 		if (e->explode) continue;
 
-		if (e->pos.y > map.boundsInWorld().Bottom()-map.unitsPerTile) {
+		if (e->pos.y > map.boundsInWorld().Bottom()-Tile::size) {
 			AwakeNearbyBats(e->pos);
 			lava.Plof(e->pos.x);
 			e->alive = false;
@@ -142,12 +142,12 @@ void JumpScene::Update(float dt) {
 		//(e->pos - toTheOutside).Debuggerino(sf::Color::White);
 		sf::Vector2i t = map.toTiles(e->pos+ toTheOutside);
 		Tile tile = map.getTile(t);
-		if (tile == Tile::NONE) {
+		if (!tile.isSolid()) {
 			t = map.toTiles(e->pos - toTheOutside);
 			tile = map.getTile(t);
 		}
-		if (tile != Tile::NONE) {
-			if (tile == Tile::BREAKABLE) {
+		if (tile.isSolid()) {
+			if (tile.isBreakable()) {
 				destroyedTiles.Destroy(t.x, t.y);
 			}
 			AwakeNearbyBats(e->pos);
@@ -195,7 +195,11 @@ void JumpScene::Update(float dt) {
 		Tile what_to_set = left? Tile::SOLID : middle? Tile::BREAKABLE : Tile::NONE;
 		vec pos = Mouse::GetPositionInWorld();
 		sf::Vector2i tile = map.toTiles(pos);
-		map.setTile(tile.x, tile.y, what_to_set);
+		if (what_to_set == Tile::NONE) {
+			map.setTile(tile.x, tile.y, Tile::NONE);
+		} else if (map.getTile(tile) != what_to_set && map.getTile(tile) != Tile::SOLID_TRANSPARENT) {
+			destroyedTiles.toSpawn.emplace_back(tile.x, tile.y, what_to_set, -1.f);
+		}
 	}
 #endif
 
@@ -210,7 +214,7 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 	window.clear(sf::Color(50, 25, 25));
 
 	if (debugDraw) {
-		Simplex::DebugDraw(window, map.unitsPerTile, [this](int x, int y) {
+		Simplex::DebugDraw(window, Tile::size, [this](int x, int y) {
 			return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
 		});
 	}

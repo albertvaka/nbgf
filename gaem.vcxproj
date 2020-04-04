@@ -58,6 +58,7 @@
     <ClInclude Include="src\mesa.h" />
     <ClInclude Include="src\simplexnoise.h" />
     <ClInclude Include="src\singleinstance.h" />
+    <ClInclude Include="src\spawningtile.h" />
     <ClInclude Include="src\steering_behavior_applier.h" />
     <ClInclude Include="src\steering_entity.h" />
     <ClInclude Include="src\partsys.h" />
@@ -92,6 +93,7 @@
     <ClCompile Include="src\rand.cpp" />
     <ClCompile Include="src\scene_jumpman.cpp" />
     <ClCompile Include="src\simplexnoise.cpp" />
+    <ClCompile Include="src\spawningtile.cpp" />
     <ClCompile Include="src\steering_behavior.cpp" />
     <ClCompile Include="src\tilemap.cpp" />
     <ClCompile Include="src\transition.cpp" />
