@@ -253,9 +253,11 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 
 
 
-	//ImGui::Begin(GameData::GAME_TITLE.c_str());
+	ImGui::Begin(GameData::GAME_TITLE.c_str());
 	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
-	//ImGui::End();
+	sf::Vector2i t = map.toTiles(Mouse::GetPositionInWorld());
+	ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
+	ImGui::End();
 
 	//player.polvito.DrawImGUI("Polvito");
 }
