@@ -5,7 +5,6 @@
 #include "spawningtile.h"
 #include "partsys.h"
 
-// TODO: Find better names for this class and its methods
 struct DestroyedTiles
 {
 	DestroyedTiles();
@@ -13,10 +12,10 @@ struct DestroyedTiles
 	void Destroy(int x, int y);
 	void Update(float dt);
 
-	void Draw(sf::RenderTarget& window) {
+	void Draw(sf::RenderTarget& window, bool debugDraw) {
 		destroyedParticles.Draw(window);
 		for (const SpawningTile& t : toSpawn) {
-			t.Draw(window);
+			t.Draw(window, debugDraw);
 		}
 		//destroyedParticles.DrawImGUI();
 	}

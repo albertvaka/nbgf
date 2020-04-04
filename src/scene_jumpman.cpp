@@ -220,7 +220,7 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 	}
 
 	map.Draw(window);
-	destroyedTiles.Draw(window);
+	destroyedTiles.Draw(window, debugDraw);
 
 	for (Bat* e : EntS<Bat>::getAll()) {
 		e->Draw(window);

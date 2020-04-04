@@ -13,27 +13,15 @@ struct CircleBounds;
 struct Bounds : public sf::Rect<float>
 {
     explicit Bounds() : sf::Rect<float>(0,0,0,0) { }
-    explicit Bounds(sf::Rect<float> r) : sf::Rect<float>(r.left, r.top, r.width, r.height) { }
-    explicit Bounds(const vec& v) : sf::Rect<float>(0,0,v.x,v.y) { }
-    explicit Bounds(const vec& pos, vec size, bool centered = false) : sf::Rect<float>(pos.x,pos.y,size.x,size.y) {
-        if (centered) { left -= size.x/2; top -= size.y/2; }
-    }
-    explicit Bounds(const vec& pos, vec size, vec origin) : sf::Rect<float>(pos.x, pos.y, size.x, size.y) {
+    explicit Bounds(const sf::Rect<float>& r) : sf::Rect<float>(r) { }
+    explicit Bounds(const vec& size) : sf::Rect<float>(0,0,size.x,size.y) { }
+    explicit Bounds(const vec& topleft, const vec& size) : sf::Rect<float>(topleft.x, topleft.y, size.x, size.y) {}
+    explicit Bounds(const vec& pos, const vec& size, const vec& origin) : sf::Rect<float>(pos.x, pos.y, size.x, size.y) {
         left -= origin.x;
         top -= origin.y;
     }
-    explicit Bounds(float x, float y, float w, float h) : sf::Rect<float>(x,y,w,h) { }
-
-    //Expands arround the center by an amount
-    void Expand(float x, float y)
-	{
-        width += x;
-        left -= x/2;
-        height += y;
-        top -= y/2;
-    }
-
-    void Expand(const vec& v) { Expand(v.x, v.y); }
+    explicit Bounds(float left, float top, float width, float height) : sf::Rect<float>(left , top, width, height) { }
+    static Bounds fromCenter(const vec& center, vec size) { return Bounds(center - size/2, size); }
 
     //Expands arround the center by a factor
     Bounds operator*(float f)

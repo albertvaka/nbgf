@@ -390,7 +390,7 @@ struct Player : SortedDrawable, EntS<Player>
 	}
 
 	Bounds bounds() {
-		return Bounds(pos, sizeToCollideWithTilemap, true);
+		return Bounds::fromCenter(pos, sizeToCollideWithTilemap);
 	}
 
 	void Draw(sf::Sprite& spr, sf::RenderTarget& window)

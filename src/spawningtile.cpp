@@ -17,14 +17,18 @@ bool SpawningTile::CanSpawn() const {
 	return true;
 }
 
-void SpawningTile::Draw(sf::RenderTarget& window) const {
+void SpawningTile::Draw(sf::RenderTarget& window, bool debugDraw) const {
+	if (debugDraw) {
+		JumpMan::instance()->maxBounds().Draw(window, sf::Color::Blue);
+		this->bounds().Draw(window, sf::Color::Black);
+	}
 	if (spawning) {
 		sf::Sprite& spr = Assets::marioSprite;
 		spr.setTextureRect(tile.textureRect());
 		float scale = 1.f - time / respawnAnimTime;
 		spr.setScale(scale, scale);
 		spr.setOrigin(Tile::size / 2, Tile::size / 2);
-		spr.setPosition(pos.x + Tile::size / 2, pos.y + Tile::size / 2);
+		spr.setPosition(pos.x, pos.y);
 		window.draw(spr);
 	}
 }

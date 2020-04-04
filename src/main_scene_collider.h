@@ -13,12 +13,12 @@
 
 bool inline Collide(Cintable* entity_a, Cinta* entity_b)
 {
-	return Collide(Bounds(entity_a->positionPlz(), entity_a->sizePlz(), true), entity_b->bounds());
+	return Collide(Bounds::fromCenter(entity_a->positionPlz(), entity_a->sizePlz()), entity_b->bounds());
 }
 
 bool inline Collide(Taca* entity_a, Cleaner* entity_b)
 {
-	return Collide(Bounds(entity_a->positionPlz(), entity_a->sizePlz(), true), entity_b->bounds());
+	return Collide(Bounds::fromCenter(entity_a->positionPlz(), entity_a->sizePlz()), entity_b->bounds());
 }
 
 void collision_player_extremity(Player* player, Extremity* extremity) {

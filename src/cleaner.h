@@ -285,7 +285,7 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 
 	Bounds bounds()
 	 {
-		return Bounds(pos, size, true);
+		return Bounds::fromCenter(pos, size);
 	}
 
 	void Draw(sf::Sprite& spr, sf::RenderTarget& window)

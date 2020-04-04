@@ -61,6 +61,7 @@ struct TileMap : SingleInstance<TileMap>
 	void Randomize(int seed);
 	void Draw(sf::RenderTarget& window) const;
 
+	//FIXME: I think these should be sizes.xy+1
 	Bounds boundsInWorld() const { return Bounds(0.f, 0.f, sizes.x * Tile::size, sizes.y * Tile::size); }
 
 	bool inBounds(int x, int y) const {

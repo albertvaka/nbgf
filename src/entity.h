@@ -14,12 +14,12 @@ struct Entity
 
 struct BoxEntity : Entity {
 	BoxEntity(vec pos, vec size) : Entity(pos), size(size) {}
-	BoxEntity(Bounds b) : Entity(b.TopLeft()), size(b.Size()) {}
+	BoxEntity(Bounds b) : Entity(b.Center()), size(b.Size()) {} //note that entities position is on their center
 
 	vec size;
 
 	Bounds bounds() const {
-		return Bounds(pos, size, true);
+		return Bounds::fromCenter(pos, size);
 	}
 
 	void drawBounds(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) const {
