@@ -247,8 +247,8 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 
 	if (debugDraw) {
 		player.bounds().Draw(window);
-		Bounds(player.pos, vec(1, 1)).Draw(window, sf::Color::White);
-		Bounds(player.center(), vec(1, 1)).Draw(window, sf::Color::White);
+		player.pos.Debuggerino(sf::Color::White);
+		player.bounds().Center().Debuggerino(sf::Color::Magenta);
 	}
 
 

@@ -37,14 +37,18 @@ const float invencibleTimeAfterHit = 0.5f;
 
 extern sf::Clock mainClock;
 
+// Sprite
+const vec standing_size = vec(16, 32);
+const vec crouched_size = vec(16, 22);
+const vec center = vec(8, 16);
+
 JumpMan::JumpMan()
 {
 	polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
 
 	animation.Ensure(MARIO_IDLE);
 	sf::Rect rect = animation.CurrentFrame();
-	siz = vec(rect.width, rect.height);
-	cen = siz / 2;
+	size = standing_size;
 	InitPolvito();
 }
 
@@ -60,7 +64,7 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 	}
 
 	spr.setTextureRect(animation.CurrentFrame());
-	spr.setOrigin(cen.x, siz.y);
+	spr.setOrigin(center.x, size.y);
 	spr.setPosition(pos.x, pos.y);
 	if (lookingLeft) {
 		spr.setScale(-1.f, 1.f);
@@ -101,7 +105,7 @@ void JumpMan::Update(float dt)
 	TileMap* map = TileMap::instance();
 
 	float marginGrounded = 1.f; //in pixels
-	grounded = map->isSolidInWorldCoordinates(pos.x - cen.x + 1.f, pos.y + marginGrounded) || map->isSolidInWorldCoordinates(pos.x + cen.x - 1.f, pos.y + marginGrounded);
+	grounded = map->isSolidInWorldCoordinates(pos.x - center.x + 1.f, pos.y + marginGrounded) || map->isSolidInWorldCoordinates(pos.x + center.x - 1.f, pos.y + marginGrounded);
 
 	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
 
@@ -118,7 +122,7 @@ void JumpMan::Update(float dt)
 			DoPolvitoWallJump();
 		}
 		else {
-			bool ceiling = map->isSolidInWorldCoordinates(pos.x - cen.x + 1.f, pos.y - siz.y - 1.f) || map->isSolidInWorldCoordinates(pos.x + cen.x - 1.f, pos.y - siz.y - 1.f);
+			bool ceiling = map->isSolidInWorldCoordinates(pos.x - center.x + 1.f, pos.y - size.y - 1.f) || map->isSolidInWorldCoordinates(pos.x + center.x - 1.f, pos.y - size.y - 1.f);
 			if (!ceiling) {
 				DoPolvitoJump();
 				grounded = false;
@@ -248,16 +252,16 @@ void JumpMan::Update(float dt)
 	// y le quitamos su velocidad Y. En caso de que estuviesemos cayendo
 	// significa que estaremos grounded, en caso de subir significia que estabamos
 	// saltando y que ya no podremos saltar mas.
-	vec csiz = siz - cen;
+	vec centerFromRight = size - center;
 	vec direction = posf - pos;
 	const int N = 1;
 
 
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
-		int xo = map->toTiles(pos.x - cen.x);
-		int xn = map->toTiles(posf.x - cen.x);
-		int yTop = map->toTiles(pos.y - siz.y + N);
+		int xo = map->toTiles(pos.x - center.x);
+		int xn = map->toTiles(posf.x - center.x);
+		int yTop = map->toTiles(pos.y - size.y + N);
 		int yBottom = map->toTiles(pos.y - N);
 		for (int x = xo; x >= xn; x--)
 		{
@@ -265,7 +269,7 @@ void JumpMan::Update(float dt)
 			{
 				if (map->isSolid(x, y))
 				{
-					posf.x = map->Right(x) + cen.x;
+					posf.x = map->Right(x) + center.x;
 					vel.x = -10.f; //stay against wall
 					if (!isHit()) {
 						onWall = ONWALL_LEFT;
@@ -279,9 +283,9 @@ void JumpMan::Update(float dt)
 	}
 	else if (direction.x > 0) //Vamos hacia la derecha
 	{
-		int xo = map->toTiles(pos.x + csiz.x);
-		int xn = map->toTiles(posf.x + csiz.x);
-		int yTop = map->toTiles(pos.y - siz.y + N);
+		int xo = map->toTiles(pos.x + centerFromRight.x);
+		int xn = map->toTiles(posf.x + centerFromRight.x);
+		int yTop = map->toTiles(pos.y - size.y + N);
 		int yBottom = map->toTiles(pos.y - N);
 		for (int x = xo; x <= xn; x++)
 		{
@@ -289,7 +293,7 @@ void JumpMan::Update(float dt)
 			{
 				if (map->isSolid(x, y))
 				{
-					posf.x = map->Left(x) - csiz.x;
+					posf.x = map->Left(x) - centerFromRight.x;
 					vel.x = 10.f; //stay against wall
 					if (!isHit()) {
 						onWall = ONWALL_RIGHT;
@@ -308,17 +312,17 @@ horz_exit:
 
 	if (direction.y < 0) //Vamos hacia arriba
 	{
-		int yo = map->toTiles(pos.y - siz.y); // usamos la y superior del sprite
-		int yn = map->toTiles(posf.y - siz.y);
-		int xl = map->toTiles(pos.x - cen.x + N);
-		int xr = map->toTiles(pos.x + csiz.x - N);
+		int yo = map->toTiles(pos.y - size.y); // usamos la y superior del sprite
+		int yn = map->toTiles(posf.y - size.y);
+		int xl = map->toTiles(pos.x - center.x + N);
+		int xr = map->toTiles(pos.x + centerFromRight.x - N);
 		for (int y = yo; y >= yn; y--)
 		{
 			for (int x = xl; x <= xr; x++)
 			{
 				if (map->isSolid(x, y))
 				{
-					posf.y = map->Top(y) + siz.y;
+					posf.y = map->Top(y) + size.y;
 					vel.y = 0;
 					jumpTimeLeft = 0;
 					goto vert_exit;
@@ -331,8 +335,8 @@ horz_exit:
 	{
 		int yo = map->toTiles(pos.y); // usamos la y inferior del sprite
 		int yn = map->toTiles(posf.y);
-		int xl = map->toTiles(pos.x - cen.x + N);
-		int xr = map->toTiles(pos.x + csiz.x - N);
+		int xl = map->toTiles(pos.x - center.x + N);
+		int xr = map->toTiles(pos.x + centerFromRight.x - N);
 		for (int y = yo; y <= yn; y++)
 		{
 			for (int x = xl; x <= xr; x++)
@@ -359,13 +363,13 @@ vert_exit:
 	bool isTurning = false;
 	if (crouched)
 	{
-		siz.y = 22;
+		size = crouched_size;
 		animation.Ensure(MARIO_CROUCH);
 	}
 	else
 	{
 
-		siz.y = 32;
+		size = standing_size;
 		if (grounded)
 		{
 			if (Keyboard::IsKeyPressed(GameKeys::LEFT) && !Keyboard::IsKeyPressed(GameKeys::RIGHT))

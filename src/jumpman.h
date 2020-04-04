@@ -20,20 +20,15 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     }
 
     Bounds bounds() const {
-        return Bounds(pos, siz, vec(siz.x/2, siz.y));
+        return Bounds(pos, size, vec(size.x/2, size.y));
     }
-    vec center() const {
-        return pos + vec(0, -siz.y/2.f);
-    }
-
     void takeDamage(vec pos);
     bool isInvencible() const { return invencibleTimer > 0; }
     bool isHit() const { return invencibleTimer > 0; }
 
     Animation animation;
 
-    vec siz;
-    vec cen;
+    vec size;
     
     enum { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
 

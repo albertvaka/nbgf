@@ -61,7 +61,7 @@ void Bat::Update(float dt)
 			}
 		}
 		else {
-			if (pos.DistanceSq(JumpMan::instance()->center()) < (awake_player_distance * awake_player_distance) || awakened) {
+			if (pos.DistanceSq(JumpMan::instance()->bounds().Center()) < (awake_player_distance * awake_player_distance) || awakened) {
 				anim.Ensure(BAT_AWAKE);
 				anim.Update(Random::roll(0, anim.GetCurrentAnimDuration()/2)); // Start flying at different time intervals
 				anim.loopable = false;
@@ -116,7 +116,7 @@ void Bat::Update(float dt)
 		if (steering.avoidingTileMap) {
 			state = State::FLYING;
 		} else {
-			vel = steering.Seek(jumpman->center());
+			vel = steering.Seek(jumpman->bounds().Center());
 		}
 
 		vel = vel.Normalized() * max_speed;
