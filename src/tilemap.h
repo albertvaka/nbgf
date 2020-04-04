@@ -25,7 +25,7 @@ private:
 	static const Value FIRST_SOLID = SOLID_TRANSPARENT;
 	static const Value FIRST_BREAKABLE = BREAKABLE;
 public:
-	bool isTransparent() {
+	bool isTransparent() const {
 		return value < FIRST_NON_TRANSPARENT;
 	}
 
@@ -53,7 +53,7 @@ private:
 
 struct TileMap : SingleInstance<TileMap>
 {
-	TileMap(sf::Vector2i _sizes)
+	TileMap(const sf::Vector2i& _sizes)
 		: sizes(_sizes)
 		, tiles(new Tile[_sizes.x * _sizes.y]{})
 	{
@@ -72,38 +72,44 @@ struct TileMap : SingleInstance<TileMap>
 		tiles[x * sizes.y + y] = col;
 	}
 
-	void setTile(sf::Vector2i pos, Tile tile) { return setTile(pos.x, pos.y, tile); }
-	Tile getTile(sf::Vector2i pos) const { return getTile(pos.x, pos.y); }
+	void setTile(const sf::Vector2i& pos, Tile tile) { return setTile(pos.x, pos.y, tile); }
+	Tile getTile(const sf::Vector2i& pos) const { return getTile(pos.x, pos.y); }
 
 	Tile getTile(int x, int y) const {
 		if (!inBounds(x, y)) return Tile::SOLID;
 		return getTileUnsafe(x,y);
 	}
 
-	bool isSolid(sf::Vector2i pos) const { return isSolid(pos.x, pos.y); }
+	bool isSolid(const sf::Vector2i& pos) const { return isSolid(pos.x, pos.y); }
 	bool isSolid(int x, int y) const { return getTile(x, y).isSolid(); }
 
 	Tile getTileUnsafe(int x, int y) const { return tiles[x * sizes.y + y]; }
 
-	sf::Vector2i toTiles(vec pos) const { return toTiles(pos.x, pos.y); }
-	sf::Vector2i toTiles(float x, float y) const { return sf::Vector2i(toTiles(x), toTiles(y)); }
-	int toTiles(float x) const { return Mates::fastfloor(x / Tile::size); } // floor could be just a cast to int if we know we will never get < 0
 
-	float Top(int y) const { return float(y + 1) * Tile::size; }
-	float Bottom(int y) const { return float(y) * Tile::size; }
-	float Left(int x) const { return float(x) * Tile::size;  }
-	float Right(int x) const { return float(x + 1) * Tile::size; }
+	// Coordinate conversion functions
 
-	Bounds getTileBounds(int x, int y) const {
+	static sf::Vector2i toTiles(const vec& pos) { return toTiles(pos.x, pos.y); }
+	static sf::Vector2i toTiles(float x, float y) { return sf::Vector2i(toTiles(x), toTiles(y)); }
+	static int toTiles(float x) { return Mates::fastfloor(x / Tile::size); } // floor could be just a cast to int if we know we will never get < 0
+
+	static float Top(int y) { return float(y + 1) * Tile::size; }
+	static float Bottom(int y) { return float(y) * Tile::size; }
+	static float Left(int x) { return float(x) * Tile::size;  }
+	static float Right(int x) { return float(x + 1) * Tile::size; }
+
+	static Bounds getTileBounds(int x, int y) {
 		return Bounds(x * Tile::size, y * Tile::size, Tile::size, Tile::size);
 	}
 
 	sf::Vector2i sizes;
 	Tile* tiles;
 
-	bool isSolidInWorldCoordinates(vec p) const { return isSolid(toTiles(p)); }
+
+	// Set/Get functions in world coordinates
+
+	bool isSolidInWorldCoordinates(const vec& p) const { return isSolid(toTiles(p)); }
 	bool isSolidInWorldCoordinates(float x, float y) const { return isSolid(toTiles(x,y)); }
-	Tile getTilenWorldCoordinates(vec p) const { return getTile(toTiles(p)); }
+	Tile getTileInWorldCoordinates(const vec& p) const { return getTile(toTiles(p)); }
 	Tile getTileInWorldCoordinates(float x, float y) const { return getTile(toTiles(x, y)); }
-	void setTileInWorldCoordinates(vec p, Tile tile) { setTile(toTiles(p), tile); }
+	void setTileInWorldCoordinates(const vec& p, Tile tile) { setTile(toTiles(p), tile); }
 };
