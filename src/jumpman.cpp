@@ -42,6 +42,11 @@ const vec standing_size = vec(16, 32);
 const vec crouched_size = vec(16, 22);
 const vec center = vec(8, 16);
 
+Bounds JumpMan::maxBounds() const
+{
+	return Bounds(pos, standing_size, vec(standing_size.x / 2, standing_size.y));
+}
+
 JumpMan::JumpMan()
 {
 	polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
