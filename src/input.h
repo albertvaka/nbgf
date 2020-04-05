@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "magic_enum.h"
@@ -161,10 +160,6 @@ namespace Window
 
 struct Keyboard
 {
-
-	static KeyStates key_states[magic_enum::enum_count<GameKeys>()];
-	static float key_times[magic_enum::enum_count<GameKeys>()];
-
 	static bool IsKeyPressed(GameKeys k) {
 		return (key_states[k] == PRESSED || key_states[k] == JUST_PRESSED);
 	}
@@ -199,7 +194,11 @@ struct Keyboard
 		key_times[k] += 1000.f;
 	}
 
+
 	static void _UpdateInputState(float dt);
+
+	static KeyStates key_states[magic_enum::enum_count<GameKeys>()];
+	static float key_times[magic_enum::enum_count<GameKeys>()];
 };
 
 //CAMERA MANAGEMENT
@@ -263,10 +262,6 @@ namespace Camera
 //============
 struct Mouse
 {
-	static KeyStates button_states[sf::Mouse::ButtonCount];
-
-	static void _UpdateInputState();
-
 	static bool IsPressed(sf::Mouse::Button b = sf::Mouse::Left)
 	{
 		if (!Window::WindowHasFocus()) return false;
@@ -295,17 +290,22 @@ struct Mouse
 		return (button_states[b] == JUST_RELEASED);
 	}
 
+	static float GetScrollWheelMovement() { return scrollWheel; }
 
 	static sf::Vector2i GetPositionInWindow();
 
 	static vec GetPositionInWorld();
 
+
+	static void _UpdateInputState();
+
+	static float scrollWheel;
+	static KeyStates button_states[sf::Mouse::ButtonCount];
+	
 };
 
 namespace Input
 {
-
 	void Init(sf::RenderWindow& renderwindow);
 	void Update(sf::Time dt);
-
 }

@@ -13,6 +13,7 @@ GamePad::Trigger::RightTrigger GamePad::Trigger::Right;
 
 KeyStates GamePad::button_states[GamePad::JoystickCountMax][sf::Joystick::ButtonCount];
 KeyStates Mouse::button_states[sf::Mouse::ButtonCount];
+float Mouse::scrollWheel;
 KeyStates Keyboard::key_states[magic_enum::enum_count<GameKeys>()];
 float Keyboard::key_times[magic_enum::enum_count<GameKeys>()];
 sf::Keyboard::Key key_map[magic_enum::enum_count<GameKeys>()];
@@ -361,6 +362,9 @@ static void _ProcessWindowEvents()
         case sf::Event::Closed:
             Window::window->close();
             break;
+        case sf::Event::MouseWheelScrolled:
+            Mouse::scrollWheel += sfmlevent.mouseWheelScroll.delta;
+            break;
         case sf::Event::Resized: //To disable sfml's automatic scaling
         {
             // GameView: scale from center
@@ -388,6 +392,7 @@ namespace Input
     void Update(sf::Time deltaTime)
 	{
         ImGui::SFML::Update(*Window::window, deltaTime);
+        Mouse::scrollWheel = 0.f;
         _ProcessWindowEvents();
         ImGuiIO& io = ImGui::GetIO();
         if (!io.WantCaptureKeyboard) {
