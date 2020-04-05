@@ -1,11 +1,10 @@
-#pragma once
-
 #include "spawningtile.h"
 
 #include "jumpman.h"
 #include "assets.h"
 #include "collider.h"
 #include "bat.h"
+#include "debug.h"
 
 const float respawnAnimTime = 0.2f;
 
@@ -17,8 +16,8 @@ bool SpawningTile::CanSpawn() const {
 	return true;
 }
 
-void SpawningTile::Draw(sf::RenderTarget& window, bool debugDraw) const {
-	if (debugDraw) {
+void SpawningTile::Draw(sf::RenderTarget& window) const {
+	if (Debug::Draw) {
 		JumpMan::instance()->maxBounds().Draw(window, sf::Color::Blue);
 		this->bounds().Draw(window, sf::Color::Black);
 	}
@@ -37,13 +36,13 @@ bool SpawningTile::Update(float dt) { //Returns true if it should be destroyed
 	time -= dt;
 	if (time < 0.f) {
 		if (spawning) {
-			TileMap::instance()->setTileInWorldCoordinates(pos, tile);
+			TileMap::instance()->setTile(TileMap::toTiles(pos), tile);
 			return true;
 		}
 		else if (CanSpawn()) {
 			spawning = true;
 			time = respawnAnimTime;
-			TileMap::instance()->setTileInWorldCoordinates(pos, Tile::SOLID_TRANSPARENT);
+			TileMap::instance()->setTile(TileMap::toTiles(pos), Tile::SOLID_TRANSPARENT);
 		}
 	}
 	return false;

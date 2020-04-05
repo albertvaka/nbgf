@@ -14,7 +14,7 @@ struct SpawningTile : BoxEntity {
 		, tile(t)
 	{}
 
-	void Draw(sf::RenderTarget& window, bool debugDraw) const;
+	void Draw(sf::RenderTarget& window) const;
 
 	bool Update(float dt); //Returns true if it should be destroyed
 

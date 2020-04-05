@@ -22,8 +22,8 @@ void AwakeNearbyBats(vec pos) {
 
 Bat::Bat(vec pos, bool aggresive)
 	: SteeringEntity(pos + vec(0.f, 6.f), 8.0f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
-	, state(State::SIESTA)
 	, steering(this)
+	, state(State::SIESTA)
 	, aggresive(aggresive)
 {
 	anim.Ensure(BAT_SIESTA);
@@ -87,7 +87,7 @@ void Bat::Update(float dt)
 		pos += vel * dt;
 
 		// Flip anim
-		if (oldVel.x < 0 && vel.x > 0 || oldVel.x > 0 && vel.x < 0) {
+		if ((oldVel.x < 0 && vel.x > 0) || (oldVel.x > 0 && vel.x < 0)) {
 			anim.Ensure(BAT_FLIP);
 			anim.loopable = false;
 		}

@@ -4,12 +4,17 @@
 #include "bullet.h"
 #include "assets.h"
 #include "simplexnoise.h"
+#include "debug.h"
 
 const float batClusterSize = 22.f;
 const float sceneZoom = 3.f;
 const float chanceAngryBat = 0.2f;
 
 extern sf::Clock mainClock;
+
+#ifdef _DEBUG
+static int currentPlacingTile = 1;
+#endif
 
 JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 20))
@@ -70,17 +75,46 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	std::cout << "seed=" << randomSeed << ", bats=" << Bat::getAll().size() << std::endl;
+	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::getAll().size();
 
 	sf::Vector2i pos = map.toTiles(player.pos);
 	map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID);
 	map.setTile(pos.x,     pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x - 2, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x - 4, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x - 5, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x - 6, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x + 1, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x + 2, pos.y + 1, Tile::SOLID);
+	map.setTile(pos.x + 3, pos.y + 1, Tile::SOLID);
 	map.setTile(pos.x - 1, pos.y,     Tile::NONE);
 	map.setTile(pos.x,     pos.y,     Tile::NONE);
 	map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
 	map.setTile(pos.x,     pos.y - 1, Tile::NONE);
 	map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
 	map.setTile(pos.x,     pos.y - 2, Tile::NONE);
+	map.setTile(pos.x + 1, pos.y,	  Tile::RIGHT_SLOPE);
+	map.setTile(pos.x + 2, pos.y,     Tile::SOLID);
+	map.setTile(pos.x + 3, pos.y - 1, Tile::SOLID);
+	map.setTile(pos.x + 3, pos.y,     Tile::SOLID);
+	map.setTile(pos.x + 2, pos.y - 1, Tile::RIGHT_SLOPE);
+	map.setTile(pos.x + 3, pos.y - 2, Tile::RIGHT_SLOPE);
+	map.setTile(pos.x + 4, pos.y - 2, Tile::SOLID);
+	map.setTile(pos.x + 5, pos.y - 2, Tile::SOLID);
+	map.setTile(pos.x - 4, pos.y,     Tile::LEFT_SLOPE);
+	map.setTile(pos.x - 5, pos.y,     Tile::SOLID);
+	map.setTile(pos.x - 5, pos.y - 1, Tile::LEFT_SLOPE);
+	map.setTile(pos.x - 6, pos.y - 1, Tile::SOLID);
+	map.setTile(pos.x - 6, pos.y,     Tile::SOLID);
+	map.setTile(pos.x - 6, pos.y - 2, Tile::LEFT_SLOPE);
+	map.setTile(pos.x - 7, pos.y - 2, Tile::SOLID);
+	map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID);
+	map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID);
+	map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID);
+	map.setTile(pos.x - 10, pos.y - 3, Tile::LEFT_SLOPE);
+
 
 }
 
@@ -188,17 +222,26 @@ void JumpScene::Update(float dt) {
 	EntS<Bat>::deleteNotAlive();
 
 #ifdef _DEBUG
-	bool left = Mouse::IsPressed(sf::Mouse::Button::Left);
-	bool middle = Mouse::IsPressed(sf::Mouse::Button::Middle);
-	bool right = Mouse::IsPressed(sf::Mouse::Button::Right);
-	if (Keyboard::IsKeyPressed(DEBUG_EDIT_MODE) && (left || middle || right)) {
-		Tile what_to_set = left? Tile::SOLID : middle? Tile::BREAKABLE : Tile::NONE;
-		vec pos = Mouse::GetPositionInWorld();
-		sf::Vector2i tile = map.toTiles(pos);
-		if (what_to_set == Tile::NONE) {
-			map.setTile(tile.x, tile.y, Tile::NONE);
-		} else if (map.getTile(tile) != what_to_set && map.getTile(tile) != Tile::SOLID_TRANSPARENT) {
-			destroyedTiles.toSpawn.emplace_back(tile.x, tile.y, what_to_set, -1.f);
+	if (Debug::Draw) {
+		if (Mouse::GetScrollWheelMovement() < 0.f) {
+			currentPlacingTile -= 1;
+			if (currentPlacingTile < 1) currentPlacingTile = magic_enum::enum_count<Tile::Value>() - 1;
+		} else if (Mouse::GetScrollWheelMovement() > 0.f) {
+			currentPlacingTile += 1;
+			if (currentPlacingTile >= magic_enum::enum_count<Tile::Value>()) currentPlacingTile = 1;
+		}
+		bool left = Mouse::IsPressed(sf::Mouse::Button::Left);
+		bool right = Mouse::IsPressed(sf::Mouse::Button::Right);
+		if (left || right) {
+			Tile what_to_set = left ? Tile::Value(currentPlacingTile) : Tile::NONE;
+			vec pos = Mouse::GetPositionInWorld();
+			sf::Vector2i tile = map.toTiles(pos);
+			if (what_to_set == Tile::NONE) {
+				map.setTile(tile.x, tile.y, Tile::NONE);
+			}
+			else if (map.getTile(tile) != what_to_set && map.getTile(tile) != Tile::SOLID_TRANSPARENT) {
+				destroyedTiles.toSpawn.emplace_back(tile.x, tile.y, what_to_set, -1.f);
+			}
 		}
 	}
 #endif
@@ -209,22 +252,22 @@ void JumpScene::Update(float dt) {
 	lava.Update(dt);
 }
 
-void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
+void JumpScene::Draw(sf::RenderTarget& window)
 {
 	window.clear(sf::Color(50, 25, 25));
 
-	if (debugDraw) {
+	if (Debug::Draw) {
 		Simplex::DebugDraw(window, Tile::size, [this](int x, int y) {
 			return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
 		});
 	}
 
 	map.Draw(window);
-	destroyedTiles.Draw(window, debugDraw);
+	destroyedTiles.Draw(window);
 
 	for (Bat* e : EntS<Bat>::getAll()) {
 		e->Draw(window);
-		if (debugDraw && Camera::GetCameraBounds().IsInside(e->pos)) {
+		if (Debug::Draw && Camera::GetCameraBounds().IsInside(e->pos)) {
 			e->drawBounds(window);
 			e->DrawSenseArea(window);
 		}
@@ -235,7 +278,7 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 
 	for (Bullet* e : EntS<Bullet>::getAll()) {
 		e->Draw(window);
-		if (debugDraw) {
+		if (Debug::Draw) {
 			e->drawBounds(window);
 		}
 	}
@@ -243,9 +286,9 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 	player.Draw(window);
 
 
-	lava.Draw(window, debugDraw);
+	lava.Draw(window);
 
-	if (debugDraw) {
+	if (Debug::Draw) {
 		player.bounds().Draw(window);
 		player.pos.Debuggerino(sf::Color::White);
 		player.bounds().Center().Debuggerino(sf::Color::Magenta);
@@ -253,11 +296,21 @@ void JumpScene::Draw(sf::RenderTarget& window, bool debugDraw)
 
 
 
-	ImGui::Begin(GameData::GAME_TITLE.c_str());
+	ImGui::Begin("jumpman scene");
 	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
 	sf::Vector2i t = map.toTiles(Mouse::GetPositionInWorld());
 	ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
 	ImGui::End();
+
+#ifdef _DEBUG
+	if (Debug::Draw) {
+		Assets::marioSprite.setTextureRect(Tile::tileToTextureRect[currentPlacingTile]);
+		vec pos = Camera::GetCameraBounds().TopLeft() + vec(0, 16);
+		Bounds(pos, vec(Tile::size, Tile::size)).Draw(window, sf::Color::Black, sf::Color::Magenta);
+		Assets::marioSprite.setPosition(pos);
+		window.draw(Assets::marioSprite);
+	}
+#endif
 
 	//player.polvito.DrawImGUI("Polvito");
 }

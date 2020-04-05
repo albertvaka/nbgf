@@ -2,12 +2,7 @@
 
 #include "steering_behavior.h"
 
-
-#include <iostream>
-#include <cassert>
-
 #include "steering_entity.h"
-
 #include "tilemap.h"
 
 // TODO: pass these as params to Wander

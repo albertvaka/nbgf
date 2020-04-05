@@ -1,8 +1,5 @@
 #pragma once
 
-#include <set>
-#include <cassert>
-#include <iostream>
 #include <vector>
 #include <functional>
 

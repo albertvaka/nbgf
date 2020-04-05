@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "input.h"
+#include "debug.h"
 
 const float waveAmplitude = 1.f;
 const float chunkSize = 5.4f;
@@ -44,12 +45,12 @@ void  Lava::Update(float dt) {
 	lavaPartSys.UpdateParticles(dt);
 }
 
-void Lava::Draw(sf::RenderTarget& window, bool debugDraw) {
+void Lava::Draw(sf::RenderTarget& window) {
 
 	lavaPartSys.Draw(window);
 	//lavaPartSys.DrawImGUI("LavaPartSys");
 
-	if (debugDraw) {
+	if (Debug::Draw) {
 		return;
 	}
 

@@ -12,10 +12,10 @@ struct DestroyedTiles
 	void Destroy(int x, int y);
 	void Update(float dt);
 
-	void Draw(sf::RenderTarget& window, bool debugDraw) {
+	void Draw(sf::RenderTarget& window) {
 		destroyedParticles.Draw(window);
 		for (const SpawningTile& t : toSpawn) {
-			t.Draw(window, debugDraw);
+			t.Draw(window);
 		}
 		//destroyedParticles.DrawImGUI();
 	}

@@ -7,7 +7,6 @@
 #include "partsys.h"
 #include "animation.h"
 #include "singleinstance.h"
-#include <iostream>
 
 struct JumpMan : Entity, SingleInstance<JumpMan>
 {
@@ -25,8 +24,8 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     Bounds maxBounds() const;
 
     void takeDamage(vec pos);
-    bool isInvencible() const { return invencibleTimer > 0; }
-    bool isHit() const { return invencibleTimer > 0; }
+    bool isInvencible() const { return invencibleTimer > 0.f; }
+    bool isHit() const { return invencibleTimer > 0.1f; }
 
     Animation animation;
 
@@ -36,7 +35,8 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
 
     short onWall = ONWALL_NO;
     float jumpTimeLeft = 0.0f;
-    
+    float crouchedTime = 0.0f;
+
     float bfgAngle;
     vec bfgPos;
     float bfgCooldownTimer = 0.f;

@@ -3,8 +3,6 @@
 #include "imgui.h"
 #include "rand.h"
 
-#include <iostream>
-
 void PartSys::Spawn(float dt) {
 	time += dt;
 	while (time > 0) {

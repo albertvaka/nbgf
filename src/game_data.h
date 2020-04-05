@@ -1,8 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-
 const int TILE_SIZE = 16;
 
 namespace GameData
@@ -19,6 +16,5 @@ namespace GameData
 	const int WINDOW_WIDTH = 1472;
 	const int WINDOW_HEIGHT = 1000;
 #endif
-	const std::string GAME_TITLE = "GGJ 2020";
 }
 

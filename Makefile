@@ -15,7 +15,7 @@ PROFILE	= 0
 SHELL = bash
 CXX	= g++
 
-CFLAGS	= -pipe -I imgui -I imgui_sfml -std=c++17 -Wall -Wno-unused-parameter $(PROFILEFLAGS) $(DEBUGFLAGS) -O$(strip $(OPTIM))
+CFLAGS	= -pipe -I imgui -I imgui_sfml -std=c++17 -Wall -Wno-unused-parameter -Wno-reorder $(PROFILEFLAGS) $(DEBUGFLAGS) -O$(strip $(OPTIM))
 LDFLAGS	= -pipe -std=c++17 -lsfml-graphics -lsfml-system -lsfml-audio -lsfml-window $(OPENGLFLAGS) $(PROFILEFLAGS) $(DEBUGFLAGS) -O$(strip $(OPTIM))
 
 ifeq ($(shell uname),Linux)

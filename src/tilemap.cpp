@@ -4,9 +4,14 @@
 #include "input.h"
 #include "assets.h"
 
+const vec Tile::sizevec = vec(size, size);
+
 const sf::IntRect Tile::tileToTextureRect[] = {
 	{},	//NONE
+	{8 * 16, 2 * 16, 16, 16}, // ONE-WAY
 	{},	//SOLID_TRANSPARENT
+	{5 * 16, 2 * 16, 16, 16}, // RIGHT_SLOPE
+	{6 * 16, 2 * 16, 16, 16}, // LEFT_SLOPE
 	{3 * 16, 2 * 16, 16, 16}, // SOLID
 	{4 * 16, 2 * 16, 16, 16}, // BREAKABLE
 };
@@ -14,7 +19,7 @@ const sf::IntRect Tile::tileToTextureRect[] = {
 void TileMap::Randomize(int seed)
 {
 	srand(seed);
-	for (int x = 0; x < sizes.x; x++) {
+	for (int x = 16; x < sizes.x; x++) {
 		for (int y = 0; y < sizes.y; y++) {
 			Tile t = Tile::NONE;
 			if (y != sizes.y-1 && (rand() % 32) > 29) {
@@ -96,7 +101,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 		for (int y = top; y < bottom; y++)
 		{
 			Tile t = getTileUnsafe(x, y);
-			if (t.isTransparent()) {
+			if (t.isInvisible()) {
 				continue;
 			}
 			sprite.setTextureRect(t.textureRect());

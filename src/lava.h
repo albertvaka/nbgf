@@ -10,7 +10,7 @@ struct Lava
 
 	Lava(float yBottom);
 	void Update(float dt);
-	void Draw(sf::RenderTarget& window, bool debugDraw);
+	void Draw(sf::RenderTarget& window);
 
 	void Plof(float posX) {
 		lavaPartSys.pos.x = posX;

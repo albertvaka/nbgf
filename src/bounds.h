@@ -2,7 +2,6 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <iostream>
 
 #include <SFML/Graphics.hpp>
 
@@ -137,7 +136,7 @@ struct CircleBounds
     }
 
     float DistanceSq(const Bounds& a) const { return a.DistanceSq(*this); };
-    float Distance(const Bounds& a) const { return sqrt(Distance(a)); }
+    float Distance(const Bounds& a) const { return a.Distance(*this); }
     
     float DistanceSq(const CircleBounds& a) const {
         return a.pos.DistanceSq(this->pos) - (a.radius + this->radius) * (a.radius + this->radius);
@@ -192,7 +191,6 @@ inline float Bounds::Distance(const CircleBounds& a) const
 
 inline std::ostream& operator<<(std::ostream& os, const Bounds& rhs)
 {
-  os << " " << rhs.left << " " << rhs.top << " " << rhs.width << " " << rhs.height;
-
-  return os;
+    os << " " << rhs.left << " " << rhs.top << " " << rhs.width << " " << rhs.height;
+    return os;
 }

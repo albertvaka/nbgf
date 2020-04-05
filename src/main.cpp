@@ -5,17 +5,18 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
-#include <iostream>
 #include <string>
 
 #include "game_data.h"
 #include "scene_manager.h"
 #include "input.h"
 #include "mates.h"
+#include "assets.h"
+#include "debug.h"
+
+#include "main_scene.h"
 #include "intro_scene.h"
 #include "scene_jumpman.h"
-#include "main_scene.h"
-#include "assets.h"
 
 Scene* SceneManager::currentScene = nullptr;
 sf::Clock mainClock;
@@ -25,7 +26,7 @@ sf::Clock mainClock;
 int main()
 {
 
-	sf::RenderWindow window(sf::VideoMode(GameData::WINDOW_WIDTH, GameData::WINDOW_HEIGHT), GameData::GAME_TITLE);
+	sf::RenderWindow window(sf::VideoMode(GameData::WINDOW_WIDTH, GameData::WINDOW_HEIGHT), "GGJ 2020");
 
 	window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
@@ -64,17 +65,18 @@ int main()
 		Input::Update(time);
 
 #ifdef _DEBUG
-		static bool debugDraw = false;
-		if (Keyboard::IsKeyJustPressed(DEBUG_BOUNDS)) {
-			debugDraw = !debugDraw;
+		if (Keyboard::IsKeyJustPressed(DEBUG_MODE)) {
+			Debug::Draw = !Debug::Draw;
 		}
+#endif
 
+#ifdef _DEBUG
 		static bool frameByFrame = false;
 		if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
 			frameByFrame = !frameByFrame;
 		}
 	
-		if (frameByFrame) {
+		if (frameByFrame && Debug::Draw) {
 			Camera::MoveCameraWithArrows(100.f, time.asSeconds());
 		}
 
@@ -94,11 +96,12 @@ int main()
 		}
 
 
+		currentScene->Draw(window);
+
 #ifdef _DEBUG
-		currentScene->Draw(window, debugDraw);
-		if (debugDraw) DrawDebugVecs(&window);
-#else
-		currentScene->Draw(window, false);
+		if (Debug::Draw) {
+			DrawDebugVecs(&window);
+		}
 #endif
 
 		Camera::StartGuiDraw();

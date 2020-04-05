@@ -103,7 +103,7 @@ struct MainScene : Scene {
 	void DrawImgui()
 	{
 	#ifdef _DEBUG
-		ImGui::Begin(GameData::GAME_TITLE.c_str());
+		ImGui::Begin("GGJ 2020");
 
 		ImGui::Text(EntS<Player>::getAll()[0]->pos.ToString().c_str());
 		if (ImGui::Button("SPAWN CADAVER"))
@@ -133,7 +133,7 @@ struct MainScene : Scene {
 	#endif
 	}
 
-	void Draw(sf::RenderTarget& window, bool debug) override
+	void Draw(sf::RenderTarget& window) override
 	{
 		sf::Sprite& sprite = Assets::hospitalSprite;
 

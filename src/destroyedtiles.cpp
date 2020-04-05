@@ -1,5 +1,3 @@
-#pragma once
-
 #include "destroyedtiles.h"
 
 #include "magic_enum.h"

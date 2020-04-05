@@ -7,26 +7,45 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
 
-
 class Tile
 {
 public:
 	static const int size = 16;
+	static const vec sizevec;
 
 	enum Value : unsigned char
 	{
 		NONE = 0,
+		ONE_WAY,
 		SOLID_TRANSPARENT,
+		RIGHT_SLOPE,
+		LEFT_SLOPE,
 		SOLID,
 		BREAKABLE,
 	};
 private:
-	static const Value FIRST_NON_TRANSPARENT = SOLID;
 	static const Value FIRST_SOLID = SOLID_TRANSPARENT;
 	static const Value FIRST_BREAKABLE = BREAKABLE;
 public:
-	bool isTransparent() const {
-		return value < FIRST_NON_TRANSPARENT;
+
+	bool isOneWay() const {
+		return value == ONE_WAY;
+	}
+
+	bool isSlope() const {
+		return isLeftSlope() || isRightSlope();
+	}
+
+	bool isLeftSlope() const {
+		return value == LEFT_SLOPE;
+	}
+
+	bool isRightSlope() const {
+		return value == RIGHT_SLOPE;
+	}
+
+	bool isInvisible() const {
+		return value == NONE || value == SOLID_TRANSPARENT;
 	}
 
 	bool isSolid() const {
@@ -92,6 +111,10 @@ struct TileMap : SingleInstance<TileMap>
 	static sf::Vector2i toTiles(float x, float y) { return sf::Vector2i(toTiles(x), toTiles(y)); }
 	static int toTiles(float x) { return Mates::fastfloor(x / Tile::size); } // floor could be just a cast to int if we know we will never get < 0
 
+	static vec alignToTiles(float x, float y) { return toTiles(x, y) * Tile::size; }
+	static vec offsetInTile(float x, float y) { return vec(x,y) - alignToTiles(x,y); }
+	static float alignToTiles(float x) { return toTiles(x) * Tile::size; }
+
 	static float Top(int y) { return float(y + 1) * Tile::size; }
 	static float Bottom(int y) { return float(y) * Tile::size; }
 	static float Left(int x) { return float(x) * Tile::size;  }
@@ -104,12 +127,17 @@ struct TileMap : SingleInstance<TileMap>
 	sf::Vector2i sizes;
 	Tile* tiles;
 
-
-	// Set/Get functions in world coordinates
-
-	bool isSolidInWorldCoordinates(const vec& p) const { return isSolid(toTiles(p)); }
-	bool isSolidInWorldCoordinates(float x, float y) const { return isSolid(toTiles(x,y)); }
-	Tile getTileInWorldCoordinates(const vec& p) const { return getTile(toTiles(p)); }
-	Tile getTileInWorldCoordinates(float x, float y) const { return getTile(toTiles(x, y)); }
-	void setTileInWorldCoordinates(const vec& p, Tile tile) { setTile(toTiles(p), tile); }
+	bool isPosOnSlope(const vec& v) const { return isPosOnSlope(v.x,v.y);  }
+	bool isPosOnSlope(float x, float y) const {
+		Tile tile = getTile(toTiles(x, y));
+		if (tile.isRightSlope()) {
+			vec offset = offsetInTile(x, y);
+			return offset.y >= (Tile::size - offset.x) + 0.1f;
+		}
+		if (tile.isLeftSlope()) {
+			vec offset = offsetInTile(x, y);
+			return offset.y >= offset.x + 0.1f;
+		}
+		return false;
+	}
 };

@@ -4,6 +4,9 @@
 #include "input.h"
 #include "bullet.h"
 #include "assets.h"
+#include "debug.h"
+
+extern sf::Clock mainClock;
 
 // accel
 const float run_acc = 1400;
@@ -23,7 +26,9 @@ const float fri_acc_wall_down = 450;
 const float vel_jump = -150;
 const float vel_walljump = 90;
 const float jump_time = 0.35f;
+const float timeCrouchedToJumpDownOneWayTile = 0.2f;
 
+// limits
 const vec vel_max(220, 200);
 
 // bfg
@@ -35,16 +40,30 @@ const float bfgPushBack = 150.f;
 const vec vel_hit(180.f, -150.f);
 const float invencibleTimeAfterHit = 0.5f;
 
-extern sf::Clock mainClock;
-
 // Sprite
 const vec standing_size = vec(16, 32);
 const vec crouched_size = vec(16, 22);
 const vec center = vec(8, 16);
 
-Bounds JumpMan::maxBounds() const
-{
-	return Bounds(pos, standing_size, vec(standing_size.x / 2, standing_size.y));
+
+inline vec posOnRightSlope(vec pos) {
+	vec rounded = (TileMap::toTiles(pos) * Tile::size);
+	vec diff = pos - rounded;
+	float targetY = (Tile::size - diff.x);
+	if (targetY < diff.y) {
+		pos.y = rounded.y + targetY;
+	}
+	return pos;
+}
+
+inline vec posOnLeftSlope(vec pos) {
+	vec rounded = (TileMap::toTiles(pos) * Tile::size);
+	vec diff = pos - rounded;
+	float targetY = diff.x;
+	if (targetY < diff.y) {
+		pos.y = rounded.y + targetY;
+	}
+	return pos;
 }
 
 JumpMan::JumpMan()
@@ -52,74 +71,58 @@ JumpMan::JumpMan()
 	polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
 
 	animation.Ensure(MARIO_IDLE);
-	sf::Rect rect = animation.CurrentFrame();
 	size = standing_size;
 	InitPolvito();
-}
-
-void JumpMan::Draw(sf::RenderTarget& window) {
-
-	polvito.Draw(window);
-	
-	sf::Sprite& spr = Assets::marioSprite;
-	sf::Shader* shader = nullptr;
-	if (isHit() > 0.f) {
-		shader = &Assets::tintShader;
-		shader->setUniform("flashColor", sf::Glsl::Vec4(1, 0, 0, 0.7));
-	}
-
-	spr.setTextureRect(animation.CurrentFrame());
-	spr.setOrigin(center.x, size.y);
-	spr.setPosition(pos.x, pos.y);
-	if (lookingLeft) {
-		spr.setScale(-1.f, 1.f);
-	}
-	else {
-		spr.setScale(1.f, 1.f);
-	}
-	window.draw(spr,shader);
-
-	//BFG
-	if (bfgCooldownTimer > (bfgCooldown-bfgCooldown/4.f)) {
-		bool blink = ((mainClock.getElapsedTime().asMilliseconds() / 10) % 2);
-		spr.setTextureRect(sf::IntRect(blink ? 32 * 3: 32 * 2, 3 * 16, 2 * 16, 16));
-	}
-	else {
-		bool blink = ((mainClock.getElapsedTime().asMilliseconds() / 160) % 10) > 8;
-		spr.setTextureRect(sf::IntRect(blink ? 32 : 0, 3 * 16, 2 * 16, 16));
-	}
-	spr.setOrigin(10, 8);
-	float scale =  (0.333f + (Mates::MaxOf(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
-	spr.setPosition(bfgPos);
-	if (bfgAngle < 270 || bfgAngle  > 450) {
-		spr.setScale(scale, -scale);
-	} else {
-		spr.setScale(scale, scale);
-	}
-	spr.setRotation(bfgAngle);
-	window.draw(spr,shader);
-
-	//Restore everything
-	spr.setScale(1.f, 1.f);
-	spr.setOrigin(0.f, 0.f);
-	spr.setRotation(0.f);
 }
 
 void JumpMan::Update(float dt)
 {
 	TileMap* map = TileMap::instance();
 
-	float marginGrounded = 1.f; //in pixels
-	grounded = map->isSolidInWorldCoordinates(pos.x - center.x + 1.f, pos.y + marginGrounded) || map->isSolidInWorldCoordinates(pos.x + center.x - 1.f, pos.y + marginGrounded);
+	const float marginGrounded = 1.f; //in pixels
+	bool grounded = false;
+	Tile t;
+	vec leftFoot(pos.x - center.x + 1.f, pos.y + marginGrounded);
+	vec rightFoot(pos.x + center.x - 1.f, pos.y + marginGrounded);
+	vec middleFoot(pos.x, pos.y + marginGrounded);
+	t = map->getTile(TileMap::toTiles(leftFoot));
+	if (t.isSolid() && !t.isSlope()) {
+		grounded = true;
+		goto grounded_exit;
+	} 
+	if (t.isOneWay() && TileMap::alignToTiles(leftFoot.y) + 1.f > pos.y) {
+		grounded = true;
+		goto grounded_exit;
+	}
+	t = map->getTile(TileMap::toTiles(rightFoot));
+	if (t.isSolid() && !t.isSlope()) {
+		grounded = true;
+		goto grounded_exit;
+	}
+	if (t.isOneWay() && TileMap::alignToTiles(rightFoot.y) + 1.f > pos.y) {
+		grounded = true;
+		goto grounded_exit;
+	}
+	if (map->isPosOnSlope(middleFoot)) {
+		grounded = true;
+		goto grounded_exit;
+	}
+grounded_exit:
 
 	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
+	if (crouched) {
+		crouchedTime += dt;
+	}
+	else {
+		crouchedTime = 0.f;
+	}
 
 	//Si en el frame anterior estaba tocando el suelo, inicializando
 	//jumpTimeLeft a mas de 0 permite al jugador saltar durante ese rato
 	if (Keyboard::IsKeyJustPressed(GameKeys::UP, 0.15f) && (grounded || (onWall && !crouched)))
 	{
 		Keyboard::ConsumeJustPressed(GameKeys::UP);
-		//if (!Keyboard::IsKeyJustPressed(GameKeys::UP)) std::cout << "cheats" << std::endl;
+		//if (!Keyboard::IsKeyJustPressed(GameKeys::UP)) Debug::out << "cheats";
 		jumpTimeLeft = jump_time;
 		if (onWall && !grounded && !crouched) {
 			vel.x = vel_walljump * -1.0f * float(onWall);
@@ -127,7 +130,7 @@ void JumpMan::Update(float dt)
 			DoPolvitoWallJump();
 		}
 		else {
-			bool ceiling = map->isSolidInWorldCoordinates(pos.x - center.x + 1.f, pos.y - size.y - 1.f) || map->isSolidInWorldCoordinates(pos.x + center.x - 1.f, pos.y - size.y - 1.f);
+			bool ceiling = map->isSolid(TileMap::toTiles(pos.x - center.x + 1.f, pos.y - size.y - 1.f)) || map->isSolid(TileMap::toTiles(pos.x + center.x - 1.f, pos.y - size.y - 1.f));
 			if (!ceiling) {
 				DoPolvitoJump();
 				grounded = false;
@@ -229,42 +232,27 @@ void JumpMan::Update(float dt)
 
 	vel = vel + acc * dt;
 
-	//Hacemos clamp de las velocidades
+	//Clamp vel
 	if (vel.x > vel_max.x) vel.x = vel_max.x;
 	if (vel.x < -vel_max.x) vel.x = -vel_max.x;
 	if (vel.y > vel_max.y) vel.y = vel_max.y;
 	if (vel.y < -vel_max.y) vel.y = -vel_max.y;
 
-	//uniformly accelerated linear motion
 	vec posf = pos + vel * dt; //posicion final
-	//std::cout << abs(pos.x - posf.x) / dt << std::endl;
+	//Debug::out << abs(pos.x - posf.x) / dt;
 
-	//Obtenemos el vector direccion para saber hacia donde nos dirigimos
-
-	// El funcionamiento de las colisiones es el siguiente:
-	// Aun que tengamos una posicion continua del personaje tenemos posiciones discretas
-	// donde mirar si hay tiles que colisionan o no. El algoritmo va por pasos, primero
-	// abanzaremos en la coordenada Y, y luego en la X.
-	//
-	// Cuando abancemos en la Y, tendremos una Y_origen y una Y_destino, y
-	// ademas el personajes es posible que este ocupando un rango de varias X
-	// si es lo suficiente ancho o simplemente esta entre dos tiles, por tanto
-	// tambien tenemos unas X_izquierda y X_derecha.
-	// Ahora lo unico que hay que hacer es, para cada y que hay entre Y_origen
-	// e Y_destino, y para cada x entre X_izquierda y X_derecha miramos si en
-	// la posicion x,y del tilemap hay un tile colisionable. Si lo hay es que
-	// nuestro personaje se va a chochar. Lo aclamos a la posicion de la colision
-	// y le quitamos su velocidad Y. En caso de que estuviesemos cayendo
-	// significa que estaremos grounded, en caso de subir significia que estabamos
-	// saltando y que ya no podremos saltar mas.
-
-	vec centerFromRight = size - center;
 	vec direction = posf - pos;
-
 	const float E = 1;
+	vec centerFromRight = size - center;
+
+	Tile tileAtMyFeet = map->getTile(TileMap::toTiles(pos.x, pos.y - 1.f));
 
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
+		if (tileAtMyFeet.isLeftSlope()) {
+			goto horz_exit;
+		}
+
 		int xo = map->toTiles(pos.x - center.x);
 		int xn = map->toTiles(posf.x - center.x);
 		int yTop = map->toTiles(pos.y - size.y + E);
@@ -273,7 +261,8 @@ void JumpMan::Update(float dt)
 		{
 			for (int y = yTop; y <= yBottom; y++)
 			{
-				if (map->isSolid(x, y))
+				Tile t = map->getTile(x, y);
+				if (t.isSolid() && !t.isSlope())
 				{
 					posf.x = map->Right(x) + center.x;
 					vel.x = -10.f; //stay against wall
@@ -289,6 +278,8 @@ void JumpMan::Update(float dt)
 	}
 	else if (direction.x > 0) //Vamos hacia la derecha
 	{
+		if (tileAtMyFeet.isRightSlope()) goto horz_exit;
+
 		int xo = map->toTiles(pos.x + centerFromRight.x);
 		int xn = map->toTiles(posf.x + centerFromRight.x);
 		int yTop = map->toTiles(pos.y - size.y + E);
@@ -297,7 +288,8 @@ void JumpMan::Update(float dt)
 		{
 			for (int y = yTop; y <= yBottom; y++)
 			{
-				if (map->isSolid(x, y))
+				Tile t = map->getTile(x, y);
+				if (t.isSolid() && !t.isSlope())
 				{
 					posf.x = map->Left(x) - centerFromRight.x;
 					vel.x = 10.f; //stay against wall
@@ -326,7 +318,8 @@ horz_exit:
 		{
 			for (int x = xl; x <= xr; x++)
 			{
-				if (map->isSolid(x, y))
+				Tile t = map->getTile(x, y);
+				if (t.isSolid()) //slopes should be collisionable when going up
 				{
 					posf.y = map->Top(y) + size.y;
 					vel.y = 0;
@@ -339,6 +332,15 @@ horz_exit:
 	}
 	else if (direction.y > 0) //Vamos hacia abajo
 	{
+		float max_movement_into_slope = abs(vel.x * dt) + 1.f;
+		for (float y = pos.y - max_movement_into_slope; y < posf.y + max_movement_into_slope; y+=1.f) {
+			if (map->isPosOnSlope(posf.x, y)) {
+				//Debug::out << "set y on slope";
+				posf.y = y;
+				goto vert_exit;
+			}
+		}
+
 		int yo = map->toTiles(pos.y); // usamos la y inferior del sprite
 		int yn = map->toTiles(posf.y);
 		int xl = map->toTiles(pos.x - center.x + E);
@@ -347,14 +349,24 @@ horz_exit:
 		{
 			for (int x = xl; x <= xr; x++)
 			{
-				if (map->isSolid(x, y))
+				Tile t = map->getTile(x, y);
+				if ((t.isSolid() && !t.isSlope()) || (t.isOneWay() && pos.y-1.f < (y*Tile::size)))
 				{
-					posf.y = map->Bottom(y);
-					if (vel.y > 50) DoPolvitoLand();
-					vel.y = 0;
-					onWall = ONWALL_NO;
-					grounded = true;
-					goto vert_exit;
+					//Debug::out << "terra";
+					if (t.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
+						posf.y = map->Bottom(y)+3.f;
+						vel.y = 0;
+						crouched = false;
+						grounded = false;
+						goto vert_exit;
+					} else {
+						posf.y = map->Bottom(y);
+						if (vel.y > 50) DoPolvitoLand();
+						vel.y = 0;
+						onWall = ONWALL_NO;
+						grounded = true;
+						goto vert_exit;
+					}
 				}
 			}
 		}
@@ -428,7 +440,7 @@ vert_exit:
 			bfgCooldownTimer = 0.f;
 		}
 	} 
-	else if (Mouse::IsPressed() && !Keyboard::IsKeyPressed(DEBUG_EDIT_MODE)) {
+	else if (Mouse::IsPressed() && !Debug::Draw) {
 		float angleInRads = Mates::DegsToRads(bfgAngle);
 		bfgCooldownTimer = bfgCooldown;
 		vec tipOfTheGun = bfgPos + vec(17, 0).RotatedAroundOrigin(angleInRads);
@@ -469,7 +481,59 @@ void JumpMan::takeDamage(vec src) {
 	crouched = false;
 }
 
+Bounds JumpMan::maxBounds() const
+{
+	return Bounds(pos, standing_size, vec(standing_size.x / 2, standing_size.y));
+}
 
+void JumpMan::Draw(sf::RenderTarget& window) {
+
+	polvito.Draw(window);
+
+	sf::Sprite& spr = Assets::marioSprite;
+	sf::Shader* shader = nullptr;
+	if (isHit() > 0.f) {
+		shader = &Assets::tintShader;
+		shader->setUniform("flashColor", sf::Glsl::Vec4(1, 0, 0, 0.7));
+	}
+
+	spr.setTextureRect(animation.CurrentFrame());
+	spr.setOrigin(center.x, size.y);
+	spr.setPosition(pos.x, pos.y);
+	if (lookingLeft) {
+		spr.setScale(-1.f, 1.f);
+	}
+	else {
+		spr.setScale(1.f, 1.f);
+	}
+	window.draw(spr, shader);
+
+	//BFG
+	if (bfgCooldownTimer > (bfgCooldown - bfgCooldown / 4.f)) {
+		bool blink = ((mainClock.getElapsedTime().asMilliseconds() / 10) % 2);
+		spr.setTextureRect(sf::IntRect(blink ? 32 * 3 : 32 * 2, 3 * 16, 2 * 16, 16));
+	}
+	else {
+		bool blink = ((mainClock.getElapsedTime().asMilliseconds() / 160) % 10) > 8;
+		spr.setTextureRect(sf::IntRect(blink ? 32 : 0, 3 * 16, 2 * 16, 16));
+	}
+	spr.setOrigin(10, 8);
+	float scale = (0.333f + (Mates::MaxOf(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
+	spr.setPosition(bfgPos);
+	if (bfgAngle < 270 || bfgAngle  > 450) {
+		spr.setScale(scale, -scale);
+	}
+	else {
+		spr.setScale(scale, scale);
+	}
+	spr.setRotation(bfgAngle);
+	window.draw(spr, shader);
+
+	//Restore everything
+	spr.setScale(1.f, 1.f);
+	spr.setOrigin(0.f, 0.f);
+	spr.setRotation(0.f);
+}
 
 
 
