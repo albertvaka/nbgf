@@ -115,8 +115,8 @@ struct TileMap : SingleInstance<TileMap>
 	static vec offsetInTile(float x, float y) { return vec(x,y) - alignToTiles(x,y); }
 	static float alignToTiles(float x) { return toTiles(x) * Tile::size; }
 
-	static float Top(int y) { return float(y + 1) * Tile::size; }
-	static float Bottom(int y) { return float(y) * Tile::size; }
+	static float Bottom(int y) { return float(y + 1) * Tile::size; }
+	static float Top(int y) { return float(y) * Tile::size; }
 	static float Left(int x) { return float(x) * Tile::size;  }
 	static float Right(int x) { return float(x + 1) * Tile::size; }
 
@@ -132,11 +132,11 @@ struct TileMap : SingleInstance<TileMap>
 		Tile tile = getTile(toTiles(x, y));
 		if (tile.isRightSlope()) {
 			vec offset = offsetInTile(x, y);
-			return offset.y >= (Tile::size - offset.x) + 0.1f;
+			return offset.y >= (Tile::size - offset.x);
 		}
 		if (tile.isLeftSlope()) {
 			vec offset = offsetInTile(x, y);
-			return offset.y >= offset.x + 0.1f;
+			return offset.y >= offset.x;
 		}
 		return false;
 	}

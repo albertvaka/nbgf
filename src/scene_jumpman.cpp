@@ -110,7 +110,6 @@ void JumpScene::EnterScene()
 	map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID);
 	map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID);
 	map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID);
-	map.setTile(pos.x - 10, pos.y - 3, Tile::LEFT_SLOPE);
 
 
 }
@@ -287,8 +286,8 @@ void JumpScene::Draw(sf::RenderTarget& window)
 
 	if (Debug::Draw) {
 		player.bounds().Draw(window);
-		player.pos.Debuggerino(sf::Color::White);
-		player.bounds().Center().Debuggerino(sf::Color::Magenta);
+		//player.pos.Debuggerino(sf::Color::White);
+		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
 	}
 
 

@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "debug.h"
 
 #ifdef _DEBUG
 

@@ -175,7 +175,7 @@ inline vec Bounds::ClosesPointInBounds(const vec& target) const {
 
 inline float Bounds::DistanceSq(const CircleBounds& a) const {
     vec closestPoint = ClosesPointInBounds(a.pos);
-    closestPoint.Debuggerino(sf::Color::Blue);
+    //closestPoint.Debuggerino(sf::Color::Blue);
     return closestPoint.DistanceSq(a.pos) - (a.radius * a.radius);
 }
 

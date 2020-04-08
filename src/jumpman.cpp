@@ -79,7 +79,7 @@ void JumpMan::Update(float dt)
 {
 	TileMap* map = TileMap::instance();
 
-	const float marginGrounded = 1.f; //in pixels
+	const float marginGrounded = 1.5f; //in pixels
 	bool grounded = false;
 	Tile t;
 	vec leftFoot(pos.x - center.x + 1.f, pos.y + marginGrounded);
@@ -238,18 +238,28 @@ grounded_exit:
 	if (vel.y > vel_max.y) vel.y = vel_max.y;
 	if (vel.y < -vel_max.y) vel.y = -vel_max.y;
 
-	vec posf = pos + vel * dt; //posicion final
+	vec appliedVel = vel;
+	Tile tileAtMyFeet = map->getTile(TileMap::toTiles(pos.x, pos.y - 0.1f));
+	if (tileAtMyFeet.isSlope()) {
+		// On a slope, we will override the Y displacement with the X displacement, either upwards or downwards.
+		// Pythagoras wouldn't approve that we move at the same velocity on a flat X axis than when move on both X and Y.
+		// The mathematically accurate value would be /2 but we don't want to slow the player that much either.
+		appliedVel.x = sqrt((vel.x * vel.x) / 1.8f);
+		if (vel.x < 0) appliedVel.x = -appliedVel.x;
+	}
+	vec posf = pos + appliedVel * dt;
+
+	//Debug::out << "----------";
 	//Debug::out << abs(pos.x - posf.x) / dt;
+	//Debug::out << "slope=" << tileAtMyFeet.isSlope();
 
 	vec direction = posf - pos;
 	const float E = 1;
 	vec centerFromRight = size - center;
 
-	Tile tileAtMyFeet = map->getTile(TileMap::toTiles(pos.x, pos.y - 1.f));
-
 	if (direction.x < 0) //Vamos hacia la izquierda
 	{
-		if (tileAtMyFeet.isLeftSlope()) {
+		if (tileAtMyFeet.isSlope()) {
 			goto horz_exit;
 		}
 
@@ -278,7 +288,9 @@ grounded_exit:
 	}
 	else if (direction.x > 0) //Vamos hacia la derecha
 	{
-		if (tileAtMyFeet.isRightSlope()) goto horz_exit;
+		if (tileAtMyFeet.isSlope()) {
+			goto horz_exit;
+		}
 
 		int xo = map->toTiles(pos.x + centerFromRight.x);
 		int xn = map->toTiles(posf.x + centerFromRight.x);
@@ -321,7 +333,7 @@ horz_exit:
 				Tile t = map->getTile(x, y);
 				if (t.isSolid()) //slopes should be collisionable when going up
 				{
-					posf.y = map->Top(y) + size.y;
+					posf.y = map->Bottom(y) + size.y;
 					vel.y = 0;
 					jumpTimeLeft = 0;
 					goto vert_exit;
@@ -332,11 +344,19 @@ horz_exit:
 	}
 	else if (direction.y > 0) //Vamos hacia abajo
 	{
-		float max_movement_into_slope = abs(vel.x * dt) + 1.f;
-		for (float y = pos.y - max_movement_into_slope; y < posf.y + max_movement_into_slope; y+=1.f) {
-			if (map->isPosOnSlope(posf.x, y)) {
+		float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
+
+		//Debug::out << "getTile from=" << TileMap::offsetInTile(posf.x, pos.y - max_movement_into_slope) << ": " << map->getTile(TileMap::toTiles(vec(posf.x, pos.y - max_movement_into_slope)));
+		//Debug::out << "getTile to=" << TileMap::offsetInTile(posf.x, pos.y + max_movement_into_slope) << ": " << map->getTile(TileMap::toTiles(vec(posf.x, pos.y + max_movement_into_slope)));
+
+		for (int y = floor(pos.y - max_movement_into_slope); y < ceil(pos.y + max_movement_into_slope); y++) {
+			if (map->isPosOnSlope(posf.x, y-0.00001f)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
 				//Debug::out << "set y on slope";
 				posf.y = y;
+				if (vel.y > 50) DoPolvitoLand();
+				vel.y = 30.f; //this helps you get grounded as soon as the slope ends
+				onWall = ONWALL_NO;
+				grounded = true;
 				goto vert_exit;
 			}
 		}
@@ -352,15 +372,15 @@ horz_exit:
 				Tile t = map->getTile(x, y);
 				if ((t.isSolid() && !t.isSlope()) || (t.isOneWay() && pos.y-1.f < (y*Tile::size)))
 				{
-					//Debug::out << "terra";
 					if (t.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
-						posf.y = map->Bottom(y)+3.f;
+						posf.y = map->Top(y)+3.f;
 						vel.y = 0;
 						crouched = false;
 						grounded = false;
 						goto vert_exit;
 					} else {
-						posf.y = map->Bottom(y);
+						//Debug::out << "terra";
+						posf.y = map->Top(y);
 						if (vel.y > 50) DoPolvitoLand();
 						vel.y = 0;
 						onWall = ONWALL_NO;

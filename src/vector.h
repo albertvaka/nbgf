@@ -496,7 +496,7 @@ std::ostream& operator<<(std::ostream& os, sf::Vector2<T>& rhs)
 
 inline std::ostream& operator<<(std::ostream& os, const vec& rhs)
 {
-    os << " " << rhs.x << " " << rhs.y;
+    os << rhs.x << "," << rhs.y;
     return os;
 }
 
