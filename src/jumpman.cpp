@@ -86,7 +86,7 @@ void JumpMan::Update(float dt)
 	vec rightFoot(pos.x + center.x - 1.f, pos.y + marginGrounded);
 	vec middleFoot(pos.x, pos.y + marginGrounded);
 	t = map->getTile(TileMap::toTiles(leftFoot));
-	if (t.isSolid() && !t.isSlope()) {
+	if (t.isFullSolid()) {
 		grounded = true;
 		goto grounded_exit;
 	} 
@@ -95,7 +95,7 @@ void JumpMan::Update(float dt)
 		goto grounded_exit;
 	}
 	t = map->getTile(TileMap::toTiles(rightFoot));
-	if (t.isSolid() && !t.isSlope()) {
+	if (t.isFullSolid()) {
 		grounded = true;
 		goto grounded_exit;
 	}
@@ -117,13 +117,12 @@ grounded_exit:
 		crouchedTime = 0.f;
 	}
 
-	//Si en el frame anterior estaba tocando el suelo, inicializando
-	//jumpTimeLeft a mas de 0 permite al jugador saltar durante ese rato
 	if (Keyboard::IsKeyJustPressed(GameKeys::UP, 0.15f) && (grounded || (onWall && !crouched)))
 	{
-		Keyboard::ConsumeJustPressed(GameKeys::UP);
 		//if (!Keyboard::IsKeyJustPressed(GameKeys::UP)) Debug::out << "cheats";
-		jumpTimeLeft = jump_time;
+		Keyboard::ConsumeJustPressed(GameKeys::UP);
+
+		jumpTimeLeft = jump_time; // the jump upwards velocity can last up to this duration
 		if (onWall && !grounded && !crouched) {
 			vel.x = vel_walljump * -1.0f * float(onWall);
 			lookingLeft = !lookingLeft;
@@ -164,16 +163,16 @@ grounded_exit:
 	}
 	else
 	{
-		jumpTimeLeft = 0; //A la que deja de pulsarse el boton de saltar cae de inmediato
+		jumpTimeLeft = 0; // Stop jumping
 	}
 
 	if (jumpTimeLeft > 0)
 	{
-		jumpTimeLeft -= dt; //Se le resta el tiempo mientras salta
+		jumpTimeLeft -= dt; //We are still jumping
 	}
 	else
 	{
-		acc.y += gravity_acc; //La gravedad afecta mientras no salte
+		acc.y += gravity_acc;
 	}
 
 	//FRICTION
@@ -196,7 +195,7 @@ grounded_exit:
 
 	if (!crouched && onWall)
 	{
-		if (vel.y < 0) { //Vamos hacia arriba
+		if (vel.y < 0) { // Moving up
 			fri.y = fri_acc_wall_up;
 		}
 		else {
@@ -257,11 +256,13 @@ grounded_exit:
 	const float E = 1;
 	vec centerFromRight = size - center;
 
-	if (direction.x < 0) //Vamos hacia la izquierda
+	//Skip horizontal collisions when on a slope
+	if (tileAtMyFeet.isSlope()) {
+		goto horz_exit;
+	}
+
+	if (direction.x < 0) //Moving left
 	{
-		if (tileAtMyFeet.isSlope()) {
-			goto horz_exit;
-		}
 
 		int xo = map->toTiles(pos.x - center.x);
 		int xn = map->toTiles(posf.x - center.x);
@@ -272,7 +273,7 @@ grounded_exit:
 			for (int y = yTop; y <= yBottom; y++)
 			{
 				Tile t = map->getTile(x, y);
-				if (t.isSolid() && !t.isSlope())
+				if (t.isFullSolid())
 				{
 					posf.x = map->Right(x) + center.x;
 					vel.x = -10.f; //stay against wall
@@ -286,12 +287,8 @@ grounded_exit:
 		}
 		//No collision left
 	}
-	else if (direction.x > 0) //Vamos hacia la derecha
+	else if (direction.x > 0) //Moving right
 	{
-		if (tileAtMyFeet.isSlope()) {
-			goto horz_exit;
-		}
-
 		int xo = map->toTiles(pos.x + centerFromRight.x);
 		int xn = map->toTiles(posf.x + centerFromRight.x);
 		int yTop = map->toTiles(pos.y - size.y + E);
@@ -301,7 +298,7 @@ grounded_exit:
 			for (int y = yTop; y <= yBottom; y++)
 			{
 				Tile t = map->getTile(x, y);
-				if (t.isSolid() && !t.isSlope())
+				if (t.isFullSolid())
 				{
 					posf.x = map->Left(x) - centerFromRight.x;
 					vel.x = 10.f; //stay against wall
@@ -320,9 +317,9 @@ grounded_exit:
 horz_exit:
 	pos.x = posf.x;
 
-	if (direction.y < 0) //Vamos hacia arriba
+	if (direction.y < 0) //Moving up
 	{
-		int yo = map->toTiles(pos.y - size.y); // usamos la y superior del sprite
+		int yo = map->toTiles(pos.y - size.y); // top edge
 		int yn = map->toTiles(posf.y - size.y);
 		int xl = map->toTiles(pos.x - center.x + E);
 		int xr = map->toTiles(pos.x + centerFromRight.x - E);
@@ -342,7 +339,7 @@ horz_exit:
 		}
 		//No collision up
 	}
-	else if (direction.y > 0) //Vamos hacia abajo
+	else if (direction.y > 0) //Moving down
 	{
 		float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
 
@@ -361,7 +358,7 @@ horz_exit:
 			}
 		}
 
-		int yo = map->toTiles(pos.y); // usamos la y inferior del sprite
+		int yo = map->toTiles(pos.y); // bottom edge
 		int yn = map->toTiles(posf.y);
 		int xl = map->toTiles(pos.x - center.x + E);
 		int xr = map->toTiles(pos.x + centerFromRight.x - E);
@@ -370,7 +367,7 @@ horz_exit:
 			for (int x = xl; x <= xr; x++)
 			{
 				Tile t = map->getTile(x, y);
-				if ((t.isSolid() && !t.isSlope()) || (t.isOneWay() && pos.y-1.f < (y*Tile::size)))
+				if ((t.isFullSolid()) || (t.isOneWay() && pos.y-1.f < (y*Tile::size)))
 				{
 					if (t.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
 						posf.y = map->Top(y)+3.f;
@@ -393,7 +390,7 @@ horz_exit:
 		//No collision down
 	}
 vert_exit:
-	pos = posf; //asignamos la posicion final a pos
+	pos = posf;
 
 	animation.Update((int)(dt * 1000));
 
@@ -557,7 +554,7 @@ void JumpMan::Draw(sf::RenderTarget& window) {
 
 
 
-// PARTICULITAS
+// BRILLI-BRILLI
 
 void JumpMan::InitPolvito() {
 	polvito.min_interval = 0.01f;

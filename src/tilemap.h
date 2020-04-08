@@ -52,6 +52,10 @@ public:
 		return value >= FIRST_SOLID;
 	}
 
+	bool isFullSolid() const { //Excludes slopes
+		return value >= FIRST_SOLID && !isSlope();
+	}
+
 	bool isBreakable() const {
 		return value >= FIRST_BREAKABLE;
 	}

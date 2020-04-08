@@ -172,11 +172,11 @@ void JumpScene::Update(float dt) {
 		//(e->pos - toTheOutside).Debuggerino(sf::Color::White);
 		sf::Vector2i t = map.toTiles(e->pos+ toTheOutside);
 		Tile tile = map.getTile(t);
-		if (!tile.isSolid() || tile.isSlope()) {
+		if (!tile.isFullSolid()) {
 			t = map.toTiles(e->pos - toTheOutside);
 			tile = map.getTile(t);
 		}
-		if (tile.isSolid() && !tile.isSlope()) {
+		if (tile.isFullSolid()) {
 			if (tile.isBreakable()) {
 				destroyedTiles.Destroy(t.x, t.y);
 			}
