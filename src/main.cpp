@@ -47,8 +47,11 @@ int main()
 
 	sf::Clock dtClock;
 
-	//Scene* currentScene = new IntroScene();
+#ifdef JUMPMAN
 	Scene* currentScene = new JumpScene();
+#else
+	Scene* currentScene = new IntroScene();
+#endif
 	SceneManager::SetScene(currentScene);
 	currentScene->EnterScene();
 	while (window.isOpen())

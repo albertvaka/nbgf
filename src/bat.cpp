@@ -6,7 +6,6 @@
 
 const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 70.f;
-const float awake_nearby_time = 1.f;
 
 float RandomSeekingTime() {
 	return Random::rollf(0.2f, 1.6f) + Random::rollf(0.2f, 1.6f); // Random between 0.4 and 3.2, with values closer to 1.7 more likely

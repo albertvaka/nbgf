@@ -1,7 +1,10 @@
 #pragma once
 
-#include "partsys.h"
+#include <cassert>
+
 #include <SFML/Graphics.hpp>
+
+#include "partsys.h"
 
 template <typename T>
 class SingleInstance
@@ -16,7 +19,7 @@ protected:
 		SingleInstance()
 		{
 #ifdef _DEBUG
-			assert(instance() == nullptr,"Creating a second instance of a singleton");
+			assert(instance() == nullptr); //Creating a second instance of a singleton
 #endif
 			instance() = (T*)this;
 		}

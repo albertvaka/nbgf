@@ -8,7 +8,7 @@ IMGUI_SRC = $(wildcard imgui*/*.cpp)
 IMGUI_OBJ = $(patsubst imgui/%, obj/imgui/%.o, $(patsubst imgui_sfml/%, obj/imgui_sfml/%.o, $(IMGUI_SRC)))
 
 OPTIM	= 0
-DEBUG	= 0
+DEBUG	= 1
 PROFILE	= 0
 
 # Bash so we can use curly braces expansion

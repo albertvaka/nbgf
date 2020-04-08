@@ -7,7 +7,6 @@
 #include "debug.h"
 
 const float batClusterSize = 22.f;
-const float sceneZoom = 3.f;
 const float chanceAngryBat = 0.2f;
 
 extern sf::Clock mainClock;
@@ -20,8 +19,6 @@ JumpScene::JumpScene()
 	: map(sf::Vector2i(1000, 20))
 	, lava(19*16)
 {
-	Window::SetWindowSize(sf::Vector2u(21*16 * sceneZoom * 16.f / 9, 21*16* sceneZoom));
-
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
 
 	float vel = 15;
@@ -42,7 +39,7 @@ JumpScene::JumpScene()
 
 void JumpScene::EnterScene() 
 {
-	Camera::SetZoom(sceneZoom);
+	Camera::SetZoom(GameData::GAME_ZOOM);
 	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
 
 	//transition.setTime(2.0f);
