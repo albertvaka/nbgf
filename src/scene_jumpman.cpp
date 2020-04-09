@@ -16,7 +16,7 @@ static int currentPlacingTile = 1;
 #endif
 
 JumpScene::JumpScene()
-	: map(sf::Vector2i(1000, 20))
+	: map()
 	, lava(19*16)
 {
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
@@ -46,19 +46,17 @@ void JumpScene::EnterScene()
 	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
 	//transition.goPos(GameData::JUMPMAN_ZOOM);
 
-	randomSeed = Random::roll(0,10000);
-
 	player.pos = vec(160, 160);
 	player.Reset();
 
-	map.Randomize(randomSeed);
+	/*
 
 	for (int x = 20; x < map.sizes.x; x+=2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
 		for (int y = -1; y < map.sizes.y-5; y++) { //don't spawn at the bottom rows
 			if (map.isSolid(x, y)) {
 				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
 				if (y == -1) noise -= 0.66f;
-				if (noise > 0.f) { 
+				if (noise > 0.f) {
 					bool angry = (Random::rollf() < chanceAngryBat);
 					new Bat(vec((x+0.5f) * Tile::size, (y+1.5f) * Tile::size), angry);
 					map.setTile(x - 1, y + 1, Tile::NONE);
@@ -71,6 +69,8 @@ void JumpScene::EnterScene()
 			}
 		}
 	}
+	randomSeed = Random::roll(0, 10000);
+	map.Randomize(randomSeed);
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::getAll().size();
 
@@ -110,7 +110,7 @@ void JumpScene::EnterScene()
 	map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID);
 	map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID);
 	map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID);
-
+	*/
 
 }
 
@@ -250,7 +250,7 @@ void JumpScene::Update(float dt) {
 
 void JumpScene::Draw(sf::RenderTarget& window)
 {
-	window.clear(sf::Color(50, 25, 25));
+	window.clear(sf::Color(31, 36, 50));
 
 	if (Debug::Draw) {
 		Simplex::DebugDraw(window, Tile::size, [this](int x, int y) {

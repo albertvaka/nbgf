@@ -6,16 +6,6 @@
 
 const vec Tile::sizevec = vec(size, size);
 
-const sf::IntRect Tile::tileToTextureRect[] = {
-	{},	//NONE
-	{8 * 16, 2 * 16, 16, 16}, // ONE-WAY
-	{},	//SOLID_TRANSPARENT
-	{5 * 16, 2 * 16, 16, 16}, // RIGHT_SLOPE
-	{6 * 16, 2 * 16, 16, 16}, // LEFT_SLOPE
-	{3 * 16, 2 * 16, 16, 16}, // SOLID
-	{4 * 16, 2 * 16, 16, 16}, // BREAKABLE
-};
-
 void TileMap::Randomize(int seed)
 {
 	srand(seed);

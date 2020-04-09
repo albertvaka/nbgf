@@ -72,6 +72,7 @@
     <ClInclude Include="src\spawner.h" />
     <ClInclude Include="src\steering_behavior.h" />
     <ClInclude Include="src\taca.h" />
+    <ClInclude Include="src\tiledexport.h" />
     <ClInclude Include="src\tilemap.h" />
     <ClInclude Include="src\transition.h" />
     <ClInclude Include="src\vector.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="src\simplexnoise.cpp" />
     <ClCompile Include="src\spawningtile.cpp" />
     <ClCompile Include="src\steering_behavior.cpp" />
+    <ClCompile Include="src\tiledexport.cpp" />
     <ClCompile Include="src\tilemap.cpp" />
     <ClCompile Include="src\transition.cpp" />
     <ClCompile Include="src\vector.cpp" />

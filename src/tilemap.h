@@ -6,42 +6,27 @@
 #include "bounds.h"
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
+#include "tiledexport.h"
 
-class Tile
+struct Tile : TiledTiles
 {
-public:
 	static const int size = 16;
 	static const vec sizevec;
 
-	enum Value : unsigned char
-	{
-		NONE = 0,
-		ONE_WAY,
-		SOLID_TRANSPARENT,
-		RIGHT_SLOPE,
-		LEFT_SLOPE,
-		SOLID,
-		BREAKABLE,
-	};
-private:
-	static const Value FIRST_SOLID = SOLID_TRANSPARENT;
-	static const Value FIRST_BREAKABLE = BREAKABLE;
-public:
-
 	bool isOneWay() const {
-		return value == ONE_WAY;
+		return value >= ONE_WAY_BEGIN && value < RIGHT_SLOPE;
 	}
 
 	bool isSlope() const {
-		return isLeftSlope() || isRightSlope();
+		return value >= RIGHT_SLOPE_BEGIN && value < SOLID_BEGIN;
 	}
 
 	bool isLeftSlope() const {
-		return value == LEFT_SLOPE;
+		return value >= LEFT_SLOPE_BEGIN && value < RIGHT_SLOPE_BEGIN;
 	}
 
 	bool isRightSlope() const {
-		return value == RIGHT_SLOPE;
+		return value >= RIGHT_SLOPE_BEGIN && value < SOLID_BEGIN;
 	}
 
 	bool isInvisible() const {
@@ -49,15 +34,15 @@ public:
 	}
 
 	bool isSolid() const {
-		return value >= FIRST_SOLID;
+		return value >= RIGHT_SLOPE_BEGIN;
 	}
 
 	bool isFullSolid() const { //Excludes slopes
-		return value >= FIRST_SOLID && !isSlope();
+		return value >= SOLID_BEGIN;
 	}
 
 	bool isBreakable() const {
-		return value >= FIRST_BREAKABLE;
+		return value >= BREAKABLE_BEGING;
 	}
 
 	Tile() = default;
@@ -68,19 +53,24 @@ public:
 
 	const sf::IntRect& textureRect() const { return tileToTextureRect[int(value)]; }
 
-	static const sf::IntRect tileToTextureRect[];
-
 private:
 	Value value;
 };
 
 struct TileMap : SingleInstance<TileMap>
 {
+	TileMap()
+		: sizes(TiledMap::width, TiledMap::height)
+		, tiles((Tile*)TiledMap::map)
+	{
+	}
+
 	TileMap(const sf::Vector2i& _sizes)
 		: sizes(_sizes)
 		, tiles(new Tile[_sizes.x * _sizes.y]{})
 	{
 	}
+
 	void Randomize(int seed);
 	void Draw(sf::RenderTarget& window) const;
 
@@ -129,7 +119,7 @@ struct TileMap : SingleInstance<TileMap>
 	}
 
 	sf::Vector2i sizes;
-	Tile* tiles;
+	Tile* tiles = nullptr;
 
 	bool isPosOnSlope(const vec& v) const { return isPosOnSlope(v.x,v.y);  }
 	bool isPosOnSlope(float x, float y) const {
