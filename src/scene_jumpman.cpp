@@ -280,7 +280,7 @@ void JumpScene::RandomMap() {
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) {
 					bool angry = (Random::rollf() < chanceAngryBat);
-					new Bat(vec((x + 0.5f) * Tile::size, (y + 1.5f) * Tile::size), angry);
+					new Bat(TileMap::fromTiles(x,y+2), angry);
 					map.setTile(x - 1, y + 1, Tile::NONE);
 					map.setTile(x, y + 1, Tile::NONE);
 					map.setTile(x + 1, y + 1, Tile::NONE);

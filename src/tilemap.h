@@ -109,6 +109,7 @@ struct TileMap : SingleInstance<TileMap>
 	static sf::Vector2i toTiles(const vec& pos) { return toTiles(pos.x, pos.y); }
 	static sf::Vector2i toTiles(float x, float y) { return sf::Vector2i(toTiles(x), toTiles(y)); }
 	static int toTiles(float x) { return Mates::fastfloor(x / Tile::size); } // floor could be just a cast to int if we know we will never get < 0
+	static vec fromTiles(int x, int y) { return vec(x*Tile::size, y*Tile::size); } // floor could be just a cast to int if we know we will never get < 0
 
 	static vec alignToTiles(float x, float y) { return toTiles(x, y) * Tile::size; }
 	static vec offsetInTile(float x, float y) { return vec(x,y) - alignToTiles(x,y); }

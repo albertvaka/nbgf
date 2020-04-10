@@ -20,7 +20,7 @@ void AwakeNearbyBats(vec pos) {
 }
 
 Bat::Bat(vec pos, bool aggresive)
-	: SteeringEntity(pos + vec(0.f, 6.f), 8.0f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
+	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
 	, steering(this)
 	, state(State::SIESTA)
 	, aggresive(aggresive)
