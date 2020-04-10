@@ -77,6 +77,8 @@ JumpMan::JumpMan()
 
 void JumpMan::Update(float dt)
 {
+	if (dead) return;
+
 	TileMap* map = TileMap::instance();
 
 	const float marginGrounded = 1.5f; //in pixels
