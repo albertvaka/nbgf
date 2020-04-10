@@ -16,11 +16,14 @@ for ts in level.tile_sets.values():
 
 tiles = None
 entities = None
+screens = None
 for l in level.layers:
     if l.name == "World":
         tiles = l
     elif l.name == "Entities":
         entities = l.tiled_objects
+    elif l.name == "Screens":
+        screens = l.tiled_objects
 
 out_map_dict = dict()
 gids_used = set()
@@ -88,6 +91,10 @@ for e in entities:
         print("Entity id={} has no type".format(e.id_))
     entities_by_type[type_].append((e.location.x-min_x*tilesize, e.location.y-min_y*tilesize))
 
+out_screens = []
+for e in screens:
+    out_screens.append((e.location.x-min_x*tilesize, e.location.y-min_y*tilesize,e.size.width,e.size.height))
+
 tm = Template(Path('tiledexport.h.tmpl').read_text())
 out_h = tm.render(
     bg=gids_by_type['bg'],
@@ -97,6 +104,7 @@ out_h = tm.render(
     solid=gids_by_type['solid'],
     breakable=gids_by_type['breakable'],
     entities_by_type=entities_by_type,
+    screens=out_screens,
 )
 Path('../src/tiledexport.h').write_text(out_h)
                 
@@ -116,6 +124,7 @@ out_cpp = tm.render(
     gid_to_tileid= gid_to_tileid,
     map = out_map,
     entities_by_type=entities_by_type,
-    debug = False
+    screens=out_screens,
+    debug = False,
 )
 Path('../src/tiledexport.cpp').write_text(out_cpp)
