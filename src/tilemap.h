@@ -59,16 +59,9 @@ private:
 
 struct TileMap : SingleInstance<TileMap>
 {
-	TileMap()
-		: sizes(TiledMap::map_size.x, TiledMap::map_size.y)
-		, tiles(new Tile[TiledMap::map_size.x * TiledMap::map_size.y]{})
-	{
-		memcpy((void*)tiles, (void*)TiledMap::map, TiledMap::map_size.x * TiledMap::map_size.y * sizeof(Tile));
-	}
-
-	TileMap(const sf::Vector2i& _sizes)
-		: sizes(_sizes)
-		, tiles(new Tile[_sizes.x * _sizes.y]{})
+	TileMap(int width, int height)
+		: sizes(width, height)
+		, tiles(new Tile[width * height]{})
 	{
 	}
 
@@ -76,6 +69,9 @@ struct TileMap : SingleInstance<TileMap>
 		delete tiles;
 	}
 
+	void LoadFromTiled() {
+		memcpy((void*)tiles, (void*)TiledMap::map, TiledMap::map_size.x * TiledMap::map_size.y * sizeof(Tile));
+	}
 	void Randomize(int seed);
 	void Draw(sf::RenderTarget& window) const;
 

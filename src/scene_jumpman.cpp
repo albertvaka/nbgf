@@ -18,7 +18,7 @@ static int currentPlacingTile = 1;
 const bool random_mode = false;
 
 JumpScene::JumpScene()
-	: map()
+	: map(TiledMap::map_size.x, TiledMap::map_size.y)
 	, lava((TiledMap::map_size.y-1)*16)
 {
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
@@ -55,6 +55,8 @@ void JumpScene::EnterScene()
 		return;
 	}
 
+	map.LoadFromTiled();
+
 	for (const sf::Vector2f& v : TiledEntities::bat) {
 		new Bat(v,false);
 	}
@@ -74,10 +76,11 @@ void JumpScene::Update(float dt)
 {
 
 	if (player.pos.y > map.boundsInWorld().Bottom() - Tile::size) {
-		player.vel = vec(0, 0); //dying slowly in the lava
+		player.invencibleTimer = 10;
+		player.vel = vec(0, 0); //sink slowly in the lava
 	}
 		
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.pos.y > map.boundsInWorld().Bottom()- Tile::size/2)) {
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.pos.y > map.boundsInWorld().Bottom() - Tile::size / 4)) {
 		ExitScene();
 		EnterScene();
 	}
