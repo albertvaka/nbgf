@@ -11,10 +11,9 @@ ScreenManager::ScreenManager() {
 		screens.emplace_back(screen.left, screen.top, screen.width, screen.height);
 	}
 }
-void ScreenManager::Update(float dt) {
-	const JumpMan* jumpman = JumpMan::instance();
-	if (!TiledMap::screens[CurrentScreen].contains(jumpman->pos)) {
-		CurrentScreen = FindScreen(jumpman);
+void ScreenManager::UpdateCurrentScreen(const Entity* entity) {
+	if (!TiledMap::screens[CurrentScreen].contains(entity->pos)) {
+		CurrentScreen = FindScreen(entity);
 	}
 }
 

@@ -31,6 +31,6 @@ struct ScreenManager : SingleInstance<ScreenManager>
 
 	const void ClampCameraToScreen(vec& camPos);
 
-	void Update(float dt);
+	void UpdateCurrentScreen(const Entity* entity);
 };
 

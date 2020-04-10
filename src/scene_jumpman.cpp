@@ -8,6 +8,7 @@
 
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
+const float camSpeed = 2000;
 
 extern sf::Clock mainClock;
 
@@ -61,6 +62,8 @@ void JumpScene::EnterScene()
 		new Bat(v,false);
 	}
 
+	screenManager.UpdateCurrentScreen(&player);
+	Camera::SetCameraCenter(player.pos);
 }
 
 void JumpScene::ExitScene()
@@ -95,12 +98,16 @@ void JumpScene::Update(float dt)
 	//	Camera::SetZoom(transition.getPos());
 	//}
 
-	screenManager.Update(dt);
+	screenManager.UpdateCurrentScreen(&player);
 
 	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
 	screenManager.ClampCameraToScreen(camPos);
-	Camera::SetCameraCenter(camPos);
+
+	vec oldPos = Camera::GetCameraCenter();
+	vec displacement = camPos - oldPos;
+	displacement.Truncate(camSpeed * dt);
+	Camera::SetCameraCenter(oldPos + displacement);
 
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : EntS<Bullet>::getAll()) {

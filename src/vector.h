@@ -96,7 +96,7 @@ struct vec : public sf::Vector2f
   inline vec  Perp() const;
 
   //adjusts x and y so that the length of the vector does not exceed max
-  inline void      Truncate(float max);
+  inline bool      Truncate(float max);
 
   //returns the distance between this vector and th one passed as a parameter
   inline float    Distance(const vec &v2) const;
@@ -233,14 +233,16 @@ inline float vec::DistanceSq(const vec &v2) const
 }
 
 //  truncates a vector so that its length does not exceed max
-inline void vec::Truncate(float max)
+inline bool vec::Truncate(float max)
 {
   if (this->Length() > max)
   {
     this->Normalize();
 
     *this *= max;
+    return true;
   } 
+  return false;
 }
 
 //  returns the vector that is the reverse of this vector
