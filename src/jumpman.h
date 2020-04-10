@@ -16,6 +16,11 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     void Reset() {
         vel = vec(0, 0);
         polvito.Clear();
+        invencibleTimer = -1.f;
+        bfgCooldownTimer = 0;
+        jumpTimeLeft = 0.0f;
+        crouchedTime = 0.0f;
+        onWall = ONWALL_NO;
     }
 
     Bounds bounds() const {
