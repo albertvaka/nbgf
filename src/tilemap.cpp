@@ -9,15 +9,15 @@ const vec Tile::sizevec = vec(size, size);
 void TileMap::Randomize(int seed)
 {
 	srand(seed);
-	for (int x = 16; x < sizes.x; x++) {
-		for (int y = 0; y < sizes.y; y++) {
+	for (int y = 0; y < sizes.y; y++) {
+		for (int x = 16; x < sizes.x; x++) {
 			Tile t = Tile::NONE;
 			if (y != sizes.y-1 && (rand() % 32) > 29) {
 				if ((rand() % 30) < 10) {
-					t = Tile::BREAKABLE;
+					t = Tile::BREAKABLE_1;
 				}
 				else {
-					t = Tile::SOLID;
+					t = Tile::SOLID_1;
 				}
 				if (x > 0 && ((rand() % 32) > 20)) t = getTile(x - 1, y);
 			}
@@ -36,12 +36,13 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	int top = (screen.Top() / Tile::size) - 1;
 	int bottom = (screen.Bottom() / Tile::size) + 1;
 
+	//out of bounds tile
 	sprite.setTextureRect(sf::Rect(3 * 16, 2 * 16, 16, 16));
 
 	if (left < 0) {
-		for (int x = left - 1; x < 0; x++)
+		for (int y = top - 1; y < bottom + 1; y++)
 		{
-			for (int y = top - 1; y < bottom + 1; y++)
+			for (int x = left - 1; x < 0; x++)
 			{
 				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
@@ -51,9 +52,9 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	}
 
 	if (right >= sizes.x) {
-		for (int x = sizes.x; x < right; x++)
+		for (int y = top - 1; y < bottom + 1; y++)
 		{
-			for (int y = top - 1; y < bottom + 1; y++)
+			for (int x = sizes.x; x < right; x++)
 			{
 				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
@@ -63,9 +64,9 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	}
 
 	if (top < 0) {
-		for (int x = left; x < right; x++)
+		for (int y = top - 1; y < 0; y++)
 		{
-			for (int y = top - 1; y < 0; y++)
+			for (int x = left; x < right; x++)
 			{
 				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
@@ -75,9 +76,9 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	}
 
 	if (bottom >= sizes.y) {
-		for (int x = left; x < right; x++)
+		for (int y = sizes.y; y < bottom; y++)
 		{
-			for (int y = sizes.y; y < bottom; y++)
+			for (int x = left; x < right; x++)
 			{
 				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
@@ -86,9 +87,9 @@ void TileMap::Draw(sf::RenderTarget& window) const
 		bottom = sizes.y;
 	}
 
-	for (int x = left; x < right; x++)
+	for (int y = top; y < bottom; y++)
 	{
-		for (int y = top; y < bottom; y++)
+		for (int x = left; x < right; x++)
 		{
 			Tile t = getTileUnsafe(x, y);
 			if (t.isInvisible()) {

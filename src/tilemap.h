@@ -14,7 +14,7 @@ struct Tile : TiledTiles
 	static const vec sizevec;
 
 	bool isOneWay() const {
-		return value >= ONE_WAY_BEGIN && value < RIGHT_SLOPE;
+		return value >= ONE_WAY_BEGIN && value < RIGHT_SLOPE_BEGIN;
 	}
 
 	bool isSlope() const {
@@ -22,11 +22,11 @@ struct Tile : TiledTiles
 	}
 
 	bool isLeftSlope() const {
-		return value >= LEFT_SLOPE_BEGIN && value < RIGHT_SLOPE_BEGIN;
+		return value >= LEFT_SLOPE_BEGIN && value < SOLID_BEGIN;
 	}
 
 	bool isRightSlope() const {
-		return value >= RIGHT_SLOPE_BEGIN && value < SOLID_BEGIN;
+		return value >= RIGHT_SLOPE_BEGIN && value < LEFT_SLOPE_BEGIN;
 	}
 
 	bool isInvisible() const {
@@ -42,7 +42,7 @@ struct Tile : TiledTiles
 	}
 
 	bool isBreakable() const {
-		return value >= BREAKABLE_BEGING;
+		return value >= BREAKABLE_BEGING && value < SOLID_TRANSPARENT;
 	}
 
 	Tile() = default;
@@ -61,14 +61,19 @@ struct TileMap : SingleInstance<TileMap>
 {
 	TileMap()
 		: sizes(TiledMap::width, TiledMap::height)
-		, tiles((Tile*)TiledMap::map)
+		, tiles(new Tile[TiledMap::width * TiledMap::height]{})
 	{
+		memcpy((void*)tiles, (void*)TiledMap::map, TiledMap::width * TiledMap::height * sizeof(Tile));
 	}
 
 	TileMap(const sf::Vector2i& _sizes)
 		: sizes(_sizes)
 		, tiles(new Tile[_sizes.x * _sizes.y]{})
 	{
+	}
+
+	~TileMap() {
+		delete tiles;
 	}
 
 	void Randomize(int seed);
@@ -82,21 +87,21 @@ struct TileMap : SingleInstance<TileMap>
 	}
 	void setTile(int x, int y, Tile col) {
 		if (!inBounds(x, y)) return;
-		tiles[x * sizes.y + y] = col;
+		tiles[y * sizes.x + x] = col;
 	}
 
 	void setTile(const sf::Vector2i& pos, Tile tile) { return setTile(pos.x, pos.y, tile); }
 	Tile getTile(const sf::Vector2i& pos) const { return getTile(pos.x, pos.y); }
 
 	Tile getTile(int x, int y) const {
-		if (!inBounds(x, y)) return Tile::SOLID;
+		if (!inBounds(x, y)) return Tile::NONE;
 		return getTileUnsafe(x,y);
 	}
 
 	bool isSolid(const sf::Vector2i& pos) const { return isSolid(pos.x, pos.y); }
 	bool isSolid(int x, int y) const { return getTile(x, y).isSolid(); }
 
-	Tile getTileUnsafe(int x, int y) const { return tiles[x * sizes.y + y]; }
+	Tile getTileUnsafe(int x, int y) const { return tiles[y * sizes.x + x]; }
 
 
 	// Coordinate conversion functions

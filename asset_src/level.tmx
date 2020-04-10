@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#1f2432" nextlayerid="7" nextobjectid="73">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#1f2432" nextlayerid="7" nextobjectid="75">
  <editorsettings>
   <export target="." format="tmx"/>
  </editorsettings>
  <tileset firstgid="1" name="mario" tilewidth="16" tileheight="16" tilecount="464" columns="29">
-  <image source="mario.png" width="464" height="256"/>
+  <image source="../bin/data/mario.png" width="464" height="256"/>
+  <tile id="0" type="spawn"/>
+  <tile id="1" type="breakable"/>
   <tile id="23" type="solid"/>
   <tile id="24" type="breakable"/>
   <tile id="25" type="rslope"/>
   <tile id="26" type="lslope"/>
   <tile id="28" type="oneway"/>
+  <tile id="30" type="breakable"/>
   <tile id="39" type="rslope"/>
   <tile id="40" type="lslope"/>
   <tile id="41" type="lslope"/>
   <tile id="42" type="rslope"/>
   <tile id="53" type="breakable"/>
   <tile id="57" type="oneway"/>
+  <tile id="58" type="collectible"/>
+  <tile id="59" type="powerup"/>
   <tile id="70" type="solid"/>
   <tile id="71" type="solid"/>
   <tile id="72" type="solid"/>
@@ -35,6 +40,7 @@
   <tile id="106" type="oneway"/>
   <tile id="107" type="oneway"/>
   <tile id="115" type="oneway"/>
+  <tile id="116" type="bat"/>
   <tile id="132" type="oneway"/>
   <tile id="133" type="oneway"/>
   <tile id="134" type="oneway"/>
@@ -46,15 +52,24 @@
   <tile id="170" type="oneway"/>
   <tile id="198" type="oneway"/>
   <tile id="199" type="oneway"/>
+  <tile id="211" type="solid"/>
+  <tile id="212" type="solid"/>
+  <tile id="213" type="solid"/>
   <tile id="226" type="rslope"/>
   <tile id="227" type="solid"/>
   <tile id="228" type="solid"/>
   <tile id="229" type="solid"/>
   <tile id="230" type="lslope"/>
+  <tile id="240" type="solid"/>
+  <tile id="241" type="solid"/>
+  <tile id="242" type="solid"/>
+  <tile id="243" type="solid"/>
   <tile id="254" type="rslope"/>
   <tile id="255" type="solid"/>
   <tile id="259" type="solid"/>
   <tile id="260" type="lslope"/>
+  <tile id="269" type="solid"/>
+  <tile id="270" type="solid"/>
   <tile id="283" type="solid"/>
   <tile id="289" type="solid"/>
   <tile id="312" type="solid"/>
@@ -73,8 +88,26 @@
   <tile id="430" type="solid"/>
   <tile id="431" type="solid"/>
  </tileset>
- <layer id="1" name="Tile Layer 1" width="100" height="100">
+ <layer id="1" name="World" width="100" height="100">
   <data encoding="csv">
+   <chunk x="-96" y="-48" width="16" height="16">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</chunk>
    <chunk x="-32" y="-48" width="16" height="16">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -243,8 +276,8 @@
 0,0,154,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,0,154,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,0,154,0,0,0,0,0,0,79,0,0,0,0,0,0,
+0,0,154,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,0,186,0,0,0,0,0,0,79,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,79,0,0,0,0,0,0,
 73,73,73,73,73,73,73,73,73,79,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -340,10 +373,10 @@
 0,0,0,0,0,0,0,0,0,0,79,0,0,0,0,76,
 0,0,0,0,0,0,0,0,0,0,79,0,0,0,0,76,
 212,212,212,212,213,214,76,77,77,77,79,145,145,145,145,77,
-0,0,0,0,0,0,22,0,0,0,79,0,0,0,0,79,
-0,0,0,0,0,0,22,0,0,0,79,0,0,0,0,0,
-0,0,0,0,0,0,22,0,0,0,79,0,0,0,0,0,
-377,371,0,0,0,0,22,0,0,0,79,0,0,0,0,0
+0,0,0,0,0,0,181,0,0,0,79,0,0,0,0,79,
+0,0,0,0,0,0,181,0,0,0,79,0,0,0,0,0,
+0,0,0,0,0,0,181,0,0,0,79,0,0,0,0,0,
+377,371,0,0,0,0,181,0,0,0,79,0,0,0,0,0
 </chunk>
    <chunk x="-16" y="-16" width="16" height="16">
 77,77,77,77,77,79,77,77,77,77,77,77,54,78,0,0,
@@ -508,7 +541,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </chunk>
    <chunk x="-32" y="0" width="16" height="16">
-0,0,0,0,0,0,22,0,0,0,79,0,0,0,0,0,
+0,0,0,0,0,0,210,0,0,0,79,0,0,0,0,0,
 0,0,0,0,0,0,71,72,72,72,77,72,72,72,72,72,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,144,79,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,79,
@@ -585,8 +618,9 @@
 80,0,0,0,0,81,0,80,0,0,0,0,80,81,0,0,
 80,0,0,0,0,81,0,80,0,0,0,0,80,81,0,0,
 80,0,0,0,0,81,0,80,0,0,0,0,109,81,0,0,
-80,0,0,75,0,110,0,80,0,0,54,0,0,81,0,0,
-109,0,0,81,0,0,0,80,0,0,0,0,0,81,0,0,
+80,0,0,0,0,81,0,80,0,0,0,0,0,0,0,0,
+109,0,0,75,0,110,0,80,0,0,54,0,0,81,0,0,
+0,0,0,81,0,0,0,80,0,0,0,0,0,81,0,0,
 0,0,0,81,0,0,0,109,0,0,0,0,0,81,0,0,
 0,0,0,81,0,0,0,0,0,0,0,0,0,110,0,0,
 0,0,0,81,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -594,7 +628,6 @@
 0,0,0,0,0,0,0,75,0,0,0,0,80,0,0,0,
 0,54,0,0,0,0,0,0,0,0,0,0,80,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,109,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </chunk>
    <chunk x="48" y="0" width="16" height="16">
@@ -605,11 +638,11 @@
 110,0,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,0,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,0,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
+0,0,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,107,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,80,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,80,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,109,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
-0,0,79,0,0,0,0,0,0,79,0,0,0,0,0,0,
 0,0,79,73,42,0,0,43,72,79,0,0,0,0,0,0,
 0,0,79,77,79,73,73,79,77,79,0,0,0,0,0,0,
 0,0,79,78,77,79,76,77,79,79,0,0,0,0,0,0,
@@ -623,20 +656,22 @@
   <object id="49" type="bat" gid="117" x="-704" y="37" width="16" height="16"/>
   <object id="50" type="bat" gid="117" x="-384" y="48" width="16" height="16"/>
   <object id="51" type="bat" gid="117" x="-528" y="6" width="16" height="16"/>
-  <object id="52" type="gun" gid="21" x="-1329.33" y="192.667" width="16" height="16"/>
-  <object id="53" type="powerup" gid="22" x="-384.667" y="9.33333" width="16" height="16"/>
-  <object id="58" type="powerup" gid="22" x="80" y="-260" width="16" height="16"/>
-  <object id="59" type="walljump" gid="21" x="856" y="204" width="16" height="16"/>
-  <object id="60" type="powerup" gid="22" x="465.333" y="79.3333" width="16" height="16"/>
+  <object id="52" type="gun" gid="59" x="-1329.33" y="192.667" width="16" height="16"/>
+  <object id="53" type="powerup" gid="60" x="-384.667" y="9.33333" width="16" height="16"/>
+  <object id="58" type="powerup" gid="60" x="80" y="-260" width="16" height="16"/>
+  <object id="59" type="walljump" gid="59" x="856" y="204" width="16" height="16"/>
+  <object id="60" type="powerup" gid="60" x="465.333" y="79.3333" width="16" height="16"/>
   <object id="61" type="bat" gid="117" x="656" y="32" width="16" height="16"/>
   <object id="62" type="bat" gid="117" x="576" y="32" width="16" height="16"/>
-  <object id="63" type="bat" gid="117" x="672" y="112" width="16" height="16"/>
-  <object id="64" type="bat" gid="117" x="560" y="112" width="16" height="16"/>
-  <object id="65" type="bat" gid="117" x="624" y="208" width="16" height="16"/>
+  <object id="63" type="bat" gid="117" x="672.25" y="127.75" width="16" height="16"/>
+  <object id="64" type="bat" gid="117" x="560" y="128.5" width="16" height="16"/>
+  <object id="65" type="bat" gid="117" x="703.25" y="208" width="16" height="16"/>
   <object id="66" type="bat" gid="117" x="752" y="32" width="16" height="16"/>
   <object id="68" type="bat" gid="117" x="-194" y="-622" width="16" height="16"/>
   <object id="69" type="bat" gid="117" x="226" y="-556" width="16" height="16"/>
   <object id="72" type="bat" gid="117" x="-336" y="-544" width="16" height="16"/>
+  <object id="73" type="spawn" gid="1" x="33.3333" y="90" width="16" height="16"/>
+  <object id="74" gid="60" x="-15.6667" y="-450" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Cameras" visible="0">
   <object id="42" name="Camera" x="-272" y="-80" width="608" height="336"/>

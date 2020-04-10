@@ -339,8 +339,8 @@ vec SteeringBehavior::TileMapAvoidance(TileMap* map)
 	int yTop = map->toTiles(steeringEntity->pos.y - steeringEntity->radius - Tile::size / 2);
 	int yBottom = map->toTiles(steeringEntity->pos.y + steeringEntity->radius + Tile::size / 2);
 	CircleBounds me = steeringEntity->bounds();
-	for (int x = xLeft; x <= xRight; x++) {
-		for (int y = yTop; y <= yBottom; y++) {
+	for (int y = yTop; y <= yBottom; y++) {
+		for (int x = xLeft; x <= xRight; x++) {
 			//vec(x * 16 + 8, y * 16 + 8).Debuggerino(sf::Color::White);
 			if (map->isSolid(x, y)) {
 				Bounds tile = map->getTileBounds(x, y);

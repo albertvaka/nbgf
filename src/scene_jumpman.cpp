@@ -15,9 +15,11 @@ extern sf::Clock mainClock;
 static int currentPlacingTile = 1;
 #endif
 
+const bool random_mode = false;
+
 JumpScene::JumpScene()
 	: map()
-	, lava(19*16)
+	, lava((TiledMap::height-1)*16)
 {
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
 
@@ -39,79 +41,78 @@ JumpScene::JumpScene()
 
 void JumpScene::EnterScene() 
 {
+	player.Reset();
+
 	Camera::SetZoom(GameData::GAME_ZOOM);
 	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
-
 	//transition.setTime(2.0f);
 	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
 	//transition.goPos(GameData::JUMPMAN_ZOOM);
 
-	player.pos = vec(160, 160);
-	player.Reset();
+	if (random_mode) {
+		player.pos = vec(160, 160);
 
-	/*
+		randomSeed = Random::roll(0, 10000);
+		map.Randomize(randomSeed);
 
-	for (int x = 20; x < map.sizes.x; x+=2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
-		for (int y = -1; y < map.sizes.y-5; y++) { //don't spawn at the bottom rows
-			if (map.isSolid(x, y)) {
-				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
-				if (y == -1) noise -= 0.66f;
-				if (noise > 0.f) {
-					bool angry = (Random::rollf() < chanceAngryBat);
-					new Bat(vec((x+0.5f) * Tile::size, (y+1.5f) * Tile::size), angry);
-					map.setTile(x - 1, y + 1, Tile::NONE);
-					map.setTile(x, y + 1, Tile::NONE);
-					map.setTile(x + 1, y + 1, Tile::NONE);
-					map.setTile(x - 1, y + 2, Tile::NONE);
-					map.setTile(x, y + 2, Tile::NONE);
-					map.setTile(x + 1, y + 2, Tile::NONE);
+		Debug::out << "seed=" << randomSeed << ", bats=" << Bat::getAll().size();
+
+		for (int y = -1; y < map.sizes.y - 5; y++) { //don't spawn at the bottom rows
+			for (int x = 20; x < map.sizes.x; x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
+				if (map.isSolid(x, y)) {
+					float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
+					if (y == -1) noise -= 0.66f;
+					if (noise > 0.f) {
+						bool angry = (Random::rollf() < chanceAngryBat);
+						new Bat(vec((x + 0.5f) * Tile::size, (y + 1.5f) * Tile::size), angry);
+						map.setTile(x - 1, y + 1, Tile::NONE);
+						map.setTile(x, y + 1, Tile::NONE);
+						map.setTile(x + 1, y + 1, Tile::NONE);
+						map.setTile(x - 1, y + 2, Tile::NONE);
+						map.setTile(x, y + 2, Tile::NONE);
+						map.setTile(x + 1, y + 2, Tile::NONE);
+					}
 				}
 			}
 		}
+
+		sf::Vector2i pos = map.toTiles(player.pos);
+		map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x - 2, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x - 4, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x - 5, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x - 6, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x + 1, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x + 2, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x + 3, pos.y + 1, Tile::SOLID_1);
+		map.setTile(pos.x - 1, pos.y, Tile::NONE);
+		map.setTile(pos.x, pos.y, Tile::NONE);
+		map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
+		map.setTile(pos.x, pos.y - 1, Tile::NONE);
+		map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
+		map.setTile(pos.x, pos.y - 2, Tile::NONE);
+		map.setTile(pos.x + 1, pos.y, Tile::RIGHT_SLOPE_1);
+		map.setTile(pos.x + 2, pos.y, Tile::SOLID_1);
+		map.setTile(pos.x + 3, pos.y - 1, Tile::SOLID_1);
+		map.setTile(pos.x + 3, pos.y, Tile::SOLID_1);
+		map.setTile(pos.x + 2, pos.y - 1, Tile::RIGHT_SLOPE_1);
+		map.setTile(pos.x + 3, pos.y - 2, Tile::RIGHT_SLOPE_1);
+		map.setTile(pos.x + 4, pos.y - 2, Tile::SOLID_1);
+		map.setTile(pos.x + 5, pos.y - 2, Tile::SOLID_1);
+		map.setTile(pos.x - 4, pos.y, Tile::LEFT_SLOPE_1);
+		map.setTile(pos.x - 5, pos.y, Tile::SOLID_1);
+		map.setTile(pos.x - 5, pos.y - 1, Tile::LEFT_SLOPE_1);
+		map.setTile(pos.x - 6, pos.y - 1, Tile::SOLID_1);
+		map.setTile(pos.x - 6, pos.y, Tile::SOLID_1);
+		map.setTile(pos.x - 6, pos.y - 2, Tile::LEFT_SLOPE_1);
+		map.setTile(pos.x - 7, pos.y - 2, Tile::SOLID_1);
+		map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID_1);
+		map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID_1);
+		map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID_1);
 	}
-	randomSeed = Random::roll(0, 10000);
-	map.Randomize(randomSeed);
-
-	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::getAll().size();
-
-	sf::Vector2i pos = map.toTiles(player.pos);
-	map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x,     pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x - 2, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x - 4, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x - 5, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x - 6, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x + 1, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x + 2, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x + 3, pos.y + 1, Tile::SOLID);
-	map.setTile(pos.x - 1, pos.y,     Tile::NONE);
-	map.setTile(pos.x,     pos.y,     Tile::NONE);
-	map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
-	map.setTile(pos.x,     pos.y - 1, Tile::NONE);
-	map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
-	map.setTile(pos.x,     pos.y - 2, Tile::NONE);
-	map.setTile(pos.x + 1, pos.y,	  Tile::RIGHT_SLOPE);
-	map.setTile(pos.x + 2, pos.y,     Tile::SOLID);
-	map.setTile(pos.x + 3, pos.y - 1, Tile::SOLID);
-	map.setTile(pos.x + 3, pos.y,     Tile::SOLID);
-	map.setTile(pos.x + 2, pos.y - 1, Tile::RIGHT_SLOPE);
-	map.setTile(pos.x + 3, pos.y - 2, Tile::RIGHT_SLOPE);
-	map.setTile(pos.x + 4, pos.y - 2, Tile::SOLID);
-	map.setTile(pos.x + 5, pos.y - 2, Tile::SOLID);
-	map.setTile(pos.x - 4, pos.y,     Tile::LEFT_SLOPE);
-	map.setTile(pos.x - 5, pos.y,     Tile::SOLID);
-	map.setTile(pos.x - 5, pos.y - 1, Tile::LEFT_SLOPE);
-	map.setTile(pos.x - 6, pos.y - 1, Tile::SOLID);
-	map.setTile(pos.x - 6, pos.y,     Tile::SOLID);
-	map.setTile(pos.x - 6, pos.y - 2, Tile::LEFT_SLOPE);
-	map.setTile(pos.x - 7, pos.y - 2, Tile::SOLID);
-	map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID);
-	map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID);
-	map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID);
-	*/
-
 }
 
 void JumpScene::ExitScene()
@@ -138,15 +139,15 @@ void JumpScene::Update(float dt) {
 	//	Camera::SetZoom(transition.getPos());
 	//}
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
-	//float minY = (Camera::GetCameraBounds().height / 2.f) - (1 * 16);
-	//float maxY = ((25 + 1) * 16) - (Camera::GetCameraBounds().height / 2.f);
-	//if (maxY < minY) {
-	//	minY = maxY - 1;
-	//}
-	//Mates::Clamp(camPos.y, minY, maxY);
-	camPos.y = (Camera::GetCameraBounds().height / 2.f) - Tile::size; //fixed Y axis
-	float minX = (Camera::GetCameraBounds().width / 2.f) - (1 * 16);
-	float maxX = ((1000 + 1) * 16) - (Camera::GetCameraBounds().width / 2.f);
+	float minY = (Camera::GetCameraBounds().height / 2.f);
+	float maxY = ((map.sizes.y) * 16) - (Camera::GetCameraBounds().height / 2.f);
+	if (maxY < minY) {
+		minY = maxY - 1;
+	}
+	Mates::Clamp(camPos.y, minY, maxY);
+	//camPos.y = (Camera::GetCameraBounds().height / 2.f) - Tile::size; //fixed Y axis
+	float minX = (Camera::GetCameraBounds().width / 2.f);
+	float maxX = ((map.sizes.x) * 16) - (Camera::GetCameraBounds().width / 2.f);
 	if (maxX < minX) {
 		minX = maxX - 1;
 	}

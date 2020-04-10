@@ -1,0 +1,39 @@
+#include "tiledexport.h"
+
+const sf::IntRect TiledTiles::tileToTextureRect[] = {
+	{},	//NONE
+	{% for t in bg -%}
+		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, BG_{{ loop.index }}, gid={{t}}
+	{% endfor -%}
+	{% for t in oneway -%}
+		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, ONE_WAY_{{ loop.index }}, gid={{t}}
+	{% endfor -%}
+	{% for t in rslope -%}
+		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, RIGHT_SLOPE_{{ loop.index }}, gid={{t}}
+	{% endfor -%}
+	{% for t in lslope -%}
+		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, LEFT_SLOPE_{{ loop.index }}, gid={{t}}
+	{% endfor -%}
+	{% for t in solid -%}
+		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, SOLID_{{ loop.index }}, gid={{t}}
+	{% endfor -%}
+	{% for t in breakable -%}
+		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, BREAKABLE_{{ loop.index }}, gid={{t}}
+	{% endfor -%}
+	{},	//SOLID_TRANSPARENT
+};
+
+const int TiledMap::width = {{ width }};
+const int TiledMap::height = {{ height }};
+
+const unsigned short TiledMap::map[] = {
+    {% for t in map -%}
+		{%- if debug -%}
+			{%- if t == 0 -%}{{ ' ' -}}{%- else -%}{{ 'x' -}}{% endif %} 
+		{%- else -%}
+			{{ t -}},
+		{%- endif -%}
+		{% if loop.index%width == 0 %}
+		{% endif %} 
+    {%- endfor -%}
+};

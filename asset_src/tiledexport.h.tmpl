@@ -1,0 +1,46 @@
+#pragma once
+
+#include <SFML/Graphics.hpp>
+
+struct TiledTiles
+{
+	static const sf::IntRect tileToTextureRect[];
+
+	enum Value : unsigned short
+	{
+		NONE = 0,
+		{% for t in bg -%}
+			BG_{{ loop.index }},
+		{% endfor -%}
+		{% for t in oneway -%}
+			ONE_WAY_{{ loop.index }},
+		{% endfor -%}
+		{% for t in rslope -%}
+			RIGHT_SLOPE_{{ loop.index }},
+		{% endfor -%}
+		{% for t in lslope -%}
+			LEFT_SLOPE_{{ loop.index }},
+		{% endfor -%}
+		{% for t in solid -%}
+			SOLID_{{ loop.index }},
+		{% endfor -%}
+		{% for t in breakable -%}
+			BREAKABLE_{{ loop.index }},
+		{% endfor -%}
+		SOLID_TRANSPARENT,
+	};
+
+	static const Value ONE_WAY_BEGIN = ONE_WAY_1;
+	static const Value RIGHT_SLOPE_BEGIN = RIGHT_SLOPE_1;
+	static const Value LEFT_SLOPE_BEGIN = LEFT_SLOPE_1;
+	static const Value SOLID_BEGIN = SOLID_1;
+	static const Value BREAKABLE_BEGING = BREAKABLE_1;
+
+};
+
+struct TiledMap
+{
+	static const unsigned short map[];
+	static const int width;
+	static const int height;
+};
