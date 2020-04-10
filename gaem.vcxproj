@@ -57,6 +57,7 @@
     <ClInclude Include="src\mates.h" />
     <ClInclude Include="src\matrix2d.h" />
     <ClInclude Include="src\mesa.h" />
+    <ClInclude Include="src\screen.h" />
     <ClInclude Include="src\simplexnoise.h" />
     <ClInclude Include="src\singleinstance.h" />
     <ClInclude Include="src\spawningtile.h" />
@@ -95,6 +96,7 @@
     <ClCompile Include="src\partsys.cpp" />
     <ClCompile Include="src\rand.cpp" />
     <ClCompile Include="src\scene_jumpman.cpp" />
+    <ClCompile Include="src\screen.cpp" />
     <ClCompile Include="src\simplexnoise.cpp" />
     <ClCompile Include="src\spawningtile.cpp" />
     <ClCompile Include="src\steering_behavior.cpp" />

@@ -94,22 +94,12 @@ void JumpScene::Update(float dt)
 	//if (!transition.reached()) {
 	//	Camera::SetZoom(transition.getPos());
 	//}
-	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
-	float minY = (Camera::GetCameraBounds().height / 2.f);
-	float maxY = ((map.sizes.y) * 16) - (Camera::GetCameraBounds().height / 2.f);
-	if (maxY < minY) {
-		minY = maxY - 1;
-	}
-	Mates::Clamp(camPos.y, minY, maxY);
-	//camPos.y = (Camera::GetCameraBounds().height / 2.f) - Tile::size; //fixed Y axis
-	float minX = (Camera::GetCameraBounds().width / 2.f);
-	float maxX = ((map.sizes.x) * 16) - (Camera::GetCameraBounds().width / 2.f);
-	if (maxX < minX) {
-		minX = maxX - 1;
-	}
-	Mates::Clamp(camPos.x, minX, maxX);
-	
+
+	screenManager.Update(dt);
+
 	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
+	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
+	screenManager.ClampCameraToScreen(camPos);
 	Camera::SetCameraCenter(camPos);
 
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
@@ -251,7 +241,9 @@ void JumpScene::Draw(sf::RenderTarget& window)
 
 	ImGui::Begin("jumpman scene");
 	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
-	sf::Vector2i t = map.toTiles(Mouse::GetPositionInWorld());
+	vec m = Mouse::GetPositionInWorld();
+	sf::Vector2i t = map.toTiles(m);
+	ImGui::Text("Mouse: %f,%f", m.x, m.y);
 	ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
 	ImGui::End();
 

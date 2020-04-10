@@ -9,10 +9,13 @@
 #include "destroyedtiles.h"
 #include "bat.h"
 #include "lava.h"
+#include "screen.h"
 
 struct JumpScene : Scene {
 
 	TransitionSinusFadeOut transition;
+	
+	ScreenManager screenManager;
 
 	int randomSeed;
 	TileMap map;

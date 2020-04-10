@@ -95,6 +95,10 @@ namespace Camera
         return Bounds(viewOrigin.x, viewOrigin.y, viewSize.x, viewSize.y);
     }
 
+    vec GetCameraSize()
+    {
+        return gameView.getSize();
+    }
 
     void ClampCameraTo(const Bounds& limit)
 	{

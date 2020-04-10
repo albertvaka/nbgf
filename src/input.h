@@ -208,6 +208,7 @@ namespace Camera
 	void SetCameraCenter(const vec& center);
 	vec GetCameraCenter();
 	Bounds GetCameraBounds();
+	vec GetCameraSize();
 	void ClampCameraTo(const Bounds& b);
 	void ResetCamera();
 
