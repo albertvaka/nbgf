@@ -106,7 +106,12 @@ out_h = tm.render(
     entities_by_type=entities_by_type,
     screens=out_screens,
 )
-Path('../src/tiledexport.h').write_text(out_h)
+
+current = Path('../src/tiledexport.h').read_text()
+if out_h == current:
+    print("Skipping header generation, no changes detected")
+else:
+    Path('../src/tiledexport.h').write_text(out_h)
                 
 tm = Template(Path('tiledexport.cpp.tmpl').read_text())
 #template.globals['custom_function'] = custom_function
@@ -127,4 +132,9 @@ out_cpp = tm.render(
     screens=out_screens,
     debug = False,
 )
-Path('../src/tiledexport.cpp').write_text(out_cpp)
+
+current = Path('../src/tiledexport.cpp').read_text()
+if out_cpp == current:
+    print("Skipping cpp generation, no changes detected")
+else:
+    Path('../src/tiledexport.cpp').write_text(out_cpp)
