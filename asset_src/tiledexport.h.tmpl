@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <SFML/Graphics.hpp>
 
 struct TiledTiles
@@ -41,6 +43,16 @@ struct TiledTiles
 struct TiledMap
 {
 	static const unsigned short map[];
-	static const int width;
-	static const int height;
+	static const sf::Vector2f map_size;
+};
+
+struct TiledEntities
+{
+	{% for k, v in entities_by_type.items() -%}
+		{%- if v|length > 1 -%}
+			static const std::array<sf::Vector2f, {{v|length}}> {{k}};
+		{%- else -%}
+			static const sf::Vector2f {{k}};
+		{%- endif %}
+	{% endfor %}
 };

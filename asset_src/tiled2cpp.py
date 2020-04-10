@@ -20,7 +20,7 @@ for l in level.layers:
     if l.name == "World":
         tiles = l
     elif l.name == "Entities":
-        entities = l
+        entities = l.tiled_objects
 
 out_map_dict = dict()
 gids_used = set()
@@ -81,6 +81,13 @@ print("Different tiles used:",len(gids_used))
 print("Width: {}, height: {}, total tiles: {}".format(out_width, out_height, len(out_map)))
 print("Tile types founds:", ','.join(gids_by_type.keys()))
 
+entities_by_type = defaultdict(list)
+for e in entities:
+    type_ = e.type if e.type != None else tileset[e.gid-1].type_
+    if not type_:
+        print("Entity id={} has no type".format(e.id_))
+    entities_by_type[type_].append((e.location.x-min_x*tilesize, e.location.y-min_y*tilesize))
+
 tm = Template(Path('tiledexport.h.tmpl').read_text())
 out_h = tm.render(
     bg=gids_by_type['bg'],
@@ -89,6 +96,7 @@ out_h = tm.render(
     lslope=gids_by_type['lslope'],
     solid=gids_by_type['solid'],
     breakable=gids_by_type['breakable'],
+    entities_by_type=entities_by_type,
 )
 Path('../src/tiledexport.h').write_text(out_h)
                 
@@ -107,6 +115,7 @@ out_cpp = tm.render(
     height = out_height,
     gid_to_tileid= gid_to_tileid,
     map = out_map,
+    entities_by_type=entities_by_type,
     debug = False
 )
 Path('../src/tiledexport.cpp').write_text(out_cpp)

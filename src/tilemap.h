@@ -60,10 +60,10 @@ private:
 struct TileMap : SingleInstance<TileMap>
 {
 	TileMap()
-		: sizes(TiledMap::width, TiledMap::height)
-		, tiles(new Tile[TiledMap::width * TiledMap::height]{})
+		: sizes(TiledMap::map_size.x, TiledMap::map_size.y)
+		, tiles(new Tile[TiledMap::map_size.x * TiledMap::map_size.y]{})
 	{
-		memcpy((void*)tiles, (void*)TiledMap::map, TiledMap::width * TiledMap::height * sizeof(Tile));
+		memcpy((void*)tiles, (void*)TiledMap::map, TiledMap::map_size.x * TiledMap::map_size.y * sizeof(Tile));
 	}
 
 	TileMap(const sf::Vector2i& _sizes)

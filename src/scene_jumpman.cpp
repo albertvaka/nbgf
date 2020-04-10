@@ -19,7 +19,7 @@ const bool random_mode = false;
 
 JumpScene::JumpScene()
 	: map()
-	, lava((TiledMap::height-1)*16)
+	, lava((TiledMap::map_size.y-1)*16)
 {
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
 
@@ -42,77 +42,23 @@ JumpScene::JumpScene()
 void JumpScene::EnterScene() 
 {
 	player.Reset();
+	player.pos = TiledEntities::spawn;
 
 	Camera::SetZoom(GameData::GAME_ZOOM);
 	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
 	//transition.setTime(2.0f);
 	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
 	//transition.goPos(GameData::JUMPMAN_ZOOM);
-
+	
 	if (random_mode) {
-		player.pos = vec(160, 160);
-
-		randomSeed = Random::roll(0, 10000);
-		map.Randomize(randomSeed);
-
-		Debug::out << "seed=" << randomSeed << ", bats=" << Bat::getAll().size();
-
-		for (int y = -1; y < map.sizes.y - 5; y++) { //don't spawn at the bottom rows
-			for (int x = 20; x < map.sizes.x; x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
-				if (map.isSolid(x, y)) {
-					float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
-					if (y == -1) noise -= 0.66f;
-					if (noise > 0.f) {
-						bool angry = (Random::rollf() < chanceAngryBat);
-						new Bat(vec((x + 0.5f) * Tile::size, (y + 1.5f) * Tile::size), angry);
-						map.setTile(x - 1, y + 1, Tile::NONE);
-						map.setTile(x, y + 1, Tile::NONE);
-						map.setTile(x + 1, y + 1, Tile::NONE);
-						map.setTile(x - 1, y + 2, Tile::NONE);
-						map.setTile(x, y + 2, Tile::NONE);
-						map.setTile(x + 1, y + 2, Tile::NONE);
-					}
-				}
-			}
-		}
-
-		sf::Vector2i pos = map.toTiles(player.pos);
-		map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 2, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 4, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 5, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 6, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x + 1, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x + 2, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x + 3, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 1, pos.y, Tile::NONE);
-		map.setTile(pos.x, pos.y, Tile::NONE);
-		map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
-		map.setTile(pos.x, pos.y - 1, Tile::NONE);
-		map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
-		map.setTile(pos.x, pos.y - 2, Tile::NONE);
-		map.setTile(pos.x + 1, pos.y, Tile::RIGHT_SLOPE_1);
-		map.setTile(pos.x + 2, pos.y, Tile::SOLID_1);
-		map.setTile(pos.x + 3, pos.y - 1, Tile::SOLID_1);
-		map.setTile(pos.x + 3, pos.y, Tile::SOLID_1);
-		map.setTile(pos.x + 2, pos.y - 1, Tile::RIGHT_SLOPE_1);
-		map.setTile(pos.x + 3, pos.y - 2, Tile::RIGHT_SLOPE_1);
-		map.setTile(pos.x + 4, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x + 5, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x - 4, pos.y, Tile::LEFT_SLOPE_1);
-		map.setTile(pos.x - 5, pos.y, Tile::SOLID_1);
-		map.setTile(pos.x - 5, pos.y - 1, Tile::LEFT_SLOPE_1);
-		map.setTile(pos.x - 6, pos.y - 1, Tile::SOLID_1);
-		map.setTile(pos.x - 6, pos.y, Tile::SOLID_1);
-		map.setTile(pos.x - 6, pos.y - 2, Tile::LEFT_SLOPE_1);
-		map.setTile(pos.x - 7, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID_1);
+		RandomMap();
+		return;
 	}
+
+	for (const sf::Vector2f& v : TiledEntities::bat) {
+		new Bat(v,false);
+	}
+
 }
 
 void JumpScene::ExitScene()
@@ -124,9 +70,14 @@ void JumpScene::ExitScene()
 	destroyedTiles.Clear();
 }
 
-void JumpScene::Update(float dt) {
+void JumpScene::Update(float dt)
+{
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.pos.y > map.boundsInWorld().Bottom()- Tile::size)) {
+	if (player.pos.y > map.boundsInWorld().Bottom() - Tile::size) {
+		player.vel = vec(0, 0); //dying slowly in the lava
+	}
+		
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.pos.y > map.boundsInWorld().Bottom()- Tile::size/2)) {
 		ExitScene();
 		EnterScene();
 	}
@@ -310,4 +261,71 @@ void JumpScene::Draw(sf::RenderTarget& window)
 #endif
 
 	//player.polvito.DrawImGUI("Polvito");
+}
+
+
+
+void JumpScene::RandomMap() {
+	player.pos = vec(160, 160);
+
+	randomSeed = Random::roll(0, 10000);
+	map.Randomize(randomSeed);
+
+	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::getAll().size();
+
+	for (int y = -1; y < map.sizes.y - 5; y++) { //don't spawn at the bottom rows
+		for (int x = 20; x < map.sizes.x; x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
+			if (map.isSolid(x, y)) {
+				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
+				if (y == -1) noise -= 0.66f;
+				if (noise > 0.f) {
+					bool angry = (Random::rollf() < chanceAngryBat);
+					new Bat(vec((x + 0.5f) * Tile::size, (y + 1.5f) * Tile::size), angry);
+					map.setTile(x - 1, y + 1, Tile::NONE);
+					map.setTile(x, y + 1, Tile::NONE);
+					map.setTile(x + 1, y + 1, Tile::NONE);
+					map.setTile(x - 1, y + 2, Tile::NONE);
+					map.setTile(x, y + 2, Tile::NONE);
+					map.setTile(x + 1, y + 2, Tile::NONE);
+				}
+			}
+		}
+	}
+
+	sf::Vector2i pos = map.toTiles(player.pos);
+	map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x - 2, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x - 4, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x - 5, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x - 6, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x + 1, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x + 2, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x + 3, pos.y + 1, Tile::SOLID_1);
+	map.setTile(pos.x - 1, pos.y, Tile::NONE);
+	map.setTile(pos.x, pos.y, Tile::NONE);
+	map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
+	map.setTile(pos.x, pos.y - 1, Tile::NONE);
+	map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
+	map.setTile(pos.x, pos.y - 2, Tile::NONE);
+	map.setTile(pos.x + 1, pos.y, Tile::RIGHT_SLOPE_1);
+	map.setTile(pos.x + 2, pos.y, Tile::SOLID_1);
+	map.setTile(pos.x + 3, pos.y - 1, Tile::SOLID_1);
+	map.setTile(pos.x + 3, pos.y, Tile::SOLID_1);
+	map.setTile(pos.x + 2, pos.y - 1, Tile::RIGHT_SLOPE_1);
+	map.setTile(pos.x + 3, pos.y - 2, Tile::RIGHT_SLOPE_1);
+	map.setTile(pos.x + 4, pos.y - 2, Tile::SOLID_1);
+	map.setTile(pos.x + 5, pos.y - 2, Tile::SOLID_1);
+	map.setTile(pos.x - 4, pos.y, Tile::LEFT_SLOPE_1);
+	map.setTile(pos.x - 5, pos.y, Tile::SOLID_1);
+	map.setTile(pos.x - 5, pos.y - 1, Tile::LEFT_SLOPE_1);
+	map.setTile(pos.x - 6, pos.y - 1, Tile::SOLID_1);
+	map.setTile(pos.x - 6, pos.y, Tile::SOLID_1);
+	map.setTile(pos.x - 6, pos.y - 2, Tile::LEFT_SLOPE_1);
+	map.setTile(pos.x - 7, pos.y - 2, Tile::SOLID_1);
+	map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID_1);
+	map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID_1);
+	map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID_1);
 }

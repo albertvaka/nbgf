@@ -23,17 +23,30 @@ const sf::IntRect TiledTiles::tileToTextureRect[] = {
 	{},	//SOLID_TRANSPARENT
 };
 
-const int TiledMap::width = {{ width }};
-const int TiledMap::height = {{ height }};
+const sf::Vector2f TiledMap::map_size = sf::Vector2f({{ width }}, {{ height }});
 
 const unsigned short TiledMap::map[] = {
     {% for t in map -%}
 		{%- if debug -%}
-			{%- if t == 0 -%}{{ ' ' -}}{%- else -%}{{ 'x' -}}{% endif %} 
+			{%- if t == 0 -%}{{ ' ' }}{%- else -%}{{ 'x' }}{% endif %} 
 		{%- else -%}
-			{{ t -}},
+			{{ t }},
 		{%- endif -%}
-		{% if loop.index%width == 0 %}
-		{% endif %} 
-    {%- endfor -%}
+	{%- if loop.index%width == 0 %}
+	{% endif -%} 
+    {%- endfor %}
 };
+
+{% for k, v in entities_by_type.items() -%}
+	{%- if v|length > 1 -%}
+		const std::array<sf::Vector2f, {{v|length}}> TiledEntities::{{k}} = {
+		{%- for e in v %}
+			sf::Vector2f({{e[0]}}f, {{e[1] }}f),
+		{%- endfor %}
+		};
+	{%- else -%}
+		const sf::Vector2f TiledEntities::{{k}} = sf::Vector2f({{v[0][0]}}f, {{v[0][1]}}f);
+	{%- endif %}
+{% endfor %}
+
+

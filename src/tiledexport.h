@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <SFML/Graphics.hpp>
 
 struct TiledTiles
@@ -117,6 +119,7 @@ struct TiledTiles
 		ONE_WAY_13,
 		ONE_WAY_14,
 		ONE_WAY_15,
+		ONE_WAY_16,
 		RIGHT_SLOPE_1,
 		RIGHT_SLOPE_2,
 		RIGHT_SLOPE_3,
@@ -174,6 +177,15 @@ struct TiledTiles
 struct TiledMap
 {
 	static const unsigned short map[];
-	static const int width;
-	static const int height;
+	static const sf::Vector2f map_size;
+};
+
+struct TiledEntities
+{
+	static const std::array<sf::Vector2f, 14> bat;
+	static const sf::Vector2f gun;
+	static const std::array<sf::Vector2f, 4> powerup;
+	static const sf::Vector2f walljump;
+	static const sf::Vector2f spawn;
+	
 };

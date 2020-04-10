@@ -26,5 +26,6 @@ struct JumpScene : Scene {
 	void ExitScene() override;
 	void Update(float dt) override;
 	void Draw(sf::RenderTarget& window) override;
+	void RandomMap();
 
 };
