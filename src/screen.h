@@ -13,7 +13,7 @@ struct ScreenManager : SingleInstance<ScreenManager>
 
 	ScreenManager();
 
-	int FindScreen(const vec& pos) {
+	int FindScreen(const vec& pos) const {
 		int i = 0;
 		for (const auto& screen : screens) {
 			if (screen.contains(pos)) {
@@ -21,14 +21,18 @@ struct ScreenManager : SingleInstance<ScreenManager>
 			}
 			i++;
 		}
-		return CurrentScreen;
+		return -1;
 	}
 
-	const Bounds& CurrentBounds() {
+	const Bounds& CurrentBounds() const {
 		return screens[CurrentScreen];
 	}
 
-	const void ClampCameraToScreen(vec& camPos);
+	const Bounds& ScreenBounds(int screen) const {
+		return screens[screen];
+	}
+
+	const void ClampCameraToScreen(vec& camPos) const;
 
 	void UpdateCurrentScreen(const vec& pos);
 };

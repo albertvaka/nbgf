@@ -1,9 +1,7 @@
 #include "screen.h"
 
-#include "jumpman.h"
 #include "input.h"
 #include "mates.h"
-#include "tilemap.h"
 #include "tiledexport.h"
 
 ScreenManager::ScreenManager() {
@@ -13,11 +11,12 @@ ScreenManager::ScreenManager() {
 }
 void ScreenManager::UpdateCurrentScreen(const vec& pos) {
 	if (!TiledMap::screens[CurrentScreen].contains(pos)) {
-		CurrentScreen = FindScreen(pos);
+		int screen = FindScreen(pos);
+		if (screen >= 0) CurrentScreen = screen;
 	}
 }
 
-const void ScreenManager::ClampCameraToScreen(vec& camPos) {
+const void ScreenManager::ClampCameraToScreen(vec& camPos) const {
 	const Bounds& screenBounds = CurrentBounds();
 
 	float minY = screenBounds.Top() + (Camera::GetCameraSize().y / 2.f);

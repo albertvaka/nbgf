@@ -2,6 +2,7 @@
 
 #include "jumpman.h"
 #include "bullet.h"
+#include "screen.h"
 #include "assets.h"
 
 const float awake_player_distance = 100.f;
@@ -31,6 +32,11 @@ Bat::Bat(vec pos, bool aggresive)
 	steering.TileMapAvoidanceOn(TileMap::instance());
 	steering.ForwardOn();
 	steering.WanderOn();
+
+	int screen = ScreenManager::instance()->FindScreen(pos);
+	if (screen >= 0) {
+		steering.BoundsAvoidanceOn(ScreenManager::instance()->ScreenBounds(screen));
+	}
 
 	if (aggresive) {
 		max_speed *= 1.4f;
