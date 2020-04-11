@@ -54,3 +54,12 @@ const std::array<sf::Vector2f, {{v|length}}> TiledEntities::{{k}} = {
 	const sf::Vector2f TiledEntities::{{k}} = sf::Vector2f({{v[0][0]}}f, {{v[0][1]}}f);
 {% endif %}
 {% endfor %}
+
+{% for k, v in areas_by_type.items() -%}
+	const std::array<sf::Rect<float>, {{v|length}}> TiledAreas::{{k}} = {
+		{%- for s in v %}
+		sf::Rect<float>({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
+		{%- endfor %}
+	};
+{% endfor %}
+
