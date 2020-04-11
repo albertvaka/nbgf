@@ -150,6 +150,11 @@ struct vec : public sf::Vector2f
     return (x != rhs.x) || (y != rhs.y);
   }
 
+  const vec operator-() const
+  {
+      return vec(-x, -y);
+  }
+
   void Debuggerino(sf::Color color = sf::Color::White)
 #ifdef _DEBUG
       ;
