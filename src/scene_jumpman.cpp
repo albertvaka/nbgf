@@ -89,14 +89,21 @@ void JumpScene::ExitScene()
 void JumpScene::Update(float dt)
 {
 
-	if (player.pos.y > map.boundsInWorld().Bottom() - Tile::size) {
-		player.dead = true;
-		player.invencibleTimer = 1;
-		player.pos.y += 6*dt; //sink slowly in the lava
-		player.bfgPos.y = -1000;
+	for (const Lava* l : EntS<Lava>::getAll()) {
+		if (l->IsInside(player.pos - vec(0,3.f))) {
+			player.dead = true;
+			player.invencibleTimer = 1;
+			player.pos.y += 6 * dt; //sink slowly in the lava
+			player.bfgPos.y = -1000;
+			player.onWall = JumpMan::ONWALL_NO;
+		}
+		if (l->IsInside(player.bounds().Center())) {
+			ExitScene();
+			EnterScene();
+		}
 	}
-		
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART) || (player.pos.y > map.boundsInWorld().Bottom() - Tile::size / 4)) {
+
+	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART)) {
 		ExitScene();
 		EnterScene();
 	}
