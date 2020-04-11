@@ -115,6 +115,9 @@ struct TiledTiles
 		BG_102,
 		BG_103,
 		BG_104,
+		BG_105,
+		BG_106,
+		BG_107,
 		ONE_WAY_1,
 		ONE_WAY_2,
 		ONE_WAY_3,
@@ -178,6 +181,7 @@ struct TiledTiles
 		BREAKABLE_1,
 		BREAKABLE_2,
 		BREAKABLE_3,
+		BREAKABLE_4,
 		SOLID_TRANSPARENT,
 	};
 
@@ -198,12 +202,18 @@ struct TiledMap
 
 struct TiledEntities
 {
-	static const std::array<sf::Vector2f, 15> bat;
+	static const std::array<sf::Vector2f, 14> bat;
 	static const sf::Vector2f gun;
 	static const std::array<sf::Vector2f, 4> powerup;
 	static const sf::Vector2f walljump;
 	static const sf::Vector2f angrybat;
 	static const std::array<sf::Vector2f, 2> batawake;
 	static const sf::Vector2f spawn;
+	
+};
+
+struct TiledAreas
+{
+	static const std::array<sf::Rect<float>, 1> lava;
 	
 };
