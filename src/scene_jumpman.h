@@ -21,7 +21,6 @@ struct JumpScene : Scene {
 	TileMap map;
 	JumpMan player;
 	PartSys bulletPartSys;
-	Lava lava;
 	DestroyedTiles destroyedTiles;
 
 	JumpScene();

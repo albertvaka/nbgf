@@ -1,18 +1,24 @@
 #pragma once
 
 #include "partsys.h"
+#include "selfregister.h"
 #include <SFML/Graphics.hpp>
 
-struct Lava
+struct Lava : EntS<Lava>
 {
 	PartSys lavaPartSys;
 	float posY;
 	float minX;
 	float maxX;
+	float targetY;
 
-	Lava(float yBottom, float minX, float maxX);
+	Lava(float posY, float minX, float maxX);
 	void Update(float dt);
-	void Draw(sf::RenderTarget& window);
+	void Draw(sf::RenderTarget& window) const;
+
+	void RaiseTo(float newY) {
+		targetY = newY;
+	}
 
 	void Plof(float posX) {
 		lavaPartSys.pos.x = posX;
@@ -22,8 +28,8 @@ struct Lava
 		}
 	}
 
-	void Clear() {
-		lavaPartSys.Clear();
+	bool IsInside(vec pos) const {
+		return pos.y > posY && pos.x > minX && pos.x < maxX;
 	}
 
 };

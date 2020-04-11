@@ -20,7 +20,6 @@ const bool random_mode = false;
 
 JumpScene::JumpScene()
 	: map(TiledMap::map_size.x, TiledMap::map_size.y)
-	, lava((TiledMap::map_size.y-1)*16, 1900, 2300)
 {
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
 
@@ -62,6 +61,10 @@ void JumpScene::EnterScene()
 		new Bat(v,false);
 	}
 
+	for (const sf::Rect<float>& a : TiledAreas::lava) {
+		new Lava(a.top, a.left, a.left+a.width);
+	}
+
 	screenManager.UpdateCurrentScreen(&player);
 	Camera::SetCameraCenter(player.pos);
 }
@@ -71,7 +74,7 @@ void JumpScene::ExitScene()
 	bulletPartSys.Clear();
 	EntS<Bullet>::deleteAll();
 	EntS<Bat>::deleteAll();
-	lava.Clear();
+	EntS<Lava>::deleteAll();
 	destroyedTiles.Clear();
 }
 
@@ -114,11 +117,13 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 		if (e->explode) continue;
 
-		if (e->pos.y > map.boundsInWorld().Bottom()-Tile::size) {
-			AwakeNearbyBats(e->pos);
-			lava.Plof(e->pos.x);
-			e->alive = false;
-			continue;
+		for (Lava* l : EntS<Lava>::getAll()) {
+			if (l->IsInside(e->pos)) {
+				AwakeNearbyBats(e->pos);
+				l->Plof(e->pos.x);
+				e->alive = false;
+				continue;
+			}
 		}
 
 		vec toTheOutside = e->vel.Perp().Normalized()* e->radius * 0.85f;
@@ -199,7 +204,9 @@ void JumpScene::Update(float dt)
 	bulletPartSys.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
-	lava.Update(dt);
+	for (Lava* l : EntS<Lava>::getAll()) {
+		l->Update(dt);
+	}
 }
 
 void JumpScene::Draw(sf::RenderTarget& window)
@@ -215,7 +222,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	map.Draw(window);
 	destroyedTiles.Draw(window);
 
-	for (Bat* e : EntS<Bat>::getAll()) {
+	for (const Bat* e : EntS<Bat>::getAll()) {
 		e->Draw(window);
 		if (Debug::Draw && Camera::GetCameraBounds().IsInside(e->pos)) {
 			e->drawBounds(window);
@@ -226,7 +233,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	bulletPartSys.Draw(window);
 	//bulletPartSys.DrawImGUI("BulletTrail");
 
-	for (Bullet* e : EntS<Bullet>::getAll()) {
+	for (const Bullet* e : EntS<Bullet>::getAll()) {
 		e->Draw(window);
 		if (Debug::Draw) {
 			e->drawBounds(window);
@@ -236,7 +243,9 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	player.Draw(window);
 
 
-	lava.Draw(window);
+	for (const Lava* l : EntS<Lava>::getAll()) {
+		l->Draw(window);
+	}
 
 	if (Debug::Draw) {
 		player.bounds().Draw(window);
@@ -252,6 +261,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	sf::Vector2i t = map.toTiles(m);
 	ImGui::Text("Mouse: %f,%f", m.x, m.y);
 	ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
+	ImGui::SliderFloat("lava", &(EntS<Lava>::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 	ImGui::End();
 
 #ifdef _DEBUG
