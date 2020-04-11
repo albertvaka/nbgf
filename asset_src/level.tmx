@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#001f2432" nextlayerid="9" nextobjectid="85">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#001f2432" nextlayerid="9" nextobjectid="87">
  <editorsettings>
   <export target="." format="tmx"/>
  </editorsettings>
@@ -749,6 +749,8 @@
   <object id="78" type="bat" gid="117" x="-1006.17" y="-61.5" width="16" height="16"/>
   <object id="80" type="bat" gid="117" x="-914" y="70.5" width="16" height="16"/>
   <object id="84" type="bat" gid="117" x="-656" y="52.5" width="16" height="16"/>
+  <object id="85" type="angrybat" gid="117" x="720.25" y="-495.042" width="16" height="16"/>
+  <object id="86" type="angrybat" gid="117" x="575.25" y="-511.5" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="8" name="Areas">
   <object id="83" name="lava" type="lava" x="336" y="232.978" width="618" height="23"/>

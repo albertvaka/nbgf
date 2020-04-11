@@ -118,6 +118,8 @@ struct TiledTiles
 		BG_105,
 		BG_106,
 		BG_107,
+		BG_108,
+		BG_109,
 		ONE_WAY_1,
 		ONE_WAY_2,
 		ONE_WAY_3,
@@ -206,7 +208,7 @@ struct TiledEntities
 	static const sf::Vector2f gun;
 	static const std::array<sf::Vector2f, 4> powerup;
 	static const sf::Vector2f walljump;
-	static const sf::Vector2f angrybat;
+	static const std::array<sf::Vector2f, 3> angrybat;
 	static const std::array<sf::Vector2f, 2> batawake;
 	static const sf::Vector2f spawn;
 	

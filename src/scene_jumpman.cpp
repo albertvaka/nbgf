@@ -61,6 +61,14 @@ void JumpScene::EnterScene()
 		new Bat(v,false);
 	}
 
+	for (const sf::Vector2f& v : TiledEntities::angrybat) {
+		new Bat(v, true);
+	}
+
+	for (const sf::Vector2f& v : TiledEntities::batawake) {
+		(new Bat(v, false))->awakened=true;
+	}
+
 	for (const sf::Rect<float>& a : TiledAreas::lava) {
 		new Lava(a.top, a.left, a.left+a.width);
 	}
