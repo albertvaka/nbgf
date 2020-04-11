@@ -7,7 +7,7 @@ namespace Debug {
 #ifdef _DEBUG
     extern bool Draw;
 #else 
-    static const bool Enabled = false;
+    static const bool Draw = false;
 #endif
     extern std::ostream& _forwarded_out;
 };
