@@ -28,7 +28,7 @@ int main()
 
 	sf::RenderWindow window(sf::VideoMode(GameData::WINDOW_WIDTH, GameData::WINDOW_HEIGHT), "GGJ 2020");
 
-	//window.setFramerateLimit(60);
+	window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
 	Input::Init(window);
 

@@ -200,6 +200,10 @@ void JumpScene::Update(float dt)
 			currentPlacingTile += 1;
 			if (currentPlacingTile >= magic_enum::enum_count<Tile::Value>()) currentPlacingTile = 1;
 		}
+		if (Keyboard::IsKeyJustPressed(LEFT)) currentPlacingTile = Tile::LEFT_SLOPE_1;
+		if (Keyboard::IsKeyJustPressed(RIGHT)) currentPlacingTile = Tile::RIGHT_SLOPE_1;
+		if (Keyboard::IsKeyJustPressed(UP)) currentPlacingTile = Tile::ONE_WAY_1;
+		if (Keyboard::IsKeyJustPressed(DOWN)) currentPlacingTile = Tile::SOLID_1;
 		bool left = Mouse::IsPressed(sf::Mouse::Button::Left);
 		bool right = Mouse::IsPressed(sf::Mouse::Button::Right);
 		if (left || right) {
@@ -268,8 +272,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
 	}
 
-
-
+#ifdef _DEBUG
 	ImGui::Begin("jumpman scene");
 	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
 	vec m = Mouse::GetPositionInWorld();
@@ -279,7 +282,6 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	ImGui::SliderFloat("lava", &(EntS<Lava>::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 	ImGui::End();
 
-#ifdef _DEBUG
 	if (Debug::Draw) {
 		Assets::marioSprite.setTextureRect(Tile::tileToTextureRect[currentPlacingTile]);
 		vec pos = Camera::GetCameraBounds().TopLeft() + vec(0, 16);
