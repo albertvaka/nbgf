@@ -278,7 +278,7 @@ grounded_exit:
 				if (t.isFullSolid())
 				{
 					posf.x = map->Right(x) + center.x;
-					vel.x = -10.f; //stay against wall
+					vel.x = -500.f * dt; //stay against wall
 					if (!isHit()) {
 						onWall = ONWALL_LEFT;
 					}
@@ -303,7 +303,7 @@ grounded_exit:
 				if (t.isFullSolid())
 				{
 					posf.x = map->Left(x) - centerFromRight.x;
-					vel.x = 10.f; //stay against wall
+					vel.x = 500.f * dt; //stay against wall
 					if (!isHit()) {
 						onWall = ONWALL_RIGHT;
 					}
