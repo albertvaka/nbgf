@@ -20,7 +20,7 @@ const bool random_mode = false;
 
 JumpScene::JumpScene()
 	: map(TiledMap::map_size.x, TiledMap::map_size.y)
-	, lava((TiledMap::map_size.y-1)*16)
+	, lava((TiledMap::map_size.y-1)*16, 1900, 2300)
 {
 	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
 

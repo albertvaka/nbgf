@@ -9,11 +9,14 @@ const float chunkSize = 5.4f;
 const float waveHeight = 2.8f;
 const float height = 22.f;
 const float speed = 3.0f;
+const float distanceBetweenParticleSpawners = 15.f;
 
 extern sf::Clock mainClock;
 
-Lava::Lava(float yBottom) 
+Lava::Lava(float yBottom, float minX, float maxX)
 	: posY(yBottom)
+	, minX(minX)
+	, maxX(maxX)
 {
 	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5 + 16, 37, 6, 6));
 	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(38, 37, 5, 5));
@@ -33,11 +36,12 @@ Lava::Lava(float yBottom)
 }
 
 void Lava::Update(float dt) {
-	const float chunkSize = 15.f;
 	Bounds screen = Camera::GetCameraBounds();
-	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
-	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
-	for (float x = left; x < right; x += chunkSize) {
+	float left = Mates::MaxOf(screen.Left(), minX);
+	float right = Mates::MinOf(screen.Right(), maxX);
+	float chunkLeft = (Mates::fastfloor(left / chunkSize) - 1) * chunkSize;
+	float chunkRight = (Mates::fastfloor(right / chunkSize) + 1) * chunkSize;
+	for (float x = chunkLeft; x < chunkRight; x += distanceBetweenParticleSpawners) {
 		lavaPartSys.pos.x = x;
 		lavaPartSys.Spawn(dt);
 	}
@@ -99,9 +103,11 @@ void Lava::Draw(sf::RenderTarget& window) {
 	bottomLayer.setFillColor(colorBottomLayer);
 #endif
 
-	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
-	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
-	for (float x = left; x < right; x += chunkSize)
+	float left = Mates::MaxOf(screen.Left(), minX);
+	float right = Mates::MinOf(screen.Right(), maxX);
+	float chunkLeft = (Mates::fastfloor(left / chunkSize) - 1) * chunkSize;
+	float chunkRight = (Mates::fastfloor(right / chunkSize) + 1) * chunkSize;
+	for (float x = chunkLeft; x < chunkRight; x += chunkSize)
 	{
 		float y = yBottom - waveHeight * sin(x * waveAmplitude + time);
 

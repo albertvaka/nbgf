@@ -7,8 +7,10 @@ struct Lava
 {
 	PartSys lavaPartSys;
 	float posY;
+	float minX;
+	float maxX;
 
-	Lava(float yBottom);
+	Lava(float yBottom, float minX, float maxX);
 	void Update(float dt);
 	void Draw(sf::RenderTarget& window);
 
