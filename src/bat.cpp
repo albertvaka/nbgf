@@ -12,7 +12,7 @@ float RandomSeekingTime() {
 }
 
 void AwakeNearbyBats(vec pos) {
-	for (Bat* bat : EntS<Bat>::getAll()) {
+	for (Bat* bat : Bat::getAll()) {
 		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
 			bat->awakened = true;
 		}

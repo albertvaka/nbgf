@@ -80,16 +80,16 @@ void JumpScene::EnterScene()
 void JumpScene::ExitScene()
 {
 	bulletPartSys.Clear();
-	EntS<Bullet>::deleteAll();
-	EntS<Bat>::deleteAll();
-	EntS<Lava>::deleteAll();
+	Bullet::deleteAll();
+	Bat::deleteAll();
+	Lava::deleteAll();
 	destroyedTiles.Clear();
 }
 
 void JumpScene::Update(float dt)
 {
 
-	for (const Lava* l : EntS<Lava>::getAll()) {
+	for (const Lava* l : Lava::getAll()) {
 		if (l->IsInside(player.pos - vec(0,7.f))) {
 			player.dead = true;
 			player.invencibleTimer = 1;
@@ -128,11 +128,11 @@ void JumpScene::Update(float dt)
 	Camera::SetCameraCenter(oldPos + displacement);
 
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
-	for (Bullet* e  : EntS<Bullet>::getAll()) {
+	for (Bullet* e  : Bullet::getAll()) {
 		e->Update(dt);
 		if (e->explode) continue;
 
-		for (Lava* l : EntS<Lava>::getAll()) {
+		for (Lava* l : Lava::getAll()) {
 			if (l->IsInside(e->pos)) {
 				AwakeNearbyBats(e->pos);
 				l->Plof(e->pos.x);
@@ -168,11 +168,11 @@ void JumpScene::Update(float dt)
 		bulletPartSys.pos = e->pos + vec::Rand(-4, -4, 4, 4);
 		bulletPartSys.Spawn(dt);
 	}
-	EntS<Bullet>::deleteNotAlive();
+	Bullet::deleteNotAlive();
 
-	for (Bat* e : EntS<Bat>::getAll()) {
+	for (Bat* e : Bat::getAll()) {
 		e->Update(dt);
-		for (Bullet* b : EntS<Bullet>::getAll()) {
+		for (Bullet* b : Bullet::getAll()) {
 			if (b->explode) continue;
 			if (Collide(e, b)) {
 				b->pos = e->pos;
@@ -189,7 +189,7 @@ void JumpScene::Update(float dt)
 			}
 		}
 	}
-	EntS<Bat>::deleteNotAlive();
+	Bat::deleteNotAlive();
 
 #ifdef _DEBUG
 	if (Debug::Draw) {
@@ -223,7 +223,7 @@ void JumpScene::Update(float dt)
 	bulletPartSys.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
-	for (Lava* l : EntS<Lava>::getAll()) {
+	for (Lava* l : Lava::getAll()) {
 		l->Update(dt);
 	}
 }
@@ -241,7 +241,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	map.Draw(window);
 	destroyedTiles.Draw(window);
 
-	for (const Bat* e : EntS<Bat>::getAll()) {
+	for (const Bat* e : Bat::getAll()) {
 		e->Draw(window);
 		if (Debug::Draw && Camera::GetCameraBounds().IsInside(e->pos)) {
 			e->drawBounds(window);
@@ -252,7 +252,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	bulletPartSys.Draw(window);
 	//bulletPartSys.DrawImGUI("BulletTrail");
 
-	for (const Bullet* e : EntS<Bullet>::getAll()) {
+	for (const Bullet* e : Bullet::getAll()) {
 		e->Draw(window);
 		if (Debug::Draw) {
 			e->drawBounds(window);
@@ -262,7 +262,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	player.Draw(window);
 
 
-	for (const Lava* l : EntS<Lava>::getAll()) {
+	for (const Lava* l : Lava::getAll()) {
 		l->Draw(window);
 	}
 
@@ -279,7 +279,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	sf::Vector2i t = map.toTiles(m);
 	ImGui::Text("Mouse: %f,%f", m.x, m.y);
 	ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
-	ImGui::SliderFloat("lava", &(EntS<Lava>::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
+	ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 	ImGui::End();
 
 	if (Debug::Draw) {

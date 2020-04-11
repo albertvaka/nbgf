@@ -10,7 +10,7 @@ const float respawnAnimTime = 0.2f;
 
 bool SpawningTile::CanSpawn() const {
 	if (Collide(JumpMan::instance()->maxBounds(), this->bounds())) return false;
-	for (Bat* b : EntS<Bat>::getAll()) {
+	for (Bat* b : Bat::getAll()) {
 		if (Collide(b->bounds(), this->bounds())) return false;
 	}
 	return true;
