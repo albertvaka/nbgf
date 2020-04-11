@@ -44,6 +44,18 @@ void Lava::Update(float dt) {
 	lavaPartSys.UpdateParticles(dt);
 }
 
+#define USE_VAO
+
+#ifdef USE_VAO
+sf::VertexArray lavaVA(sf::Quads);
+inline void AddQuad(float x, float y, float width, float height, const sf::Color& color) {
+	lavaVA.append({ vec(x, y), color });
+	lavaVA.append({ vec(x + width, y), color });
+	lavaVA.append({ vec(x + width, y + height), color });
+	lavaVA.append({ vec(x, y + height), color });
+}
+#endif
+
 void Lava::Draw(sf::RenderTarget& window) {
 
 	lavaPartSys.Draw(window);
@@ -67,13 +79,25 @@ void Lava::Draw(sf::RenderTarget& window) {
 	Bounds screen = Camera::GetCameraBounds();
 	float yBottom = posY;
 
-	static sf::RectangleShape topLayer(vec(chunkSize, 5.f));
-	topLayer.setFillColor(sf::Color(220, 10, 10)); // Top layer
-	static sf::RectangleShape lineLayer(vec(chunkSize, 1.f));
-	lineLayer.setFillColor(sf::Color(120, 0, 0)); // Line
-	static sf::RectangleShape bottomLayer(vec(chunkSize, height));
-	bottomLayer.setFillColor(sf::Color(250, 140, 50)); // Bottom layer
 
+	const float heightTopLayer = 5.f;
+	const float heightMiddleLayer = 1.f;
+	const float heightBottomLayer = height;
+
+	const sf::Color colorTopLayer(220, 10, 10);
+	const sf::Color colorMiddleLayer(120, 0, 0);
+	const sf::Color colorBottomLayer(250, 140, 50);
+
+#ifdef USE_VAO
+	lavaVA.clear();
+#else
+	static sf::RectangleShape topLayer(vec(chunkSize, heightTopLayer));
+	topLayer.setFillColor(colorTopLayer);
+	static sf::RectangleShape lineLayer(vec(chunkSize, heightMiddleLayer));
+	lineLayer.setFillColor(colorMiddleLayer);
+	static sf::RectangleShape bottomLayer(vec(chunkSize, heightBottomLayer));
+	bottomLayer.setFillColor(colorBottomLayer);
+#endif
 
 	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
 	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
@@ -81,12 +105,23 @@ void Lava::Draw(sf::RenderTarget& window) {
 	{
 		float y = yBottom - waveHeight * sin(x * waveAmplitude + time);
 
+#ifdef USE_VAO
+		AddQuad(x, y, chunkSize, heightTopLayer, colorTopLayer);
+		AddQuad(x, y + heightTopLayer, chunkSize, heightMiddleLayer, colorMiddleLayer);
+		AddQuad(x, y + heightTopLayer + heightMiddleLayer, chunkSize, heightBottomLayer, colorBottomLayer);
+#else
 		topLayer.setPosition(vec(x, y));
 		window.draw(topLayer);
-		lineLayer.setPosition(vec(x, y + 5.f));
+		lineLayer.setPosition(vec(x, y + heightTopLayer));
 		window.draw(lineLayer);
-		bottomLayer.setPosition(vec(x, y + 6.f));
+		bottomLayer.setPosition(vec(x, y + heightTopLayer + heightMiddleLayer));
 		window.draw(bottomLayer);
+#endif
 	}
+
+#ifdef USE_VAO
+	window.draw(lavaVA);
+#endif
+
 
 }
