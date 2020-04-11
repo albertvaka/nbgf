@@ -11,9 +11,9 @@ ScreenManager::ScreenManager() {
 		screens.emplace_back(screen.left, screen.top, screen.width, screen.height);
 	}
 }
-void ScreenManager::UpdateCurrentScreen(const Entity* entity) {
-	if (!TiledMap::screens[CurrentScreen].contains(entity->pos)) {
-		CurrentScreen = FindScreen(entity);
+void ScreenManager::UpdateCurrentScreen(const vec& pos) {
+	if (!TiledMap::screens[CurrentScreen].contains(pos)) {
+		CurrentScreen = FindScreen(pos);
 	}
 }
 

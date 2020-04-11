@@ -3,7 +3,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "bounds.h"
-#include "entity.h"
 #include "singleinstance.h"
 #include <vector>
 
@@ -14,10 +13,10 @@ struct ScreenManager : SingleInstance<ScreenManager>
 
 	ScreenManager();
 
-	int FindScreen(const Entity* e) {
+	int FindScreen(const vec& pos) {
 		int i = 0;
 		for (const auto& screen : screens) {
-			if (screen.contains(e->pos)) {
+			if (screen.contains(pos)) {
 				return i;
 			}
 			i++;
@@ -31,6 +30,6 @@ struct ScreenManager : SingleInstance<ScreenManager>
 
 	const void ClampCameraToScreen(vec& camPos);
 
-	void UpdateCurrentScreen(const Entity* entity);
+	void UpdateCurrentScreen(const vec& pos);
 };
 

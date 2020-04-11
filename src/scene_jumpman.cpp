@@ -73,7 +73,7 @@ void JumpScene::EnterScene()
 		new Lava(a.top, a.left, a.left+a.width);
 	}
 
-	screenManager.UpdateCurrentScreen(&player);
+	screenManager.UpdateCurrentScreen(player.pos);
 	Camera::SetCameraCenter(player.pos);
 }
 
@@ -116,7 +116,7 @@ void JumpScene::Update(float dt)
 	//	Camera::SetZoom(transition.getPos());
 	//}
 
-	screenManager.UpdateCurrentScreen(&player);
+	screenManager.UpdateCurrentScreen(player.pos);
 
 	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
