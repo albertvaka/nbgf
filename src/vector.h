@@ -155,7 +155,7 @@ struct vec : public sf::Vector2f
       return vec(-x, -y);
   }
 
-  void Debuggerino(sf::Color color = sf::Color::White)
+  void Debuggerino(sf::Color color = sf::Color::White) const
 #ifdef _DEBUG
       ;
 #else

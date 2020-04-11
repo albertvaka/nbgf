@@ -98,7 +98,6 @@ int main()
 			currentScene->Update(dt);
 		}
 
-
 		currentScene->Draw(window);
 
 #ifdef _DEBUG

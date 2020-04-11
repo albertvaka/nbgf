@@ -32,8 +32,8 @@ struct Bat : SteeringEntity, EntS<Bat>
 	Bat(vec position, bool aggresive);
 
 	void Update(float dt);
-	void Draw(sf::RenderTarget& window);
+	void Draw(sf::RenderTarget& window) const;
 
-	void DrawSenseArea(sf::RenderTarget& window);
+	void DrawSenseArea(sf::RenderTarget& window) const;
 };
 

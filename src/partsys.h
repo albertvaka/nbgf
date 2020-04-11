@@ -83,7 +83,7 @@ struct PartSys {
 
 	void Spawn(float dt);
 	void UpdateParticles(float dt); //Doesn't create new particles, use Spawn() 
-	void Draw(sf::RenderTarget& rt);
+	void Draw(sf::RenderTarget& rt) const;
 
 	Particle& AddParticle();
 	inline void AddParticles(int n) {
@@ -105,6 +105,6 @@ struct PartSys {
 private:
 	//TODO: Turn into static arrays
 	std::vector<Particle> particles;
-	std::vector<sf::Sprite> sprites;
+	mutable std::vector<sf::Sprite> sprites;
 };
 

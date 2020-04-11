@@ -18,7 +18,7 @@ void PartSys::UpdateParticles(float dt) {
 	}), particles.end());
 }
 
-void PartSys::Draw(sf::RenderTarget& rt) {
+void PartSys::Draw(sf::RenderTarget& rt) const {
 	for (const Particle& p : particles) {
 		sf::Sprite& spr = sprites[p.sprite];
 		spr.setPosition(p.pos);

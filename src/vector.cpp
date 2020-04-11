@@ -14,7 +14,7 @@ struct debugvec {
 
 std::vector<debugvec> debugvecs;
 
-void vec::Debuggerino(sf::Color color) {
+void vec::Debuggerino(sf::Color color) const {
     debugvecs.emplace_back(*this, color);
 }
 

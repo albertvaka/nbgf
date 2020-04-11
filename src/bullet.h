@@ -46,7 +46,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 		}
 	}
 
-	void Draw(sf::RenderTarget& window)
+	void Draw(sf::RenderTarget& window) const
 	{
 		sf::Sprite& spr = Assets::hospitalSprite;
 

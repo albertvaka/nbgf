@@ -38,7 +38,7 @@ Bat::Bat(vec pos, bool aggresive)
 	}
 }
 
-void Bat::DrawSenseArea(sf::RenderTarget& window)
+void Bat::DrawSenseArea(sf::RenderTarget& window) const
 {
 	CircleBounds(pos, awake_player_distance).Draw(window, sf::Color::Yellow);
 	CircleBounds(pos, awake_nearby_distance).Draw(window, sf::Color::Cyan);
@@ -134,7 +134,7 @@ void Bat::Update(float dt)
 }
 
 
-void Bat::Draw(sf::RenderTarget& window)
+void Bat::Draw(sf::RenderTarget& window) const
 {
 	sf::Sprite& spr = Assets::marioSprite;
 

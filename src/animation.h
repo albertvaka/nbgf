@@ -17,7 +17,7 @@ struct Animation
 		Reset();
 	}
 
-	AnimationType GetCurrentAnim() {
+	AnimationType GetCurrentAnim() const {
 		return anim_type;
 	}
 
@@ -51,7 +51,7 @@ struct Animation
 		}
 	}
 
-	int GetCurrentAnimDuration() {
+	int GetCurrentAnimDuration() const {
 		AnimationData* anim_data = &anim_lib[(int)anim_type];
 		return anim_data->timer[current_frame];
 	}
@@ -81,7 +81,7 @@ struct Animation
 		}
 	}
 
-	const sf::IntRect& CurrentFrame()
+	const sf::IntRect& CurrentFrame() const
 	{
 		AnimationData* anim_data = &anim_lib[(int)anim_type];
 		return anim_data->rect[current_frame];
