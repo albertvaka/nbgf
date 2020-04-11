@@ -9,7 +9,6 @@ const float chunkSize = 5.4f;
 const float waveHeight = 2.8f;
 const float height = 22.f;
 const float speed = 3.0f;
-const bool blockyWaves = true;
 
 extern sf::Clock mainClock;
 
@@ -33,7 +32,7 @@ Lava::Lava(float yBottom)
 	lavaPartSys.acc = vec(0, 60.f);
 }
 
-void  Lava::Update(float dt) {
+void Lava::Update(float dt) {
 	const float chunkSize = 15.f;
 	Bounds screen = Camera::GetCameraBounds();
 	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
@@ -61,41 +60,33 @@ void Lava::Draw(sf::RenderTarget& window) {
 	ImGui::SliderFloat("waveHeight", &waveHeight, 0.f, 10.f);
 	ImGui::SliderFloat("chunkSize", &chunkSize, 0.1f, 10.f);
 	ImGui::SliderFloat("waveAmplitude", &waveAmplitude, 0.f, 5.f);
-	ImGui::Checkbox("blockyWaves", &blockyWaves);
 	ImGui::End();
 	*/
 
 	float time = mainClock.getElapsedTime().asSeconds() * speed;
 	Bounds screen = Camera::GetCameraBounds();
-	float yBottom = posY + 16;
+	float yBottom = posY;
 
-	sf::ConvexShape poly;
-	poly.setPointCount(4);
+	static sf::RectangleShape topLayer(vec(chunkSize, 5.f));
+	topLayer.setFillColor(sf::Color(220, 10, 10)); // Top layer
+	static sf::RectangleShape lineLayer(vec(chunkSize, 1.f));
+	lineLayer.setFillColor(sf::Color(120, 0, 0)); // Line
+	static sf::RectangleShape bottomLayer(vec(chunkSize, height));
+	bottomLayer.setFillColor(sf::Color(250, 140, 50)); // Bottom layer
+
 
 	float left = (Mates::fastfloor(screen.Left() / chunkSize) - 1) * chunkSize;
 	float right = (Mates::fastfloor(screen.Right() / chunkSize) + 1) * chunkSize;
-	for (float x0 = left; x0 < right; x0 += chunkSize)
+	for (float x = left; x < right; x += chunkSize)
 	{
-		float xf = x0 + chunkSize;
-		float xf4sin = blockyWaves ? x0 : xf;
-		//float iF = blockyWaves ? i0 : i0 + 1.f;
-		poly.setPosition(vec(0, yBottom));
-		poly.setPoint(0, vec(x0, 0));
-		poly.setPoint(1, vec(x0, -height - waveHeight * sin(x0 * waveAmplitude + time)));
-		poly.setPoint(2, vec(xf, -height - waveHeight * sin(xf4sin * waveAmplitude + time)));
-		poly.setPoint(3, vec(xf, 0));
+		float y = yBottom - waveHeight * sin(x * waveAmplitude + time);
 
-		poly.setPosition(vec(0, yBottom));
-		poly.setFillColor(sf::Color(220, 10, 10)); // Top layer
-		window.draw(poly);
-
-		poly.setPosition(vec(0, yBottom + 5.f));
-		poly.setFillColor(sf::Color(120, 0, 0)); // Line
-		window.draw(poly);
-
-		poly.setPosition(vec(0, yBottom + 6.f));
-		poly.setFillColor(sf::Color(250, 140, 50)); // Bottom layer
-		window.draw(poly);
+		topLayer.setPosition(vec(x, y));
+		window.draw(topLayer);
+		lineLayer.setPosition(vec(x, y + 5.f));
+		window.draw(lineLayer);
+		bottomLayer.setPosition(vec(x, y + 6.f));
+		window.draw(bottomLayer);
 	}
 
 }
