@@ -151,6 +151,8 @@ struct TiledTiles
 		ONEWAY_14,
 		ONEWAY_15,
 		ONEWAY_16,
+		ONEWAY_17,
+		ONEWAY_18,
 		RSLOPE_1,
 		RSLOPE_2,
 		RSLOPE_3,
@@ -213,7 +215,7 @@ struct TiledTiles
 	static const Value BREAKABLE_BEGING = BREAKABLE_1;
 
 	// Aliases
-	static const Value BG_DOOR_OPENING = BG_47;
+	static const Value BG_DOOR_OPENING = BG_49;
 	static const Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
 	static const Value SOLID_DOOR = SOLID_19;
 	static const Value SOLID_DOOR_BOTTOM = SOLID_23;
