@@ -23,6 +23,7 @@ enum GameKeys
 	DEBUG_ZOOM_IN, DEBUG_ZOOM_OUT,
 	DEBUG_FRAME_BY_FRAME, DEBUG_FRAME_BY_FRAME_NEXT,
 	DEBUG_MODE,
+	DEBUG_KILLALL,
 	RESTART,
 };
 extern sf::Keyboard::Key key_map[magic_enum::enum_count<GameKeys>()];
@@ -42,6 +43,7 @@ inline void RemapInput()
 	key_map[GameKeys::DEBUG_FRAME_BY_FRAME] = sf::Keyboard::F1;
 	key_map[GameKeys::DEBUG_FRAME_BY_FRAME_NEXT] = sf::Keyboard::E;
 	key_map[GameKeys::DEBUG_MODE] = sf::Keyboard::F2;
+	key_map[GameKeys::DEBUG_KILLALL] = sf::Keyboard::F3;
 }
 
 enum KeyStates { JUST_RELEASED, RELEASED, JUST_PRESSED, PRESSED };

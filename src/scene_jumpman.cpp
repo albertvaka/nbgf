@@ -211,6 +211,15 @@ void JumpScene::Update(float dt)
 
 	Bat::deleteNotAlive(); //Must happen after enemydoor update
 
+	if (Keyboard::IsKeyJustPressed(DEBUG_KILLALL)) {
+		for (Bat* e : Bat::getAll()) {
+			if (e->screen == screenManager.currentScreen) {
+				(new Bullet(e->pos, vec(), 1.5f))->explode = true;
+				e->alive = false;
+			}
+		}
+	}
+
 #ifdef _DEBUG
 	if (Debug::Draw) {
 		if (Mouse::GetScrollWheelMovement() < 0.f) {
