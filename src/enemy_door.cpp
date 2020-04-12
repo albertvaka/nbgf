@@ -47,7 +47,7 @@ void EnemyDoor::Update(float dt)
 					break;
 				}
 				else if (t == Tile::BG_DOOR_OPENING) {
-					map->setTile(tilepos.x, tilepos.y + y, Tile::NONE);
+					map->setTile(tilepos.x, tilepos.y + y, Tile::BG_PLAIN_COLOR);
 					map->setTile(tilepos.x, tilepos.y + y - 1, Tile::SOLID_DOOR_BOTTOM);
 				}
 			}

@@ -48,7 +48,11 @@
   <tile id="107" type="oneway"/>
   <tile id="115" type="oneway"/>
   <tile id="116" type="bat"/>
-  <tile id="131" type="solid"/>
+  <tile id="131" type="solid">
+   <properties>
+    <property name="alias" value="plain_color"/>
+   </properties>
+  </tile>
   <tile id="132" type="oneway"/>
   <tile id="133" type="oneway"/>
   <tile id="134" type="oneway"/>
@@ -56,6 +60,11 @@
   <tile id="144" type="oneway">
    <properties>
     <property name="alias" value="behind_breakable"/>
+   </properties>
+  </tile>
+  <tile id="160">
+   <properties>
+    <property name="alias" value="plain_color"/>
    </properties>
   </tile>
   <tile id="167" type="oneway"/>
@@ -749,9 +758,9 @@
   </data>
  </layer>
  <objectgroup id="4" name="Entities">
-  <object id="47" type="bat" gid="117" x="-705.5" y="-58.5" width="16" height="16"/>
+  <object id="47" type="batawake" gid="117" x="-700" y="-38" width="16" height="16"/>
   <object id="50" type="bat" gid="117" x="-400" y="48" width="16" height="16"/>
-  <object id="51" type="bat" gid="117" x="-525.166" y="68" width="16" height="16"/>
+  <object id="51" type="batawake" gid="117" x="-525.166" y="68" width="16" height="16"/>
   <object id="53" type="powerup" gid="60" x="-384.667" y="9.33333" width="16" height="16"/>
   <object id="58" type="powerup" gid="60" x="96.25" y="-257.75" width="16" height="16"/>
   <object id="60" type="powerup" gid="60" x="465.333" y="79.3333" width="16" height="16"/>
@@ -763,14 +772,14 @@
   <object id="68" type="batawake" gid="117" x="-120" y="-603" width="16" height="16"/>
   <object id="69" type="batawake" gid="117" x="226" y="-556" width="16" height="16"/>
   <object id="72" type="bat" gid="117" x="-336" y="-544" width="16" height="16"/>
-  <object id="73" type="spawn" gid="1" x="33.3333" y="90" width="16" height="16"/>
+  <object id="73" type="spawn" gid="1" x="-540.667" y="96" width="16" height="16"/>
   <object id="74" gid="60" x="0.8333" y="-448.5" width="16" height="16"/>
-  <object id="75" type="bat" gid="117" x="-701.5" y="52" width="16" height="16"/>
-  <object id="76" type="bat" gid="117" x="-733" y="116.5" width="16" height="16"/>
-  <object id="77" type="bat" gid="117" x="-1030.5" y="36" width="16" height="16"/>
-  <object id="78" type="bat" gid="117" x="-1006.17" y="-61.5" width="16" height="16"/>
-  <object id="80" type="bat" gid="117" x="-888.333" y="69.5" width="16" height="16"/>
-  <object id="84" type="bat" gid="117" x="-670" y="50.1667" width="16" height="16"/>
+  <object id="75" type="batawake" gid="117" x="-771.5" y="23.5" width="16" height="16"/>
+  <object id="76" type="batawake" gid="117" x="-733" y="116.5" width="16" height="16"/>
+  <object id="77" type="batawake" gid="117" x="-1030.5" y="36" width="16" height="16"/>
+  <object id="78" type="batawake" gid="117" x="-988.67" y="-36" width="16" height="16"/>
+  <object id="80" type="batawake" gid="117" x="-888.333" y="69.5" width="16" height="16"/>
+  <object id="84" type="batawake" gid="117" x="-619.5" y="21.6667" width="16" height="16"/>
   <object id="91" type="walljump" gid="9" x="855.75" y="149.25" width="16" height="16"/>
   <object id="92" type="gun" gid="89" x="-1783.63" y="154" width="16" height="16"/>
   <object id="93" gid="182" x="-414" y="-46" width="16" height="16"/>
@@ -778,11 +787,11 @@
   <object id="97" type="angrybat" gid="117" x="-1517" y="-618" width="16" height="16"/>
   <object id="101" type="angrybat" gid="117" x="-1503" y="-604" width="16" height="16"/>
  </objectgroup>
- <objectgroup id="8" name="Areas">
+ <objectgroup id="8" name="Areas" visible="0">
   <object id="83" name="lava" type="lava" x="336" y="232.978" width="618" height="23"/>
-  <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-86.5" width="824" height="265.5"/>
+  <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
  </objectgroup>
- <objectgroup id="2" name="Screens">
+ <objectgroup id="2" name="Screens" visible="0">
   <object id="42" name="Camera" x="-260.455" y="-73" width="591.538" height="322"/>
   <object id="44" name="Camera" x="-1311.12" y="-78.3333" width="1048.45" height="332.997"/>
   <object id="45" name="Camera" x="-261.667" y="-386.667" width="587.333" height="308.667"/>
