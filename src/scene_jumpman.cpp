@@ -5,6 +5,7 @@
 #include "enemy_door.h"
 #include "assets.h"
 #include "simplexnoise.h"
+#include "parallax.h"
 #include "debug.h"
 
 const float batClusterSize = 22.f;
@@ -38,6 +39,11 @@ JumpScene::JumpScene()
 	bulletPartSys.max_rotation = 360.f;
 	bulletPartSys.rotation_vel = 180.f;
 	bulletPartSys.alpha = 0.75f;
+
+
+	for (const sf::Rect<float>& p : TiledAreas::parallax_forest) {
+		new Parallax(p);
+	}
 }
 
 void JumpScene::EnterScene() 
@@ -265,6 +271,10 @@ void JumpScene::Draw(sf::RenderTarget& window)
 		Simplex::DebugDraw(window, Tile::size, [this](int x, int y) {
 			return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
 		});
+	}
+
+	for (const Parallax* p : Parallax::getAll()) {
+		p->Draw(window);
 	}
 
 	map.Draw(window);

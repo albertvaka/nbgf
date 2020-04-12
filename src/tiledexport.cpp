@@ -282,22 +282,27 @@ const std::array<sf::Rect<float>, 10> TiledMap::screens = {
 	sf::Rect<float>(449.6199999999999f,37.0f,280.75f,153.0f),
 };
 
-const std::array<sf::Vector2f, 15> TiledEntities::bat = {
-	sf::Vector2f(1342.5f, 709.5f),
-	sf::Vector2f(1648.0f, 816.0f),
+const std::array<sf::Vector2f, 10> TiledEntities::batawake = {
+	sf::Vector2f(1348.0f, 730.0f),
 	sf::Vector2f(1522.8339999999998f, 836.0f),
+	sf::Vector2f(1928.0f, 165.0f),
+	sf::Vector2f(2274.0f, 212.0f),
+	sf::Vector2f(1276.5f, 791.5f),
+	sf::Vector2f(1315.0f, 884.5f),
+	sf::Vector2f(1017.5f, 804.0f),
+	sf::Vector2f(1059.33f, 732.0f),
+	sf::Vector2f(1159.667f, 837.5f),
+	sf::Vector2f(1428.5f, 789.6667f),
+};
+
+const std::array<sf::Vector2f, 7> TiledEntities::bat = {
+	sf::Vector2f(1648.0f, 816.0f),
 	sf::Vector2f(2704.0f, 800.0f),
 	sf::Vector2f(2624.0f, 800.0f),
 	sf::Vector2f(2720.25f, 895.75f),
 	sf::Vector2f(2608.0f, 896.5f),
 	sf::Vector2f(2751.25f, 976.0f),
 	sf::Vector2f(1712.0f, 224.0f),
-	sf::Vector2f(1346.5f, 820.0f),
-	sf::Vector2f(1315.0f, 884.5f),
-	sf::Vector2f(1017.5f, 804.0f),
-	sf::Vector2f(1041.83f, 706.5f),
-	sf::Vector2f(1159.667f, 837.5f),
-	sf::Vector2f(1378.0f, 818.1667f),
 };
 
 const std::array<sf::Vector2f, 4> TiledEntities::powerup = {
@@ -307,12 +312,7 @@ const std::array<sf::Vector2f, 4> TiledEntities::powerup = {
 	sf::Vector2f(2048.8333f, 319.5f),
 };
 
-const std::array<sf::Vector2f, 2> TiledEntities::batawake = {
-	sf::Vector2f(1928.0f, 165.0f),
-	sf::Vector2f(2274.0f, 212.0f),
-};
-
-const sf::Vector2f TiledEntities::spawn = sf::Vector2f(2081.3333f, 858.0f);
+const sf::Vector2f TiledEntities::spawn = sf::Vector2f(1507.333f, 864.0f);
 
 const sf::Vector2f TiledEntities::walljump = sf::Vector2f(2903.75f, 917.25f);
 
@@ -334,6 +334,6 @@ const std::array<sf::Rect<float>, 1> TiledAreas::lava = {
 		sf::Rect<float>(2384.0f,1000.9780000000001f,618.0f,23.0f),
 	};
 const std::array<sf::Rect<float>, 1> TiledAreas::parallax_forest = {
-		sf::Rect<float>(838.5f,681.5f,824.0f,265.5f),
+		sf::Rect<float>(838.5f,673.5f,824.0f,289.5f),
 	};
 

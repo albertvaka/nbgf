@@ -10,6 +10,7 @@ sf::Font Assets::font;
 
 sf::Shader Assets::tintShader;
 
+std::array<sf::Texture, 4> Assets::forestParallaxTextures;
 
 void Assets::LoadAll() {
 
@@ -23,4 +24,8 @@ void Assets::LoadAll() {
 
     tintShader.loadFromFile("data/tint.frag", sf::Shader::Fragment);
 
+    for (size_t i = 0; i < forestParallaxTextures.size(); i++) {
+        forestParallaxTextures[i].loadFromFile("data/redforest_"+ std::to_string(i)+".png");
+        forestParallaxTextures[i].setRepeated(true);
+    }
 }

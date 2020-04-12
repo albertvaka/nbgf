@@ -123,8 +123,6 @@ namespace Mates
 
 	inline float Lerp(float from, float to, float t)
 	{
-		if (t > 1) t = 1;
-		if (t < -1) t = -1;
 		return (from)+(to - from) * t;
 	}
 

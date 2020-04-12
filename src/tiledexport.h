@@ -234,9 +234,9 @@ struct TiledMap
 
 struct TiledEntities
 {
-	static const std::array<sf::Vector2f, 15> bat;
+	static const std::array<sf::Vector2f, 10> batawake;
+	static const std::array<sf::Vector2f, 7> bat;
 	static const std::array<sf::Vector2f, 4> powerup;
-	static const std::array<sf::Vector2f, 2> batawake;
 	static const sf::Vector2f spawn;
 	static const sf::Vector2f walljump;
 	static const sf::Vector2f gun;

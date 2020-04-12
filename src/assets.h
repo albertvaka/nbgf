@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <array>
 
 struct Assets
 {
@@ -15,6 +16,8 @@ struct Assets
 	static sf::Font font;
 
 	static sf::Shader tintShader;
+
+	static std::array<sf::Texture, 4> forestParallaxTextures;
 
 };
 
