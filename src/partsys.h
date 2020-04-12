@@ -77,7 +77,7 @@ struct PartSys {
 	sf::Sprite& AddSprite(const sf::Texture& texture, const sf::IntRect& rect) {
 		sprites.emplace_back(texture, rect);
 		sf::Sprite& sprite = sprites.back();
-		sprite.setOrigin(rect.width/2,rect.height/2);
+		sprite.setOrigin(rect.width/2.f,rect.height/2.f);
 		return sprite;
 	}
 

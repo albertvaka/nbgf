@@ -511,7 +511,7 @@ void JumpMan::Draw(sf::RenderTarget& window) const {
 
 	sf::Sprite& spr = Assets::marioSprite;
 	sf::Shader* shader = nullptr;
-	if (isHit() > 0.f) {
+	if (isHit()) {
 		shader = &Assets::tintShader;
 		shader->setUniform("flashColor", sf::Glsl::Vec4(1.f, 0.f, 0.f, 0.7f));
 	}
