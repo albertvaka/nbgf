@@ -77,6 +77,10 @@ unknown_t = gids_by_type.keys() - known_types
 if len(unknown_t) > 0:
     print("Unknown types found:", unknown_t)
 
+missing_t = known_types - gids_by_type.keys()
+if len(missing_t) > 0:
+    print("Found no tiles of these types:", missing_t)
+
 current_tileid = 1
 gid_to_tileid = {-1:0}
 aliases = dict()
@@ -98,7 +102,7 @@ out_map = [ gid_to_tileid[out_map_dict.get(i,-1)] for i in range(out_width*out_h
 
 print("Different tiles used:",len(gids_used))
 print("Width: {}, height: {}, total tiles: {}".format(out_width, out_height, len(out_map)))
-print("Tile types founds:", ','.join(gids_by_type.keys()))
+
 
 all_gids = []
 for t in known_types:
