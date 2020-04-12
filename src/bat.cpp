@@ -165,7 +165,7 @@ void Bat::Draw(sf::RenderTarget& window) const
 
 	if (aggresive) {
 		sf::Shader *tintShader = &Assets::tintShader;
-		tintShader->setUniform("flashColor", sf::Glsl::Vec4(0.7, 0.1, 0.2, 0.4));
+		tintShader->setUniform("flashColor", sf::Glsl::Vec4(0.7f, 0.1f, 0.2f, 0.4f));
 		window.draw(spr, tintShader);
 	} else {
 		window.draw(spr);

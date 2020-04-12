@@ -513,7 +513,7 @@ void JumpMan::Draw(sf::RenderTarget& window) const {
 	sf::Shader* shader = nullptr;
 	if (isHit() > 0.f) {
 		shader = &Assets::tintShader;
-		shader->setUniform("flashColor", sf::Glsl::Vec4(1, 0, 0, 0.7));
+		shader->setUniform("flashColor", sf::Glsl::Vec4(1.f, 0.f, 0.f, 0.7f));
 	}
 
 	spr.setTextureRect(animation.CurrentFrame());

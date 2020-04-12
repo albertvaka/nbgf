@@ -141,9 +141,9 @@ struct MainScene : Scene {
 
 		//Tilemap
 		sprite.setOrigin(0, 0);
-		for (int i = 0; i < mapita.size(); ++i)
+		for (size_t i = 0; i < mapita.size(); ++i)
 		{
-			for (int j = 0; j < mapita[i].size(); ++j)
+			for (size_t j = 0; j < mapita[i].size(); ++j)
 			{
 				drawTile(sprite, window, i, j);
 			}

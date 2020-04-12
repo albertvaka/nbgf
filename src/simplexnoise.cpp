@@ -312,13 +312,13 @@ float raw_noise_3d( const float x, const float y, const float z ) {
     float n0, n1, n2, n3; // Noise contributions from the four corners
 
     // Skew the input space to determine which simplex cell we're in
-    float F3 = 1.0/3.0;
+    float F3 = 1.0f/3.0f;
     float s = (x+y+z)*F3; // Very nice and simple skew factor for 3D
     int i = Mates::fastfloor(x+s);
     int j = Mates::fastfloor(y+s);
     int k = Mates::fastfloor(z+s);
 
-    float G3 = 1.0/6.0; // Very nice and simple unskew factor, too
+    float G3 = 1.0f/6.0f; // Very nice and simple unskew factor, too
     float t = (i+j+k)*G3;
     float X0 = i-t; // Unskew the cell origin back to (x,y,z) space
     float Y0 = j-t;
@@ -543,10 +543,10 @@ float dot( const int* g, const float x, const float y, const float z, const floa
 void DebugDraw(sf::RenderTarget& window, float tileSize, std::function<float(int x, int y)> noisefunc)
 {
     Bounds screen = Camera::GetCameraBounds();
-    int left = (screen.Left() / tileSize) - 1;
-    int right = (screen.Right() / tileSize) + 1;
-    int top = (screen.Top() / tileSize) - 1;
-    int bottom = (screen.Bottom() / tileSize) + 1;
+    int left = int(screen.Left() / tileSize) - 1;
+    int right = int(screen.Right() / tileSize) + 1;
+    int top = int(screen.Top() / tileSize) - 1;
+    int bottom = int(screen.Bottom() / tileSize) + 1;
 
     sf::RectangleShape rect;
     rect.setSize(vec(16, 16));

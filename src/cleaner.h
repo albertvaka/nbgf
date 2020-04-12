@@ -54,20 +54,20 @@ struct Cleaner : SortedDrawable, EntS<Cleaner>
 		switch (newdir)
 		{
 		case 0:
-			vel.x = 0.05;
+			vel.x = 0.05f;
 			break;
 		case 1:
-			vel.x = -0.05;
+			vel.x = -0.05f;
 			break;
 		}
 		newdir = Random::roll(2);
 		switch (newdir)
 		{
 		case 0:
-			vel.y = 0.05;
+			vel.y = 0.05f;
 			break;
 		case 1:
-			vel.y = -0.05;
+			vel.y = -0.05f;
 			break;
 		}
 	}

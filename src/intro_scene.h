@@ -32,8 +32,8 @@ struct IntroScene : Scene {
 		sprite.setTextureRect(sf::IntRect(16, 16, 16, 16));
 
 		passableCleaner.resize(23, std::vector<bool>(17, false));
-		for (int x = 0; x < passableCleaner.size(); x++){
-			for (int y = 0; y < passableCleaner[x].size(); y++){
+		for (size_t x = 0; x < passableCleaner.size(); x++){
+			for (size_t y = 0; y < passableCleaner[x].size(); y++){
 				bool borde = (x == 0 || y == 0 || x == passableCleaner.size()-1 || y == passableCleaner[x].size() -2);
 				passableCleaner[x][y] = !borde && ((x % 3 == 0) || (y % 3 == 0));
 			}

@@ -227,7 +227,7 @@ void JumpScene::Update(float dt)
 			if (currentPlacingTile < 1) currentPlacingTile = magic_enum::enum_count<Tile::Value>() - 1;
 		} else if (Mouse::GetScrollWheelMovement() > 0.f) {
 			currentPlacingTile += 1;
-			if (currentPlacingTile >= magic_enum::enum_count<Tile::Value>()) currentPlacingTile = 1;
+			if (currentPlacingTile >= int(magic_enum::enum_count<Tile::Value>())) currentPlacingTile = 1;
 		}
 		if (Keyboard::IsKeyJustPressed(LEFT)) currentPlacingTile = Tile::LSLOPE_1;
 		if (Keyboard::IsKeyJustPressed(RIGHT)) currentPlacingTile = Tile::RSLOPE_1;

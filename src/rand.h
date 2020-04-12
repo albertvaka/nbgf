@@ -118,7 +118,7 @@ namespace Random
 		float r = rollf(0.0f, radius);
 		float ang = rollf(0.0f, 360.0f);
 
-		float rads = ang * M_PI / 180.0f;
+		float rads = ang * float(M_PI) / 180.0f;
 
 		x = r * std::cos(rads);
 		y = r * std::sin(rads);

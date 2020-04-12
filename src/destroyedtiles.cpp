@@ -6,7 +6,7 @@
 const float timeToRespawn = 10.f;
 
 DestroyedTiles::DestroyedTiles() {
-	for (int i = 0; i < magic_enum::enum_count<Tile::Value>(); ++i) {
+	for (size_t i = 0; i < magic_enum::enum_count<Tile::Value>(); ++i) {
 		destroyedParticles.AddSprite(Assets::marioTexture, Tile::tileToTextureRect[i]);
 	}
 	destroyedParticles.acc.y = 50.f;

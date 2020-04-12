@@ -25,7 +25,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 	void Update(float dt)
 	{
 		auto tile = PosToTile(pos);
-		if (passableCleaner.size() > tile.x && passableCleaner[tile.x].size() > tile.y) {
+		if (int(passableCleaner.size()) > tile.x && int(passableCleaner[tile.x].size()) > tile.y) {
 			if (!passableCleaner[tile.x][tile.y]) {
 				alive = false;
 			}

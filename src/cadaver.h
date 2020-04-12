@@ -104,9 +104,11 @@ struct Cadaver : SortedDrawable, Cintable, EntS<Cadaver>
 			return leftLeg != ExtremityColor::NONE_COLOR;
 		case ExtremityType::RIGHT_LEG:
 			return rightLeg != ExtremityColor::NONE_COLOR;
+		default:
 		case ExtremityType::BODY:
 			return body != ExtremityColor::NONE_COLOR;
 		}
+
 	}
 
 	void AttachExtremity(Extremity* e) {
@@ -216,7 +218,7 @@ struct Cadaver : SortedDrawable, Cintable, EntS<Cadaver>
 	bool IsOk()
 	{
 		bool has_all = true;
-		for (int i = 0; i < magic_enum::enum_count<ExtremityType>(); ++i)
+		for (size_t i = 0; i < magic_enum::enum_count<ExtremityType>(); ++i)
 		{
 			has_all &= HasExtremity((ExtremityType)i);
 		}
