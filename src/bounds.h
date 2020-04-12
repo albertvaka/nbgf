@@ -33,7 +33,7 @@ struct Bounds : public sf::Rect<float>
         return ret;
     }
 
-    vec Center() const
+    [[nodiscard]] vec Center() const
 	{
 		return vec(left + width/2, top + height/2);
 	}
@@ -63,35 +63,35 @@ struct Bounds : public sf::Rect<float>
 		rt.draw(rs);
 	}
 
-    float Top() const
+    [[nodiscard]] float Top() const
 	{
         return top;
     }
 
-    float Bottom() const
+    [[nodiscard]] float Bottom() const
 	{
         return top + height;
     }
 
-    float Left() const
+    [[nodiscard]] float Left() const
 	{
         return left;
     }
 
-    float Right() const
+    [[nodiscard]] float Right() const
 	{
         return left + width;
     }
 
-    vec TopLeft() const {
+    [[nodiscard]] vec TopLeft() const {
         return vec(Left(), Top());
     }
 
-    vec BottomRight() const {
+    [[nodiscard]] vec BottomRight() const {
         return vec(Right(), Bottom());
     }
 
-	bool IsInside(const vec& point) const
+    [[nodiscard]] bool IsInside(const vec& point) const
 	{
         if (point.x < left) return false;
         if (point.x >= left+width) return false;
@@ -100,15 +100,15 @@ struct Bounds : public sf::Rect<float>
 		return true;
     }
 
-    vec Size() const {
+    [[nodiscard]] vec Size() const {
         return vec(width, height);
     }
 
-    vec ClosesPointInBounds(const vec& target) const;
-    float DistanceSq(const Bounds& a) const;
-    float DistanceSq(const CircleBounds& a) const;
-    float Distance(const Bounds& a) const;
-    float Distance(const CircleBounds& a) const;
+    [[nodiscard]] vec ClosesPointInBounds(const vec& target) const;
+    [[nodiscard]] float DistanceSq(const Bounds& a) const;
+    [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
+    [[nodiscard]] float Distance(const Bounds& a) const;
+    [[nodiscard]] float Distance(const CircleBounds& a) const;
 
     //TODO
     //void ExpandToInclude(vec point);

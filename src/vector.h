@@ -24,15 +24,15 @@ struct vec : public sf::Vector2f
   vec(sf::Vector2i v):sf::Vector2f(float(v.x),float(v.y)){}
   vec(sf::Vector2f v):sf::Vector2f(v.x,v.y){}
 
-  static vec Rand(float minX, float minY, float maxX, float maxY) {
+  [[nodiscard]] static vec Rand(float minX, float minY, float maxX, float maxY) {
       return vec(Random::rollf(minX, maxX), Random::rollf(minY, maxY));
   }
   
-  static vec Rand(const vec& min, const vec& max) {
+  [[nodiscard]] static vec Rand(const vec& min, const vec& max) {
       return vec(Random::rollf(min.x, max.x), Random::rollf(min.y, max.y));
   }
 
-  bool Equals(float px, float py) 
+  [[nodiscard]] bool Equals(float px, float py)
   {
       return x == px && y == py;
   }
@@ -40,20 +40,20 @@ struct vec : public sf::Vector2f
   void Zero(){x=0.0; y=0.0;}
 
   //returns true if both x and y are zero
-  bool isZero()const{return (x*x + y*y) < Mates::MinFloat;}
+  [[nodiscard]] bool isZero()const{return (x*x + y*y) < Mates::MinFloat;}
 
   //returns the length of the vector
-  inline float    Length()const;
+  [[nodiscard]] inline float    Length()const;
 
   //returns the squared length of the vector (thereby avoiding the sqrt)
-  inline float    LengthSq()const;
+  [[nodiscard]] inline float    LengthSq()const;
 
   inline void      Normalize();
-  inline vec      Normalized() const;
+  [[nodiscard]] inline vec      Normalized() const;
 
-  inline float    Dot(const vec& v2) const;
+  [[nodiscard]] inline float    Dot(const vec& v2) const;
 
-  inline float    Cross(const vec& v2) const;
+  [[nodiscard]] inline float    Cross(const vec& v2) const;
 
   void Clamp(const vec& minv, const vec& maxv) 
   {
@@ -63,7 +63,7 @@ struct vec : public sf::Vector2f
       else if (y < minv.y) y = minv.y;
   }
 
-  std::string ToString() const {
+  [[nodiscard]] std::string ToString() const {
       std::stringstream stream;
       stream << std::fixed << std::setprecision(2) << x << "," << y;
       return stream.str();
@@ -73,39 +73,36 @@ struct vec : public sf::Vector2f
   //returns positive if v2 is clockwise of this vector,
   //negative if anticlockwise (assuming the Y axis is pointing down,
   //X axis to right like a Window app)
-  inline int       Sign(const vec& v2) const;
+  [[nodiscard]] inline int       Sign(const vec& v2) const;
 
 
   // Angle in Degrees between the lines (origin to point a) and (origin to point b)
-  float Angle(const vec& other) const
+  [[nodiscard]] float Angle(const vec& other) const
   {
     float deltaY = other.y - y;
     float deltaX = other.x - x;
     return Mates::RadsToDegs(atan2(deltaY, deltaX));
   }
 
-  vec RotatedAroundOrigin(float rads) {
+  [[nodiscard]] vec RotatedAroundOrigin(float rads) {
       float cs = cos(rads);
       float sn = sin(rads);
       return vec(x * cs - y * sn, x * sn + y * cs);
   }
 
-  inline vec RotatedToFacePosition(const vec& target, float maxTurnRateRads = 900.f);
+  [[nodiscard]] inline vec RotatedToFacePosition(const vec& target, float maxTurnRateRads = 900.f);
 
   //returns the vector that is perpendicular to this one.
-  inline vec  Perp() const;
+  [[nodiscard]] inline vec  Perp() const;
 
   //adjusts x and y so that the length of the vector does not exceed max
   inline bool      Truncate(const float max);
 
   //returns the distance between this vector and th one passed as a parameter
-  inline float    Distance(const vec &v2) const;
+  [[nodiscard]] inline float    Distance(const vec &v2) const;
 
   //squared version of above.
-  inline float    DistanceSq(const vec &v2) const;
-
-  //returns the vector that is the reverse of this vector
-  inline vec  GetReverse() const;
+  [[nodiscard]] inline float    DistanceSq(const vec &v2) const;
 
   //we need some overloaded operators
   const vec& operator+=(const vec &rhs)
@@ -248,12 +245,6 @@ inline bool vec::Truncate(float max)
     return true;
   } 
   return false;
-}
-
-//  returns the vector that is the reverse of this vector
-inline vec vec::GetReverse() const
-{
-  return vec(-this->x, -this->y);
 }
 
 //  normalizes a 2D Vector
