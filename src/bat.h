@@ -30,7 +30,7 @@ struct Bat : SteeringEntity, EntS<Bat>
 	float seekingTimer; // Aggresive bats will start seeking when this gets to 0
 	int screen;
 
-	Bat(const vec& position, bool aggresive);
+	Bat(const vec& position, bool aggresive, bool awake);
 
 	void Update(float dt);
 	void Draw(sf::RenderTarget& window) const;

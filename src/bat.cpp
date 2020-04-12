@@ -20,14 +20,21 @@ void AwakeNearbyBats(const vec& pos) {
 	}
 }
 
-Bat::Bat(const vec& pos, bool aggresive)
+Bat::Bat(const vec& pos, bool aggresive, bool awake)
 	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
 	, steering(this)
 	, state(State::SIESTA)
 	, aggresive(aggresive)
 {
-	anim.Ensure(BAT_SIESTA);
-	anim.Update(Random::roll(0, anim.GetCurrentAnimDuration())); // Start blink anim at different time intervals
+	if (awake) {
+		state = State::FLYING;
+		anim.Ensure(BAT_FLYING);
+		anim.loopable = true;
+	}
+	else {
+		anim.Ensure(BAT_SIESTA);
+		anim.Update(Random::roll(0, anim.GetCurrentAnimDuration())); // Start blink anim at different time intervals
+	}
 
 	steering.TileMapAvoidanceOn(TileMap::instance());
 	steering.ForwardOn();

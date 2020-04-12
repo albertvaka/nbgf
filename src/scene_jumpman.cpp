@@ -59,15 +59,15 @@ void JumpScene::EnterScene()
 	map.LoadFromTiled();
 
 	for (const sf::Vector2f& v : TiledEntities::bat) {
-		new Bat(v,false);
+		new Bat(v,false, false);
 	}
 
 	for (const sf::Vector2f& v : TiledEntities::angrybat) {
-		new Bat(v, true);
+		new Bat(v, true, false);
 	}
 
 	for (const sf::Vector2f& v : TiledEntities::batawake) {
-		(new Bat(v, false))->awakened=true;
+		new Bat(v, false, true);
 	}
 
 	for (const sf::Rect<float>& a : TiledAreas::lava) {
@@ -344,7 +344,7 @@ void JumpScene::RandomMap() {
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) {
 					bool angry = (Random::rollf() < chanceAngryBat);
-					new Bat(TileMap::fromTiles(x,y+2), angry);
+					new Bat(TileMap::fromTiles(x,y+2), angry, false);
 					map.setTile(x - 1, y + 1, Tile::NONE);
 					map.setTile(x, y + 1, Tile::NONE);
 					map.setTile(x + 1, y + 1, Tile::NONE);
