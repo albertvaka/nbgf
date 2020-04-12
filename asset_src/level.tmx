@@ -70,7 +70,7 @@
   <tile id="181" type="enemy_door"/>
   <tile id="198" type="oneway"/>
   <tile id="199" type="oneway"/>
-  <tile id="209" type="solid">
+  <tile id="209">
    <properties>
     <property name="alias" value="door_opening"/>
    </properties>

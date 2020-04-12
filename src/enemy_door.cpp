@@ -40,13 +40,13 @@ void EnemyDoor::Update(float dt)
 			for (int y = 0; y < maxHeight; y++) {
 				Tile t = map->getTile(tilepos.x, tilepos.y + y);
 				if (t == Tile::SOLID_DOOR_BOTTOM) {
-					map->setTile(tilepos.x, tilepos.y + y, Tile::SOLID_DOOR_OPENING);
+					map->setTile(tilepos.x, tilepos.y + y, Tile::BG_DOOR_OPENING);
 					if (y == 0) {
 						state = State::OPEN;
 					}
 					break;
 				}
-				else if (t == Tile::SOLID_DOOR_OPENING) {
+				else if (t == Tile::BG_DOOR_OPENING) {
 					map->setTile(tilepos.x, tilepos.y + y, Tile::NONE);
 					map->setTile(tilepos.x, tilepos.y + y - 1, Tile::SOLID_DOOR_BOTTOM);
 				}

@@ -70,7 +70,7 @@ gids_used.remove(-1)
 
 gids_by_type = defaultdict(list)
 for g in gids_used:
-    type_ = tileset[g].type_ if g in tileset else "bg"
+    type_ = tileset[g].type_ if g in tileset and tileset[g].type_ is not None else "bg"
     gids_by_type[type_].append(g)
 
 unknown_t = gids_by_type.keys() - known_types
@@ -85,14 +85,14 @@ for type_ in known_types:
     num = 1
     for g in gids_by_type[type_]:
         gid_to_tileid[g] = current_tileid
-        name = '{}_{}'.format(type_.upper(), num).upper()
-        tilenames[g] = name
         current_tileid += 1
-        num +=1
+        name = '{}_{}'.format(type_.upper(), num).upper()
+        num += 1
+        tilenames[g] = name
         if g in tileset and tileset[g].properties is not None:
             for p in tileset[g].properties:
                 if p.name == 'alias':
-                    aliases[name] = '{}_{}'.format(type_.upper(), p.value).upper()  
+                    aliases[name] = '{}_{}'.format(type_.upper(), p.value).upper()
 
 out_map = [ gid_to_tileid[out_map_dict.get(i,-1)] for i in range(out_width*out_height) ]
 
