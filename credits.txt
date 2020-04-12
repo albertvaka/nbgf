@@ -1,0 +1,10 @@
+Code
+Tile collision algorithm by Jordi Santiago
+Animation system by Mario Gonzalez
+Steering behaviours based on work from Mat Buckland
+
+Art
+Forest background by David Marah https://itch.io/profile/aethrall
+Tileset by Robert Norenberg https://0x72.itch.io/
+Bat sprite by Avery https://forums.rpgmakerweb.com/index.php?members/avery.5315/
+
