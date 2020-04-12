@@ -94,8 +94,6 @@
     <property name="alias" value="door_bottom"/>
    </properties>
   </tile>
-  <tile id="240" type="solid"/>
-  <tile id="241" type="solid"/>
   <tile id="254" type="rslope"/>
   <tile id="255" type="solid"/>
   <tile id="259" type="solid"/>
