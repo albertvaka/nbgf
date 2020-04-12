@@ -28,11 +28,14 @@ struct Bat : SteeringEntity, EntS<Bat>
 	bool awakened = false;
 	bool aggresive = false;
 	float seekingTimer; // Aggresive bats will start seeking when this gets to 0
+	int screen;
 
 	Bat(vec position, bool aggresive);
 
 	void Update(float dt);
 	void Draw(sf::RenderTarget& window) const;
+
+	inline bool inSameScreenAsPlayer() const;
 
 	void DrawSenseArea(sf::RenderTarget& window) const;
 };

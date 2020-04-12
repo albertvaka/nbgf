@@ -10,9 +10,9 @@ ScreenManager::ScreenManager() {
 	}
 }
 void ScreenManager::UpdateCurrentScreen(const vec& pos) {
-	if (!TiledMap::screens[CurrentScreen].contains(pos)) {
+	if (!TiledMap::screens[currentScreen].contains(pos)) {
 		int screen = FindScreen(pos);
-		if (screen >= 0) CurrentScreen = screen;
+		if (screen >= 0) currentScreen = screen;
 	}
 }
 

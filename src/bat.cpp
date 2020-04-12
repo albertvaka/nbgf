@@ -33,7 +33,7 @@ Bat::Bat(vec pos, bool aggresive)
 	steering.ForwardOn();
 	steering.WanderOn();
 
-	int screen = ScreenManager::instance()->FindScreen(pos);
+	screen = ScreenManager::instance()->FindScreen(pos);
 	if (screen >= 0) {
 		steering.BoundsAvoidanceOn(ScreenManager::instance()->ScreenBounds(screen));
 	}
@@ -50,8 +50,13 @@ void Bat::DrawSenseArea(sf::RenderTarget& window) const
 	CircleBounds(pos, awake_nearby_distance).Draw(window, sf::Color::Cyan);
 }
 
+inline bool Bat::inSameScreenAsPlayer() const {
+	return screen == -1 || screen == ScreenManager::instance()->CurrentScreen();
+}
+
 void Bat::Update(float dt)
 {
+
 	anim.Update(dt * 1000);
 
 	switch (state) {
@@ -66,6 +71,9 @@ void Bat::Update(float dt)
 			}
 		}
 		else {
+			if (!inSameScreenAsPlayer()) {
+				return;
+			}
 			if (pos.DistanceSq(JumpMan::instance()->bounds().Center()) < (awake_player_distance * awake_player_distance) || awakened) {
 				anim.Ensure(BAT_AWAKE);
 				anim.Update(Random::roll(0, anim.GetCurrentAnimDuration()/2)); // Start flying at different time intervals
@@ -120,14 +128,15 @@ void Bat::Update(float dt)
 		vel = steering.CalculatePrioritized(dt);
 		if (steering.avoidingTileMap) {
 			state = State::FLYING;
-		} else {
+		}
+		else {
 			vel = steering.Seek(jumpman->bounds().Center());
 		}
 
 		vel = vel.Normalized() * max_speed;
 		pos += vel * dt;
 
-		if (jumpman->isHit() || steering.avoidingTileMap) {
+		if (jumpman->isHit() || steering.avoidingTileMap || !inSameScreenAsPlayer()) {
 			state = State::FLYING;
 			if (jumpman->isHit()) {
 				steering.FleeOn(jumpman);
@@ -142,6 +151,7 @@ void Bat::Update(float dt)
 
 void Bat::Draw(sf::RenderTarget& window) const
 {
+
 	sf::Sprite& spr = Assets::marioSprite;
 
 	if (vel.x > 0) {

@@ -8,7 +8,7 @@
 
 struct ScreenManager : SingleInstance<ScreenManager>
 {
-	int CurrentScreen = 0;
+	int currentScreen = 0;
 	std::vector<Bounds> screens;
 
 	ScreenManager();
@@ -24,8 +24,12 @@ struct ScreenManager : SingleInstance<ScreenManager>
 		return -1;
 	}
 
+	int CurrentScreen() const {
+		return currentScreen;
+	}
+
 	const Bounds& CurrentBounds() const {
-		return screens[CurrentScreen];
+		return screens[currentScreen];
 	}
 
 	const Bounds& ScreenBounds(int screen) const {
