@@ -2,23 +2,8 @@
 
 const sf::IntRect TiledTiles::tileToTextureRect[] = {
 	{},	//NONE
-	{% for t in bg -%}
-		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, BG_{{ loop.index }}, gid={{t}}
-	{% endfor -%}
-	{% for t in oneway -%}
-		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, ONE_WAY_{{ loop.index }}, gid={{t}}
-	{% endfor -%}
-	{% for t in rslope -%}
-		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, RIGHT_SLOPE_{{ loop.index }}, gid={{t}}
-	{% endfor -%}
-	{% for t in lslope -%}
-		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, LEFT_SLOPE_{{ loop.index }}, gid={{t}}
-	{% endfor -%}
-	{% for t in solid -%}
-		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, SOLID_{{ loop.index }}, gid={{t}}
-	{% endfor -%}
-	{% for t in breakable -%}
-		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, BREAKABLE_{{ loop.index }}, gid={{t}}
+	{% for t in gids -%}
+		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, {{ tilenames[t] }}, gid={{t}}
 	{% endfor -%}
 	{},	//SOLID_TRANSPARENT
 };

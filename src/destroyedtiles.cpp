@@ -43,7 +43,7 @@ void DestroyedTiles::Destroy(int x, int y) {
 		p.vel = vel[i];
 		p.sprite = int(t);
 	}
-	map->setTile(x, y, t == Tile::BREAKABLE_4 ? Tile::ONE_WAY_9 : Tile::NONE); //Hack
+	map->setTile(x, y, t == Tile::BREAKABLE_COVERING_ONEWAY ? Tile::ONEWAY_BEHIND_BREAKABLE : Tile::NONE);
 
 	toSpawn.emplace_back(x, y, t, timeToRespawn);
 }

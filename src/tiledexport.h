@@ -127,30 +127,37 @@ struct TiledTiles
 		BG_114,
 		BG_115,
 		BG_116,
-		ONE_WAY_1,
-		ONE_WAY_2,
-		ONE_WAY_3,
-		ONE_WAY_4,
-		ONE_WAY_5,
-		ONE_WAY_6,
-		ONE_WAY_7,
-		ONE_WAY_8,
-		ONE_WAY_9,
-		ONE_WAY_10,
-		ONE_WAY_11,
-		ONE_WAY_12,
-		ONE_WAY_13,
-		ONE_WAY_14,
-		ONE_WAY_15,
-		ONE_WAY_16,
-		RIGHT_SLOPE_1,
-		RIGHT_SLOPE_2,
-		RIGHT_SLOPE_3,
-		RIGHT_SLOPE_4,
-		LEFT_SLOPE_1,
-		LEFT_SLOPE_2,
-		LEFT_SLOPE_3,
-		LEFT_SLOPE_4,
+		BG_117,
+		BG_118,
+		BG_119,
+		BG_120,
+		BG_121,
+		BG_122,
+		BG_123,
+		ONEWAY_1,
+		ONEWAY_2,
+		ONEWAY_3,
+		ONEWAY_4,
+		ONEWAY_5,
+		ONEWAY_6,
+		ONEWAY_7,
+		ONEWAY_8,
+		ONEWAY_9,
+		ONEWAY_10,
+		ONEWAY_11,
+		ONEWAY_12,
+		ONEWAY_13,
+		ONEWAY_14,
+		ONEWAY_15,
+		ONEWAY_16,
+		RSLOPE_1,
+		RSLOPE_2,
+		RSLOPE_3,
+		RSLOPE_4,
+		LSLOPE_1,
+		LSLOPE_2,
+		LSLOPE_3,
+		LSLOPE_4,
 		SOLID_1,
 		SOLID_2,
 		SOLID_3,
@@ -189,6 +196,9 @@ struct TiledTiles
 		SOLID_36,
 		SOLID_37,
 		SOLID_38,
+		SOLID_39,
+		SOLID_40,
+		SOLID_41,
 		BREAKABLE_1,
 		BREAKABLE_2,
 		BREAKABLE_3,
@@ -196,11 +206,18 @@ struct TiledTiles
 		SOLID_TRANSPARENT,
 	};
 
-	static const Value ONE_WAY_BEGIN = ONE_WAY_1;
-	static const Value RIGHT_SLOPE_BEGIN = RIGHT_SLOPE_1;
-	static const Value LEFT_SLOPE_BEGIN = LEFT_SLOPE_1;
+	static const Value ONEWAY_BEGIN = ONEWAY_1;
+	static const Value RSLOPE_BEGIN = RSLOPE_1;
+	static const Value LSLOPE_BEGIN = LSLOPE_1;
 	static const Value SOLID_BEGIN = SOLID_1;
 	static const Value BREAKABLE_BEGING = BREAKABLE_1;
+
+	// Aliases
+	static const Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
+	static const Value SOLID_DOOR = SOLID_19;
+	static const Value SOLID_DOOR_OPENING = SOLID_20;
+	static const Value SOLID_DOOR_BOTTOM = SOLID_24;
+	static const Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_4;
 
 };
 
@@ -208,23 +225,25 @@ struct TiledMap
 {
 	static const unsigned short map[];
 	static const sf::Vector2f map_size;
-	static const std::array<sf::Rect<float>, 9> screens;
+	static const std::array<sf::Rect<float>, 10> screens;
 };
 
 struct TiledEntities
 {
-	static const std::array<sf::Vector2f, 14> bat;
+	static const std::array<sf::Vector2f, 15> bat;
 	static const std::array<sf::Vector2f, 4> powerup;
-	static const std::array<sf::Vector2f, 3> angrybat;
 	static const std::array<sf::Vector2f, 2> batawake;
 	static const sf::Vector2f spawn;
 	static const sf::Vector2f walljump;
 	static const sf::Vector2f gun;
+	static const std::array<sf::Vector2f, 2> enemy_door;
+	static const std::array<sf::Vector2f, 2> angrybat;
 	
 };
 
 struct TiledAreas
 {
 	static const std::array<sf::Rect<float>, 1> lava;
+	static const std::array<sf::Rect<float>, 1> parallax_forest;
 	
 };

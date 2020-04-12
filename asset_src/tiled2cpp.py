@@ -1,7 +1,10 @@
 import pytiled_parser
 from jinja2 import Template
 from pathlib import Path
-from  collections import defaultdict
+from collections import defaultdict
+from itertools import chain
+
+known_types = ['bg','oneway','rslope','lslope','solid','breakable']
 
 level = pytiled_parser.parse_tile_map("level.tmx")
 tileset = None
@@ -70,22 +73,36 @@ for g in gids_used:
     type_ = tileset[g].type_ if g in tileset else "bg"
     gids_by_type[type_].append(g)
 
-unknown_t = gids_by_type.keys() - ['bg','oneway','rslope','lslope','solid','breakable']
+unknown_t = gids_by_type.keys() - known_types
 if len(unknown_t) > 0:
     print("Unknown types found:", unknown_t)
 
 current_tileid = 1
 gid_to_tileid = {-1:0}
-for type_ in ['bg','oneway','rslope','lslope','solid','breakable']:
+aliases = dict()
+tilenames = {}
+for type_ in known_types:
+    num = 1
     for g in gids_by_type[type_]:
         gid_to_tileid[g] = current_tileid
+        name = '{}_{}'.format(type_.upper(), num).upper()
+        tilenames[g] = name
         current_tileid += 1
+        num +=1
+        if g in tileset and tileset[g].properties is not None:
+            for p in tileset[g].properties:
+                if p.name == 'alias':
+                    aliases[name] = '{}_{}'.format(type_.upper(), p.value).upper()  
 
 out_map = [ gid_to_tileid[out_map_dict.get(i,-1)] for i in range(out_width*out_height) ]
 
 print("Different tiles used:",len(gids_used))
 print("Width: {}, height: {}, total tiles: {}".format(out_width, out_height, len(out_map)))
 print("Tile types founds:", ','.join(gids_by_type.keys()))
+
+all_gids = []
+for t in known_types:
+    all_gids += gids_by_type[t]
 
 entities_by_type = defaultdict(list)
 for e in entities:
@@ -102,12 +119,9 @@ for e in screens:
 
 tm = Template(Path('tiledexport.h.tmpl').read_text())
 out_h = tm.render(
-    bg=gids_by_type['bg'],
-    oneway=gids_by_type['oneway'],
-    rslope=gids_by_type['rslope'],
-    lslope=gids_by_type['lslope'],
-    solid=gids_by_type['solid'],
-    breakable=gids_by_type['breakable'],
+    gids=all_gids,
+    tilenames=tilenames,
+    aliases=aliases,
     entities_by_type=entities_by_type,
     areas_by_type=areas_by_type,
     screens=out_screens,
@@ -122,12 +136,8 @@ else:
 tm = Template(Path('tiledexport.cpp.tmpl').read_text())
 #template.globals['custom_function'] = custom_function
 out_cpp = tm.render(
-    bg=gids_by_type['bg'],
-    oneway=gids_by_type['oneway'],
-    rslope=gids_by_type['rslope'],
-    lslope=gids_by_type['lslope'],
-    solid=gids_by_type['solid'],
-    breakable=gids_by_type['breakable'],
+    gids = all_gids,
+    tilenames = tilenames,
     tilesize = tilesize,
     tileset_cols = tileset_cols,
     width = out_width,

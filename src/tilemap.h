@@ -14,19 +14,19 @@ struct Tile : TiledTiles
 	static const vec sizevec;
 
 	bool isOneWay() const {
-		return value >= ONE_WAY_BEGIN && value < RIGHT_SLOPE_BEGIN;
+		return value >= ONEWAY_BEGIN && value < RSLOPE_BEGIN;
 	}
 
 	bool isSlope() const {
-		return value >= RIGHT_SLOPE_BEGIN && value < SOLID_BEGIN;
+		return value >= RSLOPE_BEGIN && value < SOLID_BEGIN;
 	}
 
 	bool isLeftSlope() const {
-		return value >= LEFT_SLOPE_BEGIN && value < SOLID_BEGIN;
+		return value >= LSLOPE_BEGIN && value < SOLID_BEGIN;
 	}
 
 	bool isRightSlope() const {
-		return value >= RIGHT_SLOPE_BEGIN && value < LEFT_SLOPE_BEGIN;
+		return value >= RSLOPE_BEGIN && value < LSLOPE_BEGIN;
 	}
 
 	bool isInvisible() const {
@@ -34,7 +34,7 @@ struct Tile : TiledTiles
 	}
 
 	bool isSolid() const {
-		return value >= RIGHT_SLOPE_BEGIN;
+		return value >= RSLOPE_BEGIN;
 	}
 
 	bool isFullSolid() const { //Excludes slopes
