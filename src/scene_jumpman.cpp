@@ -2,6 +2,7 @@
 #include "input.h"
 #include "imgui.h"
 #include "bullet.h"
+#include "enemy_door.h"
 #include "assets.h"
 #include "simplexnoise.h"
 #include "debug.h"
@@ -73,6 +74,19 @@ void JumpScene::EnterScene()
 		new Lava(a.top, a.left, a.left+a.width);
 	}
 
+	for (const sf::Vector2f& v : TiledEntities::enemy_door) {
+		EnemyDoor* d = new EnemyDoor(v);
+		int door_screen = screenManager.FindScreen(d->pos);
+		if (door_screen < 0) {
+			Debug::out << "Warning: Enemy door outside a screen";
+		}
+		for (const Bat* b : Bat::getAll()) {
+			if (b->screen == door_screen) {
+				d->AddEnemy(b);
+			}
+		}
+	}
+
 	screenManager.UpdateCurrentScreen(player.pos);
 	Camera::SetCameraCenter(player.pos);
 }
@@ -84,6 +98,7 @@ void JumpScene::ExitScene()
 	Bat::deleteAll();
 	Lava::deleteAll();
 	destroyedTiles.Clear();
+	EnemyDoor::deleteAll();
 }
 
 void JumpScene::Update(float dt)
@@ -189,7 +204,12 @@ void JumpScene::Update(float dt)
 			}
 		}
 	}
-	Bat::deleteNotAlive();
+
+	for (EnemyDoor* ed : EnemyDoor::getAll()) {
+		ed->Update(dt); // Checks for enemies with alive = false, crashes if they have been deleted already
+	}
+
+	Bat::deleteNotAlive(); //Must happen after enemydoor update
 
 #ifdef _DEBUG
 	if (Debug::Draw) {
@@ -240,6 +260,10 @@ void JumpScene::Draw(sf::RenderTarget& window)
 
 	map.Draw(window);
 	destroyedTiles.Draw(window);
+
+	for (const EnemyDoor* ed : EnemyDoor::getAll()) {
+		ed->Draw(window);
+	}
 
 	for (const Bat* e : Bat::getAll()) {
 		e->Draw(window);

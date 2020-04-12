@@ -198,6 +198,9 @@
     <ClInclude Include="src\screen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\enemy_door.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rand.cpp">
@@ -273,6 +276,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy_door.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
