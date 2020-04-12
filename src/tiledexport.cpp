@@ -312,7 +312,7 @@ const std::array<sf::Vector2f, 4> TiledEntities::powerup = {
 	sf::Vector2f(2048.8333f, 319.5f),
 };
 
-const sf::Vector2f TiledEntities::spawn = sf::Vector2f(1507.333f, 864.0f);
+const sf::Vector2f TiledEntities::spawn = sf::Vector2f(2098.333f, 876.0f);
 
 const sf::Vector2f TiledEntities::walljump = sf::Vector2f(2903.75f, 917.25f);
 

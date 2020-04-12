@@ -770,7 +770,7 @@
   <object id="68" type="batawake" gid="117" x="-120" y="-603" width="16" height="16"/>
   <object id="69" type="batawake" gid="117" x="226" y="-556" width="16" height="16"/>
   <object id="72" type="bat" gid="117" x="-336" y="-544" width="16" height="16"/>
-  <object id="73" type="spawn" gid="1" x="-540.667" y="96" width="16" height="16"/>
+  <object id="73" type="spawn" gid="1" x="50.333" y="108" width="16" height="16"/>
   <object id="74" gid="60" x="0.8333" y="-448.5" width="16" height="16"/>
   <object id="75" type="batawake" gid="117" x="-771.5" y="23.5" width="16" height="16"/>
   <object id="76" type="batawake" gid="117" x="-733" y="116.5" width="16" height="16"/>
