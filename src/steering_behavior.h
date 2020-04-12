@@ -25,15 +25,15 @@ struct SteeringBehavior
     vec Forward();
 
     //this behavior moves the agent towards a target position
-    vec Seek(vec TargetPos);
+    vec Seek(const vec& TargetPos);
 
     //this behavior returns a vector that moves the agent away
     //from a target position
-    vec Flee(vec TargetPos);
+    vec Flee(const vec& TargetPos);
 
     //this behavior is similar to seek but it attempts to arrive 
     //at the target position with a zero velocity
-    vec Arrive(vec TargetPos, Deceleration deceleration);
+    vec Arrive(const vec& TargetPos, Deceleration deceleration);
 
     //this behavior predicts where an agent will be in time T and seeks
     //towards that point to intercept it.

@@ -15,7 +15,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 	float timer_explosion = 0;
 	float scale;
 
-	Bullet(vec position, vec velocity, float _scale = 1.f) {
+	Bullet(const vec& position, const vec& velocity, float _scale = 1.f) {
 		pos = position;
 		vel = velocity;
 		radius = 5 * _scale;

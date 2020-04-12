@@ -7,14 +7,14 @@
 #ifdef _DEBUG
 
 struct debugvec {
-    debugvec(vec v, sf::Color c) : v(v), c(c) {}
+    debugvec(const vec& v, const sf::Color& c) : v(v), c(c) {}
     vec v; 
     sf::Color c;
 };
 
 std::vector<debugvec> debugvecs;
 
-void vec::Debuggerino(sf::Color color) const {
+void vec::Debuggerino(const sf::Color& color) const {
     debugvecs.emplace_back(*this, color);
 }
 

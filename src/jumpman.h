@@ -12,7 +12,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
 {
     JumpMan();
     void Update(float GameTime);
-    void Draw(sf::RenderTarget& window);
+    void Draw(sf::RenderTarget& window) const;
     void Reset() {
         vel = vec(0, 0);
         polvito.Clear();
@@ -29,7 +29,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     }
     Bounds maxBounds() const;
 
-    void takeDamage(vec pos);
+    void takeDamage(const vec& pos);
     bool isInvencible() const { return invencibleTimer > 0.f; }
     bool isHit() const { return invencibleTimer > 0.1f; }
 

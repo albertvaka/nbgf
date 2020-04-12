@@ -18,7 +18,7 @@ struct EnemyDoor : Entity, EntS<EnemyDoor>
 	std::vector<const Entity*> enemies;
 	float openingTimer = 0;
 
-	EnemyDoor(vec position);
+	EnemyDoor(const vec& position);
 
 	void AddEnemy(const Entity* enemy) {
 		enemies.push_back(enemy);

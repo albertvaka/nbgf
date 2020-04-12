@@ -12,7 +12,7 @@ float RandomSeekingTime() {
 	return Random::rollf(0.2f, 1.6f) + Random::rollf(0.2f, 1.6f); // Random between 0.4 and 3.2, with values closer to 1.7 more likely
 }
 
-void AwakeNearbyBats(vec pos) {
+void AwakeNearbyBats(const vec& pos) {
 	for (Bat* bat : Bat::getAll()) {
 		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
 			bat->awakened = true;
@@ -20,7 +20,7 @@ void AwakeNearbyBats(vec pos) {
 	}
 }
 
-Bat::Bat(vec pos, bool aggresive)
+Bat::Bat(const vec& pos, bool aggresive)
 	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
 	, steering(this)
 	, state(State::SIESTA)

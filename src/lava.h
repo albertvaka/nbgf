@@ -28,7 +28,7 @@ struct Lava : EntS<Lava>
 		}
 	}
 
-	bool IsInside(vec pos) const {
+	bool IsInside(const vec& pos) const {
 		return pos.y > posY && pos.x > minX && pos.x < maxX;
 	}
 

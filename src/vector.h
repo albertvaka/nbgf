@@ -28,7 +28,7 @@ struct vec : public sf::Vector2f
       return vec(Random::rollf(minX, maxX), Random::rollf(minY, maxY));
   }
   
-  static vec Rand(vec min, vec max) {
+  static vec Rand(const vec& min, const vec& max) {
       return vec(Random::rollf(min.x, max.x), Random::rollf(min.y, max.y));
   }
 
@@ -90,13 +90,13 @@ struct vec : public sf::Vector2f
       return vec(x * cs - y * sn, x * sn + y * cs);
   }
 
-  inline vec RotatedToFacePosition(vec target, float maxTurnRateRads = 900.f);
+  inline vec RotatedToFacePosition(const vec& target, float maxTurnRateRads = 900.f);
 
   //returns the vector that is perpendicular to this one.
   inline vec  Perp() const;
 
   //adjusts x and y so that the length of the vector does not exceed max
-  inline bool      Truncate(float max);
+  inline bool      Truncate(const float max);
 
   //returns the distance between this vector and th one passed as a parameter
   inline float    Distance(const vec &v2) const;
@@ -155,7 +155,7 @@ struct vec : public sf::Vector2f
       return vec(-x, -y);
   }
 
-  void Debuggerino(sf::Color color = sf::Color::White) const
+  void Debuggerino(const sf::Color& color = sf::Color::White) const
 #ifdef _DEBUG
       ;
 #else
@@ -397,32 +397,32 @@ inline void WrapAround(vec &pos, int MaxX, int MaxY)
 
 //returns true if the point p is not inside the region defined by top_left
 //and bot_rgt
-inline bool NotInsideRegion(vec p,
-                            vec top_left,
-                            vec bot_rgt)
+inline bool NotInsideRegion(const vec& p,
+                            const vec& top_left,
+                            const vec& bot_rgt)
 {
   return (p.x < top_left.x) || (p.x > bot_rgt.x) || 
          (p.y < top_left.y) || (p.y > bot_rgt.y);
 }
 
-inline bool InsideRegion(vec p,
-                         vec top_left,
-                         vec bot_rgt)
+inline bool InsideRegion(const vec& p,
+                         const vec& top_left,
+                         const vec& bot_rgt)
 {
   return !((p.x < top_left.x) || (p.x > bot_rgt.x) || 
          (p.y < top_left.y) || (p.y > bot_rgt.y));
 }
 
-inline bool InsideRegion(vec p, int left, int top, int right, int bottom)
+inline bool InsideRegion(const vec& p, int left, int top, int right, int bottom)
 {
   return !( (p.x < left) || (p.x > right) || (p.y < top) || (p.y > bottom) );
 }
 
 //  returns true if the target position is in the field of view of the entity
 //  positioned at posFirst facing in facingFirst
-inline bool isSecondInFOVOfFirst(vec posFirst,
-                                 vec facingFirst,
-                                 vec posSecond,
+inline bool isSecondInFOVOfFirst(const vec& posFirst,
+                                 const vec& facingFirst,
+                                 const vec& posSecond,
                                  float    fov)
 {
   vec toTarget = Normalize(posSecond - posFirst);
@@ -440,7 +440,7 @@ inline bool isSecondInFOVOfFirst(vec posFirst,
 //  occurs along AB. Also sets the 2d vector point to the point of
 //  intersection
 //----------------------------------------------------------------- 
-inline bool LineIntersection2D(vec A, vec B, vec C, vec D, float& dist, vec& point)
+inline bool LineIntersection2D(const vec& A, const vec& B, const vec& C, const vec& D, float& dist, vec& point)
 {
 
 	float rTop = (A.y-C.y)*(D.x-C.x)-(A.x-C.x)*(D.y-C.y);
@@ -471,7 +471,7 @@ inline bool LineIntersection2D(vec A, vec B, vec C, vec D, float& dist, vec& poi
 	}
 }
 
-inline vec vec::RotatedToFacePosition(vec target, float maxTurnRateRads)
+inline vec vec::RotatedToFacePosition(const vec& target, float maxTurnRateRads)
 {
     vec toTarget = (target - *this).Normalized();
     vec heading = Normalized();
@@ -513,7 +513,7 @@ inline std::ifstream& operator>>(std::ifstream& is, vec& lhs)
     return is;
 }
 
-inline sf::Vector2i PosToTile(vec pos)
+inline sf::Vector2i PosToTile(const vec& pos)
 {
 	return
 	{

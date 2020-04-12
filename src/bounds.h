@@ -11,16 +11,16 @@ struct CircleBounds;
 
 struct Bounds : public sf::Rect<float>
 {
-    explicit Bounds() : sf::Rect<float>(0,0,0,0) { }
-    explicit Bounds(const sf::Rect<float>& r) : sf::Rect<float>(r) { }
+    Bounds() : sf::Rect<float>(0,0,0,0) { }
+    Bounds(const sf::Rect<float>& r) : sf::Rect<float>(r) { }
     explicit Bounds(const vec& size) : sf::Rect<float>(0,0,size.x,size.y) { }
-    explicit Bounds(const vec& topleft, const vec& size) : sf::Rect<float>(topleft.x, topleft.y, size.x, size.y) {}
+    Bounds(const vec& topleft, const vec& size) : sf::Rect<float>(topleft.x, topleft.y, size.x, size.y) {}
     explicit Bounds(const vec& pos, const vec& size, const vec& origin) : sf::Rect<float>(pos.x, pos.y, size.x, size.y) {
         left -= origin.x;
         top -= origin.y;
     }
-    explicit Bounds(float left, float top, float width, float height) : sf::Rect<float>(left , top, width, height) { }
-    static Bounds fromCenter(const vec& center, vec size) { return Bounds(center - size/2, size); }
+    Bounds(float left, float top, float width, float height) : sf::Rect<float>(left , top, width, height) { }
+    static Bounds fromCenter(const vec& center, const vec& size) { return Bounds(center - size/2, size); }
 
     //Expands arround the center by a factor
     Bounds operator*(float f)
@@ -49,7 +49,7 @@ struct Bounds : public sf::Rect<float>
         SetCenter(center.x, center.y);
     }
 
-	void Draw(sf::RenderTarget &rt, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) const
+	void Draw(sf::RenderTarget &rt, const sf::Color& color = sf::Color::Red, const sf::Color& fillColor = sf::Color::Transparent) const
 	{
 		sf::RectangleShape rs;
 
@@ -91,7 +91,7 @@ struct Bounds : public sf::Rect<float>
         return vec(Right(), Bottom());
     }
 
-	bool IsInside(vec point) const
+	bool IsInside(const vec& point) const
 	{
         if (point.x < left) return false;
         if (point.x >= left+width) return false;
@@ -117,11 +117,11 @@ struct Bounds : public sf::Rect<float>
 
 struct CircleBounds
 {
-    CircleBounds(vec pos, float radius) : pos(pos), radius(radius) {}
+    CircleBounds(const vec& pos, float radius) : pos(pos), radius(radius) {}
     vec pos;
     float radius;
 
-    void Draw(sf::RenderTarget& window, sf::Color color = sf::Color::Red, sf::Color fillColor = sf::Color::Transparent) const
+    void Draw(sf::RenderTarget& window, const sf::Color& color = sf::Color::Red, const sf::Color& fillColor = sf::Color::Transparent) const
     {
         sf::CircleShape cs(radius);
         cs.setRadius(radius);

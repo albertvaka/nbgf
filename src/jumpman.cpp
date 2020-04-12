@@ -484,7 +484,7 @@ vert_exit:
 	}
 }
 
-void JumpMan::takeDamage(vec src) {
+void JumpMan::takeDamage(const vec& src) {
 	invencibleTimer = invencibleTimeAfterHit;
 	if (pos.x > src.x) {
 		vel.x = vel_hit.x;
@@ -505,7 +505,7 @@ Bounds JumpMan::maxBounds() const
 	return Bounds(pos, standing_size, vec(standing_size.x / 2, standing_size.y));
 }
 
-void JumpMan::Draw(sf::RenderTarget& window) {
+void JumpMan::Draw(sf::RenderTarget& window) const {
 
 	polvito.Draw(window);
 
