@@ -29,12 +29,24 @@ void TileMap::Randomize(int seed)
 #define USE_VAO
 
 #ifdef USE_VAO
-sf::VertexArray tilesVA(sf::Quads);
-inline void AddTile(float x, float y, const sf::IntRect& tr) {
-	tilesVA.append({ vec(x, y), vec(tr.left, tr.top) });
-	tilesVA.append({ vec(x + 16, y), vec(tr.left + tr.width, tr.top) });
-	tilesVA.append({ vec(x + 16, y + 16), vec(tr.left + tr.width, tr.top + tr.height) });
-	tilesVA.append({ vec(x, y + 16), vec(tr.left, tr.top + tr.height) });
+std::vector<sf::Vertex> tilesVA;
+inline void AddTile(size_t& i, float x, float y, const sf::IntRect& tr)
+{
+	tilesVA[i].position = vec(x, y);
+	tilesVA[i].texCoords = vec(tr.left, tr.top);
+	i++;
+
+	tilesVA[i].position = vec(x + 16, y);
+	tilesVA[i].texCoords = vec(tr.left + tr.width, tr.top);
+	i++;
+
+	tilesVA[i].position = vec(x + 16, y + 16);
+	tilesVA[i].texCoords = vec(tr.left + tr.width, tr.top + tr.height);
+	i++;
+
+	tilesVA[i].position = vec(x, y + 16);
+	tilesVA[i].texCoords = vec(tr.left, tr.top + tr.height);
+	i++;
 }
 #endif
 
@@ -50,7 +62,12 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	sf::Rect outOfBounds(3 * 16, 2 * 16, 16, 16);
 
 #ifdef USE_VAO
-	tilesVA.clear();
+	size_t maxsize = (right - left) * (bottom - top) * 4;
+	if (tilesVA.size() < maxsize) {
+		//we could use a fixed size, but this works for every resolution and keeps memory usage low on smaller resolutions
+		tilesVA.resize(maxsize);
+	}
+	size_t i = 0;
 #else
 	sf::Sprite & sprite = Assets::marioSprite;
 	sprite.setTextureRect(outOfBounds);
@@ -62,7 +79,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 			for (int x = left; x < 0; x++)
 			{
 #ifdef USE_VAO
-				AddTile(x * Tile::size, y * Tile::size, outOfBounds);
+				AddTile(i, x * Tile::size, y * Tile::size, outOfBounds);
 #else
 				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
@@ -78,7 +95,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 			for (int x = sizes.x; x < right; x++)
 			{
 #ifdef USE_VAO
-				AddTile(x * Tile::size, y * Tile::size, outOfBounds);
+				AddTile(i, x * Tile::size, y * Tile::size, outOfBounds);
 #else
 				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
@@ -94,7 +111,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 			for (int x = left; x < right; x++)
 			{
 #ifdef USE_VAO
-				AddTile(x * Tile::size, y * Tile::size, outOfBounds);
+				AddTile(i, x * Tile::size, y * Tile::size, outOfBounds);
 #else
 				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
@@ -110,7 +127,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 			for (int x = left; x < right; x++)
 			{
 #ifdef USE_VAO
-				AddTile(x * Tile::size, y * Tile::size, outOfBounds);
+				AddTile(i, x * Tile::size, y * Tile::size, outOfBounds);
 #else
 				sprite.setPosition(x * Tile::size, y * Tile::size);
 				window.draw(sprite);
@@ -129,7 +146,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 				continue;
 			}
 #ifdef USE_VAO
-			AddTile(x * Tile::size, y * Tile::size, t.textureRect());
+			AddTile(i, x * Tile::size, y * Tile::size, t.textureRect());
 #else
 			sprite.setTextureRect(t.textureRect());
 			sprite.setPosition(x * Tile::size, y * Tile::size);
@@ -139,6 +156,6 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	}
 
 #ifdef USE_VAO
-	window.draw(tilesVA, &Assets::marioTexture);
+	window.draw(tilesVA.data(), i, sf::Quads, &Assets::marioTexture);
 #endif
 }
