@@ -40,16 +40,16 @@ JumpScene::JumpScene()
 	bulletPartSys.rotation_vel = 180.f;
 	bulletPartSys.alpha = 0.75f;
 
-
-	for (const sf::Rect<float>& p : TiledAreas::parallax_forest) {
-		new Parallax(p);
+	if (!random_mode) {
+		for (const sf::Rect<float>& p : TiledAreas::parallax_forest) {
+			new Parallax(p);
+		}
 	}
 }
 
 void JumpScene::EnterScene() 
 {
 	player.Reset();
-	player.pos = TiledEntities::spawn;
 
 	Camera::SetZoom(GameData::GAME_ZOOM);
 	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
@@ -58,10 +58,12 @@ void JumpScene::EnterScene()
 	//transition.goPos(GameData::JUMPMAN_ZOOM);
 	
 	if (random_mode) {
+		player.pos = vec(160,160);
 		RandomMap();
 		return;
 	}
 
+	player.pos = TiledEntities::spawn;
 	map.LoadFromTiled();
 
 	for (const sf::Vector2f& v : TiledEntities::bat) {
@@ -136,8 +138,9 @@ void JumpScene::Update(float dt)
 	//if (!transition.reached()) {
 	//	Camera::SetZoom(transition.getPos());
 	//}
-
-	screenManager.UpdateCurrentScreen(player.pos);
+	if (!random_mode) {
+		screenManager.UpdateCurrentScreen(player.pos);
+	}
 
 	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
@@ -322,7 +325,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	sf::Vector2i t = map.toTiles(m);
 	ImGui::Text("Mouse: %f,%f", m.x, m.y);
 	ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
-	ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
+	//ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 	ImGui::End();
 
 	if (Debug::Draw) {

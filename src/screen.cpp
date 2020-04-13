@@ -10,13 +10,15 @@ ScreenManager::ScreenManager() {
 	}
 }
 void ScreenManager::UpdateCurrentScreen(const vec& pos) {
-	if (!TiledMap::screens[currentScreen].contains(pos)) {
+	if (currentScreen < 0 || !TiledMap::screens[currentScreen].contains(pos)) {
 		int screen = FindScreen(pos);
 		if (screen >= 0) currentScreen = screen;
 	}
 }
 
 const void ScreenManager::ClampCameraToScreen(vec& camPos) const {
+	if (currentScreen < 0) return;
+
 	const Bounds& screenBounds = CurrentBounds();
 
 	float minY = screenBounds.Top() + (Camera::GetCameraSize().y / 2.f);

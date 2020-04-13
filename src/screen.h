@@ -8,7 +8,7 @@
 
 struct ScreenManager : SingleInstance<ScreenManager>
 {
-	int currentScreen = 0;
+	int currentScreen = -1;
 	std::vector<Bounds> screens;
 
 	ScreenManager();

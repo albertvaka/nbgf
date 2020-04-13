@@ -162,7 +162,7 @@ void Bat::Draw(sf::RenderTarget& window) const
 	sf::Sprite& spr = Assets::marioSprite;
 
 	if (vel.x > 0) {
-		spr.setScale(-1.f, 1.f);
+		spr.setScale(-1.f, 1.f); // To optimize: We could do this just by using a texture coordinates with (-width)
 	} else {
 		spr.setScale(1.f, 1.f);
 	}
