@@ -136,7 +136,6 @@ struct TiledTiles
 		BG_123,
 		BG_124,
 		BG_125,
-		BG_126,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -215,8 +214,8 @@ struct TiledTiles
 	static const Value BREAKABLE_BEGING = BREAKABLE_1;
 
 	// Aliases
-	static const Value BG_PLAIN_COLOR = BG_34;
-	static const Value BG_DOOR_OPENING = BG_49;
+	static const Value BG_PLAIN_COLOR = BG_33;
+	static const Value BG_DOOR_OPENING = BG_48;
 	static const Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
 	static const Value SOLID_PLAIN_COLOR = SOLID_18;
 	static const Value SOLID_DOOR = SOLID_19;
