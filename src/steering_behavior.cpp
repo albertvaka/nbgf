@@ -173,24 +173,24 @@ vec SteeringBehavior::Wander(float dt)
 //------------------------------------------------------------------------
 vec SteeringBehavior::BoundsAvoidance(const sf::Rect<float>& m_bounds)
 {
-	std::vector<vec> m_Feelers(3);
-	const float m_dWallDetectionFeelerLength = 20;
+	vec m_Feelers[3];
+	const float m_dWallDetectionFeelerLength = 20; //Front feeler length. Lateral feelers will be half as long.
 
 	vec heading = steeringEntity->Heading();
 
 	//feeler pointing straight in front
 	m_Feelers[0] = steeringEntity->pos + m_dWallDetectionFeelerLength * heading;
+	m_Feelers[0].Debuggerino();
 
 	//feeler to left
-	vec temp = heading.RotatedAroundOrigin(Mates::HalfPi * 3.5f);;
+	vec temp = heading.RotatedAroundOrigin(Mates::Pi * -0.3f);
 	m_Feelers[1] = steeringEntity->pos + m_dWallDetectionFeelerLength/2.0f * temp;
+	//m_Feelers[1].Debuggerino();
 
 	//feeler to right
-	temp = heading.RotatedAroundOrigin(Mates::HalfPi * 0.5f);;
+	temp = heading.RotatedAroundOrigin(Mates::Pi * 0.3f);
 	m_Feelers[2] = steeringEntity->pos + m_dWallDetectionFeelerLength/2.0f * temp;
-
-	float DistToThisIP    = 0.0;
-	float DistToClosestIP = Mates::MaxFloat;
+	//m_Feelers[2].Debuggerino();
 
 	vec wallsv[5] = {vec(m_bounds.left, m_bounds.top),
 		vec(m_bounds.left, m_bounds.top+m_bounds.height),
@@ -199,19 +199,20 @@ vec SteeringBehavior::BoundsAvoidance(const sf::Rect<float>& m_bounds)
 		vec(m_bounds.left, m_bounds.top)
 	};
 
-	//this will hold an index into the vector of walls
-	int ClosestWall = -1;
+	float DistToClosestIP = Mates::MaxFloat;
+	vec ClosestPoint;
+	int ClosestWall = -1; //index in wallsv
 
-	vec SteeringForce,
-		point,         //used for storing temporary info
-		ClosestPoint;  //holds the closest intersection point
+	vec SteeringForce;
 
 	//examine each feeler in turn
-	for (unsigned int flr=0; flr<m_Feelers.size(); ++flr) {
+	for (unsigned int flr=0; flr < 3; ++flr) {
 
 		//run through each wall checking for any intersection points
 		for (int i = 0; i < 4; i++) {
 
+			float DistToThisIP;
+			vec point;
 			if (LineIntersection2D(steeringEntity->pos,
 				m_Feelers[flr],
 				wallsv[i],
