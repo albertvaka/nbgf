@@ -38,6 +38,11 @@ struct Bounds : public sf::Rect<float>
 		return vec(left + width/2, top + height/2);
 	}
 
+    [[nodiscard]] float Area() const
+    {
+        return width * height;
+    }
+
     void SetCenter(float x, float y)
 	{
         left = x - width/2;

@@ -38,5 +38,7 @@ struct Bat : SteeringEntity, EntS<Bat>
 	inline bool inSameScreenAsPlayer() const;
 
 	void DrawSenseArea(sf::RenderTarget& window) const;
+private:
+	void EnableBoundsAvoidance();
 };
 

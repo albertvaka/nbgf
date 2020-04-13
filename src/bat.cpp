@@ -4,6 +4,7 @@
 #include "bullet.h"
 #include "screen.h"
 #include "assets.h"
+#include "debug.h"
 
 const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 70.f;
@@ -20,6 +21,31 @@ void AwakeNearbyBats(const vec& pos) {
 	}
 }
 
+void Bat::EnableBoundsAvoidance() {
+	int i = 0;
+	int smallest_i = -1;
+	float smallest_area = Mates::MaxInt;
+	for (const auto& bounds : TiledAreas::bat_bounds) {
+		if (bounds.contains(pos)) {
+			float area = bounds.width * bounds.height;
+			if (area < smallest_area) {
+				smallest_i = i;
+				smallest_area = area;
+			}
+		}
+		i++;
+	}
+
+	if (smallest_i > -1) {
+		steering.BoundsAvoidanceOn(TiledAreas::bat_bounds[smallest_i]);
+	} else if (screen > -1) {
+		steering.BoundsAvoidanceOn(ScreenManager::instance()->ScreenBounds(screen));
+	}
+	else {
+		Debug::out << "Unbounded bat";
+	}
+
+}
 Bat::Bat(const vec& pos, bool aggresive, bool awake)
 	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, vec::Rand(-10.f, 0.f, 10.f, 10.f))
 	, steering(this)
@@ -40,10 +66,8 @@ Bat::Bat(const vec& pos, bool aggresive, bool awake)
 	steering.ForwardOn();
 	steering.WanderOn();
 
-	screen = ScreenManager::instance()->FindScreen(pos);
-	if (screen >= 0) {
-		steering.BoundsAvoidanceOn(ScreenManager::instance()->ScreenBounds(screen));
-	}
+	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	EnableBoundsAvoidance(); //Expects screen to be set
 
 	if (aggresive) {
 		max_speed *= 1.4f;

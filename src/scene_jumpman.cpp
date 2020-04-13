@@ -84,7 +84,7 @@ void JumpScene::EnterScene()
 
 	for (const sf::Vector2f& v : TiledEntities::enemy_door) {
 		EnemyDoor* d = new EnemyDoor(v);
-		int door_screen = screenManager.FindScreen(d->pos);
+		int door_screen = screenManager.FindScreenContaining(d->pos);
 		if (door_screen < 0) {
 			Debug::out << "Warning: Enemy door outside a screen";
 		}

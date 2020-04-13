@@ -13,7 +13,7 @@ struct ScreenManager : SingleInstance<ScreenManager>
 
 	ScreenManager();
 
-	int FindScreen(const vec& pos) const {
+	int FindScreenContaining(const vec& pos) const {
 		int i = 0;
 		for (const auto& screen : screens) {
 			if (screen.contains(pos)) {

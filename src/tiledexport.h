@@ -136,6 +136,8 @@ struct TiledTiles
 		BG_123,
 		BG_124,
 		BG_125,
+		BG_126,
+		BG_127,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -198,8 +200,6 @@ struct TiledTiles
 		SOLID_34,
 		SOLID_35,
 		SOLID_36,
-		SOLID_37,
-		SOLID_38,
 		BREAKABLE_1,
 		BREAKABLE_2,
 		BREAKABLE_3,
@@ -228,25 +228,29 @@ struct TiledMap
 {
 	static const unsigned short map[];
 	static const sf::Vector2f map_size;
-	static const std::array<sf::Rect<float>, 10> screens;
+	static const std::array<sf::Rect<float>, 11> screens;
 };
 
 struct TiledEntities
 {
 	static const std::array<sf::Vector2f, 10> batawake;
-	static const std::array<sf::Vector2f, 7> bat;
-	static const std::array<sf::Vector2f, 4> powerup;
+	static const std::array<sf::Vector2f, 8> bat;
+	static const std::array<sf::Vector2f, 2> healthup;
 	static const sf::Vector2f spawn;
-	static const sf::Vector2f walljump;
 	static const sf::Vector2f gun;
-	static const std::array<sf::Vector2f, 2> enemy_door;
+	static const std::array<sf::Vector2f, 3> enemy_door;
 	static const std::array<sf::Vector2f, 2> angrybat;
+	static const sf::Vector2f walljump;
+	static const std::array<sf::Vector2f, 2> gunup;
+	static const sf::Vector2f gunup_tancaporta;
+	static const sf::Vector2f save;
 	
 };
 
 struct TiledAreas
 {
-	static const std::array<sf::Rect<float>, 1> lava;
+	static const std::array<sf::Rect<float>, 2> lava;
 	static const std::array<sf::Rect<float>, 1> parallax_forest;
+	static const std::array<sf::Rect<float>, 2> bat_bounds;
 	
 };
