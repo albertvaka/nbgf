@@ -76,7 +76,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	if (left < 0) {
 		for (int y = top; y < bottom; y++)
 		{
-			for (int x = left; x < 0; x++)
+			for (int x = left; x < Mates::MinOf(0, right); x++)
 			{
 #ifdef USE_VAO
 				AddTile(i, x * Tile::size, y * Tile::size, outOfBounds);
@@ -92,7 +92,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	if (right >= sizes.x) {
 		for (int y = top; y < bottom; y++)
 		{
-			for (int x = sizes.x; x < right; x++)
+			for (int x = Mates::MaxOf(left, sizes.x); x < right; x++)
 			{
 #ifdef USE_VAO
 				AddTile(i, x * Tile::size, y * Tile::size, outOfBounds);
@@ -106,7 +106,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	}
 
 	if (top < 0) {
-		for (int y = top; y < 0; y++)
+		for (int y = top; y < Mates::MinOf(0, bottom); y++)
 		{
 			for (int x = left; x < right; x++)
 			{
@@ -122,7 +122,7 @@ void TileMap::Draw(sf::RenderTarget& window) const
 	}
 
 	if (bottom >= sizes.y) {
-		for (int y = sizes.y; y < bottom; y++)
+		for (int y = Mates::MaxOf(top, sizes.y); y < bottom; y++)
 		{
 			for (int x = left; x < right; x++)
 			{
