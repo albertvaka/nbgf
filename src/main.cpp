@@ -1,7 +1,9 @@
 #include <map>
 
+#ifdef _DEBUG
 #include "imgui.h"
 #include "imgui-SFML.h"
+#endif
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
@@ -29,7 +31,9 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(GameData::WINDOW_WIDTH, GameData::WINDOW_HEIGHT), "GGJ 2020");
 
 	window.setFramerateLimit(60);
+#ifdef _DEBUG
 	ImGui::SFML::Init(window);
+#endif
 	Input::Init(window);
 
 	Assets::LoadAll();
@@ -119,11 +123,15 @@ int main()
 		window.draw(txt_fps);
 #endif
 
+#ifdef _DEBUG
 		ImGui::SFML::Render(window);
+#endif
 		Camera::EndGuiDraw();
 
 		window.display();
 	}
 
+#ifdef _DEBUG
 	ImGui::SFML::Shutdown();
+#endif
 }

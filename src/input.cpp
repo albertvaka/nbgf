@@ -1,7 +1,9 @@
 #include "input.h"
 
+#ifdef _DEBUG
 #include "imgui.h"
 #include "imgui-SFML.h"
+#endif
 
 int GamePad::player_to_joystick[GamePad::JoystickCountMax];
 
@@ -355,7 +357,9 @@ static void _ProcessWindowEvents()
     sf::Event sfmlevent;
     while (Window::window->pollEvent(sfmlevent))
 	{
+#ifdef _DEBUG
         ImGui::SFML::ProcessEvent(sfmlevent);
+#endif
         switch (sfmlevent.type) {
         case sf::Event::LostFocus:
             Window::focus = false;
@@ -395,14 +399,24 @@ namespace Input
 {
     void Update(sf::Time deltaTime)
 	{
+#ifdef _DEBUG
         ImGui::SFML::Update(*Window::window, deltaTime);
+#endif
         Mouse::scrollWheel = 0.f;
         _ProcessWindowEvents();
+
+#ifdef _DEBUG
         ImGuiIO& io = ImGui::GetIO();
-        if (!io.WantCaptureKeyboard) {
+        if (!io.WantCaptureKeyboard)
+#endif
+        {
             Keyboard::_UpdateInputState(deltaTime.asSeconds());
+
         }
-        if (!io.WantCaptureMouse) {
+#ifdef _DEBUG
+        if (!io.WantCaptureMouse)
+#endif
+        {
             Mouse::_UpdateInputState();
         }
         GamePad::_UpdateInputState();
