@@ -2,17 +2,17 @@
 
 #include "partsys.h"
 #include "selfregister.h"
+#include "bounds.h"
 #include <SFML/Graphics.hpp>
 
 struct Lava : EntS<Lava>
 {
 	PartSys lavaPartSys;
-	float posY;
-	float minX;
-	float maxX;
+
+	Bounds bounds;
 	float targetY;
 
-	Lava(float posY, float minX, float maxX);
+	Lava(const Bounds& bounds);
 	void Update(float dt);
 	void Draw(sf::RenderTarget& window) const;
 
@@ -29,7 +29,7 @@ struct Lava : EntS<Lava>
 	}
 
 	bool IsInside(const vec& pos) const {
-		return pos.y > posY && pos.x > minX && pos.x < maxX;
+		return bounds.contains(pos);
 	}
 
 };

@@ -79,7 +79,7 @@ void JumpScene::EnterScene()
 	}
 
 	for (const sf::Rect<float>& a : TiledAreas::lava) {
-		new Lava(a.top, a.left, a.left+a.width);
+		new Lava(a);
 	}
 
 	for (const sf::Vector2f& v : TiledEntities::enemy_door) {
@@ -325,7 +325,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	sf::Vector2i t = map.toTiles(m);
 	ImGui::Text("Mouse: %f,%f", m.x, m.y);
 	ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
-	//ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
+	ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 	ImGui::End();
 
 	if (Debug::Draw) {

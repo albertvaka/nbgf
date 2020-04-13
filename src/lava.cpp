@@ -16,11 +16,9 @@ extern sf::Clock mainClock;
 
 
 
-Lava::Lava(float posY, float minX, float maxX)
-	: posY(posY)
-	, targetY(posY)
-	, minX(minX)
-	, maxX(maxX)
+Lava::Lava(const Bounds& b)
+	: bounds(b)
+	, targetY(b.Top())
 {
 	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5 + 16, 37, 6, 6));
 	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(38, 37, 5, 5));
@@ -39,29 +37,37 @@ Lava::Lava(float posY, float minX, float maxX)
 }
 
 void Lava::Update(float dt) {
-	if (targetY > posY) {
-		if (posY - targetY > raiseSpeed* dt) {
-			posY = targetY;
+	if (targetY > bounds.top) {
+		if (bounds.top - targetY > raiseSpeed * dt) {
+			bounds.height += bounds.top - targetY;
+			bounds.top = targetY;
 		}
 		else {
-			posY += raiseSpeed * dt;
+			bounds.top += raiseSpeed * dt;
+			bounds.height -= raiseSpeed * dt;
 		}
 	}
-	else if (targetY < posY) {
-		if (targetY - posY > raiseSpeed * dt) {
-			posY = targetY;
+	else if (targetY < bounds.top) {
+		if (targetY - bounds.top > raiseSpeed * dt) {
+			bounds.height += bounds.top - targetY;
+			bounds.top = targetY;
 		}
 		else {
-			posY -= raiseSpeed * dt;
+			bounds.top -= raiseSpeed * dt;
+			bounds.height += raiseSpeed * dt;
 		}
 	}
 
+	if (!Camera::GetCameraBounds().intersects(bounds)) {
+		return;
+	}
+
 	Bounds screen = Camera::GetCameraBounds();
-	float left = Mates::MaxOf(screen.Left(), minX);
-	float right = Mates::MinOf(screen.Right(), maxX);
+	float left = Mates::MaxOf(screen.Left(), bounds.Left());
+	float right = Mates::MinOf(screen.Right(), bounds.Right());
 	float chunkLeft = (Mates::fastfloor(left / chunkSize)) * chunkSize;
 	float chunkRight = (Mates::fastfloor(right / chunkSize)) * chunkSize;
-	lavaPartSys.pos.y = posY - 2;
+	lavaPartSys.pos.y = bounds.Top() - 2;
 	for (float x = chunkLeft; x < chunkRight; x += distanceBetweenParticleSpawners) {
 		lavaPartSys.pos.x = x;
 		lavaPartSys.Spawn(dt);
@@ -82,6 +88,10 @@ inline void AddQuad(float x, float y, float width, float height, const sf::Color
 #endif
 
 void Lava::Draw(sf::RenderTarget& window) const {
+
+	if (!Camera::GetCameraBounds().intersects(bounds)) {
+		return;
+	}
 
 	lavaPartSys.Draw(window);
 	//lavaPartSys.DrawImGUI("LavaPartSys");
@@ -106,7 +116,7 @@ void Lava::Draw(sf::RenderTarget& window) const {
 
 	const float heightTopLayer = 5.f;
 	const float heightMiddleLayer = 1.f;
-	const float heightBottomLayer = screen.Bottom() - posY;
+	const float heightBottomLayer = bounds.height;
 
 	const sf::Color colorTopLayer(220, 10, 10);
 	const sf::Color colorMiddleLayer(120, 0, 0);
@@ -123,13 +133,13 @@ void Lava::Draw(sf::RenderTarget& window) const {
 	bottomLayer.setFillColor(colorBottomLayer);
 #endif
 
-	float left = Mates::MaxOf(screen.Left(), minX);
-	float right = Mates::MinOf(screen.Right(), maxX);
+	float left = Mates::MaxOf(screen.Left(), bounds.Left());
+	float right = Mates::MinOf(screen.Right(), bounds.Right());
 	float chunkLeft = (Mates::fastfloor(left / chunkSize)) * chunkSize;
 	float chunkRight = (Mates::fastfloor(right / chunkSize)) * chunkSize;
 	for (float x = chunkLeft; x < chunkRight; x += chunkSize)
 	{
-		float y = posY - waveHeight * sin(x * waveAmplitude + time);
+		float y = bounds.top - waveHeight * sin(x * waveAmplitude + time);
 
 #ifdef USE_VAO
 		AddQuad(x, y, chunkSize, heightTopLayer, colorTopLayer);
