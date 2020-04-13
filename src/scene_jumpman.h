@@ -8,6 +8,7 @@
 #include "transition.h"
 #include "destroyedtiles.h"
 #include "bat.h"
+#include "powerups.h"
 #include "lava.h"
 #include "screen.h"
 
@@ -22,6 +23,7 @@ struct JumpScene : Scene {
 	JumpMan player;
 	PartSys bulletPartSys;
 	DestroyedTiles destroyedTiles;
+	GunUp* gunup_tancaporta;
 
 	JumpScene();
 	void EnterScene() override;

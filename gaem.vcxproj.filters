@@ -204,6 +204,9 @@
     <ClInclude Include="src\parallax.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\powerups.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rand.cpp">
@@ -285,6 +288,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\parallax.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\powerups.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

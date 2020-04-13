@@ -82,6 +82,15 @@ void JumpScene::EnterScene()
 		new Lava(a);
 	}
 
+	for (const vec& v : TiledEntities::gunup) {
+		GunUp* up = new GunUp(v);
+	}
+	gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
+
+	for (const vec& v : TiledEntities::healthup) {
+		new HealthUp(v);
+	}
+
 	for (const sf::Vector2f& v : TiledEntities::enemy_door) {
 		EnemyDoor* d = new EnemyDoor(v);
 		int door_screen = screenManager.FindScreenContaining(d->pos);
@@ -305,8 +314,14 @@ void JumpScene::Draw(sf::RenderTarget& window)
 		}
 	}
 
-	player.Draw(window);
+	for (const GunUp* g : GunUp::getAll()) {
+		g->Draw(window);
+	}
+	for (const HealthUp* g : HealthUp::getAll()) {
+		g->Draw(window);
+	}
 
+	player.Draw(window);
 
 	for (const Lava* l : Lava::getAll()) {
 		l->Draw(window);
