@@ -205,5 +205,7 @@ void Bat::Draw(sf::RenderTarget& window) const
 	if (state == State::SEEKING) {
 		pos.Debuggerino();
 	}
+
+	spr.setScale(1.f, 1.f);
 }
 
