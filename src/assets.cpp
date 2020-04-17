@@ -6,6 +6,8 @@ sf::Sprite Assets::hospitalSprite;
 sf::Texture Assets::marioTexture;
 sf::Sprite Assets::marioSprite;
 
+sf::Texture Assets::fogTexture;
+
 sf::Font Assets::font;
 
 sf::Shader Assets::tintShader;
@@ -19,6 +21,8 @@ void Assets::LoadAll() {
 
     marioTexture.loadFromFile("data/mario.png");
     marioSprite.setTexture(marioTexture);
+
+    fogTexture.loadFromFile("data/fog.png");
 
     font.loadFromFile("data/PressStart2P.ttf");
 

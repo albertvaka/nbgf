@@ -367,7 +367,10 @@ const std::array<sf::Vector2f, 2> TiledEntities::gunup = {
 
 const sf::Vector2f TiledEntities::gunup_tancaporta = sf::Vector2f(1713.5f, 758.41667f);
 
-const sf::Vector2f TiledEntities::save = sf::Vector2f(1935.0f, 910.0f);
+const std::array<sf::Vector2f, 2> TiledEntities::save = {
+	sf::Vector2f(1937.545f, 914.0f),
+	sf::Vector2f(612.5f, 166.75f),
+};
 
 
 
@@ -381,5 +384,8 @@ const std::array<sf::Rect<float>, 1> TiledAreas::parallax_forest = {
 const std::array<sf::Rect<float>, 2> TiledAreas::bat_bounds = {
 		sf::Rect<float>(150.43000000000006f,693.553f,273.47f,147.894f),
 		sf::Rect<float>(839.78f,695.4598f,842.45f,291.747f),
+	};
+const std::array<sf::Rect<float>, 1> TiledAreas::fog = {
+		sf::Rect<float>(880.5f,879.5f,734.0f,85.5f),
 	};
 

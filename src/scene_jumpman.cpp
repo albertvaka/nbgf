@@ -40,6 +40,21 @@ JumpScene::JumpScene()
 	bulletPartSys.rotation_vel = 180.f;
 	bulletPartSys.alpha = 0.75f;
 
+	fogPartSys.AddSprite(Assets::fogTexture, sf::IntRect(0, 0, 140, 61));
+	fogPartSys.AddSprite(Assets::fogTexture, sf::IntRect(140, 0, 140, 61));
+	fogPartSys.AddSprite(Assets::fogTexture, sf::IntRect(140*2, 0, 140, 61));
+	fogPartSys.AddSprite(Assets::fogTexture, sf::IntRect(140 * 3, 0, 140, 61));
+	fogPartSys.alpha = 0.f;
+	fogPartSys.alpha_vel = 0.1f;
+	fogPartSys.bounce_alpha = 0.5f;
+	fogPartSys.min_scale = 2.f;
+	fogPartSys.max_scale = 3.f;
+	fogPartSys.min_vel.x = 17.f;
+	fogPartSys.max_vel.x = 20.f;
+	fogPartSys.min_ttl = fogPartSys.max_ttl = 10.f;
+	fogPartSys.min_interval = 4.5f;
+	fogPartSys.max_interval = 6.f;
+
 	if (!random_mode) {
 		for (const sf::Rect<float>& p : TiledAreas::parallax_forest) {
 			new Parallax(p);
@@ -273,6 +288,19 @@ void JumpScene::Update(float dt)
 	for (Lava* l : Lava::getAll()) {
 		l->Update(dt);
 	}
+
+	for (const sf::Rect<float>& a : TiledAreas::fog) {
+		if (!Camera::GetCameraBounds().intersects(Bounds(a)*2.f)) {
+			continue;
+		}
+		for (int x = 50; x < a.width - 180; x += 50) {
+			for (int y = 0; y < a.height; y += 50) {
+				fogPartSys.pos = vec(a.left + x, a.top + y);
+				fogPartSys.Spawn(dt);
+			}
+		}
+		fogPartSys.UpdateParticles(dt);
+	}
 }
 
 void JumpScene::Draw(sf::RenderTarget& window)
@@ -351,6 +379,8 @@ void JumpScene::Draw(sf::RenderTarget& window)
 		window.draw(Assets::marioSprite);
 	}
 #endif
+	fogPartSys.Draw(window);
+	fogPartSys.DrawImGUI();
 
 	//player.polvito.DrawImGUI("Polvito");
 }

@@ -38,7 +38,11 @@ struct PartSys {
 					alpha = 0.f;
 				}
 			}
-			else if (alpha > 1.f) {
+			else if (system.bounce_alpha > 0) {
+				if (alpha > 2 * system.bounce_alpha) {
+					return true;
+				}
+			} else if (alpha > 1.f) {
 				alpha = 1.f;
 			}
 			return false;
@@ -71,6 +75,8 @@ struct PartSys {
 
 	float alpha = 1.f;
 	float alpha_vel = 0.f;
+
+	float bounce_alpha = -1.f; //max alpha, at which it starts going back to 0
 
 	float time = 0.f;
 

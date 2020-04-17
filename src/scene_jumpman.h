@@ -22,6 +22,7 @@ struct JumpScene : Scene {
 	TileMap map;
 	JumpMan player;
 	PartSys bulletPartSys;
+	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;
 	GunUp* gunup_tancaporta;
 

@@ -243,7 +243,7 @@ struct TiledEntities
 	static const sf::Vector2f walljump;
 	static const std::array<sf::Vector2f, 2> gunup;
 	static const sf::Vector2f gunup_tancaporta;
-	static const sf::Vector2f save;
+	static const std::array<sf::Vector2f, 2> save;
 	
 };
 
@@ -252,5 +252,6 @@ struct TiledAreas
 	static const std::array<sf::Rect<float>, 2> lava;
 	static const std::array<sf::Rect<float>, 1> parallax_forest;
 	static const std::array<sf::Rect<float>, 2> bat_bounds;
+	static const std::array<sf::Rect<float>, 1> fog;
 	
 };

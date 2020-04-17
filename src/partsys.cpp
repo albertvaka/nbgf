@@ -24,7 +24,11 @@ void PartSys::Draw(sf::RenderTarget& rt) const {
 		spr.setPosition(p.pos);
 		spr.setScale(p.scale, p.scale);
 		spr.setRotation(p.rotation);
-		spr.setColor(sf::Color(255, 255, 255, 255*p.alpha));
+		float alpha = p.alpha;
+		if (bounce_alpha  > 0.f && alpha > bounce_alpha) {
+			alpha = 2*bounce_alpha - alpha;
+		}
+		spr.setColor(sf::Color(255, 255, 255, 255*alpha));
 		rt.draw(spr);
 	}
 }
@@ -45,12 +49,12 @@ PartSys::Particle& PartSys::AddParticle() {
 void PartSys::DrawImGUI(const char* title) {
 	// With the interval and ttl ranges here, it's guaranteed we will have ~160 particles or less at a time
 	ImGui::Begin(title);
-	if (ImGui::SliderFloat("min_interval", &min_interval, 0.05f, 1.f)) {
+	if (ImGui::SliderFloat("min_interval", &min_interval, 0.05f, 10.f)) {
 		if (min_interval > max_interval) {
 			max_interval = min_interval;
 		}
 	}
-	if (ImGui::SliderFloat("max_interval", &max_interval, 0.05f, 1.f)) {
+	if (ImGui::SliderFloat("max_interval", &max_interval, 0.05f, 10.f)) {
 		if (min_interval > max_interval) {
 			min_interval = max_interval;
 		}
@@ -94,6 +98,7 @@ void PartSys::DrawImGUI(const char* title) {
 	}
 	ImGui::SliderFloat("alpha", &alpha, 0.f, 1.f);
 	ImGui::SliderFloat("alpha_vel", &alpha_vel, -4.f, 4.f);
+	ImGui::SliderFloat("bounce_alpha", &bounce_alpha, -0.1f, 1.f);
 	ImGui::SliderFloat("rotation_vel", &rotation_vel, -360.f, 360.f);
 	ImGui::SliderFloat2("accel", &acc.x, -50.f, 50.f);
 	ImGui::Text("Count: %lu", particles.size());
