@@ -18,8 +18,10 @@
 
 enum GameKeys
 {
-	UP = 0, DOWN, LEFT, RIGHT,
+	NONE = 0,
+	UP, DOWN, LEFT, RIGHT,
 	ACTION, START, SHOOT,
+	ACTIVATE,
 	DEBUG_ZOOM_IN, DEBUG_ZOOM_OUT,
 	DEBUG_FRAME_BY_FRAME, DEBUG_FRAME_BY_FRAME_NEXT,
 	DEBUG_MODE,
@@ -30,10 +32,12 @@ extern sf::Keyboard::Key key_map[magic_enum::enum_count<GameKeys>()];
 
 inline void RemapInput()
 {
+	key_map[GameKeys::NONE] = sf::Keyboard::Key::Unknown;
 	key_map[GameKeys::UP] = sf::Keyboard::Key::W;
 	key_map[GameKeys::DOWN] = sf::Keyboard::Key::S;
 	key_map[GameKeys::LEFT] = sf::Keyboard::Key::A;
 	key_map[GameKeys::RIGHT] = sf::Keyboard::Key::D;
+	key_map[GameKeys::ACTIVATE] = sf::Keyboard::Key::E;
 	key_map[GameKeys::ACTION] = sf::Keyboard::Key::P;
 	key_map[GameKeys::SHOOT] = sf::Keyboard::Key::O;
 	key_map[GameKeys::START] = sf::Keyboard::Key::Enter;

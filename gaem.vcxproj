@@ -60,6 +60,7 @@
     <ClInclude Include="src\mesa.h" />
     <ClInclude Include="src\parallax.h" />
     <ClInclude Include="src\powerups.h" />
+    <ClInclude Include="src\savestation.h" />
     <ClInclude Include="src\screen.h" />
     <ClInclude Include="src\simplexnoise.h" />
     <ClInclude Include="src\singleinstance.h" />
@@ -101,6 +102,7 @@
     <ClCompile Include="src\partsys.cpp" />
     <ClCompile Include="src\powerups.cpp" />
     <ClCompile Include="src\rand.cpp" />
+    <ClCompile Include="src\savestation.cpp" />
     <ClCompile Include="src\scene_jumpman.cpp" />
     <ClCompile Include="src\screen.cpp" />
     <ClCompile Include="src\simplexnoise.cpp" />

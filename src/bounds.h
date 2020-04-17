@@ -92,6 +92,10 @@ struct Bounds : public sf::Rect<float>
         return vec(Left(), Top());
     }
 
+    [[nodiscard]] vec TopRight() const {
+        return vec(Right(), Top());
+    }
+
     [[nodiscard]] vec BottomRight() const {
         return vec(Right(), Bottom());
     }

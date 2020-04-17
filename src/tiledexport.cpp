@@ -368,7 +368,7 @@ const std::array<sf::Vector2f, 2> TiledEntities::gunup = {
 const sf::Vector2f TiledEntities::gunup_tancaporta = sf::Vector2f(1713.5f, 758.41667f);
 
 const std::array<sf::Vector2f, 2> TiledEntities::save = {
-	sf::Vector2f(1937.545f, 914.0f),
+	sf::Vector2f(1953.5336f, 911.114f),
 	sf::Vector2f(612.5f, 166.75f),
 };
 

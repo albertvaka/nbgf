@@ -7,10 +7,9 @@
 #include "scene_manager.h"
 #include "transition.h"
 #include "destroyedtiles.h"
-#include "bat.h"
 #include "powerups.h"
-#include "lava.h"
 #include "screen.h"
+#include "input.h"
 
 struct JumpScene : Scene {
 
@@ -25,6 +24,8 @@ struct JumpScene : Scene {
 	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;
 	GunUp* gunup_tancaporta;
+
+	GameKeys contextActionButton = GameKeys::NONE;
 
 	JumpScene();
 	void EnterScene() override;

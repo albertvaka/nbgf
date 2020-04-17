@@ -6,6 +6,9 @@
 #include "assets.h"
 #include "simplexnoise.h"
 #include "parallax.h"
+#include "bat.h"
+#include "lava.h"
+#include "savestation.h"
 #include "debug.h"
 
 const float batClusterSize = 22.f;
@@ -93,8 +96,8 @@ void JumpScene::EnterScene()
 		new Bat(v, false, true);
 	}
 
-	for (const sf::Rect<float>& a : TiledAreas::lava) {
-		new Lava(a);
+	for (const sf::Vector2f& v : TiledEntities::save) {
+		new SaveStation(v);
 	}
 
 	for (const vec& v : TiledEntities::gunup) {
@@ -117,6 +120,10 @@ void JumpScene::EnterScene()
 				d->AddEnemy(b);
 			}
 		}
+	}
+
+	for (const sf::Rect<float>& a : TiledAreas::lava) {
+		new Lava(a);
 	}
 
 	screenManager.UpdateCurrentScreen(player.pos);
@@ -289,6 +296,17 @@ void JumpScene::Update(float dt)
 		l->Update(dt);
 	}
 
+	contextActionButton = GameKeys::NONE;
+	for (SaveStation* ss : SaveStation::getAll()) {
+		ss->Update(dt);
+		if (ss->enabled && Collide(ss->bounds(), player.bounds())) {
+			contextActionButton = GameKeys::ACTIVATE;
+			if (Keyboard::IsKeyJustPressed(GameKeys::ACTIVATE)) {
+				ss->Activate();
+			}
+		}
+	}
+
 	for (const sf::Rect<float>& a : TiledAreas::fog) {
 		if (!Camera::GetCameraBounds().intersects(Bounds(a)*2.f)) {
 			continue;
@@ -320,6 +338,10 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	map.Draw(window);
 	destroyedTiles.Draw(window);
 
+	for (const SaveStation* ss : SaveStation::getAll()) {
+		ss->Draw(window);
+	}
+
 	for (const EnemyDoor* ed : EnemyDoor::getAll()) {
 		ed->Draw(window);
 	}
@@ -350,6 +372,14 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	}
 
 	player.Draw(window);
+
+	if (contextActionButton != GameKeys::NONE) {
+		sf::Sprite& spr = Assets::hospitalSprite;
+		spr.setPosition(player.bounds().TopRight() + vec(2, -6));
+		AnimationType anim = BUTTON_A_PRESS; // TODO: switch depending on the key
+		spr.setTextureRect(Animation::AnimFrame(anim, mainClock.getElapsedTime().asMilliseconds()));
+		window.draw(spr);
+	}
 
 	for (const Lava* l : Lava::getAll()) {
 		l->Draw(window);
