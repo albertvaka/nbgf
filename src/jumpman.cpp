@@ -82,7 +82,7 @@ void JumpMan::Update(float dt)
 	TileMap* map = TileMap::instance();
 
 	const float marginGrounded = 1.5f; //in pixels
-	bool grounded = false;
+	grounded = false;
 	Tile t;
 	vec leftFoot(pos.x - center.x + 1.f, pos.y + marginGrounded);
 	vec rightFoot(pos.x + center.x - 1.f, pos.y + marginGrounded);
