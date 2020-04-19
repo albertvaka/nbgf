@@ -210,6 +210,9 @@
     <ClInclude Include="src\savestation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\richtext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rand.cpp">
@@ -297,6 +300,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\savestation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\richtext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

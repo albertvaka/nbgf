@@ -2,6 +2,7 @@ Code
 Tile collision algorithm by Jordi Santiago
 Animation system by Mario Gonzalez
 Steering behaviours based on work from Mat Buckland
+RichText by Cristian Pallarés
 
 Art
 Forest background by David Marah https://itch.io/profile/aethrall
