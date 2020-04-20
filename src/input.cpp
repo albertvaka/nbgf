@@ -319,7 +319,7 @@ void GamePad::_UpdateInputState()
 
 void Keyboard::_UpdateInputState(float dt)
 {
-    for (size_t i = 0; i < magic_enum::enum_count<GameKeys>(); i++)
+    for (size_t i = 1; i < magic_enum::enum_count<GameKeys>(); i++) // Skip GameKeys::NONE
 	{
         if (sf::Keyboard::isKeyPressed(key_map[i]) && Window::WindowHasFocus())
 		{
