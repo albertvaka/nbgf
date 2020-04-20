@@ -66,7 +66,7 @@ struct TileMap : SingleInstance<TileMap>
 	}
 
 	~TileMap() {
-		delete tiles;
+		delete[] tiles;
 	}
 
 	void LoadFromTiled() {
