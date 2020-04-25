@@ -10,7 +10,7 @@ const sf::IntRect TiledTiles::tileToTextureRect[] = {
 
 const sf::Vector2f TiledMap::map_size = sf::Vector2f({{ width }}, {{ height }});
 
-const unsigned short TiledMap::map[] = {
+const uint8_t TiledMap::map[] = {
     {% for t in map -%}
 		{%- if debug -%}
 			{%- if t == 0 -%}{{ ' ' }}{%- else -%}{{ 'x' }}{% endif %} 

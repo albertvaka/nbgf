@@ -37,9 +37,9 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
 
     vec size;
     
-    enum { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
+    enum : int8_t { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
 
-    short onWall = ONWALL_NO;
+    int8_t onWall = ONWALL_NO;
     float jumpTimeLeft = 0.0f;
     float crouchedTime = 0.0f;
     bool dead = false;

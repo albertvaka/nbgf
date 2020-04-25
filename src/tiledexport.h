@@ -8,7 +8,7 @@ struct TiledTiles
 {
 	static const sf::IntRect tileToTextureRect[];
 
-	enum Value : unsigned short
+	enum Value : uint8_t
 	{
 		NONE = 0,
 		BG_1,
@@ -226,7 +226,7 @@ struct TiledTiles
 
 struct TiledMap
 {
-	static const unsigned short map[];
+	static const uint8_t map[];
 	static const sf::Vector2f map_size;
 	static const std::array<sf::Rect<float>, 11> screens;
 };
