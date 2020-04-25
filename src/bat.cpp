@@ -1,7 +1,6 @@
 #include "bat.h"
 
 #include "jumpman.h"
-#include "bullet.h"
 #include "screen.h"
 #include "assets.h"
 #include "debug.h"

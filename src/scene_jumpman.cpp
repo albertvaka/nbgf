@@ -100,7 +100,7 @@ void JumpScene::EnterScene()
 		new SaveStation(v);
 	}
 
-	for (const vec& v : TiledEntities::gunup) {
+	for (const sf::Vector2f& v : TiledEntities::gunup) {
 		GunUp* up = new GunUp(v);
 	}
 	gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
