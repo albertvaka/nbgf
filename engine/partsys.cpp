@@ -22,18 +22,35 @@ void PartSys::UpdateParticles(float dt) {
 	}), particles.end());
 }
 
+
+//Disabled since rotation is not implemented yet
+//#define USE_VAO
+
 void PartSys::Draw() const {
 	for (const Particle& p : particles) {
 		float alpha = p.alpha;
 		if (bounce_alpha  > 0.f && alpha > bounce_alpha) {
 			alpha = 2*bounce_alpha - alpha;
 		}
+
+#ifdef USE_VAO
+		GPU_Rect rect = sprites[p.sprite];
+		float w = rect.w * p.scale;
+		float h = rect.h * p.scale;
+		RectToTextureCoordinates(texture, rect);
+		Window::DrawRaw::BatchColoredTexturedQuad(texture, p.pos.x, p.pos.y, w, h, rect, 1.f,1.f,1.f,p.alpha);
+#else
 		Window::Draw(texture, p.pos)
-			.withColor(255,255,255,255 * alpha)
+			.withColor(255, 255, 255, 255 * alpha)
 			.withScale(p.scale)
 			.withRect(sprites[p.sprite])
 			.withRotation(p.rotation);
+#endif
 	}
+
+#ifdef USE_VAO
+	Window::DrawRaw::FlushColoredTexturedQuad(texture);
+#endif
 }
 
 PartSys::Particle& PartSys::AddParticle() {

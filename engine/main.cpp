@@ -156,9 +156,7 @@ void main_loop() {
 	if (Keyboard::IsKeyJustPressed(DEBUG_MODE)) {
 		Debug::Draw = !Debug::Draw;
 	}
-#endif
 
-#ifdef _DEBUG
 	static bool frameByFrame = false;
 
 	if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {

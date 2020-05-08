@@ -77,17 +77,7 @@ void Lava::Update(float dt) {
 	lavaPartSys.UpdateParticles(dt);
 }
 
-//#define USE_VAO
-
-#ifdef USE_VAO
-sf::VertexArray lavaVA(sf::Quads);
-inline void AddQuad(float x, float y, float width, float height, const sf::Color& color) {
-	lavaVA.append({ vec(x, y), color });
-	lavaVA.append({ vec(x + width, y), color });
-	lavaVA.append({ vec(x + width, y + height), color });
-	lavaVA.append({ vec(x, y + height), color });
-}
-#endif
+#define USE_VAO
 
 void Lava::Draw() const {
 
@@ -115,7 +105,6 @@ void Lava::Draw() const {
 	float time = mainClock * speed;
 	Bounds screen = Camera::GetBounds();
 
-
 	const float heightTopLayer = 5.f;
 	const float heightMiddleLayer = 1.f;
 	const float heightBottomLayer = bounds.height;
@@ -124,9 +113,7 @@ void Lava::Draw() const {
 	const SDL_Color colorMiddleLayer = { 120, 0, 0, 255 };
 	const SDL_Color colorBottomLayer = { 250, 140, 50, 255 };
 
-#ifdef USE_VAO
-	lavaVA.clear();
-#else
+#ifndef USE_VAO
 	Bounds topLayer(vec(chunkSize, heightTopLayer));
 	Bounds middleLayer(vec(chunkSize, heightMiddleLayer));
 	Bounds bottomLayer(vec(chunkSize, heightBottomLayer));
@@ -141,9 +128,15 @@ void Lava::Draw() const {
 		float y = bounds.top - waveHeight * sin(x * waveAmplitude + time);
 
 #ifdef USE_VAO
-		AddQuad(x, y, chunkSize, heightTopLayer, colorTopLayer);
-		AddQuad(x, y + heightTopLayer, chunkSize, heightMiddleLayer, colorMiddleLayer);
-		AddQuad(x, y + heightTopLayer + heightMiddleLayer, chunkSize, heightBottomLayer, colorBottomLayer);
+		Window::DrawRaw::BatchRGBQuad(x, y,
+			chunkSize, heightTopLayer, 
+			colorTopLayer.r / 255.f, colorTopLayer.g / 255.f, colorTopLayer.b / 255.f);
+		Window::DrawRaw::BatchRGBQuad(x, y + heightTopLayer,
+			chunkSize, heightMiddleLayer, 
+			colorMiddleLayer.r / 255.f, colorMiddleLayer.g / 255.f, colorMiddleLayer.b / 255.f);
+		Window::DrawRaw::BatchRGBQuad(x, y + heightTopLayer + heightMiddleLayer,
+			chunkSize, heightBottomLayer, 
+			colorBottomLayer.r / 255.f, colorBottomLayer.g / 255.f, colorBottomLayer.b / 255.f);
 #else
 		topLayer.SetTopLeft(vec(x, y));
 		middleLayer.SetTopLeft(vec(x, y + heightTopLayer));
@@ -156,7 +149,7 @@ void Lava::Draw() const {
 	}
 
 #ifdef USE_VAO
-	window.draw(lavaVA);
+	Window::DrawRaw::FlushRGBQuads();
 #endif
 
 }

@@ -52,7 +52,7 @@ namespace Camera {
         }
         if (Keyboard::IsKeyPressed(SDL_SCANCODE_MINUS) || Keyboard::IsKeyPressed(SDL_SCANCODE_KP_MINUS)) {
             zoom -= zoomVel * dt;
-            if (zoom < 0.01) zoom = 0.01;
+            if (zoom < 0.01f) zoom = 0.01f;
             SetZoom(zoom);
         }
     }
@@ -201,5 +201,13 @@ namespace Window
                 GPU_Circle(Window::target, x, y, radius, {r,g,b,a});
             }
         }
+    }
+
+
+    namespace DrawRaw {
+        unsigned short vertex_count = 0;
+        unsigned int index_count = 0;
+        float vertices[MAX_VERTICES * MAX_COMPONENTS_PER_VERTEX];
+        unsigned short indices[MAX_INDICES];
     }
 }
