@@ -372,11 +372,13 @@ const std::array<vec, 2> TiledEntities::save = {
 	vec(612.5f, 166.75f),
 };
 
+const vec TiledEntities::lava_initial_height = vec(2689.75f, 1000.0f);
+
 
 
 const std::array<Bounds, 2> TiledAreas::lava = {
-		Bounds(2384.0f,1000.9780000000001f,618.0f,23.0f),
-		Bounds(1459.0f,1131.333f,990.0f,72.0f),
+		Bounds(2384.0f,814.478f,618.0f,209.5f),
+		Bounds(2028.3333f,1131.333f,244.0f,72.0f),
 	};
 const std::array<Bounds, 1> TiledAreas::parallax_forest = {
 		Bounds(838.5f,673.5f,824.0f,289.5f),

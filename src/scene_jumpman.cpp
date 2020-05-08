@@ -130,7 +130,12 @@ void JumpScene::EnterScene()
 	}
 
 	for (const Bounds& a : TiledAreas::lava) {
-		new Lava(a);
+		Lava* lava = new Lava(a);
+		if (a.Contains(TiledEntities::lava_initial_height)) {
+			raising_lava = lava;
+			raising_lava_target_height = lava->CurrentLevel();
+			lava->SetLevel(TiledEntities::lava_initial_height.y, true);
+		}
 	}
 
 	screenManager.UpdateCurrentScreen(player.pos);
@@ -145,6 +150,9 @@ void JumpScene::ExitScene()
 	Lava::deleteAll();
 	destroyedTiles.Clear();
 	EnemyDoor::deleteAll();
+	BigItem::deleteAll();
+	HealthUp::deleteAll();
+	GunUp::deleteAll();
 }
 
 void JumpScene::Update(float dt)
@@ -344,6 +352,10 @@ void JumpScene::Update(float dt)
 
 			skillTree.Enable(g->skill);
 			g->alive = false;
+
+			if (g->skill == Skill::WALLJUMP) {
+				raising_lava->SetLevel(raising_lava_target_height);
+			}
 		}
 	}
 
@@ -352,6 +364,11 @@ void JumpScene::Update(float dt)
 	bulletPartSys.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
+
+	if (raising_lava->CurrentLevel() <= raising_lava_target_height+1.f) {
+		raising_lava->SetLevel(TiledEntities::lava_initial_height.y);
+	}
+
 	for (Lava* l : Lava::getAll()) {
 		l->Update(dt);
 	}

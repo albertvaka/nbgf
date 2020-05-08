@@ -127,9 +127,9 @@ void Lava::Draw() const {
 #ifdef USE_VAO
 	lavaVA.clear();
 #else
-	static Bounds topLayer(vec(chunkSize, heightTopLayer));
-	static Bounds middleLayer(vec(chunkSize, heightMiddleLayer));
-	static Bounds bottomLayer(vec(chunkSize, heightBottomLayer));
+	Bounds topLayer(vec(chunkSize, heightTopLayer));
+	Bounds middleLayer(vec(chunkSize, heightMiddleLayer));
+	Bounds bottomLayer(vec(chunkSize, heightBottomLayer));
 #endif
 
 	float left = Mates::MaxOf(screen.Left(), bounds.Left());

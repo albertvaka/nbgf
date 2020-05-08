@@ -15,8 +15,16 @@ struct Lava : EntS<Lava>
 	void Update(float dt);
 	void Draw() const;
 
-	void RaiseTo(float newY) {
+	void SetLevel(float newY, bool immediate = false) {
 		targetY = newY;
+		if (immediate) {
+			bounds.height += bounds.top - targetY;
+			bounds.top = targetY;
+		}
+	}
+
+	float CurrentLevel() {
+		return bounds.top;
 	}
 
 	void Plof(float posX) {

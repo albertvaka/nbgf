@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="10" nextobjectid="138">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="10" nextobjectid="145">
  <editorsettings>
   <export target="." format="tmx"/>
  </editorsettings>
@@ -952,6 +952,7 @@
   <object id="127" gid="117" x="-1844" y="-16.5" width="16" height="16"/>
   <object id="129" gid="182" x="-1613.45" y="130.545" width="16" height="16"/>
   <object id="136" gid="354" x="-1435.5" y="-601.25" width="16" height="16"/>
+  <object id="144" type="lava_initial_height" gid="404" x="641.75" y="232" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="9" name="Notes">
   <object id="112" x="-532.167" y="-16.1667" width="101.667" height="41.6667">
@@ -961,10 +962,10 @@
    <text wrap="1">Need fly to get here</text>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Areas" visible="0">
-  <object id="83" name="lava" type="lava" x="336" y="232.978" width="618" height="23"/>
+ <objectgroup id="8" name="Areas">
+  <object id="83" name="lava" type="lava" x="336" y="46.478" width="618" height="209.5"/>
   <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
-  <object id="106" name="lava" type="lava" x="-589" y="363.333" width="990" height="72"/>
+  <object id="106" name="lava" type="lava" x="-19.6667" y="363.333" width="244" height="72"/>
   <object id="131" name="bat_bounds" type="bat_bounds" x="-1897.57" y="-74.447" width="273.47" height="147.894"/>
   <object id="132" name="bat_bounds" type="bat_bounds" x="-1208.22" y="-72.5402" width="842.45" height="291.747"/>
   <object id="134" name="fog" type="fog" x="-1167.5" y="111.5" width="734" height="85.5"/>

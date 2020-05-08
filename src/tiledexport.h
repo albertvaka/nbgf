@@ -246,6 +246,7 @@ struct TiledEntities
 	static const std::array<vec, 2> gunup;
 	static const vec gunup_tancaporta;
 	static const std::array<vec, 2> save;
+	static const vec lava_initial_height;
 	
 };
 
