@@ -4,7 +4,6 @@
 #include "assets.h"
 #include "input.h"
 #include "debug.h"
-#include "imgui.h"
 
 std::vector<bool> unlocked;
 
@@ -205,12 +204,6 @@ void SkillTree::DrawMenu() {
 	//Assets::menuBgSprxte.setScale(1.f / GameData::GAME_ZOOM, 1.f / GameData::GAME_ZOOM);
 
 	Window::Draw(Assets::menuBgTexture, Camera::GetBounds().TopLeft());
-
-	ImGui::Begin("SkillTree");
-	if (ImGui::Button("add point")) {
-		gunpoints++;
-	};
-	ImGui::End();
 
 	for (int s = 0; s < needs.size(); s++) {
 		if (!needs[s].empty()) {
