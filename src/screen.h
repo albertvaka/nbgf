@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
 #include "bounds.h"
 #include "singleinstance.h"
 #include <vector>
@@ -16,7 +14,7 @@ struct ScreenManager : SingleInstance<ScreenManager>
 	int FindScreenContaining(const vec& pos) const {
 		int i = 0;
 		for (const auto& screen : screens) {
-			if (screen.contains(pos)) {
+			if (screen.Contains(pos)) {
 				return i;
 			}
 			i++;

@@ -4,6 +4,7 @@
 #include "assets.h"
 #include "collider.h"
 #include "bat.h"
+#include "window.h"
 #include "debug.h"
 
 const float respawnAnimTime = 0.2f;
@@ -16,19 +17,16 @@ bool SpawningTile::CanSpawn() const {
 	return true;
 }
 
-void SpawningTile::Draw(sf::RenderTarget& window) const {
+void SpawningTile::Draw() const {
 	if (Debug::Draw) {
-		JumpMan::instance()->maxBounds().Draw(window, sf::Color::Blue);
-		this->bounds().Draw(window, sf::Color::Black);
+		JumpMan::instance()->maxBounds().Draw(0,0,255);
+		this->bounds().Draw(0, 0, 0);
 	}
 	if (spawning) {
-		sf::Sprite& spr = Assets::marioSprite;
-		spr.setTextureRect(tile.textureRect());
-		float scale = 1.f - time / respawnAnimTime;
-		spr.setScale(scale, scale);
-		spr.setOrigin(Tile::size / 2, Tile::size / 2);
-		spr.setPosition(pos.x, pos.y);
-		window.draw(spr);
+		Window::Draw(Assets::marioTexture, pos)
+			.withScale(1.f - time / respawnAnimTime)
+			.withOrigin(Tile::size / 2, Tile::size / 2)
+			.withRect(tile.textureRect());
 	}
 }
 

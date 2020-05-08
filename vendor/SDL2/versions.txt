@@ -1,0 +1,4 @@
+SDL2-devel-2.0.12-VC
+SDL2_ttf-devel-2.0.15-VC
+SDL2_mixer-devel-2.0.4-VC
+SDL2_image-devel-2.0.5-VC

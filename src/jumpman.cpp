@@ -6,7 +6,7 @@
 #include "assets.h"
 #include "debug.h"
 
-extern sf::Clock mainClock;
+extern float mainClock;
 
 // accel
 const float run_acc = 1400;
@@ -67,11 +67,10 @@ inline vec posOnLeftSlope(vec pos) {
 }
 
 JumpMan::JumpMan()
+	: polvito(Assets::hospitalTexture)
+	, animation(MARIO_IDLE)
+	, size(standing_size)
 {
-	polvito.AddSprite(Assets::hospitalTexture, sf::IntRect(69, 50, 2, 2));
-
-	animation.Ensure(MARIO_IDLE);
-	size = standing_size;
 	InitPolvito();
 }
 
@@ -111,7 +110,7 @@ void JumpMan::Update(float dt)
 	}
 grounded_exit:
 
-	crouched = ((crouched || grounded) && Keyboard::IsKeyPressed(GameKeys::DOWN)) || (crouched && !grounded);
+	crouched = ((crouched || grounded) && Input::IsPressed(0,GameKeys::DOWN)) || (crouched && !grounded);
 	if (crouched) {
 		crouchedTime += dt;
 	}
@@ -119,10 +118,10 @@ grounded_exit:
 		crouchedTime = 0.f;
 	}
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::UP, 0.15f) && (grounded || (onWall && !crouched)))
+	if (Input::IsJustPressed(0,GameKeys::UP, 0.15f) && (grounded || (onWall && !crouched)))
 	{
-		//if (!Keyboard::IsKeyJustPressed(GameKeys::UP)) Debug::out << "cheats";
-		Keyboard::ConsumeJustPressed(GameKeys::UP);
+		//if (!Input::IsJustPressed(0,GameKeys::UP)) Debug::out << "cheats";
+		Input::ConsumeJustPressed(0, GameKeys::UP);
 
 		jumpTimeLeft = jump_time; // the jump upwards velocity can last up to this duration
 		if (onWall && !grounded && !crouched) {
@@ -140,7 +139,7 @@ grounded_exit:
 	}
 
 	vec acc = vec(0, 0);
-	if (Keyboard::IsKeyPressed(GameKeys::LEFT)) {
+	if (Input::IsPressed(0,GameKeys::LEFT)) {
 		lookingLeft = true;
 		if (grounded) {
 			if (!crouched) acc.x -= run_acc;
@@ -149,7 +148,7 @@ grounded_exit:
 			acc.x -= run_acc_onair;
 		}
 	}
-	if (Keyboard::IsKeyPressed(GameKeys::RIGHT)) {
+	if (Input::IsPressed(0,GameKeys::RIGHT)) {
 		lookingLeft = false;
 		if (grounded) {
 			if (!crouched) acc.x += run_acc;
@@ -159,7 +158,7 @@ grounded_exit:
 		}
 	}
 
-	if (Keyboard::IsKeyPressed(GameKeys::UP) && jumpTimeLeft > 0)
+	if (Input::IsPressed(0,GameKeys::UP) && jumpTimeLeft > 0)
 	{
 		vel.y = vel_jump;
 	}
@@ -409,7 +408,7 @@ vert_exit:
 		size = standing_size;
 		if (grounded)
 		{
-			if (Keyboard::IsKeyPressed(GameKeys::LEFT) && !Keyboard::IsKeyPressed(GameKeys::RIGHT))
+			if (Input::IsPressed(0,GameKeys::LEFT) && !Input::IsPressed(0,GameKeys::RIGHT))
 			{
 				isWalking = true;
 				if (vel.x > 0) {
@@ -420,7 +419,7 @@ vert_exit:
 					animation.Ensure(MARIO_WALK);
 				}
 			}
-			else if (Keyboard::IsKeyPressed(GameKeys::RIGHT) && !Keyboard::IsKeyPressed(GameKeys::LEFT))
+			else if (Input::IsPressed(0,GameKeys::RIGHT) && !Input::IsPressed(0,GameKeys::LEFT))
 			{
 				isWalking = true;
 				if (vel.x < 0) {
@@ -505,53 +504,42 @@ Bounds JumpMan::maxBounds() const
 	return Bounds(pos, standing_size, vec(standing_size.x / 2, standing_size.y));
 }
 
-void JumpMan::Draw(sf::RenderTarget& window) const {
+void JumpMan::Draw() const {
 
-	polvito.Draw(window);
+	polvito.Draw();
 
-	sf::Sprite& spr = Assets::marioSprite;
-	sf::Shader* shader = nullptr;
 	if (isHit()) {
-		shader = &Assets::tintShader;
-		shader->setUniform("flashColor", sf::Glsl::Vec4(1.f, 0.f, 0.f, 0.7f));
+		Assets::tintShader.Activate();
+		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
-	spr.setTextureRect(animation.CurrentFrame());
-	spr.setOrigin(center.x, size.y);
-	spr.setPosition(pos.x, pos.y);
-	if (lookingLeft) {
-		spr.setScale(-1.f, 1.f);
-	}
-	else {
-		spr.setScale(1.f, 1.f);
-	}
-	window.draw(spr, shader);
+	Window::Draw(Assets::marioTexture, pos)
+		.withOrigin(center.x, size.y)
+		.withRect(animation.CurrentFrame())
+		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 
 	//BFG
+	GPU_Rect rect;
 	if (bfgCooldownTimer > (bfgCooldown - bfgCooldown / 4.f)) {
-		bool blink = ((mainClock.getElapsedTime().asMilliseconds() / 10) % 2);
-		spr.setTextureRect(sf::IntRect(blink ? 32 * 3 : 32 * 2, 3 * 16, 2 * 16, 16));
+		bool blink = (int(mainClock * 100) % 2);
+		rect = { blink ? 32 * 3.f : 32 * 2.f, 3 * 16.f, 2 * 16.f, 16.f };
 	}
 	else {
-		bool blink = ((mainClock.getElapsedTime().asMilliseconds() / 160) % 10) > 8;
-		spr.setTextureRect(sf::IntRect(blink ? 32 : 0, 3 * 16, 2 * 16, 16));
+		bool blink = (int(mainClock*6) % 10) > 8;
+		rect = { blink ? 32 : 0.f, 3 * 16.f, 2 * 16.f, 16.f };
 	}
-	spr.setOrigin(10, 8);
 	float scale = (0.333f + (Mates::MaxOf(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
-	spr.setPosition(bfgPos);
+	vec vscale = vec(scale, scale);
 	if (bfgAngle < 270 || bfgAngle  > 450) {
-		spr.setScale(scale, -scale);
+		vscale.y = -vscale.y;
 	}
-	else {
-		spr.setScale(scale, scale);
-	}
-	spr.setRotation(bfgAngle);
-	window.draw(spr, shader);
+	Window::Draw(Assets::marioTexture, bfgPos)
+		.withRect(rect)
+		.withOrigin(10, 8)
+		.withRotation(bfgAngle)
+		.withScale(vscale);
 
-	//Restore everything
-	spr.setScale(1.f, 1.f);
-	spr.setOrigin(0.f, 0.f);
-	spr.setRotation(0.f);
+	Assets::tintShader.Deactivate();
 }
 
 
@@ -559,6 +547,8 @@ void JumpMan::Draw(sf::RenderTarget& window) const {
 // BRILLI-BRILLI
 
 void JumpMan::InitPolvito() {
+	polvito.AddSprite({ 69.f, 50.f, 2.f, 2.f });
+
 	polvito.min_interval = 0.01f;
 	polvito.max_interval = 0.05f;
 

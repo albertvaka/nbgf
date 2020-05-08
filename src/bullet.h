@@ -34,32 +34,31 @@ struct Bullet : CircleEntity, EntS<Bullet>
 		}
 
 		pos += vel * dt;
-		if (!Camera::GetCameraBounds().IsInside(pos)) {
+		if (!Camera::GetBounds().Contains(pos)) {
 			alive = false;
 		}
 	}
 
-	void Draw(sf::RenderTarget& window) const
+	void Draw() const
 	{
-		sf::Sprite& spr = Assets::hospitalSprite;
+		vec drawPos = pos;
+		float rotation = 0.f;
+		GPU_Rect rect;
 
-		spr.setScale(scale, scale);
-
-		spr.setOrigin(8, 8);
 		if (!explode) {
-			spr.setTextureRect(sf::IntRect(8 * 16, 10 * 16, 16, 16));
-			spr.setRotation(Random::roll(0, 360));
-			spr.setPosition(pos + vec::Rand(-1, -1, 1, 1));
+			rect = { 8 * 16, 10 * 16, 16, 16 };
+			rotation = Random::roll(0, 360);
+			drawPos += vec::Rand(-1, -1, 1, 1);
 		}
 		else {
 			int frame = (timer_explosion * 7);
-			spr.setTextureRect(sf::IntRect((9 + frame) * 16, 10 * 16, 16, 16));
-			spr.setPosition(pos);
+			rect = { (9 + frame) * 16.f, 10 * 16.f, 16.f, 16.f };
 		}
-		window.draw(spr);
+		Window::Draw(Assets::hospitalTexture, drawPos)
+			.withScale(scale)
+			.withOrigin(8, 8)
+			.withRect(rect)
+			.withRotation(rotation);
 
-		spr.setOrigin(0, 0);
-		spr.setScale(1.f, 1.f);
-		spr.setRotation(0);
 	}
 };

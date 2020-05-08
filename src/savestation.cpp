@@ -4,14 +4,15 @@
 #include "mates.h"
 #include "assets.h"
 #include "input.h"
+#include "collider.h"
 
-extern sf::Clock mainClock;
+extern float mainClock;
 
 SaveStation::SaveStation(const vec& p) : BoxEntity(p, vec(32, 32)) { }
 
 void SaveStation::Update(float dt) {
 	bool prevInScene = inScene;
-	inScene = Camera::GetCameraBounds().intersects(bounds());
+	inScene = Collide(Camera::GetBounds(),bounds());
 	if (inScene && !prevInScene) {
 		enabled = true;
 	}
@@ -23,21 +24,17 @@ void SaveStation::Activate() {
 	}
 }
 
-void SaveStation::Draw(sf::RenderTarget& window) const
+void SaveStation::Draw() const
 {
-	sf::Sprite& spr = Assets::marioSprite;
-
-	spr.setOrigin(16, 16);
-	spr.setTextureRect(sf::IntRect(4 * 16, 12 * 16, 32, 32));
-	spr.setPosition(pos.x, pos.y);
-	window.draw(spr);
+	Window::Draw(Assets::marioTexture, pos)
+		.withRect(4 * 16, 12 * 16, 32, 32)
+		.withOrigin(16, 16);
 
 	if (enabled) {
-		spr.setTextureRect(sf::IntRect(6 * 16, 12 * 16, 32, 32));
-		spr.setColor(sf::Color(255, 255, 255, 128 + 128 * sin(mainClock.getElapsedTime().asSeconds()*2)));
-		spr.setPosition(pos.x, pos.y);
-		window.draw(spr);
-		spr.setColor(sf::Color(255, 255, 255, 255));
+		Window::Draw(Assets::marioTexture, pos)
+			.withRect(6 * 16, 12 * 16, 32, 32)
+			.withOrigin(16, 16)
+			.withColor(255, 255, 255, 128 + 128 * sin(mainClock*2));
 	}
 }
 

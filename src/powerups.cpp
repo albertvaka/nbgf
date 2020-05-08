@@ -3,36 +3,34 @@
 #include "tilemap.h"
 #include "mates.h"
 #include "assets.h"
+#include "window.h"
 
-extern sf::Clock mainClock;
+extern float mainClock;
 
 
-void GunUp::Draw(sf::RenderTarget& window) const
+void GunUp::Draw() const
 {
-	float y = 5 * sin(mainClock.getElapsedTime().asSeconds());
+	float y = 5 * sin(mainClock);
 
-	sf::Sprite& spr = Assets::marioSprite;
-	spr.setOrigin(0, 0);
-	spr.setTextureRect(sf::IntRect(5 * 16, 11 * 16, 16, 16));
-	spr.setPosition(pos.x, pos.y - y);
-	window.draw(spr);
+	Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
+		.withOrigin(0, 0)
+		.withRect(5 * 16, 11 * 16, 16, 16);
+
 }
 
 
 
-void HealthUp::Draw(sf::RenderTarget& window) const
+void HealthUp::Draw() const
 {
 	if (TileMap::instance()->getTile(TileMap::toTiles(pos)).isBreakable()) {
 		//Don't draw behind breakables
 		return;
 	}
 
-	float y = 5 * sin(mainClock.getElapsedTime().asSeconds());
+	float y = 5 * sin(mainClock);
 
-	sf::Sprite& spr = Assets::marioSprite;
-	spr.setOrigin(0, 0);
-	spr.setTextureRect(sf::IntRect(6 * 16, 11 * 16, 16, 16));
-	spr.setPosition(pos.x, pos.y - y);
-	window.draw(spr);
+	Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
+		.withOrigin(0, 0)
+		.withRect(6 * 16, 11 * 16, 16, 16);
 }
 

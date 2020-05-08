@@ -1,6 +1,6 @@
 #include "tiledexport.h"
 
-const sf::IntRect TiledTiles::tileToTextureRect[] = {
+const GPU_Rect TiledTiles::tileToTextureRect[] = {
 	{},	//NONE
 	{% for t in gids -%}
 		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, {{ tilenames[t] }}, gid={{t}}
@@ -8,7 +8,7 @@ const sf::IntRect TiledTiles::tileToTextureRect[] = {
 	{},	//SOLID_TRANSPARENT
 };
 
-const sf::Vector2f TiledMap::map_size = sf::Vector2f({{ width }}, {{ height }});
+const vec TiledMap::map_size = vec({{ width }}, {{ height }});
 
 const uint8_t TiledMap::map[] = {
     {% for t in map -%}
@@ -22,28 +22,28 @@ const uint8_t TiledMap::map[] = {
     {%- endfor %}
 };
 
-const std::array<sf::Rect<float>, {{screens|length}}> TiledMap::screens = {
+const std::array<Bounds, {{screens|length}}> TiledMap::screens = {
 	{%- for s in screens %}
-	sf::Rect<float>({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
+	Bounds({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
 	{%- endfor %}
 };
 
 {% for k, v in entities_by_type.items() -%}
 	{%- if v|length > 1 -%}
-const std::array<sf::Vector2f, {{v|length}}> TiledEntities::{{k}} = {
+const std::array<vec, {{v|length}}> TiledEntities::{{k}} = {
 {%- for e in v %}
-	sf::Vector2f({{e[0]}}f, {{e[1]}}f),
+	vec({{e[0]}}f, {{e[1]}}f),
 {%- endfor %}
 };
 {% else -%}
-	const sf::Vector2f TiledEntities::{{k}} = sf::Vector2f({{v[0][0]}}f, {{v[0][1]}}f);
+	const vec TiledEntities::{{k}} = vec({{v[0][0]}}f, {{v[0][1]}}f);
 {% endif %}
 {% endfor %}
 
 {% for k, v in areas_by_type.items() -%}
-	const std::array<sf::Rect<float>, {{v|length}}> TiledAreas::{{k}} = {
+	const std::array<Bounds, {{v|length}}> TiledAreas::{{k}} = {
 		{%- for s in v %}
-		sf::Rect<float>({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
+		Bounds({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
 		{%- endfor %}
 	};
 {% endfor %}

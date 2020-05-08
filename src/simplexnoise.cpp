@@ -540,14 +540,14 @@ float dot( const int* g, const float x, const float y, const float z, const floa
 
 
 
-void DebugDraw(sf::RenderTarget& window, float tileSize, std::function<float(int x, int y)> noisefunc)
+void DebugDraw(float tileSize, std::function<float(int x, int y)> noisefunc)
 {
-    Bounds screen = Camera::GetCameraBounds();
+    Bounds screen = Camera::GetBounds();
     int left = int(screen.Left() / tileSize) - 1;
     int right = int(screen.Right() / tileSize) + 1;
     int top = int(screen.Top() / tileSize) - 1;
     int bottom = int(screen.Bottom() / tileSize) + 1;
-
+    /*
     sf::RectangleShape rect;
     rect.setSize(vec(16, 16));
     rect.setOutlineThickness(0);
@@ -562,6 +562,7 @@ void DebugDraw(sf::RenderTarget& window, float tileSize, std::function<float(int
             window.draw(rect);
         }
     }
+    */
 }
 
 }

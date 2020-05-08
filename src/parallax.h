@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
 #include "selfregister.h"
 #include "bounds.h"
 
@@ -11,7 +9,7 @@ struct Parallax : EntS<Parallax>
 
 	Bounds bounds;
 
-	void Draw(sf::RenderTarget& window) const;
+	void Draw() const;
 
 };
 

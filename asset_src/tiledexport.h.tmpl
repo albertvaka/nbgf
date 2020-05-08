@@ -2,11 +2,13 @@
 
 #include <array>
 
-#include <SFML/Graphics.hpp>
+#include "vector.h"
+#include "bounds.h"
+#include "SDL_gpu.h"
 
 struct TiledTiles
 {
-	static const sf::IntRect tileToTextureRect[];
+	static const GPU_Rect tileToTextureRect[];
 
 	enum Value : uint8_t
 	{
@@ -33,17 +35,17 @@ struct TiledTiles
 struct TiledMap
 {
 	static const uint8_t map[];
-	static const sf::Vector2f map_size;
-	static const std::array<sf::Rect<float>, {{screens|length}}> screens;
+	static const vec map_size;
+	static const std::array<Bounds, {{screens|length}}> screens;
 };
 
 struct TiledEntities
 {
 	{% for k, v in entities_by_type.items() -%}
 		{%- if v|length > 1 -%}
-			static const std::array<sf::Vector2f, {{v|length}}> {{k}};
+			static const std::array<vec, {{v|length}}> {{k}};
 		{%- else -%}
-			static const sf::Vector2f {{k}};
+			static const vec {{k}};
 		{%- endif %}
 	{% endfor %}
 };
@@ -51,6 +53,6 @@ struct TiledEntities
 struct TiledAreas
 {
 	{% for k, v in areas_by_type.items() -%}
-		static const std::array<sf::Rect<float>, {{v|length}}> {{k}};
+		static const std::array<Bounds, {{v|length}}> {{k}};
 	{% endfor %}
 };

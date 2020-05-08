@@ -3,6 +3,7 @@
 #include "jumpman.h"
 #include "screen.h"
 #include "assets.h"
+#include "window.h"
 #include "debug.h"
 
 const float awake_player_distance = 100.f;
@@ -25,7 +26,7 @@ void Bat::EnableBoundsAvoidance() {
 	int smallest_i = -1;
 	float smallest_area = Mates::MaxInt;
 	for (const auto& bounds : TiledAreas::bat_bounds) {
-		if (bounds.contains(pos)) {
+		if (bounds.Contains(pos)) {
 			float area = bounds.width * bounds.height;
 			if (area < smallest_area) {
 				smallest_i = i;
@@ -50,16 +51,14 @@ Bat::Bat(const vec& pos, bool aggresive, bool awake)
 	, steering(this)
 	, state(State::SIESTA)
 	, aggresive(aggresive)
+	, anim(BAT_SIESTA)
 {
 	if (awake) {
 		state = State::FLYING;
 		anim.Ensure(BAT_FLYING);
-		anim.loopable = true;
 	}
-	else {
-		anim.Ensure(BAT_SIESTA);
-		anim.Update(Random::roll(0, anim.GetCurrentAnimDuration())); // Start blink anim at different time intervals
-	}
+
+	anim.Update(Random::roll(0, anim.GetCurrentAnimDuration())); // Start anim at different time intervals
 
 	steering.TileMapAvoidanceOn(TileMap::instance());
 	steering.ForwardOn();
@@ -74,10 +73,10 @@ Bat::Bat(const vec& pos, bool aggresive, bool awake)
 	}
 }
 
-void Bat::DrawSenseArea(sf::RenderTarget& window) const
+void Bat::DrawSenseArea() const
 {
-	CircleBounds(pos, awake_player_distance).Draw(window, sf::Color::Yellow);
-	CircleBounds(pos, awake_nearby_distance).Draw(window, sf::Color::Cyan);
+	CircleBounds(pos, awake_player_distance).Draw(255,255,0);
+	CircleBounds(pos, awake_nearby_distance).Draw(0,255,255);
 }
 
 inline bool Bat::inSameScreenAsPlayer() const {
@@ -179,32 +178,23 @@ void Bat::Update(float dt)
 }
 
 
-void Bat::Draw(sf::RenderTarget& window) const
+void Bat::Draw() const
 {
-
-	sf::Sprite& spr = Assets::marioSprite;
-
-	if (vel.x > 0) {
-		spr.setScale(-1.f, 1.f); // To optimize: We could do this just by using a texture coordinates with (-width)
-	} else {
-		spr.setScale(1.f, 1.f);
-	}
-	spr.setOrigin(16.f, 14.f);
-	spr.setTextureRect(anim.CurrentFrame());
-	spr.setPosition(pos.x, pos.y);
-
 	if (aggresive) {
-		sf::Shader *tintShader = &Assets::tintShader;
-		tintShader->setUniform("flashColor", sf::Glsl::Vec4(0.7f, 0.1f, 0.2f, 0.4f));
-		window.draw(spr, tintShader);
-	} else {
-		window.draw(spr);
+		Assets::tintShader.Activate();
+		Assets::tintShader.SetUniform("flashColor", 0.7f, 0.1f, 0.2f, 0.4f);
 	}
+
+	Window::Draw(Assets::marioTexture, pos)
+		.withScale(vel.x < 0 ? 1.f : -1.f, 1.f)
+		.withOrigin(16.f, 14.f)
+		.withRect(anim.CurrentFrame());
+
+	Assets::tintShader.Deactivate();
 
 	if (state == State::SEEKING) {
 		pos.Debuggerino();
 	}
 
-	spr.setScale(1.f, 1.f);
 }
 

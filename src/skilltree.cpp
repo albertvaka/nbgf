@@ -26,7 +26,7 @@ std::vector<bool> unlocked;
 	"Range++\n\nIncreases the range of your weapon.",
  };
 
- std::vector< sf::IntRect> img = {
+ std::vector<GPU_Rect> img = {
 	{8*16,11*16,16,16},
 	{10*16,11*16,16,16},
 	{5*16,10*16,16,16},
@@ -57,37 +57,31 @@ SkillTree::TreePos posInTree(SkillTree::Skill s) {
 }
 
 vec posInTreeToPosInScreen(SkillTree::TreePos p) {
-	auto size = Camera::GetCameraSize();
+	auto size = Camera::GetSize();
 	vec div = vec(size.x / (tree[0].size()), (size.y / (tree.size())));
-	return Camera::GetCameraBounds().TopLeft() + (vec(p.i, p.j) * (div / 2)) + vec(div.x/2, div.y);
+	return Camera::GetBounds().TopLeft() + (vec(p.i, p.j) * (div / 2)) + vec(div.x/2, div.y);
 }
 
 SkillTree::SkillTree()
+	: textPoints(Assets::font_30)
+	, textPressStart(Assets::font_30)
+	, textDescription(Assets::font_30)
 {
 	enabled.resize(description.size(), false);
-
-	textPoints.setFont(Assets::font);
-	textPressStart.setFont(Assets::font);
-	textDescription.setFont(Assets::font);
-
-	const float scale = 0.3f;
-	textPoints.setScale(scale, scale);
-	textPressStart.setScale(scale, scale);
-	textDescription.setScale(scale, scale);
 
 	current = posInTree(SkillTree::BREAK);
 	textPressStart.setString("Press start to assign points");
 };
 
 void SkillTree::Update(float dt) {
-	if (Keyboard::IsKeyJustPressed(GameKeys::START)) {
+	if (Input::IsJustPressed(0,GameKeys::START)) {
 		open = !open;
 	}
 	if (!open) {
 		return;
 	}
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::LEFT)) {
+	if (Input::IsJustPressed(0,GameKeys::LEFT)) {
 		if (current.i > 0) {
 			if (prev_left != -1) {
 				prev_right = current.j;
@@ -104,7 +98,7 @@ void SkillTree::Update(float dt) {
 			}
 		}
 	}
-	if (Keyboard::IsKeyJustPressed(GameKeys::RIGHT)) {
+	if (Input::IsJustPressed(0,GameKeys::RIGHT)) {
 		if (current.i < tree[current.j].size()) {
 			if (prev_right != -1) {
 				prev_left = current.j;
@@ -126,7 +120,7 @@ void SkillTree::Update(float dt) {
 		}
 	}
 found:
-	if (Keyboard::IsKeyJustPressed(GameKeys::UP)) {
+	if (Input::IsJustPressed(0,GameKeys::UP)) {
 		if (current.j > 0) {
 			prev_left = -1;
 			prev_right = -1;
@@ -142,7 +136,7 @@ found:
 			} while (tree[current.j][current.i] == -1);
 		}
 	}
-	if (Keyboard::IsKeyJustPressed(GameKeys::DOWN)) {
+	if (Input::IsJustPressed(0,GameKeys::DOWN)) {
 		if (current.j < tree.size() - 1) {
 			prev_left = -1;
 			prev_right = -1;
@@ -161,7 +155,7 @@ found:
 
 	int skill = tree[current.j][current.i];
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::ACTION) && !enabled[skill]) {
+	if (Input::IsJustPressed(0,GameKeys::ACTIVATE) && !enabled[skill]) {
 		if (gunpoints > 0) {
 			bool requirementsMet = true;
 			for (int n : needs[skill]) {
@@ -192,24 +186,17 @@ found:
 	textPoints.setString("Points to assign: " + std::to_string(gunpoints));
 	textDescription.setString(description[skill]);
 }
-void SkillTree::DrawOverlay(sf::RenderTarget& window) {
-	sf::Sprite& sprite = Assets::marioSprite;
+void SkillTree::DrawOverlay() {
 	if (gunpoints > 0) {
-		textPressStart.setPosition(Camera::GetCameraBounds().TopLeft() + vec(10, 10));
-		window.draw(textPressStart);
+		Window::Draw(textPressStart, Camera::GetBounds().TopLeft() + vec(10, 10)).withScale(0.3f);
 	}
 }
 
 
-void SkillTree::DrawMenu(sf::RenderTarget& window) {
+void SkillTree::DrawMenu() {
 	//Assets::menuBgSprite.setScale(1.f / GameData::GAME_ZOOM, 1.f / GameData::GAME_ZOOM);
 
-	sf::Sprite& sprite = Assets::marioSprite;
-
-	Assets::menuBgSprite.setPosition(Camera::GetCameraBounds().TopLeft());
-	window.draw(Assets::menuBgSprite);
-	
-	sf::VertexArray lines(sf::Lines);
+	Window::Draw(Assets::menuBgTexture, Camera::GetBounds().TopLeft());
 
 	ImGui::Begin("SkillTree");
 	if (ImGui::Button("add point")) {
@@ -217,67 +204,56 @@ void SkillTree::DrawMenu(sf::RenderTarget& window) {
 	};
 	ImGui::End();
 
-
 	for (int s = 0; s < needs.size(); s++) {
 		if (!needs[s].empty()) {
 			vec from = posInTreeToPosInScreen(posInTree(Skill(s)));
 			for (int n = 0; n < needs[s].size(); n++) {
 				vec to = posInTreeToPosInScreen(posInTree(Skill(needs[s][n])));
-				lines.append(from);
-				lines.append(to);
+				Window::DrawPrimitive::Line(from, to, 1, 255, 255, 255);
 			}
 		}
 	}
-	window.draw(lines);
 
-	sprite.setOrigin(8, 8);
 	for (int j = 0; j < tree.size(); j++) {
 		for (int i = 0; i < tree[j].size(); i++) {
 			if (tree[j][i] != -1) {
-				sprite.setPosition(posInTreeToPosInScreen({ i,j }));
-				sprite.setTextureRect(img[tree[j][i]]);
-
-				bool canpick = true;
-				
+				vec pos = posInTreeToPosInScreen({ i,j });
+				SDL_Color color = { 100, 100, 250, 255 }; 
 				if (enabled[tree[j][i]]) {
-					sprite.setColor(sf::Color(250, 100, 100, 255));
-				} else {
-					sprite.setColor(sf::Color(100, 100, 250, 255));
+					color = { 250, 100, 100, 255 };
 				}
-				window.draw(sprite);
+				GPU_Rect rect = img[tree[j][i]];
+
+				Window::Draw(Assets::marioTexture, pos)
+					.withRect(rect)
+					.withOrigin(8,8)
+					.withColor(color);
 			}
 		}
 	}
 
 	vec currentPos = posInTreeToPosInScreen(current);
-	Bounds::fromCenter(currentPos, vec(16, 16)).Draw(window, sf::Color::White);
+	Bounds::fromCenter(currentPos, vec(16, 16)).Draw(255,255,255);
 
 	if (requirements_not_met_timer > 0) {
 		if (int(requirements_not_met_timer * 10.f) % 2) {
 			for (int n : needs[requirements_not_met_skill]) {
 				if (!enabled[n]) {
 					vec pos = posInTreeToPosInScreen(posInTree(Skill(n)));
-					Bounds::fromCenter(pos, vec(16, 16)).Draw(window, sf::Color::Red);
+					Bounds::fromCenter(pos, vec(16, 16)).Draw(255,0,0);
 				}
 			}
 		}
 	}
 
-	sprite.setColor(sf::Color(255, 255, 255, 255));
-
-	
-	textPoints.setPosition(Camera::GetCameraBounds().TopLeft() + vec(10, 10));
-	textDescription.setPosition(Camera::GetCameraBounds().TopLeft() + vec(50, 250));
-
-
-	textPoints.setFillColor(sf::Color(255, 255, 255, 255));
+	textPoints.setFillColor(255, 255, 255);
 	if (not_enough_points_timer > 0.f) {
 		if (int(not_enough_points_timer * 10.f) % 2) {
-			textPoints.setFillColor(sf::Color(255, 0, 0, 255));
+			textPoints.setFillColor(255, 0, 0);
 		}
 	}
 
-	window.draw(textPoints);
-	window.draw(textDescription);
+	Window::Draw(textPoints, Camera::GetBounds().TopLeft() + vec(10, 10)).withScale(0.3f);
+	Window::Draw(textDescription, Camera::GetBounds().TopLeft() + vec(50, 250)).withScale(0.3f);
 
 }

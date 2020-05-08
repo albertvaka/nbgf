@@ -1,8 +1,8 @@
 #pragma once
 
 #include "singleinstance.h"
-#include <SFML/Graphics.hpp>
 #include <vector>
+#include "text.h"
 
 struct SkillTree : SingleInstance<SkillTree>
 {
@@ -17,8 +17,8 @@ struct SkillTree : SingleInstance<SkillTree>
 
 	SkillTree();
 	void Update(float dt);
-	void DrawMenu(sf::RenderTarget& window);
-	void DrawOverlay(sf::RenderTarget& window);
+	void DrawMenu();
+	void DrawOverlay();
 
 	struct TreePos {
 		int i, j;
@@ -36,9 +36,9 @@ struct SkillTree : SingleInstance<SkillTree>
 
 	std::vector<bool> enabled;
 
-	sf::Text textPoints;
-	sf::Text textDescription;
-	sf::Text textPressStart;
+	Text textPoints;
+	Text textDescription;
+	Text textPressStart;
 
 };
 

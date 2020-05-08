@@ -42,7 +42,6 @@ all look identical.
 */
 
 #include <functional>
-#include <SFML/Graphics.hpp>
 
 namespace Simplex {
 
@@ -125,6 +124,6 @@ float dot(const int* g, const float x, const float y, const float z);
 float dot(const int* g, const float x, const float y, const float z, const float w);
 
 
-void DebugDraw(sf::RenderTarget& window, float tileSize, std::function<float(int x, int y)> noisefunc);
+void DebugDraw(float tileSize, std::function<float(int x, int y)> noisefunc);
 
 }

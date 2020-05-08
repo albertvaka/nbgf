@@ -33,11 +33,11 @@ struct Bat : SteeringEntity, EntS<Bat>
 	Bat(const vec& position, bool aggresive, bool awake);
 
 	void Update(float dt);
-	void Draw(sf::RenderTarget& window) const;
+	void Draw() const;
 
 	inline bool inSameScreenAsPlayer() const;
 
-	void DrawSenseArea(sf::RenderTarget& window) const;
+	void DrawSenseArea() const;
 private:
 	void EnableBoundsAvoidance();
 };

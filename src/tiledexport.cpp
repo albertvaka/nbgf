@@ -1,6 +1,6 @@
 #include "tiledexport.h"
 
-const sf::IntRect TiledTiles::tileToTextureRect[] = {
+const GPU_Rect TiledTiles::tileToTextureRect[] = {
 	{},	//NONE
 	{ 9 * 16, 2 * 16, 16, 16 }, //=1, BG_1, gid=67
 	{ 10 * 16, 2 * 16, 16, 16 }, //=2, BG_2, gid=68
@@ -198,7 +198,7 @@ const sf::IntRect TiledTiles::tileToTextureRect[] = {
 	{},	//SOLID_TRANSPARENT
 };
 
-const sf::Vector2f TiledMap::map_size = sf::Vector2f(192, 96);
+const vec TiledMap::map_size = vec(192, 96);
 
 const uint8_t TiledMap::map[] = {
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -300,92 +300,92 @@ const uint8_t TiledMap::map[] = {
 	
 };
 
-const std::array<sf::Rect<float>, 11> TiledMap::screens = {
-	sf::Rect<float>(1787.545f,728.0f,591.538f,256.0f),
-	sf::Rect<float>(736.8800000000001f,689.6667f,1048.45f,332.997f),
-	sf::Rect<float>(1786.333f,381.333f,587.333f,308.667f),
-	sf::Rect<float>(144.0f,688.0f,591.5f,336.0f),
-	sf::Rect<float>(2377.75f,688.0f,590.25f,336.0f),
-	sf::Rect<float>(1793.333f,48.0f,573.417f,336.0f),
-	sf::Rect<float>(2385.25f,48.0f,590.75f,336.0f),
-	sf::Rect<float>(449.6199999999999f,37.0f,280.75f,153.0f),
-	sf::Rect<float>(1787.55f,946.0f,591.54f,200.0f),
-	sf::Rect<float>(1290.0639999999999f,1047.083f,591.538f,333.0f),
-	sf::Rect<float>(2369.2309999999998f,1039.833f,591.538f,333.0f),
+const std::array<Bounds, 11> TiledMap::screens = {
+	Bounds(1787.545f,728.0f,591.538f,256.0f),
+	Bounds(736.8800000000001f,689.6667f,1048.45f,332.997f),
+	Bounds(1786.333f,381.333f,587.333f,308.667f),
+	Bounds(144.0f,688.0f,591.5f,336.0f),
+	Bounds(2377.75f,688.0f,590.25f,336.0f),
+	Bounds(1793.333f,48.0f,573.417f,336.0f),
+	Bounds(2385.25f,48.0f,590.75f,336.0f),
+	Bounds(449.6199999999999f,37.0f,280.75f,153.0f),
+	Bounds(1787.55f,946.0f,591.54f,200.0f),
+	Bounds(1290.0639999999999f,1047.083f,591.538f,333.0f),
+	Bounds(2369.2309999999998f,1039.833f,591.538f,333.0f),
 };
 
-const std::array<sf::Vector2f, 10> TiledEntities::batawake = {
-	sf::Vector2f(1348.0f, 730.0f),
-	sf::Vector2f(1522.8339999999998f, 836.0f),
-	sf::Vector2f(1928.0f, 165.0f),
-	sf::Vector2f(2274.0f, 212.0f),
-	sf::Vector2f(1276.5f, 791.5f),
-	sf::Vector2f(1315.0f, 884.5f),
-	sf::Vector2f(1017.5f, 804.0f),
-	sf::Vector2f(1059.33f, 732.0f),
-	sf::Vector2f(1159.667f, 837.5f),
-	sf::Vector2f(1428.5f, 789.6667f),
+const std::array<vec, 10> TiledEntities::batawake = {
+	vec(1348.0f, 730.0f),
+	vec(1522.8339999999998f, 836.0f),
+	vec(1928.0f, 165.0f),
+	vec(2274.0f, 212.0f),
+	vec(1276.5f, 791.5f),
+	vec(1315.0f, 884.5f),
+	vec(1017.5f, 804.0f),
+	vec(1059.33f, 732.0f),
+	vec(1159.667f, 837.5f),
+	vec(1428.5f, 789.6667f),
 };
 
-const std::array<sf::Vector2f, 8> TiledEntities::bat = {
-	sf::Vector2f(1648.0f, 816.0f),
-	sf::Vector2f(2704.0f, 800.0f),
-	sf::Vector2f(2624.0f, 800.0f),
-	sf::Vector2f(2720.25f, 895.75f),
-	sf::Vector2f(2608.0f, 896.5f),
-	sf::Vector2f(2751.25f, 976.0f),
-	sf::Vector2f(2316.0f, 1068.0f),
-	sf::Vector2f(204.0f, 751.5f),
+const std::array<vec, 8> TiledEntities::bat = {
+	vec(1648.0f, 816.0f),
+	vec(2704.0f, 800.0f),
+	vec(2624.0f, 800.0f),
+	vec(2720.25f, 895.75f),
+	vec(2608.0f, 896.5f),
+	vec(2751.25f, 976.0f),
+	vec(2316.0f, 1068.0f),
+	vec(204.0f, 751.5f),
 };
 
-const std::array<sf::Vector2f, 2> TiledEntities::healthup = {
-	sf::Vector2f(2144.25f, 510.25f),
-	sf::Vector2f(2513.333f, 847.3333f),
+const std::array<vec, 2> TiledEntities::healthup = {
+	vec(2144.25f, 510.25f),
+	vec(2513.333f, 847.3333f),
 };
 
-const sf::Vector2f TiledEntities::spawn = sf::Vector2f(2098.333f, 876.0f);
+const vec TiledEntities::spawn = vec(2098.333f, 876.0f);
 
-const sf::Vector2f TiledEntities::gun = sf::Vector2f(264.3699999999999f, 922.0f);
+const vec TiledEntities::gun = vec(264.3699999999999f, 922.0f);
 
-const std::array<sf::Vector2f, 3> TiledEntities::enemy_door = {
-	sf::Vector2f(1634.0f, 722.0f),
-	sf::Vector2f(1889.667f, 1072.667f),
-	sf::Vector2f(434.54999999999995f, 898.545f),
+const std::array<vec, 3> TiledEntities::enemy_door = {
+	vec(1634.0f, 722.0f),
+	vec(1889.667f, 1072.667f),
+	vec(434.54999999999995f, 898.545f),
 };
 
-const std::array<sf::Vector2f, 2> TiledEntities::angrybat = {
-	sf::Vector2f(531.0f, 150.0f),
-	sf::Vector2f(545.0f, 164.0f),
+const std::array<vec, 2> TiledEntities::angrybat = {
+	vec(531.0f, 150.0f),
+	vec(545.0f, 164.0f),
 };
 
-const sf::Vector2f TiledEntities::walljump = sf::Vector2f(2904.25f, 918.75f);
+const vec TiledEntities::walljump = vec(2904.25f, 918.75f);
 
-const std::array<sf::Vector2f, 2> TiledEntities::gunup = {
-	sf::Vector2f(2047.666667f, 318.667f),
-	sf::Vector2f(1739.0f, 1099.667f),
+const std::array<vec, 2> TiledEntities::gunup = {
+	vec(2047.666667f, 318.667f),
+	vec(1739.0f, 1099.667f),
 };
 
-const sf::Vector2f TiledEntities::gunup_tancaporta = sf::Vector2f(1713.5f, 758.41667f);
+const vec TiledEntities::gunup_tancaporta = vec(1713.5f, 758.41667f);
 
-const std::array<sf::Vector2f, 2> TiledEntities::save = {
-	sf::Vector2f(1953.5336f, 911.114f),
-	sf::Vector2f(612.5f, 166.75f),
+const std::array<vec, 2> TiledEntities::save = {
+	vec(1953.5336f, 911.114f),
+	vec(612.5f, 166.75f),
 };
 
 
 
-const std::array<sf::Rect<float>, 2> TiledAreas::lava = {
-		sf::Rect<float>(2384.0f,1000.9780000000001f,618.0f,23.0f),
-		sf::Rect<float>(1459.0f,1131.333f,990.0f,72.0f),
+const std::array<Bounds, 2> TiledAreas::lava = {
+		Bounds(2384.0f,1000.9780000000001f,618.0f,23.0f),
+		Bounds(1459.0f,1131.333f,990.0f,72.0f),
 	};
-const std::array<sf::Rect<float>, 1> TiledAreas::parallax_forest = {
-		sf::Rect<float>(838.5f,673.5f,824.0f,289.5f),
+const std::array<Bounds, 1> TiledAreas::parallax_forest = {
+		Bounds(838.5f,673.5f,824.0f,289.5f),
 	};
-const std::array<sf::Rect<float>, 2> TiledAreas::bat_bounds = {
-		sf::Rect<float>(150.43000000000006f,693.553f,273.47f,147.894f),
-		sf::Rect<float>(839.78f,695.4598f,842.45f,291.747f),
+const std::array<Bounds, 2> TiledAreas::bat_bounds = {
+		Bounds(150.43000000000006f,693.553f,273.47f,147.894f),
+		Bounds(839.78f,695.4598f,842.45f,291.747f),
 	};
-const std::array<sf::Rect<float>, 1> TiledAreas::fog = {
-		sf::Rect<float>(880.5f,879.5f,734.0f,85.5f),
+const std::array<Bounds, 1> TiledAreas::fog = {
+		Bounds(880.5f,879.5f,734.0f,85.5f),
 	};
 

@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -16,300 +8,380 @@
     <Filter Include="Bundled Dependencies">
       <UniqueIdentifier>{256968a6-009b-4651-8ae5-a4f95670f698}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Bundled Dependencies\Imgui">
+    <Filter Include="Bundled Dependencies\sdl_gpu">
+      <UniqueIdentifier>{3d2e5d61-a998-4dbe-94d7-59fb256bdbb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bundled Dependencies\stb_image">
+      <UniqueIdentifier>{639f997a-2caa-484f-9890-ae836465d653}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bundled Dependencies\glew">
+      <UniqueIdentifier>{2522117a-2f25-4e07-b8fe-5db8547bcb70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bundled Dependencies\imgui">
       <UniqueIdentifier>{f04c1d6a-03a0-4b9a-9a0b-c44f562282ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Steering">
-      <UniqueIdentifier>{334872e3-915f-4e65-b016-64a8104431c7}</UniqueIdentifier>
+    <Filter Include="Bundled Dependencies\imgui_imp">
+      <UniqueIdentifier>{169eeddb-58a8-452d-afef-d879d039e84a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{31d75502-0a92-4a01-9a96-a7b3c736b2c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4ac15e07-3b9f-47b2-ae09-134038d673c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\player.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\glew\glew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
     </ClInclude>
-    <ClInclude Include="src\popupText.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\glew\glxew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
     </ClInclude>
-    <ClInclude Include="src\rand.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\glew\wglew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_jumpman.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\imgui\imconfig.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_manager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\imgui\imgui.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\selfregister.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\imgui\imgui_internal.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\spawner.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\imgui\imstb_rectpack.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\taca.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\imgui\imstb_textedit.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\tilemap.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\imgui\imstb_truetype.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\transition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\anim_data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bounds.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cadaver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cinta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cleaner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\door.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\extremity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\intro_scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\jumpman.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lever.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\main_scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\main_scene_collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\main_scene_tile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mates.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mesa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_sfml\imconfig-SFML.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_sfml\imgui-SFML.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_sfml\imgui-SFML_export.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_internal.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_rectpack.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_textedit.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_truetype.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imconfig.h">
-      <Filter>Bundled Dependencies\Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\magic_enum.h">
+    <ClInclude Include="vendor\magic_enum\magic_enum.h">
       <Filter>Bundled Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="src\partsys.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClInclude>
-    <ClInclude Include="src\matrix2d.h">
-      <Filter>Steering</Filter>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_GLES_1.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_GLES_2.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_GLES_3.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_1.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_1_BASE.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_2.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_3.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_4.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_RendererImpl.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_version.h">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb_image\stb_image.h">
+      <Filter>Bundled Dependencies\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\animation.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\bounds.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collider.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\debug.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\entity.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\input.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\mates.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\matrix2d.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\partsys.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rand.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\raw_input.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene_manager.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\selfregister.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\shader.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\singleinstance.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\sound.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\text.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\tilemap.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\vector.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\window.h">
+      <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="src\bat.h">
-      <Filter>Header Files</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\bullet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\hospital_entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\steering_entity.h">
-      <Filter>Steering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\steering_behavior_applier.h">
-      <Filter>Steering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\steering_behavior.h">
-      <Filter>Steering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\assets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\simplexnoise.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lava.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\singleinstance.h">
-      <Filter>Header Files</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\destroyedtiles.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\spawningtile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tiledexport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\screen.h">
-      <Filter>Header Files</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\enemy_door.h">
-      <Filter>Header Files</Filter>
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\jumpman.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lava.h">
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\parallax.h">
-      <Filter>Header Files</Filter>
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\popupText.h">
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\powerups.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\skilltree.h">
-      <Filter>Header Files</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\savestation.h">
-      <Filter>Header Files</Filter>
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\richtext.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\scene_jumpman.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screen.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\simplexnoise.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\skilltree.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\spawningtile.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_behavior.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_behavior_applier.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_entity.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tiledexport.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\anim_data.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\assets.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\rand.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\glew\glew.c">
+      <Filter>Bundled Dependencies\glew</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_jumpman.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\imgui\imgui.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\tilemap.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\transition.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\anim_data.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\input.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\renderer_GLES_1.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="src\jumpman.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\renderer_GLES_2.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\renderer_GLES_3.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="imgui_sfml\imgui-SFML.cpp">
-      <Filter>Bundled Dependencies\Imgui</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_1.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui.cpp">
-      <Filter>Bundled Dependencies\Imgui</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_1_BASE.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>Bundled Dependencies\Imgui</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_2.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_draw.cpp">
-      <Filter>Bundled Dependencies\Imgui</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_3.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_widgets.cpp">
-      <Filter>Bundled Dependencies\Imgui</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_4.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="src\partsys.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="src\bat.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu_matrix.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="src\steering_behavior.cpp">
-      <Filter>Steering</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu_renderer.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="src\vector.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu_shapes.c">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </ClCompile>
-    <ClCompile Include="src\assets.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\stb_image\stb_image.c">
+      <Filter>Bundled Dependencies\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\simplexnoise.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
-    <ClCompile Include="src\lava.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\bounds.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\debug.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\input.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\main.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\partsys.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\rand.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\raw_input.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\shader.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\sound.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\tilemap.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\vector.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\window.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\destroyedtiles.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\spawningtile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tiledexport.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\screen.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\enemy_door.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jumpman.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lava.cpp">
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\parallax.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\powerups.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\skilltree.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\savestation.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\richtext.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\scene_jumpman.cpp">
+      <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\screen.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\simplexnoise.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skilltree.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spawningtile.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\steering_behavior.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tiledexport.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\anim_data.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\assets.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bat.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </None>
+    <None Include="vendor\SDL_gpu\src\renderer_shapes_GL_common.inl">
+      <Filter>Bundled Dependencies\sdl_gpu</Filter>
+    </None>
   </ItemGroup>
 </Project>

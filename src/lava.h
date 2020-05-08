@@ -3,7 +3,6 @@
 #include "partsys.h"
 #include "selfregister.h"
 #include "bounds.h"
-#include <SFML/Graphics.hpp>
 
 struct Lava : EntS<Lava>
 {
@@ -14,7 +13,7 @@ struct Lava : EntS<Lava>
 
 	Lava(const Bounds& bounds);
 	void Update(float dt);
-	void Draw(sf::RenderTarget& window) const;
+	void Draw() const;
 
 	void RaiseTo(float newY) {
 		targetY = newY;
@@ -29,7 +28,7 @@ struct Lava : EntS<Lava>
 	}
 
 	bool IsInside(const vec& pos) const {
-		return bounds.contains(pos);
+		return bounds.Contains(pos);
 	}
 
 };

@@ -12,6 +12,6 @@ struct SaveStation : BoxEntity, EntS<SaveStation>
 	SaveStation(const vec& p);
 	void Update(float dt);
 	void Activate();
-	void Draw(sf::RenderTarget& window) const;
+	void Draw() const;
 };
 

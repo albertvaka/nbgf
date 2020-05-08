@@ -2,11 +2,13 @@
 
 #include <array>
 
-#include <SFML/Graphics.hpp>
+#include "vector.h"
+#include "bounds.h"
+#include "SDL_gpu.h"
 
 struct TiledTiles
 {
-	static const sf::IntRect tileToTextureRect[];
+	static const GPU_Rect tileToTextureRect[];
 
 	enum Value : uint8_t
 	{
@@ -227,31 +229,31 @@ struct TiledTiles
 struct TiledMap
 {
 	static const uint8_t map[];
-	static const sf::Vector2f map_size;
-	static const std::array<sf::Rect<float>, 11> screens;
+	static const vec map_size;
+	static const std::array<Bounds, 11> screens;
 };
 
 struct TiledEntities
 {
-	static const std::array<sf::Vector2f, 10> batawake;
-	static const std::array<sf::Vector2f, 8> bat;
-	static const std::array<sf::Vector2f, 2> healthup;
-	static const sf::Vector2f spawn;
-	static const sf::Vector2f gun;
-	static const std::array<sf::Vector2f, 3> enemy_door;
-	static const std::array<sf::Vector2f, 2> angrybat;
-	static const sf::Vector2f walljump;
-	static const std::array<sf::Vector2f, 2> gunup;
-	static const sf::Vector2f gunup_tancaporta;
-	static const std::array<sf::Vector2f, 2> save;
+	static const std::array<vec, 10> batawake;
+	static const std::array<vec, 8> bat;
+	static const std::array<vec, 2> healthup;
+	static const vec spawn;
+	static const vec gun;
+	static const std::array<vec, 3> enemy_door;
+	static const std::array<vec, 2> angrybat;
+	static const vec walljump;
+	static const std::array<vec, 2> gunup;
+	static const vec gunup_tancaporta;
+	static const std::array<vec, 2> save;
 	
 };
 
 struct TiledAreas
 {
-	static const std::array<sf::Rect<float>, 2> lava;
-	static const std::array<sf::Rect<float>, 1> parallax_forest;
-	static const std::array<sf::Rect<float>, 2> bat_bounds;
-	static const std::array<sf::Rect<float>, 1> fog;
+	static const std::array<Bounds, 2> lava;
+	static const std::array<Bounds, 1> parallax_forest;
+	static const std::array<Bounds, 2> bat_bounds;
+	static const std::array<Bounds, 1> fog;
 	
 };

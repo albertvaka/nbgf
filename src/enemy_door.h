@@ -25,7 +25,7 @@ struct EnemyDoor : Entity, EntS<EnemyDoor>
 	}
 
 	void Update(float dt);
-	void Draw(sf::RenderTarget& window) const;
+	void Draw() const;
 
 };
 

@@ -35,7 +35,7 @@ public:
 	Entity* fleeTarget = nullptr;
 	Entity* hideTarget = nullptr;
 	
-	sf::Rect<float> m_bounds; //For bounds avoidance
+	Bounds m_bounds; //For bounds avoidance
 	
 	std::vector<CircleEntity*>* obstacles;
 
@@ -88,7 +88,7 @@ public:
 	void WanderOn() { m_iFlags |= wander; }
 	void PursuitOn(Entity* v) { m_iFlags |= pursuit; pursuitTarget = v; }
 	void ObstacleAvoidanceOn() { m_iFlags |= obstacle_avoidance; }
-	void BoundsAvoidanceOn(sf::Rect<float> bounds) { m_bounds = bounds; m_iFlags |= bounds_avoidance; }
+	void BoundsAvoidanceOn(Bounds bounds) { m_bounds = bounds; m_iFlags |= bounds_avoidance; }
 	void HideOn(Entity* v) { m_iFlags |= hide; hideTarget = v; }
 	void OffsetPursuitOn(Entity* v1, const float offset) { m_iFlags |= offset_pursuit; m_vOffset = offset; pursuitTarget = v1; }
 	void TileMapAvoidanceOn(TileMap* tilemap) { m_iFlags |= tilemap_avoidance; m_tilemap = tilemap; }
@@ -169,7 +169,7 @@ inline bool SteeringBehaviorApplier::AccumulateForce(vec& RunningTot, const vec&
 inline vec SteeringBehaviorApplier::CalculatePrioritized(float dt)
 {
 	//reset the steering force
-	m_vSteeringForce.Zero();
+	m_vSteeringForce = vec::Zero;
 
 	vec force;
 
@@ -272,7 +272,7 @@ inline vec SteeringBehaviorApplier::CalculatePrioritized(float dt)
 inline vec SteeringBehaviorApplier::CalculateWeightedSum(float dt)
 {
 	//reset the steering force
-	m_vSteeringForce.Zero();
+	m_vSteeringForce = vec::Zero;
 
 	if (On(bounds_avoidance))
 	{

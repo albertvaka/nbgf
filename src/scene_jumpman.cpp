@@ -1,6 +1,8 @@
 #include "scene_jumpman.h"
 #include "input.h"
+#ifdef _IMGUI
 #include "imgui.h"
+#endif
 #include "bullet.h"
 #include "enemy_door.h"
 #include "assets.h"
@@ -11,11 +13,11 @@
 #include "savestation.h"
 #include "debug.h"
 
+extern float mainClock;
+
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
 const float camSpeed = 2000;
-
-extern sf::Clock mainClock;
 
 #ifdef _DEBUG
 static int currentPlacingTile = 1;
@@ -25,8 +27,10 @@ const bool random_mode = false;
 
 JumpScene::JumpScene()
 	: map(TiledMap::map_size.x, TiledMap::map_size.y)
+	, fogPartSys(Assets::fogTexture)
+	, bulletPartSys(Assets::marioTexture)
 {
-	bulletPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5, 37, 6, 6));
+	bulletPartSys.AddSprite({ 5, 37, 6, 6 });
 
 	float vel = 15;
 	bulletPartSys.max_vel = vec(vel, vel);
@@ -43,10 +47,10 @@ JumpScene::JumpScene()
 	bulletPartSys.rotation_vel = 180.f;
 	bulletPartSys.alpha = 0.75f;
 
-	fogPartSys.AddSprite(Assets::fogTexture, sf::IntRect(0, 0, 140, 61));
-	fogPartSys.AddSprite(Assets::fogTexture, sf::IntRect(140, 0, 140, 61));
-	fogPartSys.AddSprite(Assets::fogTexture, sf::IntRect(140*2, 0, 140, 61));
-	fogPartSys.AddSprite(Assets::fogTexture, sf::IntRect(140 * 3, 0, 140, 61));
+	fogPartSys.AddSprite({ 0, 0, 140, 61 });
+	fogPartSys.AddSprite({140, 0, 140, 61 });
+	fogPartSys.AddSprite({140*2, 0, 140, 61 });
+	fogPartSys.AddSprite({140 * 3, 0, 140, 61 });
 	fogPartSys.alpha = 0.f;
 	fogPartSys.alpha_vel = 0.1f;
 	fogPartSys.bounce_alpha = 0.5f;
@@ -59,7 +63,7 @@ JumpScene::JumpScene()
 	fogPartSys.max_interval = 6.f;
 
 	if (!random_mode) {
-		for (const sf::Rect<float>& p : TiledAreas::parallax_forest) {
+		for (const Bounds& p : TiledAreas::parallax_forest) {
 			new Parallax(p);
 		}
 	}
@@ -69,12 +73,6 @@ void JumpScene::EnterScene()
 {
 	player.Reset();
 
-	Camera::SetZoom(GameData::GAME_ZOOM);
-	Camera::SetCameraCenter(vec(GameData::WINDOW_WIDTH / (2*GameData::GAME_ZOOM), GameData::WINDOW_HEIGHT/(2*GameData::GAME_ZOOM)));
-	//transition.setTime(2.0f);
-	//transition.setPos(0.5f* GameData::JUMPMAN_ZOOM);
-	//transition.goPos(GameData::JUMPMAN_ZOOM);
-	
 	if (random_mode) {
 		player.pos = vec(160,160);
 		RandomMap();
@@ -82,34 +80,37 @@ void JumpScene::EnterScene()
 	}
 
 	player.pos = TiledEntities::spawn;
+
+	new GunUp(TiledEntities::spawn);
+
 	map.LoadFromTiled();
 
-	for (const sf::Vector2f& v : TiledEntities::bat) {
+	for (const vec& v : TiledEntities::bat) {
 		new Bat(v,false, false);
 	}
 
-	for (const sf::Vector2f& v : TiledEntities::angrybat) {
+	for (const vec& v : TiledEntities::angrybat) {
 		new Bat(v, true, false);
 	}
 
-	for (const sf::Vector2f& v : TiledEntities::batawake) {
+	for (const vec& v : TiledEntities::batawake) {
 		new Bat(v, false, true);
 	}
 
-	for (const sf::Vector2f& v : TiledEntities::save) {
+	for (const vec& v : TiledEntities::save) {
 		new SaveStation(v);
 	}
 
-	for (const sf::Vector2f& v : TiledEntities::gunup) {
-		GunUp* up = new GunUp(v);
+	for (const vec& v : TiledEntities::gunup) {
+		//GunUp* up = new GunUp(v);
 	}
-	gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
+	//gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
 
 	for (const vec& v : TiledEntities::healthup) {
 		new HealthUp(v);
 	}
 
-	for (const sf::Vector2f& v : TiledEntities::enemy_door) {
+	for (const vec& v : TiledEntities::enemy_door) {
 		EnemyDoor* d = new EnemyDoor(v);
 		int door_screen = screenManager.FindScreenContaining(d->pos);
 		if (door_screen < 0) {
@@ -122,12 +123,12 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	for (const sf::Rect<float>& a : TiledAreas::lava) {
+	for (const Bounds& a : TiledAreas::lava) {
 		new Lava(a);
 	}
 
 	screenManager.UpdateCurrentScreen(player.pos);
-	Camera::SetCameraCenter(player.pos);
+	Camera::SetCenter(player.pos);
 }
 
 void JumpScene::ExitScene()
@@ -157,7 +158,7 @@ void JumpScene::Update(float dt)
 		}
 	}
 
-	if (Keyboard::IsKeyJustPressed(GameKeys::RESTART)) {
+	if (Input::IsJustPressed(0,GameKeys::RESTART)) {
 		ExitScene();
 		EnterScene();
 	}
@@ -165,13 +166,8 @@ void JumpScene::Update(float dt)
 	skillTree.Update(dt);
 	if (skillTree.open) return;
 
-	//transition.update(dt);
 	player.Update(dt);
 
-	Camera::ChangeZoomWithPlusAndMinus(10.f, dt);
-	//if (!transition.reached()) {
-	//	Camera::SetZoom(transition.getPos());
-	//}
 	if (!random_mode) {
 		screenManager.UpdateCurrentScreen(player.pos);
 	}
@@ -180,10 +176,10 @@ void JumpScene::Update(float dt)
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
 	screenManager.ClampCameraToScreen(camPos);
 
-	vec oldPos = Camera::GetCameraCenter();
+	vec oldPos = Camera::GetCenter();
 	vec displacement = camPos - oldPos;
 	displacement.Truncate(camSpeed * dt);
-	Camera::SetCameraCenter(oldPos + displacement);
+	Camera::SetCenter(oldPos + displacement);
 
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : Bullet::getAll()) {
@@ -202,7 +198,7 @@ void JumpScene::Update(float dt)
 		vec toTheOutside = e->vel.Perp().Normalized()* e->radius * 0.85f;
 		//(e->pos + toTheOutside).Debuggerino(sf::Color::White);
 		//(e->pos - toTheOutside).Debuggerino(sf::Color::White);
-		sf::Vector2i t = map.toTiles(e->pos+ toTheOutside);
+		veci t = map.toTiles(e->pos+ toTheOutside);
 		Tile tile = map.getTile(t);
 		if (!tile.isFullSolid()) {
 			t = map.toTiles(e->pos - toTheOutside);
@@ -254,7 +250,18 @@ void JumpScene::Update(float dt)
 
 	Bat::deleteNotAlive(); //Must happen after enemydoor update
 
-	if (Keyboard::IsKeyJustPressed(DEBUG_KILLALL)) {
+
+#ifdef _DEBUG
+	const SDL_Scancode killall = SDL_SCANCODE_F12;
+	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
+	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
+	if (Keyboard::IsKeyJustPressed(screen_left)) {
+		player.pos.x -= Window::GAME_WIDTH;
+	}
+	if (Keyboard::IsKeyJustPressed(screen_right)) {
+		player.pos.x += Window::GAME_WIDTH;
+	}
+	if (Keyboard::IsKeyJustPressed(killall)) {
 		for (Bat* e : Bat::getAll()) {
 			if (e->screen == screenManager.currentScreen) {
 				(new Bullet(e->pos, vec(), 1.5f))->explode = true;
@@ -262,8 +269,6 @@ void JumpScene::Update(float dt)
 			}
 		}
 	}
-
-#ifdef _DEBUG
 	if (Debug::Draw) {
 		if (Mouse::GetScrollWheelMovement() < 0.f) {
 			currentPlacingTile -= 1;
@@ -272,16 +277,16 @@ void JumpScene::Update(float dt)
 			currentPlacingTile += 1;
 			if (currentPlacingTile >= int(magic_enum::enum_count<Tile::Value>())) currentPlacingTile = 1;
 		}
-		if (Keyboard::IsKeyJustPressed(LEFT)) currentPlacingTile = Tile::LSLOPE_1;
-		if (Keyboard::IsKeyJustPressed(RIGHT)) currentPlacingTile = Tile::RSLOPE_1;
-		if (Keyboard::IsKeyJustPressed(UP)) currentPlacingTile = Tile::ONEWAY_1;
-		if (Keyboard::IsKeyJustPressed(DOWN)) currentPlacingTile = Tile::SOLID_1;
-		bool left = Mouse::IsPressed(sf::Mouse::Button::Left);
-		bool right = Mouse::IsPressed(sf::Mouse::Button::Right);
+		if (Input::IsJustPressed(0,LEFT)) currentPlacingTile = Tile::LSLOPE_1;
+		if (Input::IsJustPressed(0,RIGHT)) currentPlacingTile = Tile::RSLOPE_1;
+		if (Input::IsJustPressed(0,UP)) currentPlacingTile = Tile::ONEWAY_1;
+		if (Input::IsJustPressed(0,DOWN)) currentPlacingTile = Tile::SOLID_1;
+		bool left = Mouse::IsPressed(Mouse::Button::Left);
+		bool right = Mouse::IsPressed(Mouse::Button::Right);
 		if (left || right) {
 			Tile what_to_set = left ? Tile::Value(currentPlacingTile) : Tile::NONE;
 			vec pos = Mouse::GetPositionInWorld();
-			sf::Vector2i tile = map.toTiles(pos);
+			veci tile = map.toTiles(pos);
 			if (what_to_set == Tile::NONE) {
 				map.setTile(tile.x, tile.y, Tile::NONE);
 			}
@@ -304,14 +309,14 @@ void JumpScene::Update(float dt)
 		ss->Update(dt);
 		if (ss->enabled && Collide(ss->bounds(), player.bounds())) {
 			contextActionButton = GameKeys::ACTIVATE;
-			if (Keyboard::IsKeyJustPressed(GameKeys::ACTIVATE)) {
+			if (Input::IsJustPressed(0,GameKeys::ACTIVATE)) {
 				ss->Activate();
 			}
 		}
 	}
 
-	for (const sf::Rect<float>& a : TiledAreas::fog) {
-		if (!Camera::GetCameraBounds().intersects(Bounds(a)*2.f)) {
+	for (const Bounds& a : TiledAreas::fog) {
+		if (!Collide(Camera::GetBounds(),(Bounds(a)*2.f))) {
 			continue;
 		}
 		for (int x = 50; x < a.width - 180; x += 50) {
@@ -325,77 +330,75 @@ void JumpScene::Update(float dt)
 
 }
 
-void JumpScene::Draw(sf::RenderTarget& window)
+void JumpScene::Draw()
 {
-	window.clear(sf::Color(31, 36, 50));
+	Window::Clear(31, 36, 50);
 
 	if (skillTree.open) {
-		skillTree.DrawMenu(window);
+		skillTree.DrawMenu();
 		return;
 	}
 
 	if (Debug::Draw) {
-		Simplex::DebugDraw(window, Tile::size, [this](int x, int y) {
+		Simplex::DebugDraw(Tile::size, [this](int x, int y) {
 			return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
 		});
 	}
 
 	for (const Parallax* p : Parallax::getAll()) {
-		p->Draw(window);
+		p->Draw();
 	}
 
-	map.Draw(window);
-	destroyedTiles.Draw(window);
+	map.Draw();
+	destroyedTiles.Draw();
 
 	for (const SaveStation* ss : SaveStation::getAll()) {
-		ss->Draw(window);
+		ss->Draw();
 	}
 
 	for (const EnemyDoor* ed : EnemyDoor::getAll()) {
-		ed->Draw(window);
+		ed->Draw();
 	}
 
 	for (const Bat* e : Bat::getAll()) {
-		e->Draw(window);
-		if (Debug::Draw && Camera::GetCameraBounds().IsInside(e->pos)) {
-			e->drawBounds(window);
-			e->DrawSenseArea(window);
+		e->Draw();
+		if (Debug::Draw && Camera::GetBounds().Contains(e->pos)) {
+			e->drawBounds();
+			e->DrawSenseArea();
 		}
 	}
 
-	bulletPartSys.Draw(window);
+	bulletPartSys.Draw();
 	//bulletPartSys.DrawImGUI("BulletTrail");
 
 	for (const Bullet* e : Bullet::getAll()) {
-		e->Draw(window);
+		e->Draw();
 		if (Debug::Draw) {
-			e->drawBounds(window);
+			e->drawBounds();
 		}
 	}
 
 	for (const GunUp* g : GunUp::getAll()) {
-		g->Draw(window);
+		g->Draw();
 	}
 	for (const HealthUp* g : HealthUp::getAll()) {
-		g->Draw(window);
+		g->Draw();
 	}
 
-	player.Draw(window);
+	player.Draw();
 
 	if (contextActionButton != GameKeys::NONE) {
-		sf::Sprite& spr = Assets::hospitalSprite;
-		spr.setPosition(player.bounds().TopRight() + vec(2, -6));
 		AnimationType anim = BUTTON_A_PRESS; // TODO: switch depending on the key
-		spr.setTextureRect(Animation::AnimFrame(anim, mainClock.getElapsedTime().asMilliseconds()));
-		window.draw(spr);
+		Window::Draw(Assets::hospitalTexture, player.bounds().TopRight() + vec(2, -6))
+			.withRect(Animation::AnimFrame(anim, mainClock * 1000));
 	}
 
 	for (const Lava* l : Lava::getAll()) {
-		l->Draw(window);
+		l->Draw();
 	}
 
 	if (Debug::Draw) {
-		player.bounds().Draw(window);
+		player.bounds().Draw();
 		//player.pos.Debuggerino(sf::Color::White);
 		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
 	}
@@ -405,7 +408,7 @@ void JumpScene::Draw(sf::RenderTarget& window)
 		ImGui::Begin("jumpman scene");
 		//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
 		vec m = Mouse::GetPositionInWorld();
-		sf::Vector2i t = map.toTiles(m);
+		veci t = map.toTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		if (ImGui::Button("Add point")) {
 			skillTree.gunpoints += 1;
@@ -416,17 +419,16 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	}
 
 	if (Debug::Draw) {
-		Assets::marioSprite.setTextureRect(Tile::tileToTextureRect[currentPlacingTile]);
-		vec pos = Camera::GetCameraBounds().TopLeft() + vec(0, 16);
-		Bounds(pos, vec(Tile::size, Tile::size)).Draw(window, sf::Color::Black, sf::Color::Magenta);
-		Assets::marioSprite.setPosition(pos);
-		window.draw(Assets::marioSprite);
+		vec pos = Camera::GetBounds().TopLeft() + vec(0, 16);
+		Bounds(pos, vec(Tile::size, Tile::size)).Draw(0,0,0);
+		Window::Draw(Assets::marioTexture, pos)
+			.withRect(Tile::tileToTextureRect[currentPlacingTile]);
 	}
 #endif
-	fogPartSys.Draw(window);
+	fogPartSys.Draw();
 	fogPartSys.DrawImGUI();
 	
-	skillTree.DrawOverlay(window);
+	skillTree.DrawOverlay();
 
 	//player.polvito.DrawImGUI("Polvito");
 }
@@ -460,7 +462,7 @@ void JumpScene::RandomMap() {
 		}
 	}
 
-	sf::Vector2i pos = map.toTiles(player.pos);
+	veci pos = map.toTiles(player.pos);
 	map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID_1);
 	map.setTile(pos.x, pos.y + 1, Tile::SOLID_1);
 	map.setTile(pos.x - 2, pos.y + 1, Tile::SOLID_1);

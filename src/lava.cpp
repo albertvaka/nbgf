@@ -3,6 +3,7 @@
 #include "assets.h"
 #include "input.h"
 #include "debug.h"
+#include "collider.h"
 
 const float waveAmplitude = 1.f;
 const float chunkSize = 5.4f;
@@ -12,16 +13,17 @@ const float distanceBetweenParticleSpawners = 15.f;
 
 const float raiseSpeed = 15.f;
 
-extern sf::Clock mainClock;
+extern float mainClock;
 
 
 
 Lava::Lava(const Bounds& b)
 	: bounds(b)
 	, targetY(b.Top())
+	, lavaPartSys(Assets::marioTexture)
 {
-	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(5 + 16, 37, 6, 6));
-	lavaPartSys.AddSprite(Assets::marioTexture, sf::IntRect(38, 37, 5, 5));
+	lavaPartSys.AddSprite({ 5 + 16, 37, 6, 6 });
+	lavaPartSys.AddSprite({ 38, 37, 5, 5 });
 
 	lavaPartSys.min_interval = 4.f;
 	lavaPartSys.max_interval = 6.5f;
@@ -58,11 +60,11 @@ void Lava::Update(float dt) {
 		}
 	}
 
-	if (!Camera::GetCameraBounds().intersects(bounds)) {
+	if (!Collide(Camera::GetBounds(),bounds)) {
 		return;
 	}
 
-	Bounds screen = Camera::GetCameraBounds();
+	Bounds screen = Camera::GetBounds();
 	float left = Mates::MaxOf(screen.Left(), bounds.Left());
 	float right = Mates::MinOf(screen.Right(), bounds.Right());
 	float chunkLeft = (Mates::fastfloor(left / chunkSize)) * chunkSize;
@@ -75,7 +77,7 @@ void Lava::Update(float dt) {
 	lavaPartSys.UpdateParticles(dt);
 }
 
-#define USE_VAO
+//#define USE_VAO
 
 #ifdef USE_VAO
 sf::VertexArray lavaVA(sf::Quads);
@@ -87,13 +89,13 @@ inline void AddQuad(float x, float y, float width, float height, const sf::Color
 }
 #endif
 
-void Lava::Draw(sf::RenderTarget& window) const {
+void Lava::Draw() const {
 
-	if (!Camera::GetCameraBounds().intersects(bounds)) {
+	if (!Collide(Camera::GetBounds(),bounds)) {
 		return;
 	}
 
-	lavaPartSys.Draw(window);
+	lavaPartSys.Draw();
 	//lavaPartSys.DrawImGUI("LavaPartSys");
 
 	if (Debug::Draw) {
@@ -110,27 +112,24 @@ void Lava::Draw(sf::RenderTarget& window) const {
 	ImGui::End();
 	*/
 
-	float time = mainClock.getElapsedTime().asSeconds() * speed;
-	Bounds screen = Camera::GetCameraBounds();
+	float time = mainClock * speed;
+	Bounds screen = Camera::GetBounds();
 
 
 	const float heightTopLayer = 5.f;
 	const float heightMiddleLayer = 1.f;
 	const float heightBottomLayer = bounds.height;
 
-	const sf::Color colorTopLayer(220, 10, 10);
-	const sf::Color colorMiddleLayer(120, 0, 0);
-	const sf::Color colorBottomLayer(250, 140, 50);
+	const SDL_Color colorTopLayer = { 220, 10, 10, 255 };
+	const SDL_Color colorMiddleLayer = { 120, 0, 0, 255 };
+	const SDL_Color colorBottomLayer = { 250, 140, 50, 255 };
 
 #ifdef USE_VAO
 	lavaVA.clear();
 #else
-	static sf::RectangleShape topLayer(vec(chunkSize, heightTopLayer));
-	topLayer.setFillColor(colorTopLayer);
-	static sf::RectangleShape lineLayer(vec(chunkSize, heightMiddleLayer));
-	lineLayer.setFillColor(colorMiddleLayer);
-	static sf::RectangleShape bottomLayer(vec(chunkSize, heightBottomLayer));
-	bottomLayer.setFillColor(colorBottomLayer);
+	static Bounds topLayer(vec(chunkSize, heightTopLayer));
+	static Bounds middleLayer(vec(chunkSize, heightMiddleLayer));
+	static Bounds bottomLayer(vec(chunkSize, heightBottomLayer));
 #endif
 
 	float left = Mates::MaxOf(screen.Left(), bounds.Left());
@@ -146,18 +145,18 @@ void Lava::Draw(sf::RenderTarget& window) const {
 		AddQuad(x, y + heightTopLayer, chunkSize, heightMiddleLayer, colorMiddleLayer);
 		AddQuad(x, y + heightTopLayer + heightMiddleLayer, chunkSize, heightBottomLayer, colorBottomLayer);
 #else
-		topLayer.setPosition(vec(x, y));
-		window.draw(topLayer);
-		lineLayer.setPosition(vec(x, y + heightTopLayer));
-		window.draw(lineLayer);
-		bottomLayer.setPosition(vec(x, y + heightTopLayer + heightMiddleLayer));
-		window.draw(bottomLayer);
+		topLayer.SetTopLeft(vec(x, y));
+		middleLayer.SetTopLeft(vec(x, y + heightTopLayer));
+		bottomLayer.SetTopLeft(vec(x, y + heightTopLayer + heightMiddleLayer));
+
+		Window::DrawPrimitive::Rectangle(topLayer, -1, colorTopLayer);
+		Window::DrawPrimitive::Rectangle(middleLayer, -1, colorMiddleLayer);
+		Window::DrawPrimitive::Rectangle(bottomLayer, -1, colorBottomLayer);
 #endif
 	}
 
 #ifdef USE_VAO
 	window.draw(lavaVA);
 #endif
-
 
 }

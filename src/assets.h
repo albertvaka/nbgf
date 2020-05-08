@@ -1,28 +1,32 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
 #include <array>
+
+#include "sound.h"
+#include "shader.h"
+
+struct GPU_Image;
+typedef struct _TTF_Font TTF_Font;
+typedef struct _Mix_Music Mix_Music;
 
 struct Assets
 {
 	static void LoadAll();
 
-	static sf::Texture hospitalTexture;
-	static sf::Sprite hospitalSprite;
+	static GPU_Image* hospitalTexture;
 
-	static sf::Texture marioTexture;
-	static sf::Sprite marioSprite;
+	static GPU_Image* marioTexture;
 
-	static sf::Texture menuBgTexture;
-	static sf::Sprite menuBgSprite;
+	static GPU_Image* menuBgTexture;
 
-	static sf::Texture fogTexture;
+	static GPU_Image* fogTexture;
 
-	static sf::Font font;
+	static TTF_Font* font_30;
+	static TTF_Font* font_30_outline;
 
-	static sf::Shader tintShader;
+	static Shader tintShader;
 
-	static std::array<sf::Texture, 4> forestParallaxTextures;
+	static std::array<GPU_Image*, 4> forestParallaxTextures;
 
 };
 

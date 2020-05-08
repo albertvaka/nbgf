@@ -2,6 +2,7 @@
 
 #include "tilemap.h"
 #include "assets.h"
+#include "window.h"
 
 const float openAnimationTime = 0.4f; //Animation will take twice this time per tile
 const int maxHeight = 10;
@@ -58,12 +59,10 @@ void EnemyDoor::Update(float dt)
 	}
 }
 
-void EnemyDoor::Draw(sf::RenderTarget& window) const
+void EnemyDoor::Draw() const
 {
-	sf::Sprite& spr = Assets::marioSprite;
-	spr.setOrigin(0, 0);
-	spr.setTextureRect(sf::IntRect(7 * 16, 6 * 16, 16, 16));
-	spr.setPosition(pos.x, pos.y);
-	window.draw(spr);
+	Window::Draw(Assets::marioTexture, pos)
+		.withOrigin(0, 0)
+		.withRect({ 7 * 16, 6 * 16, 16, 16 });
 }
 

@@ -162,7 +162,7 @@ vec SteeringBehavior::Wander(float dt)
 	vec Origin = steeringEntity->pos;
 	vec Ret = Target - Origin;
 
-	(steeringEntity->pos + m_vWanderTarget * 20).Debuggerino(sf::Color::Green);
+	(steeringEntity->pos + m_vWanderTarget * 20).Debuggerino(0,255,0);
 
 	return Ret;
 }
@@ -171,7 +171,7 @@ vec SteeringBehavior::Wander(float dt)
 //
 //  This returns a steering force that will keep the agent in an area
 //------------------------------------------------------------------------
-vec SteeringBehavior::BoundsAvoidance(const sf::Rect<float>& m_bounds)
+vec SteeringBehavior::BoundsAvoidance(const Bounds& m_bounds)
 {
 	vec m_Feelers[3];
 	const float m_dWallDetectionFeelerLength = 20; //Front feeler length. Lateral feelers will be half as long.
@@ -345,7 +345,7 @@ vec SteeringBehavior::TileMapAvoidance(TileMap* map)
 			//vec(x * 16 + 8, y * 16 + 8).Debuggerino(sf::Color::White);
 			if (map->isSolid(x, y)) {
 				Bounds tile = map->getTileBounds(x, y);
-				if (tile.contains(me.pos)) {
+				if (tile.Contains(me.pos)) {
 					minDistToCenterSq = 0;
 					closestObstacle = tile.Center();
 					goto im_inside; //exit early
