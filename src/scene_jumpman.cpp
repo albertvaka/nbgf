@@ -100,7 +100,7 @@ void JumpScene::EnterScene()
 	}
 
 	for (const vec& v : TiledEntities::gunup) {
-		GunUp* up = new GunUp(v);
+		new GunUp(v);
 	}
 	gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
 	int screen_gunup_tancaporta = screenManager.FindScreenContaining(gunup_tancaporta->pos);
