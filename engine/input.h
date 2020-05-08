@@ -70,9 +70,7 @@ struct Input {
 	static void Update(float dt);
 
 private:
-
 	static int keyboard_player_id; //max 1 player on keyboard
-	static int player_id_to_gamepad_id[Input::kMaxPlayers];
 
 	static KeyStates action_states[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()];
 	static float action_times[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()];

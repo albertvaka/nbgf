@@ -68,18 +68,19 @@ inline void RemapKeyboardInput()
 
 // Assumes first player is on Keyboard.
 int Input::keyboard_player_id = 0;
-int Input::player_id_to_gamepad_id[Input::kMaxPlayers] = { -1, 0, 1, 2 };
 KeyStates Input::action_states[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { RELEASED } };
 float Input::action_times[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { 0 } };
-
 
 
 void Input::Update(float dt)
 {
 	for (int player = 0; player < Input::kMaxPlayers; ++player) {
-		int gamepad_id = player_id_to_gamepad_id[player];
+		int gamepad_id = player;
 		for (size_t k = 1; k < magic_enum::enum_count<GameKeys>(); k++) {  //Skip GameKeys::NONE
-			bool pressed_now = player == keyboard_player_id ? (kb_map[k] && kb_map[k]()) : (gp_map[k] && gp_map[k](gamepad_id));
+			bool pressed_now = (gp_map[k] && gp_map[k](gamepad_id));
+			if (player == keyboard_player_id) {
+				pressed_now = pressed_now || (kb_map[k] && kb_map[k]());
+			}
 			if (pressed_now) {
 				if (action_states[player][k] == JUST_PRESSED || action_states[player][k] == PRESSED) {
 					action_states[player][k] = PRESSED;
