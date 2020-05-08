@@ -101,11 +101,16 @@ void Mouse::_UpdateInputState()
     int x, y;
     int pressed = SDL_GetMouseState(&x, &y);
 
+#ifdef __EMSCRIPTEN__
+    //Doesn't take into account the letterbox margins, but the manual method below doesn't work on the browser :shrug:
+    GPU_GetVirtualCoords(Window::target,&pos.x,&pos.y,x,y);
+#else
     // Convert position to scaled, letterboxed view coordinates
     x -= Window::target->viewport.x;
     y -= Window::target->viewport.y;
     pos.x = (x * Window::GAME_WIDTH) / Window::target->viewport.w;
     pos.y = (y * Window::GAME_HEIGHT) / Window::target->viewport.h;
+#endif
 
     for (size_t i = 1; i < magic_enum::enum_count<Button>(); i++) //skip NONE
     {
