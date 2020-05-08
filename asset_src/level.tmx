@@ -942,7 +942,7 @@
   <object id="93" gid="182" x="-414" y="-46" width="16" height="16"/>
   <object id="97" type="angrybat" gid="117" x="-1517" y="-618" width="16" height="16"/>
   <object id="101" type="angrybat" gid="117" x="-1503" y="-604" width="16" height="16"/>
-  <object id="115" gid="237" x="856.25" y="150.75" width="16" height="16"/>
+  <object id="115" gid="237" x="856.977" y="154.568" width="16" height="16"/>
   <object id="117" gid="117" x="268" y="300" width="16" height="16"/>
   <object id="118" gid="182" x="-158.333" y="304.667" width="16" height="16"/>
   <object id="120" gid="325" x="-0.333333" y="-449.333" width="16" height="16"/>
@@ -962,7 +962,7 @@
    <text wrap="1">Need fly to get here</text>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Areas">
+ <objectgroup id="8" name="Areas" visible="0">
   <object id="83" name="lava" type="lava" x="336" y="46.478" width="618" height="209.5"/>
   <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
   <object id="106" name="lava" type="lava" x="-16" y="363.333" width="240" height="127.455"/>

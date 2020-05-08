@@ -42,13 +42,13 @@ BigItem::BigItem(const vec& p, Skill s)
 	, particles(Assets::marioTexture)
 {
 	particles.AddSprite({ 5, 37, 6, 6 });
-	particles.max_vel = vec(0, -10);
-	particles.min_vel = vec(0, -30);
+	particles.max_vel = vec(0, -12);
+	particles.min_vel = vec(0, -35);
 	particles.min_ttl = 1.f;
 	particles.max_ttl = 1.f;
-	particles.min_interval = 0.2f;
-	particles.max_interval = 0.3f;
-	particles.min_scale = 0.4f;
+	particles.min_interval = 0.15f;
+	particles.max_interval = 0.25f;
+	particles.min_scale = 0.6f;
 	particles.max_scale = 0.4f;
 	particles.alpha = 0.7f;
 	particles.alpha_vel = -0.8f;
@@ -74,7 +74,7 @@ void BigItem::Draw()
 
 	auto tilePos = TileMap::alignToTiles(pos);
 
-	particles.pos.y = tilePos.y + 32;
+	particles.pos.y = tilePos.y + 16;
 	particles.pos.x = Random::roll(tilePos.x - 13, tilePos.x + 13);
 	particles.Spawn(1 / 60.f);
 	particles.UpdateParticles(1 / 60.f);
@@ -82,15 +82,15 @@ void BigItem::Draw()
 
 	//particles.DrawImGUI();
 
-	Window::Draw(Assets::marioTexture, tilePos + vec(-16, 32))
+	Window::Draw(Assets::marioTexture, tilePos + vec(-16, 16))
 		.withRect(5 * 16, 9 * 16, 16, 16);
-	Window::Draw(Assets::marioTexture, tilePos + vec(0, 32))
+	Window::Draw(Assets::marioTexture, tilePos + vec(0, 16))
 		.withRect(5 * 16, 9 * 16, 16, 16);
 	float alpha = abs(sin(mainClock));
-	Window::Draw(Assets::marioTexture, tilePos + vec(-16, 32))
+	Window::Draw(Assets::marioTexture, tilePos + vec(-16, 16))
 		.withRect(6 * 16, 9 * 16, 16, 16)
 		.withColor(255, 255, 255, alpha*255);
-	Window::Draw(Assets::marioTexture, tilePos + vec(0, 32))
+	Window::Draw(Assets::marioTexture, tilePos + vec(0, 16))
 		.withRect(6 * 16, 9 * 16, 16, 16)
 		.withColor(255,255,255,alpha*255);
 }

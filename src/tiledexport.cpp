@@ -358,7 +358,7 @@ const std::array<vec, 2> TiledEntities::angrybat = {
 	vec(545.0f, 164.0f),
 };
 
-const vec TiledEntities::walljump = vec(2904.25f, 918.75f);
+const vec TiledEntities::walljump = vec(2904.977f, 922.568f);
 
 const std::array<vec, 2> TiledEntities::gunup = {
 	vec(2047.666667f, 318.667f),
