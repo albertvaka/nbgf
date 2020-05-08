@@ -462,8 +462,8 @@ void JumpScene::Draw()
 			.withRect(Tile::tileToTextureRect[currentPlacingTile]);
 	}
 #endif
-	fogPartSys.Draw();
-	fogPartSys.DrawImGUI();
+	//fogPartSys.Draw();
+	//fogPartSys.DrawImGUI();
 	
 	skillTree.DrawOverlay();
 
