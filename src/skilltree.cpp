@@ -1,4 +1,4 @@
-#include "skilltree.h"
+#include "Skilltree.h"
 
 #include <vector>
 #include "assets.h"
@@ -8,16 +8,18 @@
 
 std::vector<bool> unlocked;
 
- std::vector< std::vector<SkillTree::Skill>> needs = {
+ std::vector< std::vector<Skill>> needs = {
 	{},
-	{SkillTree::BREAK},
-	{SkillTree::BREAK},
-	{SkillTree::BOUNCY},
-	{SkillTree::BOUNCY, SkillTree::RANGE_1},
-	{SkillTree::RANGE_1},
+	{},
+	{Skill::BREAK},
+	{Skill::BREAK},
+	{Skill::BOUNCY},
+	{Skill::BOUNCY, Skill::RANGE_1},
+	{Skill::RANGE_1},
 };
 
  std::vector<const char*> description = {
+	"",
 	"Break blocks\n\n\nShot at transparent blocks to break them.",
 	"Bouncy shots\n\n\nShots bounce against walls once.",
 	"Range I\n\n\nIncrease the range of your weapon.",
@@ -27,6 +29,7 @@ std::vector<bool> unlocked;
  };
 
  std::vector<GPU_Rect> img = {
+	{},
 	{8*16,11*16,16,16},
 	{10*16,11*16,16,16},
 	{5*16,10*16,16,16},
@@ -35,19 +38,19 @@ std::vector<bool> unlocked;
 	{6*16,10*16,16,16},
 };
 
- std::vector< std::vector<int>> tree = {
-	{-1,               -1,                 SkillTree::RAPID_FIRE},
-	{-1,               SkillTree::BOUNCY,  -1},
-	{SkillTree::BREAK, -1,                 SkillTree::DMG_1},
-	{-1,               SkillTree::RANGE_1, -1},
-	{-1,               -1,                 SkillTree::RANGE_2},
+ std::vector< std::vector<Skill>> tree = {
+	{Skill::NO,    Skill::NO,      Skill::RAPID_FIRE},
+	{Skill::NO,    Skill::BOUNCY,  Skill::NO},
+	{Skill::BREAK, Skill::NO,      Skill::DMG_1},
+	{Skill::NO,    Skill::RANGE_1, Skill::NO},
+	{Skill::NO,    Skill::NO,      Skill::RANGE_2},
 };
 
-SkillTree::TreePos posInTree(SkillTree::Skill s) {
-	for (int j = 0; j < tree.size(); j++) {
-		for (int i = 0; i < tree[j].size(); i++) {
-			if (tree[j][i] == s) {
-				return { i,j };
+veci PosInTree(Skill s) {
+	for (int y = 0; y < tree.size(); y++) {
+		for (int x = 0; x < tree[y].size(); x++) {
+			if (tree[y][x] == s) {
+				return { x,y };
 			}
 		}
 	}
@@ -56,21 +59,20 @@ SkillTree::TreePos posInTree(SkillTree::Skill s) {
 
 }
 
-vec posInTreeToPosInScreen(SkillTree::TreePos p) {
+vec PosInTreeToPosInScreen(veci p) {
 	auto size = Camera::GetSize();
-	vec div = vec(size.x / (tree[0].size()), (size.y / (tree.size())));
-	return Camera::GetBounds().TopLeft() + (vec(p.i, p.j) * (div / 2)) + vec(div.x/2, div.y);
+	vec dxv = vec(size.x / (tree[0].size()), (size.y / (tree.size())));
+	return Camera::GetBounds().TopLeft() + (vec(p) * (dxv / 2)) + vec(dxv.x/2, dxv.y);
 }
 
 SkillTree::SkillTree()
 	: textPoints(Assets::font_30)
 	, textPressStart(Assets::font_30)
 	, textDescription(Assets::font_30)
+	, current(PosInTree(Skill::BREAK))
 {
 	enabled.resize(description.size(), false);
-
-	current = posInTree(SkillTree::BREAK);
-	textPressStart.setString("Press start to assign points");
+	textPressStart.setString("Press start to assxgn points");
 };
 
 void SkillTree::Update(float dt) {
@@ -82,37 +84,37 @@ void SkillTree::Update(float dt) {
 	}
 
 	if (Input::IsJustPressed(0,GameKeys::LEFT)) {
-		if (current.i > 0) {
+		if (current.x > 0) {
 			if (prev_left != -1) {
-				prev_right = current.j;
-				current.j = prev_left;
-				current.i--;
+				prev_right = current.y;
+				current.y = prev_left;
+				current.x--;
 				prev_left = -1;
 				goto found;
 			}
-			int current_skill = tree[current.j][current.i];
-			std::vector<SkillTree::Skill>& n = needs[current_skill];
+			int current_Skill = int(tree[current.y][current.x]);
+			std::vector<Skill>& n = needs[current_Skill];
 			if (!n.empty()) {
-				prev_right = current.j;
-				current = posInTree(n[0]); //current_skill needs n[0]
+				prev_right = current.y;
+				current = PosInTree(n[0]); //current_Skill needs n[0]
 			}
 		}
 	}
 	if (Input::IsJustPressed(0,GameKeys::RIGHT)) {
-		if (current.i < tree[current.j].size()) {
+		if (current.x < tree[current.y].size()) {
 			if (prev_right != -1) {
-				prev_left = current.j;
-				current.j = prev_right;
-				current.i++;
+				prev_left = current.y;
+				current.y = prev_right;
+				current.x++;
 				prev_right = -1;
 				goto found;
 			}
-			int current_skill = tree[current.j][current.i];
+			Skill current_Skill = tree[current.y][current.x];
 			for (int s = 0; s < needs.size(); s++) {
 				for (int n = 0; n < needs[s].size(); n++) {
-					if (needs[s][n] == current_skill) { //skill s needs current_skill
-						prev_left = current.j;
-						current = posInTree(Skill(s));
+					if (needs[s][n] == current_Skill) { //Skill s needs current_Skill
+						prev_left = current.y;
+						current = PosInTree(Skill(s));
 						goto found;
 					}
 				}
@@ -121,45 +123,45 @@ void SkillTree::Update(float dt) {
 	}
 found:
 	if (Input::IsJustPressed(0,GameKeys::UP)) {
-		if (current.j > 0) {
+		if (current.y > 0) {
 			prev_left = -1;
 			prev_right = -1;
 			do {
-				current.j--;
-				if (current.j == 0) {
-					if (current.i < tree[current.j].size() - 1) current.i++;
-					while (tree[current.j][current.i] == -1) {
-						current.j++;
+				current.y--;
+				if (current.y == 0) {
+					if (current.x < tree[current.y].size() - 1) current.x++;
+					while (tree[current.y][current.x] == Skill::NO) {
+						current.y++;
 					} 
 					break;
 				}
-			} while (tree[current.j][current.i] == -1);
+			} while (tree[current.y][current.x] == Skill::NO);
 		}
 	}
 	if (Input::IsJustPressed(0,GameKeys::DOWN)) {
-		if (current.j < tree.size() - 1) {
+		if (current.y < tree.size() - 1) {
 			prev_left = -1;
 			prev_right = -1;
 			do {
-				current.j++;
-				if (current.j == tree.size() - 1) {
-					if (current.i < tree[current.j].size()-1) current.i++;
-					while (tree[current.j][current.i] == -1) {
-						current.j--;
+				current.y++;
+				if (current.y == tree.size() - 1) {
+					if (current.x < tree[current.y].size()-1) current.x++;
+					while (tree[current.y][current.x] == Skill::NO) {
+						current.y--;
 					}
 					break;
 				}
-			} while (tree[current.j][current.i] == -1);
+			} while (tree[current.y][current.x] == Skill::NO);
 		}
 	}
 
-	int skill = tree[current.j][current.i];
+	int skill = int(tree[current.y][current.x]);
 
 	if (Input::IsJustPressed(0,GameKeys::ACTIVATE) && !enabled[skill]) {
 		if (gunpoints > 0) {
 			bool requirementsMet = true;
-			for (int n : needs[skill]) {
-				if (!enabled[n]) {
+			for (Skill n : needs[skill]) {
+				if (!enabled[int(n)]) {
 					requirements_not_met_skill = skill;
 					requirements_not_met_timer = 0.8f;
 					requirementsMet = false;
@@ -194,7 +196,7 @@ void SkillTree::DrawOverlay() {
 
 
 void SkillTree::DrawMenu() {
-	//Assets::menuBgSprite.setScale(1.f / GameData::GAME_ZOOM, 1.f / GameData::GAME_ZOOM);
+	//Assets::menuBgSprxte.setScale(1.f / GameData::GAME_ZOOM, 1.f / GameData::GAME_ZOOM);
 
 	Window::Draw(Assets::menuBgTexture, Camera::GetBounds().TopLeft());
 
@@ -206,24 +208,24 @@ void SkillTree::DrawMenu() {
 
 	for (int s = 0; s < needs.size(); s++) {
 		if (!needs[s].empty()) {
-			vec from = posInTreeToPosInScreen(posInTree(Skill(s)));
+			vec from = PosInTreeToPosInScreen(PosInTree(Skill(s)));
 			for (int n = 0; n < needs[s].size(); n++) {
-				vec to = posInTreeToPosInScreen(posInTree(Skill(needs[s][n])));
+				vec to = PosInTreeToPosInScreen(PosInTree(Skill(needs[s][n])));
 				Window::DrawPrimitive::Line(from, to, 1, 255, 255, 255);
 			}
 		}
 	}
 
-	for (int j = 0; j < tree.size(); j++) {
-		for (int i = 0; i < tree[j].size(); i++) {
-			if (tree[j][i] != -1) {
-				vec pos = posInTreeToPosInScreen({ i,j });
+	for (int y = 0; y < tree.size(); y++) {
+		for (int x = 0; x < tree[y].size(); x++) {
+			int skill = int(tree[y][x]);
+			if (skill != int(Skill::NO)) {
+				vec pos = PosInTreeToPosInScreen({ x,y });
+				GPU_Rect rect = img[skill];
 				SDL_Color color = { 100, 100, 250, 255 }; 
-				if (enabled[tree[j][i]]) {
+				if (enabled[skill]) {
 					color = { 250, 100, 100, 255 };
 				}
-				GPU_Rect rect = img[tree[j][i]];
-
 				Window::Draw(Assets::marioTexture, pos)
 					.withRect(rect)
 					.withOrigin(8,8)
@@ -232,25 +234,24 @@ void SkillTree::DrawMenu() {
 		}
 	}
 
-	vec currentPos = posInTreeToPosInScreen(current);
+	vec currentPos = PosInTreeToPosInScreen(current);
 	Bounds::fromCenter(currentPos, vec(16, 16)).Draw(255,255,255);
 
 	if (requirements_not_met_timer > 0) {
 		if (int(requirements_not_met_timer * 10.f) % 2) {
-			for (int n : needs[requirements_not_met_skill]) {
-				if (!enabled[n]) {
-					vec pos = posInTreeToPosInScreen(posInTree(Skill(n)));
+			for (Skill n : needs[requirements_not_met_skill]) {
+				if (!enabled[int(n)]) {
+					vec pos = PosInTreeToPosInScreen(PosInTree(n));
 					Bounds::fromCenter(pos, vec(16, 16)).Draw(255,0,0);
 				}
 			}
 		}
 	}
 
-	textPoints.setFillColor(255, 255, 255);
-	if (not_enough_points_timer > 0.f) {
-		if (int(not_enough_points_timer * 10.f) % 2) {
-			textPoints.setFillColor(255, 0, 0);
-		}
+	if (not_enough_points_timer > 0.f && int(not_enough_points_timer * 10.f) % 2) {
+		textPoints.setFillColor(255, 0, 0);
+	} else {
+		textPoints.setFillColor(255, 255, 255);
 	}
 
 	Window::Draw(textPoints, Camera::GetBounds().TopLeft() + vec(10, 10)).withScale(0.3f);
