@@ -8,6 +8,7 @@
 #include "transition.h"
 #include "destroyedtiles.h"
 #include "powerups.h"
+#include "skilltree.h"
 #include "screen.h"
 #include "input.h"
 
@@ -20,6 +21,7 @@ struct JumpScene : Scene {
 	int randomSeed;
 	TileMap map;
 	JumpMan player;
+	SkillTree skillTree;
 	PartSys bulletPartSys;
 	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;

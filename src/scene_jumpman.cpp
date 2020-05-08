@@ -162,6 +162,9 @@ void JumpScene::Update(float dt)
 		EnterScene();
 	}
 
+	skillTree.Update(dt);
+	if (skillTree.open) return;
+
 	//transition.update(dt);
 	player.Update(dt);
 
@@ -319,11 +322,17 @@ void JumpScene::Update(float dt)
 		}
 		fogPartSys.UpdateParticles(dt);
 	}
+
 }
 
 void JumpScene::Draw(sf::RenderTarget& window)
 {
 	window.clear(sf::Color(31, 36, 50));
+
+	if (skillTree.open) {
+		skillTree.DrawMenu(window);
+		return;
+	}
 
 	if (Debug::Draw) {
 		Simplex::DebugDraw(window, Tile::size, [this](int x, int y) {
@@ -392,14 +401,19 @@ void JumpScene::Draw(sf::RenderTarget& window)
 	}
 
 #ifdef _DEBUG
-	ImGui::Begin("jumpman scene");
-	//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
-	vec m = Mouse::GetPositionInWorld();
-	sf::Vector2i t = map.toTiles(m);
-	ImGui::Text("Mouse: %f,%f", m.x, m.y);
-	ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
-	ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
-	ImGui::End();
+	{
+		ImGui::Begin("jumpman scene");
+		//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
+		vec m = Mouse::GetPositionInWorld();
+		sf::Vector2i t = map.toTiles(m);
+		ImGui::Text("Mouse: %f,%f", m.x, m.y);
+		if (ImGui::Button("Add point")) {
+			skillTree.gunpoints += 1;
+		};
+		ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
+		ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
+		ImGui::End();
+	}
 
 	if (Debug::Draw) {
 		Assets::marioSprite.setTextureRect(Tile::tileToTextureRect[currentPlacingTile]);
@@ -411,6 +425,8 @@ void JumpScene::Draw(sf::RenderTarget& window)
 #endif
 	fogPartSys.Draw(window);
 	fogPartSys.DrawImGUI();
+	
+	skillTree.DrawOverlay(window);
 
 	//player.polvito.DrawImGUI("Polvito");
 }

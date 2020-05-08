@@ -65,6 +65,7 @@
     <ClInclude Include="src\screen.h" />
     <ClInclude Include="src\simplexnoise.h" />
     <ClInclude Include="src\singleinstance.h" />
+    <ClInclude Include="src\skilltree.h" />
     <ClInclude Include="src\spawningtile.h" />
     <ClInclude Include="src\steering_behavior_applier.h" />
     <ClInclude Include="src\steering_entity.h" />
@@ -108,6 +109,7 @@
     <ClCompile Include="src\scene_jumpman.cpp" />
     <ClCompile Include="src\screen.cpp" />
     <ClCompile Include="src\simplexnoise.cpp" />
+    <ClCompile Include="src\skilltree.cpp" />
     <ClCompile Include="src\spawningtile.cpp" />
     <ClCompile Include="src\steering_behavior.cpp" />
     <ClCompile Include="src\tiledexport.cpp" />

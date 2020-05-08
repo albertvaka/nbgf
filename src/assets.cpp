@@ -6,6 +6,9 @@ sf::Sprite Assets::hospitalSprite;
 sf::Texture Assets::marioTexture;
 sf::Sprite Assets::marioSprite;
 
+sf::Texture Assets::menuBgTexture;
+sf::Sprite Assets::menuBgSprite;
+
 sf::Texture Assets::fogTexture;
 
 sf::Font Assets::font;
@@ -21,6 +24,9 @@ void Assets::LoadAll() {
 
     marioTexture.loadFromFile("data/mario.png");
     marioSprite.setTexture(marioTexture);
+
+    menuBgTexture.loadFromFile("data/menubg3.png");
+    menuBgSprite.setTexture(menuBgTexture);
 
     fogTexture.loadFromFile("data/fog.png");
 

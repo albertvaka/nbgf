@@ -13,6 +13,9 @@ struct Assets
 	static sf::Texture marioTexture;
 	static sf::Sprite marioSprite;
 
+	static sf::Texture menuBgTexture;
+	static sf::Sprite menuBgSprite;
+
 	static sf::Texture fogTexture;
 
 	static sf::Font font;
