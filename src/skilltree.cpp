@@ -18,12 +18,12 @@ std::vector<bool> unlocked;
 };
 
  std::vector<const char*> description = {
-	"Break blocks\n\nBreak some blocks with your gun.",
-	"Bouncy shots\n\nShots can bounce against walls once.",
-	"Rapid fire\n\nShot twice as fast.",
-	"Range+\n\nIncreases the range of your weapon.",
-	"Damage+\n\nDamage foes with stronger defenses.",
-	"Range++\n\nIncreases the range of your weapon.",
+	"Break blocks\n\n\nShot at transparent blocks to break them.",
+	"Bouncy shots\n\n\nShots bounce against walls once.",
+	"Range I\n\n\nIncrease the range of your weapon.",
+	"Rapid fire\n\n\nShot twice as fast.",
+	"Damage I\n\n\nBeat up stronger foes.",
+	"Range II\n\n\nIncrease the range of your weapon.",
  };
 
  std::vector<GPU_Rect> img = {
