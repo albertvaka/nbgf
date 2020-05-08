@@ -302,9 +302,9 @@ const uint8_t TiledMap::map[] = {
 
 const std::array<Bounds, 11> TiledMap::screens = {
 	Bounds(1787.545f,728.0f,591.538f,256.0f),
-	Bounds(736.8800000000001f,689.6667f,1048.45f,332.997f),
+	Bounds(738.8800000000001f,689.6667f,1048.45f,332.997f),
 	Bounds(1786.333f,381.333f,587.333f,308.667f),
-	Bounds(144.0f,688.0f,591.5f,336.0f),
+	Bounds(145.9000000000001f,688.0f,591.6f,336.0f),
 	Bounds(2377.75f,688.0f,590.25f,336.0f),
 	Bounds(1793.333f,48.0f,573.417f,336.0f),
 	Bounds(2385.25f,48.0f,590.75f,336.0f),
@@ -365,7 +365,7 @@ const std::array<vec, 2> TiledEntities::gunup = {
 	vec(1739.0f, 1099.667f),
 };
 
-const vec TiledEntities::gunup_tancaporta = vec(1713.5f, 758.41667f);
+const vec TiledEntities::gunup_tancaporta = vec(1702.25f, 770.16667f);
 
 const std::array<vec, 2> TiledEntities::save = {
 	vec(1953.5336f, 911.114f),

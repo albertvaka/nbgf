@@ -947,7 +947,7 @@
   <object id="118" gid="182" x="-158.333" y="304.667" width="16" height="16"/>
   <object id="120" gid="325" x="-0.333333" y="-449.333" width="16" height="16"/>
   <object id="121" gid="325" x="-309" y="331.667" width="16" height="16"/>
-  <object id="122" type="gunup_tancaporta" gid="325" x="-334.5" y="-9.58333" width="16" height="16"/>
+  <object id="122" type="gunup_tancaporta" gid="325" x="-345.75" y="2.16667" width="16" height="16"/>
   <object id="126" gid="354" x="-94.4664" y="143.114" width="16" height="16"/>
   <object id="127" gid="117" x="-1844" y="-16.5" width="16" height="16"/>
   <object id="129" gid="182" x="-1613.45" y="130.545" width="16" height="16"/>
@@ -961,7 +961,7 @@
    <text wrap="1">Need fly to get here</text>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Areas">
+ <objectgroup id="8" name="Areas" visible="0">
   <object id="83" name="lava" type="lava" x="336" y="232.978" width="618" height="23"/>
   <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
   <object id="106" name="lava" type="lava" x="-589" y="363.333" width="990" height="72"/>
@@ -971,9 +971,9 @@
  </objectgroup>
  <objectgroup id="2" name="Screens" visible="0">
   <object id="42" name="Screen" x="-260.455" y="-40" width="591.538" height="256"/>
-  <object id="44" name="Screen" x="-1311.12" y="-78.3333" width="1048.45" height="332.997"/>
+  <object id="44" name="Screen" x="-1309.12" y="-78.3333" width="1048.45" height="332.997"/>
   <object id="45" name="Screen" x="-261.667" y="-386.667" width="587.333" height="308.667"/>
-  <object id="46" name="Screen" x="-1904" y="-80" width="591.5" height="336"/>
+  <object id="46" name="Screen" x="-1902.1" y="-80" width="591.6" height="336"/>
   <object id="54" name="Screen" x="329.75" y="-80" width="590.25" height="336"/>
   <object id="57" name="Screen" x="-254.667" y="-720" width="573.417" height="336"/>
   <object id="71" name="Screen" x="337.25" y="-720" width="590.75" height="336"/>
