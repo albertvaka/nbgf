@@ -8,9 +8,12 @@
 #include "powerups.h"
 #include "skilltree.h"
 #include "screen.h"
-#include "lava.h"
-#include "enemy_door.h"
 #include "input.h"
+#include "rototext.h"
+
+struct Lava;
+struct GunUp;
+struct EnemyDoor;
 
 struct JumpScene : Scene {
 
@@ -23,8 +26,11 @@ struct JumpScene : Scene {
 	PartSys bulletPartSys;
 	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;
+	RotoText rotoText;
+
 	GunUp* gunup_tancaporta;
 	EnemyDoor* gunup_tancaporta_door;
+
 	Lava* raising_lava;
 	float raising_lava_target_height;
 

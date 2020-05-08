@@ -50,6 +50,7 @@
     <ClInclude Include="src\parallax.h" />
     <ClInclude Include="src\popupText.h" />
     <ClInclude Include="src\powerups.h" />
+    <ClInclude Include="src\rototext.h" />
     <ClInclude Include="src\savestation.h" />
     <ClInclude Include="src\scene_jumpman.h" />
     <ClInclude Include="src\screen.h" />

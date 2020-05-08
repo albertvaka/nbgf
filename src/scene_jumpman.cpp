@@ -12,6 +12,7 @@
 #include "lava.h"
 #include "savestation.h"
 #include "debug.h"
+#include "rototext.h"
 
 extern float mainClock;
 
@@ -353,8 +354,14 @@ void JumpScene::Update(float dt)
 			skillTree.Enable(g->skill);
 			g->alive = false;
 
-			if (g->skill == Skill::WALLJUMP) {
+			switch(g->skill) {
+			case Skill::WALLJUMP:
 				raising_lava->SetLevel(raising_lava_target_height);
+				rotoText.ShowMessage("WallJump");
+				break;
+			case Skill::GUN:
+				rotoText.ShowMessage("Big F. Gun");
+				break;
 			}
 		}
 	}
@@ -396,6 +403,9 @@ void JumpScene::Update(float dt)
 		}
 		fogPartSys.UpdateParticles(dt);
 	}
+
+
+	rotoText.Update(dt);
 
 }
 
@@ -477,6 +487,8 @@ void JumpScene::Draw()
 	for (const Lava* l : Lava::getAll()) {
 		l->Draw();
 	}
+	
+	rotoText.Draw();
 
 	if (Debug::Draw) {
 		player.bounds().Draw();
