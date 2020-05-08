@@ -547,22 +547,16 @@ void DebugDraw(float tileSize, std::function<float(int x, int y)> noisefunc)
     int right = int(screen.Right() / tileSize) + 1;
     int top = int(screen.Top() / tileSize) - 1;
     int bottom = int(screen.Bottom() / tileSize) + 1;
-    /*
-    sf::RectangleShape rect;
-    rect.setSize(vec(16, 16));
-    rect.setOutlineThickness(0);
-;
+
     for (int x = left; x < right; x++)
     {
         for (int y = top; y < bottom; y++)
         {
             float noise = noisefunc(x, y);
-            rect.setFillColor(sf::Color(0, 128 + 128 * noise, 0));
-            rect.setPosition(x * tileSize, y * tileSize);
-            window.draw(rect);
+            Window::DrawPrimitive::Rectangle(x * tileSize, y * tileSize, 16,16, -1,  0,128 + 128 * noise, 0);
         }
     }
-    */
+
 }
 
 }
