@@ -24,7 +24,7 @@ void AwakeNearbyBats(const vec& pos) {
 void Bat::EnableBoundsAvoidance() {
 	int i = 0;
 	int smallest_i = -1;
-	float smallest_area = Mates::MaxInt;
+	float smallest_area = Mates::MaxFloat;
 	for (const auto& bounds : TiledAreas::bat_bounds) {
 		if (bounds.Contains(pos)) {
 			float area = bounds.width * bounds.height;
