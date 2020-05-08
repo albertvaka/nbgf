@@ -140,16 +140,30 @@ namespace Window
 
 		void Pixel(float x, float y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 		inline void Pixel(vec v, uint8_t r, uint8_t g, uint8_t b, uint8_t a) { Pixel(v.x, v.y, r, g, b, a); }
+		inline void Pixel(float x, float y, const SDL_Color& c) { Pixel(x, y, c.r, c.g, c.b, c.a); }
+		inline void Pixel(vec v, uint8_t r, const SDL_Color & c) { Pixel(v.x, v.y, c.r, c.g, c.b, c.a); }
 
-		// pass thickness = -1 to draw a filled rectangle
+		// pass thickness = -1 to draw a filled shape
 		void Rectangle(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 		inline void Rectangle(const Bounds& box, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Rectangle(box.Left(), box.Top(), box.Right(), box.Bottom(), thickness, r, g, b, a);
+		}
+		inline void Rectangle(float x1, float y1, float x2, float y2, float thickness, const SDL_Color& c) {
+			Rectangle(x1, y1, x2, y2, thickness, c.r, c.g, c.b, c.a);
+		}
+		inline void Rectangle(const Bounds& box, float thickness, const SDL_Color& c) {
+			Rectangle(box.Left(), box.Top(), box.Right(), box.Bottom(), thickness, c.r, c.g, c.b, c.a);
 		}
 
 		void Line(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 		inline void Line(const vec& v1, const vec& v2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Line(v1.x, v1.y, v2.x, v2.y, thickness, r, g, b, a);
+		}
+		inline void Line(float x1, float y1, float x2, float y2, float thickness, const SDL_Color& c) {
+			Line(x1, y1, x2, y2, thickness, c.r, c.g, c.b, c.a);
+		}
+		inline void Line(const vec& v1, const vec& v2, float thickness, const SDL_Color & c) {
+			Line(v1.x, v1.y, v2.x, v2.y, thickness, c.r, c.g, c.b, c.a);
 		}
 
 		void Circle(float x, float y, int radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
@@ -159,7 +173,15 @@ namespace Window
 		inline void Circle(const CircleBounds& bounds, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Circle(bounds.pos, bounds.radius, thickness, r, g, b, a);
 		}
-
+		inline void Circle(float x, float y, int radius, float thickness, const SDL_Color& c) {
+			Circle(x, y, radius, thickness, c.r, c.g, c.b, c.a);
+		}
+		inline void Circle(const vec& v, int radius, float thickness, const SDL_Color& c) {
+			Circle(v.x, v.y, radius, thickness, c.r, c.g, c.b, c.a);
+		}
+		inline void Circle(const CircleBounds& bounds, float thickness, const SDL_Color& c) {
+			Circle(bounds.pos, bounds.radius, thickness, c.r, c.g, c.b, c.a);
+		}
 	}
 
 	struct Draw {
