@@ -6,6 +6,8 @@
 
 enum class Skill {
 	NO = 0,
+	GUN,
+	WALLJUMP,
 	BREAK,
 	BOUNCY,
 	RANGE_1,
@@ -23,6 +25,10 @@ struct SkillTree : SingleInstance<SkillTree>
 
 	bool IsEnabled(Skill s) {
 		return enabled[int(s)];
+	}
+
+	void Enable(Skill s) {
+		enabled[int(s)] = true;
 	}
 
 	int gunpoints = 0;

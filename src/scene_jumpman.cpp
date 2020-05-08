@@ -105,6 +105,10 @@ void JumpScene::EnterScene()
 	gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
 	int screen_gunup_tancaporta = screenManager.FindScreenContaining(gunup_tancaporta->pos);
 
+
+	new BigItem(TiledEntities::walljump, Skill::WALLJUMP);
+	new BigItem(TiledEntities::gun, Skill::GUN);
+
 	for (const vec& v : TiledEntities::healthup) {
 		new HealthUp(v);
 	}
@@ -249,8 +253,13 @@ void JumpScene::Update(float dt)
 
 #ifdef _DEBUG
 	const SDL_Scancode killall = SDL_SCANCODE_F11;
+	const SDL_Scancode unlockbasics = SDL_SCANCODE_F8;
 	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
+	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
+		skillTree.Enable(Skill::GUN);
+		skillTree.Enable(Skill::WALLJUMP);
+	}
 	if (Keyboard::IsKeyJustPressed(screen_left)) {
 		player.pos.x -= Window::GAME_WIDTH;
 	}
@@ -327,6 +336,18 @@ void JumpScene::Update(float dt)
 	}
 
 	HealthUp::deleteNotAlive();
+
+	for (BigItem* g : BigItem::getAll()) {
+		if (Collide(g->bounds(), player.bounds())) {
+
+			//TODO: PICK UP ANIMATION
+
+			skillTree.Enable(g->skill);
+			g->alive = false;
+		}
+	}
+
+	BigItem::deleteNotAlive();
 
 	bulletPartSys.UpdateParticles(dt);
 
@@ -416,6 +437,12 @@ void JumpScene::Draw()
 		}
 	}
 	for (const HealthUp* g : HealthUp::getAll()) {
+		g->Draw();
+		if (Debug::Draw) {
+			g->bounds().Draw();
+		}
+	}
+	for (BigItem* g : BigItem::getAll()) {
 		g->Draw();
 		if (Debug::Draw) {
 			g->bounds().Draw();

@@ -11,6 +11,8 @@ std::vector<bool> unlocked;
  std::vector< std::vector<Skill>> needs = {
 	{},
 	{},
+	{},
+	{},
 	{Skill::BREAK},
 	{Skill::BREAK},
 	{Skill::BOUNCY},
@@ -19,6 +21,8 @@ std::vector<bool> unlocked;
 };
 
  std::vector<const char*> description = {
+	"",
+	"",
 	"",
 	"Break blocks\n\n\nShot at transparent blocks to break them.",
 	"Bouncy shots\n\n\nShots bounce against walls once.",
@@ -29,6 +33,8 @@ std::vector<bool> unlocked;
  };
 
  std::vector<GPU_Rect> img = {
+	{},
+	{},
 	{},
 	{8*16,11*16,16,16},
 	{10*16,11*16,16,16},
@@ -72,7 +78,7 @@ SkillTree::SkillTree()
 	, current(PosInTree(Skill::BREAK))
 {
 	enabled.resize(description.size(), false);
-	textPressStart.setString("Press start to assxgn points");
+	textPressStart.setString("Press Start to assign points");
 };
 
 void SkillTree::Update(float dt) {

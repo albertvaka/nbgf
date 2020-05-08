@@ -5,6 +5,7 @@
 #include "bullet.h"
 #include "assets.h"
 #include "debug.h"
+#include "skilltree.h"
 
 extern float mainClock;
 
@@ -277,9 +278,12 @@ grounded_exit:
 				if (t.isFullSolid())
 				{
 					posf.x = map->Right(x) + center.x;
-					vel.x = -500.f * dt; //stay against wall
-					if (!isHit()) {
+					if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
 						onWall = ONWALL_LEFT;
+						vel.x = -500.f * dt; //stay against wall
+					}
+					else {
+						vel.x = 0;
 					}
 					lookingLeft = true;
 					goto horz_exit;
@@ -302,9 +306,12 @@ grounded_exit:
 				if (t.isFullSolid())
 				{
 					posf.x = map->Left(x) - centerFromRight.x;
-					vel.x = 500.f * dt; //stay against wall
-					if (!isHit()) {
+					if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
 						onWall = ONWALL_RIGHT;
+						vel.x = 500.f * dt; //stay against wall
+					}
+					else {
+						vel.x = 0;
 					}
 					lookingLeft = false;
 					goto horz_exit;
@@ -444,36 +451,40 @@ vert_exit:
 	}
 	polvito.UpdateParticles(dt);
 
-	if (crouched) {
-		bfgPos = vec(pos.x, pos.y - 10);
-	}
-	else {
-		bfgPos = vec(pos.x, pos.y - 16);
-	}
-	bfgAngle = bfgPos.Angle(Mouse::GetPositionInWorld());
-	bfgAngle = (int(bfgAngle + 360 + (45.f / 2)) / 45) * 45.f;
-	if (bfgCooldownTimer > 0.f) {
-		bfgCooldownTimer -= dt;
-		if (bfgCooldownTimer < 0.f) {
-			bfgCooldownTimer = 0.f;
+
+	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
+		if (crouched) {
+			bfgPos = vec(pos.x, pos.y - 10);
 		}
-	} 
-	else if (Mouse::IsPressed() && !Debug::Draw) {
-		float angleInRads = Mates::DegsToRads(bfgAngle);
-		bfgCooldownTimer = bfgCooldown;
-		vec tipOfTheGun = bfgPos + vec(17, 0).RotatedAroundOrigin(angleInRads);
-		new Bullet(tipOfTheGun, vec(bulletVel, 0).RotatedAroundOrigin(angleInRads), 1.5f);
-		vel -= vec(bfgPushBack, 0).RotatedAroundOrigin(angleInRads);
-		jumpTimeLeft = 0; // Overrides jump impulse 
-		if (onWall) {
-			vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
+		else {
+			bfgPos = vec(pos.x, pos.y - 16);
 		}
-		if (grounded) {
-			if (abs(vel.x) < 0.1) {
-				DoPolvitoLand();
-			} else {
-				DoPolvitoRun(dt, vel.x < 0, true);
-				DoPolvitoRun(dt, vel.x < 0, true);
+		bfgAngle = bfgPos.Angle(Mouse::GetPositionInWorld());
+		bfgAngle = (int(bfgAngle + 360 + (45.f / 2)) / 45) * 45.f;
+		if (bfgCooldownTimer > 0.f) {
+			bfgCooldownTimer -= dt;
+			if (bfgCooldownTimer < 0.f) {
+				bfgCooldownTimer = 0.f;
+			}
+		}
+		else if (Mouse::IsPressed() && !Debug::Draw) {
+			float angleInRads = Mates::DegsToRads(bfgAngle);
+			bfgCooldownTimer = bfgCooldown;
+			vec tipOfTheGun = bfgPos + vec(17, 0).RotatedAroundOrigin(angleInRads);
+			new Bullet(tipOfTheGun, vec(bulletVel, 0).RotatedAroundOrigin(angleInRads), 1.5f);
+			vel -= vec(bfgPushBack, 0).RotatedAroundOrigin(angleInRads);
+			jumpTimeLeft = 0; // Overrides jump impulse 
+			if (onWall) {
+				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
+			}
+			if (grounded) {
+				if (abs(vel.x) < 0.1) {
+					DoPolvitoLand();
+				}
+				else {
+					DoPolvitoRun(dt, vel.x < 0, true);
+					DoPolvitoRun(dt, vel.x < 0, true);
+				}
 			}
 		}
 	}
@@ -519,25 +530,27 @@ void JumpMan::Draw() const {
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 
 	//BFG
-	GPU_Rect rect;
-	if (bfgCooldownTimer > (bfgCooldown - bfgCooldown / 4.f)) {
-		bool blink = (int(mainClock * 100) % 2);
-		rect = { blink ? 32 * 3.f : 32 * 2.f, 3 * 16.f, 2 * 16.f, 16.f };
+	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
+		GPU_Rect rect;
+		if (bfgCooldownTimer > (bfgCooldown - bfgCooldown / 4.f)) {
+			bool blink = (int(mainClock * 100) % 2);
+			rect = { blink ? 32 * 3.f : 32 * 2.f, 3 * 16.f, 2 * 16.f, 16.f };
+		}
+		else {
+			bool blink = (int(mainClock * 6) % 10) > 8;
+			rect = { blink ? 32 : 0.f, 3 * 16.f, 2 * 16.f, 16.f };
+		}
+		float scale = (0.333f + (Mates::MaxOf(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
+		vec vscale = vec(scale, scale);
+		if (bfgAngle < 270 || bfgAngle  > 450) {
+			vscale.y = -vscale.y;
+		}
+		Window::Draw(Assets::marioTexture, bfgPos)
+			.withRect(rect)
+			.withOrigin(10, 8)
+			.withRotation(bfgAngle)
+			.withScale(vscale);
 	}
-	else {
-		bool blink = (int(mainClock*6) % 10) > 8;
-		rect = { blink ? 32 : 0.f, 3 * 16.f, 2 * 16.f, 16.f };
-	}
-	float scale = (0.333f + (Mates::MaxOf(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
-	vec vscale = vec(scale, scale);
-	if (bfgAngle < 270 || bfgAngle  > 450) {
-		vscale.y = -vscale.y;
-	}
-	Window::Draw(Assets::marioTexture, bfgPos)
-		.withRect(rect)
-		.withOrigin(10, 8)
-		.withRotation(bfgAngle)
-		.withScale(vscale);
 
 	Assets::tintShader.Deactivate();
 }
