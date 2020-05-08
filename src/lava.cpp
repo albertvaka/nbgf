@@ -40,7 +40,7 @@ Lava::Lava(const Bounds& b)
 
 void Lava::Update(float dt) {
 	if (targetY > bounds.top) {
-		if (bounds.top - targetY > raiseSpeed * dt) {
+		if (targetY - bounds.top < raiseSpeed * dt) {
 			bounds.height += bounds.top - targetY;
 			bounds.top = targetY;
 		}
@@ -50,7 +50,7 @@ void Lava::Update(float dt) {
 		}
 	}
 	else if (targetY < bounds.top) {
-		if (targetY - bounds.top > raiseSpeed * dt) {
+		if (bounds.top - targetY < raiseSpeed * dt) {
 			bounds.height += bounds.top - targetY;
 			bounds.top = targetY;
 		}
