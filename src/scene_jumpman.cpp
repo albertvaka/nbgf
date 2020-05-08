@@ -95,9 +95,9 @@ void JumpScene::EnterScene()
 		new Bat(v, false, true);
 	}
 
-	for (const vec& v : TiledEntities::save) {
-		new SaveStation(v);
-	}
+	//for (const vec& v : TiledEntities::save) {
+	//	new SaveStation(v);
+	//}
 
 	for (const vec& v : TiledEntities::gunup) {
 		new GunUp(v);
@@ -484,7 +484,7 @@ void JumpScene::Draw()
 		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
 	}
 
-#ifdef _DEBUG
+#ifdef _IMGUI
 	{
 		ImGui::Begin("jumpman scene");
 		//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
@@ -498,7 +498,9 @@ void JumpScene::Draw()
 		ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 		ImGui::End();
 	}
+#endif
 
+#ifdef _DEBUG
 	if (Debug::Draw) {
 		vec pos = Camera::GetBounds().TopLeft() + vec(0, 16);
 		Bounds(pos, vec(Tile::size, Tile::size)).Draw(0,0,0);
