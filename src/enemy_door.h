@@ -9,6 +9,7 @@
 struct EnemyDoor : Entity, EntS<EnemyDoor>
 {
 	enum class State {
+		LOCKED,
 		CLOSED,
 		OPEN,
 		OPENING,
@@ -16,7 +17,7 @@ struct EnemyDoor : Entity, EntS<EnemyDoor>
 
 	State state = State::CLOSED;
 	std::vector<const Entity*> enemies;
-	float openingTimer = 0;
+	float openingTimer;
 
 	EnemyDoor(const vec& position);
 
@@ -24,8 +25,13 @@ struct EnemyDoor : Entity, EntS<EnemyDoor>
 		enemies.push_back(enemy);
 	}
 
+	void Lock(); //Closes immediately and won't open
+
 	void Update(float dt);
 	void Draw() const;
+
+private:
+	void SpawnTiles();
 
 };
 

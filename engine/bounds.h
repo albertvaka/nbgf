@@ -55,6 +55,17 @@ struct Bounds
         SetCenter(center.x, center.y);
     }
 
+    void SetTopLeft(float x, float y)
+    {
+        left = x;
+        top = y;
+    }
+
+    void SetTopLeft(const vec& center)
+    {
+        SetTopLeft(center.x, center.y);
+    }
+
     void Draw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const;
 
     [[nodiscard]] constexpr float Top() const

@@ -81,8 +81,6 @@ void JumpScene::EnterScene()
 
 	player.pos = TiledEntities::spawn;
 
-	new GunUp(TiledEntities::spawn);
-
 	map.LoadFromTiled();
 
 	for (const vec& v : TiledEntities::bat) {
@@ -102,9 +100,10 @@ void JumpScene::EnterScene()
 	}
 
 	for (const vec& v : TiledEntities::gunup) {
-		//GunUp* up = new GunUp(v);
+		GunUp* up = new GunUp(v);
 	}
-	//gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
+	gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
+	int screen_gunup_tancaporta = screenManager.FindScreenContaining(gunup_tancaporta->pos);
 
 	for (const vec& v : TiledEntities::healthup) {
 		new HealthUp(v);
@@ -120,6 +119,9 @@ void JumpScene::EnterScene()
 			if (b->screen == door_screen) {
 				d->AddEnemy(b);
 			}
+		}
+		if (door_screen == screen_gunup_tancaporta) {
+			gunup_tancaporta_door = d;
 		}
 	}
 
@@ -244,15 +246,9 @@ void JumpScene::Update(float dt)
 		}
 	}
 
-	for (EnemyDoor* ed : EnemyDoor::getAll()) {
-		ed->Update(dt); // Checks for enemies with alive = false, crashes if they have been deleted already
-	}
-
-	Bat::deleteNotAlive(); //Must happen after enemydoor update
-
 
 #ifdef _DEBUG
-	const SDL_Scancode killall = SDL_SCANCODE_F12;
+	const SDL_Scancode killall = SDL_SCANCODE_F11;
 	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
 	if (Keyboard::IsKeyJustPressed(screen_left)) {
@@ -296,6 +292,40 @@ void JumpScene::Update(float dt)
 		}
 	}
 #endif
+
+	for (EnemyDoor* ed : EnemyDoor::getAll()) {
+		ed->Update(dt); // Checks for enemies with alive = false, crashes if they have been deleted already
+	}
+
+	Bat::deleteNotAlive(); //Must happen after enemydoor update
+
+	for (GunUp* g : GunUp::getAll()) {
+		if (Collide(g->bounds(), player.bounds())) {
+
+			//TODO: PICK UP ANIMATION
+
+			skillTree.gunpoints++;
+			g->alive = false;
+
+			if (g == gunup_tancaporta) {
+				gunup_tancaporta_door->Lock();
+			}
+		}
+	}
+
+	GunUp::deleteNotAlive();
+
+	for (HealthUp* g : HealthUp::getAll()) {
+		if (Collide(g->bounds(), player.bounds())) {
+
+			//TODO: PICK UP ANIMATION
+
+			//TODO: Raise health
+
+			g->alive = false;
+		}
+	}
+
 
 	bulletPartSys.UpdateParticles(dt);
 

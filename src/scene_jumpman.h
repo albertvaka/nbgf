@@ -8,6 +8,7 @@
 #include "powerups.h"
 #include "skilltree.h"
 #include "screen.h"
+#include "enemy_door.h"
 #include "input.h"
 
 struct JumpScene : Scene {
@@ -22,6 +23,7 @@ struct JumpScene : Scene {
 	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;
 	GunUp* gunup_tancaporta;
+	EnemyDoor* gunup_tancaporta_door;
 
 	GameKeys contextActionButton = GameKeys::NONE;
 
