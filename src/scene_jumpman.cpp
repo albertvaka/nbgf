@@ -326,6 +326,7 @@ void JumpScene::Update(float dt)
 		}
 	}
 
+	HealthUp::deleteNotAlive();
 
 	bulletPartSys.UpdateParticles(dt);
 
@@ -410,9 +411,15 @@ void JumpScene::Draw()
 
 	for (const GunUp* g : GunUp::getAll()) {
 		g->Draw();
+		if (Debug::Draw) {
+			g->bounds().Draw();
+		}
 	}
 	for (const HealthUp* g : HealthUp::getAll()) {
 		g->Draw();
+		if (Debug::Draw) {
+			g->bounds().Draw();
+		}
 	}
 
 	player.Draw();

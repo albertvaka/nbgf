@@ -10,10 +10,10 @@ extern float mainClock;
 
 void GunUp::Draw() const
 {
-	float y = 5 * sin(mainClock);
+	float y = 3.f * sin(mainClock);
 
 	Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
-		.withOrigin(0, 0)
+		.withOrigin(8, 8)
 		.withRect(5 * 16, 11 * 16, 16, 16);
 
 }
@@ -27,10 +27,10 @@ void HealthUp::Draw() const
 		return;
 	}
 
-	float y = 5 * sin(mainClock);
+	float y = 3.f * sin(mainClock);
 
 	Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
-		.withOrigin(0, 0)
+		.withOrigin(8, 8)
 		.withRect(6 * 16, 11 * 16, 16, 16);
 }
 
