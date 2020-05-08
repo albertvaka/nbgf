@@ -207,7 +207,7 @@ void JumpScene::Update(float dt)
 			tile = map.getTile(t);
 		}
 		if (tile.isFullSolid()) {
-			if (tile.isBreakable()) {
+			if (tile.isBreakable() && skillTree.IsEnabled(Skill::BREAK)) {
 				destroyedTiles.Destroy(t.x, t.y);
 			}
 			AwakeNearbyBats(e->pos);
