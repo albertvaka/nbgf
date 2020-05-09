@@ -96,21 +96,44 @@ void GamePad::_UpdateInputState() {
         }
     }
 }
+
 void Mouse::_UpdateInputState()
 {
-    int x, y;
-    int pressed = SDL_GetMouseState(&x, &y);
+    int int_x, int_y;
+    int pressed = SDL_GetMouseState(&int_x, &int_y);
+    pos.x = int_x;
+    pos.y = int_y;
+
+    // Convert mouse position to scaled, letterboxed game coordinates
+    // --------------------------------------------------------------
 
 #ifdef __EMSCRIPTEN__
-    //Doesn't take into account the letterbox margins, but the manual method below doesn't work on the browser :shrug:
-    GPU_GetVirtualCoords(Window::target,&pos.x,&pos.y,x,y);
-#else
-    // Convert position to scaled, letterboxed view coordinates
-    x -= Window::target->viewport.x;
-    y -= Window::target->viewport.y;
-    pos.x = (x * Window::GAME_WIDTH) / Window::target->viewport.w;
-    pos.y = (y * Window::GAME_HEIGHT) / Window::target->viewport.h;
+    // In emscripten, mouse position is not in the same coordinates as the viewport, convert them first
+
+    // Normalize mouse coordinates
+    pos.x /= Window::target->context->window_w;
+    pos.y /= Window::target->context->window_h;
+
+    // Expand to viewport coordinates
+    pos.x *= Window::target->context->drawable_w; // equals to the size of the viewport + margins: 2*Window::target->viewport.x + Window::target->viewport.w;
+    pos.y *= Window::target->context->drawable_h;
 #endif
+
+    // Remove margins
+    pos.x -= Window::target->viewport.x;
+    pos.y -= Window::target->viewport.y;
+
+    // Normalize to viewport coordinates without margin
+    pos.x /= Window::target->viewport.w;
+    pos.y /= Window::target->viewport.h;
+
+    // Expand to game coordinates
+    pos.x *= Window::GAME_WIDTH;
+    pos.y *= Window::GAME_HEIGHT;
+
+
+    // Update mouse button states
+    // --------------------------
 
     for (size_t i = 1; i < magic_enum::enum_count<Button>(); i++) //skip NONE
     {
