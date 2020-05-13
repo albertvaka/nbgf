@@ -60,7 +60,7 @@ namespace Camera {
 
 namespace Window
 {
-    void Init() {
+    int Init() {
         GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
 
 #ifdef __EMSCRIPTEN__
@@ -75,10 +75,14 @@ namespace Window
         window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, GAME_WIDTH * scale, GAME_HEIGHT * scale, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
         if (window == NULL) {
             Debug::out << "Window Creation Error: " << SDL_GetError();
+            return 1;
         }
         GPU_SetInitWindow(SDL_GetWindowID(window));
 
         target = GPU_Init(GAME_WIDTH, GAME_HEIGHT, GPU_DEFAULT_INIT_FLAGS);
+        if (target == NULL) {
+            return 2;
+        }
 
         // [Debug] Disable vsync
         //SDL_GL_SetSwapInterval(0);
@@ -97,6 +101,8 @@ namespace Window
         Camera::SetTopLeft(0, 0);
 
         GPU_SetVirtualResolution(Window::target, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+
+        return 0;
     }
 
     void ProcessEvents()

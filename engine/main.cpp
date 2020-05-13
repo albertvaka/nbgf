@@ -64,7 +64,8 @@ void init() {
 #endif
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0) {
-		Debug::out << IMG_GetError();
+		Debug::out << SDL_GetError();
+		exit(1);
 	}
 
 	if (TTF_Init() != 0) {
@@ -79,7 +80,9 @@ void init() {
 		Debug::out << Mix_GetError();
 	}
 
-	Window::Init();
+	if (Window::Init() != 0) {
+		exit(1);
+	}
 
 	Input::Init();
 

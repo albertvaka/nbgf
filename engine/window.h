@@ -126,7 +126,7 @@ namespace Camera
 
 namespace Window
 {
-	void Init();
+	int Init();
 	void ProcessEvents();
 
 	inline bool HasFocus() { return focus; }
