@@ -62,14 +62,8 @@ namespace Window
 {
     void Init() {
         GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
-        GPU_SetLogCallback([](GPU_LogLevelEnum log_level, const char* format, va_list args) -> int {
-            char buffer[1024];
-            vsprintf(buffer, format, args);
-            Debug::out << std::string(buffer);
-            return 0;
-            });
 
- #ifdef __EMSCRIPTEN__
+#ifdef __EMSCRIPTEN__
         int scale = 1;
 #else
         SDL_DisplayMode dm;
