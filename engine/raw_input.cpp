@@ -12,7 +12,8 @@ KeyStates GamePad::button_states[max_gamepads][SDL_CONTROLLER_BUTTON_MAX];
 
 KeyStates Mouse::button_states[magic_enum::enum_count<Button>()] = { RELEASED };
 float Mouse::scrollWheel = 0;
-vec Mouse::pos(0,0);
+vec Mouse::pos(0, 0);
+vec Mouse::oldPos(0, 0);
 
 Uint8 Keyboard::state_buffers[2][SDL_NUM_SCANCODES] = { { 0 } };
 Uint8* Keyboard::state = state_buffers[0];
@@ -99,6 +100,7 @@ void GamePad::_UpdateInputState() {
 
 void Mouse::_UpdateInputState()
 {
+    oldPos = pos;
     int int_x, int_y;
     int pressed = SDL_GetMouseState(&int_x, &int_y);
     pos.x = int_x;

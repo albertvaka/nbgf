@@ -161,6 +161,7 @@ struct Mouse
 	static float GetScrollWheelMovement() { return scrollWheel; }
 
 	static vec GetPositionInWindow() { return pos; }
+	static vec GetDeltaMovement() { return oldPos-pos; }
 
 	static vec GetPositionInWorld();
 
@@ -168,6 +169,6 @@ struct Mouse
 
 private:
 	static KeyStates button_states[magic_enum::enum_count<Button>()];
-	static vec pos;
+	static vec pos, oldPos;
 
 };
