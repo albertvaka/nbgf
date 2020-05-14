@@ -173,10 +173,6 @@ void JumpScene::Update(float dt)
 		}
 	}
 
-	if (Input::IsJustPressed(0,GameKeys::RESTART)) {
-		ExitScene();
-		EnterScene();
-	}
 
 	skillTree.Update(dt);
 	if (skillTree.open) return;
@@ -265,6 +261,12 @@ void JumpScene::Update(float dt)
 	const SDL_Scancode unlockbasics = SDL_SCANCODE_F8;
 	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
+	const SDL_Scancode restart = SDL_SCANCODE_F5;
+	if (Keyboard::IsKeyJustPressed(restart)) {
+		ExitScene();
+		EnterScene();
+		return;
+	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
 		skillTree.Enable(Skill::GUN);
 		skillTree.Enable(Skill::WALLJUMP);
@@ -384,8 +386,8 @@ void JumpScene::Update(float dt)
 	for (SaveStation* ss : SaveStation::getAll()) {
 		ss->Update(dt);
 		if (ss->enabled && Collide(ss->bounds(), player.bounds())) {
-			contextActionButton = GameKeys::ACTIVATE;
-			if (Input::IsJustPressed(0,GameKeys::ACTIVATE)) {
+			contextActionButton = GameKeys::ACTION;
+			if (Input::IsJustPressed(0,GameKeys::ACTION)) {
 				ss->Activate();
 			}
 		}

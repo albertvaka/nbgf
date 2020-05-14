@@ -7,10 +7,7 @@ enum GameKeys
 	NONE = 0,
 	UP, DOWN, LEFT, RIGHT,
 	START,
-	ACTIVATE,
-	MUTE,
-	NEXT_TRACK,
-	RESTART,
+	ACTION,
 };
 
 // Action-based input

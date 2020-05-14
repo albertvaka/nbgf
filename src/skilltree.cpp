@@ -162,7 +162,7 @@ found:
 
 	int skill = int(tree[current.y][current.x]);
 
-	if (Input::IsJustPressed(0,GameKeys::ACTIVATE) && !enabled[skill]) {
+	if (Input::IsJustPressed(0,GameKeys::ACTION) && !enabled[skill]) {
 		if (gunpoints > 0) {
 			bool requirementsMet = true;
 			for (Skill n : needs[skill]) {

@@ -26,9 +26,8 @@ inline void RemapGamePadInput()
 		return GamePad::AnalogStick::Left.get(p, 20.f).x > 0.0f ||
 			GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
 	};
-	gp_map[GameKeys::ACTIVATE] = [](int p) { return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A); };
+	gp_map[GameKeys::ACTION] = [](int p) { return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A); };
 	gp_map[GameKeys::START] = [](int p) { return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START); };
-	gp_map[GameKeys::RESTART] = [](int p) { return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_BACK); };
 }
 
 inline void RemapKeyboardInput()
@@ -45,20 +44,11 @@ inline void RemapKeyboardInput()
 	kb_map[GameKeys::RIGHT] = []() {
 		return Keyboard::IsKeyPressed(SDL_SCANCODE_D) || Keyboard::IsKeyPressed(SDL_SCANCODE_RIGHT);
 	};
-	kb_map[GameKeys::ACTIVATE] = []() {
+	kb_map[GameKeys::ACTION] = []() {
 		return Keyboard::IsKeyPressed(SDL_SCANCODE_E) || Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE);
 	};
 	kb_map[GameKeys::START] = []() {
-		return Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN);
-	};
-	kb_map[GameKeys::RESTART] = []() {
-		return Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE);
-	};
-	kb_map[GameKeys::MUTE] = []() {
-		return Keyboard::IsKeyPressed(SDL_SCANCODE_M);
-	};
-	kb_map[GameKeys::NEXT_TRACK] = []() {
-		return Keyboard::IsKeyPressed(SDL_SCANCODE_COMMA);
+		return Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN) || Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE);
 	};
 }
 

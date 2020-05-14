@@ -170,7 +170,7 @@ void main_loop() {
 		Camera::ChangeZoomWithPlusAndMinus(1.f, dt);
 	}
 
-	if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT) || Input::IsJustPressedAnyPlayer(RESTART))
+	if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
 #endif
 	{
 #ifdef _DEBUG
