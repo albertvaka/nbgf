@@ -67,7 +67,7 @@ veci PosInTree(Skill s) {
 vec PosInTreeToPosInScreen(veci p) {
 	auto size = Camera::GetSize();
 	vec dxv = vec(size.x / (tree[0].size()), (size.y / (tree.size())));
-	return Camera::GetBounds().TopLeft() + (vec(p) * (dxv / 2)) + vec(dxv.x/2, dxv.y);
+	return Camera::GetBounds().TopLeft() + vec(p.x * dxv.x / 2, p.y * dxv.y /2) + vec(dxv.x/2, dxv.y);
 }
 
 SkillTree::SkillTree()

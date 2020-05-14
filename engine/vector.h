@@ -337,14 +337,6 @@ inline constexpr vec operator*(float lhs, const vec &rhs)
   return result;
 }
 
-inline constexpr vec operator*(const vec &lhs, const vec &rhs)
-{
-	vec result(rhs);
-	result.x = lhs.x * rhs.x;
-	result.y = lhs.y * rhs.y;
-	return result;
-}
-
 inline constexpr vec operator-(const vec &lhs, const vec &rhs)
 {
   vec result(lhs);
