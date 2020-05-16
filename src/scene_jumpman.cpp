@@ -166,6 +166,7 @@ void JumpScene::Update(float dt)
 			player.pos.y += 6 * dt; //sink slowly in the lava
 			player.bfgPos.y = -1000;
 			player.onWall = JumpMan::ONWALL_NO;
+			raising_lava->SetLevel(raising_lava->CurrentLevel()); // stop lava to prevent it lowering and suddently us not being inside
 		}
 		if (l->IsInside(player.pos - vec(0, 14.f))) {
 			ExitScene();
