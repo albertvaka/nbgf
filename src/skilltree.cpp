@@ -65,9 +65,9 @@ veci PosInTree(Skill s) {
 }
 
 vec PosInTreeToPosInScreen(veci p) {
-	auto size = Camera::GetSize();
+	auto size = Camera::GUI::GetSize();
 	vec dxv = vec(size.x / (tree[0].size()), (size.y / (tree.size())));
-	return Camera::GetBounds().TopLeft() + vec(p.x * dxv.x / 2, p.y * dxv.y /2) + vec(dxv.x/2, dxv.y);
+	return vec(p.x * dxv.x / 2, p.y * dxv.y /2) + vec(dxv.x/2, dxv.y);
 }
 
 SkillTree::SkillTree()
@@ -201,9 +201,11 @@ void SkillTree::DrawOverlay() {
 
 
 void SkillTree::DrawMenu() {
-	//Assets::menuBgSprxte.setScale(1.f / GameData::GAME_ZOOM, 1.f / GameData::GAME_ZOOM);
 
-	Window::Draw(Assets::menuBgTexture, Camera::GetBounds().TopLeft());
+	Camera::GUI::Begin();
+
+	Window::Draw(Assets::menuBgTexture, vec(0,0))
+		.withScale(float(Window::GAME_WIDTH)/Assets::menuBgTexture->w, float(Window::GAME_HEIGHT)/Assets::menuBgTexture->h);
 
 	for (int s = 0; s < needs.size(); s++) {
 		if (!needs[s].empty()) {
@@ -253,7 +255,9 @@ void SkillTree::DrawMenu() {
 		textPoints.setFillColor(255, 255, 255);
 	}
 
-	Window::Draw(textPoints, Camera::GetBounds().TopLeft() + vec(10, 10)).withScale(0.3f);
-	Window::Draw(textDescription, Camera::GetBounds().TopLeft() + vec(50, 250)).withScale(0.3f);
+	Window::Draw(textPoints, vec(10, 10)).withScale(0.3f);
+	Window::Draw(textDescription, vec(50, 250)).withScale(0.3f);
+
+	Camera::GUI::End();
 
 }

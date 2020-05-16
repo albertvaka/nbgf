@@ -105,18 +105,32 @@ namespace Camera
 		return camera.zoom_x;
 	}
 
-	inline void SetGUICamera(bool b)
+	namespace GUI
 	{
-		if (b) {
+		// GUI Camera is not affected by the current zoom nor camera displacement. Its top-left is always at 0,0
+
+		inline void Begin() {
 			GPU_SetCamera(Window::target, &gui_camera);
-		} else {
+		}
+
+		inline void End() {
 			GPU_SetCamera(Window::target, &camera);
 		}
-	}
 
-	inline Bounds GetGuiCameraBounds()
-	{
-		return Bounds(0,0, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+		inline constexpr vec GetSize()
+		{
+			return vec(Window::GAME_WIDTH, Window::GAME_HEIGHT);
+		}
+
+		inline constexpr Bounds GetBounds()
+		{
+			return Bounds(vec::Zero, GetSize());
+		}
+
+		inline constexpr vec GetCenter()
+		{
+			return GetSize() / 2.f;
+		}
 	}
 
 	//Useful for debug pourposes
@@ -204,7 +218,7 @@ namespace Window
 			srcp = &src;
 			return *this;
 		}
-		
+
 		Draw& withColor(SDL_Color c) {
 			return withColor(c.r, c.g, c.b, c.a);
 		}

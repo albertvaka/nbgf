@@ -198,7 +198,7 @@ void main_loop() {
 #endif
 
 	//Draw GUI
-	Camera::SetGUICamera(true);
+	Camera::GUI::Begin();
 	
 #ifdef _FPS_COUNTER
 	fps_counter++;
@@ -210,7 +210,7 @@ void main_loop() {
 		fps_counter = 0;
 		fpsClock = 0;
 	}
-	Window::Draw(*txt_fps, Camera::GetGuiCameraBounds().TopRight() + vec(-5, 5))
+	Window::Draw(*txt_fps, Camera::GUI::GetBounds().TopRight() + vec(-5, 5))
 		.withOrigin(txt_fps->getSize().x, 0)
 		.withScale(0.5f);
 #endif
@@ -221,7 +221,7 @@ void main_loop() {
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
 
-	Camera::SetGUICamera(false);
+	Camera::GUI::End();
 
 	GPU_Flip(Window::target);
 }
