@@ -3,6 +3,7 @@
 #include <vector>
 #include "assets.h"
 #include "input.h"
+#include "magic_enum.h"
 #include "debug.h"
 
 std::vector<bool> unlocked;
@@ -51,6 +52,8 @@ std::vector<bool> unlocked;
 	{Skill::NO,    Skill::NO,      Skill::RANGE_2},
 };
 
+ std::vector<Bounds> skillBounds; // bounds in screen of each skill icon
+
 veci PosInTree(Skill s) {
 	for (int y = 0; y < tree.size(); y++) {
 		for (int x = 0; x < tree[y].size(); x++) {
@@ -59,8 +62,7 @@ veci PosInTree(Skill s) {
 			}
 		}
 	}
-	Debug::out << "Skill not found";
-	return { 0,0 };
+	return { -1,-1 };
 
 }
 
@@ -76,9 +78,27 @@ SkillTree::SkillTree()
 	, textDescription(Assets::font_30)
 	, current(PosInTree(Skill::BREAK))
 {
+	for (Skill s : magic_enum::enum_values<Skill>()) {
+		vec pos = PosInTreeToPosInScreen(PosInTree(s));
+		skillBounds.push_back(Bounds(pos-vec(8,8), vec(16,16)));
+	}
+
 	enabled.resize(description.size(), false);
 	textPressStart.setString("Press Start to assign points");
 };
+
+Skill MouseSelectedSkill() {
+	vec pos = Mouse::GetPositionInWindow();
+	Skill skill = Skill::NO;
+	int i = 0;
+	for (const Bounds& b : skillBounds) {
+		if (b.Contains(pos)) {
+			return Skill(i);
+		}
+		i++;
+	}
+	return Skill::NO;
+}
 
 void SkillTree::Update(float dt) {
 	if (Input::IsJustPressed(0,GameKeys::START)) {
@@ -86,6 +106,21 @@ void SkillTree::Update(float dt) {
 	}
 	if (!open) {
 		return;
+	}
+
+	bool clickedOnSkill = false;
+	vec delta = Mouse::GetDeltaMovement();
+	if (Mouse::IsJustPressed() || fabs(delta.x) > 0.f || fabs(delta.y) > 0.f) {
+		Skill skill = MouseSelectedSkill();
+		if (skill != Skill::NO) {
+			veci posi = PosInTree(skill);
+			prev_left = -1;
+			prev_right = -1;
+			current = posi;
+			if (Mouse::IsJustPressed()) {
+				clickedOnSkill = true;
+			}
+		}
 	}
 
 	if (Input::IsJustPressed(0,GameKeys::LEFT)) {
@@ -162,7 +197,7 @@ found:
 
 	int skill = int(tree[current.y][current.x]);
 
-	if (Input::IsJustPressed(0,GameKeys::ACTION) && !enabled[skill]) {
+	if ((Input::IsJustPressed(0,GameKeys::ACTION) || clickedOnSkill) && !enabled[skill]) {
 		if (gunpoints > 0) {
 			bool requirementsMet = true;
 			for (Skill n : needs[skill]) {
