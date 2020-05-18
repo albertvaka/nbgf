@@ -55,8 +55,8 @@ std::vector<bool> unlocked;
  std::vector<Bounds> skillBounds; // bounds in screen of each skill icon
 
 veci PosInTree(Skill s) {
-	for (int y = 0; y < tree.size(); y++) {
-		for (int x = 0; x < tree[y].size(); x++) {
+	for (int y = 0; y < int(tree.size()); y++) {
+		for (int x = 0; x < int(tree[y].size()); x++) {
 			if (tree[y][x] == s) {
 				return { x,y };
 			}
@@ -89,7 +89,6 @@ SkillTree::SkillTree()
 
 Skill MouseSelectedSkill() {
 	vec pos = Mouse::GetPositionInWindow();
-	Skill skill = Skill::NO;
 	int i = 0;
 	for (const Bounds& b : skillBounds) {
 		if (b.Contains(pos)) {
@@ -141,7 +140,7 @@ void SkillTree::Update(float dt) {
 		}
 	}
 	if (Input::IsJustPressed(0,GameKeys::RIGHT)) {
-		if (current.x < tree[current.y].size()) {
+		if (current.x < int(tree[current.y].size())) {
 			if (prev_right != -1) {
 				prev_left = current.y;
 				current.y = prev_right;
@@ -150,8 +149,8 @@ void SkillTree::Update(float dt) {
 				goto found;
 			}
 			Skill current_Skill = tree[current.y][current.x];
-			for (int s = 0; s < needs.size(); s++) {
-				for (int n = 0; n < needs[s].size(); n++) {
+			for (size_t s = 0; s < needs.size(); s++) {
+				for (size_t n = 0; n < needs[s].size(); n++) {
 					if (needs[s][n] == current_Skill) { //Skill s needs current_Skill
 						prev_left = current.y;
 						current = PosInTree(Skill(s));
@@ -169,7 +168,7 @@ found:
 			do {
 				current.y--;
 				if (current.y == 0) {
-					if (current.x < tree[current.y].size() - 1) current.x++;
+					if (current.x < int(tree[current.y].size()) - 1) current.x++;
 					while (tree[current.y][current.x] == Skill::NO) {
 						current.y++;
 					} 
@@ -179,13 +178,13 @@ found:
 		}
 	}
 	if (Input::IsJustPressed(0,GameKeys::DOWN)) {
-		if (current.y < tree.size() - 1) {
+		if (current.y < int(tree.size()) - 1) {
 			prev_left = -1;
 			prev_right = -1;
 			do {
 				current.y++;
-				if (current.y == tree.size() - 1) {
-					if (current.x < tree[current.y].size()-1) current.x++;
+				if (current.y == int(tree.size()) - 1) {
+					if (current.x < int(tree[current.y].size()) - 1) current.x++;
 					while (tree[current.y][current.x] == Skill::NO) {
 						current.y--;
 					}
@@ -242,18 +241,18 @@ void SkillTree::DrawMenu() {
 	Window::Draw(Assets::menuBgTexture, vec(0,0))
 		.withScale(float(Window::GAME_WIDTH)/Assets::menuBgTexture->w, float(Window::GAME_HEIGHT)/Assets::menuBgTexture->h);
 
-	for (int s = 0; s < needs.size(); s++) {
+	for (size_t s = 0; s < needs.size(); s++) {
 		if (!needs[s].empty()) {
 			vec from = PosInTreeToPosInScreen(PosInTree(Skill(s)));
-			for (int n = 0; n < needs[s].size(); n++) {
+			for (size_t n = 0; n < needs[s].size(); n++) {
 				vec to = PosInTreeToPosInScreen(PosInTree(Skill(needs[s][n])));
 				Window::DrawPrimitive::Line(from, to, 1, 255, 255, 255);
 			}
 		}
 	}
 
-	for (int y = 0; y < tree.size(); y++) {
-		for (int x = 0; x < tree[y].size(); x++) {
+	for (int y = 0; y < int(tree.size()); y++) {
+		for (int x = 0; x < int(tree[y].size()); x++) {
 			int skill = int(tree[y][x]);
 			if (skill != int(Skill::NO)) {
 				vec pos = PosInTreeToPosInScreen({ x,y });

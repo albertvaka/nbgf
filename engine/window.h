@@ -265,7 +265,7 @@ namespace Window
 
 	namespace DrawRaw {
 
-		const unsigned int MAX_VERTICES = 60000; //From SDL_GPU's GPU_BLIT_BUFFER_ABSOLUTE_MAX_VERTICES
+		const unsigned short MAX_VERTICES = 60000; //From SDL_GPU's GPU_BLIT_BUFFER_ABSOLUTE_MAX_VERTICES
 		const unsigned int MAX_INDICES = (MAX_VERTICES / 4) * 6; //6 indices for each 4 vertices (quads drawn as 2 triangles)
 		const unsigned int MAX_COMPONENTS_PER_VERTEX = 8; // Max of GPU_BATCH_XY_ST (4), GPU_BATCH_XY_RGB (5) and GPU_BATCH_XY_ST_RGBA (8) 
 

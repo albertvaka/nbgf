@@ -70,6 +70,8 @@ void BigItem::Draw()
 			.withOrigin(16, 8)
 			.withRect(4 * 16, 8 * 16, 2 * 16, 16);
 		break;
+	default:
+		break;
 	}
 
 	auto tilePos = TileMap::alignToTiles(pos);

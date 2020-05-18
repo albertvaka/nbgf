@@ -21,8 +21,8 @@ WEBGL_VER = 2
 SHELL = bash
 
 #NOTE: Dynamic casts are disabled by fno-rtti
-CFLAGS = -pipe $(shell sdl2-config --cflags) -I./engine $(DEP_INCLUDE) -Wall -Wno-unused-parameter -Wno-reorder $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
-CXXFLAGS = $(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions
+CFLAGS = -pipe $(shell sdl2-config --cflags) -I./engine $(DEP_INCLUDE) -Wall -Wno-unused-parameter $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
+CXXFLAGS = $(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions -Wno-reorder
 LDFLAGS	 = $(CXXFLAGS) $(shell sdl2-config --libs) -lSDL2_ttf -lSDL2_mixer $(PLATFORM_LDFLAGS)
 
 ifdef EMSCRIPTEN

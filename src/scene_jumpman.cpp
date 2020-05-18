@@ -365,6 +365,8 @@ void JumpScene::Update(float dt)
 			case Skill::GUN:
 				rotoText.ShowMessage("Big F. Gun");
 				break;
+			default:
+				break;
 			}
 		}
 	}

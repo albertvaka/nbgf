@@ -52,7 +52,7 @@ struct Shader {
 
 	int GetUniformLocation(const char* name);
 
-    int program;
+    unsigned int program;
 	GPU_ShaderBlock block;
 
 private:
