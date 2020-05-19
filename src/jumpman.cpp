@@ -470,10 +470,11 @@ vert_exit:
 		else if (Mouse::IsPressed() && !Debug::Draw) {
 			float angleInRads = Mates::DegsToRads(bfgAngle);
 			bfgCooldownTimer = bfgCooldown;
-			vec tipOfTheGun = bfgPos + vec(17, 0).RotatedAroundOrigin(angleInRads);
-			new Bullet(tipOfTheGun, vec(bulletVel, 0).RotatedAroundOrigin(angleInRads), 1.5f);
-			vel -= vec(bfgPushBack, 0).RotatedAroundOrigin(angleInRads);
-			jumpTimeLeft = 0; // Overrides jump impulse 
+			vec gunDirection = vec::FromAngle(angleInRads);
+			vec tipOfTheGun = bfgPos + gunDirection*17.f;
+			new Bullet(tipOfTheGun, gunDirection*bulletVel, 1.5f);
+			vel -= gunDirection*bfgPushBack;
+			jumpTimeLeft = 0; // Overrides jump impulse
 			if (onWall) {
 				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
 			}

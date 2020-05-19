@@ -35,6 +35,10 @@ struct vec
       return vec(Random::rollf(min.x, max.x), Random::rollf(min.y, max.y));
   }
 
+  [[nodiscard]] static vec FromAngle(float rads, float len=1.0f) {
+      return vec(cos(rads)*len,sin(rads)*len);
+  }
+
   [[nodiscard]] bool isNearlyEqual(const vec& p)
   {
       return (Mates::isNearlyEqual(x, p.x) && Mates::isNearlyEqual(y, p.y));
