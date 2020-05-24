@@ -423,11 +423,11 @@ void JumpScene::Draw()
 		return;
 	}
 
-	if (Debug::Draw) {
-		Simplex::DebugDraw(Tile::size, [this](int x, int y) {
-			return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
-		});
-	}
+    if (Debug::Draw) {
+        //Simplex::DebugDraw(Tile::size, [this](int x, int y) {
+        //  return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
+        //});
+    }
 
 	for (const Parallax* p : Parallax::getAll()) {
 		p->Draw();
