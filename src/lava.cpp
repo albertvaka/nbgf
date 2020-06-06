@@ -89,6 +89,7 @@ void Lava::Draw() const {
 	//lavaPartSys.DrawImGUI("LavaPartSys");
 
 	if (Debug::Draw) {
+		bounds.Draw();
 		return;
 	}
 
@@ -121,8 +122,8 @@ void Lava::Draw() const {
 
 	float left = Mates::MaxOf(screen.Left(), bounds.Left());
 	float right = Mates::MinOf(screen.Right(), bounds.Right());
-	float chunkLeft = (Mates::fastfloor(left / chunkSize)) * chunkSize;
-	float chunkRight = (Mates::fastfloor(right / chunkSize)) * chunkSize;
+	float chunkLeft = (floor(left / chunkSize)) * chunkSize;
+	float chunkRight = (floor(right / chunkSize)) * chunkSize;
 	for (float x = chunkLeft; x < chunkRight; x += chunkSize)
 	{
 		float y = bounds.top - waveHeight * sin(x * waveAmplitude + time);

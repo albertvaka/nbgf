@@ -11,7 +11,7 @@ struct Lava : EntS<Lava>
 	Bounds bounds;
 	float targetY;
 
-	Lava(const Bounds& bounds);
+	explicit Lava(const Bounds& bounds);
 	void Update(float dt);
 	void Draw() const;
 
