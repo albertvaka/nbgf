@@ -553,7 +553,7 @@ void DebugDraw(float tileSize, std::function<float(int x, int y)> noisefunc)
         for (int y = top; y < bottom; y++)
         {
             float noise = noisefunc(x, y);
-            Window::DrawPrimitive::Rectangle(x * tileSize, y * tileSize, 16,16, -1,  0,128 + 128 * noise, 0);
+            Window::DrawPrimitive::Rectangle(x * tileSize, y * tileSize, x * tileSize + 16, y * tileSize + 16, -1,  0,128 + 128 * noise, 0);
         }
     }
 
