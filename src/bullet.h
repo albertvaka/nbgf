@@ -7,8 +7,6 @@
 #include "input.h"
 #include "assets.h"
 
-extern std::vector<std::vector<bool>> passableCleaner;
-
 struct Bullet : CircleEntity, EntS<Bullet>
 {
 	bool explode = false;
