@@ -5,7 +5,7 @@
 
 #include "debug.h"
 
-void Sound::load(const char* path) {
+void Sound::Load(const char* path) {
 	if (sound) Mix_FreeChunk(sound);
 	sound = Mix_LoadWAV(path);
 	if (!sound) {
@@ -17,13 +17,17 @@ Sound::~Sound() {
 	if (sound) Mix_FreeChunk(sound);
 }
 
-void Sound::setVolume(float v) { //from 0 to 100
+void Sound::SetVolume(float v) { //from 0 to 100
 	Mix_VolumeChunk(sound, v * (128 / 100.f));
 }
 
-void Sound::play() {
-	if (Mix_VolumeChunk(sound, -1) == 0) return;
-	Mix_PlayChannel(-1, sound, 0);
+int Sound::Play() {
+	if (Mix_VolumeChunk(sound, -1) == 0) return -1;
+	return Mix_PlayChannel(-1, sound, 0);
+}
+
+void Sound::Stop(int channel) {
+	Mix_HaltChannel(channel);
 }
 
 namespace MusicPlayer

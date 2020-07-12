@@ -5,11 +5,13 @@ typedef struct _Mix_Music Mix_Music;
 
 struct Sound
 {
-	void load(const char* path);
+	void Load(const char* path);
 	~Sound();
 
-	void setVolume(float v); //from 0 to 100
-	void play();
+	void SetVolume(float v); //from 0 to 100
+	int Play(); //returns a channel id
+
+	static void Stop(int channel);
 
 private:
 	Mix_Chunk* sound = nullptr;

@@ -1,6 +1,6 @@
 #include "screen.h"
 
-#include "input.h"
+#include "camera.h"
 #include "mates.h"
 #include "tiledexport.h"
 

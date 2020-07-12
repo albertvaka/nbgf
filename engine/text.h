@@ -16,7 +16,7 @@ class Text
 	SDL_Color outline_color = { 0,0,0,255 };
 	int spacing = 0;
 	int empty_line_spacing = 12;
-	GPU_Image* cached = nullptr;
+	mutable GPU_Image* cached = nullptr;
 
 public:
 	Text(TTF_Font* font = nullptr, TTF_Font* font_outline = nullptr) : font(font), font_outline(font_outline) {}
@@ -26,15 +26,16 @@ public:
 		}
 	}
 
-	operator GPU_Image* () {
-		return getImage();
+	operator GPU_Image*() const {
+		return GetImage();
 	}
 
-	GPU_Image* getImage() {
+	GPU_Image* GetImage() const {
 		if (cached == nullptr) {
-			SDL_Surface* surface = MultiLineRender();
+			SDL_Surface* surface = const_cast<Text*>(this)->MultiLineRender();
 			cached = GPU_CopyImageFromSurface(surface);
 			GPU_SetImageFilter(cached, GPU_FILTER_NEAREST);
+			GPU_SetSnapMode(cached, GPU_SNAP_NONE);
 			SDL_FreeSurface(surface);
 			if (!cached) {
 				printf("Unable to create text texture. SDL Error: %s\n", SDL_GetError());
@@ -43,7 +44,7 @@ public:
 		return cached;
 	};
 
-	Text& setFont(TTF_Font* newfont, TTF_Font* newfont_outline = nullptr) {
+	Text& SetFont(TTF_Font* newfont, TTF_Font* newfont_outline = nullptr) {
 		if (newfont != font || font_outline != newfont_outline) {
 			font_outline = newfont_outline;
 			font = newfont;
@@ -52,7 +53,7 @@ public:
 		return *this;
 	}
 
-	Text& setSpacing(int pixels) {
+	Text& SetSpacing(int pixels) {
 		if (pixels != spacing) {
 			spacing = pixels;
 			Invalidate();
@@ -60,7 +61,7 @@ public:
 		return *this;
 	}
 
-	Text& setEmptyLineSpacing(int pixels) {
+	Text& SetEmptyLineSpacing(int pixels) {
 		if (pixels != empty_line_spacing) {
 			empty_line_spacing = pixels;
 			Invalidate();
@@ -68,7 +69,7 @@ public:
 		return *this;
 	}
 
-	Text& setString(const std::string& newstr) {
+	Text& SetString(const std::string& newstr) {
 		if (newstr != str) {
 			str = newstr;
 			Invalidate();
@@ -76,7 +77,7 @@ public:
 		return *this;
 	}
 
-	Text& setFillColor(uint8_t r, uint8_t g, uint8_t b) {
+	Text& SetFillColor(uint8_t r, uint8_t g, uint8_t b) {
 		if (r != color.r || g != color.g || b != color.b) {
 			color.r = r;
 			color.g = g;
@@ -86,7 +87,7 @@ public:
 		return *this;
 	}
 
-	Text& setOutlineColor(uint8_t r, uint8_t g, uint8_t b) {
+	Text& SetOutlineColor(uint8_t r, uint8_t g, uint8_t b) {
 		if (r != outline_color.r || g != outline_color.g || b != outline_color.b) {
 			outline_color.r = r;
 			outline_color.g = g;
@@ -96,8 +97,8 @@ public:
 		return *this;
 	}
 
-	vec getSize() {
-		GPU_Image* image = getImage();
+	vec GetSize() const {
+		GPU_Image* image = GetImage();
 		return vec(image->texture_w, image->texture_h);
 	}
 private:
@@ -148,7 +149,9 @@ private:
 			}
 			SDL_Surface* s = Render();
 			totalHeight += s->h + spacing;
-			maxWidth = std::max(maxWidth, s->w);
+			if (s->w > maxWidth) {
+				maxWidth = s->w;
+			}
 			surfaces.push_back(s);
 		}
 

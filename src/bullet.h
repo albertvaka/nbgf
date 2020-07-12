@@ -4,10 +4,10 @@
 #include "animation.h"
 #include "rand.h"
 #include "collider.h"
-#include "input.h"
+#include "camera.h"
 #include "assets.h"
 
-struct Bullet : CircleEntity, EntS<Bullet>
+struct Bullet : CircleEntity, SelfRegister<Bullet>
 {
 	bool explode = false;
 	float timer_explosion = 0;
@@ -46,7 +46,7 @@ struct Bullet : CircleEntity, EntS<Bullet>
 		if (!explode) {
 			rect = { 8 * 16, 10 * 16, 16, 16 };
 			rotation = Random::roll(0, 360);
-			drawPos += vec::Rand(-1, -1, 1, 1);
+			drawPos += Random::vecInRange(-1, -1, 1, 1);
 		}
 		else {
 			int frame = (timer_explosion * 7);

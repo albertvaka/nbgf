@@ -1,7 +1,8 @@
 #include "raw_input.h"
+
 #include <SDL.h>
 
-//const int GamePad::max_gamepads = 4;
+#include "camera.h"
 
 const GamePad::AnalogStick GamePad::AnalogStick::Left(SDL_CONTROLLER_AXIS_LEFTX, SDL_CONTROLLER_AXIS_LEFTY);
 const GamePad::AnalogStick GamePad::AnalogStick::Right(SDL_CONTROLLER_AXIS_RIGHTX, SDL_CONTROLLER_AXIS_RIGHTY);
@@ -65,7 +66,7 @@ void GamePad::_UpdateInputState__XboxNormal(SDL_GameController* joystick, int pl
 
 
 void GamePad::_Added(SDL_GameController* joystick) {
-    Debug::out << "Added " << joystick;
+    Debug::out << "Added joystick " << joystick;
     for (int player = 0; player < max_gamepads; player++) {
         if (!joysticks[player]) {
             joysticks[player] = joystick;
@@ -75,7 +76,7 @@ void GamePad::_Added(SDL_GameController* joystick) {
 }
 
 void GamePad::_Removed(SDL_GameController* joystick) {
-    Debug::out << "Removed " << joystick;
+    Debug::out << "Removed joystick " << joystick;
     for (int player = 0; player < max_gamepads; player++) {
         if (joystick == joysticks[player]) {
             joysticks[player] = nullptr;

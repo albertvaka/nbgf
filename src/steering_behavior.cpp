@@ -2,6 +2,7 @@
 
 #include "steering_behavior.h"
 
+#include "rand.h"
 #include "steering_entity.h"
 #include "tilemap.h"
 

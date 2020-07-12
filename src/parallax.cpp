@@ -1,6 +1,6 @@
 #include "parallax.h"
 
-#include "input.h"
+#include "camera.h"
 #include "assets.h"
 
 #include "debug.h"
@@ -12,7 +12,7 @@ const float base_offset = 183;
 
 void Parallax::Draw() const
 {
-	auto camera = Camera::GetBounds();
+	Bounds camera = Camera::GetBounds();
 	if (!Collide(bounds, camera)) {
 		return;
 	}

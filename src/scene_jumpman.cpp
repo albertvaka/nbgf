@@ -120,7 +120,7 @@ void JumpScene::EnterScene()
 		if (door_screen < 0) {
 			Debug::out << "Warning: Enemy door outside a screen";
 		}
-		for (const Bat* b : Bat::getAll()) {
+		for (const Bat* b : Bat::GetAll()) {
 			if (b->screen == door_screen) {
 				d->AddEnemy(b);
 			}
@@ -146,20 +146,20 @@ void JumpScene::EnterScene()
 void JumpScene::ExitScene()
 {
 	bulletPartSys.Clear();
-	Bullet::deleteAll();
-	Bat::deleteAll();
-	Lava::deleteAll();
+	Bullet::DeleteAll();
+	Bat::DeleteAll();
+	Lava::DeleteAll();
 	destroyedTiles.Clear();
-	EnemyDoor::deleteAll();
-	BigItem::deleteAll();
-	HealthUp::deleteAll();
-	GunUp::deleteAll();
+	EnemyDoor::DeleteAll();
+	BigItem::DeleteAll();
+	HealthUp::DeleteAll();
+	GunUp::DeleteAll();
 }
 
 void JumpScene::Update(float dt)
 {
 
-	for (const Lava* l : Lava::getAll()) {
+	for (const Lava* l : Lava::GetAll()) {
 		if (l->IsInside(player.pos - vec(0,7.f))) {
 			player.dead = true;
 			player.invencibleTimer = 1;
@@ -194,11 +194,11 @@ void JumpScene::Update(float dt)
 	Camera::SetCenter(oldPos + displacement);
 
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
-	for (Bullet* e  : Bullet::getAll()) {
+	for (Bullet* e  : Bullet::GetAll()) {
 		e->Update(dt);
 		if (e->explode) continue;
 
-		for (Lava* l : Lava::getAll()) {
+		for (Lava* l : Lava::GetAll()) {
 			if (l->IsInside(e->pos)) {
 				AwakeNearbyBats(e->pos);
 				l->Plof(e->pos.x);
@@ -231,14 +231,14 @@ void JumpScene::Update(float dt)
 			continue;
 		}
 
-		bulletPartSys.pos = e->pos + vec::Rand(-4, -4, 4, 4);
+		bulletPartSys.pos = e->pos + Random::vecInRange(-4, -4, 4, 4);
 		bulletPartSys.Spawn(dt);
 	}
-	Bullet::deleteNotAlive();
+	Bullet::DeleteNotAlive();
 
-	for (Bat* e : Bat::getAll()) {
+	for (Bat* e : Bat::GetAll()) {
 		e->Update(dt);
-		for (Bullet* b : Bullet::getAll()) {
+		for (Bullet* b : Bullet::GetAll()) {
 			if (b->explode) continue;
 			if (Collide(e, b)) {
 				b->pos = e->pos;
@@ -279,7 +279,7 @@ void JumpScene::Update(float dt)
 		player.pos.x += Window::GAME_WIDTH;
 	}
 	if (Keyboard::IsKeyJustPressed(killall)) {
-		for (Bat* e : Bat::getAll()) {
+		for (Bat* e : Bat::GetAll()) {
 			if (e->screen == screenManager.currentScreen) {
 				(new Bullet(e->pos, vec(), 1.5f))->explode = true;
 				e->alive = false;
@@ -314,13 +314,13 @@ void JumpScene::Update(float dt)
 	}
 #endif
 
-	for (EnemyDoor* ed : EnemyDoor::getAll()) {
+	for (EnemyDoor* ed : EnemyDoor::GetAll()) {
 		ed->Update(dt); // Checks for enemies with alive = false, crashes if they have been deleted already
 	}
 
-	Bat::deleteNotAlive(); //Must happen after enemydoor update
+	Bat::DeleteNotAlive(); //Must happen after enemydoor update
 
-	for (GunUp* g : GunUp::getAll()) {
+	for (GunUp* g : GunUp::GetAll()) {
 		if (Collide(g->bounds(), player.bounds())) {
 
 			//TODO: PICK UP ANIMATION
@@ -334,9 +334,9 @@ void JumpScene::Update(float dt)
 		}
 	}
 
-	GunUp::deleteNotAlive();
+	GunUp::DeleteNotAlive();
 
-	for (HealthUp* g : HealthUp::getAll()) {
+	for (HealthUp* g : HealthUp::GetAll()) {
 		if (Collide(g->bounds(), player.bounds())) {
 
 			//TODO: PICK UP ANIMATION
@@ -347,9 +347,9 @@ void JumpScene::Update(float dt)
 		}
 	}
 
-	HealthUp::deleteNotAlive();
+	HealthUp::DeleteNotAlive();
 
-	for (BigItem* g : BigItem::getAll()) {
+	for (BigItem* g : BigItem::GetAll()) {
 		if (Collide(g->bounds(), player.bounds())) {
 
 			//TODO: PICK UP ANIMATION
@@ -371,7 +371,7 @@ void JumpScene::Update(float dt)
 		}
 	}
 
-	BigItem::deleteNotAlive();
+	BigItem::DeleteNotAlive();
 
 	bulletPartSys.UpdateParticles(dt);
 
@@ -381,12 +381,12 @@ void JumpScene::Update(float dt)
 		raising_lava->SetLevel(TiledEntities::lava_initial_height.y);
 	}
 
-	for (Lava* l : Lava::getAll()) {
+	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);
 	}
 
 	contextActionButton = GameKeys::NONE;
-	for (SaveStation* ss : SaveStation::getAll()) {
+	for (SaveStation* ss : SaveStation::GetAll()) {
 		ss->Update(dt);
 		if (ss->enabled && Collide(ss->bounds(), player.bounds())) {
 			contextActionButton = GameKeys::ACTION;
@@ -429,25 +429,25 @@ void JumpScene::Draw()
         //});
     }
 
-	for (const Parallax* p : Parallax::getAll()) {
+	for (const Parallax* p : Parallax::GetAll()) {
 		p->Draw();
 	}
 
 	map.Draw();
 	destroyedTiles.Draw();
 
-	for (const SaveStation* ss : SaveStation::getAll()) {
+	for (const SaveStation* ss : SaveStation::GetAll()) {
 		ss->Draw();
 	}
 
-	for (const EnemyDoor* ed : EnemyDoor::getAll()) {
+	for (const EnemyDoor* ed : EnemyDoor::GetAll()) {
 		ed->Draw();
 	}
 
-	for (const Bat* e : Bat::getAll()) {
+	for (const Bat* e : Bat::GetAll()) {
 		e->Draw();
 		if (Debug::Draw && Camera::GetBounds().Contains(e->pos)) {
-			e->drawBounds();
+			e->DrawBounds();
 			e->DrawSenseArea();
 		}
 	}
@@ -455,26 +455,26 @@ void JumpScene::Draw()
 	bulletPartSys.Draw();
 	//bulletPartSys.DrawImGUI("BulletTrail");
 
-	for (const Bullet* e : Bullet::getAll()) {
+	for (const Bullet* e : Bullet::GetAll()) {
 		e->Draw();
 		if (Debug::Draw) {
-			e->drawBounds();
+			e->DrawBounds();
 		}
 	}
 
-	for (const GunUp* g : GunUp::getAll()) {
+	for (const GunUp* g : GunUp::GetAll()) {
 		g->Draw();
 		if (Debug::Draw) {
 			g->bounds().Draw();
 		}
 	}
-	for (const HealthUp* g : HealthUp::getAll()) {
+	for (const HealthUp* g : HealthUp::GetAll()) {
 		g->Draw();
 		if (Debug::Draw) {
 			g->bounds().Draw();
 		}
 	}
-	for (BigItem* g : BigItem::getAll()) {
+	for (BigItem* g : BigItem::GetAll()) {
 		g->Draw();
 		if (Debug::Draw) {
 			g->bounds().Draw();
@@ -489,11 +489,11 @@ void JumpScene::Draw()
 			.withRect(Animation::AnimFrame(anim, mainClock * 1000));
 	}
 
-	for (const Lava* l : Lava::getAll()) {
+	for (const Lava* l : Lava::GetAll()) {
 		l->Draw();
 	}
 	
-	rotoText.Draw();
+	rotoText.Draw(vec(0,-30));
 
 	if (Debug::Draw) {
 		player.bounds().Draw();
@@ -512,7 +512,7 @@ void JumpScene::Draw()
 			skillTree.gunpoints += 1;
 		};
 		ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
-		ImGui::SliderFloat("lava", &(Lava::getAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
+		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 		ImGui::End();
 	}
 #endif
@@ -541,7 +541,7 @@ void JumpScene::RandomMap() {
 	randomSeed = Random::roll(0, 10000);
 	map.Randomize(randomSeed);
 
-	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::getAll().size();
+	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
 	for (int y = -1; y < map.sizes.y - 5; y++) { //don't spawn at the bottom rows
 		for (int x = 20; x < map.sizes.x; x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together

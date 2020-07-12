@@ -10,6 +10,7 @@ struct PartSys {
 	GPU_Image* texture;
 
 	struct Particle {
+		Particle() {}
 		int sprite;
 		vec pos;
 		vec vel;

@@ -3,7 +3,7 @@
 #include "selfregister.h"
 #include "bounds.h"
 
-struct Parallax : EntS<Parallax>
+struct Parallax : SelfRegister<Parallax>
 {
 	Parallax(const Bounds& bounds) : bounds(bounds) { }
 

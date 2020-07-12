@@ -3,7 +3,7 @@
 #include "tilemap.h"
 #include "mates.h"
 #include "assets.h"
-#include "input.h"
+#include "camera.h"
 #include "collider.h"
 
 extern float mainClock;

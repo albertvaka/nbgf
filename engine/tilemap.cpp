@@ -1,8 +1,8 @@
 #include "tilemap.h"
 
 #include <cstdlib>
-#include "input.h"
 #include "SDL_gpu.h"
+#include "camera.h"
 #include "../src/assets.h"
 
 const vec Tile::sizevec = vec(size, size);

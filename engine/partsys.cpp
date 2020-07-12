@@ -23,7 +23,7 @@ void PartSys::UpdateParticles(float dt) {
 }
 
 
-//Disabled since rotation is not implemented yet
+//Rotation is not supported when USE_VAO is set
 //#define USE_VAO
 
 void PartSys::Draw() const {
@@ -37,6 +37,7 @@ void PartSys::Draw() const {
 		GPU_Rect rect = sprites[p.sprite];
 		float w = rect.w * p.scale;
 		float h = rect.h * p.scale;
+		//vec pos = p.pos - (vec(w, h) * 0.5f);
 		RectToTextureCoordinates(texture, rect);
 		Window::DrawRaw::BatchColoredTexturedQuad(texture, p.pos.x, p.pos.y, w, h, rect, 1.f,1.f,1.f,p.alpha);
 #else
@@ -58,7 +59,7 @@ PartSys::Particle& PartSys::AddParticle() {
 	Particle& p = particles.back();
 	p.ttl = Random::rollf(min_ttl, max_ttl);
 	p.pos = pos;
-	p.vel = vec::Rand(min_vel, max_vel);
+	p.vel = Random::vecInRange(min_vel, max_vel);
 	p.sprite = Random::roll(sprites.size());
 	p.rotation = Random::rollf(min_rotation, max_rotation);
 	p.scale = Random::rollf(min_scale, max_scale);
@@ -121,6 +122,16 @@ void PartSys::DrawImGUI(const char* title) {
 	ImGui::SliderFloat("alpha_vel", &alpha_vel, -4.f, 4.f);
 	ImGui::SliderFloat("bounce_alpha", &bounce_alpha, -0.1f, 1.f);
 	ImGui::SliderFloat("rotation_vel", &rotation_vel, -360.f, 360.f);
+		if (ImGui::SliderFloat("min_rotation", &min_rotation, 0.f, 360.f)) {
+		if (min_rotation > max_rotation) {
+			max_rotation = min_rotation;
+		}
+	}
+	if (ImGui::SliderFloat("max_rotation", &max_rotation, 0.f, 360.f)) {
+		if (min_rotation > max_rotation) {
+			min_rotation = max_rotation;
+		}
+	}
 	ImGui::SliderFloat2("accel", &acc.x, -50.f, 50.f);
 	ImGui::Text("Count: %lu", particles.size());
 	ImGui::End();

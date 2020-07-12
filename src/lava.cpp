@@ -1,9 +1,9 @@
 #include "lava.h"
 
 #include "assets.h"
-#include "input.h"
 #include "debug.h"
 #include "collider.h"
+#include "camera.h"
 
 const float waveAmplitude = 1.f;
 const float chunkSize = 5.4f;

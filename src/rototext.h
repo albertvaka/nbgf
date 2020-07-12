@@ -2,6 +2,7 @@
 
 #include "assets.h"
 #include "window.h"
+#include "camera.h"
 #include "singleinstance.h"
 #include "text.h"
 
@@ -15,13 +16,13 @@ struct RotoText : Text, SingleInstance<RotoText>
 
 	RotoText() : Text(Assets::font_30, Assets::font_30_outline)
 	{
-		setFillColor(255,255,255);
-		setOutlineColor(0,0,0);
+		SetFillColor(255,255,255);
+		SetOutlineColor(0,0,0);
 	}
 
 	void ShowMessage(const std::string& msg)
 	{
-		setString(msg);
+		SetString(msg);
 		timer = 0.01f;
 	}
 
@@ -31,7 +32,7 @@ struct RotoText : Text, SingleInstance<RotoText>
 		}
 	}
 
-	void Draw() {
+	void Draw(vec pos, float scale = 1.f) {
 		if (timer < 0) {
 			return;
 		}
@@ -57,8 +58,8 @@ struct RotoText : Text, SingleInstance<RotoText>
 			sc = messageTime / INTRO_DURATION;
 		}
 
-		Window::Draw(*this, Camera::GetCenter() - vec(0,30))
-			.withOrigin(getSize() / 2.f)
+		Window::Draw(*this, Camera::GetCenter() + pos)
+			.withOrigin(GetSize() / 2.f)
 			.withScale(sc)
 			.withRotation(ang);
 	}

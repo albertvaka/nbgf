@@ -6,7 +6,7 @@
 #include "entity.h"
 #include "tilemap.h"
 
-struct EnemyDoor : Entity, EntS<EnemyDoor>
+struct EnemyDoor : Entity, SelfRegister<EnemyDoor>
 {
 	enum class State {
 		LOCKED,

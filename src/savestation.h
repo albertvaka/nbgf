@@ -4,7 +4,7 @@
 #include "entity.h"
 #include "selfregister.h"
 
-struct SaveStation : BoxEntity, EntS<SaveStation>
+struct SaveStation : BoxEntity, SelfRegister<SaveStation>
 {
 	bool inScene = true;
 	bool enabled = false;

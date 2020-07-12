@@ -6,12 +6,6 @@
 
 #include "SDL_gpu.h"
 
-namespace Camera
-{
-	extern GPU_Camera camera;
-	extern GPU_Camera gui_camera;
-}
-
 namespace Window
 {
 	extern SDL_Window* window;
@@ -22,120 +16,6 @@ namespace Window
 	constexpr const int GAME_HEIGHT = 21 * 16;
 	constexpr const int GAME_WIDTH = GAME_HEIGHT * 16.f / 9;
 	constexpr const char* WINDOW_TITLE = "Gaem";
-}
-
-namespace Camera
-{
-	inline vec GetSize()
-	{
-		return vec(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
-	}
-
-	inline vec GetTopLeft()
-	{
-		return vec(camera.x/camera.zoom_x, camera.y/camera.zoom_y);
-	}
-
-	inline vec GetCenter()
-	{
-		return GetTopLeft() + GetSize() / 2.f;
-	}
-
-	inline void SetTopLeft(float x, float y)
-	{
-		camera.x = x*camera.zoom_x;
-		camera.y = y*camera.zoom_y;
-		GPU_SetCamera(Window::target, &camera);
-	}
-
-	inline void SetTopLeft(const vec& pos)
-	{
-		SetTopLeft(pos.x, pos.y);
-	}
-
-	inline void SetCenter(const vec& pos)
-	{
-		SetTopLeft(pos - GetSize() / 2.f);
-
-	}
-	inline void SetCenter(float x, float y)
-	{
-		SetCenter(vec(x, y));
-	}
-
-	inline Bounds GetBounds()
-	{
-		//return Bounds::fromCenter(GetCenter(), GetSize());
-		return Bounds(GetTopLeft(), GetSize());
-	}
-
-	inline void ClampCameraTo(const Bounds& limit)
-	{
-		vec c = GetCenter();
-
-		vec screenSize(Window::GAME_HEIGHT/camera.zoom_x, Window::GAME_HEIGHT/camera.zoom_y);
-		float halfScreenWidth = screenSize.x / 2.f;
-		float halfScreenHeight = screenSize.y / 2.f;
-
-		//TODO: Center if viewport is bigger than limits
-		if (c.x + halfScreenWidth > limit.Right()) c.x = limit.Right() - halfScreenWidth;
-		if (c.x - halfScreenWidth < limit.Left()) c.x = limit.Left() + halfScreenWidth;
-		if (c.y + halfScreenHeight > limit.Bottom()) c.y = limit.Bottom() - halfScreenHeight;
-		if (c.y - halfScreenHeight < limit.Top()) c.y = limit.Top() + halfScreenHeight;
-
-		SetCenter(c);
-	}
-	
-	// if preserve_center is false, we will zoom from the top-left corner
-	inline void SetZoom(float z, bool preserve_center = true) 
-	{
-		vec c = GetCenter();
-		camera.zoom_x = z;
-		camera.zoom_y = z;
-		if (preserve_center) {
-			SetCenter(c);
-		}
-		else {
-			GPU_SetCamera(Window::target, &camera);
-		}
-	}
-
-	inline float GetZoom()
-	{
-		return camera.zoom_x;
-	}
-
-	namespace GUI
-	{
-		// GUI Camera is not affected by the current zoom nor camera displacement. Its top-left is always at 0,0
-
-		inline void Begin() {
-			GPU_SetCamera(Window::target, &gui_camera);
-		}
-
-		inline void End() {
-			GPU_SetCamera(Window::target, &camera);
-		}
-
-		inline constexpr vec GetSize()
-		{
-			return vec(Window::GAME_WIDTH, Window::GAME_HEIGHT);
-		}
-
-		inline constexpr Bounds GetBounds()
-		{
-			return Bounds(vec::Zero, GetSize());
-		}
-
-		inline constexpr vec GetCenter()
-		{
-			return GetSize() / 2.f;
-		}
-	}
-
-	//Useful for debug pourposes
-	void MoveCameraWithArrows(float velocity, float dt);
-	void ChangeZoomWithPlusAndMinus(float zoomVel, float dt);
 }
 
 namespace Window
@@ -180,21 +60,32 @@ namespace Window
 			Line(v1.x, v1.y, v2.x, v2.y, thickness, c.r, c.g, c.b, c.a);
 		}
 
-		void Circle(float x, float y, int radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
-		inline void Circle(const vec& v, int radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+		void Circle(float x, float y, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
+		inline void Circle(const vec& v, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Circle(v.x, v.y, radius, thickness, r, g, b, a);
 		}
 		inline void Circle(const CircleBounds& bounds, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Circle(bounds.pos, bounds.radius, thickness, r, g, b, a);
 		}
-		inline void Circle(float x, float y, int radius, float thickness, const SDL_Color& c) {
+		inline void Circle(float x, float y, float radius, float thickness, const SDL_Color& c) {
 			Circle(x, y, radius, thickness, c.r, c.g, c.b, c.a);
 		}
-		inline void Circle(const vec& v, int radius, float thickness, const SDL_Color& c) {
+		inline void Circle(const vec& v, float radius, float thickness, const SDL_Color& c) {
 			Circle(v.x, v.y, radius, thickness, c.r, c.g, c.b, c.a);
 		}
 		inline void Circle(const CircleBounds& bounds, float thickness, const SDL_Color& c) {
 			Circle(bounds.pos, bounds.radius, thickness, c.r, c.g, c.b, c.a);
+		}
+
+		void Arc(float x, float y, float radius, float start_angle, float end_angle, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
+		inline void Arc(const vec& v, float radius, float start_angle, float end_angle, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+			Arc(v.x, v.y, radius, start_angle, end_angle, thickness, r, g, b, a);
+		}
+		inline void Arc(float x, float y, float radius, float start_angle, float end_angle, float thickness, const SDL_Color& c) {
+			Arc(x, y, radius, start_angle, end_angle, thickness, c.r, c.g, c.b, c.a);
+		}
+		inline void Arc(const vec& v, float radius, float start_angle, float end_angle, float thickness, const SDL_Color& c) {
+			Arc(v.x, v.y, radius, start_angle, end_angle, thickness, c.r, c.g, c.b, c.a);
 		}
 	}
 
@@ -223,7 +114,7 @@ namespace Window
 			return withColor(c.r, c.g, c.b, c.a);
 		}
 
-		Draw& withColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+		Draw& withColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			GPU_SetRGBA(t, r, g, b, a);
 			return *this;
 		}
@@ -238,8 +129,8 @@ namespace Window
 			return withOrigin(o.x, o.y);
 		}
 
-		constexpr Draw& withRotation(float r) {
-			rotation = r;
+		constexpr Draw& withRotation(float degrees) {
+			rotation = degrees;
 			return *this;
 		}
 
@@ -256,11 +147,11 @@ namespace Window
 			return withScale(v.x, v.y);
 		}
 
-    	~Draw() {
-            // We pass origin as rotation pivot. We could change that to a different variable.
-            GPU_BlitTransformX(t, srcp, Window::target, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
-            GPU_SetRGBA(t, 255, 255, 255, 255);
-    	}
+		~Draw() {
+			// We pass origin as rotation pivot. We could change that to a different variable.
+			GPU_BlitTransformX(t, srcp, Window::target, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
+			GPU_SetRGBA(t, 255, 255, 255, 255);
+		}
 	};
 
 	namespace DrawRaw {
@@ -288,7 +179,7 @@ namespace Window
 			index_count = 0;
 		}
 
-		inline void FlushColoredTexturedQuad(GPU_Image* t) {
+		inline void FlushColoredTexturedQuads(GPU_Image* t) {
 			//Debug::out << "vertices:" << vertex_count << " indices:" << index_count;
 			GPU_TriangleBatch(t, Window::target, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_ST_RGBA);
 			vertex_count = 0;
@@ -352,7 +243,7 @@ namespace Window
 
 			if (vertex_count + 4 >= MAX_VERTICES) {
 				// Flush what we have so we don't go over MAX_VERTICES
-				FlushColoredTexturedQuad(t);
+				FlushColoredTexturedQuads(t);
 			};
 		}
 		

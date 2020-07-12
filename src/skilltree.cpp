@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "assets.h"
+#include "camera.h"
 #include "input.h"
 #include "magic_enum.h"
 #include "debug.h"
@@ -84,7 +85,7 @@ SkillTree::SkillTree()
 	}
 
 	enabled.resize(description.size(), false);
-	textPressStart.setString("Press Start to assign points");
+	textPressStart.SetString("Press Start to assign points");
 };
 
 Skill MouseSelectedSkill() {
@@ -224,8 +225,8 @@ found:
 		not_enough_points_timer -= dt;
 	}
 
-	textPoints.setString("Points to assign: " + std::to_string(gunpoints));
-	textDescription.setString(description[skill]);
+	textPoints.SetString("Points to assign: " + std::to_string(gunpoints));
+	textDescription.SetString(description[skill]);
 }
 void SkillTree::DrawOverlay() {
 	if (gunpoints > 0) {
@@ -284,9 +285,9 @@ void SkillTree::DrawMenu() {
 	}
 
 	if (not_enough_points_timer > 0.f && int(not_enough_points_timer * 10.f) % 2) {
-		textPoints.setFillColor(255, 0, 0);
+		textPoints.SetFillColor(255, 0, 0);
 	} else {
-		textPoints.setFillColor(255, 255, 255);
+		textPoints.SetFillColor(255, 255, 255);
 	}
 
 	Window::Draw(textPoints, vec(10, 10)).withScale(0.3f);

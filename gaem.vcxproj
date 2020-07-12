@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\animation.h" />
+    <ClInclude Include="engine\asset_load.h" />
     <ClInclude Include="engine\bounds.h" />
+    <ClInclude Include="engine\camera.h" />
     <ClInclude Include="engine\collider.h" />
     <ClInclude Include="engine\debug.h" />
     <ClInclude Include="engine\entity.h" />
@@ -88,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\bounds.cpp" />
+    <ClCompile Include="engine\camera.cpp" />
     <ClCompile Include="engine\debug.cpp" />
     <ClCompile Include="engine\input.cpp" />
     <ClCompile Include="engine\main.cpp" />

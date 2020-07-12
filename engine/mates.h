@@ -36,27 +36,27 @@ namespace Mates
 	//returns true if the parameter is equal to zero
 	inline bool IsZero(float val)
 	{
-	return ((-MinFloat < val) && (val < MinFloat));
+		return ((-MinFloat < val) && (val < MinFloat));
 	}
 
 	//returns true is the third parameter is in the range described by the first two
 	inline bool InRange(float start, float end, float val)
 	{
-	if (start < end)
-	{
-		if ((val > start) && (val < end)) return true;
-		else return false;
-	}
+		if (start < end)
+		{
+			if ((val > start) && (val < end)) return true;
+			else return false;
+		}
 
-	else
-	{
-		if ((val < start) && (val > end)) return true;
-		else return false;
-	}
+		else
+		{
+			if ((val < start) && (val > end)) return true;
+			else return false;
+		}
 	}
 
 	//-----------------------------------------------------------------------
-	//  
+	//
 	//  some handy little functions
 	//-----------------------------------------------------------------------
 
@@ -143,7 +143,7 @@ namespace Mates
 		}
 	}
 
-	//rounds a double up or down depending on whether its 
+	//rounds a double up or down depending on whether its
 	//mantissa is higher or lower than offset
 	inline int RoundUnderOffset(float val, float offset)
 	{
@@ -162,7 +162,7 @@ namespace Mates
 	}
 
 	//compares two real numbers. Returns true if they are equal
-	inline bool isNearlyEqual(float a, float b, float margin = 1E-12)
+	inline bool IsNearlyEqual(float a, float b, float margin = 1E-12)
 	{
 		if (fabs(a - b) < margin)
 		{
@@ -172,7 +172,7 @@ namespace Mates
 		return false;
 	}
 
-	inline bool isNearlyEqual(double a, double b, double margin = 1E-12)
+	inline bool IsNearlyEqual(double a, double b, double margin = 1E-12)
 	{
 		if (fabs(a - b) < margin)
 		{

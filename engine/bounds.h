@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "vector.h"
+#include "SDL_gpu.h"
 
 struct CircleBounds;
 
@@ -22,6 +23,10 @@ struct Bounds
     }
 
     static constexpr Bounds fromCenter(const vec& center, const vec& size) { return Bounds(center - size/2, size); }
+
+    GPU_Rect AsRect() {
+        return GPU_Rect{ left, top, width, height };
+    }
 
     //Expands arround the center by a factor
     Bounds operator*(float f)
@@ -148,7 +153,7 @@ struct CircleBounds
         return a.pos.DistanceSq(this->pos) - (a.radius + this->radius) * (a.radius + this->radius);
     }
     float Distance(const CircleBounds& a) const { 
-        return a.pos.Distance(this->pos) - (a.radius+ this->radius);
+        return a.pos.Distance(this->pos) - (a.radius + this->radius);
     }
 };
 

@@ -4,7 +4,7 @@
 #include "selfregister.h"
 #include "bounds.h"
 
-struct Lava : EntS<Lava>
+struct Lava : SelfRegister<Lava>
 {
 	PartSys lavaPartSys;
 

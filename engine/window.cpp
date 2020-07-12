@@ -1,61 +1,18 @@
 #include "window.h"
-#include "input.h"
-//nclude "imgui_impl_sdl.h"
-#include "debug.h"
 
 #include "SDL_gpu.h"
+//nclude "imgui_impl_sdl.h"
 
-namespace Camera {
-    GPU_Camera camera;
-    GPU_Camera gui_camera;
-}
+#include "debug.h"
+#include "raw_input.h"
+#include "camera.h"
+
 namespace Window
 {
     SDL_Window* window;
     GPU_Target* target;
     bool focus = true;
     SDL_GLContext glcontext;
-}
-
-namespace Camera {
-
-    //Useful for debug pourposes
-    void MoveCameraWithArrows(float velocity, float dt) {
-        vec c = GetTopLeft();
-        float zoom = GetZoom();
-        if (Keyboard::IsKeyPressed(SDL_SCANCODE_RIGHT))
-        {
-            c.x += velocity * dt * 10 / zoom;
-        }
-        if (Keyboard::IsKeyPressed(SDL_SCANCODE_LEFT))
-        {
-            c.x -= velocity * dt * 10 / zoom;
-        }
-        if (Keyboard::IsKeyPressed(SDL_SCANCODE_DOWN))
-        {
-            c.y += velocity * dt * 10 / zoom;
-        }
-        if (Keyboard::IsKeyPressed(SDL_SCANCODE_UP))
-        {
-            c.y -= velocity * dt * 10 / zoom;
-        }
-        SetTopLeft(c);
-    }
-
-    void ChangeZoomWithPlusAndMinus(float zoomVel, float dt)
-    {
-        float zoom = GetZoom();
-        if (Keyboard::IsKeyPressed(SDL_SCANCODE_EQUALS) || Keyboard::IsKeyPressed(SDL_SCANCODE_KP_PLUS))
-        {
-            zoom += zoomVel * dt;
-            SetZoom(zoom);
-        }
-        if (Keyboard::IsKeyPressed(SDL_SCANCODE_MINUS) || Keyboard::IsKeyPressed(SDL_SCANCODE_KP_MINUS)) {
-            zoom -= zoomVel * dt;
-            if (zoom < 0.01f) zoom = 0.01f;
-            SetZoom(zoom);
-        }
-    }
 }
 
 namespace Window
@@ -88,7 +45,7 @@ namespace Window
         //SDL_GL_SetSwapInterval(0);
 
         // SDL-gpu anchors images at the center by default, change it to the top-left corner
-        GPU_SetDefaultAnchor(0, 0);
+        GPU_SetDefaultAnchor(0.f, 0.f);
 
         // FIXME: Too late for this game, but we have the option to set the Y coordinates the right way
         //GPU_SetCoordinateMode(false);
@@ -98,7 +55,7 @@ namespace Window
         Camera::camera.use_centered_origin = false;
         Camera::gui_camera = GPU_GetDefaultCamera();
         Camera::gui_camera.use_centered_origin = false;
-        Camera::SetTopLeft(0, 0);
+        Camera::SetTopLeft(0.f, 0.f);
 
         GPU_SetVirtualResolution(Window::target, Window::GAME_WIDTH, Window::GAME_HEIGHT);
 
@@ -190,7 +147,7 @@ namespace Window
             GPU_Line(Window::target, x1, y1, x2, y2, { r,g,b,a });
         }
 
-        void Circle(float x, float y, int radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+        void Circle(float x, float y, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
             GPU_SetLineThickness(thickness);
             if (thickness < 0) {
                 GPU_SetLineThickness(0);
@@ -199,6 +156,18 @@ namespace Window
             else {
                 GPU_SetLineThickness(thickness);
                 GPU_Circle(Window::target, x, y, radius, {r,g,b,a});
+            }
+        }
+
+        void Arc(float x, float y, float radius, float start_angle, float end_angle, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+            GPU_SetLineThickness(thickness);
+            if (thickness < 0) {
+                GPU_SetLineThickness(0);
+                GPU_ArcFilled(Window::target, x, y, radius, start_angle, end_angle, { r,g,b,a });
+            }
+            else {
+                GPU_SetLineThickness(thickness);
+                GPU_Arc(Window::target, x, y, radius, start_angle, end_angle, { r,g,b,a });
             }
         }
     }

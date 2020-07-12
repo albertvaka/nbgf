@@ -30,6 +30,16 @@ private:
 
 public:
 
+	static inline int ConnectedGamepads() {
+		int a = 0;
+		for (SDL_GameController* c : joysticks) {
+			if (c != nullptr) {
+				a++;
+			}
+		}
+		return a;
+	}
+
 	struct Trigger
 	{
 		struct TriggerBase

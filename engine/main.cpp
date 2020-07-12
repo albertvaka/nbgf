@@ -4,6 +4,7 @@
 #include "input.h"
 #include "mates.h"
 #include "debug.h"
+#include "camera.h"
 
 #include "../src/assets.h"
 #include "../src/scene_jumpman.h"
@@ -98,7 +99,7 @@ void init() {
 
 #ifdef _FPS_COUNTER
 	txt_fps= new Text(Assets::font_30);
-	txt_fps->setString("0");
+	txt_fps->SetString("0");
 #endif
 
 	last_ticks = SDL_GetTicks();
@@ -205,13 +206,13 @@ void main_loop() {
 	fpsClock += dt;
 	if (fpsClock > 0.5f)
 	{
-		txt_fps->setString(std::to_string(int(fps_counter / fpsClock)) + (slowDown ? "!" : ""));
+		txt_fps->SetString(std::to_string(int(fps_counter / fpsClock)) + (slowDown ? "!" : ""));
 		slowDown = false;
 		fps_counter = 0;
 		fpsClock = 0;
 	}
 	Window::Draw(*txt_fps, Camera::GUI::GetBounds().TopRight() + vec(-5, 5))
-		.withOrigin(txt_fps->getSize().x, 0)
+		.withOrigin(txt_fps->GetSize().x, 0)
 		.withScale(0.5f);
 #endif
 

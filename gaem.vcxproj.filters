@@ -229,6 +229,12 @@
     <ClInclude Include="src\rototext.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="engine\asset_load.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\camera.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -377,6 +383,9 @@
     </ClCompile>
     <ClCompile Include="src\bat.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\camera.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,47 +5,77 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-typedef int unsigned uint;
+#include "vector.h"
 
-struct RndEngine
+namespace Random
 {
+	inline float rollf(float min, float max) { return min + (rand() / (float(RAND_MAX) / (max - min))); } // Range [min, max) most of the time (except when rand() == RAND_MAX, then its [min, max])
+	inline float rollf(float max = 1.f) { return rollf(0.f, max); } // Range [0, max)
 
-	std::mt19937 gen;
+	inline int roll(int min, int max) { return min + (rand() % (max - min)); } // Range [min, max)
+	inline int roll(int max) { return roll(0, max); } // Range [0, max)
 
-	// note: uniform_real_distribution interval is [a, b) but uniform_int_distribution is [a, b].
-	std::uniform_real_distribution<float> uniform   = std::uniform_real_distribution<float>(0.f, 1.f);
-	std::uniform_int_distribution<uint> distr_coin  = std::uniform_int_distribution<uint>(0, 1);
-	std::uniform_int_distribution<uint> distr_1d3   = std::uniform_int_distribution<uint>(0, 2);
-	std::uniform_int_distribution<uint> distr_1d4   = std::uniform_int_distribution<uint>(0, 3);
-	std::uniform_int_distribution<uint> distr_1d6   = std::uniform_int_distribution<uint>(0, 5);
-	std::uniform_int_distribution<uint> distr_1d10  = std::uniform_int_distribution<uint>(0, 9);
-	std::uniform_int_distribution<uint> distr_1d20  = std::uniform_int_distribution<uint>(0, 19);
-	std::uniform_int_distribution<uint> distr_1d100 = std::uniform_int_distribution<uint>(0, 99);
-	std::uniform_int_distribution<uint> distr_1d360 = std::uniform_int_distribution<uint>(0, 350);
-
-	unsigned int seed;
-
-	RndEngine()
+	inline vec vecInCircle(float radius)
 	{
-		init();
+		float r = rollf(0.0f, radius);
+		float ang = rollf(0.0f, 360.0f);
+
+		float rads = ang * float(M_PI) / 180.0f;
+
+		return vec(r * std::cos(rads), r * std::sin(rads));
 	}
 
-	void init()
-	{
-		std::random_device rd;
-		init(rd());
+	inline vec vecInRange(float minX, float minY, float maxX, float maxY) {
+		return vec(rollf(minX, maxX), rollf(minY, maxY));
 	}
 
-	void init(unsigned int _seed)
-	{
-		seed = _seed;
-		gen = std::mt19937(seed);
+	inline vec vecInRange(const vec& min, const vec& max) {
+		return vec(rollf(min.x, max.x), rollf(min.y, max.y));
 	}
 
-};
+}
 
 namespace GoodRandom
 {
+	typedef int unsigned uint;
+
+	struct RndEngine
+	{
+
+		std::mt19937 gen;
+
+		// note: uniform_real_distribution interval is [a, b) but uniform_int_distribution is [a, b].
+		std::uniform_real_distribution<float> uniform   = std::uniform_real_distribution<float>(0.f, 1.f);
+		std::uniform_int_distribution<uint> distr_coin  = std::uniform_int_distribution<uint>(0, 1);
+		std::uniform_int_distribution<uint> distr_1d3   = std::uniform_int_distribution<uint>(0, 2);
+		std::uniform_int_distribution<uint> distr_1d4   = std::uniform_int_distribution<uint>(0, 3);
+		std::uniform_int_distribution<uint> distr_1d6   = std::uniform_int_distribution<uint>(0, 5);
+		std::uniform_int_distribution<uint> distr_1d10  = std::uniform_int_distribution<uint>(0, 9);
+		std::uniform_int_distribution<uint> distr_1d20  = std::uniform_int_distribution<uint>(0, 19);
+		std::uniform_int_distribution<uint> distr_1d100 = std::uniform_int_distribution<uint>(0, 99);
+		std::uniform_int_distribution<uint> distr_1d360 = std::uniform_int_distribution<uint>(0, 359);
+
+		unsigned int seed;
+
+		RndEngine()
+		{
+			init();
+		}
+
+		void init()
+		{
+			std::random_device rd;
+			init(rd());
+		}
+
+		void init(unsigned int _seed)
+		{
+			seed = _seed;
+			gen = std::mt19937(seed);
+		}
+
+	};
+
 	extern RndEngine r;
 
 	//Pre-defined distributions are faster than asking for an arbitrary range
@@ -80,7 +110,7 @@ namespace GoodRandom
 		static float y2;
 		static int use_last = 0;
 
-		if (use_last)		        /* use value from previous call */
+		if (use_last) // use value from previous call
 		{
 			y1 = y2;
 			use_last = 0;
@@ -101,27 +131,6 @@ namespace GoodRandom
 		}
 
 		return(mean + y1 * standard_deviation);
-	}
-
-}
-
-namespace Random
-{
-	inline float rollf(float min, float max) { return min + (rand() / (float(RAND_MAX) / (max - min))); } // Range [min, max) most of the time (except when rand() == RAND_MAX, then its [min, max])
-	inline float rollf(float max = 1.f) { return rollf(0.f, max); } // Range [0, max)
-
-	inline int roll(int min, int max) { return min + (rand() % (max - min)); } // Range [min, max)
-	inline int roll(int max) { return roll(0, max); } // Range [0, max)
-
-	inline void CircularRoll(float radius, float& x, float& y)
-	{
-		float r = rollf(0.0f, radius);
-		float ang = rollf(0.0f, 360.0f);
-
-		float rads = ang * float(M_PI) / 180.0f;
-
-		x = r * std::cos(rads);
-		y = r * std::sin(rads);
 	}
 
 }
