@@ -23,7 +23,7 @@
     <ClInclude Include="engine\asset_load.h" />
     <ClInclude Include="engine\bounds.h" />
     <ClInclude Include="engine\camera.h" />
-    <ClInclude Include="engine\collider.h" />
+    <ClInclude Include="engine\collide.h" />
     <ClInclude Include="engine\debug.h" />
     <ClInclude Include="engine\entity.h" />
     <ClInclude Include="engine\input.h" />
@@ -39,7 +39,7 @@
     <ClInclude Include="engine\sound.h" />
     <ClInclude Include="engine\text.h" />
     <ClInclude Include="engine\tilemap.h" />
-    <ClInclude Include="engine\vector.h" />
+    <ClInclude Include="engine\vec.h" />
     <ClInclude Include="engine\window.h" />
     <ClInclude Include="src\anim_data.h" />
     <ClInclude Include="src\assets.h" />
@@ -95,12 +95,11 @@
     <ClCompile Include="engine\input.cpp" />
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\partsys.cpp" />
-    <ClCompile Include="engine\rand.cpp" />
     <ClCompile Include="engine\raw_input.cpp" />
     <ClCompile Include="engine\shader.cpp" />
     <ClCompile Include="engine\sound.cpp" />
     <ClCompile Include="engine\tilemap.cpp" />
-    <ClCompile Include="engine\vector.cpp" />
+    <ClCompile Include="engine\vec.cpp" />
     <ClCompile Include="engine\window.cpp" />
     <ClCompile Include="src\anim_data.cpp" />
     <ClCompile Include="src\assets.cpp" />

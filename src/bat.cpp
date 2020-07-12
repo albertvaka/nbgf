@@ -11,7 +11,7 @@ const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 70.f;
 
 float RandomSeekingTime() {
-	return Random::rollf(0.2f, 1.6f) + Random::rollf(0.2f, 1.6f); // Random between 0.4 and 3.2, with values closer to 1.7 more likely
+	return Rand::rollf(0.2f, 1.6f) + Rand::rollf(0.2f, 1.6f); // Random between 0.4 and 3.2, with values closer to 1.7 more likely
 }
 
 void AwakeNearbyBats(const vec& pos) {
@@ -48,7 +48,7 @@ void Bat::EnableBoundsAvoidance() {
 
 }
 Bat::Bat(const vec& pos, bool aggresive, bool awake)
-	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, Random::vecInRange(-10.f, 0.f, 10.f, 10.f))
+	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, Rand::vecInRange(-10.f, 0.f, 10.f, 10.f))
 	, steering(this)
 	, state(State::SIESTA)
 	, aggresive(aggresive)
@@ -59,7 +59,7 @@ Bat::Bat(const vec& pos, bool aggresive, bool awake)
 		anim.Ensure(BAT_FLYING);
 	}
 
-	anim.Update(Random::roll(0, anim.GetCurrentAnimDuration())); // Start anim at different time intervals
+	anim.Update(Rand::roll(0, anim.GetCurrentAnimDuration())); // Start anim at different time intervals
 
 	steering.TileMapAvoidanceOn(TileMap::instance());
 	steering.ForwardOn();
@@ -106,7 +106,7 @@ void Bat::Update(float dt)
 			}
 			if (pos.DistanceSq(JumpMan::instance()->bounds().Center()) < (awake_player_distance * awake_player_distance) || awakened) {
 				anim.Ensure(BAT_AWAKE);
-				anim.Update(Random::roll(0, anim.GetCurrentAnimDuration()/2)); // Start flying at different time intervals
+				anim.Update(Rand::roll(0, anim.GetCurrentAnimDuration()/2)); // Start flying at different time intervals
 				anim.loopable = false;
 			}
 		}

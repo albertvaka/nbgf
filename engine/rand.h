@@ -5,9 +5,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "vector.h"
+#include "vec.h"
 
-namespace Random
+namespace Rand
 {
 	inline float rollf(float min, float max) { return min + (rand() / (float(RAND_MAX) / (max - min))); } // Range [min, max) most of the time (except when rand() == RAND_MAX, then its [min, max])
 	inline float rollf(float max = 1.f) { return rollf(0.f, max); } // Range [0, max)
@@ -35,13 +35,12 @@ namespace Random
 
 }
 
-namespace GoodRandom
+namespace GoodRand
 {
 	typedef int unsigned uint;
 
-	struct RndEngine
+	inline struct RndEngine
 	{
-
 		std::mt19937 gen;
 
 		// note: uniform_real_distribution interval is [a, b) but uniform_int_distribution is [a, b].
@@ -73,10 +72,7 @@ namespace GoodRandom
 			seed = _seed;
 			gen = std::mt19937(seed);
 		}
-
-	};
-
-	extern RndEngine r;
+	} r;
 
 	//Pre-defined distributions are faster than asking for an arbitrary range
 	inline uint roll_flipcoin() { return r.distr_coin(r.gen); } // [0,1]

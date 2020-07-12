@@ -109,9 +109,6 @@
     <ClInclude Include="engine\bounds.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collider.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="engine\debug.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -128,9 +125,6 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\partsys.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\rand.h">
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\raw_input.h">
@@ -155,9 +149,6 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\tilemap.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\vector.h">
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\window.h">
@@ -233,6 +224,15 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\camera.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collide.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\vec.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rand.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
@@ -312,9 +312,6 @@
     <ClCompile Include="engine\partsys.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="engine\rand.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="engine\raw_input.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -325,9 +322,6 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="engine\tilemap.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\vector.cpp">
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="engine\window.cpp">
@@ -385,6 +379,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="engine\camera.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\vec.cpp">
       <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>

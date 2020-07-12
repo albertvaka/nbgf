@@ -5,7 +5,7 @@
 
 #include "debug.h"
 //#include "imgui.h"
-#include "collider.h"
+#include "collide.h"
 
 // I like how it looks at this offset together with the rest of the map
 const float base_offset = 183;

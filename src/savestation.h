@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector.h"
+#include "vec.h"
 #include "entity.h"
 #include "selfregister.h"
 

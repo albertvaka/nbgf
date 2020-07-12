@@ -12,7 +12,7 @@ void PartSys::Spawn(float dt) {
 	while (time > 0) {
 		AddParticle();
 		//p.Update(time, *this);
-		time -= Random::rollf(min_interval, max_interval);
+		time -= Rand::rollf(min_interval, max_interval);
 	}
 }
 
@@ -57,12 +57,12 @@ void PartSys::Draw() const {
 PartSys::Particle& PartSys::AddParticle() {
 	particles.push_back({});
 	Particle& p = particles.back();
-	p.ttl = Random::rollf(min_ttl, max_ttl);
+	p.ttl = Rand::rollf(min_ttl, max_ttl);
 	p.pos = pos;
-	p.vel = Random::vecInRange(min_vel, max_vel);
-	p.sprite = Random::roll(sprites.size());
-	p.rotation = Random::rollf(min_rotation, max_rotation);
-	p.scale = Random::rollf(min_scale, max_scale);
+	p.vel = Rand::vecInRange(min_vel, max_vel);
+	p.sprite = Rand::roll(sprites.size());
+	p.rotation = Rand::rollf(min_rotation, max_rotation);
+	p.scale = Rand::rollf(min_scale, max_scale);
 	p.alpha = alpha;
 	return p;
 }

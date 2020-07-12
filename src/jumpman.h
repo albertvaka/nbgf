@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entity.h"
-#include "vector.h"
+#include "vec.h"
 #include "bounds.h"
 #include "tilemap.h"
 #include "partsys.h"

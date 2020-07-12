@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "vector.h"
+#include "vec.h"
 #include "SDL_gpu.h"
 
 struct PartSys {

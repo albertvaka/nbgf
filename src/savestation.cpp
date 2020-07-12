@@ -4,7 +4,7 @@
 #include "mates.h"
 #include "assets.h"
 #include "camera.h"
-#include "collider.h"
+#include "collide.h"
 
 extern float mainClock;
 

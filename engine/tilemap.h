@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "vector.h"
+#include "vec.h"
 #include "singleinstance.h"
 #include "bounds.h"
 #include "../src/tiledexport.h"

@@ -3,7 +3,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "vector.h"
+#include "vec.h"
 #include "SDL_gpu.h"
 
 struct CircleBounds;

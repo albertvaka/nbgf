@@ -2,7 +2,7 @@
 
 #include "debug.h"
 
-#include <SDL_gpu.h>
+#include "SDL_gpu.h"
 
 void Shader::loadAndAttach(GPU_ShaderEnum type, const char* path) {
 

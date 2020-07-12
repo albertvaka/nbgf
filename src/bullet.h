@@ -3,7 +3,7 @@
 #include "entity.h"
 #include "animation.h"
 #include "rand.h"
-#include "collider.h"
+#include "collide.h"
 #include "camera.h"
 #include "assets.h"
 
@@ -45,8 +45,8 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 
 		if (!explode) {
 			rect = { 8 * 16, 10 * 16, 16, 16 };
-			rotation = Random::roll(0, 360);
-			drawPos += Random::vecInRange(-1, -1, 1, 1);
+			rotation = Rand::roll(0, 360);
+			drawPos += Rand::vecInRange(-1, -1, 1, 1);
 		}
 		else {
 			int frame = (timer_explosion * 7);

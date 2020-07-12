@@ -2,7 +2,7 @@
 
 #include "jumpman.h"
 #include "assets.h"
-#include "collider.h"
+#include "collide.h"
 #include "bat.h"
 #include "window.h"
 #include "debug.h"

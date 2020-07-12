@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector.h"
+#include "vec.h"
 #include "bounds.h"
 
 struct Entity

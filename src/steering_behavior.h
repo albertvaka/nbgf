@@ -6,7 +6,7 @@
 #include <list>
 
 #include "entity.h"
-#include "vector.h"
+#include "vec.h"
 #include "mates.h"
 #include "bounds.h"
 #include "steering_entity.h"

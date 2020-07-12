@@ -5,7 +5,7 @@
 #include "SDL_gpu.h"
 #include <string>
 #include <vector>
-#include "vector.h"
+#include "vec.h"
 
 class Text
 {

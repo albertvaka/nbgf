@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector.h"
+#include "vec.h"
 #include "animation.h"
 #include "selfregister.h"
 #include "steering_entity.h"

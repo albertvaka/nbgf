@@ -78,7 +78,7 @@ void BigItem::Draw()
 	auto tilePos = TileMap::alignToTiles(pos);
 
 	particles.pos.y = tilePos.y + 16;
-	particles.pos.x = Random::roll(tilePos.x - 13, tilePos.x + 13);
+	particles.pos.x = Rand::roll(tilePos.x - 13, tilePos.x + 13);
 	particles.Spawn(1 / 60.f);
 	particles.UpdateParticles(1 / 60.f);
 	particles.Draw();

@@ -231,7 +231,7 @@ void JumpScene::Update(float dt)
 			continue;
 		}
 
-		bulletPartSys.pos = e->pos + Random::vecInRange(-4, -4, 4, 4);
+		bulletPartSys.pos = e->pos + Rand::vecInRange(-4, -4, 4, 4);
 		bulletPartSys.Spawn(dt);
 	}
 	Bullet::DeleteNotAlive();
@@ -538,7 +538,7 @@ void JumpScene::Draw()
 void JumpScene::RandomMap() {
 	player.pos = vec(160, 160);
 
-	randomSeed = Random::roll(0, 10000);
+	randomSeed = Rand::roll(0, 10000);
 	map.Randomize(randomSeed);
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
@@ -549,7 +549,7 @@ void JumpScene::RandomMap() {
 				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) {
-					bool angry = (Random::rollf() < chanceAngryBat);
+					bool angry = (Rand::rollf() < chanceAngryBat);
 					new Bat(TileMap::fromTiles(x,y+2), angry, false);
 					map.setTile(x - 1, y + 1, Tile::NONE);
 					map.setTile(x, y + 1, Tile::NONE);

@@ -2,7 +2,7 @@
 
 #include "assets.h"
 #include "debug.h"
-#include "collider.h"
+#include "collide.h"
 #include "camera.h"
 
 const float waveAmplitude = 1.f;
