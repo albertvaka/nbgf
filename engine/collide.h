@@ -41,17 +41,17 @@ inline bool Collide(const CircleEntity* a, const BoxEntity* b) {
     return Collide(a->bounds(), b->bounds());
 }
 
-template <typename S, typename E, typename X, typename Y>
-void CollideAll(const std::vector<S*>& setA, const std::vector<E*>& setB, void (*callback)(X*, Y*))
+template <typename A, typename B, typename F>
+void CollideAll(const std::vector<A*>& setA, const std::vector<B*>& setB, F callback)
 {
     size_t sa = setA.size();
     for (size_t i = 0; i < sa; ++i)
     {
-        S* a = setA[i];
+        A* a = setA[i];
         size_t sb = setB.size();
         for (size_t j = 0; j < sb; ++j)
         {
-            E* b = setB[j];
+            B* b = setB[j];
             if ((void*)a == (void*)b) continue;
             if (Collide(a, b))
             {
@@ -61,16 +61,16 @@ void CollideAll(const std::vector<S*>& setA, const std::vector<E*>& setB, void (
     }
 }
 
-template <typename S, typename X, typename Y>
-void CollideSelf(const std::vector<S*>& setA, void (*callback)(X*, Y*))
+template <typename T, typename F>
+void CollideSelf(const std::vector<T*>& setA, F callback)
 {
     size_t sa = setA.size();
     for (size_t i = 0; i < sa; ++i)
     {
-        S* a = setA[i];
+        T* a = setA[i];
         for (size_t j = i+1; j < sa; ++j)
         {
-            S* b = setA[j];
+            T* b = setA[j];
             if (Collide(a, b))
             {
                 callback(a, b);
