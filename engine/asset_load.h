@@ -1,15 +1,15 @@
 #pragma once
 
+#include "SDL_gpu.h"
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <SDL_image.h>
 #include <SDL_mixer.h>
 
 inline GPU_Image* LoadImage(const std::string& path) {
 
     GPU_Image* texture = GPU_LoadImage(path.c_str());
     if (!texture) {
-        Debug::out << "Unable to load image '" << path.c_str() << "': " << IMG_GetError();
+        Debug::out << "Unable to load image '" << path.c_str();
         return nullptr;
     }
     GPU_SetImageFilter(texture, GPU_FILTER_NEAREST);
