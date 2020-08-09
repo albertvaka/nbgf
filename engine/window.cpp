@@ -11,12 +11,8 @@ namespace Window
 {
     SDL_Window* window;
     GPU_Target* target;
-    bool focus = true;
-    SDL_GLContext glcontext;
-}
+    bool has_focus = true;
 
-namespace Window
-{
     int Init() {
         GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
 
@@ -63,10 +59,10 @@ namespace Window
             switch (event.type)
             {
             case SDL_WINDOWEVENT_FOCUS_LOST:
-                focus = false;
+                has_focus = false;
                 break;
             case SDL_WINDOWEVENT_FOCUS_GAINED:
-                focus = true;
+                has_focus = true;
                 break;
             case SDL_CONTROLLERDEVICEADDED:
                 GamePad::_Added(SDL_GameControllerOpen(event.jdevice.which));

@@ -8,23 +8,20 @@
 
 namespace Window
 {
-	extern SDL_Window* window;
-	extern GPU_Target* target;
-	extern bool focus;
-	extern SDL_GLContext glcontext;
-
 	constexpr const int GAME_HEIGHT = 21 * 16;
 	constexpr const int GAME_WIDTH = GAME_HEIGHT * 16.f / 9;
-	constexpr const char* WINDOW_TITLE = "Gaem";
-}
 
-namespace Window
-{
+	constexpr const char* WINDOW_TITLE = "Gaem";
+
+	extern SDL_Window* window;
+	extern GPU_Target* target;
+
+	extern bool has_focus;
+
 	int Init();
 	void ProcessEvents();
 
-	inline bool HasFocus() { return focus; }
-	bool IsMouseInsideWindow();
+	inline bool HasFocus() { return has_focus; }
 
 	inline void Clear(uint8_t r, uint8_t g, uint8_t b) {
 		GPU_ClearRGBA(Window::target, r, g, b, 255);
@@ -37,7 +34,7 @@ namespace Window
 		inline void Pixel(float x, float y, const SDL_Color& c) { Pixel(x, y, c.r, c.g, c.b, c.a); }
 		inline void Pixel(vec v, uint8_t r, const SDL_Color & c) { Pixel(v.x, v.y, c.r, c.g, c.b, c.a); }
 
-		// pass thickness = -1 to draw a filled shape
+		// pass thickness < 0 to draw a filled shape
 		void Rectangle(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 		inline void Rectangle(const Bounds& box, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Rectangle(box.Left(), box.Top(), box.Right(), box.Bottom(), thickness, r, g, b, a);
@@ -60,6 +57,7 @@ namespace Window
 			Line(v1.x, v1.y, v2.x, v2.y, thickness, c.r, c.g, c.b, c.a);
 		}
 
+		// pass thickness < 0 to draw a filled shape
 		void Circle(float x, float y, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 		inline void Circle(const vec& v, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Circle(v.x, v.y, radius, thickness, r, g, b, a);
@@ -77,6 +75,7 @@ namespace Window
 			Circle(bounds.pos, bounds.radius, thickness, c.r, c.g, c.b, c.a);
 		}
 
+		// pass thickness < 0 to draw a filled shape
 		void Arc(float x, float y, float radius, float start_angle, float end_angle, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 		inline void Arc(const vec& v, float radius, float start_angle, float end_angle, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Arc(v.x, v.y, radius, start_angle, end_angle, thickness, r, g, b, a);
