@@ -29,20 +29,13 @@ namespace Window
         Debug::out << "Scaling to x" << scale;
         //Debug::out << dm.w << " " << dm.h;
  #endif
-        window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, GAME_WIDTH * scale, GAME_HEIGHT * scale, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL);
-        if (window == NULL) {
-            Debug::out << "Window Creation Error: " << SDL_GetError();
+        target = GPU_Init(GAME_WIDTH * scale, GAME_HEIGHT * scale, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+        if (target == NULL) {
+            Debug::out << "GPU_Init failed";
             return 1;
         }
-        GPU_SetInitWindow(SDL_GetWindowID(window));
-
-        target = GPU_Init(GAME_WIDTH, GAME_HEIGHT, GPU_DEFAULT_INIT_FLAGS);
-        if (target == NULL) {
-            return 2;
-        }
-
-        // [Debug] Disable vsync
-        //SDL_GL_SetSwapInterval(0);
+        window = SDL_GetWindowFromID(target->context->windowID);
+        SDL_SetWindowTitle(window, Window::WINDOW_TITLE);
 
         // SDL-gpu anchors images at the center by default, change it to the top-left corner
         GPU_SetDefaultAnchor(0.f, 0.f);
