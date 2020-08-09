@@ -89,7 +89,7 @@ namespace Window
 		}
 	}
 
-	struct Draw {
+	class Draw {
 		GPU_Image* t;
 		vec dest;
 		GPU_Rect src = { 0,0,0,0 };
@@ -97,6 +97,7 @@ namespace Window
 		float rotation = 0;
 		vec scale = vec(1.f, 1.f);
 		vec origin = vec(0.f,0.f);
+	public:
 		constexpr Draw(GPU_Image* t, const vec& pos) : t(t), dest(pos) { }
 		constexpr Draw(GPU_Image* t, float x, float y) : t(t), dest(x,y) { }
 
