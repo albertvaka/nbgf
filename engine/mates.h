@@ -25,24 +25,24 @@ namespace Mates
 	const constexpr float   HalfPi = Pi / 2;
 	const constexpr float   QuarterPi = Pi / 4;
 
-	inline float DegsToRads(float degs)
+	[[nodiscard]] inline float DegsToRads(float degs)
 	{
 		return TwoPi * (degs / 360.0f);
 	}
 
-	inline float RadsToDegs(float rads)
+	[[nodiscard]] inline float RadsToDegs(float rads)
 	{
 		return (rads * 360.0f) / TwoPi;
 	}
 
 	//returns true if the parameter is equal to zero
-	inline bool IsZero(float val)
+	[[nodiscard]] inline bool IsZero(float val)
 	{
 		return ((-MinFloat < val) && (val < MinFloat));
 	}
 
 	//returns true is the third parameter is in the range described by the first two
-	inline bool InRange(float start, float end, float val)
+	[[nodiscard]] inline bool InRange(float start, float end, float val)
 	{
 		if (start < end)
 		{
@@ -63,7 +63,7 @@ namespace Mates
 	//-----------------------------------------------------------------------
 
 
-	inline float Sigmoid(float input, float response = 1.0)
+	[[nodiscard]] inline float Sigmoid(float input, float response = 1.0)
 	{
 		return (1.0f / (1.0f + exp(-input / response)));
 	}
@@ -106,13 +106,13 @@ namespace Mates
 		}
 	}
 
-	inline float Lerp(float from, float to, float t)
+	[[nodiscard]] inline float Lerp(float from, float to, float t)
 	{
 		return (from)+(to - from) * t;
 	}
 
 	//rounds a float up or down depending on its value
-	inline int Rounded(float val)
+	[[nodiscard]] inline int Rounded(float val)
 	{
 		int    integral = (int)val;
 		float mantissa = val - integral;
@@ -130,7 +130,7 @@ namespace Mates
 
 	//rounds a double up or down depending on whether its
 	//mantissa is higher or lower than offset
-	inline int RoundUnderOffset(float val, float offset)
+	[[nodiscard]] inline int RoundUnderOffset(float val, float offset)
 	{
 		int    integral = (int)val;
 		float mantissa = val - integral;
@@ -147,7 +147,7 @@ namespace Mates
 	}
 
 	//compares two real numbers. Returns true if they are equal
-	inline bool IsNearlyEqual(float a, float b, float margin = 1E-12)
+	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12)
 	{
 		if (fabs(a - b) < margin)
 		{
@@ -157,7 +157,7 @@ namespace Mates
 		return false;
 	}
 
-	inline bool IsNearlyEqual(double a, double b, double margin = 1E-12)
+	[[nodiscard]] inline bool IsNearlyEqual(double a, double b, double margin = 1E-12)
 	{
 		if (fabs(a - b) < margin)
 		{
@@ -169,7 +169,7 @@ namespace Mates
 
 
 	template <class T>
-	inline double Average(const std::vector<T>& v)
+	[[nodiscard]] inline double Average(const std::vector<T>& v)
 	{
 		double average = 0.0;
 
@@ -182,7 +182,7 @@ namespace Mates
 	}
 
 
-	inline double StandardDeviation(const std::vector<double>& v)
+	[[nodiscard]] inline double StandardDeviation(const std::vector<double>& v)
 	{
 		double sd = 0.0;
 		double average = Average(v);
@@ -197,5 +197,5 @@ namespace Mates
 		return sqrt(sd);
 	}
 
-	inline int fastfloor(const float x) { return x > 0 ? (int)x : (int)x - 1; }
+	[[nodiscard]] inline int fastfloor(const float x) { return x > 0 ? (int)x : (int)x - 1; }
 }
