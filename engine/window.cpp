@@ -5,7 +5,6 @@
 
 #include "debug.h"
 #include "raw_input.h"
-#include "mates.h"
 #include "camera.h"
 
 namespace Window
@@ -22,7 +21,7 @@ namespace Window
 #else
         SDL_DisplayMode dm;
         SDL_GetDesktopDisplayMode(0, &dm);
-        int scale = Mates::MinOf(dm.w / GAME_WIDTH, dm.h / GAME_HEIGHT);
+        int scale = std::min(dm.w / GAME_WIDTH, dm.h / GAME_HEIGHT);
         Debug::out << "Scaling to x" << scale;
         //Debug::out << dm.w << " " << dm.h;
  #endif

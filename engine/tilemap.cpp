@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include "SDL_gpu.h"
 #include "camera.h"
-#include "mates.h"
 #include "../src/assets.h"
 
 const vec Tile::sizevec = vec(size, size);
@@ -51,7 +50,7 @@ void TileMap::Draw() const
 	if (left < 0) {
 		for (int y = top; y < bottom; y++)
 		{
-			for (int x = left; x < Mates::MinOf(0, right); x++)
+			for (int x = left; x < std::min(0, right); x++)
 			{
 #ifdef USE_VAO
 				Window::DrawRaw::BatchTexturedQuad(Assets::marioTexture, x * Tile::size, y * Tile::size,16,16, outOfBounds);
@@ -67,7 +66,7 @@ void TileMap::Draw() const
 	if (right >= sizes.x) {
 		for (int y = top; y < bottom; y++)
 		{
-			for (int x = Mates::MaxOf(left, sizes.x); x < right; x++)
+			for (int x = std::max(left, sizes.x); x < right; x++)
 			{
 #ifdef USE_VAO
 				Window::DrawRaw::BatchTexturedQuad(Assets::marioTexture, x * Tile::size, y * Tile::size,16,16, outOfBounds);
@@ -81,7 +80,7 @@ void TileMap::Draw() const
 	}
 
 	if (top < 0) {
-		for (int y = top; y < Mates::MinOf(0, bottom); y++)
+		for (int y = top; y < std::min(0, bottom); y++)
 		{
 			for (int x = left; x < right; x++)
 			{
@@ -97,7 +96,7 @@ void TileMap::Draw() const
 	}
 
 	if (bottom >= sizes.y) {
-		for (int y = Mates::MaxOf(top, sizes.y); y < bottom; y++)
+		for (int y = std::max(top, sizes.y); y < bottom; y++)
 		{
 			for (int x = left; x < right; x++)
 			{

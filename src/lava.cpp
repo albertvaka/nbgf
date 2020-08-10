@@ -66,8 +66,8 @@ void Lava::Update(float dt) {
 	}
 
 	Bounds screen = Camera::GetBounds();
-	float left = Mates::MaxOf(screen.Left(), bounds.Left());
-	float right = Mates::MinOf(screen.Right(), bounds.Right());
+	float left = std::max(screen.Left(), bounds.Left());
+	float right = std::min(screen.Right(), bounds.Right());
 	float chunkLeft = (Mates::fastfloor(left / chunkSize)) * chunkSize;
 	float chunkRight = (Mates::fastfloor(right / chunkSize)) * chunkSize;
 	lavaPartSys.pos.y = bounds.Top() - 2;
@@ -121,8 +121,8 @@ void Lava::Draw() const {
 	Bounds bottomLayer(vec(chunkSize, heightBottomLayer));
 #endif
 
-	float left = Mates::MaxOf(screen.Left(), bounds.Left());
-	float right = Mates::MinOf(screen.Right(), bounds.Right());
+	float left = std::max(screen.Left(), bounds.Left());
+	float right = std::min(screen.Right(), bounds.Right());
 	float chunkLeft = (floor(left / chunkSize)) * chunkSize;
 	float chunkRight = (floor(right / chunkSize)) * chunkSize;
 	for (float x = chunkLeft; x < chunkRight; x += chunkSize)

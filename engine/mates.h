@@ -69,23 +69,6 @@ namespace Mates
 	}
 
 
-	//returns the maximum of two values
-	template <class T>
-	inline T MaxOf(const T& a, const T& b)
-	{
-		if (a > b) return a;
-		return b;
-	}
-
-	//returns the minimum of two values
-	template <class T>
-	inline T MinOf(const T& a, const T& b)
-	{
-		if (a < b) return a;
-		return b;
-	}
-
-
 	//clamps the first argument between the second two
 	template <class T, class U, class V>
 	inline void Clamp(T& arg, const U& minVal, const V& maxVal)

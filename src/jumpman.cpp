@@ -542,7 +542,7 @@ void JumpMan::Draw() const {
 			bool blink = (int(mainClock * 6) % 10) > 8;
 			rect = { blink ? 32 : 0.f, 3 * 16.f, 2 * 16.f, 16.f };
 		}
-		float scale = (0.333f + (Mates::MaxOf(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
+		float scale = (0.333f + (std::max(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
 		vec vscale = vec(scale, scale);
 		if (bfgAngle < 270 || bfgAngle  > 450) {
 			vscale.y = -vscale.y;
