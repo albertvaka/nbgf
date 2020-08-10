@@ -1,7 +1,9 @@
 #ifndef _SDL_GPU_H__
 #define _SDL_GPU_H__
 
+#ifndef _USE_MATH_DEFINES 
 #define _USE_MATH_DEFINES // So M_PI and co get defined on MSVC
+#endif
 #include <math.h> // if this gets included after SDL.h, then M_PI is already defined and we get a warning
 
 #include "SDL.h"

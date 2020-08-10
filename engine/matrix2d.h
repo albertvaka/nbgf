@@ -1,7 +1,9 @@
 #pragma once
 //Based on the work of: Mat Buckland (fup@ai-junkie.com)
 
+#ifndef _USE_MATH_DEFINES 
 #define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 #include <vector>
 
