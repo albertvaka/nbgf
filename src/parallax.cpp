@@ -4,6 +4,7 @@
 #include "assets.h"
 
 #include "debug.h"
+#include "mates.h"
 //#include "imgui.h"
 #include "collide.h"
 

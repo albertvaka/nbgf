@@ -12,8 +12,6 @@
 #endif
 #include <math.h>
 
-#include "mates.h"
-
 struct veci {
 	int x, y;
 	constexpr veci(int a, int b) : x(a), y(b) {}
@@ -31,14 +29,6 @@ struct vec
 	[[nodiscard]] static vec FromAngle(float rads, float len=1.0f) {
 		return vec(cos(rads)*len,sin(rads)*len);
 	}
-
-	[[nodiscard]] bool IsNearlyEqual(const vec& p)
-	{
-		return (Mates::IsNearlyEqual(x, p.x) && Mates::IsNearlyEqual(y, p.y));
-	}
-
-	//returns true if both x and y are zero
-	[[nodiscard]] bool isZero()const{return (x*x + y*y) < Mates::MinFloat;}
 
 	//returns the length of the vector
 	[[nodiscard]] inline float    Length()const;
@@ -79,7 +69,7 @@ struct vec
 	{
 		float deltaY = other.y - y;
 		float deltaX = other.x - x;
-		return Mates::RadsToDegs(atan2(deltaY, deltaX));
+		return  (atan2(deltaY, deltaX) * 360.0f) / (2*M_PI);
 	}
 
 	[[nodiscard]] vec RotatedAroundOrigin(float rads) {

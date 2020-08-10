@@ -4,6 +4,7 @@
 #include "debug.h"
 #include "collide.h"
 #include "camera.h"
+#include "mates.h"
 
 const float waveAmplitude = 1.f;
 const float chunkSize = 5.4f;

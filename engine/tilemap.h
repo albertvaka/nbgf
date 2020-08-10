@@ -4,6 +4,7 @@
 #include "vec.h"
 #include "singleinstance.h"
 #include "bounds.h"
+#include "mates.h"
 #include "../src/tiledexport.h"
 
 struct Tile : TiledTiles

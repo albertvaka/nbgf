@@ -3,6 +3,7 @@
 
 #include "input.h"
 #include "bullet.h"
+#include "mates.h"
 #include "assets.h"
 #include "debug.h"
 #include "skilltree.h"

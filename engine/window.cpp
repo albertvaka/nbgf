@@ -5,6 +5,7 @@
 
 #include "debug.h"
 #include "raw_input.h"
+#include "mates.h"
 #include "camera.h"
 
 namespace Window
