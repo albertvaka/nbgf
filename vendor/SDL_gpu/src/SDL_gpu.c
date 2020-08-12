@@ -1552,7 +1552,7 @@ GPU_bool GPU_IntersectClipRect(GPU_Target* target, GPU_Rect B, GPU_Rect* result)
     
     if(!target->use_clip_rect)
     {
-        GPU_Rect A = {0, 0, target->w, target->h};
+        GPU_Rect A = {0, 0, (float)target->w, (float)target->h};
         return GPU_IntersectRect(A, B, result);
     }
     
@@ -1888,7 +1888,7 @@ void GPU_GetAnchor(GPU_Image* image, float* anchor_x, float* anchor_y)
 GPU_SnapEnum GPU_GetSnapMode(GPU_Image* image)
 {
     if(image == NULL)
-        return 0;
+        return GPU_SNAP_NONE;
 
     return image->snap_mode;
 }
