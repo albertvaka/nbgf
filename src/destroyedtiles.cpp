@@ -1,5 +1,6 @@
 #include "destroyedtiles.h"
 
+#include <algorithm>
 #include "magic_enum.h"
 #include "assets.h"
 
