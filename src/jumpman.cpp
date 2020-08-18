@@ -554,7 +554,7 @@ void JumpMan::Draw() const {
 			.withScale(vscale);
 	}
 
-	Assets::tintShader.Deactivate();
+	Shader::Deactivate();
 }
 
 

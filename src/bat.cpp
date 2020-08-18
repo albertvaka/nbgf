@@ -191,7 +191,7 @@ void Bat::Draw() const
 		.withOrigin(16.f, 14.f)
 		.withRect(anim.CurrentFrame());
 
-	Assets::tintShader.Deactivate();
+	Shader::Deactivate();
 
 	if (state == State::SEEKING) {
 		pos.Debuggerino();

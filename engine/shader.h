@@ -48,7 +48,7 @@ struct Shader {
 			GPU_ActivateShaderProgram(program, &block);
 		}
 	}
-	void Deactivate() { GPU_DeactivateShaderProgram(); }
+	static void Deactivate() { GPU_DeactivateShaderProgram(); }
 
 	int GetUniformLocation(const char* name);
 
