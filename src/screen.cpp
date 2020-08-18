@@ -4,12 +4,6 @@
 #include "mates.h"
 #include "tiledexport.h"
 
-ScreenManager::ScreenManager() {
-	for (const auto& screen : TiledMap::screens) {
-		screens.emplace_back(screen.left, screen.top, screen.width, screen.height);
-	}
-}
-
 void ScreenManager::UpdateCurrentScreen(const vec& pos) {
 	if (currentScreen < 0 || !TiledMap::screens[currentScreen].Contains(pos)) {
 		int screen = FindScreenContaining(pos);

@@ -19,7 +19,6 @@ struct JumpScene : Scene {
 
 	ScreenManager screenManager;
 
-	int randomSeed;
 	TileMap map;
 	JumpMan player;
 	SkillTree skillTree;

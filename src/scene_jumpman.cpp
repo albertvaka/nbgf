@@ -6,7 +6,6 @@
 #include "bullet.h"
 #include "enemy_door.h"
 #include "assets.h"
-#include "simplexnoise.h"
 #include "parallax.h"
 #include "bat.h"
 #include "lava.h"
@@ -16,15 +15,11 @@
 
 extern float mainClock;
 
-const float batClusterSize = 22.f;
-const float chanceAngryBat = 0.2f;
 const float camSpeed = 2000;
 
 #ifdef _DEBUG
 static int currentPlacingTile = 1;
 #endif
-
-const bool random_mode = false;
 
 JumpScene::JumpScene()
 	: map(TiledMap::map_size.x, TiledMap::map_size.y)
@@ -63,22 +58,18 @@ JumpScene::JumpScene()
 	fogPartSys.min_interval = 4.5f;
 	fogPartSys.max_interval = 6.f;
 
-	if (!random_mode) {
-		for (const Bounds& p : TiledAreas::parallax_forest) {
-			new Parallax(p);
-		}
+	for (const Bounds& p : TiledAreas::parallax_forest) {
+		new Parallax(p);
+	}
+
+	for (const auto& screen : TiledMap::screens) {
+		screenManager.AddScreen(screen);
 	}
 }
 
 void JumpScene::EnterScene() 
 {
 	player.Reset();
-
-	if (random_mode) {
-		player.pos = vec(160,160);
-		RandomMap();
-		return;
-	}
 
 	player.pos = TiledEntities::spawn;
 
@@ -180,9 +171,7 @@ void JumpScene::Update(float dt)
 
 	player.Update(dt);
 
-	if (!random_mode) {
-		screenManager.UpdateCurrentScreen(player.pos);
-	}
+	screenManager.UpdateCurrentScreen(player.pos);
 
 	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
@@ -280,7 +269,7 @@ void JumpScene::Update(float dt)
 	}
 	if (Keyboard::IsKeyJustPressed(killall)) {
 		for (Bat* e : Bat::GetAll()) {
-			if (e->screen == screenManager.currentScreen) {
+			if (e->screen == screenManager.CurrentScreen()) {
 				(new Bullet(e->pos, vec(), 1.5f))->explode = true;
 				e->alive = false;
 			}
@@ -423,12 +412,6 @@ void JumpScene::Draw()
 		return;
 	}
 
-    if (Debug::Draw) {
-        //Simplex::DebugDraw(Tile::size, [this](int x, int y) {
-        //  return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
-        //});
-    }
-
 	for (const Parallax* p : Parallax::GetAll()) {
 		p->Draw();
 	}
@@ -531,71 +514,4 @@ void JumpScene::Draw()
 	skillTree.DrawOverlay();
 
 	//player.polvito.DrawImGUI("Polvito");
-}
-
-
-
-void JumpScene::RandomMap() {
-	player.pos = vec(160, 160);
-
-	randomSeed = Rand::roll(0, 10000);
-	map.Randomize(randomSeed);
-
-	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
-
-	for (int y = -1; y < map.sizes.y - 5; y++) { //don't spawn at the bottom rows
-		for (int x = 20; x < map.sizes.x; x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
-			if (map.isSolid(x, y)) {
-				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
-				if (y == -1) noise -= 0.66f;
-				if (noise > 0.f) {
-					bool angry = (Rand::rollf() < chanceAngryBat);
-					new Bat(TileMap::fromTiles(x,y+2), angry, false);
-					map.setTile(x - 1, y + 1, Tile::NONE);
-					map.setTile(x, y + 1, Tile::NONE);
-					map.setTile(x + 1, y + 1, Tile::NONE);
-					map.setTile(x - 1, y + 2, Tile::NONE);
-					map.setTile(x, y + 2, Tile::NONE);
-					map.setTile(x + 1, y + 2, Tile::NONE);
-				}
-			}
-		}
-	}
-
-	veci pos = map.toTiles(player.pos);
-	map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x - 2, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x - 4, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x - 5, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x - 6, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x + 1, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x + 2, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x + 3, pos.y + 1, Tile::SOLID_1);
-	map.setTile(pos.x - 1, pos.y, Tile::NONE);
-	map.setTile(pos.x, pos.y, Tile::NONE);
-	map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
-	map.setTile(pos.x, pos.y - 1, Tile::NONE);
-	map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
-	map.setTile(pos.x, pos.y - 2, Tile::NONE);
-	map.setTile(pos.x + 1, pos.y, Tile::RSLOPE_1);
-	map.setTile(pos.x + 2, pos.y, Tile::SOLID_1);
-	map.setTile(pos.x + 3, pos.y - 1, Tile::SOLID_1);
-	map.setTile(pos.x + 3, pos.y, Tile::SOLID_1);
-	map.setTile(pos.x + 2, pos.y - 1, Tile::RSLOPE_1);
-	map.setTile(pos.x + 3, pos.y - 2, Tile::RSLOPE_1);
-	map.setTile(pos.x + 4, pos.y - 2, Tile::SOLID_1);
-	map.setTile(pos.x + 5, pos.y - 2, Tile::SOLID_1);
-	map.setTile(pos.x - 4, pos.y, Tile::LSLOPE_1);
-	map.setTile(pos.x - 5, pos.y, Tile::SOLID_1);
-	map.setTile(pos.x - 5, pos.y - 1, Tile::LSLOPE_1);
-	map.setTile(pos.x - 6, pos.y - 1, Tile::SOLID_1);
-	map.setTile(pos.x - 6, pos.y, Tile::SOLID_1);
-	map.setTile(pos.x - 6, pos.y - 2, Tile::LSLOPE_1);
-	map.setTile(pos.x - 7, pos.y - 2, Tile::SOLID_1);
-	map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID_1);
-	map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID_1);
-	map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID_1);
 }

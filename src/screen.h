@@ -6,10 +6,18 @@
 
 struct ScreenManager : SingleInstance<ScreenManager>
 {
-	int currentScreen = -1;
-	std::vector<Bounds> screens;
 
-	ScreenManager();
+	void AddScreen(const Bounds& b) {
+		screens.push_back(b);
+	}
+
+	int ScreenCount() {
+		return screens.size();
+	}
+
+	void ClearScreenList() {
+		screens.clear();
+	}
 
 	int FindScreenContaining(const vec& pos) const {
 		int i = 0;
@@ -37,5 +45,10 @@ struct ScreenManager : SingleInstance<ScreenManager>
 	const void ClampCameraToScreen(vec& camPos) const;
 
 	void UpdateCurrentScreen(const vec& pos);
+
+private:
+	int currentScreen = -1;
+	std::vector<Bounds> screens;
+
 };
 
