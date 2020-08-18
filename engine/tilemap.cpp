@@ -40,11 +40,13 @@ void TileMap::Draw() const
 	//out of bounds tile coords
 	GPU_Rect outOfBounds = { 3 * 16, 2 * 16, 16, 16 };
 
+	GPU_Image* texture = Assets::marioTexture;
+
 #ifdef USE_VAO
 	//int num_tiles = (right - left) * (bottom - top);
 	//Debug::out << "Drawing " << num_tiles << " tiles on screen";
 
-	RectToTextureCoordinates(Assets::marioTexture, outOfBounds);
+	RectToTextureCoordinates(texture, outOfBounds);
 #endif
 
 	if (left < 0) {
@@ -53,9 +55,9 @@ void TileMap::Draw() const
 			for (int x = left; x < std::min(0, right); x++)
 			{
 #ifdef USE_VAO
-				Window::DrawRaw::BatchTexturedQuad(Assets::marioTexture, x * Tile::size, y * Tile::size,16,16, outOfBounds);
+				Window::DrawRaw::BatchTexturedQuad(texture, x * Tile::size, y * Tile::size,16,16, outOfBounds);
 #else
-				Window::Draw(Assets::marioTexture, vec(x * Tile::size, y * Tile::size))
+				Window::Draw(texture, vec(x * Tile::size, y * Tile::size))
 				.withRect(outOfBounds);
 #endif
 			}
@@ -69,9 +71,9 @@ void TileMap::Draw() const
 			for (int x = std::max(left, sizes.x); x < right; x++)
 			{
 #ifdef USE_VAO
-				Window::DrawRaw::BatchTexturedQuad(Assets::marioTexture, x * Tile::size, y * Tile::size,16,16, outOfBounds);
+				Window::DrawRaw::BatchTexturedQuad(texture, x * Tile::size, y * Tile::size,16,16, outOfBounds);
 #else
-				Window::Draw(Assets::marioTexture, vec(x * Tile::size, y * Tile::size))
+				Window::Draw(texture, vec(x * Tile::size, y * Tile::size))
 					.withRect(outOfBounds);
 #endif
 			}
@@ -85,9 +87,9 @@ void TileMap::Draw() const
 			for (int x = left; x < right; x++)
 			{
 #ifdef USE_VAO
-				Window::DrawRaw::BatchTexturedQuad(Assets::marioTexture, x * Tile::size, y * Tile::size, 16,16, outOfBounds);
+				Window::DrawRaw::BatchTexturedQuad(texture, x * Tile::size, y * Tile::size, 16,16, outOfBounds);
 #else
-				Window::Draw(Assets::marioTexture, vec(x * Tile::size, y * Tile::size))
+				Window::Draw(texture, vec(x * Tile::size, y * Tile::size))
 					.withRect(outOfBounds);
 #endif
 			}
@@ -101,9 +103,9 @@ void TileMap::Draw() const
 			for (int x = left; x < right; x++)
 			{
 #ifdef USE_VAO
-				Window::DrawRaw::BatchTexturedQuad(Assets::marioTexture, x * Tile::size, y * Tile::size, 16,16, outOfBounds);
+				Window::DrawRaw::BatchTexturedQuad(texture, x * Tile::size, y * Tile::size, 16,16, outOfBounds);
 #else
-				Window::Draw(Assets::marioTexture, vec(x * Tile::size, y * Tile::size))
+				Window::Draw(texture, vec(x * Tile::size, y * Tile::size))
 					.withRect(outOfBounds);
 #endif
 			}
@@ -121,16 +123,16 @@ void TileMap::Draw() const
 			}
 #ifdef USE_VAO
 			GPU_Rect rect = t.textureRect();
-			RectToTextureCoordinates(Assets::marioTexture, rect);
-			Window::DrawRaw::BatchTexturedQuad(Assets::marioTexture, x * Tile::size, y * Tile::size, 16,16, rect);
+			RectToTextureCoordinates(texture, rect);
+			Window::DrawRaw::BatchTexturedQuad(texture, x * Tile::size, y * Tile::size, 16,16, rect);
 #else
-			Window::Draw(Assets::marioTexture, vec(x * Tile::size, y * Tile::size))
+			Window::Draw(texture, vec(x * Tile::size, y * Tile::size))
 				.withRect(t.textureRect());
 #endif
 		}
 	}
 
 #ifdef USE_VAO
-	Window::DrawRaw::FlushTexturedQuads(Assets::marioTexture);
+	Window::DrawRaw::FlushTexturedQuads(texture);
 #endif
 }
