@@ -59,6 +59,9 @@ struct HellCrossScene : Scene {
 
 		skillTree.Enable(Skill::GUN);
 		skillTree.Enable(Skill::WALLJUMP);
+
+		ScreenManager::instance()->AddScreen(map.boundsInWorld());
+		ScreenManager::instance()->UpdateCurrentScreen(map.boundsInWorld().Center());
 	}
 
 	void EnterScene() 
@@ -69,7 +72,6 @@ struct HellCrossScene : Scene {
 		randomSeed = Rand::roll(0, 10000);
 		map.Randomize(randomSeed);
 
-		ScreenManager::instance()->AddScreen(map.boundsInWorld());
 
 		for (int y = -1; y < map.sizes.y - 5; y++) { //don't spawn at the bottom rows
 			for (int x = 20; x < map.sizes.x; x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
