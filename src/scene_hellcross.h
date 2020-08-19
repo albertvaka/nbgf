@@ -17,6 +17,9 @@ extern float mainClock;
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
 
+const Tile SOLID_TILE = Tile::SOLID_5; //TODO: Use aliases instead of tile numbers
+const Tile BREAKABLE_TILE = Tile::BREAKABLE_3;
+
 #ifdef _DEBUG
 static int currentPlacingTile = 1;
 #endif
@@ -64,14 +67,32 @@ struct HellCrossScene : Scene {
 		ScreenManager::instance()->UpdateCurrentScreen(map.boundsInWorld().Center());
 	}
 
+	void RandomizeMap() {
+		for (int y = 0; y < map.sizes.y; y++) {
+			for (int x = 0; x < map.sizes.x; x++) {
+				Tile t = Tile::NONE;
+				if (y != map.sizes.y-1 && (rand() % 32) > 29) {
+					if ((rand() % 30) < 10) {
+						t = BREAKABLE_TILE;
+					}
+					else {
+						t = SOLID_TILE;
+					}
+					if (x > 0 && ((rand() % 32) > 20)) t = map.getTile(x - 1, y);
+				}
+				map.setTile(x, y, t);
+			}
+		}
+	}
+
 	void EnterScene() 
 	{
 		player.Reset();
 		player.pos = vec(160,160);
 
 		randomSeed = Rand::roll(0, 10000);
-		map.Randomize(randomSeed);
-
+		srand(randomSeed);
+		RandomizeMap();
 
 		for (int y = -1; y < map.sizes.y - 5; y++) { //don't spawn at the bottom rows
 			for (int x = 20; x < map.sizes.x; x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
@@ -93,41 +114,43 @@ struct HellCrossScene : Scene {
 		}
 
 		veci pos = map.toTiles(player.pos);
-		map.setTile(pos.x - 1, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 2, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 4, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 5, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 6, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x - 3, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x + 1, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x + 2, pos.y + 1, Tile::SOLID_1);
-		map.setTile(pos.x + 3, pos.y + 1, Tile::SOLID_1);
 		map.setTile(pos.x - 1, pos.y, Tile::NONE);
 		map.setTile(pos.x, pos.y, Tile::NONE);
 		map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
 		map.setTile(pos.x, pos.y - 1, Tile::NONE);
 		map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
 		map.setTile(pos.x, pos.y - 2, Tile::NONE);
+		map.setTile(pos.x, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x - 1, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x - 2, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x + 1, pos.y + 1, SOLID_TILE);
+
+/*
+		map.setTile(pos.x + 2, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x - 3, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x + 3, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x - 4, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x - 5, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x - 6, pos.y + 1, SOLID_TILE);
 		map.setTile(pos.x + 1, pos.y, Tile::RSLOPE_1);
-		map.setTile(pos.x + 2, pos.y, Tile::SOLID_1);
-		map.setTile(pos.x + 3, pos.y - 1, Tile::SOLID_1);
-		map.setTile(pos.x + 3, pos.y, Tile::SOLID_1);
+		map.setTile(pos.x + 2, pos.y, SOLID_TILE);
+		map.setTile(pos.x + 3, pos.y - 1, SOLID_TILE);
+		map.setTile(pos.x + 3, pos.y, SOLID_TILE);
 		map.setTile(pos.x + 2, pos.y - 1, Tile::RSLOPE_1);
 		map.setTile(pos.x + 3, pos.y - 2, Tile::RSLOPE_1);
-		map.setTile(pos.x + 4, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x + 5, pos.y - 2, Tile::SOLID_1);
+		map.setTile(pos.x + 4, pos.y - 2, SOLID_TILE);
+		map.setTile(pos.x + 5, pos.y - 2, SOLID_TILE);
 		map.setTile(pos.x - 4, pos.y, Tile::LSLOPE_1);
-		map.setTile(pos.x - 5, pos.y, Tile::SOLID_1);
+		map.setTile(pos.x - 5, pos.y, SOLID_TILE);
 		map.setTile(pos.x - 5, pos.y - 1, Tile::LSLOPE_1);
-		map.setTile(pos.x - 6, pos.y - 1, Tile::SOLID_1);
-		map.setTile(pos.x - 6, pos.y, Tile::SOLID_1);
+		map.setTile(pos.x - 6, pos.y - 1, SOLID_TILE);
+		map.setTile(pos.x - 6, pos.y, SOLID_TILE);
 		map.setTile(pos.x - 6, pos.y - 2, Tile::LSLOPE_1);
-		map.setTile(pos.x - 7, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x - 8, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x - 9, pos.y - 2, Tile::SOLID_1);
-		map.setTile(pos.x - 10, pos.y - 2, Tile::SOLID_1);
+		map.setTile(pos.x - 7, pos.y - 2, SOLID_TILE);
+		map.setTile(pos.x - 8, pos.y - 2, SOLID_TILE);
+		map.setTile(pos.x - 9, pos.y - 2, SOLID_TILE);
+		map.setTile(pos.x - 10, pos.y - 2, SOLID_TILE);
+*/
 
 		Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 

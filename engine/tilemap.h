@@ -73,7 +73,6 @@ struct TileMap : SingleInstance<TileMap>
 	void LoadFromTiled() {
 		memcpy((void*)tiles, (void*)TiledMap::map, TiledMap::map_size.x * TiledMap::map_size.y * sizeof(Tile));
 	}
-	void Randomize(int seed);
 	void Draw() const;
 
 	//FIXME: I think these should be sizes.xy+1

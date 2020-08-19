@@ -6,26 +6,6 @@
 
 const vec Tile::sizevec = vec(size, size);
 
-void TileMap::Randomize(int seed)
-{
-	srand(seed);
-	for (int y = 0; y < sizes.y; y++) {
-		for (int x = 16; x < sizes.x; x++) {
-			Tile t = Tile::NONE;
-			if (y != sizes.y-1 && (rand() % 32) > 29) {
-				if ((rand() % 30) < 10) {
-					t = Tile::BREAKABLE_1;
-				}
-				else {
-					t = Tile::SOLID_1;
-				}
-				if (x > 0 && ((rand() % 32) > 20)) t = getTile(x - 1, y);
-			}
-			setTile(x, y, t);
-		}
-	}
-}
-
 #define USE_VAO
 
 void TileMap::Draw() const
