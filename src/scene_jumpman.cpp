@@ -22,7 +22,7 @@ static int currentPlacingTile = 1;
 #endif
 
 JumpScene::JumpScene()
-	: map(TiledMap::map_size.x, TiledMap::map_size.y)
+	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::marioTexture)
 	, fogPartSys(Assets::fogTexture)
 	, bulletPartSys(Assets::marioTexture)
 {

@@ -36,7 +36,7 @@ struct HellCrossScene : Scene {
 	RotoText rotoText;
 
 	HellCrossScene()
-		: map(map_size.x, map_size.y)
+		: map(map_size.x, map_size.y, Assets::marioTexture)
 		, lava(Bounds(0, map_size.y*16 - 16, map_size.x*16, 200))
 		, bulletPartSys(Assets::marioTexture)
 	{

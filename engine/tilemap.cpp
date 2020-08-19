@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include "SDL_gpu.h"
 #include "camera.h"
-#include "../src/assets.h"
 
 const vec Tile::sizevec = vec(size, size);
 
@@ -40,7 +39,7 @@ void TileMap::Draw() const
 	//out of bounds tile coords
 	GPU_Rect outOfBounds = { 3 * 16, 2 * 16, 16, 16 };
 
-	GPU_Image* texture = Assets::marioTexture;
+	GPU_Image* texture = tileset;
 
 #ifdef USE_VAO
 	//int num_tiles = (right - left) * (bottom - top);

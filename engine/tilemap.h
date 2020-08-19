@@ -6,6 +6,7 @@
 #include "bounds.h"
 #include "mates.h"
 #include "../src/tiledexport.h"
+#include "SDL_gpu.h"
 
 struct Tile : TiledTiles
 {
@@ -58,9 +59,10 @@ private:
 
 struct TileMap : SingleInstance<TileMap>
 {
-	TileMap(int width, int height)
+	TileMap(int width, int height, GPU_Image* texture)
 		: sizes(width, height)
 		, tiles(new Tile[width * height]{})
+		, tileset(texture)
 	{
 	}
 
@@ -123,7 +125,8 @@ struct TileMap : SingleInstance<TileMap>
 	}
 
 	veci sizes;
-	Tile* tiles = nullptr;
+	Tile* tiles;
+	GPU_Image* tileset;
 
 	bool isPosOnSlope(const vec& v) const { return isPosOnSlope(v.x,v.y);  }
 	bool isPosOnSlope(float x, float y) const {
