@@ -25,13 +25,7 @@ namespace Window
         Debug::out << "Scaling to x" << scale;
         //Debug::out << dm.w << " " << dm.h;
  #endif
-        auto sdl_create_window_flags = SDL_WINDOW_RESIZABLE;
-#ifndef __APPLE__
-        // This alone is not enough to support HiDPI on MacOS
-        // > On Apple's OS X you must set the NSHighResolutionCapable Info.plist property to YES
-        // See: https://wiki.libsdl.org/SDL_CreateWindow
-        sdl_create_window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
-#endif
+        auto sdl_create_window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
         target = GPU_Init(GAME_WIDTH * scale, GAME_HEIGHT * scale, sdl_create_window_flags);
         if (target == NULL) {
             Debug::out << "GPU_Init failed";

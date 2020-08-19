@@ -110,15 +110,16 @@ void Mouse::_UpdateInputState()
     // Convert mouse position to scaled, letterboxed game coordinates
     // --------------------------------------------------------------
 
-#ifdef __EMSCRIPTEN__
+#if defined(__EMSCRIPTEN__) || defined(__APPLE__)
     // In emscripten, mouse position is not in the same coordinates as the viewport, convert them first
+    // Same happens in MacOS when on a retina display with auto-scaling
 
     // Normalize mouse coordinates
     pos.x /= Window::target->context->window_w;
     pos.y /= Window::target->context->window_h;
 
     // Expand to viewport coordinates
-    pos.x *= Window::target->context->drawable_w; // equals to the size of the viewport + margins: 2*Window::target->viewport.x + Window::target->viewport.w;
+    pos.x *= Window::target->context->drawable_w; // drawable_w equals to the size of the viewport + margins, ie: 2*Window::target->viewport.x + Window::target->viewport.w;
     pos.y *= Window::target->context->drawable_h;
 #endif
 
