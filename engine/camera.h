@@ -58,10 +58,9 @@ namespace Camera
 		vec c = GetCenter();
 
 		vec screenSize(Window::GAME_WIDTH/camera.zoom_x, Window::GAME_HEIGHT/camera.zoom_y);
-		float halfScreenWidth = screenSize.x / 2.f;
-		float halfScreenHeight = screenSize.y / 2.f;
+		float halfScreenWidth = std::min(limit.width, screenSize.x) / 2.f;
+		float halfScreenHeight = std::min(limit.height, screenSize.y) / 2.f;
 
-		//TODO: Center if viewport is bigger than limits
 		if (c.x + halfScreenWidth > limit.Right()) c.x = limit.Right() - halfScreenWidth;
 		if (c.x - halfScreenWidth < limit.Left()) c.x = limit.Left() + halfScreenWidth;
 		if (c.y + halfScreenHeight > limit.Bottom()) c.y = limit.Bottom() - halfScreenHeight;
