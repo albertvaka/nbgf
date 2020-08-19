@@ -185,6 +185,7 @@ struct HellCrossScene : Scene {
 
 		vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
 		Camera::SetCenter(camPos);
+		Camera::ClampCameraTo(map.boundsInWorld());
 
 		// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 		for (Bullet* e  : Bullet::GetAll()) {
