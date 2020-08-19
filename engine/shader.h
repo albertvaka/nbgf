@@ -8,6 +8,7 @@
 #include "SDL_gpu.h"
 
 struct Shader {
+	// Pass in nullptrs to use the defaults
 	void Load(const char* vertex_path, const char* geometry_path, const char* fragment_path);
 
 	Shader& SetUniform(int location, int i) {

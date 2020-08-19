@@ -3,6 +3,7 @@
 #include "debug.h"
 
 #include "SDL_gpu.h"
+#include "window.h"
 
 void Shader::loadAndAttach(GPU_ShaderEnum type, const char* path) {
 
@@ -46,12 +47,16 @@ void Shader::Load(const char* vertex_path, const char* geometry_path, const char
 	program = GPU_CreateShaderProgram();
 	if (vertex_path) {
 		loadAndAttach(GPU_ShaderEnum::GPU_VERTEX_SHADER, vertex_path);
+	} else {
+		GPU_AttachShader(program, Window::target->context->default_textured_vertex_shader_id);
 	}
 	if (geometry_path) {
 		loadAndAttach(GPU_ShaderEnum::GPU_GEOMETRY_SHADER, geometry_path);
 	}
 	if (fragment_path) {
 		loadAndAttach(GPU_ShaderEnum::GPU_FRAGMENT_SHADER, fragment_path);
+	} else {
+		GPU_AttachShader(program, Window::target->context->default_textured_fragment_shader_id);
 	}
 	GPU_LinkShaderProgram(program);
 	block = GPU_LoadShaderBlock(program, "gpu_Vertex", "gpu_TexCoord", "gpu_Color", "gpu_ModelViewProjectionMatrix");
