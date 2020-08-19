@@ -57,7 +57,7 @@ namespace Camera
 	{
 		vec c = GetCenter();
 
-		vec screenSize(Window::GAME_HEIGHT/camera.zoom_x, Window::GAME_HEIGHT/camera.zoom_y);
+		vec screenSize(Window::GAME_WIDTH/camera.zoom_x, Window::GAME_HEIGHT/camera.zoom_y);
 		float halfScreenWidth = screenSize.x / 2.f;
 		float halfScreenHeight = screenSize.y / 2.f;
 
