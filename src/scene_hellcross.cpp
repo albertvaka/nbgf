@@ -23,11 +23,11 @@ const Tile BREAKABLE_TILE = Tile::BREAKABLE_3;
 static int currentPlacingTile = 1;
 #endif
 
-static vec map_size = vec(1000, 20);
+static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::size);
 
 HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::marioTexture)
-	, lava(Bounds(0, map_size.y*16 - 16, map_size.x*16, 200))
+	, lava(Bounds(0, map_size.y*16 - 20, map_size.x*16, 200))
 	, bulletPartSys(Assets::marioTexture)
 {
 	bulletPartSys.AddSprite({ 5, 37, 6, 6 });
