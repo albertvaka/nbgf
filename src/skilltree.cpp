@@ -81,7 +81,12 @@ SkillTree::SkillTree()
 {
 	for (Skill s : magic_enum::enum_values<Skill>()) {
 		vec pos = PosInTreeToPosInScreen(PosInTree(s));
-		skillBounds.push_back(Bounds(pos-vec(8,8), vec(16,16)));
+		if (pos.x < 0 || pos.y < 0) {
+			// Skill not in tree
+			skillBounds.push_back(Bounds(0,0,0,0));
+		} else {
+			skillBounds.push_back(Bounds(pos-vec(8,8), vec(16,16)));
+		}
 	}
 
 	enabled.resize(description.size(), false);
@@ -132,11 +137,11 @@ void SkillTree::Update(float dt) {
 				prev_left = -1;
 				goto found;
 			}
-			int current_Skill = int(tree[current.y][current.x]);
-			std::vector<Skill>& n = needs[current_Skill];
+			int current_skill = int(tree[current.y][current.x]);
+			std::vector<Skill>& n = needs[current_skill];
 			if (!n.empty()) {
 				prev_right = current.y;
-				current = PosInTree(n[0]); //current_Skill needs n[0]
+				current = PosInTree(n[0]); //current_skill needs n[0]
 			}
 		}
 	}
@@ -149,10 +154,10 @@ void SkillTree::Update(float dt) {
 				prev_right = -1;
 				goto found;
 			}
-			Skill current_Skill = tree[current.y][current.x];
+			Skill current_skill = tree[current.y][current.x];
 			for (size_t s = 0; s < needs.size(); s++) {
 				for (size_t n = 0; n < needs[s].size(); n++) {
-					if (needs[s][n] == current_Skill) { //Skill s needs current_Skill
+					if (needs[s][n] == current_skill) { //Skill s needs current_skill
 						prev_left = current.y;
 						current = PosInTree(Skill(s));
 						goto found;

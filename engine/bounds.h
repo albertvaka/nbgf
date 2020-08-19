@@ -16,7 +16,7 @@ struct Bounds
     float width, height;
 
     constexpr Bounds(float x, float y, float w, float h) : left(x), top(y), width(w), height(h) { }
-    constexpr Bounds() : Bounds(-1,-1,-1,-1) { }
+    constexpr Bounds() : Bounds(-1,-1,0,0) { }
     constexpr Bounds(const vec& topleft, const vec& size) : Bounds(topleft.x, topleft.y, size.x, size.y) {}
     constexpr explicit Bounds(const vec& size) : Bounds(0,0,size.x,size.y) { }
     constexpr explicit Bounds(const vec& pos, const vec& size, const vec& origin) : Bounds(pos.x, pos.y, size.x, size.y) {
