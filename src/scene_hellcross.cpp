@@ -58,14 +58,17 @@ void HellCrossScene::RandomizeMap() {
 	for (int y = 0; y < map.sizes.y; y++) {
 		for (int x = 0; x < map.sizes.x; x++) {
 			Tile t = Tile::NONE;
-			if (y != map.sizes.y-1 && (rand() % 32) > 29) {
-				if ((rand() % 30) < 10) {
-					t = BREAKABLE_TILE;
+			if (y == 0 || map.getTile(x, y - 1) == Tile::NONE) { // do not stack solid blocks
+				if (x > 0 && map.getTile(x - 1, y) != Tile::NONE && Rand::rollf() < 0.2f) {
+					t = map.getTile(x - 1, y); // continue previous block type so we create horizontal platforms
+				} else if (y != map.sizes.y-1 && Rand::rollf() < 0.05f) {
+					if (Rand::rollf() < 0.33f) {
+						t = BREAKABLE_TILE;
+					}
+					else {
+						t = SOLID_TILE;
+					}
 				}
-				else {
-					t = SOLID_TILE;
-				}
-				if (x > 0 && ((rand() % 32) > 20)) t = map.getTile(x - 1, y);
 			}
 			map.setTile(x, y, t);
 		}
@@ -102,17 +105,20 @@ void HellCrossScene::EnterScene()
 
 	veci pos = map.toTiles(player.pos);
 	map.setTile(pos.x - 1, pos.y, Tile::NONE);
-	map.setTile(pos.x, pos.y, Tile::NONE);
+	map.setTile(pos.x + 0, pos.y, Tile::NONE);
+	map.setTile(pos.x + 1, pos.y, Tile::NONE);
 	map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
-	map.setTile(pos.x, pos.y - 1, Tile::NONE);
+	map.setTile(pos.x + 0, pos.y - 1, Tile::NONE);
+	map.setTile(pos.x + 1, pos.y - 1, Tile::NONE);
 	map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
-	map.setTile(pos.x, pos.y - 2, Tile::NONE);
-	map.setTile(pos.x, pos.y + 1, SOLID_TILE);
+	map.setTile(pos.x + 0, pos.y - 2, Tile::NONE);
+	map.setTile(pos.x + 1, pos.y - 2, Tile::NONE);
 	map.setTile(pos.x - 1, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x - 2, pos.y + 1, SOLID_TILE);
+	map.setTile(pos.x + 0, pos.y + 1, SOLID_TILE);
 	map.setTile(pos.x + 1, pos.y + 1, SOLID_TILE);
 
 /*
+	map.setTile(pos.x - 2, pos.y + 1, SOLID_TILE);
 	map.setTile(pos.x + 2, pos.y + 1, SOLID_TILE);
 	map.setTile(pos.x - 3, pos.y + 1, SOLID_TILE);
 	map.setTile(pos.x + 3, pos.y + 1, SOLID_TILE);
