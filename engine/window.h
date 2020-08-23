@@ -15,6 +15,7 @@ namespace Window
 
 	extern SDL_Window* window;
 	extern GPU_Target* target;
+	extern SDL_PixelFormatEnum nativePixelFormat;
 
 	extern bool has_focus;
 

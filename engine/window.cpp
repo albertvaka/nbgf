@@ -11,6 +11,7 @@ namespace Window
 {
     SDL_Window* window;
     GPU_Target* target;
+    SDL_PixelFormatEnum nativePixelFormat;
     bool has_focus = true;
 
     int Init() {
@@ -33,6 +34,9 @@ namespace Window
         }
         window = SDL_GetWindowFromID(target->context->windowID);
         SDL_SetWindowTitle(window, Window::WINDOW_TITLE);
+
+        //This seems to be SDL_PIXELFORMAT_ARGB8888 on my mac
+        nativePixelFormat = (SDL_PixelFormatEnum)SDL_GetWindowPixelFormat(window);
 
         // SDL-gpu anchors images at the center by default, change it to the top-left corner
         GPU_SetDefaultAnchor(0.f, 0.f);
