@@ -40,6 +40,9 @@ precision mediump int;\n";
 	source << std::ifstream(path).rdbuf();
 
 	int id = GPU_CompileShader(type, source.str().c_str());
+	if (id == 0) {
+		Debug::out << GPU_GetShaderMessage();
+	}
 	GPU_AttachShader(program, id);
 }
 
