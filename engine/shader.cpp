@@ -62,7 +62,9 @@ void Shader::Load(const char* vertex_path, const char* geometry_path, const char
 	} else {
 		GPU_AttachShader(program, Window::target->context->default_textured_fragment_shader_id);
 	}
-	GPU_LinkShaderProgram(program);
+	if (GPU_LinkShaderProgram(program) == GPU_FALSE) {
+		Debug::out << GPU_GetShaderMessage();
+	}
 	block = GPU_LoadShaderBlock(program, "gpu_Vertex", "gpu_TexCoord", "gpu_Color", "gpu_ModelViewProjectionMatrix");
 }
 
