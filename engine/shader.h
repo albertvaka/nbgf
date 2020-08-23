@@ -44,6 +44,11 @@ struct Shader {
 	Shader& SetUniform(const char* name, const vec& v) { return SetUniform(GetUniformLocation(name), v); }
 	Shader& SetUniform(const char* name, float r, float g, float b, float a) { return SetUniform(GetUniformLocation(name), r, g, b, a); }
 
+	Shader& SetTexture(const char* textureSamplerUniformName, GPU_Image* image, int location = 1) { 
+		GPU_SetShaderImage(image, GetUniformLocation(textureSamplerUniformName), location); 
+		return *this;
+	}
+
 	void Activate() {
 		if (GPU_GetCurrentShaderProgram() != program) {
 			GPU_ActivateShaderProgram(program, &block);
