@@ -25,6 +25,7 @@ namespace Assets
 	inline TTF_Font* font_30_outline;
 
 	inline Shader tintShader;
+	inline Shader fogShader;
 
 	inline std::array<GPU_Image*, 4> forestParallaxTextures;
 

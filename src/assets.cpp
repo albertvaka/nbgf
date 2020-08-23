@@ -21,6 +21,7 @@ void Assets::LoadAll() {
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 
     tintShader.Load(nullptr, nullptr, "data/tint.frag");
+    fogShader.Load("data/vertex_out.vert", nullptr, "data/fog.frag");
 
     for (size_t i = 0; i < forestParallaxTextures.size(); i++) {
         forestParallaxTextures[i]= LoadImage("data/redforest_"+ std::to_string(i)+".png");

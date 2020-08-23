@@ -508,6 +508,16 @@ void JumpScene::Draw()
 			.withRect(Tile::tileToTextureRect[currentPlacingTile]);
 	}
 #endif
+
+	for (const Bounds& a : TiledAreas::fog) {
+		Assets::fogShader.Activate();
+		Assets::fogShader.SetUniform("offset", vec(mainClock*0.7f, 0.f));
+		Assets::fogShader.SetUniform("time", mainClock);
+		// The texture is not used by the shader at all
+		Window::Draw(Assets::hospitalTexture, a);
+		Shader::Deactivate();
+	}
+
 	//fogPartSys.Draw();
 	//fogPartSys.DrawImGUI();
 	
