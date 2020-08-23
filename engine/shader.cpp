@@ -47,6 +47,7 @@ precision mediump int;\n";
 }
 
 void Shader::Load(const char* vertex_path, const char* geometry_path, const char* fragment_path) {
+	uniforms.clear();
 	program = GPU_CreateShaderProgram();
 	if (vertex_path) {
 		loadAndAttach(GPU_ShaderEnum::GPU_VERTEX_SHADER, vertex_path);
