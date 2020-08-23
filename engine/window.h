@@ -99,6 +99,9 @@ namespace Window
 	public:
 		constexpr Draw(GPU_Image* t, const vec& pos) : t(t), dest(pos) { }
 		constexpr Draw(GPU_Image* t, float x, float y) : t(t), dest(x,y) { }
+		constexpr Draw(GPU_Image* t, const Bounds& destRect) // sets scale
+			: t(t), dest(destRect.TopLeft())
+			, scale(destRect.width/float(t->w), destRect.height/float(t->h)) { }
 
 		constexpr Draw& withRect(float x, float y, float w, float h) {
 			return withRect({ x, y, w, h });
