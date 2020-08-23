@@ -14,7 +14,8 @@ namespace Window
 	constexpr const char* WINDOW_TITLE = "Gaem";
 
 	extern SDL_Window* window;
-	extern GPU_Target* target;
+	extern GPU_Target* screenTarget;
+	extern GPU_Target* currentDrawTarget;
 	extern SDL_PixelFormatEnum nativePixelFormat;
 
 	extern bool has_focus;
@@ -25,7 +26,19 @@ namespace Window
 	inline bool HasFocus() { return has_focus; }
 
 	inline void Clear(uint8_t r, uint8_t g, uint8_t b) {
-		GPU_ClearRGBA(Window::target, r, g, b, 255);
+		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);
+	}
+
+	inline GPU_Image* CreateRenderToTextureTarget(int w = Window::GAME_WIDTH, int h = Window::GAME_HEIGHT) {
+		GPU_Image* texture = GPU_CreateImage(w, h, GPU_FORMAT_RGBA);
+		GPU_SetImageFilter(texture, GPU_FILTER_NEAREST);
+		GPU_SetSnapMode(texture, GPU_SNAP_NONE);
+		return texture;
+	}
+
+	void BeginRenderToTexture(GPU_Image* renderToTextureTarget, bool useCamera);
+	inline void EndRenderToTexture() {
+		Window::currentDrawTarget = Window::screenTarget;
 	}
 
 	namespace DrawPrimitive {
@@ -153,7 +166,7 @@ namespace Window
 
 		~Draw() {
 			// We pass origin as rotation pivot. We could change that to a different variable.
-			GPU_BlitTransformX(t, srcp, Window::target, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
+			GPU_BlitTransformX(t, srcp, Window::currentDrawTarget, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
 			GPU_SetRGBA(t, 255, 255, 255, 255);
 		}
 	};
@@ -171,21 +184,21 @@ namespace Window
 
 		inline void FlushTexturedQuads(GPU_Image* t) {
 			//Debug::out << "vertices:" << vertex_count << " indices:" << index_count;
-			GPU_TriangleBatch(t, Window::target, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_ST);
+			GPU_TriangleBatch(t, Window::currentDrawTarget, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_ST);
 			vertex_count = 0;
 			index_count = 0;
 		}
 
 		inline void FlushRGBQuads() {
 			//Debug::out << "vertices:" << vertex_count << " indices:" << index_count;
-			GPU_TriangleBatch(NULL, Window::target, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_RGB);
+			GPU_TriangleBatch(NULL, Window::currentDrawTarget, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_RGB);
 			vertex_count = 0;
 			index_count = 0;
 		}
 
 		inline void FlushColoredTexturedQuads(GPU_Image* t) {
 			//Debug::out << "vertices:" << vertex_count << " indices:" << index_count;
-			GPU_TriangleBatch(t, Window::target, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_ST_RGBA);
+			GPU_TriangleBatch(t, Window::currentDrawTarget, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_ST_RGBA);
 			vertex_count = 0;
 			index_count = 0;
 		}

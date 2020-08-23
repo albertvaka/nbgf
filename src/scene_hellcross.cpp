@@ -52,6 +52,9 @@ HellCrossScene::HellCrossScene()
 
 	ScreenManager::instance()->AddScreen(map.boundsInWorld());
 	ScreenManager::instance()->UpdateCurrentScreen(map.boundsInWorld().Center());
+
+	renderToTextureTarget = Window::CreateRenderToTextureTarget(Window::GAME_WIDTH, Window::GAME_HEIGHT);
+
 }
 
 void HellCrossScene::RandomizeMap() {
@@ -292,6 +295,8 @@ void HellCrossScene::Update(float dt)
 
 void HellCrossScene::Draw()
 {
+	Window::BeginRenderToTexture(renderToTextureTarget, true);
+
 	Window::Clear(31, 36, 50);
 
 	if (Debug::Draw) {
@@ -353,6 +358,13 @@ void HellCrossScene::Draw()
 			.withRect(Tile::tileToTextureRect[currentPlacingTile]);
 	}
 #endif
+
+	Window::EndRenderToTexture();
+	
+	Assets::waveShader.Activate();
+	Assets::waveShader.SetUniform("time", mainClock);
+	Window::Draw(renderToTextureTarget,Camera::GetTopLeft());
+	Shader::Deactivate();
 
 	//player.polvito.DrawImGUI("Polvito");
 }

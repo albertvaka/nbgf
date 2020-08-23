@@ -52,7 +52,7 @@ void Shader::Load(const char* vertex_path, const char* geometry_path, const char
 	if (vertex_path) {
 		loadAndAttach(GPU_ShaderEnum::GPU_VERTEX_SHADER, vertex_path);
 	} else {
-		GPU_AttachShader(program, Window::target->context->default_textured_vertex_shader_id);
+		GPU_AttachShader(program, Window::screenTarget->context->default_textured_vertex_shader_id);
 	}
 	if (geometry_path) {
 		loadAndAttach(GPU_ShaderEnum::GPU_GEOMETRY_SHADER, geometry_path);
@@ -60,7 +60,7 @@ void Shader::Load(const char* vertex_path, const char* geometry_path, const char
 	if (fragment_path) {
 		loadAndAttach(GPU_ShaderEnum::GPU_FRAGMENT_SHADER, fragment_path);
 	} else {
-		GPU_AttachShader(program, Window::target->context->default_textured_fragment_shader_id);
+		GPU_AttachShader(program, Window::screenTarget->context->default_textured_fragment_shader_id);
 	}
 	if (GPU_LinkShaderProgram(program) == GPU_FALSE) {
 		Debug::out << GPU_GetShaderMessage();

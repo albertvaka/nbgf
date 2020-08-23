@@ -29,7 +29,7 @@ namespace Camera
 	{
 		camera.x = x*camera.zoom_x;
 		camera.y = y*camera.zoom_y;
-		GPU_SetCamera(Window::target, &camera);
+		GPU_SetCamera(Window::currentDrawTarget, &camera);
 	}
 
 	inline void SetTopLeft(const vec& pos)
@@ -79,7 +79,7 @@ namespace Camera
 			SetCenter(c);
 		}
 		else {
-			GPU_SetCamera(Window::target, &camera);
+			GPU_SetCamera(Window::currentDrawTarget, &camera);
 		}
 	}
 
@@ -93,11 +93,11 @@ namespace Camera
 		// GUI Camera is not affected by the current zoom nor camera displacement. Its top-left is always at 0,0
 
 		inline void Begin() {
-			GPU_SetCamera(Window::target, &gui_camera);
+			GPU_SetCamera(Window::currentDrawTarget, &gui_camera);
 		}
 
 		inline void End() {
-			GPU_SetCamera(Window::target, &camera);
+			GPU_SetCamera(Window::currentDrawTarget, &camera);
 		}
 
 		inline constexpr vec GetSize()

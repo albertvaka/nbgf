@@ -26,6 +26,7 @@ namespace Assets
 
 	inline Shader tintShader;
 	inline Shader fogShader;
+	inline Shader waveShader;
 
 	inline std::array<GPU_Image*, 4> forestParallaxTextures;
 

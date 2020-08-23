@@ -226,12 +226,12 @@ void main_loop() {
 
 #ifdef _IMGUI
 	ImGui::Render();
-	SDL_GL_MakeCurrent(Window::window, Window::target->context->context);
+	SDL_GL_MakeCurrent(Window::window, Window::screenTarget->context->context);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
 
 	Camera::GUI::End();
 
-	GPU_Flip(Window::target);
+	GPU_Flip(Window::screenTarget);
 }
 

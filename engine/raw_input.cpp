@@ -115,21 +115,21 @@ void Mouse::_UpdateInputState()
     // Same happens in MacOS when on a retina display with auto-scaling
 
     // Normalize mouse coordinates
-    pos.x /= Window::target->context->window_w;
-    pos.y /= Window::target->context->window_h;
+    pos.x /= Window::screenTarget->context->window_w;
+    pos.y /= Window::screenTarget->context->window_h;
 
     // Expand to viewport coordinates
-    pos.x *= Window::target->context->drawable_w; // drawable_w equals to the size of the viewport + margins, ie: 2*Window::target->viewport.x + Window::target->viewport.w;
-    pos.y *= Window::target->context->drawable_h;
+    pos.x *= Window::screenTarget->context->drawable_w; // drawable_w equals to the size of the viewport + margins, ie: 2*Window::screenTarget->viewport.x + Window::screenTarget->viewport.w;
+    pos.y *= Window::screenTarget->context->drawable_h;
 #endif
 
     // Remove margins
-    pos.x -= Window::target->viewport.x;
-    pos.y -= Window::target->viewport.y;
+    pos.x -= Window::screenTarget->viewport.x;
+    pos.y -= Window::screenTarget->viewport.y;
 
     // Normalize to viewport coordinates without margin
-    pos.x /= Window::target->viewport.w;
-    pos.y /= Window::target->viewport.h;
+    pos.x /= Window::screenTarget->viewport.w;
+    pos.y /= Window::screenTarget->viewport.h;
 
     // Expand to game coordinates
     pos.x *= Window::GAME_WIDTH;

@@ -19,6 +19,7 @@ struct HellCrossScene : Scene {
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;
 	ScreenManager sceneManager;
+	GPU_Image* renderToTextureTarget;
 
 	HellCrossScene();
 

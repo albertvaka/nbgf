@@ -10,7 +10,8 @@
 namespace Window
 {
     SDL_Window* window;
-    GPU_Target* target;
+    GPU_Target* screenTarget;
+    GPU_Target* currentDrawTarget;
     SDL_PixelFormatEnum nativePixelFormat;
     bool has_focus = true;
 
@@ -27,12 +28,12 @@ namespace Window
         //Debug::out << dm.w << " " << dm.h;
  #endif
         auto sdl_create_window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
-        target = GPU_Init(GAME_WIDTH * scale, GAME_HEIGHT * scale, sdl_create_window_flags);
-        if (target == NULL) {
+        screenTarget = GPU_Init(GAME_WIDTH * scale, GAME_HEIGHT * scale, sdl_create_window_flags);
+        if (screenTarget == NULL) {
             Debug::out << "GPU_Init failed";
             return 1;
         }
-        window = SDL_GetWindowFromID(target->context->windowID);
+        window = SDL_GetWindowFromID(screenTarget->context->windowID);
         SDL_SetWindowTitle(window, Window::WINDOW_TITLE);
 
         //This seems to be SDL_PIXELFORMAT_ARGB8888 on my mac
@@ -44,14 +45,16 @@ namespace Window
         // FIXME: Too late for this game, but we have the option to set the Y coordinates the right way
         //GPU_SetCoordinateMode(false);
 
-        GPU_EnableCamera(target, true);
+        currentDrawTarget = screenTarget;
+
+        GPU_EnableCamera(screenTarget, true);
         Camera::camera = GPU_GetDefaultCamera();
         Camera::camera.use_centered_origin = false;
         Camera::gui_camera = GPU_GetDefaultCamera();
         Camera::gui_camera.use_centered_origin = false;
         Camera::SetTopLeft(0.f, 0.f);
 
-        GPU_SetVirtualResolution(Window::target, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+        GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
 
         return 0;
     }
@@ -107,8 +110,8 @@ namespace Window
                         rect.x = (width - rect.w)/2;
                         rect.y = 0;
                     }
-                    GPU_SetViewport(Window::target,rect);
-                    GPU_SetVirtualResolution(Window::target, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+                    GPU_SetViewport(Window::screenTarget,rect);
+                    GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
                 }
                 break;
             }
@@ -116,40 +119,48 @@ namespace Window
         }
     }
 
-    
+	void BeginRenderToTexture(GPU_Image* renderToTextureTarget, bool useCamera) {
+		GPU_Target* target = GPU_LoadTarget(renderToTextureTarget);
+		Window::currentDrawTarget = target;
+		GPU_EnableCamera(target, useCamera);
+		if (useCamera) {
+			GPU_SetCamera(target, &Camera::camera);
+		}
+	}
+
     namespace DrawPrimitive {
 
         void Pixel(float x, float y, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-            GPU_Pixel(Window::target, x, y, { r,g,b,a });
+            GPU_Pixel(Window::currentDrawTarget, x, y, { r,g,b,a });
         }
 
         void Rectangle(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
             if (thickness < 0)
             {
                 GPU_SetLineThickness(0);
-                GPU_RectangleFilled(Window::target, x1, y1, x2, y2, {r,g,b,a});
+                GPU_RectangleFilled(Window::currentDrawTarget, x1, y1, x2, y2, {r,g,b,a});
             }
             else
             {
                 GPU_SetLineThickness(thickness);
-                GPU_Rectangle(Window::target, x1, y1, x2, y2, { r,g,b,a });
+                GPU_Rectangle(Window::currentDrawTarget, x1, y1, x2, y2, { r,g,b,a });
             }
         }
 
         void Line(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
             GPU_SetLineThickness(thickness);
-            GPU_Line(Window::target, x1, y1, x2, y2, { r,g,b,a });
+            GPU_Line(Window::currentDrawTarget, x1, y1, x2, y2, { r,g,b,a });
         }
 
         void Circle(float x, float y, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
             GPU_SetLineThickness(thickness);
             if (thickness < 0) {
                 GPU_SetLineThickness(0);
-                GPU_CircleFilled(Window::target, x, y, radius, {r,g,b,a});
+                GPU_CircleFilled(Window::currentDrawTarget, x, y, radius, {r,g,b,a});
             }
             else {
                 GPU_SetLineThickness(thickness);
-                GPU_Circle(Window::target, x, y, radius, {r,g,b,a});
+                GPU_Circle(Window::currentDrawTarget, x, y, radius, {r,g,b,a});
             }
         }
 
@@ -157,11 +168,11 @@ namespace Window
             GPU_SetLineThickness(thickness);
             if (thickness < 0) {
                 GPU_SetLineThickness(0);
-                GPU_ArcFilled(Window::target, x, y, radius, start_angle, end_angle, { r,g,b,a });
+                GPU_ArcFilled(Window::currentDrawTarget, x, y, radius, start_angle, end_angle, { r,g,b,a });
             }
             else {
                 GPU_SetLineThickness(thickness);
-                GPU_Arc(Window::target, x, y, radius, start_angle, end_angle, { r,g,b,a });
+                GPU_Arc(Window::currentDrawTarget, x, y, radius, start_angle, end_angle, { r,g,b,a });
             }
         }
     }
