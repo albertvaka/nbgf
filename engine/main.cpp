@@ -157,6 +157,13 @@ void main_loop() {
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME = SDL_SCANCODE_F1;
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME_NEXT = SDL_SCANCODE_E;
 	const SDL_Scancode DEBUG_MODE = SDL_SCANCODE_F2;
+	const SDL_Scancode DEBUG_RELOAD_ASSETS = SDL_SCANCODE_F4;
+
+	if (Keyboard::IsKeyJustPressed(DEBUG_RELOAD_ASSETS)) {
+		// Leaks all already loaded assets, but we don't care since this is just for testing
+		Assets::LoadAll();
+		Debug::out << "Assets reloaded";
+	}
 
 	if (Keyboard::IsKeyJustPressed(DEBUG_MODE)) {
 		Debug::Draw = !Debug::Draw;
