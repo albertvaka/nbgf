@@ -19,6 +19,8 @@ const float chanceAngryBat = 0.2f;
 const Tile SOLID_TILE = Tile::SOLID_5; //TODO: Use aliases instead of tile numbers
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_3;
 
+const bool slope_test = false;
+
 #ifdef _DEBUG
 static int currentPlacingTile = 1;
 #endif
@@ -58,8 +60,9 @@ HellCrossScene::HellCrossScene()
 }
 
 void HellCrossScene::RandomizeMap() {
+	const int start_x = slope_test? 22 : 0;
 	for (int y = 0; y < map.sizes.y; y++) {
-		for (int x = 0; x < map.sizes.x; x++) {
+		for (int x = start_x; x < map.sizes.x; x++) {
 			Tile t = Tile::NONE;
 			if (y == 0 || map.getTile(x, y - 1) == Tile::NONE) { // do not stack solid blocks
 				if (x > 0 && map.getTile(x - 1, y) != Tile::NONE && Rand::rollf() < 0.2f) {
@@ -107,46 +110,46 @@ void HellCrossScene::EnterScene()
 	}
 
 	veci pos = map.toTiles(player.pos);
-	map.setTile(pos.x - 1, pos.y, Tile::NONE);
-	map.setTile(pos.x + 0, pos.y, Tile::NONE);
-	map.setTile(pos.x + 1, pos.y, Tile::NONE);
+	map.setTile(pos.x - 1, pos.y + 1, Tile::NONE);
+	map.setTile(pos.x + 0, pos.y + 1, Tile::NONE);
+	map.setTile(pos.x + 1, pos.y + 1, Tile::NONE);
+	map.setTile(pos.x - 1, pos.y - 0, Tile::NONE);
+	map.setTile(pos.x + 0, pos.y - 0, Tile::NONE);
+	map.setTile(pos.x + 1, pos.y - 0, Tile::NONE);
 	map.setTile(pos.x - 1, pos.y - 1, Tile::NONE);
 	map.setTile(pos.x + 0, pos.y - 1, Tile::NONE);
 	map.setTile(pos.x + 1, pos.y - 1, Tile::NONE);
-	map.setTile(pos.x - 1, pos.y - 2, Tile::NONE);
-	map.setTile(pos.x + 0, pos.y - 2, Tile::NONE);
-	map.setTile(pos.x + 1, pos.y - 2, Tile::NONE);
-	map.setTile(pos.x - 1, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x + 0, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x + 1, pos.y + 1, SOLID_TILE);
-
-/*
-	map.setTile(pos.x - 2, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x + 2, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x - 3, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x + 3, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x - 4, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x - 5, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x - 6, pos.y + 1, SOLID_TILE);
-	map.setTile(pos.x + 1, pos.y, Tile::RSLOPE_1);
-	map.setTile(pos.x + 2, pos.y, SOLID_TILE);
-	map.setTile(pos.x + 3, pos.y - 1, SOLID_TILE);
-	map.setTile(pos.x + 3, pos.y, SOLID_TILE);
-	map.setTile(pos.x + 2, pos.y - 1, Tile::RSLOPE_1);
-	map.setTile(pos.x + 3, pos.y - 2, Tile::RSLOPE_1);
-	map.setTile(pos.x + 4, pos.y - 2, SOLID_TILE);
-	map.setTile(pos.x + 5, pos.y - 2, SOLID_TILE);
-	map.setTile(pos.x - 4, pos.y, Tile::LSLOPE_1);
-	map.setTile(pos.x - 5, pos.y, SOLID_TILE);
-	map.setTile(pos.x - 5, pos.y - 1, Tile::LSLOPE_1);
-	map.setTile(pos.x - 6, pos.y - 1, SOLID_TILE);
-	map.setTile(pos.x - 6, pos.y, SOLID_TILE);
-	map.setTile(pos.x - 6, pos.y - 2, Tile::LSLOPE_1);
-	map.setTile(pos.x - 7, pos.y - 2, SOLID_TILE);
-	map.setTile(pos.x - 8, pos.y - 2, SOLID_TILE);
-	map.setTile(pos.x - 9, pos.y - 2, SOLID_TILE);
-	map.setTile(pos.x - 10, pos.y - 2, SOLID_TILE);
-*/
+	map.setTile(pos.x - 1, pos.y + 2, SOLID_TILE);
+	map.setTile(pos.x + 0, pos.y + 2, SOLID_TILE);
+	map.setTile(pos.x + 1, pos.y + 2, SOLID_TILE);
+	map.setTile(pos.x + 2, pos.y + 2, SOLID_TILE);
+	if (slope_test) {
+		map.setTile(pos.x + 3, pos.y + 2, SOLID_TILE);
+		map.setTile(pos.x + 2, pos.y + 1, Tile::RSLOPE_1);
+		map.setTile(pos.x + 3, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x + 4, pos.y - 0, SOLID_TILE);
+		map.setTile(pos.x + 3, pos.y - 0, Tile::RSLOPE_1);
+		map.setTile(pos.x + 4, pos.y - 1, Tile::RSLOPE_1);
+		map.setTile(pos.x + 5, pos.y - 2, Tile::RSLOPE_1);
+		map.setTile(pos.x + 5, pos.y - 1, SOLID_TILE);
+		map.setTile(pos.x + 6, pos.y - 2, SOLID_TILE);
+		map.setTile(pos.x + 7, pos.y - 2, SOLID_TILE);
+		map.setTile(pos.x + 8, pos.y - 2, SOLID_TILE);
+		map.setTile(pos.x + 9, pos.y - 2, SOLID_TILE);
+		map.setTile(pos.x - 2, pos.y + 2, SOLID_TILE);
+		map.setTile(pos.x - 3, pos.y + 2, SOLID_TILE);
+		map.setTile(pos.x - 4, pos.y + 2, SOLID_TILE);
+		map.setTile(pos.x - 5, pos.y + 2, SOLID_TILE);
+		map.setTile(pos.x - 4, pos.y + 1, Tile::LSLOPE_1);
+		map.setTile(pos.x - 5, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x - 5, pos.y - 0, Tile::LSLOPE_1);
+		map.setTile(pos.x - 6, pos.y - 0, SOLID_TILE);
+		map.setTile(pos.x - 6, pos.y - 1, Tile::LSLOPE_1);
+		map.setTile(pos.x - 7, pos.y - 1, SOLID_TILE);
+		map.setTile(pos.x - 8, pos.y - 1, SOLID_TILE);
+		map.setTile(pos.x - 9, pos.y - 1, SOLID_TILE);
+		map.setTile(pos.x - 10, pos.y - 1, SOLID_TILE);
+	}
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
