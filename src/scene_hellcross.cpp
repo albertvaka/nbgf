@@ -341,7 +341,7 @@ void HellCrossScene::Draw()
 #ifdef _IMGUI
 	{
 		ImGui::Begin("hellcross scene");
-		//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
+		ImGui::InputFloat("y", &player.pos.y, 0.5f, 1.f, 2, ImGuiInputTextFlags_CharsDecimal);
 		vec m = Mouse::GetPositionInWorld();
 		veci t = map.toTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);

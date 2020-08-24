@@ -1,7 +1,10 @@
 #include "window.h"
 
 #include "SDL_gpu.h"
-//nclude "imgui_impl_sdl.h"
+
+#ifdef _IMGUI
+#include "imgui_impl_sdl.h"
+#endif
 
 #include "debug.h"
 #include "raw_input.h"
@@ -115,7 +118,9 @@ namespace Window
                 }
                 break;
             }
-            //ImGui_ImplSDL2_ProcessEvent(&event);
+#ifdef _IMGUI
+            ImGui_ImplSDL2_ProcessEvent(&event);
+#endif
         }
     }
 
