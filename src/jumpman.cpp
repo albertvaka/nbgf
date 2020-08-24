@@ -356,7 +356,7 @@ horz_exit:
 		//Debug::out << "getTile to=" << TileMap::offsetInTile(posf.x, pos.y + max_movement_into_slope) << ": " << map->getTile(TileMap::toTiles(vec(posf.x, pos.y + max_movement_into_slope)));
 
 		for (int y = floor(pos.y - max_movement_into_slope); y < ceil(pos.y + max_movement_into_slope); y++) {
-			if (map->isPosOnSlope(posf.x, y-0.00001f)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
+			if (map->isPosOnSlope(posf.x, y-0.0001f)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
 				//Debug::out << "set y on slope";
 				posf.y = y;
 				if (vel.y > 50) DoPolvitoLand();
