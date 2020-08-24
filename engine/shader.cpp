@@ -63,18 +63,21 @@ void Shader::Load(const char* vertex_path, const char* geometry_path, const char
 	} else {
 		GPU_AttachShader(program, Window::screenTarget->context->default_textured_fragment_shader_id);
 	}
+
+	std::stringstream paths;
+	if (vertex_path) {
+		paths << vertex_path << " ";
+	}
+	if (geometry_path) {
+		paths << geometry_path << " ";
+	}
+	if (fragment_path) {
+		paths << fragment_path << " ";
+	}
+	shaderFilePaths = paths.str();
+
 	if (GPU_LinkShaderProgram(program) == GPU_FALSE) {
-		std::stringstream paths;
-		if (vertex_path) {
-			paths << vertex_path << " ";
-		}
-		if (geometry_path) {
-			paths << geometry_path << " ";
-		}
-		if (fragment_path) {
-			paths << fragment_path << " ";
-		}
-		Debug::out << paths.str();
+		Debug::out << shaderFilePaths;
 		Debug::out << GPU_GetShaderMessage();
 	}
 	block = GPU_LoadShaderBlock(program, "gpu_Vertex", "gpu_TexCoord", "gpu_Color", "gpu_ModelViewProjectionMatrix");
@@ -89,7 +92,7 @@ int Shader::GetUniformLocation(const char* name) {
 		int location = GPU_GetUniformLocation(program, name);
 		uniforms.insert(std::make_pair(name, location));
 		if (location == -1) {
-			Debug::out << "Uniform \"" << name << "\" not found in shader";
+			Debug::out << "Uniform \"" << name << "\" not found in shader: " << shaderFilePaths;
 		}
 
 		return location;

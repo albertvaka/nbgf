@@ -60,6 +60,7 @@ struct Shader {
 
     unsigned int program;
 	GPU_ShaderBlock block;
+	std::string shaderFilePaths;
 
 private:
 	void loadAndAttach(GPU_ShaderEnum type, const char* path);
