@@ -17,14 +17,6 @@
 extern "C" {
 #endif
 
-
-#ifdef __EMSCRIPTEN__
-#define SDL_GPU_DISABLE_OPENGL
-#define SDL_GPU_DISABLE_GLES_1
-#else
-#define SDL_GPU_DISABLE_GLES
-#endif
-
 // Compile-time version info
 #include "SDL_gpu_version.h"
 
