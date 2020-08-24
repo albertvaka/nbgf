@@ -41,6 +41,7 @@ precision mediump int;\n";
 
 	int id = GPU_CompileShader(type, source.str().c_str());
 	if (id == 0) {
+		Debug::out << path;
 		Debug::out << GPU_GetShaderMessage();
 	}
 	GPU_AttachShader(program, id);
@@ -63,6 +64,17 @@ void Shader::Load(const char* vertex_path, const char* geometry_path, const char
 		GPU_AttachShader(program, Window::screenTarget->context->default_textured_fragment_shader_id);
 	}
 	if (GPU_LinkShaderProgram(program) == GPU_FALSE) {
+		std::stringstream paths;
+		if (vertex_path) {
+			paths << vertex_path << " ";
+		}
+		if (geometry_path) {
+			paths << geometry_path << " ";
+		}
+		if (fragment_path) {
+			paths << fragment_path << " ";
+		}
+		Debug::out << paths.str();
 		Debug::out << GPU_GetShaderMessage();
 	}
 	block = GPU_LoadShaderBlock(program, "gpu_Vertex", "gpu_TexCoord", "gpu_Color", "gpu_ModelViewProjectionMatrix");
