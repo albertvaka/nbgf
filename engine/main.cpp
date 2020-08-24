@@ -20,22 +20,29 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-Scene* SceneManager::currentScene = nullptr;
-
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
-float mainClock;
-
 #define _FPS_COUNTER
 
 Scene* currentScene;
+Scene* SceneManager::currentScene = nullptr;
+
+float mainClock;
+int last_ticks;
+
+bool slowDown = false;
+
+#ifdef _FPS_COUNTER
 Text* txt_fps;
 int fps_counter = 0;
 float fpsClock = 0.f;
-bool slowDown = false;
-int last_ticks;
+#endif
+
+#ifdef _DEBUG
+bool debugFrameByFrame = false;
+#endif
 
 void init();
 void main_loop();
@@ -169,17 +176,15 @@ void main_loop() {
 		Debug::Draw = !Debug::Draw;
 	}
 
-	static bool frameByFrame = false;
-
 	if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
-		frameByFrame = !frameByFrame;
+		debugFrameByFrame = !debugFrameByFrame;
 	}
-	if (frameByFrame && Debug::Draw) {
+	if (debugFrameByFrame && Debug::Draw) {
 		Camera::MoveCameraWithArrows(50.f, dt);
 		Camera::ChangeZoomWithPlusAndMinus(1.f, dt);
 	}
 
-	if (!frameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
+	if (!debugFrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
 #endif
 	{
 #ifdef _DEBUG
