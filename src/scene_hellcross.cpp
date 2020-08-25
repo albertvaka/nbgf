@@ -18,6 +18,7 @@ const float chanceAngryBat = 0.2f;
 
 const Tile SOLID_TILE = Tile::SOLID_5; //TODO: Use aliases instead of tile numbers
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_3;
+const Tile ONEWAY_TILE = Tile::ONEWAY_6;
 
 const bool slope_test = false;
 
@@ -141,6 +142,15 @@ void HellCrossScene::EnterScene()
 		map.setTile(pos.x - 4, pos.y + 2, SOLID_TILE);
 		map.setTile(pos.x - 5, pos.y + 2, SOLID_TILE);
 		map.setTile(pos.x - 4, pos.y + 1, Tile::LSLOPE_1);
+		map.setTile(pos.x - 5, pos.y - 1, ONEWAY_TILE);
+		map.setTile(pos.x - 4, pos.y - 1, ONEWAY_TILE);
+		map.setTile(pos.x - 3, pos.y - 1, ONEWAY_TILE);
+		map.setTile(pos.x - 2, pos.y - 1, ONEWAY_TILE);
+		map.setTile(pos.x - 1, pos.y - 1, ONEWAY_TILE);
+		map.setTile(pos.x - 0, pos.y - 1, ONEWAY_TILE);
+		map.setTile(pos.x + 1, pos.y - 1, ONEWAY_TILE);
+		map.setTile(pos.x + 2, pos.y - 1, ONEWAY_TILE);
+		map.setTile(pos.x + 3, pos.y - 1, ONEWAY_TILE);
 		map.setTile(pos.x - 5, pos.y + 1, SOLID_TILE);
 		map.setTile(pos.x - 5, pos.y - 0, Tile::LSLOPE_1);
 		map.setTile(pos.x - 6, pos.y - 0, SOLID_TILE);
@@ -364,8 +374,8 @@ void HellCrossScene::Draw()
 
 	Window::EndRenderToTexture();
 	
-	Assets::waveShader.Activate();
-	Assets::waveShader.SetUniform("time", mainClock);
+	//Assets::waveShader.Activate();
+	//Assets::waveShader.SetUniform("time", mainClock);
 	Window::Draw(renderToTextureTarget,Camera::GetTopLeft());
 	Shader::Deactivate();
 
