@@ -106,7 +106,7 @@ void JumpMan::Update(float dt)
 		grounded = true;
 		goto grounded_exit;
 	}
-	if (map->isPosOnSlope(middleFoot)) {
+	if (map->isPosOnSlope(rightFoot - vec(0,marginGrounded)) || map->isPosOnSlope(leftFoot - vec(0,marginGrounded)) || map->isPosOnSlope(middleFoot)) {
 		grounded = true;
 		goto grounded_exit;
 	}
@@ -373,6 +373,24 @@ horz_exit:
 		int xr = map->toTiles(pos.x + centerFromRight.x - E);
 		for (int y = yo; y <= yn; y++)
 		{
+			float maxY = y<yn? map->Bottom(y)-0.001f : posf.y; //in pixels within the current tile 
+			if (map->isPosOnSlope(pos.x, maxY)) { //check the center X only
+			    // we know at some point within this tile there's our slope 
+				float yp = map->Top(y) + 0.001f;
+				while (!map->isPosOnSlope(pos.x, yp) && yp < maxY) {
+					yp += 1.0f;
+				}
+				if (yp > maxY) {
+					yp = maxY;
+				}
+				posf.y = yp;
+				if (vel.y > 50) DoPolvitoLand();
+				vel.y = 30.f; //this helps you get grounded as soon as the slope ends
+				onWall = ONWALL_NO;
+				//if (!grounded) Debug::out << "slope";
+				grounded = true;
+				goto vert_exit;
+			}
 			for (int x = xl; x <= xr; x++)
 			{
 				Tile t = map->getTile(x, y);
@@ -385,11 +403,11 @@ horz_exit:
 						grounded = false;
 						goto vert_exit;
 					} else {
-						//Debug::out << "terra";
 						posf.y = map->Top(y);
 						if (vel.y > 50) DoPolvitoLand();
 						vel.y = 0;
 						onWall = ONWALL_NO;
+						//if (!grounded) Debug::out << "terra";
 						grounded = true;
 						goto vert_exit;
 					}
