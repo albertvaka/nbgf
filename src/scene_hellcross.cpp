@@ -20,7 +20,7 @@ const Tile SOLID_TILE = Tile::SOLID_5; //TODO: Use aliases instead of tile numbe
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_3;
 const Tile ONEWAY_TILE = Tile::ONEWAY_6;
 
-const bool slope_test = true;
+const bool slope_test = false;
 
 #ifdef _DEBUG
 static int currentPlacingTile = 1;
@@ -127,16 +127,16 @@ void HellCrossScene::EnterScene()
 	if (slope_test) {
 		map.setTile(pos.x + 3, pos.y + 4, SOLID_TILE);
 		map.setTile(pos.x + 2, pos.y + 3, Tile::RSLOPE_1);
-		//map.setTile(pos.x + 3, pos.y + 3, SOLID_TILE);
-		//map.setTile(pos.x + 4, pos.y + 2, SOLID_TILE);
+		map.setTile(pos.x + 3, pos.y + 3, SOLID_TILE);
+		map.setTile(pos.x + 4, pos.y + 2, SOLID_TILE);
 		map.setTile(pos.x + 3, pos.y + 2, Tile::RSLOPE_1);
 		map.setTile(pos.x + 4, pos.y + 1, Tile::RSLOPE_1);
 		map.setTile(pos.x + 5, pos.y + 0, Tile::RSLOPE_1);
 		map.setTile(pos.x + 6, pos.y - 1, Tile::RSLOPE_1);
 		map.setTile(pos.x + 7, pos.y - 2, Tile::RSLOPE_1);
-		//map.setTile(pos.x + 5, pos.y + 1, SOLID_TILE);
-		//map.setTile(pos.x + 6, pos.y - 0, SOLID_TILE);
-		//map.setTile(pos.x + 7, pos.y - 1, SOLID_TILE);
+		map.setTile(pos.x + 5, pos.y + 1, SOLID_TILE);
+		map.setTile(pos.x + 6, pos.y - 0, SOLID_TILE);
+		map.setTile(pos.x + 7, pos.y - 1, SOLID_TILE);
 		map.setTile(pos.x + 10, pos.y - 2, SOLID_TILE);
 		map.setTile(pos.x + 8, pos.y - 2, SOLID_TILE);
 		map.setTile(pos.x + 9, pos.y - 2, SOLID_TILE);
@@ -154,9 +154,9 @@ void HellCrossScene::EnterScene()
 		map.setTile(pos.x + 1, pos.y + 1, ONEWAY_TILE);
 		map.setTile(pos.x + 2, pos.y + 1, ONEWAY_TILE);
 		map.setTile(pos.x + 3, pos.y + 1, ONEWAY_TILE);
-		//map.setTile(pos.x - 5, pos.y + 3, SOLID_TILE);
-		//map.setTile(pos.x - 6, pos.y + 2, SOLID_TILE);
+		map.setTile(pos.x - 5, pos.y + 3, SOLID_TILE);
 		map.setTile(pos.x - 5, pos.y + 2, Tile::LSLOPE_1);
+		map.setTile(pos.x - 6, pos.y + 2, SOLID_TILE);
 		map.setTile(pos.x - 6, pos.y + 1, Tile::LSLOPE_1);
 		map.setTile(pos.x - 7, pos.y + 1, SOLID_TILE);
 		map.setTile(pos.x - 8, pos.y + 1, SOLID_TILE);

@@ -111,8 +111,8 @@ void init() {
 
 	last_ticks = SDL_GetTicks();
 
-	currentScene = new HellCrossScene();
-	//currentScene = new JumpScene();
+	//currentScene = new HellCrossScene();
+	currentScene = new JumpScene();
 	SceneManager::SetScene(currentScene);
 	currentScene->EnterScene();
 }
