@@ -330,16 +330,20 @@ horz_exit:
 	{
 		int yo = map->toTiles(pos.y - size.y); // top edge
 		int yn = map->toTiles(posf.y - size.y);
-		int x = map->toTiles(pos.x);
+		int xl = map->toTiles(pos.x - center.x + E);
+		int xr = map->toTiles(pos.x + centerFromRight.x - E);
 		for (int y = yo; y >= yn; y--)
 		{
-			Tile t = map->getTile(x, y);
-			if (t.isSolid()) //slopes should be collisionable when going up
+			for (int x = xl; x <= xr; x++)
 			{
-				posf.y = map->Bottom(y) + size.y;
-				vel.y = 0;
-				jumpTimeLeft = 0;
-				goto vert_exit;
+				Tile t = map->getTile(x, y);
+				if (t.isSolid()) //slopes should be collisionable when going up
+				{
+					posf.y = map->Bottom(y) + size.y;
+					vel.y = 0;
+					jumpTimeLeft = 0;
+					goto vert_exit;
+				}
 			}
 		}
 		//No collision up
@@ -365,26 +369,30 @@ horz_exit:
 
 		int yo = map->toTiles(pos.y); // bottom edge
 		int yn = map->toTiles(posf.y);
-		int x = map->toTiles(pos.x);
+		int xl = map->toTiles(pos.x - center.x + E);
+		int xr = map->toTiles(pos.x + centerFromRight.x - E);
 		for (int y = yo; y <= yn; y++)
 		{
-			Tile t = map->getTile(x, y);
-			if ((t.isFullSolid()) || (t.isOneWay() && pos.y-1.f < (y*Tile::size)))
+			for (int x = xl; x <= xr; x++)
 			{
-				if (t.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
-					posf.y = map->Top(y)+3.f;
-					vel.y = 0;
-					crouched = false;
-					grounded = false;
-					goto vert_exit;
-				} else {
-					//Debug::out << "terra";
-					posf.y = map->Top(y);
-					if (vel.y > 50) DoPolvitoLand();
-					vel.y = 0;
-					onWall = ONWALL_NO;
-					grounded = true;
-					goto vert_exit;
+				Tile t = map->getTile(x, y);
+				if ((t.isFullSolid()) || (t.isOneWay() && pos.y-1.f < (y*Tile::size)))
+				{
+					if (t.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
+						posf.y = map->Top(y)+3.f;
+						vel.y = 0;
+						crouched = false;
+						grounded = false;
+						goto vert_exit;
+					} else {
+						//Debug::out << "terra";
+						posf.y = map->Top(y);
+						if (vel.y > 50) DoPolvitoLand();
+						vel.y = 0;
+						onWall = ONWALL_NO;
+						grounded = true;
+						goto vert_exit;
+					}
 				}
 			}
 		}
