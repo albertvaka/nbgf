@@ -56,7 +56,7 @@ HellCrossScene::HellCrossScene()
 	ScreenManager::instance()->AddScreen(map.boundsInWorld());
 	ScreenManager::instance()->UpdateCurrentScreen(map.boundsInWorld().Center());
 
-	renderToTextureTarget = Window::CreateRenderToTextureTarget(Window::GAME_WIDTH, Window::GAME_HEIGHT);
+	renderToTextureTarget = Window::CreateTexture(Window::GAME_WIDTH, Window::GAME_HEIGHT);
 
 }
 

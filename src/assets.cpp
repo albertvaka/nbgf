@@ -1,21 +1,18 @@
-#include "window.h"
-
 #include "assets.h"
-#include "asset_load.h"
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+#include "window.h"
+#include "asset_load.h"
 
 void Assets::LoadAll() {
 
-    hospitalTexture= LoadImage("data/spritesheet.png");
 
-    marioTexture= LoadImage("data/mario.png");
+    hospitalTexture = LoadImage("data/spritesheet.png");
 
-    menuBgTexture= LoadImage("data/menubg3.png");
+    marioTexture = LoadImage("data/mario.png");
 
-    fogTexture= LoadImage("data/fog.png");
+    menuBgTexture = LoadImage("data/menubg3.png");
+
+    fogTexture = LoadImage("data/fog.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);

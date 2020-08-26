@@ -124,8 +124,8 @@ namespace Window
         }
     }
 
-	void BeginRenderToTexture(GPU_Image* renderToTextureTarget, bool useCamera) {
-		GPU_Target* target = GPU_LoadTarget(renderToTextureTarget);
+	void BeginRenderToTexture(GPU_Image* targetTexture, bool useCamera) {
+		GPU_Target* target = GPU_GetTarget(targetTexture);
 		Window::currentDrawTarget = target;
 		GPU_EnableCamera(target, useCamera);
 		if (useCamera) {

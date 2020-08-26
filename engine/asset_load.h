@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SDL_gpu.h"
-#include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 

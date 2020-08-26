@@ -29,14 +29,14 @@ namespace Window
 		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);
 	}
 
-	inline GPU_Image* CreateRenderToTextureTarget(int w = Window::GAME_WIDTH, int h = Window::GAME_HEIGHT) {
+	inline GPU_Image* CreateTexture(int w = Window::GAME_WIDTH, int h = Window::GAME_HEIGHT) {
 		GPU_Image* texture = GPU_CreateImage(w, h, GPU_FORMAT_RGBA);
 		GPU_SetImageFilter(texture, GPU_FILTER_NEAREST);
 		GPU_SetSnapMode(texture, GPU_SNAP_NONE);
 		return texture;
 	}
 
-	void BeginRenderToTexture(GPU_Image* renderToTextureTarget, bool useCamera);
+	void BeginRenderToTexture(GPU_Image* targetTexture, bool useCamera);
 	inline void EndRenderToTexture() {
 		Window::currentDrawTarget = Window::screenTarget;
 	}

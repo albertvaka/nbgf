@@ -2,12 +2,10 @@
 
 #include <array>
 
+#include "SDL_gpu.h"
 #include "sound.h"
 #include "shader.h"
-
-struct GPU_Image;
 typedef struct _TTF_Font TTF_Font;
-typedef struct _Mix_Music Mix_Music;
 
 namespace Assets
 {
