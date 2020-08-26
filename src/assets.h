@@ -11,6 +11,8 @@ namespace Assets
 {
 	extern void LoadAll();
 
+	inline GPU_Image* blankTexture;
+
 	inline GPU_Image* hospitalTexture;
 
 	inline GPU_Image* marioTexture;
@@ -25,6 +27,7 @@ namespace Assets
 	inline Shader tintShader;
 	inline Shader fogShader;
 	inline Shader waveShader;
+	inline Shader transitionDiamondsShader;
 
 	inline std::array<GPU_Image*, 4> forestParallaxTextures;
 

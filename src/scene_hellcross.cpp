@@ -22,6 +22,8 @@ const Tile ONEWAY_TILE = Tile::ONEWAY_6;
 
 const bool slope_test = false;
 
+const float introDuration = 1.f;
+
 #ifdef _DEBUG
 static int currentPlacingTile = 1;
 #endif
@@ -166,6 +168,7 @@ void HellCrossScene::EnterScene()
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
+	introTime = introDuration;
 }
 
 void HellCrossScene::ExitScene()
@@ -178,6 +181,10 @@ void HellCrossScene::ExitScene()
 
 void HellCrossScene::Update(float dt)
 {
+	if (introTime > 0) {
+		introTime -= dt;
+		return;
+	}
 
 	for (const Lava* l : Lava::GetAll()) {
 		if (l->IsInside(player.pos - vec(0,7.f))) {
@@ -381,6 +388,13 @@ void HellCrossScene::Draw()
 	//Assets::waveShader.SetUniform("time", mainClock);
 	Window::Draw(renderToTextureTarget,Camera::GetTopLeft());
 	Shader::Deactivate();
+
+	if (introTime > 0.f) {
+		Assets::transitionDiamondsShader.Activate();
+		Assets::transitionDiamondsShader.SetUniform("progress", introTime/introDuration);
+		Window::Draw(Assets::blankTexture, Camera::GetBounds());
+		Shader::Deactivate();
+	}
 
 	//player.polvito.DrawImGUI("Polvito");
 }
