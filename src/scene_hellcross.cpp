@@ -186,6 +186,15 @@ void HellCrossScene::Update(float dt)
 		return;
 	}
 
+	if (outtroTime > 0) {
+		outtroTime -= dt;
+		if (outtroTime <= 0) {
+			ExitScene();
+			EnterScene();
+		}
+		return;
+	}
+
 	for (const Lava* l : Lava::GetAll()) {
 		if (l->IsInside(player.pos - vec(0,7.f))) {
 			player.dead = true;
@@ -273,8 +282,7 @@ void HellCrossScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		ExitScene();
-		EnterScene();
+		outtroTime = introDuration;
 		return;
 	}
 	if (Debug::Draw) {
@@ -390,8 +398,14 @@ void HellCrossScene::Draw()
 	Shader::Deactivate();
 
 	if (introTime > 0.f) {
-		Assets::transitionDiamondsShader.Activate();
-		Assets::transitionDiamondsShader.SetUniform("progress", introTime/introDuration);
+		Assets::fadeInDiamondsShader.Activate();
+		Assets::fadeInDiamondsShader.SetUniform("fadeInProgress", introTime/introDuration);
+		Window::Draw(Assets::blankTexture, Camera::GetBounds());
+		Shader::Deactivate();
+	}
+	if (outtroTime > 0.f) {
+		Assets::fadeOutDiamondsShader.Activate();
+		Assets::fadeOutDiamondsShader.SetUniform("fadeOutProgress", outtroTime/introDuration);
 		Window::Draw(Assets::blankTexture, Camera::GetBounds());
 		Shader::Deactivate();
 	}

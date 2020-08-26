@@ -4,7 +4,7 @@ in vec2 texCoord;
 in vec2 vertex;
 
 out vec4 fragColor;
-uniform float progress = 0;
+uniform float fadeOutProgress = 0; //0-1
 
 float diamondPixelSize = 20;
 
@@ -15,8 +15,9 @@ void main() {
     float xDistance = abs(xFraction - 0.5);
     float yDistance = abs(yFraction - 0.5);
     
-    if (xDistance + yDistance + texCoord.x + texCoord.y > progress * 3) {
-		discard;
-	}
-    fragColor = vec4(0,0,0,255);
+    float val =  xDistance + yDistance + texCoord.x + texCoord.y;
+
+    if (val <= fadeOutProgress * 3) {
+        discard;
+    }
 }

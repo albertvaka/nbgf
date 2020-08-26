@@ -24,7 +24,8 @@ void Assets::LoadAll() {
     tintShader.Load(nullptr, nullptr, "data/tint.frag");
     fogShader.Load("data/vertex_out.vert", nullptr, "data/fog.frag");
     waveShader.Load("data/vertex_out.vert", nullptr, "data/wave.frag");
-    transitionDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/transition_diamonds.frag");
+    fadeInDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadein_diamonds.frag");
+    fadeOutDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_diamonds.frag");
 
     for (size_t i = 0; i < forestParallaxTextures.size(); i++) {
         forestParallaxTextures[i]= LoadImage("data/redforest_"+ std::to_string(i)+".png");

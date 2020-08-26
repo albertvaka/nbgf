@@ -20,7 +20,7 @@ struct HellCrossScene : Scene {
 	DestroyedTiles destroyedTiles;
 	ScreenManager sceneManager;
 	GPU_Image* renderToTextureTarget;
-	float introTime;
+	float introTime, outtroTime;
 
 	HellCrossScene();
 
