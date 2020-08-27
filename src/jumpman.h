@@ -13,7 +13,9 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     JumpMan();
     void Update(float GameTime);
     void Draw() const;
-    void Reset() {
+    void Reset(vec position) {
+        pos = position;
+        bfgPos = position + bfgOffset();
         vel = vec(0, 0);
         polvito.Clear();
         invencibleTimer = -1.f;
@@ -32,6 +34,14 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     void takeDamage(const vec& pos);
     bool isInvencible() const { return invencibleTimer > 0.f; }
     bool isHit() const { return invencibleTimer > 0.1f; }
+
+    vec bfgOffset() {
+        if (crouched) {
+            return vec(0,-10);
+        } else {
+            return vec(0, -16);
+        }
+    }
 
     Animation animation;
 

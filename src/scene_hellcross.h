@@ -29,5 +29,6 @@ struct HellCrossScene : Scene {
 	void EnterScene();
 	void ExitScene();
 	void Update(float dt);
+	void UpdateCamera();
 	void Draw();
 };

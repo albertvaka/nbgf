@@ -454,12 +454,7 @@ vert_exit:
 
 
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
-		if (crouched) {
-			bfgPos = vec(pos.x, pos.y - 10);
-		}
-		else {
-			bfgPos = vec(pos.x, pos.y - 16);
-		}
+		bfgPos = pos + bfgOffset();
 		bfgAngle = bfgPos.Angle(Mouse::GetPositionInWorld());
 		bfgAngle = (int(bfgAngle + 360 + (45.f / 2)) / 45) * 45.f;
 		if (bfgCooldownTimer > 0.f) {

@@ -86,8 +86,7 @@ void HellCrossScene::RandomizeMap() {
 
 void HellCrossScene::EnterScene() 
 {
-	player.Reset();
-	player.pos = vec(160,160);
+	player.Reset(vec(160,160));
 
 	randomSeed = Rand::roll(0, 10000);
 	srand(randomSeed);
@@ -169,6 +168,7 @@ void HellCrossScene::EnterScene()
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
 	introTime = introDuration;
+	UpdateCamera();
 }
 
 void HellCrossScene::ExitScene()
@@ -177,6 +177,12 @@ void HellCrossScene::ExitScene()
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
 	destroyedTiles.Clear();
+}
+
+void HellCrossScene::UpdateCamera() {
+	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
+	Camera::SetCenter(camPos);
+	Camera::ClampCameraTo(map.boundsInWorld());
 }
 
 void HellCrossScene::Update(float dt)
@@ -204,16 +210,14 @@ void HellCrossScene::Update(float dt)
 			player.onWall = JumpMan::ONWALL_NO;
 		}
 		if (l->IsInside(player.pos - vec(0, 14.f))) {
-			ExitScene();
-			EnterScene();
+			outtroTime = introDuration; // Timer to reset scene
+			return;
 		}
 	}
 
 	player.Update(dt);
 
-	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
-	Camera::SetCenter(camPos);
-	Camera::ClampCameraTo(map.boundsInWorld());
+	UpdateCamera();
 
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : Bullet::GetAll()) {
@@ -282,7 +286,7 @@ void HellCrossScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		outtroTime = introDuration;
+		outtroTime = introDuration; // Timer to reset scene
 		return;
 	}
 	if (Debug::Draw) {

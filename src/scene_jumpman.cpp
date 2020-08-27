@@ -69,9 +69,7 @@ JumpScene::JumpScene()
 
 void JumpScene::EnterScene() 
 {
-	player.Reset();
-
-	player.pos = TiledEntities::spawn;
+	player.Reset(TiledEntities::spawn);
 
 	map.LoadFromTiled();
 
