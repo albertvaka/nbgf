@@ -45,13 +45,13 @@ void main() {
 
 	vec2 coord = vec2(vertex.x, vertex.y);
 
-    coord /= 50.f;
+    coord /= 60.f;
     coord += offset;
 
-	vec2 motion = vec2( fbm(coord + vec2(time * -0.5, time * 0.5)) );
+	vec2 motion = vec2( fbm(coord + vec2(time * -0.3, time * 0.3)) );
 	float final = fbm(coord + motion);
 
-	fragColor = vec4(fogColor.r, fogColor.g, fogColor.b, fogColor.a * final);
+	fragColor = vec4(fogColor.r, fogColor.g, fogColor.b, final*0.7-0.2);
 }
 
 

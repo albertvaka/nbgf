@@ -507,9 +507,9 @@ void JumpScene::Draw()
 	}
 #endif
 
-	for (const Bounds& a : TiledAreas::fog) {
+	for (const Bounds& a : TiledAreas::parallax_forest) {
 		Assets::fogShader.Activate();
-		Assets::fogShader.SetUniform("offset", vec(mainClock*0.7f, 0.f));
+		Assets::fogShader.SetUniform("offset", vec(mainClock*0.2f, 0.f));
 		Assets::fogShader.SetUniform("time", mainClock);
 		// The texture is not used by the shader at all
 		Window::Draw(Assets::hospitalTexture, a);
