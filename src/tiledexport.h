@@ -202,6 +202,7 @@ struct TiledTiles
 		SOLID_34,
 		SOLID_35,
 		SOLID_36,
+		SOLID_37,
 		BREAKABLE_1,
 		BREAKABLE_2,
 		BREAKABLE_3,
@@ -209,20 +210,24 @@ struct TiledTiles
 		SOLID_TRANSPARENT,
 	};
 
-	static const Value ONEWAY_BEGIN = ONEWAY_1;
-	static const Value RSLOPE_BEGIN = RSLOPE_1;
-	static const Value LSLOPE_BEGIN = LSLOPE_1;
-	static const Value SOLID_BEGIN = SOLID_1;
-	static const Value BREAKABLE_BEGING = BREAKABLE_1;
+	static constexpr Value ONEWAY_BEGIN = ONEWAY_1;
+	static constexpr Value RSLOPE_BEGIN = RSLOPE_1;
+	static constexpr Value LSLOPE_BEGIN = LSLOPE_1;
+	static constexpr Value SOLID_BEGIN = SOLID_1;
+	static constexpr Value BREAKABLE_BEGIN = BREAKABLE_1;
 
 	// Aliases
-	static const Value BG_PLAIN_COLOR = BG_33;
-	static const Value BG_DOOR_OPENING = BG_48;
-	static const Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
-	static const Value SOLID_PLAIN_COLOR = SOLID_18;
-	static const Value SOLID_DOOR = SOLID_19;
-	static const Value SOLID_DOOR_BOTTOM = SOLID_23;
-	static const Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_4;
+	static constexpr Value BG_PLAIN_COLOR = BG_33;
+	static constexpr Value BG_DOOR_OPENING = BG_48;
+	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
+	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
+	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_3;
+	static constexpr Value SOLID_SIMPLE = SOLID_6;
+	static constexpr Value SOLID_PLAIN_COLOR = SOLID_19;
+	static constexpr Value SOLID_DOOR = SOLID_20;
+	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_24;
+	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_3;
+	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_4;
 
 };
 

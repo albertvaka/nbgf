@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "vector.h"
+#include "vec.h"
 #include "bounds.h"
 #include "SDL_gpu.h"
 
@@ -19,15 +19,15 @@ struct TiledTiles
 		SOLID_TRANSPARENT,
 	};
 
-	static const Value ONEWAY_BEGIN = ONEWAY_1;
-	static const Value RSLOPE_BEGIN = RSLOPE_1;
-	static const Value LSLOPE_BEGIN = LSLOPE_1;
-	static const Value SOLID_BEGIN = SOLID_1;
-	static const Value BREAKABLE_BEGING = BREAKABLE_1;
+	static constexpr Value ONEWAY_BEGIN = ONEWAY_1;
+	static constexpr Value RSLOPE_BEGIN = RSLOPE_1;
+	static constexpr Value LSLOPE_BEGIN = LSLOPE_1;
+	static constexpr Value SOLID_BEGIN = SOLID_1;
+	static constexpr Value BREAKABLE_BEGIN = BREAKABLE_1;
 
 	// Aliases
 {%- for k, v in aliases.items() %}
-	static const Value {{v}} = {{k}};
+	static constexpr Value {{k}} = {{v}};
 {%- endfor %}
 
 };

@@ -16,9 +16,9 @@ extern float mainClock;
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
 
-const Tile SOLID_TILE = Tile::SOLID_5; //TODO: Use aliases instead of tile numbers
-const Tile BREAKABLE_TILE = Tile::BREAKABLE_3;
-const Tile ONEWAY_TILE = Tile::ONEWAY_6;
+const Tile SOLID_TILE = Tile::SOLID_SIMPLE;
+const Tile BREAKABLE_TILE = Tile::BREAKABLE_SIMPLE;
+const Tile ONEWAY_TILE = Tile::ONEWAY_SIMPLE;
 
 const bool slope_test = false;
 

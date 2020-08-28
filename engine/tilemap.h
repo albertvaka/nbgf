@@ -42,7 +42,7 @@ struct Tile : TiledTiles
 	}
 
 	bool isBreakable() const {
-		return value >= BREAKABLE_BEGING && value < SOLID_TRANSPARENT;
+		return value >= BREAKABLE_BEGIN && value < SOLID_TRANSPARENT;
 	}
 
 	Tile() = default;

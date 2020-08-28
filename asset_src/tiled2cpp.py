@@ -66,6 +66,14 @@ for chunk in tiles.data:
             x+=1
         y+=1
 
+# Mark tiles with aliases as used so they appear in the
+# exported file, since they might be used programatically
+for g in tileset.keys():
+    if tileset[g].properties is not None:
+        for p in tileset[g].properties:
+            if p.name == 'alias':
+                gids_used.add(g)
+
 gids_used.remove(-1)
 
 gids_by_type = defaultdict(list)
@@ -96,7 +104,9 @@ for type_ in known_types:
         if g in tileset and tileset[g].properties is not None:
             for p in tileset[g].properties:
                 if p.name == 'alias':
-                    aliases[name] = '{}_{}'.format(type_.upper(), p.value).upper()
+                    for alias in p.value.split(";"):
+                        full_alias = '{}_{}'.format(type_, alias).upper()
+                        aliases[full_alias] = name
 
 out_map = [ gid_to_tileid[out_map_dict.get(i,-1)] for i in range(out_width*out_height) ]
 

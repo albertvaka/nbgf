@@ -17,7 +17,7 @@ void TileMap::Draw() const
 	int bottom = (screen.Bottom() / Tile::size) + 1;
 
 	//out of bounds tile coords
-	GPU_Rect outOfBounds = { 3 * 16, 2 * 16, 16, 16 };
+	GPU_Rect outOfBounds = Tile::tileToTextureRect[Tile::SOLID_OUT_OF_BOUNDS];
 
 	GPU_Image* texture = tileset;
 
