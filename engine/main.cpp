@@ -40,10 +40,6 @@ int fps_counter = 0;
 float fpsClock = 0.f;
 #endif
 
-#ifdef _DEBUG
-bool debugFrameByFrame = false;
-#endif
-
 void init();
 void main_loop();
 
@@ -177,14 +173,14 @@ void main_loop() {
 	}
 
 	if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
-		debugFrameByFrame = !debugFrameByFrame;
+		Debug::FrameByFrame = !Debug::FrameByFrame;
 	}
-	if (debugFrameByFrame && Debug::Draw) {
+	if (Debug::FrameByFrame && Debug::Draw) {
 		Camera::MoveCameraWithArrows(50.f, dt);
 		Camera::ChangeZoomWithPlusAndMinus(1.f, dt);
 	}
 
-	if (!debugFrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
+	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
 #endif
 	{
 #ifdef _DEBUG

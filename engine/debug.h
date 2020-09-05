@@ -5,9 +5,11 @@
 
 namespace Debug {
 #ifdef _DEBUG
-    extern bool Draw;
+    inline bool Draw = false;
+    inline bool FrameByFrame = false;
 #else 
     static const bool Draw = false;
+    static const bool FrameByFrame = false;
 #endif
     extern std::ostream& _forwarded_out;
 };

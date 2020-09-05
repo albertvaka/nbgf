@@ -8,10 +8,6 @@ namespace Debug {
 
 	std::ostream& _forwarded_out = std::cout;
 
-#ifdef _DEBUG
-	bool Draw = false;
-#endif
-
 }
 
 DebugStreamDelegate::~DebugStreamDelegate() {
