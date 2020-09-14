@@ -2,7 +2,6 @@ import pytiled_parser
 from jinja2 import Template
 from pathlib import Path
 from collections import defaultdict
-from itertools import chain
 
 known_types = ['bg','oneway','rslope','lslope','solid','breakable']
 
@@ -141,7 +140,10 @@ out_h = tm.render(
     screens=out_screens,
 )
 
-current = Path('../src/tiledexport.h').read_text()
+try:
+    current = Path('../src/tiledexport.h').read_text()
+except FileNotFoundError:
+    current = ""
 if out_h == current:
     print("Skipping header generation, no changes detected")
 else:
@@ -164,7 +166,10 @@ out_cpp = tm.render(
     debug = False,
 )
 
-current = Path('../src/tiledexport.cpp').read_text()
+try:
+    current = Path('../src/tiledexport.cpp').read_text()
+except FileNotFoundError:
+    current = ""
 if out_cpp == current:
     print("Skipping cpp generation, no changes detected")
 else:

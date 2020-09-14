@@ -16,6 +16,9 @@ namespace Assets
 	inline GPU_Image* hospitalTexture;
 
 	inline GPU_Image* marioTexture;
+	inline GPU_Image* wheelerTexture;
+	inline GPU_Image* mantisTexture;
+	inline GPU_Image* scifiTexture;
 
 	inline GPU_Image* menuBgTexture;
 
