@@ -4,9 +4,9 @@
 
 #include "vec.h"
 
-#include "../src/anim_data.h"
+#include "../src/anim_lib.h"
 
-struct Animation
+struct Animation2
 {
 	float timer = 0;
 	int current_frame = 0;
@@ -18,10 +18,18 @@ struct Animation
 	int anim_size = 0;
 
 	template<int size>
-	constexpr Animation(const AnimationFrame(&animation)[size])
-		: anim(animation)
-		, anim_size(size)
-	{ }
+	constexpr Animation2(const AnimationFrame(&animation)[size])
+	{
+		SetAnimation(animation);
+	}
+
+	template<int size>
+	constexpr void SetAnimation(const AnimationFrame(&animation)[size])
+	{ 
+		anim = animation;
+		anim_size = size;
+		complete = false;
+	}
 
 	void Update(float dt)
 	{
@@ -46,6 +54,28 @@ struct Animation
 		}
 	}
 
+	void Reverse(float dt)
+	{
+		timer += dt;
+
+		const AnimationFrame& frame = anim[current_frame];
+		if (timer > frame.duration)
+		{
+			timer -= frame.duration;
+			if (current_frame > 0)
+			{
+				current_frame--;
+			}
+			else if (loopable)
+			{
+				current_frame = anim_size - 1;
+			}
+			else
+			{
+				complete = true;
+			}
+		}
+	}
 	constexpr void Reset()
 	{
 		timer = 0;
@@ -70,4 +100,8 @@ struct Animation
 		return anim[current_frame].rect;
 	}
 
+	const float GetCurrentFrameDuration() const
+	{
+		return anim[current_frame].duration;
+	}
 };

@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\animation.h" />
+    <ClInclude Include="engine\animation2.h" />
+    <ClInclude Include="engine\anim_frame.h" />
     <ClInclude Include="engine\asset_load.h" />
     <ClInclude Include="engine\bounds.h" />
     <ClInclude Include="engine\camera.h" />
@@ -42,8 +44,10 @@
     <ClInclude Include="engine\vec.h" />
     <ClInclude Include="engine\window.h" />
     <ClInclude Include="src\anim_data.h" />
+    <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bat.h" />
+    <ClInclude Include="src\bipedal.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\destroyedtiles.h" />
     <ClInclude Include="src\enemy_door.h" />
@@ -54,6 +58,7 @@
     <ClInclude Include="src\powerups.h" />
     <ClInclude Include="src\rototext.h" />
     <ClInclude Include="src\savestation.h" />
+    <ClInclude Include="src\scene_hellcross.h" />
     <ClInclude Include="src\scene_jumpman.h" />
     <ClInclude Include="src\screen.h" />
     <ClInclude Include="src\simplexnoise.h" />
@@ -62,6 +67,7 @@
     <ClInclude Include="src\steering_behavior.h" />
     <ClInclude Include="src\steering_behavior_applier.h" />
     <ClInclude Include="src\steering_entity.h" />
+    <ClInclude Include="src\texturepackerexport.h" />
     <ClInclude Include="src\tiledexport.h" />
     <ClInclude Include="vendor\glew\glew.h" />
     <ClInclude Include="vendor\glew\glxew.h" />
@@ -104,6 +110,7 @@
     <ClCompile Include="src\anim_data.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\bat.cpp" />
+    <ClCompile Include="src\bipedal.cpp" />
     <ClCompile Include="src\destroyedtiles.cpp" />
     <ClCompile Include="src\enemy_door.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
@@ -111,6 +118,7 @@
     <ClCompile Include="src\parallax.cpp" />
     <ClCompile Include="src\powerups.cpp" />
     <ClCompile Include="src\savestation.cpp" />
+    <ClCompile Include="src\scene_hellcross.cpp" />
     <ClCompile Include="src\scene_jumpman.cpp" />
     <ClCompile Include="src\screen.cpp" />
     <ClCompile Include="src\simplexnoise.cpp" />

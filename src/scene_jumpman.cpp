@@ -8,6 +8,7 @@
 #include "assets.h"
 #include "parallax.h"
 #include "bat.h"
+#include "bipedal.h"
 #include "lava.h"
 #include "savestation.h"
 #include "debug.h"
@@ -77,6 +78,8 @@ void JumpScene::EnterScene()
 		new Bat(v,false, false);
 	}
 
+	new Bipedal(TiledEntities::boss_bipedal);
+
 	for (const vec& v : TiledEntities::angrybat) {
 		new Bat(v, true, false);
 	}
@@ -137,6 +140,7 @@ void JumpScene::ExitScene()
 	bulletPartSys.Clear();
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
+	Bipedal::DeleteAll();
 	Lava::DeleteAll();
 	destroyedTiles.Clear();
 	EnemyDoor::DeleteAll();
@@ -223,6 +227,10 @@ void JumpScene::Update(float dt)
 	}
 	Bullet::DeleteNotAlive();
 
+	for (Bipedal* e : Bipedal::GetAll()) {
+		e->Update(dt);
+	}
+
 	for (Bat* e : Bat::GetAll()) {
 		e->Update(dt);
 		for (Bullet* b : Bullet::GetAll()) {
@@ -258,6 +266,8 @@ void JumpScene::Update(float dt)
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
 		skillTree.Enable(Skill::GUN);
 		skillTree.Enable(Skill::WALLJUMP);
+		skillTree.Enable(Skill::BREAK);
+		player.pos = vec(1748, 1084);
 	}
 	if (Keyboard::IsKeyJustPressed(screen_left)) {
 		player.pos.x -= Window::GAME_WIDTH;
@@ -433,6 +443,9 @@ void JumpScene::Draw()
 		}
 	}
 
+	for (const Bipedal* e : Bipedal::GetAll()) {
+		e->Draw();
+	}
 	bulletPartSys.Draw();
 	//bulletPartSys.DrawImGUI("BulletTrail");
 

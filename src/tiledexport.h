@@ -252,6 +252,7 @@ struct TiledEntities
 	static const vec gunup_tancaporta;
 	static const std::array<vec, 2> save;
 	static const vec lava_initial_height;
+	static const vec boss_bipedal;
 	
 };
 

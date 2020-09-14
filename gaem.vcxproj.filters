@@ -235,6 +235,24 @@
     <ClInclude Include="engine\rand.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene_hellcross.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texturepackerexport.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\anim_lib.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\animation2.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\anim_frame.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bipedal.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -383,6 +401,12 @@
     </ClCompile>
     <ClCompile Include="engine\vec.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_hellcross.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bipedal.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

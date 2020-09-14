@@ -16,6 +16,7 @@ namespace Rand
 
 	inline int roll(int min, int max) { return min + (rand() % (max - min)); } // Range [min, max)
 	inline int roll(int max) { return roll(0, max); } // Range [0, max)
+	inline bool OnceEach(int max) { return roll(0, max) == 0; }
 
 	inline vec vecInCircle(float radius)
 	{
