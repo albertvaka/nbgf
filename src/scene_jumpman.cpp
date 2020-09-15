@@ -8,6 +8,7 @@
 #include "assets.h"
 #include "parallax.h"
 #include "bat.h"
+#include "missile.h"
 #include "bipedal.h"
 #include "lava.h"
 #include "savestation.h"
@@ -139,6 +140,7 @@ void JumpScene::ExitScene()
 {
 	bulletPartSys.Clear();
 	Bullet::DeleteAll();
+	Missile::DeleteAll();
 	Bat::DeleteAll();
 	Bipedal::DeleteAll();
 	Lava::DeleteAll();
@@ -147,6 +149,19 @@ void JumpScene::ExitScene()
 	BigItem::DeleteAll();
 	HealthUp::DeleteAll();
 	GunUp::DeleteAll();
+}
+
+std::tuple<Tile, veci> CollideBulletTilemap(CircleEntity* e, const TileMap& map) {
+	vec toTheOutside = e->vel.Perp().Normalized()* e->radius * 0.85f;
+	//(e->pos + toTheOutside).Debuggerino(sf::Color::White);
+	//(e->pos - toTheOutside).Debuggerino(sf::Color::White);
+	veci tpos = map.toTiles(e->pos+ toTheOutside);
+	Tile tile = map.getTile(tpos);
+	if (!tile.isFullSolid()) {
+		tpos = map.toTiles(e->pos - toTheOutside);
+		tile = map.getTile(tpos);
+	}
+	return std::make_tuple(tile,tpos);
 }
 
 void JumpScene::Update(float dt)
@@ -184,6 +199,10 @@ void JumpScene::Update(float dt)
 	displacement.Truncate(camSpeed * dt);
 	Camera::SetCenter(oldPos + displacement);
 
+	for (Bipedal* e : Bipedal::GetAll()) {
+		e->Update(dt);
+	}
+
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : Bullet::GetAll()) {
 		e->Update(dt);
@@ -198,18 +217,10 @@ void JumpScene::Update(float dt)
 			}
 		}
 
-		vec toTheOutside = e->vel.Perp().Normalized()* e->radius * 0.85f;
-		//(e->pos + toTheOutside).Debuggerino(sf::Color::White);
-		//(e->pos - toTheOutside).Debuggerino(sf::Color::White);
-		veci t = map.toTiles(e->pos+ toTheOutside);
-		Tile tile = map.getTile(t);
-		if (!tile.isFullSolid()) {
-			t = map.toTiles(e->pos - toTheOutside);
-			tile = map.getTile(t);
-		}
+		auto&&[tile, tpos] = CollideBulletTilemap(e, map);
 		if (tile.isFullSolid()) {
 			if (tile.isBreakable() && skillTree.IsEnabled(Skill::BREAK)) {
-				destroyedTiles.Destroy(t.x, t.y);
+				destroyedTiles.Destroy(tpos.x, tpos.y);
 			}
 			AwakeNearbyBats(e->pos);
 			bulletPartSys.pos = e->pos;
@@ -227,9 +238,22 @@ void JumpScene::Update(float dt)
 	}
 	Bullet::DeleteNotAlive();
 
-	for (Bipedal* e : Bipedal::GetAll()) {
+	//FIXME: This is a copy-paste from bullet
+	for (Missile* e  : Missile::GetAll()) {
 		e->Update(dt);
+		if (e->explode) continue;
+
+		auto&&[tile, tpos] = CollideBulletTilemap(e, map);
+		if (tile.isFullSolid()) {
+			if (tile.isBreakable() && skillTree.IsEnabled(Skill::BREAK)) {
+				destroyedTiles.Destroy(tpos.x, tpos.y);
+			}
+			AwakeNearbyBats(e->pos);
+			e->alive = false;
+			continue;
+		}
 	}
+	Missile::DeleteNotAlive();
 
 	for (Bat* e : Bat::GetAll()) {
 		e->Update(dt);
@@ -455,6 +479,14 @@ void JumpScene::Draw()
 			e->DrawBounds();
 		}
 	}
+	
+	for (const Missile* e : Missile::GetAll()) {
+		e->Draw();
+		if (Debug::Draw) {
+			e->DrawBounds();
+		}
+	}
+
 
 	for (const GunUp* g : GunUp::GetAll()) {
 		g->Draw();

@@ -3,6 +3,7 @@
 
 #include "input.h"
 #include "bullet.h"
+#include "missile.h"
 #include "mates.h"
 #include "assets.h"
 #include "debug.h"
@@ -468,6 +469,7 @@ vert_exit:
 			bfgCooldownTimer = bfgCooldown;
 			vec gunDirection = vec::FromAngle(angleInRads);
 			vec tipOfTheGun = bfgPos + gunDirection*17.f;
+			new Missile(tipOfTheGun, gunDirection*bulletVel/5.f);
 			new Bullet(tipOfTheGun, gunDirection*bulletVel, 1.5f);
 			vel -= gunDirection*bfgPushBack;
 			jumpTimeLeft = 0; // Overrides jump impulse
