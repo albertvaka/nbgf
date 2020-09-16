@@ -19,5 +19,7 @@ void main() {
 
     if (val >= fadeInProgress * 3) {
         discard;
+    } else {
+        fragColor = vec4(0,0,0,255);
     }
 }
