@@ -6,6 +6,7 @@
 #include "window.h"
 #include "rand.h"
 #include "debug.h"
+#include "fxmanager.h"
 #include "camera.h"
 
 const float walking_speed = 30.f;
@@ -72,6 +73,13 @@ void Bipedal::Update(float dt)
 		}
 
 		pos.x += speed * dt;
+
+		if (Camera::GetBounds().Contains(pos)) {
+			bool stomp = (frame != anim.current_frame) && (anim.current_frame == 0 || anim.current_frame == 3);
+			if (stomp) {
+				FxManager::StartScreenshake(veci(0, 10), 0.2f);
+			}
+		}
 
 		bool outOfBounds = (pos.x < initialX) || (pos.x > (initialX + maxDistance));
 		bool animationLooped = (frame != anim.current_frame) && (anim.current_frame == 0);
