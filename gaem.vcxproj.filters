@@ -408,6 +408,9 @@
     <ClCompile Include="src\bipedal.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\fxmanager.h">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">

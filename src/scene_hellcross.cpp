@@ -10,6 +10,7 @@
 #include "simplexnoise.h"
 #include "bat.h"
 #include "debug.h"
+#include "fxmanager.h"
 
 extern float mainClock;
 
@@ -58,7 +59,6 @@ HellCrossScene::HellCrossScene()
 	ScreenManager::instance()->AddScreen(map.boundsInWorld());
 	ScreenManager::instance()->UpdateCurrentScreen(map.boundsInWorld().Center());
 
-	renderToTextureTarget = Window::CreateTexture(Window::GAME_WIDTH, Window::GAME_HEIGHT);
 
 }
 
@@ -167,7 +167,7 @@ void HellCrossScene::EnterScene()
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
-	introTime = introDuration;
+	FxManager::StartIntroTransition(introDuration);
 	UpdateCamera();
 }
 
@@ -181,23 +181,22 @@ void HellCrossScene::ExitScene()
 
 void HellCrossScene::UpdateCamera() {
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
+	camPos += FxManager::GetScreenshake();
 	Camera::SetCenter(camPos);
 	Camera::ClampCameraTo(map.boundsInWorld());
 }
 
 void HellCrossScene::Update(float dt)
 {
-	if (introTime > 0) {
-		introTime -= dt;
-		return;
-	}
+	FxManager::Update(dt);
 
-	if (outtroTime > 0) {
-		outtroTime -= dt;
-		if (outtroTime <= 0) {
-			ExitScene();
-			EnterScene();
-		}
+	if (FxManager::IsIntroTransitionActive() || FxManager::IsOuttroTransitionActive()) {
+		return;
+	} else if (FxManager::IsOuttroTransitionDone()) {
+		FxManager::ResetOuttroTransitionDone();
+		// Restart scene
+		ExitScene();
+		EnterScene();
 		return;
 	}
 
@@ -210,7 +209,7 @@ void HellCrossScene::Update(float dt)
 			player.onWall = JumpMan::ONWALL_NO;
 		}
 		if (l->IsInside(player.pos - vec(0, 14.f))) {
-			outtroTime = introDuration; // Timer to reset scene
+			FxManager::StartOuttroTransition(introDuration); // Will reset scene after it's done
 			return;
 		}
 	}
@@ -286,7 +285,7 @@ void HellCrossScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		outtroTime = introDuration; // Timer to reset scene
+		FxManager::StartOuttroTransition(introDuration); // Timer to reset scene
 		return;
 	}
 	if (Debug::Draw) {
@@ -330,7 +329,7 @@ void HellCrossScene::Update(float dt)
 
 void HellCrossScene::Draw()
 {
-	Window::BeginRenderToTexture(renderToTextureTarget, true);
+	FxManager::BeginDraw();
 
 	Window::Clear(31, 36, 50);
 
@@ -394,25 +393,7 @@ void HellCrossScene::Draw()
 	}
 #endif
 
-	Window::EndRenderToTexture();
-	
-	//Assets::waveShader.Activate();
-	//Assets::waveShader.SetUniform("time", mainClock);
-	Window::Draw(renderToTextureTarget,Camera::GetTopLeft());
-	Shader::Deactivate();
-
-	if (introTime > 0.f) {
-		Assets::fadeInDiamondsShader.Activate();
-		Assets::fadeInDiamondsShader.SetUniform("fadeInProgress", introTime/introDuration);
-		Window::Draw(Assets::blankTexture, Camera::GetBounds());
-		Shader::Deactivate();
-	}
-	if (outtroTime > 0.f) {
-		Assets::fadeOutDiamondsShader.Activate();
-		Assets::fadeOutDiamondsShader.SetUniform("fadeOutProgress", outtroTime/introDuration);
-		Window::Draw(Assets::blankTexture, Camera::GetBounds());
-		Shader::Deactivate();
-	}
+	FxManager::EndDraw();
 
 	//player.polvito.DrawImGUI("Polvito");
 }

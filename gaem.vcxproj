@@ -113,6 +113,7 @@
     <ClCompile Include="src\bipedal.cpp" />
     <ClCompile Include="src\destroyedtiles.cpp" />
     <ClCompile Include="src\enemy_door.cpp" />
+    <ClCompile Include="src\fxmanager.h" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\lava.cpp" />
     <ClCompile Include="src\parallax.cpp" />

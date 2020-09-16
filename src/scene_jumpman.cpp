@@ -10,6 +10,7 @@
 #include "bat.h"
 #include "missile.h"
 #include "bipedal.h"
+#include "fxmanager.h"
 #include "lava.h"
 #include "savestation.h"
 #include "debug.h"
@@ -18,6 +19,7 @@
 extern float mainClock;
 
 const float camSpeed = 2000;
+const float introDuration = 1.f;
 
 #ifdef _DEBUG
 static int currentPlacingTile = 1;
@@ -133,7 +135,25 @@ void JumpScene::EnterScene()
 	}
 
 	screenManager.UpdateCurrentScreen(player.pos);
-	Camera::SetCenter(player.pos);
+
+	Camera::SetCenter(GetCameraTargetPos());
+
+	FxManager::StartIntroTransition(introDuration);
+}
+
+vec JumpScene::GetCameraTargetPos() {
+	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
+	vec camPos = (player.pos * 17 + Mouse::GetPositionInWorld() * 2) / 19.f;
+	screenManager.ClampCameraToScreen(camPos);
+	return camPos;
+}
+
+void JumpScene::UpdateCamera(float dt) {
+	vec camPos = GetCameraTargetPos();
+	vec oldPos = Camera::GetCenter();
+	vec displacement = camPos - oldPos;
+	displacement.Truncate(camSpeed * dt);
+	Camera::SetCenter(oldPos + displacement + FxManager::GetScreenshake());
 }
 
 void JumpScene::ExitScene()
@@ -166,6 +186,18 @@ std::tuple<Tile, veci> CollideBulletTilemap(CircleEntity* e, const TileMap& map)
 
 void JumpScene::Update(float dt)
 {
+	FxManager::Update(dt);
+
+	if (FxManager::IsIntroTransitionActive() || FxManager::IsOuttroTransitionActive()) {
+		return;
+	}
+	else if (FxManager::IsOuttroTransitionDone()) {
+		FxManager::ResetOuttroTransitionDone();
+		// Restart scene
+		ExitScene();
+		EnterScene();
+		return;
+	}
 
 	for (const Lava* l : Lava::GetAll()) {
 		if (l->IsInside(player.pos - vec(0,7.f))) {
@@ -177,8 +209,9 @@ void JumpScene::Update(float dt)
 			raising_lava->SetLevel(raising_lava->CurrentLevel()); // stop lava to prevent it lowering and suddently us not being inside
 		}
 		if (l->IsInside(player.pos - vec(0, 14.f))) {
-			ExitScene();
-			EnterScene();
+			FxManager::StartOuttroTransition(introDuration);
+			return;
+
 		}
 	}
 
@@ -190,14 +223,7 @@ void JumpScene::Update(float dt)
 
 	screenManager.UpdateCurrentScreen(player.pos);
 
-	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
-	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
-	screenManager.ClampCameraToScreen(camPos);
-
-	vec oldPos = Camera::GetCenter();
-	vec displacement = camPos - oldPos;
-	displacement.Truncate(camSpeed * dt);
-	Camera::SetCenter(oldPos + displacement);
+	UpdateCamera(dt);
 
 	for (Bipedal* e : Bipedal::GetAll()) {
 		e->Update(dt);
@@ -283,8 +309,7 @@ void JumpScene::Update(float dt)
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		ExitScene();
-		EnterScene();
+		FxManager::StartOuttroTransition(introDuration);
 		return;
 	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
@@ -437,12 +462,14 @@ void JumpScene::Update(float dt)
 
 void JumpScene::Draw()
 {
-	Window::Clear(31, 36, 50);
-
 	if (skillTree.open) {
 		skillTree.DrawMenu();
 		return;
 	}
+
+	FxManager::BeginDraw();
+
+	Window::Clear(31, 36, 50);
 
 	for (const Parallax* p : Parallax::GetAll()) {
 		p->Draw();
@@ -563,7 +590,9 @@ void JumpScene::Draw()
 
 	//fogPartSys.Draw();
 	//fogPartSys.DrawImGUI();
-	
+
+	FxManager::EndDraw();
+
 	skillTree.DrawOverlay();
 
 	//player.polvito.DrawImGUI("Polvito");
