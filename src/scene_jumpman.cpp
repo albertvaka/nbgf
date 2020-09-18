@@ -227,6 +227,22 @@ void JumpScene::Update(float dt)
 
 	for (Bipedal* e : Bipedal::GetAll()) {
 		e->Update(dt);
+		if (!player.isInvencible()) {
+			if (Collide(player.bounds(), e->headHitBox)) {
+				player.takeDamage(e->headHitBox.Center());
+			}
+			else if (Collide(player.bounds(), e->legsHitBox)) {
+				player.takeDamage(e->legsHitBox.Center());
+			}
+		}
+		for (Bullet* b : Bullet::GetAll()) {
+			if (b->explode) continue;
+			if (Collide(e->headHitBox, b->bounds()) || Collide(e->legsHitBox, b->bounds())) {
+				b->explode = true;
+				e->takeDamage();
+				break;
+			}
+		}
 	}
 
 	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
@@ -268,15 +284,20 @@ void JumpScene::Update(float dt)
 	for (Missile* e  : Missile::GetAll()) {
 		e->Update(dt);
 		if (e->explode) continue;
-
 		auto&&[tile, tpos] = CollideBulletTilemap(e, map);
 		if (tile.isFullSolid()) {
 			if (tile.isBreakable() && skillTree.IsEnabled(Skill::BREAK)) {
 				destroyedTiles.Destroy(tpos.x, tpos.y);
 			}
 			AwakeNearbyBats(e->pos);
-			e->alive = false;
+			e->boom();
 			continue;
+		}
+		if (Collide(player.bounds(), e->bounds())) {
+			e->boom();
+			if (!player.isInvencible()) {
+				player.takeDamage(e->pos);
+			}
 		}
 	}
 	Missile::DeleteNotAlive();
@@ -305,6 +326,7 @@ void JumpScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode killall = SDL_SCANCODE_F11;
 	const SDL_Scancode unlockbasics = SDL_SCANCODE_F8;
+	const SDL_Scancode gotoplaces = SDL_SCANCODE_F9;
 	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
@@ -312,11 +334,17 @@ void JumpScene::Update(float dt)
 		FxManager::StartOuttroTransition(introDuration);
 		return;
 	}
+	if (Keyboard::IsKeyJustPressed(gotoplaces)) {
+		player.pos = vec(1748, 1084);
+		for (Bipedal* e : Bipedal::GetAll()) {
+			e->state = Bipedal::State::FIRING;
+			e->timer = 0;
+		}
+	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
 		skillTree.Enable(Skill::GUN);
 		skillTree.Enable(Skill::WALLJUMP);
 		skillTree.Enable(Skill::BREAK);
-		player.pos = vec(1748, 1084);
 	}
 	if (Keyboard::IsKeyJustPressed(screen_left)) {
 		player.pos.x -= Window::GAME_WIDTH;

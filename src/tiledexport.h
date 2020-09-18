@@ -262,5 +262,6 @@ struct TiledAreas
 	static const std::array<Bounds, 1> parallax_forest;
 	static const std::array<Bounds, 2> bat_bounds;
 	static const std::array<Bounds, 1> fog;
+	static const std::array<Bounds, 1> boss_bounds;
 	
 };

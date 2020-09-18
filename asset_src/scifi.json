@@ -1,8 +1,16 @@
 {"frames": [
 
 {
+	"filename": "bipedalunit/falling/00.png",
+	"frame": {"x":0,"y":0,"w":51,"h":58},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":51,"h":58},
+	"sourceSize": {"w":51,"h":58}
+},
+{
 	"filename": "bipedalunit/idle/00.png",
-	"frame": {"x":0,"y":0,"w":46,"h":53},
+	"frame": {"x":51,"y":0,"w":46,"h":53},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":53},
@@ -10,23 +18,23 @@
 },
 {
 	"filename": "bipedalunit/walking/001-000.png",
-	"frame": {"x":46,"y":0,"w":49,"h":55},
+	"frame": {"x":97,"y":0,"w":49,"h":58},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":49,"h":55},
-	"sourceSize": {"w":49,"h":55}
+	"spriteSourceSize": {"x":0,"y":0,"w":49,"h":58},
+	"sourceSize": {"w":49,"h":58}
 },
 {
 	"filename": "bipedalunit/walking/001-001.png",
-	"frame": {"x":95,"y":0,"w":47,"h":56},
+	"frame": {"x":146,"y":0,"w":47,"h":58},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":47,"h":56},
-	"sourceSize": {"w":47,"h":56}
+	"spriteSourceSize": {"x":0,"y":0,"w":47,"h":58},
+	"sourceSize": {"w":47,"h":58}
 },
 {
 	"filename": "bipedalunit/walking/001-002.png",
-	"frame": {"x":142,"y":0,"w":46,"h":58},
+	"frame": {"x":193,"y":0,"w":46,"h":58},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":46,"h":58},
@@ -34,35 +42,27 @@
 },
 {
 	"filename": "bipedalunit/walking/001-003.png",
-	"frame": {"x":188,"y":0,"w":45,"h":56},
+	"frame": {"x":239,"y":0,"w":45,"h":58},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":56},
-	"sourceSize": {"w":45,"h":56}
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":58},
+	"sourceSize": {"w":45,"h":58}
 },
 {
 	"filename": "bipedalunit/walking/001-004.png",
-	"frame": {"x":233,"y":0,"w":47,"h":55},
+	"frame": {"x":284,"y":0,"w":47,"h":58},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":47,"h":55},
-	"sourceSize": {"w":47,"h":55}
+	"spriteSourceSize": {"x":0,"y":0,"w":47,"h":58},
+	"sourceSize": {"w":47,"h":58}
 },
 {
 	"filename": "bipedalunit/walking/001-005.png",
-	"frame": {"x":280,"y":0,"w":48,"h":56},
+	"frame": {"x":331,"y":0,"w":48,"h":58},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":56},
-	"sourceSize": {"w":48,"h":56}
-},
-{
-	"filename": "bipedalunit/walking/001-006.png",
-	"frame": {"x":328,"y":0,"w":51,"h":58},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":51,"h":58},
-	"sourceSize": {"w":51,"h":58}
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":58},
+	"sourceSize": {"w":48,"h":58}
 },
 {
 	"filename": "explosion/01.png",
@@ -207,6 +207,6 @@
 	"format": "RGBA8888",
 	"size": {"w":448,"h":506},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d2b2838a88f4810c81bed3db4a617d79:a0d8c87d1672aa6cb82c2482034d80d8:6d6f3dc21d4b50786b0bf7f3e3a4821d$"
+	"smartupdate": "$TexturePacker:SmartUpdate:dbff76270ca1c32481cdbb26151b5054:cca83b4718547c85d2e74f3ac725c14d:6d6f3dc21d4b50786b0bf7f3e3a4821d$"
 }
 }

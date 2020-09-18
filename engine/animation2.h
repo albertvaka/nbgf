@@ -104,4 +104,13 @@ struct Animation2
 	{
 		return anim[current_frame].duration;
 	}
+
+	const float GetTotalDuration() const
+	{
+		float t = 0;
+		for (int i = 0; i < anim_size; i++) {
+			t += anim[i].duration;
+		}
+		return t;
+	}
 };

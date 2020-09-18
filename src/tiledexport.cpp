@@ -375,7 +375,7 @@ const std::array<vec, 2> TiledEntities::save = {
 
 const vec TiledEntities::lava_initial_height = vec(2689.75f, 1000.0f);
 
-const vec TiledEntities::boss_bipedal = vec(1364.0f, 1273.333f);
+const vec TiledEntities::boss_bipedal = vec(1392.182f, 1328.424f);
 
 
 
@@ -392,5 +392,8 @@ const std::array<Bounds, 2> TiledAreas::bat_bounds = {
 	};
 const std::array<Bounds, 1> TiledAreas::fog = {
 		Bounds(880.5f,879.5f,734.0f,85.5f),
+	};
+const std::array<Bounds, 1> TiledAreas::boss_bounds = {
+		Bounds(1340.0f,1294.333f,404.0f,39.0f),
 	};
 

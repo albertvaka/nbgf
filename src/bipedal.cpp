@@ -6,18 +6,48 @@
 #include "window.h"
 #include "rand.h"
 #include "debug.h"
+#include "tiledexport.h"
+#include "missile.h"
 #include "fxmanager.h"
 #include "camera.h"
 
-const float walking_speed = 30.f;
-const float maxDistance = 200.f;
+const float walking_speed = 30.f; //per second
+
+// Constants relatives to the sprite, assuming the origin is at ground level
+const vec headHitBoxOffset = vec(-20, -105);
+const vec headHitBoxSize = vec(80, 45);
+const vec legsHitBoxOffset = vec(-10, -64);
+const vec legsHitBoxSize = vec(40, 60);
+const vec textureOffset = vec(0, -88); 
+const vec missilesOriginOffset = vec(0, -80);
 
 Bipedal::Bipedal(const vec& pos)
-	: BoxEntity(pos + vec(8.f, -2.f), vec(20,10))
+	: Entity(pos)
 	, state(State::WALKING_FORWARD)
 	, anim(AnimLib::BIPEDAL_WALKING)
+	, headHitBox(pos + headHitBoxOffset, headHitBoxSize)
+	, legsHitBox(pos + legsHitBoxOffset, legsHitBoxSize)
 {
-	initialX = pos.x;
+	int i = 0;
+	for (const auto& bounds : TiledAreas::boss_bounds) {
+		if (bounds.Contains(pos)) {
+			break;
+		}
+		i++;
+	}
+	if (i >= TiledAreas::boss_bounds.size()) {
+		Debug::out << "Bipedal boss outside boss_bounds";
+		minX = pos.x;
+		maxX = pos.x;
+	} else {
+		Debug::out << i;
+		minX = TiledAreas::boss_bounds[i].Left();
+		maxX = TiledAreas::boss_bounds[i].Right();
+
+		float maxDistanceItCanWalkInOneLoop = anim.GetTotalDuration() * walking_speed;
+		minX += maxDistanceItCanWalkInOneLoop; // We do this since it never changes direction mid-animation
+		maxX -= maxDistanceItCanWalkInOneLoop;
+	}
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 
@@ -27,15 +57,39 @@ inline bool Bipedal::inSameScreenAsPlayer() const {
 
 void Bipedal::Update(float dt)
 {
+	if (damagedTimer > 0.f) {
+		damagedTimer -= dt;
+	}
 	switch (state) {
+	case State::FIRING:
+	{
+		float oldTimer = timer;
+		float timeBetweenMissiles = 0.4f;
+		vec shotsOrigin = pos + missilesOriginOffset;
+		timer += dt;
+		if (oldTimer < timeBetweenMissiles && timer >= timeBetweenMissiles) {
+			new Missile(shotsOrigin, 90 + 45);
+		}
+		else if (oldTimer < 2 * timeBetweenMissiles && timer >= 2 * timeBetweenMissiles) {
+			new Missile(shotsOrigin, 90);
+		}
+		else if (oldTimer < 3 * timeBetweenMissiles && timer >= 3 * timeBetweenMissiles) {
+			new Missile(shotsOrigin, 45);
+		}
+		else if (timer >= 4 * timeBetweenMissiles) {
+			timer = 0.5f;
+			state = State::DRAMATIC_PAUSE;
+		}
+	}
+		break;
 	case State::DRAMATIC_PAUSE:
 		timer -= dt;
 		if (timer < 0) {
 			bool forward;
-			if (pos.x < initialX) {
+			if (pos.x < minX) {
 				forward = true;
 			}
-			else if (pos.x > (initialX + maxDistance)) {
+			else if (pos.x > (maxX)) {
 				forward = false;
 			}
 			else {
@@ -73,6 +127,8 @@ void Bipedal::Update(float dt)
 		}
 
 		pos.x += speed * dt;
+		headHitBox.left = pos.x + headHitBoxOffset.x;
+		legsHitBox.left = pos.x + legsHitBoxOffset.x;
 
 		if (Camera::GetBounds().Contains(pos)) {
 			bool stomp = (frame != anim.current_frame) && (anim.current_frame == 0 || anim.current_frame == 3);
@@ -81,11 +137,17 @@ void Bipedal::Update(float dt)
 			}
 		}
 
-		bool outOfBounds = (pos.x < initialX) || (pos.x > (initialX + maxDistance));
+		bool outOfBounds = (pos.x < minX) || (pos.x > (maxX));
 		bool animationLooped = (frame != anim.current_frame) && (anim.current_frame == 0);
-		if (animationLooped && (outOfBounds || Rand::OnceEach(3))) {
-			state = State::DRAMATIC_PAUSE;
-			timer = Rand::rollf(0.5f, 1.0f);
+		if (animationLooped && (outOfBounds || Rand::PercentChance(25))) {
+			if (Rand::OnceEach(3)) {
+				state = State::DRAMATIC_PAUSE;
+				timer = Rand::rollf(0.5f, 1.0f);
+			}
+			else {
+				state = State::FIRING;
+				timer = 0;
+			}
 		}
 		break;
 	}
@@ -93,14 +155,23 @@ void Bipedal::Update(float dt)
 
 void Bipedal::Draw() const
 {
-	Window::Draw(Assets::scifiTexture, pos)
+
+	if (damagedTimer > 0.f) {
+		Assets::tintShader.Activate();
+		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
+	}
+
+	Window::Draw(Assets::scifiTexture, pos+textureOffset)
 		.withScale(2.f)
 		.withOrigin(16.f, 14.f)
 		.withRect(anim.GetCurrentRect());
 
+	Shader::Deactivate();
+
 	if (Debug::Draw && Camera::GetBounds().Contains(pos)) {
-		DrawBounds();
-		Bounds(initialX, pos.y, maxDistance, 2).Draw(255, 255, 0);
+		legsHitBox.Draw();
+		headHitBox.Draw();
+		Bounds(minX, pos.y, maxX-minX, 2).Draw(255, 255, 0);
 	}
 	pos.Debuggerino();
 
