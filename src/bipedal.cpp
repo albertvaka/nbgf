@@ -23,7 +23,8 @@ const vec missilesOriginOffset = vec(0, -80);
 
 Bipedal::Bipedal(const vec& pos)
 	: Entity(pos)
-	, state(State::WALKING_FORWARD)
+	, state(State::ASLEEP)
+	, timer(0)
 	, anim(AnimLib::BIPEDAL_WALKING)
 	, headHitBox(pos + headHitBoxOffset, headHitBoxSize)
 	, legsHitBox(pos + legsHitBoxOffset, legsHitBoxSize)
@@ -61,6 +62,11 @@ void Bipedal::Update(float dt)
 		damagedTimer -= dt;
 	}
 	switch (state) {
+	case State::ASLEEP:
+		if (inSameScreenAsPlayer()) {
+			state = State::WALKING_FORWARD;
+		}
+		break;
 	case State::FIRING:
 	{
 		float oldTimer = timer;
