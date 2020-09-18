@@ -12,6 +12,8 @@
 #endif
 #include <math.h>
 
+#include "angles.h"
+
 struct veci {
 	int x, y;
 	constexpr veci(int a, int b) : x(a), y(b) {}
@@ -26,9 +28,14 @@ struct vec
 
 	static const vec Zero;
 
-	[[nodiscard]] static vec FromAngle(float rads, float len=1.0f) {
+	[[nodiscard]] static vec FromAngleRads(float rads, float len=1.0f) {
 		return vec(cos(rads)*len,sin(rads)*len);
 	}
+
+	[[nodiscard]] static vec FromAngleDegs(float degs, float len = 1.0f) {
+		return FromAngleRads(Angles::DegsToRads(degs), len);
+	}
+
 
 	//returns the length of the vector
 	[[nodiscard]] inline float    Length()const;
@@ -63,22 +70,36 @@ struct vec
 	//X axis to right like a Window app)
 	[[nodiscard]] inline int       Sign(const vec& v2) const;
 
-
 	// Angle in Degrees between the lines (origin to point a) and (origin to point b)
-	[[nodiscard]] float Angle(const vec& other = vec::Zero) const
+	[[nodiscard]] float AngleRads(const vec& other = vec::Zero) const
 	{
 		float deltaY = other.y - y;
 		float deltaX = other.x - x;
-		return  (atan2(deltaY, deltaX) * 360.0f) / (2*M_PI);
+		return atan2(deltaY, deltaX);
 	}
 
-	[[nodiscard]] vec RotatedAroundOrigin(float rads) {
+	// Angle in Degrees between the lines (origin to point a) and (origin to point b)
+	[[nodiscard]] float AngleDegs(const vec& other = vec::Zero) const
+	{
+		return Angles::RadsToDegs(AngleRads(other));
+	}
+
+	[[nodiscard]] vec RotatedAroundOriginRads(float rads) 
+	{
 		float cs = cos(rads);
 		float sn = sin(rads);
 		return vec(x * cs - y * sn, x * sn + y * cs);
 	}
 
-	[[nodiscard]] inline vec RotatedToFacePosition(const vec& target, float maxTurnRateRads = 900.f);
+	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees) 
+	{
+		return RotatedAroundOriginRads(Angles::DegsToRads(degrees));
+	}
+
+	[[nodiscard]] inline vec RotatedToFacePositionRads(const vec& target, float maxTurnRateRads = 900.f);
+	[[nodiscard]] inline vec RotatedToFacePositionDegs(const vec& target, float maxTurnRateDegs = Angles::RadsToDegs(900.f)) {
+		return RotatedToFacePositionRads(target, Angles::DegsToRads(maxTurnRateDegs));
+	}
 
 	//returns the vector that is perpendicular to this one.
 	[[nodiscard]] inline vec  Perp() const;
@@ -423,7 +444,7 @@ inline bool LineIntersection2D(const vec& A, const vec& B, const vec& C, const v
 	}
 }
 
-inline vec vec::RotatedToFacePosition(const vec& target, float maxTurnRateRads)
+inline vec vec::RotatedToFacePositionRads(const vec& target, float maxTurnRateRads)
 {
 	vec toTarget = (target - *this).Normalized();
 	vec heading = Normalized();
@@ -439,7 +460,7 @@ inline vec vec::RotatedToFacePosition(const vec& target, float maxTurnRateRads)
 	//clamp the amount to turn to the max turn rate
 	if (fabs(angle) > maxTurnRateRads) angle = maxTurnRateRads;
 
-	return RotatedAroundOrigin(angle * heading.Sign(toTarget));
+	return RotatedAroundOriginRads(angle * heading.Sign(toTarget));
 }
 
 //-----------------------------------------------------------------------------

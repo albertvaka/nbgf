@@ -1,5 +1,6 @@
 #pragma once
 
+#include "angles.h"
 #include "bounds.h"
 
 #include "debug.h"
@@ -146,8 +147,13 @@ namespace Window
 			return withOrigin(o.x, o.y);
 		}
 
-		constexpr Draw& withRotation(float degrees) {
+		constexpr Draw& withRotationDegs(float degrees) {
 			rotation = degrees;
+			return *this;
+		}
+
+		constexpr Draw& withRotationRads(float rads) {
+			rotation = Angles::RadsToDegs(rads);
 			return *this;
 		}
 

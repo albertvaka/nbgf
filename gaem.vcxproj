@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\angles.h" />
     <ClInclude Include="engine\animation.h" />
     <ClInclude Include="engine\animation2.h" />
     <ClInclude Include="engine\anim_frame.h" />

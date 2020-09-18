@@ -61,7 +61,7 @@ struct RotoText : Text, SingleInstance<RotoText>
 		Window::Draw(*this, Camera::GetCenter() + pos)
 			.withOrigin(GetSize() / 2.f)
 			.withScale(sc)
-			.withRotation(ang);
+			.withRotationDegs(ang);
 	}
 };
 

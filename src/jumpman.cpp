@@ -456,7 +456,7 @@ vert_exit:
 
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
 		bfgPos = pos + bfgOffset();
-		bfgAngle = bfgPos.Angle(Mouse::GetPositionInWorld());
+		bfgAngle = bfgPos.AngleDegs(Mouse::GetPositionInWorld());
 		bfgAngle = (int(bfgAngle + 360 + (45.f / 2)) / 45) * 45.f;
 		if (bfgCooldownTimer > 0.f) {
 			bfgCooldownTimer -= dt;
@@ -465,9 +465,8 @@ vert_exit:
 			}
 		}
 		else if (Mouse::IsPressed() && !Debug::Draw) {
-			float angleInRads = Mates::DegsToRads(bfgAngle);
 			bfgCooldownTimer = bfgCooldown;
-			vec gunDirection = vec::FromAngle(angleInRads);
+			vec gunDirection = vec::FromAngleDegs(bfgAngle);
 			vec tipOfTheGun = bfgPos + gunDirection*17.f;
 			new Missile(tipOfTheGun, gunDirection*bulletVel/5.f);
 			new Bullet(tipOfTheGun, gunDirection*bulletVel, 1.5f);
@@ -547,7 +546,7 @@ void JumpMan::Draw() const {
 		Window::Draw(Assets::marioTexture, bfgPos)
 			.withRect(rect)
 			.withOrigin(10, 8)
-			.withRotation(bfgAngle)
+			.withRotationDegs(bfgAngle)
 			.withScale(vscale);
 	}
 

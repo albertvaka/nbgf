@@ -45,7 +45,7 @@ void PartSys::Draw() const {
 			.withColor(255, 255, 255, 255 * alpha)
 			.withScale(p.scale)
 			.withRect(sprites[p.sprite])
-			.withRotation(p.rotation);
+			.withRotationDegs(p.rotation);
 #endif
 	}
 

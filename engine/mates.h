@@ -20,21 +20,6 @@ namespace Mates
 	const constexpr float   MaxFloat = (std::numeric_limits<float>::max)();
 	const constexpr float   MinFloat = (std::numeric_limits<float>::min)();
 
-	const constexpr float   Pi = 3.141592653589793238462643383279502884f;
-	const constexpr float   TwoPi = Pi * 2;
-	const constexpr float   HalfPi = Pi / 2;
-	const constexpr float   QuarterPi = Pi / 4;
-
-	[[nodiscard]] inline float DegsToRads(float degs)
-	{
-		return TwoPi * (degs / 360.0f);
-	}
-
-	[[nodiscard]] inline float RadsToDegs(float rads)
-	{
-		return (rads * 360.0f) / TwoPi;
-	}
-
 	//returns true if the parameter is equal to zero
 	[[nodiscard]] inline bool IsZero(float val)
 	{

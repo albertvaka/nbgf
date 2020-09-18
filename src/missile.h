@@ -10,7 +10,7 @@
 #include "assets.h"
 
 const float kRadius = 5.f;
-const float kMaxSpeed = 3.f;
+const float kMaxSpeed = 1.f;
 const float kAccel = 1.f;
 
 struct Missile : CircleEntity, SelfRegister<Missile>
@@ -39,19 +39,15 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 			return;
 		}
 
+		vec target = JumpMan::instance()->pos;
+
+		vel = vel.RotatedToFacePositionRads(target, 10);
+
+
 		pos += vel * dt;
 		if (!Camera::GetBounds().Contains(pos)) {
 			alive = false;
 		}
-
-		vec target = JumpMan::instance()->pos;
-		vec force = (target - pos).Normalized() * kAccel;
-		vel += force;
-		
-		//FIXME: Why this doesn't work in preventing it from slowing down completely?
-		if (vel.Length() < kMaxSpeed) {
-			vel = vel.Normalized()*kMaxSpeed;
-		} 
 
 	}
 
@@ -64,7 +60,7 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 			Window::Draw(Assets::wheelerTexture, pos)
 				.withRect(rect)
 				.withOrigin(0.f, rect.h/2)
-				.withRotation(vel.Angle());
+				.withRotationDegs(vel.AngleDegs());
 		}
 		if (Debug::Draw) {
 			pos.Debuggerino();

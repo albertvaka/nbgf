@@ -2,6 +2,7 @@
 
 #include "steering_behavior.h"
 
+#include "angles.h"
 #include "rand.h"
 #include "steering_entity.h"
 #include "tilemap.h"
@@ -15,7 +16,7 @@ const float WanderJitterPerSec = 45.f; //Trompicones que dona (the maximum amoun
 SteeringBehavior::SteeringBehavior(SteeringEntity* agent) : steeringEntity(agent)
 {
 	//create a vector to a target position on the wander circle
-	float theta = Rand::rollf() * Mates::TwoPi;
+	float theta = Rand::rollf() * Angles::TwoPi;
 	m_vWanderTarget = vec(WanderRad * cos(theta), WanderRad * sin(theta));
 }
 
@@ -184,12 +185,12 @@ vec SteeringBehavior::BoundsAvoidance(const Bounds& m_bounds)
 	m_Feelers[0].Debuggerino();
 
 	//feeler to left
-	vec temp = heading.RotatedAroundOrigin(Mates::Pi * -0.3f);
+	vec temp = heading.RotatedAroundOriginRads(Angles::Pi * -0.3f);
 	m_Feelers[1] = steeringEntity->pos + m_dWallDetectionFeelerLength/2.0f * temp;
 	//m_Feelers[1].Debuggerino();
 
 	//feeler to right
-	temp = heading.RotatedAroundOrigin(Mates::Pi * 0.3f);
+	temp = heading.RotatedAroundOriginRads(Angles::Pi * 0.3f);
 	m_Feelers[2] = steeringEntity->pos + m_dWallDetectionFeelerLength/2.0f * temp;
 	//m_Feelers[2].Debuggerino();
 

@@ -256,6 +256,9 @@
     <ClInclude Include="src\missile.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="engine\angles.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

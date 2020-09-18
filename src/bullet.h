@@ -56,7 +56,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 			.withScale(scale)
 			.withOrigin(8, 8)
 			.withRect(rect)
-			.withRotation(rotation);
+			.withRotationDegs(rotation);
 
 	}
 };
