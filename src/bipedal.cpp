@@ -49,7 +49,7 @@ void Bipedal::Update(float dt)
 				state = State::WALKING_BACK;
 				anim.current_frame = anim.anim_size - 1;
 			}
-			charging = Rand::OnceEach(5);
+			charging = Rand::rollf() < 0.45f;
 		}
 		break;
 	case State::WALKING_FORWARD: //fall-through
@@ -77,7 +77,7 @@ void Bipedal::Update(float dt)
 		if (Camera::GetBounds().Contains(pos)) {
 			bool stomp = (frame != anim.current_frame) && (anim.current_frame == 0 || anim.current_frame == 3);
 			if (stomp) {
-				FxManager::StartScreenshake(veci(0, 10), 0.2f);
+				FxManager::StartScreenshakePreset(charging? FxManager::Stomp : FxManager::LittleStomp);
 			}
 		}
 

@@ -7,12 +7,12 @@
 namespace AnimLib {
 
 	constexpr const AnimationFrame BIPEDAL_WALKING[] = {
-		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_000, .2f },
-		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_001, .2f },
-		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_002, .2f },
-		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_003, .2f },
-		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_004, .2f },
-		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_005, .2f },
+		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_000, .25f },
+		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_001, .25f },
+		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_002, .25f },
+		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_003, .25f },
+		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_004, .25f },
+		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_005, .25f },
 	};
 
 	constexpr const AnimationFrame MISSILE[] = {

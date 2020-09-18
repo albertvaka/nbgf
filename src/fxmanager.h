@@ -1,13 +1,6 @@
 #pragma once 
 
-#include "camera.h"
-#include "SDL_gpu.h"
-#include "shader.h"
-#include "assets.h"
-#include "window.h"
-#include "singleinstance.h"
-
-extern float mainClock;
+#include "vec.h"
 
 struct FxManager {
 
@@ -49,77 +42,47 @@ struct FxManager {
 		introfinished = false;
 	}
 
-	static inline void StartScreenshake(veci intensity, float time) {
-		screenshakeTime = time;
-		screenshakeIntensity = intensity;
+	static inline void StartScreenshake(float time, veci amplitude, vec speed) {
+		if (time >= screenshakeTime) {
+			screenshakeTime = time;
+			screenshakeAmplitude = amplitude;
+			screenshakeSpeed = speed;
+		}
+	}
+	enum ScreenShakePreset {
+		Earthquake,
+		LittleStomp,
+		Stomp,
+		Electroshok,
+	};
+	static inline void StartScreenshakePreset(ScreenShakePreset preset) {
+		switch (preset) {
+		case Earthquake: // Call repeatedly for a sustained effect
+			StartScreenshake(0.1f, veci(2,2), vec(35.f,45.f));
+			break;
+		case LittleStomp:
+			StartScreenshake(0.17f, veci(0, 2), vec(0.f, 47.f));
+			break;
+		case Stomp:
+			StartScreenshake(0.17f, veci(0, 3), vec(0.f, 47.f));
+			break;
+		case Electroshok:
+			StartScreenshake(0.157f, veci(8, 2), vec(86.7f, 14.1f));
+			break;
+		}
 	}
 
-	static inline void Update(float dt) {
-		if (introTime > 0) {
-			introTime -= dt;
-			introfinished = introTime <= 0;
-		}
+	static void Update(float dt);
 
-		if (outtroTime > 0) {
-			outtroTime -= dt;
-			outtrofinished = outtroTime <= 0;
-		}
+	static void BeginDraw();
 
-		if (screenshakeTime > 0) {
-			screenshakeTime -= dt;
-			if (screenshakeTime <= 0) {
-				screenshake = vec::Zero;
-			}
-			else {
-				if (screenshakeIntensity.y > 0.1) {
-					int v = screenshakeIntensity.y;
-					screenshake.y = (int(cos(mainClock * 15) * 3 * v) / v) - v / 2;
-				}
-				else {
-					screenshake.y = 0;
-				}
-				if (screenshakeIntensity.x > 0.1) {
-					int v = screenshakeIntensity.x;
-					screenshake.x = (int(cos(mainClock * 10) * 3 * v) / v) - v/2;
-				}
-				else {
-					screenshake.x = 0;
-				}
-			}
-		}
-
-	}
-
-	static inline void BeginDraw() {
-		//Window::BeginRenderToTexture(renderToTextureTarget(), true);
-	}
-
-	static inline void EndDraw() {
-		Window::EndRenderToTexture();
-
-		//Assets::waveShader.Activate();
-		//Assets::waveShader.SetUniform("time", mainClock);
-		//Window::Draw(renderToTextureTarget(), Camera::GetTopLeft());
-		//Shader::Deactivate();
-
-		if (introTime > 0.f) {
-			Assets::fadeInDiamondsShader.Activate();
-			Assets::fadeInDiamondsShader.SetUniform("fadeInProgress", introTime / introDuration);
-			Window::Draw(Assets::blankTexture, Camera::GetBounds());
-			Shader::Deactivate();
-		}
-		if (outtroTime > 0.f) {
-			Assets::fadeOutDiamondsShader.Activate();
-			Assets::fadeOutDiamondsShader.SetUniform("fadeOutProgress", outtroTime / outtroDuration);
-			Window::Draw(Assets::blankTexture, Camera::GetBounds());
-			Shader::Deactivate();
-		}
-
-	}
+	static void EndDraw();
 
 	static inline const vec& GetScreenshake() {
 		return screenshake;
 	}
+
+	static void DrawImgui();
 
 private:
 	static inline vec screenshake = vec();
@@ -133,11 +96,6 @@ private:
 	static inline bool outtrofinished = false;
 
 	static inline float screenshakeTime;
-	static inline veci screenshakeIntensity = veci(0,0);
-
-	static inline GPU_Image* renderToTextureTarget() {
-		static GPU_Image* target = Window::CreateTexture(Window::GAME_WIDTH, Window::GAME_HEIGHT);
-		return target;
-	}
-
+	static inline veci screenshakeAmplitude = veci(0, 0);
+	static inline vec screenshakeSpeed = veci(0, 0);
 };

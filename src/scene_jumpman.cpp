@@ -567,6 +567,8 @@ void JumpScene::Draw()
 		ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
 		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 		ImGui::End();
+
+		//FxManager::DrawImgui();
 	}
 #endif
 

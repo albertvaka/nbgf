@@ -253,6 +253,9 @@
     <ClInclude Include="src\bipedal.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\missile.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -409,6 +412,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\fxmanager.h">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fxmanager.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
