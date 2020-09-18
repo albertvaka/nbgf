@@ -347,7 +347,7 @@ void JumpScene::Update(float dt)
 			}
 		}
 	}
-	if (Debug::Draw) {
+	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 		if (Mouse::GetScrollWheelMovement() < 0.f) {
 			currentPlacingTile -= 1;
 			if (currentPlacingTile < 1) currentPlacingTile = magic_enum::enum_count<Tile::Value>() - 1;
