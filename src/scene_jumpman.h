@@ -22,7 +22,6 @@ struct JumpScene : Scene {
 	TileMap map;
 	JumpMan player;
 	SkillTree skillTree;
-	PartSys bulletPartSys;
 	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;
 	RotoText rotoText;

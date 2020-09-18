@@ -15,7 +15,6 @@ struct HellCrossScene : Scene {
 	TileMap map;
 	JumpMan player;
 	Lava lava;
-	PartSys bulletPartSys;
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;
 	ScreenManager sceneManager;

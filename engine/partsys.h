@@ -83,7 +83,8 @@ struct PartSys {
 
 	float time = 0.f;
 
-	PartSys(GPU_Image* t) : texture(t) { }
+	PartSys(GPU_Image* t) { SetTexture(t); }
+	void SetTexture(GPU_Image* t) { texture = t; }
 
 	void AddSprite(const GPU_Rect& rect) {
 		sprites.emplace_back(rect);

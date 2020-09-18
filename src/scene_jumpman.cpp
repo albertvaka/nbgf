@@ -14,6 +14,7 @@
 #include "lava.h"
 #include "savestation.h"
 #include "debug.h"
+#include "collide.h"
 #include "rototext.h"
 
 extern float mainClock;
@@ -28,24 +29,9 @@ static int currentPlacingTile = 1;
 JumpScene::JumpScene()
 	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::marioTexture)
 	, fogPartSys(Assets::fogTexture)
-	, bulletPartSys(Assets::marioTexture)
 {
-	bulletPartSys.AddSprite({ 5, 37, 6, 6 });
-
-	float vel = 15;
-	bulletPartSys.max_vel = vec(vel, vel);
-	bulletPartSys.min_vel = vec(-vel, -vel);
-	bulletPartSys.min_ttl = 0.5f;
-	bulletPartSys.max_ttl = 1.f;
-	bulletPartSys.min_interval = 0.03f;
-	bulletPartSys.max_interval = 0.06f;
-	bulletPartSys.min_scale = 0.5f;
-	bulletPartSys.max_scale = 0.9f;
-	bulletPartSys.scale_vel = -2.5f;
-	bulletPartSys.min_rotation = 0.f;
-	bulletPartSys.max_rotation = 360.f;
-	bulletPartSys.rotation_vel = 180.f;
-	bulletPartSys.alpha = 0.75f;
+	Bullet::InitParticles();
+	Missile::InitParticles();
 
 	fogPartSys.AddSprite({ 0, 0, 140, 61 });
 	fogPartSys.AddSprite({140, 0, 140, 61 });
@@ -158,9 +144,10 @@ void JumpScene::UpdateCamera(float dt) {
 
 void JumpScene::ExitScene()
 {
-	bulletPartSys.Clear();
 	Bullet::DeleteAll();
+	Bullet::particles.Clear();
 	Missile::DeleteAll();
+	Missile::particles.Clear();
 	Bat::DeleteAll();
 	Bipedal::DeleteAll();
 	Lava::DeleteAll();
@@ -265,9 +252,9 @@ void JumpScene::Update(float dt)
 				destroyedTiles.Destroy(tpos.x, tpos.y);
 			}
 			AwakeNearbyBats(e->pos);
-			bulletPartSys.pos = e->pos;
+			Bullet::particles.pos = e->pos;
 			for (int i = 0; i < 5; i++) {
-				auto& p = bulletPartSys.AddParticle();
+				auto& p = Bullet::particles.AddParticle();
 				p.scale = 1.7f;
 				p.vel *= 1.5f;
 			}
@@ -275,8 +262,8 @@ void JumpScene::Update(float dt)
 			continue;
 		}
 
-		bulletPartSys.pos = e->pos + Rand::vecInRange(-4, -4, 4, 4);
-		bulletPartSys.Spawn(dt);
+		Bullet::particles.pos = e->pos + Rand::vecInRange(-4, -4, 4, 4);
+		Bullet::particles.Spawn(dt);
 	}
 	Bullet::DeleteNotAlive();
 
@@ -447,7 +434,8 @@ void JumpScene::Update(float dt)
 
 	BigItem::DeleteNotAlive();
 
-	bulletPartSys.UpdateParticles(dt);
+	Bullet::particles.UpdateParticles(dt);
+	Missile::particles.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
 
@@ -482,7 +470,6 @@ void JumpScene::Update(float dt)
 		}
 		fogPartSys.UpdateParticles(dt);
 	}
-
 
 	rotoText.Update(dt);
 
@@ -525,8 +512,11 @@ void JumpScene::Draw()
 	for (const Bipedal* e : Bipedal::GetAll()) {
 		e->Draw();
 	}
-	bulletPartSys.Draw();
-	//bulletPartSys.DrawImGUI("BulletTrail");
+	Bullet::particles.Draw();
+	//Bullet::particles.DrawImGUI("BulletTrail");
+
+	Missile::particles.Draw();
+	Missile::particles.DrawImGUI("MissileSmoke");
 
 	for (const Bullet* e : Bullet::GetAll()) {
 		e->Draw();

@@ -10,6 +10,7 @@
 #include "simplexnoise.h"
 #include "bat.h"
 #include "debug.h"
+#include "collide.h"
 #include "fxmanager.h"
 
 extern float mainClock;
@@ -34,24 +35,8 @@ static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::size);
 HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::marioTexture)
 	, lava(Bounds(0, map_size.y*16 - 20, map_size.x*16, 200))
-	, bulletPartSys(Assets::marioTexture)
 {
-	bulletPartSys.AddSprite({ 5, 37, 6, 6 });
-
-	float vel = 15;
-	bulletPartSys.max_vel = vec(vel, vel);
-	bulletPartSys.min_vel = vec(-vel, -vel);
-	bulletPartSys.min_ttl = 0.5f;
-	bulletPartSys.max_ttl = 1.f;
-	bulletPartSys.min_interval = 0.03f;
-	bulletPartSys.max_interval = 0.06f;
-	bulletPartSys.min_scale = 0.5f;
-	bulletPartSys.max_scale = 0.9f;
-	bulletPartSys.scale_vel = -2.5f;
-	bulletPartSys.min_rotation = 0.f;
-	bulletPartSys.max_rotation = 360.f;
-	bulletPartSys.rotation_vel = 180.f;
-	bulletPartSys.alpha = 0.75f;
+	Bullet::InitParticles();
 
 	skillTree.Enable(Skill::GUN);
 	skillTree.Enable(Skill::WALLJUMP);
@@ -173,7 +158,7 @@ void HellCrossScene::EnterScene()
 
 void HellCrossScene::ExitScene()
 {
-	bulletPartSys.Clear();
+	Bullet::particles.Clear();
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
 	destroyedTiles.Clear();
@@ -246,9 +231,9 @@ void HellCrossScene::Update(float dt)
 				destroyedTiles.Destroy(t.x, t.y);
 			}
 			AwakeNearbyBats(e->pos);
-			bulletPartSys.pos = e->pos;
+			Bullet::particles.pos = e->pos;
 			for (int i = 0; i < 5; i++) {
-				auto& p = bulletPartSys.AddParticle();
+				auto& p = Bullet::particles.AddParticle();
 				p.scale = 1.7f;
 				p.vel *= 1.5f;
 			}
@@ -256,8 +241,8 @@ void HellCrossScene::Update(float dt)
 			continue;
 		}
 
-		bulletPartSys.pos = e->pos + Rand::vecInRange(-4, -4, 4, 4);
-		bulletPartSys.Spawn(dt);
+		Bullet::particles.pos = e->pos + Rand::vecInRange(-4, -4, 4, 4);
+		Bullet::particles.Spawn(dt);
 	}
 	Bullet::DeleteNotAlive();
 
@@ -318,7 +303,7 @@ void HellCrossScene::Update(float dt)
 
 	Bat::DeleteNotAlive();
 
-	bulletPartSys.UpdateParticles(dt);
+	Bullet::particles.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
 
@@ -350,8 +335,8 @@ void HellCrossScene::Draw()
 		}
 	}
 
-	bulletPartSys.Draw();
-	//bulletPartSys.DrawImGUI("BulletTrail");
+	Bullet::particles.Draw();
+	//Bullet::particles.DrawImGUI("BulletTrail");
 
 	for (const Bullet* e : Bullet::GetAll()) {
 		e->Draw();
