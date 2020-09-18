@@ -1,4 +1,5 @@
 #include "fxmanager.h"
+
 #include "camera.h"
 #include "SDL_gpu.h"
 #include "shader.h"

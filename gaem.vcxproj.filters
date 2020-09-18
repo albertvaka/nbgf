@@ -259,6 +259,9 @@
     <ClInclude Include="engine\angles.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\fxmanager.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -412,9 +415,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\bipedal.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\fxmanager.h">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\fxmanager.cpp">
