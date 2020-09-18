@@ -10,8 +10,9 @@
 #include "assets.h"
 
 const float kRadius = 5.f;
-const float kMaxSpeed = 1.f;
-const float kAccel = 1.f;
+const float kMaxSpeed = 140.f;
+const float kInitialSpeed = 60.f;
+const float kAccel = 40.f;
 
 struct Missile : CircleEntity, SelfRegister<Missile>
 {
@@ -19,11 +20,11 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 	float timer_explosion = 0;
 	Animation2 anim;
 
-	Missile(const vec& position, const vec& velocity) 
+	Missile(const vec& position, float angleDegs) 
 	  : CircleEntity(position, kRadius)
 	  , anim(AnimLib::MISSILE)
 	{
-		vel = velocity;
+		vel = vec(kInitialSpeed,0).RotatedAroundOriginDegs(angleDegs);
 	}
 
 	void Update(float dt)
@@ -41,8 +42,14 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 
 		vec target = JumpMan::instance()->pos;
 
-		vel = vel.RotatedToFacePositionRads(target, 10);
+		float speed = vel.Length();
+		if (speed < kMaxSpeed) {
+			speed += kAccel*dt;
+			Mates::ClampMax(speed, kMaxSpeed);
+			vel = vel.Normalized()* speed;
+		}
 
+		vel = vel.RotatedToFacePositionDegs(target-pos, 2*speed*dt);
 
 		pos += vel * dt;
 		if (!Camera::GetBounds().Contains(pos)) {

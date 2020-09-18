@@ -96,11 +96,14 @@ struct vec
 		return RotatedAroundOriginRads(Angles::DegsToRads(degrees));
 	}
 
-	[[nodiscard]] inline vec RotatedToFacePositionRads(const vec& target, float maxTurnRateRads = 900.f);
-	[[nodiscard]] inline vec RotatedToFacePositionDegs(const vec& target, float maxTurnRateDegs = Angles::RadsToDegs(900.f)) {
+	// Note: If specified, maxTurnRate should to be multiplied by dt
+	[[nodiscard]] inline vec RotatedToFacePositionRads(const vec& target, float maxTurnRateRads = std::numeric_limits<float>::max());
+	[[nodiscard]] inline vec RotatedToFacePositionDegs(const vec& target) {
+		return RotatedToFacePositionRads(target);
+	}
+	[[nodiscard]] inline vec RotatedToFacePositionDegs(const vec& target, float maxTurnRateDegs) {
 		return RotatedToFacePositionRads(target, Angles::DegsToRads(maxTurnRateDegs));
 	}
-
 	//returns the vector that is perpendicular to this one.
 	[[nodiscard]] inline vec  Perp() const;
 
@@ -453,7 +456,7 @@ inline vec vec::RotatedToFacePositionRads(const vec& target, float maxTurnRateRa
 	float angle = acos(heading.Dot(toTarget));
 
 	//return true if already facing the target
-	if (angle < 0.00001) {
+	if (angle < 0.00001 || isnan(angle)) {
 		return *this;
 	}
 
