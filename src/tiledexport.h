@@ -140,6 +140,10 @@ struct TiledTiles
 		BG_125,
 		BG_126,
 		BG_127,
+		BG_128,
+		BG_129,
+		BG_130,
+		BG_131,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -218,7 +222,7 @@ struct TiledTiles
 
 	// Aliases
 	static constexpr Value BG_PLAIN_COLOR = BG_33;
-	static constexpr Value BG_DOOR_OPENING = BG_48;
+	static constexpr Value BG_DOOR_OPENING = BG_49;
 	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
 	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
 	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_3;
