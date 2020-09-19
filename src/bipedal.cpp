@@ -14,12 +14,12 @@
 const float walking_speed = 30.f; //per second
 
 // Constants relatives to the sprite, assuming the origin is at ground level
-const vec headHitBoxOffset = vec(-20, -105);
+const vec headHitBoxOffset = vec(-30, -105);
 const vec headHitBoxSize = vec(80, 45);
-const vec legsHitBoxOffset = vec(-10, -64);
+const vec legsHitBoxOffset = vec(-20, -64);
 const vec legsHitBoxSize = vec(40, 60);
-const vec textureOffset = vec(0, -88); 
-const vec missilesOriginOffset = vec(0, -80);
+const vec textureOffset = vec(-10, -88); 
+const vec missilesOriginOffset = vec(-10, -110);
 
 Bipedal::Bipedal(const vec& pos)
 	: Entity(pos)
@@ -143,9 +143,9 @@ void Bipedal::Update(float dt)
 			}
 		}
 
-		bool outOfBounds = (pos.x < minX) || (pos.x > (maxX));
+		bool outOfBounds = (pos.x < minX) || (pos.x > maxX);
 		bool animationLooped = (frame != anim.current_frame) && (anim.current_frame == 0);
-		if (animationLooped && (outOfBounds || Rand::PercentChance(25))) {
+		if (animationLooped && (outOfBounds || Rand::PercentChance(40))) {
 			if (Rand::OnceEach(3)) {
 				state = State::DRAMATIC_PAUSE;
 				timer = Rand::rollf(0.5f, 1.0f);
@@ -177,7 +177,9 @@ void Bipedal::Draw() const
 	if (Debug::Draw && Camera::GetBounds().Contains(pos)) {
 		legsHitBox.Draw();
 		headHitBox.Draw();
-		Bounds(minX, pos.y, maxX-minX, 2).Draw(255, 255, 0);
+
+		Bounds(TiledAreas::boss_bounds[0].Left(), pos.y, TiledAreas::boss_bounds[0].width, 2).Draw(255, 255, 0);
+		Bounds(minX, pos.y, maxX - minX, 2).Draw(0, 255, 0);
 	}
 	pos.Debuggerino();
 
