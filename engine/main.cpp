@@ -161,6 +161,7 @@ void main_loop() {
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME_NEXT = SDL_SCANCODE_E;
 	const SDL_Scancode DEBUG_MODE = SDL_SCANCODE_F2;
 	const SDL_Scancode DEBUG_RELOAD_ASSETS = SDL_SCANCODE_F4;
+	const SDL_Scancode DEBUG_FAST_FORWARD = SDL_SCANCODE_F10;
 
 	if (Keyboard::IsKeyJustPressed(DEBUG_RELOAD_ASSETS)) {
 		// Leaks all already loaded assets, but we don't care since this is just for testing
@@ -193,6 +194,12 @@ void main_loop() {
 			limited_dt = 0.06f; //Slow game down instead of epic jumps
 			slowDown = true;
 		}
+
+#ifdef _DEBUG
+		if (Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
+			limited_dt *= 3;
+		}
+#endif
 		mainClock += limited_dt;
 		currentScene->Update(limited_dt);
 	}
