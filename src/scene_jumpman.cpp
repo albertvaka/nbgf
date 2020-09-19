@@ -224,7 +224,10 @@ void JumpScene::Update(float dt)
 		}
 		for (Bullet* b : Bullet::GetAll()) {
 			if (b->explode) continue;
-			if (Collide(e->headHitBox, b->bounds()) || Collide(e->legsHitBox, b->bounds())) {
+			if (
+				Collide(e->headHitBox, b->bounds()) 
+//			   || Collide(e->legsHitBox, b->bounds())
+			) {
 				b->explode = true;
 				e->takeDamage();
 				break;
