@@ -70,7 +70,8 @@ struct vec
 	//X axis to right like a Window app)
 	[[nodiscard]] inline int       Sign(const vec& v2) const;
 
-	// Angle in Degrees between the lines (origin to point a) and (origin to point b)
+	// Angle in Rads between the lines (origin to point a) and (origin to point b)
+	// In range [-Pi,Pi]
 	[[nodiscard]] float AngleRads(const vec& other = vec::Zero) const
 	{
 		float deltaY = other.y - y;
@@ -79,6 +80,7 @@ struct vec
 	}
 
 	// Angle in Degrees between the lines (origin to point a) and (origin to point b)
+	// In range [-180,180]
 	[[nodiscard]] float AngleDegs(const vec& other = vec::Zero) const
 	{
 		return Angles::RadsToDegs(AngleRads(other));
