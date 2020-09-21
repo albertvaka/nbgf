@@ -73,13 +73,13 @@ void Bipedal::Update(float dt)
 		vec shotsOrigin = pos + missilesOriginOffset;
 		timer += dt;
 		if (oldTimer < timeBetweenMissiles && timer >= timeBetweenMissiles) {
-			new Missile(shotsOrigin, 90 + 45);
+			new Missile(shotsOrigin, -135);
 		}
 		else if (oldTimer < 2 * timeBetweenMissiles && timer >= 2 * timeBetweenMissiles) {
-			new Missile(shotsOrigin, 90);
+			new Missile(shotsOrigin, -90);
 		}
 		else if (oldTimer < 3 * timeBetweenMissiles && timer >= 3 * timeBetweenMissiles) {
-			new Missile(shotsOrigin, 45);
+			new Missile(shotsOrigin, -45);
 		}
 		else if (timer >= 4 * timeBetweenMissiles) {
 			timer = 0.5f;

@@ -48,7 +48,7 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 	  : CircleEntity(position, kRadius)
 	  , anim(AnimLib::MISSILE)
 	{
-		vel = vec(-kMaxSpeed,0).RotatedAroundOriginDegs(angleDegs);
+		vel = vec::FromAngleDegs(angleDegs, kMaxSpeed);
 	}
 
 	void boom() {
