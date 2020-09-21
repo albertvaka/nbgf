@@ -17,7 +17,6 @@ const float kMaxTurnRateRads = Angles::DegsToRads(90.f);
 struct Missile : CircleEntity, SelfRegister<Missile>
 {
 	bool explode = false;
-	float timer_explosion = 0;
 	Animation2 anim;
 
 	static inline PartSys particles = PartSys(nullptr);
@@ -52,16 +51,16 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 	}
 
 	void boom() {
-		alive = false;
+		explode = true;
+		anim.SetAnimation(AnimLib::EXPLOSION);
+		anim.loopable = false;
 	}
 	void Update(float dt)
 	{
 		anim.Update(dt);
 
 		if (explode) {
-			vel = vec(0,0);
-			timer_explosion += dt;
-			if (timer_explosion > 1.f) {
+			if (anim.complete) {
 				alive = false;
 			}
 			return;
@@ -81,7 +80,11 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 	void Draw() const
 	{
 		if (explode) {
-			// TODO
+			const GPU_Rect& rect = anim.GetCurrentRect();
+			Window::Draw(Assets::scifiTexture, pos)
+				.withRect(rect)
+				.withScale(0.5f)
+				.withOrigin(rect.w/2, rect.h/2);
 		} else {
 			const GPU_Rect& rect = anim.GetCurrentRect();
 			Window::Draw(Assets::wheelerTexture, pos)

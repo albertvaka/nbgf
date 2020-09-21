@@ -20,6 +20,18 @@ namespace AnimLib {
 		{ TexturePackerRects::BOSSWHEELERXMISSILE_DEFAULT_001, 0.1f },
 	};
 
+	constexpr const AnimationFrame EXPLOSION[] = {
+		{ TexturePackerRects::EXPLOSION_01, 0.05f },
+		{ TexturePackerRects::EXPLOSION_02, 0.05f },
+		{ TexturePackerRects::EXPLOSION_03, 0.05f },
+		{ TexturePackerRects::EXPLOSION_04, 0.05f },
+		{ TexturePackerRects::EXPLOSION_05, 0.05f },
+		{ TexturePackerRects::EXPLOSION_06, 0.05f },
+		{ TexturePackerRects::EXPLOSION_07, 0.05f },
+		{ TexturePackerRects::EXPLOSION_08, 0.05f },
+		{ TexturePackerRects::EXPLOSION_09, 0.05f },
+	};
+
 	constexpr const GPU_Rect BIPEDAL_IDLE = TexturePackerRects::BIPEDALUNIT_IDLE_00;
 
 }
