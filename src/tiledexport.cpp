@@ -367,7 +367,7 @@ const vec TiledEntities::walljump = vec(2904.977f, 922.568f);
 
 const std::array<vec, 2> TiledEntities::gunup = {
 	vec(2047.666667f, 318.667f),
-	vec(1739.0f, 1099.667f),
+	vec(690.0f, 184.0f),
 };
 
 const vec TiledEntities::gunup_tancaporta = vec(1702.25f, 770.16667f);
@@ -398,6 +398,6 @@ const std::array<Bounds, 1> TiledAreas::fog = {
 		Bounds(880.5f,879.5f,734.0f,85.5f),
 	};
 const std::array<Bounds, 1> TiledAreas::boss_bounds = {
-		Bounds(1319.0f,1324.333f,489.0f,39.0f),
+		Bounds(1331.667f,1324.333f,476.333f,39.0f),
 	};
 
