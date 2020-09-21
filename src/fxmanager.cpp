@@ -9,7 +9,7 @@
 #include "imgui.h"
 #endif
 
-static GPU_Image* renderToTextureTarget;
+//static GPU_Image* renderToTextureTarget;
 
 void FxManager::Update(float dt) {
 	if (introTime > 0) {
