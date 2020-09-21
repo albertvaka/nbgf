@@ -41,7 +41,6 @@ Bipedal::Bipedal(const vec& pos)
 		minX = pos.x;
 		maxX = pos.x;
 	} else {
-		Debug::out << i;
 		minX = TiledAreas::boss_bounds[i].Left();
 		maxX = TiledAreas::boss_bounds[i].Right();
 

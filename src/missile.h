@@ -13,6 +13,7 @@
 const float kRadius = 1.f;
 const float kMaxSpeed = 120.f;
 const float kMaxTurnRateRads = Angles::DegsToRads(90.f);
+const float kFlockAvoidanceDistance = 30.f;
 
 struct Missile : CircleEntity, SelfRegister<Missile>
 {
@@ -68,9 +69,20 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 
 		vec target = JumpMan::instance()->pos;
 
+		// Prevent missiles from merging all into one.
+		// Note it's an n^2 check. We could also do without it
+		// if performance is a concern.
+		for(Missile* m : Missile::GetAll()) {
+			if (m == this) continue;
+			if (m->pos.Distance(pos) < kFlockAvoidanceDistance) {
+				target = m->pos;
+			}
+		}
+
 		vel = vel.RotatedToFacePositionRads(target-pos, kMaxTurnRateRads*dt);
 
 		pos += vel * dt;
+
 		if (!Camera::GetBounds().Contains(pos)) {
 			alive = false;
 		}
@@ -94,6 +106,7 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 		}
 		if (Debug::Draw) {
 			pos.Debuggerino();
+			CircleBounds(pos, kFlockAvoidanceDistance).Draw(255,0,0);
 			DrawBounds();
 		}
 	}
