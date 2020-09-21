@@ -10,45 +10,42 @@
 #include "jumpman.h"
 #include "assets.h"
 
-const float kRadius = 1.f;
-const float kMaxSpeed = 120.f;
+const float kRadius = 2.f;
+const float kSpeed = 120.f;
 const float kMaxTurnRateRads = Angles::DegsToRads(90.f);
 const float kFlockAvoidanceDistance = 30.f;
+const float kSmokePerSecond = 30.f;
 
 struct Missile : CircleEntity, SelfRegister<Missile>
 {
 	bool explode = false;
 	Animation2 anim;
+	float smokeTimer = 0;
 
 	static inline PartSys particles = PartSys(nullptr);
 	static void InitParticles() {
 		if (particles.texture != nullptr) {
 			return;
 		}
-		particles.SetTexture(Assets::marioTexture);
-		particles.AddSprite({ 5, 37, 6, 6 });
+		particles.SetTexture(Assets::wheelerTexture);
+		particles.AddSprite(TexturePackerRects::BOSSWHEELERXMISSILESMOKE_DEFAULT_002);
+		particles.AddSprite(TexturePackerRects::BOSSWHEELERXMISSILESMOKE_DEFAULT_001);
 
-		float vel = 15;
-		particles.max_vel = vec(vel, vel);
-		particles.min_vel = vec(-vel, -vel);
-		particles.min_ttl = 0.5f;
+		particles.max_vel = vec(10, 10);
+		particles.min_vel = vec(-10, -10);
+		particles.min_ttl = 0.6f;
 		particles.max_ttl = 1.f;
-		particles.min_interval = 0.03f;
-		particles.max_interval = 0.06f;
-		particles.min_scale = 0.5f;
-		particles.max_scale = 0.9f;
-		particles.scale_vel = -2.5f;
-		particles.min_rotation = 0.f;
-		particles.max_rotation = 360.f;
-		particles.rotation_vel = 180.f;
-		particles.alpha = 0.75f;
+		particles.min_scale = 0.3f;
+		particles.max_scale = 0.6f;
+		particles.alpha = 0.5f;
+		particles.alpha_vel = -1.0f;
 	}
 
 	Missile(const vec& position, float angleDegs) 
 	  : CircleEntity(position, kRadius)
 	  , anim(AnimLib::MISSILE)
 	{
-		vel = vec::FromAngleDegs(angleDegs, kMaxSpeed);
+		vel = vec::FromAngleDegs(angleDegs, kSpeed);
 	}
 
 	void boom() {
@@ -87,6 +84,17 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 			alive = false;
 		}
 
+		// Particles
+		smokeTimer += dt;
+		if (smokeTimer > 1.f/kSmokePerSecond) {
+			smokeTimer = 0;
+			const GPU_Rect& sprite = anim.GetCurrentRect();
+			vec rear = pos-(vel.Normalized()*sprite.w);
+			rear.Debuggerino(0,255,0);
+			particles.pos = rear;
+			particles.AddParticle();
+
+		}
 	}
 
 	void Draw() const
