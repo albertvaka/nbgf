@@ -52,6 +52,7 @@
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\destroyedtiles.h" />
     <ClInclude Include="src\enemy_door.h" />
+    <ClInclude Include="src\goomba.h" />
     <ClInclude Include="src\jumpman.h" />
     <ClInclude Include="src\lava.h" />
     <ClInclude Include="src\missile.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="src\enemy_door.cpp" />
     <ClCompile Include="src\fxmanager.cpp" />
     <ClInclude Include="src\fxmanager.h" />
+    <ClCompile Include="src\goomba.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\lava.cpp" />
     <ClCompile Include="src\parallax.cpp" />

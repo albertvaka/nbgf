@@ -16,6 +16,7 @@
 #include "debug.h"
 #include "collide.h"
 #include "rototext.h"
+#include "goomba.h"
 
 extern float mainClock;
 
@@ -57,14 +58,14 @@ JumpScene::JumpScene()
 	}
 }
 
-void JumpScene::EnterScene() 
+void JumpScene::EnterScene()
 {
 	player.Reset(TiledEntities::spawn);
 
 	map.LoadFromTiled();
 
 	for (const vec& v : TiledEntities::bat) {
-		new Bat(v,false, false);
+		new Bat(v, false, false);
 	}
 
 	new Bipedal(TiledEntities::boss_bipedal);
@@ -76,6 +77,11 @@ void JumpScene::EnterScene()
 	for (const vec& v : TiledEntities::batawake) {
 		new Bat(v, false, true);
 	}
+
+	for (const vec& v : TiledEntities::goomba) {
+		new Goomba(v);
+	}
+
 
 	//for (const vec& v : TiledEntities::save) {
 	//	new SaveStation(v);
@@ -149,6 +155,7 @@ void JumpScene::ExitScene()
 	Missile::DeleteAll();
 	Missile::particles.Clear();
 	Bat::DeleteAll();
+	Goomba::DeleteAll();
 	Bipedal::DeleteAll();
 	Lava::DeleteAll();
 	destroyedTiles.Clear();
@@ -312,6 +319,25 @@ void JumpScene::Update(float dt)
 		}
 	}
 
+	for (Goomba* e : Goomba::GetAll()) {
+		e->Update(dt);
+		for (Bullet* b : Bullet::GetAll()) {
+			if (b->explode) continue;
+			if (Collide(e->bounds(), b->bounds())) {
+				b->pos = e->pos;
+				b->explode = true;
+				e->alive = false;
+				AwakeNearbyBats(e->pos);
+				break;
+			}
+		}
+		if (!player.isInvencible()) {
+			if (Collide(player.bounds(), e->bounds())) {
+				player.takeDamage(e->pos);
+			}
+		}
+	}
+
 
 #ifdef _DEBUG
 	const SDL_Scancode killall = SDL_SCANCODE_F11;
@@ -383,6 +409,7 @@ void JumpScene::Update(float dt)
 	}
 
 	Bat::DeleteNotAlive(); //Must happen after enemydoor update
+	Goomba::DeleteNotAlive();
 
 	for (GunUp* g : GunUp::GetAll()) {
 		if (Collide(g->bounds(), player.bounds())) {
@@ -511,6 +538,11 @@ void JumpScene::Draw()
 			e->DrawSenseArea();
 		}
 	}
+
+	for (const Goomba* e : Goomba::GetAll()) {
+		e->Draw();
+	}
+
 
 	for (const Bipedal* e : Bipedal::GetAll()) {
 		e->Draw();

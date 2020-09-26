@@ -262,6 +262,9 @@
     <ClInclude Include="src\fxmanager.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\goomba.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -418,6 +421,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\fxmanager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\goomba.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
