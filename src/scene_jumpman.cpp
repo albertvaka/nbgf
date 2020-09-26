@@ -455,6 +455,9 @@ void JumpScene::Update(float dt)
 				break;
 			case Skill::GUN:
 				rotoText.ShowMessage("Big F. Gun");
+				for (const vec& v : TiledEntities::initial_batawake) {
+					new Bat(v, false, true);
+				}
 				break;
 			default:
 				break;

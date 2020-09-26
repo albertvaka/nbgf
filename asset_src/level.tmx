@@ -958,7 +958,7 @@
  </layer>
  <objectgroup id="4" name="Entities">
   <object id="50" gid="117" x="-400" y="48" width="16" height="16"/>
-  <object id="51" type="batawake" gid="117" x="-525.166" y="68" width="16" height="16"/>
+  <object id="51" type="initial_batawake" gid="117" x="-525.166" y="68" width="16" height="16"/>
   <object id="58" gid="326" x="96.25" y="-257.75" width="16" height="16"/>
   <object id="60" gid="326" x="465.333" y="79.3333" width="16" height="16"/>
   <object id="61" gid="117" x="656" y="32" width="16" height="16"/>
@@ -969,8 +969,8 @@
   <object id="68" type="batawake" gid="117" x="-120" y="-603" width="16" height="16"/>
   <object id="69" type="batawake" gid="117" x="226" y="-556" width="16" height="16"/>
   <object id="73" gid="1" x="50.333" y="108" width="16" height="16"/>
-  <object id="76" type="batawake" gid="117" x="-733" y="116.5" width="16" height="16"/>
-  <object id="77" type="batawake" gid="117" x="-1030.5" y="36" width="16" height="16"/>
+  <object id="76" type="initial_batawake" gid="117" x="-733" y="116.5" width="16" height="16"/>
+  <object id="77" type="initial_batawake" gid="117" x="-1030.5" y="36" width="16" height="16"/>
   <object id="92" gid="89" x="-1783.63" y="154" width="16" height="16"/>
   <object id="93" gid="182" x="-414" y="-46" width="16" height="16"/>
   <object id="97" type="angrybat" gid="117" x="-1517" y="-618" width="16" height="16"/>
@@ -1007,7 +1007,6 @@
   <object id="132" name="bat_bounds" type="bat_bounds" x="-1208.22" y="-72.5402" width="842.45" height="291.747"/>
   <object id="134" name="fog" type="fog" x="-1167.5" y="111.5" width="734" height="85.5"/>
   <object id="147" name="boss_bounds" type="boss_bounds" x="-716.333" y="556.333" width="476.333" height="39"/>
-  <object id="152" name="bats_spawn_later" type="bats_spawn_later" x="-1266.67" y="-134.667" width="936" height="416"/>
  </objectgroup>
  <objectgroup id="2" name="Screens" visible="0">
   <object id="42" name="Screen" x="-260.455" y="-40" width="591.538" height="256"/>

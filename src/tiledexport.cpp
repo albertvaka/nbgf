@@ -330,10 +330,8 @@ const std::array<vec, 8> TiledEntities::bat = {
 	vec(204.0f, 751.5f),
 };
 
-const std::array<vec, 5> TiledEntities::batawake = {
+const std::array<vec, 3> TiledEntities::initial_batawake = {
 	vec(1522.8339999999998f, 836.0f),
-	vec(1928.0f, 165.0f),
-	vec(2274.0f, 212.0f),
 	vec(1315.0f, 884.5f),
 	vec(1017.5f, 804.0f),
 };
@@ -341,6 +339,11 @@ const std::array<vec, 5> TiledEntities::batawake = {
 const std::array<vec, 2> TiledEntities::healthup = {
 	vec(2144.25f, 510.25f),
 	vec(2513.333f, 847.3333f),
+};
+
+const std::array<vec, 2> TiledEntities::batawake = {
+	vec(1928.0f, 165.0f),
+	vec(2274.0f, 212.0f),
 };
 
 const vec TiledEntities::spawn = vec(2098.333f, 876.0f);
@@ -400,8 +403,5 @@ const std::array<Bounds, 1> TiledAreas::fog = {
 	};
 const std::array<Bounds, 1> TiledAreas::boss_bounds = {
 		Bounds(1331.667f,1324.333f,476.333f,39.0f),
-	};
-const std::array<Bounds, 1> TiledAreas::bats_spawn_later = {
-		Bounds(781.3299999999999f,633.333f,936.0f,416.0f),
 	};
 
