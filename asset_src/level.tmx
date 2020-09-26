@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="10" nextobjectid="149">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="10" nextobjectid="156">
  <editorsettings>
   <export target="." format="tmx"/>
  </editorsettings>
@@ -9,6 +9,7 @@
   <tile id="1" type="breakable"/>
   <tile id="10" type="solid"/>
   <tile id="11" type="solid"/>
+  <tile id="12" type="goomba"/>
   <tile id="23" type="solid"/>
   <tile id="24" type="breakable"/>
   <tile id="25" type="rslope"/>
@@ -956,7 +957,6 @@
   </data>
  </layer>
  <objectgroup id="4" name="Entities">
-  <object id="47" type="batawake" gid="117" x="-700" y="-38" width="16" height="16"/>
   <object id="50" gid="117" x="-400" y="48" width="16" height="16"/>
   <object id="51" type="batawake" gid="117" x="-525.166" y="68" width="16" height="16"/>
   <object id="58" gid="326" x="96.25" y="-257.75" width="16" height="16"/>
@@ -969,12 +969,8 @@
   <object id="68" type="batawake" gid="117" x="-120" y="-603" width="16" height="16"/>
   <object id="69" type="batawake" gid="117" x="226" y="-556" width="16" height="16"/>
   <object id="73" gid="1" x="50.333" y="108" width="16" height="16"/>
-  <object id="75" type="batawake" gid="117" x="-771.5" y="23.5" width="16" height="16"/>
   <object id="76" type="batawake" gid="117" x="-733" y="116.5" width="16" height="16"/>
   <object id="77" type="batawake" gid="117" x="-1030.5" y="36" width="16" height="16"/>
-  <object id="78" type="batawake" gid="117" x="-988.67" y="-36" width="16" height="16"/>
-  <object id="80" type="batawake" gid="117" x="-888.333" y="69.5" width="16" height="16"/>
-  <object id="84" type="batawake" gid="117" x="-619.5" y="21.6667" width="16" height="16"/>
   <object id="92" gid="89" x="-1783.63" y="154" width="16" height="16"/>
   <object id="93" gid="182" x="-414" y="-46" width="16" height="16"/>
   <object id="97" type="angrybat" gid="117" x="-1517" y="-618" width="16" height="16"/>
@@ -991,6 +987,9 @@
   <object id="144" type="lava_initial_height" gid="404" x="641.75" y="232" width="16" height="16"/>
   <object id="145" name="boss_bipedal" type="boss_bipedal" gid="195" x="-671.818" y="592.174" width="16" height="16"/>
   <object id="148" gid="325" x="-1358" y="-584" width="16" height="16"/>
+  <object id="153" gid="13" x="-768.667" y="96" width="16" height="16"/>
+  <object id="154" gid="13" x="-1124.67" y="80" width="16" height="16"/>
+  <object id="155" gid="13" x="80.6667" y="32.3333" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="9" name="Notes" visible="0">
   <object id="112" x="-532.167" y="-16.1667" width="101.667" height="41.6667">
@@ -1000,7 +999,7 @@
    <text wrap="1">Need fly to get here</text>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Areas">
+ <objectgroup id="8" name="Areas" visible="0">
   <object id="83" name="lava" type="lava" x="336" y="46.478" width="618" height="209.5"/>
   <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
   <object id="106" name="lava" type="lava" x="-16" y="363.333" width="240" height="127.455"/>
@@ -1008,6 +1007,7 @@
   <object id="132" name="bat_bounds" type="bat_bounds" x="-1208.22" y="-72.5402" width="842.45" height="291.747"/>
   <object id="134" name="fog" type="fog" x="-1167.5" y="111.5" width="734" height="85.5"/>
   <object id="147" name="boss_bounds" type="boss_bounds" x="-716.333" y="556.333" width="476.333" height="39"/>
+  <object id="152" name="bats_spawn_later" type="bats_spawn_later" x="-1266.67" y="-134.667" width="936" height="416"/>
  </objectgroup>
  <objectgroup id="2" name="Screens" visible="0">
   <object id="42" name="Screen" x="-260.455" y="-40" width="591.538" height="256"/>

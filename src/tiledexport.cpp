@@ -319,19 +319,6 @@ const std::array<Bounds, 11> TiledMap::screens = {
 	Bounds(2369.2309999999998f,1039.833f,591.538f,333.0f),
 };
 
-const std::array<vec, 10> TiledEntities::batawake = {
-	vec(1348.0f, 730.0f),
-	vec(1522.8339999999998f, 836.0f),
-	vec(1928.0f, 165.0f),
-	vec(2274.0f, 212.0f),
-	vec(1276.5f, 791.5f),
-	vec(1315.0f, 884.5f),
-	vec(1017.5f, 804.0f),
-	vec(1059.33f, 732.0f),
-	vec(1159.667f, 837.5f),
-	vec(1428.5f, 789.6667f),
-};
-
 const std::array<vec, 8> TiledEntities::bat = {
 	vec(1648.0f, 816.0f),
 	vec(2704.0f, 800.0f),
@@ -341,6 +328,14 @@ const std::array<vec, 8> TiledEntities::bat = {
 	vec(2751.25f, 976.0f),
 	vec(2316.0f, 1068.0f),
 	vec(204.0f, 751.5f),
+};
+
+const std::array<vec, 5> TiledEntities::batawake = {
+	vec(1522.8339999999998f, 836.0f),
+	vec(1928.0f, 165.0f),
+	vec(2274.0f, 212.0f),
+	vec(1315.0f, 884.5f),
+	vec(1017.5f, 804.0f),
 };
 
 const std::array<vec, 2> TiledEntities::healthup = {
@@ -381,6 +376,12 @@ const vec TiledEntities::lava_initial_height = vec(2689.75f, 1000.0f);
 
 const vec TiledEntities::boss_bipedal = vec(1376.182f, 1360.174f);
 
+const std::array<vec, 3> TiledEntities::goomba = {
+	vec(1279.333f, 864.0f),
+	vec(923.3299999999999f, 848.0f),
+	vec(2128.6667f, 800.3333f),
+};
+
 
 
 const std::array<Bounds, 2> TiledAreas::lava = {
@@ -399,5 +400,8 @@ const std::array<Bounds, 1> TiledAreas::fog = {
 	};
 const std::array<Bounds, 1> TiledAreas::boss_bounds = {
 		Bounds(1331.667f,1324.333f,476.333f,39.0f),
+	};
+const std::array<Bounds, 1> TiledAreas::bats_spawn_later = {
+		Bounds(781.3299999999999f,633.333f,936.0f,416.0f),
 	};
 

@@ -6,6 +6,11 @@
 
 namespace AnimLib {
 
+	constexpr const AnimationFrame GOOMBA[] = {
+		{ {12 * 16, 0, 16,16}, .2f },
+		{ {13 * 16, 0, 16,16}, .2f },
+	};
+
 	constexpr const AnimationFrame BIPEDAL_WALKING[] = {
 		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_000, .25f },
 		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_001, .25f },
