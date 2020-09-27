@@ -7,6 +7,8 @@
 #include "selfregister.h"
 #include "assets.h"
 
+const float kExplosionTime = 0.3f;
+
 struct Bullet : CircleEntity, SelfRegister<Bullet>
 {
 	bool explode = false;
@@ -49,7 +51,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 		if (explode) {
 			vel = vec(0,0);
 			timer_explosion += dt;
-			if (timer_explosion > 1.f) {
+			if (timer_explosion > kExplosionTime) {
 				alive = false;
 			}
 			return;
@@ -73,7 +75,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 			drawPos += Rand::vecInRange(-1, -1, 1, 1);
 		}
 		else {
-			int frame = (timer_explosion * 7);
+			int frame = (7 * timer_explosion / kExplosionTime);
 			rect = { (9 + frame) * 16.f, 10 * 16.f, 16.f, 16.f };
 		}
 		Window::Draw(Assets::hospitalTexture, drawPos)
