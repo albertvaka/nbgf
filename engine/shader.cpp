@@ -37,11 +37,17 @@ precision mediump int;\n";
 		}
 	}
 
+	int prefix_lines = 0;
+	for (char c : source.str()) {
+		if (c == '\n') prefix_lines++;
+	}
+
 	source << std::ifstream(path).rdbuf();
 
 	int id = GPU_CompileShader(type, source.str().c_str());
 	if (id == 0) {
 		Debug::out << path;
+		Debug::out << "Note: Following line numbers offset by: " << prefix_lines;
 		Debug::out << GPU_GetShaderMessage();
 	}
 	GPU_AttachShader(program, id);
