@@ -460,7 +460,8 @@ void JumpScene::Update(float dt)
 			case Skill::GUN:
 				rotoText.ShowMessage("Big F. Gun");
 				for (const vec& v : TiledEntities::initial_batawake) {
-					new Bat(v, false, true);
+					Bat* b = new Bat(v, false, true);
+					gunup_tancaporta_door->AddEnemy(b);
 				}
 				break;
 			default:
