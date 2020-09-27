@@ -12,6 +12,7 @@ struct Goomba : BoxEntity, SelfRegister<Goomba>
 	{
 		WALKING,
 		ENTER_CHARGE,
+		EXIT_CHARGE,
 		CHARGING
 	};
 

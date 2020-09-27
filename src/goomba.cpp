@@ -17,7 +17,9 @@ Goomba::Goomba(const vec& pos, bool isCharger)
 const float speed = 25;
 const float chargeSpeed = 100;
 
-const float chargeTime = 0.35f;
+const float enterChargeTime = 0.35f;
+const float exitChargeTime = 0.2f;
+
 
 Bounds Goomba::ChargeBounds() const
 {
@@ -65,7 +67,10 @@ void Goomba::WalkAdvance(float dt)
 	else
 	{
 		goingRight = !goingRight;
-		state = State::WALKING;
+		if (state == State::CHARGING) {
+			state = State::EXIT_CHARGE;
+			timer = 0.f;
+		}
 	}
 }
 
@@ -82,23 +87,32 @@ void Goomba::Update(float dt)
 			state = State::ENTER_CHARGE;
 			timer = 0.0f;
 		}
+		anim.Update(dt);
 		break;
 
 	case ENTER_CHARGE:
 		timer += dt;
-		if (timer > chargeTime)
+		if (timer > enterChargeTime)
 		{
 			state = State::CHARGING;
 		}
 		break;
 
+	case EXIT_CHARGE:
+		timer += dt;
+		if (timer > exitChargeTime)
+		{
+			state = State::WALKING;
+		}
+		break;
+
 	case CHARGING:
 		WalkAdvance(dt);
+		anim.Update(dt*2);
 		break;
 	}
 
 
-	anim.Update(dt);
 }
 
 
@@ -111,17 +125,19 @@ void Goomba::Draw() const
 
 	if (state == State::ENTER_CHARGE)
 	{
-		drawPos.y -= sinf((timer/ chargeTime)*M_PI) * Tile::size;
+		drawPos.y -= sinf((timer/ enterChargeTime)*M_PI) * Tile::size;
+	}
+	else if (state == State::EXIT_CHARGE)
+	{ 
+		drawPos.y -= sinf((timer / exitChargeTime) * M_PI) * 2;
 	}
 
 	Window::Draw(Assets::marioTexture, drawPos)
 		.withRect(r);
 
-
 	if (Debug::Draw) {
 		bounds().Draw();
 		ChargeBounds().Draw(255, 0, 255);
 	}
-
 
 }
