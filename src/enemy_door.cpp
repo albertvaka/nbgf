@@ -3,6 +3,7 @@
 #include "tilemap.h"
 #include "assets.h"
 #include "window.h"
+#include "fxmanager.h"
 
 const float openAnimationTime = 0.4f; //Animation will take twice this time per tile
 const int maxHeight = 10;
@@ -43,6 +44,7 @@ void EnemyDoor::Update(float dt)
 		}), enemies.end());
 		if (enemies.empty()) {
 			state = State::OPENING;
+			FxManager::StartScreenshake(3.f, veci(2, 2), vec(35.f, 45.f));
 			openingTimer = 0.f;
 		}
 	} break;
