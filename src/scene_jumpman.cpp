@@ -79,7 +79,11 @@ void JumpScene::EnterScene()
 	}
 
 	for (const vec& v : TiledEntities::goomba) {
-		new Goomba(v);
+		new Goomba(v, false);
+	}
+
+	for (const vec& v : TiledEntities::goombacharger) {
+		new Goomba(v ,true);
 	}
 
 

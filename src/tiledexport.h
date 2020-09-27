@@ -258,7 +258,8 @@ struct TiledEntities
 	static const std::array<vec, 2> save;
 	static const vec lava_initial_height;
 	static const vec boss_bipedal;
-	static const std::array<vec, 3> goomba;
+	static const std::array<vec, 2> goomba;
+	static const std::array<vec, 2> goombacharger;
 	
 };
 

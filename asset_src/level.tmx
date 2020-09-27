@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="10" nextobjectid="156">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="10" nextobjectid="158">
  <editorsettings>
   <export target="." format="tmx"/>
  </editorsettings>
@@ -10,6 +10,7 @@
   <tile id="10" type="solid"/>
   <tile id="11" type="solid"/>
   <tile id="12" type="goomba"/>
+  <tile id="14" type="goombacharger"/>
   <tile id="23" type="solid"/>
   <tile id="24" type="breakable"/>
   <tile id="25" type="rslope"/>
@@ -622,7 +623,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,370,377,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,68,69,70,0,0,0,70,68,0,0,0,0,0,
+0,0,0,68,0,70,0,0,0,70,68,0,0,0,0,0,
 101,97,96,100,99,100,100,99,99,97,96,98,41,0,0,0,
 161,161,161,161,161,161,161,161,161,161,161,161,12,98,97,97,
 161,161,161,161,161,161,161,161,161,161,161,161,161,161,161,161,
@@ -987,9 +988,10 @@
   <object id="144" type="lava_initial_height" gid="404" x="641.75" y="232" width="16" height="16"/>
   <object id="145" name="boss_bipedal" type="boss_bipedal" gid="195" x="-671.818" y="592.174" width="16" height="16"/>
   <object id="148" gid="325" x="-1358" y="-584" width="16" height="16"/>
-  <object id="153" gid="13" x="-768.667" y="96" width="16" height="16"/>
-  <object id="154" gid="13" x="-1124.67" y="80" width="16" height="16"/>
+  <object id="154" gid="13" x="-912.253" y="48.0417" width="16" height="16"/>
   <object id="155" gid="13" x="80.6667" y="32.3333" width="16" height="16"/>
+  <object id="156" gid="15" x="-959.667" y="160.333" width="16" height="16"/>
+  <object id="157" gid="15" x="-1103.67" y="80" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="9" name="Notes" visible="0">
   <object id="112" x="-532.167" y="-16.1667" width="101.667" height="41.6667">
