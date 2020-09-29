@@ -39,7 +39,6 @@ struct JumpScene : Scene {
 	void ExitScene() override;
 	void Update(float dt) override;
 	void Draw() override;
-	void RandomMap();
 	vec GetCameraTargetPos();
 	void UpdateCamera(float dt);
 

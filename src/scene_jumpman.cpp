@@ -355,9 +355,12 @@ void JumpScene::Update(float dt)
 	if (raising_lava->CurrentLevel() <= raising_lava_target_height+1.f) {
 		raising_lava->SetLevel(TiledEntities::lava_initial_height.y);
 	}
-
 	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);
+	}
+	if (player.frozen) {
+		// stop lava to prevent it lowering and suddently us not being inside
+		raising_lava->SetLevel(raising_lava->CurrentLevel());
 	}
 
 	contextActionButton = GameKeys::NONE;
