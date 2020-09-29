@@ -19,7 +19,7 @@ struct BoxEntity : Entity {
 
 	vec size;
 
-	constexpr Bounds bounds() const {
+	[[nodiscard]] constexpr Bounds bounds() const {
 		return Bounds::fromCenter(pos, size);
 	}
 
@@ -35,7 +35,7 @@ struct CircleEntity : Entity {
 
 	float radius;
 	
-	constexpr CircleBounds bounds() const {
+	[[nodiscard]] constexpr CircleBounds bounds() const {
 		return CircleBounds(pos, radius);
 	}
 

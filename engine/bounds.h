@@ -24,14 +24,14 @@ struct Bounds
         top -= origin.y;
     }
 
-    static constexpr Bounds fromCenter(const vec& center, const vec& size) { return Bounds(center - size/2, size); }
+    [[nodiscard]] static constexpr Bounds fromCenter(const vec& center, const vec& size) { return Bounds(center - size/2, size); }
 
-    GPU_Rect AsRect() {
+    [[nodiscard]] GPU_Rect AsRect() {
         return GPU_Rect{ left, top, width, height };
     }
 
     //Expands arround the center by a factor
-    Bounds operator*(float f)
+    [[nodiscard]] Bounds operator*(float f)
 	{
         vec center = Center();
         Bounds ret = *this;
@@ -148,13 +148,13 @@ struct CircleBounds
 
     void Draw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const;
 
-    float DistanceSq(const Bounds& a) const { return a.DistanceSq(*this); };
-    float Distance(const Bounds& a) const { return a.Distance(*this); }
+    [[nodiscard]] float DistanceSq(const Bounds& a) const { return a.DistanceSq(*this); };
+    [[nodiscard]] float Distance(const Bounds& a) const { return a.Distance(*this); }
     
-    float DistanceSq(const CircleBounds& a) const {
+    [[nodiscard]] float DistanceSq(const CircleBounds& a) const {
         return a.pos.DistanceSq(this->pos) - (a.radius + this->radius) * (a.radius + this->radius);
     }
-    float Distance(const CircleBounds& a) const { 
+    [[nodiscard]] float Distance(const CircleBounds& a) const { 
         return a.pos.Distance(this->pos) - (a.radius + this->radius);
     }
 };
