@@ -183,27 +183,13 @@ void JumpScene::Update(float dt)
 		return;
 	}
 
-	for (const Lava* l : Lava::GetAll()) {
-		if (l->IsInside(player.pos - vec(0,7.f))) {
-			player.dead = true;
-			player.invencibleTimer = 1;
-			player.pos.y += 6 * dt; //sink slowly in the lava
-			player.bfgPos.y = -1000;
-			player.onWall = JumpMan::ONWALL_NO;
-			raising_lava->SetLevel(raising_lava->CurrentLevel()); // stop lava to prevent it lowering and suddently us not being inside
-		}
-		if (l->IsInside(player.pos - vec(0, 14.f))) {
-			FxManager::StartOuttroTransition(introDuration);
-			return;
-
-		}
-	}
-
-
 	skillTree.Update(dt);
 	if (skillTree.open) return;
 
 	player.Update(dt);
+	if (!player.alive) {
+		FxManager::StartOuttroTransition(introDuration);
+	}
 
 	screenManager.UpdateCurrentScreen(player.pos);
 
@@ -211,25 +197,6 @@ void JumpScene::Update(float dt)
 
 	for (Bipedal* e : Bipedal::GetAll()) {
 		e->Update(dt);
-		if (!player.isInvencible()) {
-			if (Collide(player.bounds(), e->headHitBox)) {
-				player.takeDamage(e->headHitBox.Center());
-			}
-			else if (Collide(player.bounds(), e->legsHitBox)) {
-				player.takeDamage(e->legsHitBox.Center());
-			}
-		}
-		for (Bullet* b : Bullet::GetAll()) {
-			if (b->explode) continue;
-			if (
-				Collide(e->headHitBox, b->bounds()) 
-//			   || Collide(e->legsHitBox, b->bounds())
-			) {
-				b->explode = true;
-				e->takeDamage();
-				break;
-			}
-		}
 	}
 
 	for (Bullet* e  : Bullet::GetAll()) {
@@ -237,7 +204,6 @@ void JumpScene::Update(float dt)
 	}
 	Bullet::DeleteNotAlive();
 
-	//FIXME: This is a copy-paste from bullet
 	for (Missile* e  : Missile::GetAll()) {
 		e->Update(dt);
 	}

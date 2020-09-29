@@ -23,7 +23,8 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         jumpTimeLeft = 0.0f;
         crouchedTime = 0.0f;
         onWall = ONWALL_NO;
-        dead = false;
+        frozen = false;
+        alive = true;
     }
 
     Bounds bounds() const {
@@ -52,7 +53,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     int8_t onWall = ONWALL_NO;
     float jumpTimeLeft = 0.0f;
     float crouchedTime = 0.0f;
-    bool dead = false;
+    bool frozen = false;
 
     float bfgAngle;
     vec bfgPos;

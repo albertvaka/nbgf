@@ -187,21 +187,10 @@ void HellCrossScene::Update(float dt)
 		return;
 	}
 
-	for (const Lava* l : Lava::GetAll()) {
-		if (l->IsInside(player.pos - vec(0,7.f))) {
-			player.dead = true;
-			player.invencibleTimer = 1;
-			player.pos.y += 6 * dt; //sink slowly in the lava
-			player.bfgPos.y = -1000;
-			player.onWall = JumpMan::ONWALL_NO;
-		}
-		if (l->IsInside(player.pos - vec(0, 14.f))) {
-			FxManager::StartOuttroTransition(introDuration); // Will reset scene after it's done
-			return;
-		}
-	}
-
 	player.Update(dt);
+	if (!player.alive) {
+		FxManager::StartOuttroTransition(introDuration);
+	}
 
 	UpdateCamera();
 

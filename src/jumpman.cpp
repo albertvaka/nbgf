@@ -78,7 +78,7 @@ JumpMan::JumpMan()
 
 void JumpMan::Update(float dt)
 {
-	if (dead) return;
+	if (frozen || !alive) return;
 
 	TileMap* map = TileMap::instance();
 

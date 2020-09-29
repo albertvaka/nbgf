@@ -5,6 +5,7 @@
 #include "collide.h"
 #include "camera.h"
 #include "mates.h"
+#include "jumpman.h"
 
 const float waveAmplitude = 1.f;
 const float chunkSize = 5.4f;
@@ -76,6 +77,19 @@ void Lava::Update(float dt) {
 		lavaPartSys.Spawn(dt);
 	}
 	lavaPartSys.UpdateParticles(dt);
+
+	// Kill the player
+	JumpMan* player = JumpMan::instance();
+	if (IsInside(player->pos - vec(0,7.f))) {
+		player->frozen = true; // disable movement
+		player->invencibleTimer = 1;
+		player->pos.y += 6 * dt; //sink slowly in the lava
+		player->bfgPos.y = -1000;
+		player->onWall = JumpMan::ONWALL_NO;
+	}
+	if (IsInside(player->pos - vec(0, 14.f))) {
+		player->alive = false;
+	}
 }
 
 #define USE_VAO
