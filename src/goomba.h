@@ -29,9 +29,10 @@ struct Goomba : BoxEntity, SelfRegister<Goomba>
 
 	Bounds ChargeBounds() const;
 
-	void WalkAdvance(float dt);
 	float WalkDirection() const;
 	float WalkSpeed() const;
+
+	void Walk(float dt);
 
 	void Update(float dt);
 	void Draw() const;

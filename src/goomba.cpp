@@ -46,7 +46,7 @@ float Goomba::WalkDirection() const
 	return (goingRight ? 1 : -1);
 }
 
-void Goomba::WalkAdvance(float dt)
+void Goomba::Walk(float dt)
 {
 	float realSpeed = WalkSpeed();
 
@@ -85,7 +85,7 @@ void Goomba::Update(float dt)
 	switch (state)
 	{
 	case WALKING:
-		WalkAdvance(dt);
+		Walk(dt);
 		if (isCharger && Collide(ChargeBounds(), player->bounds()))
 		{
 			state = State::ENTER_CHARGE;
@@ -111,7 +111,7 @@ void Goomba::Update(float dt)
 		break;
 
 	case CHARGING:
-		WalkAdvance(dt);
+		Walk(dt);
 		anim.Update(dt*2);
 		break;
 	}
