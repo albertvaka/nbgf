@@ -415,7 +415,7 @@ void JumpScene::Draw()
 	//Bullet::particles.DrawImGUI("BulletTrail");
 
 	Missile::particles.Draw();
-	Missile::particles.DrawImGUI("MissileSmoke");
+	//Missile::particles.DrawImGUI("MissileSmoke");
 
 	for (const Bullet* e : Bullet::GetAll()) {
 		e->Draw();
