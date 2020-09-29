@@ -7,9 +7,6 @@
 #include "steering_behavior.h"
 #include "steering_behavior_applier.h"
 
-struct JumpMan;
-struct TileMap;
-
 struct Bat : SteeringEntity, SelfRegister<Bat>
 {
 	enum class State {
