@@ -88,6 +88,9 @@ void Bullet::Draw() const
 		.withRect(rect)
 		.withRotationDegs(rotation);
 
+	if (Debug::Draw) {
+		DrawBounds();
+	}
 }
 
 void Bullet::InitParticles() {

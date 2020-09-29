@@ -211,41 +211,10 @@ void JumpScene::Update(float dt)
 
 	for (Bat* e : Bat::GetAll()) {
 		e->Update(dt);
-		for (Bullet* b : Bullet::GetAll()) {
-			if (b->explode) continue;
-			if (Collide(e, b)) {
-				b->pos = e->pos;
-				b->explode = true;
-				e->alive = false;
-				Bat::AwakeNearbyBats(e->pos);
-				break;
-			}
-		}
-		if (!e->alive) continue;
-		if (!player.isInvencible()) {
-			if (Collide(player.bounds(), e->bounds())) {
-				player.takeDamage(e->pos);
-			}
-		}
 	}
 
 	for (Goomba* e : Goomba::GetAll()) {
 		e->Update(dt);
-		for (Bullet* b : Bullet::GetAll()) {
-			if (b->explode) continue;
-			if (Collide(e->bounds(), b->bounds())) {
-				b->pos = e->pos;
-				b->explode = true;
-				e->alive = false;
-				Bat::AwakeNearbyBats(e->pos);
-				break;
-			}
-		}
-		if (!player.isInvencible()) {
-			if (Collide(player.bounds(), e->bounds())) {
-				player.takeDamage(e->pos);
-			}
-		}
 	}
 
 
@@ -447,16 +416,11 @@ void JumpScene::Draw()
 
 	for (const Bat* e : Bat::GetAll()) {
 		e->Draw();
-		if (Debug::Draw && Camera::GetBounds().Contains(e->pos)) {
-			e->DrawBounds();
-			e->DrawSenseArea();
-		}
 	}
 
 	for (const Goomba* e : Goomba::GetAll()) {
 		e->Draw();
 	}
-
 
 	for (const Bipedal* e : Bipedal::GetAll()) {
 		e->Draw();
@@ -469,36 +433,21 @@ void JumpScene::Draw()
 
 	for (const Bullet* e : Bullet::GetAll()) {
 		e->Draw();
-		if (Debug::Draw) {
-			e->DrawBounds();
-		}
 	}
 	
 	for (const Missile* e : Missile::GetAll()) {
 		e->Draw();
-		if (Debug::Draw) {
-			e->DrawBounds();
-		}
 	}
 
 
 	for (const GunUp* g : GunUp::GetAll()) {
 		g->Draw();
-		if (Debug::Draw) {
-			g->bounds().Draw();
-		}
 	}
 	for (const HealthUp* g : HealthUp::GetAll()) {
 		g->Draw();
-		if (Debug::Draw) {
-			g->bounds().Draw();
-		}
 	}
 	for (BigItem* g : BigItem::GetAll()) {
 		g->Draw();
-		if (Debug::Draw) {
-			g->bounds().Draw();
-		}
 	}
 
 	player.Draw();

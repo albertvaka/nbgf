@@ -19,6 +19,9 @@ void GunUp::Draw() const
 		.withOrigin(8, 8)
 		.withRect(5 * 16, 11 * 16, 16, 16);
 
+	if (Debug::Draw) {
+		bounds().Draw();
+	}
 }
 
 
@@ -34,6 +37,10 @@ void HealthUp::Draw() const
 	Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
 		.withOrigin(8, 8)
 		.withRect(6 * 16, 11 * 16, 16, 16);
+
+	if (Debug::Draw) {
+		bounds().Draw();
+	}
 }
 
 

@@ -5,7 +5,10 @@
 #include "assets.h"
 #include "window.h"
 #include "rand.h"
+#include "bullet.h"
 #include "debug.h"
+#include "camera.h"
+#include "collide.h"
 
 const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 70.f;
@@ -86,7 +89,6 @@ inline bool Bat::inSameScreenAsPlayer() const {
 
 void Bat::Update(float dt)
 {
-
 	anim.Update(dt * 1000);
 
 	switch (state) {
@@ -176,6 +178,25 @@ void Bat::Update(float dt)
 	break;
 	}
 
+	// Take damage from bullets
+	for (Bullet* b : Bullet::GetAll()) {
+		if (b->explode) continue;
+		if (Collide(bounds(), b->bounds())) {
+			b->pos = pos;
+			b->explode = true;
+			alive = false;
+			Bat::AwakeNearbyBats(pos);
+			return;
+		}
+	}
+
+	// Damage player
+	JumpMan* player = JumpMan::instance();
+	if (!player->isInvencible()) {
+		if (Collide(player->bounds(), bounds())) {
+			player->takeDamage(pos);
+		}
+	}
 }
 
 
@@ -197,5 +218,9 @@ void Bat::Draw() const
 		pos.Debuggerino();
 	}
 
+	if (Debug::Draw && Camera::GetBounds().Contains(pos)) {
+		DrawBounds();
+		DrawSenseArea();
+	}
 }
 

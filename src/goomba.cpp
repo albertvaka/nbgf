@@ -5,6 +5,9 @@
 #include "assets.h"
 #include "tilemap.h"
 #include "rand.h"
+#include "collide.h"
+#include "bat.h"
+#include "bullet.h"
 
 Goomba::Goomba(const vec& pos, bool isCharger) 
 	: BoxEntity(pos - vec(0,8), {12, 12})
@@ -77,12 +80,13 @@ void Goomba::WalkAdvance(float dt)
 
 void Goomba::Update(float dt)
 {
+	JumpMan* player = JumpMan::instance();
 
 	switch (state)
 	{
 	case WALKING:
 		WalkAdvance(dt);
-		if (isCharger && Collide(ChargeBounds(), JumpMan::instance()->bounds()))
+		if (isCharger && Collide(ChargeBounds(), player->bounds()))
 		{
 			state = State::ENTER_CHARGE;
 			timer = 0.0f;
@@ -112,7 +116,26 @@ void Goomba::Update(float dt)
 		break;
 	}
 
+	//FIXME: Duplicated from Bat
+	// Take damage from bullets
+	for (Bullet* b : Bullet::GetAll()) {
+		if (b->explode) continue;
+		if (Collide(bounds(), b->bounds())) {
+			b->pos = pos;
+			b->explode = true;
+			alive = false;
+			Bat::AwakeNearbyBats(pos);
+			return;
+		}
+	}
 
+	// Damage player
+	if (!player->isInvencible()) {
+		if (Collide(player->bounds(), bounds())) {
+			player->takeDamage(pos);
+		}
+	}
+	//ENDFIXME
 }
 
 

@@ -201,22 +201,6 @@ void HellCrossScene::Update(float dt)
 
 	for (Bat* e : Bat::GetAll()) {
 		e->Update(dt);
-		for (Bullet* b : Bullet::GetAll()) {
-			if (b->explode) continue;
-			if (Collide(e, b)) {
-				b->pos = e->pos;
-				b->explode = true;
-				e->alive = false;
-				Bat::AwakeNearbyBats(e->pos);
-				break;
-			}
-		}
-		if (!e->alive) continue;
-		if (!player.isInvencible()) {
-			if (Collide(player.bounds(), e->bounds())) {
-				player.takeDamage(e->pos);
-			}
-		}
 	}
 
 
@@ -282,10 +266,6 @@ void HellCrossScene::Draw()
 
 	for (const Bat* e : Bat::GetAll()) {
 		e->Draw();
-		if (Debug::Draw && Camera::GetBounds().Contains(e->pos)) {
-			e->DrawBounds();
-			e->DrawSenseArea();
-		}
 	}
 
 	Bullet::particles.Draw();
@@ -293,9 +273,6 @@ void HellCrossScene::Draw()
 
 	for (const Bullet* e : Bullet::GetAll()) {
 		e->Draw();
-		if (Debug::Draw) {
-			e->DrawBounds();
-		}
 	}
 
 	player.Draw();
