@@ -10,7 +10,7 @@
 #include "bullet.h"
 
 Goomba::Goomba(const vec& pos, bool isCharger) 
-	: BoxEntity(pos - vec(0,8), {12, 12})
+	: CircleEntity(pos - vec(0,8), 6)
 	, anim(isCharger ? AnimLib::GOOMBACHARGER : AnimLib::GOOMBA)
 	, isCharger(isCharger)
 {

@@ -5,7 +5,7 @@
 #include "animation2.h"
 #include "entity.h"
 
-struct Goomba : BoxEntity, SelfRegister<Goomba>
+struct Goomba : CircleEntity, SelfRegister<Goomba>
 {
 	enum class State
 	{
