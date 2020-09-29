@@ -168,20 +168,6 @@ void JumpScene::ExitScene()
 	HealthUp::DeleteAll();
 	GunUp::DeleteAll();
 }
-
-std::tuple<Tile, veci> CollideBulletTilemap(CircleEntity* e, const TileMap& map) {
-	vec toTheOutside = e->vel.Perp().Normalized()* e->radius * 0.85f;
-	//(e->pos + toTheOutside).Debuggerino(sf::Color::White);
-	//(e->pos - toTheOutside).Debuggerino(sf::Color::White);
-	veci tpos = map.toTiles(e->pos+ toTheOutside);
-	Tile tile = map.getTile(tpos);
-	if (!tile.isFullSolid()) {
-		tpos = map.toTiles(e->pos - toTheOutside);
-		tile = map.getTile(tpos);
-	}
-	return std::make_tuple(tile,tpos);
-}
-
 void JumpScene::Update(float dt)
 {
 	FxManager::Update(dt);
@@ -254,22 +240,6 @@ void JumpScene::Update(float dt)
 	//FIXME: This is a copy-paste from bullet
 	for (Missile* e  : Missile::GetAll()) {
 		e->Update(dt);
-		if (e->explode) continue;
-		auto&&[tile, tpos] = CollideBulletTilemap(e, map);
-		if (tile.isFullSolid()) {
-			if (tile.isBreakable() && skillTree.IsEnabled(Skill::BREAK)) {
-				destroyedTiles.Destroy(tpos.x, tpos.y);
-			}
-			Bat::AwakeNearbyBats(e->pos);
-			e->boom();
-			continue;
-		}
-		if (Collide(player.bounds(), e->bounds())) {
-			e->boom();
-			if (!player.isInvencible()) {
-				player.takeDamage(e->pos);
-			}
-		}
 	}
 	Missile::DeleteNotAlive();
 
