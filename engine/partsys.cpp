@@ -33,8 +33,8 @@ void PartSys::Draw() const {
 			alpha = 2*bounce_alpha - alpha;
 		}
 
+		const GPU_Rect& rect = sprites[p.sprite];
 #ifdef USE_VAO
-		GPU_Rect rect = sprites[p.sprite];
 		float w = rect.w * p.scale;
 		float h = rect.h * p.scale;
 		//vec pos = p.pos - (vec(w, h) * 0.5f);
@@ -44,7 +44,8 @@ void PartSys::Draw() const {
 		Window::Draw(texture, p.pos)
 			.withColor(255, 255, 255, 255 * alpha)
 			.withScale(p.scale)
-			.withRect(sprites[p.sprite])
+			.withOrigin(rect.w/2, rect.h/2)
+			.withRect(rect)
 			.withRotationDegs(p.rotation);
 #endif
 	}
