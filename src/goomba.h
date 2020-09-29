@@ -4,7 +4,6 @@
 #include "selfregister.h"
 #include "animation2.h"
 #include "entity.h"
-#include "goomba.h"
 
 struct Goomba : BoxEntity, SelfRegister<Goomba>
 {
