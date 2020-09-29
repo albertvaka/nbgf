@@ -114,6 +114,7 @@
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\bat.cpp" />
     <ClCompile Include="src\bipedal.cpp" />
+    <ClCompile Include="src\bullet.cpp" />
     <ClCompile Include="src\destroyedtiles.cpp" />
     <ClCompile Include="src\enemy_door.cpp" />
     <ClCompile Include="src\fxmanager.cpp" />
@@ -121,6 +122,7 @@
     <ClCompile Include="src\goomba.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\lava.cpp" />
+    <ClCompile Include="src\missile.cpp" />
     <ClCompile Include="src\parallax.cpp" />
     <ClCompile Include="src\powerups.cpp" />
     <ClCompile Include="src\savestation.cpp" />

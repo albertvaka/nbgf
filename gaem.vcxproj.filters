@@ -426,6 +426,12 @@
     <ClCompile Include="src\goomba.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\bullet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\missile.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">
