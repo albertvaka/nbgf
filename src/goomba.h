@@ -7,7 +7,7 @@
 
 struct Goomba : BoxEntity, SelfRegister<Goomba>
 {
-	enum State
+	enum class State
 	{
 		WALKING,
 		ENTER_CHARGE,
@@ -15,7 +15,7 @@ struct Goomba : BoxEntity, SelfRegister<Goomba>
 		CHARGING
 	};
 
-	State state = WALKING;
+	State state = State::WALKING;
 
 	bool goingRight = true;
 

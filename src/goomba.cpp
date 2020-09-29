@@ -84,7 +84,7 @@ void Goomba::Update(float dt)
 
 	switch (state)
 	{
-	case WALKING:
+	case State::WALKING:
 		Walk(dt);
 		if (isCharger && Collide(ChargeBounds(), player->bounds()))
 		{
@@ -94,7 +94,7 @@ void Goomba::Update(float dt)
 		anim.Update(dt);
 		break;
 
-	case ENTER_CHARGE:
+	case State::ENTER_CHARGE:
 		timer += dt;
 		if (timer > enterChargeTime)
 		{
@@ -102,7 +102,7 @@ void Goomba::Update(float dt)
 		}
 		break;
 
-	case EXIT_CHARGE:
+	case State::EXIT_CHARGE:
 		timer += dt;
 		if (timer > exitChargeTime)
 		{
@@ -110,7 +110,7 @@ void Goomba::Update(float dt)
 		}
 		break;
 
-	case CHARGING:
+	case State::CHARGING:
 		Walk(dt);
 		anim.Update(dt*2);
 		break;
