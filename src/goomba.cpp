@@ -142,13 +142,13 @@ void Goomba::Update(float dt)
 void Goomba::Draw() const
 {
 	pos.Debuggerino();
-	GPU_Rect r = anim.GetCurrentRect();
+	GPU_Rect rect = anim.GetCurrentRect();
 
-	vec drawPos = pos - vec(r.w / 2, r.h / 2);
+	vec drawPos = pos;
 
 	if (state == State::ENTER_CHARGE)
 	{
-		drawPos.y -= sinf((timer/ enterChargeTime)*M_PI) * Tile::size;
+		drawPos.y -= sinf((timer / enterChargeTime) * M_PI) * Tile::size;
 	}
 	else if (state == State::EXIT_CHARGE)
 	{ 
@@ -156,7 +156,8 @@ void Goomba::Draw() const
 	}
 
 	Window::Draw(Assets::marioTexture, drawPos)
-		.withRect(r);
+		.withRect(rect)
+		.withOrigin(rect.w / 2, rect.h / 2);
 
 	if (Debug::Draw) {
 		bounds().Draw();
