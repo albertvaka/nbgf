@@ -49,13 +49,13 @@ HellCrossScene::HellCrossScene()
 
 void HellCrossScene::RandomizeMap() {
 	const int start_x = slope_test? 22 : 0;
-	for (int y = 0; y < map.sizes.y; y++) {
-		for (int x = start_x; x < map.sizes.x; x++) {
+	for (int y = 0; y < map.height(); y++) {
+		for (int x = start_x; x < map.width(); x++) {
 			Tile t = Tile::NONE;
 			if (y == 0 || map.getTile(x, y - 1) == Tile::NONE) { // do not stack solid blocks
 				if (x > 0 && map.getTile(x - 1, y) != Tile::NONE && Rand::rollf() < 0.2f) {
 					t = map.getTile(x - 1, y); // continue previous block type so we create horizontal platforms
-				} else if (y != map.sizes.y-1 && Rand::rollf() < 0.05f) {
+				} else if (y != map.height()-1 && Rand::rollf() < 0.05f) {
 					if (Rand::rollf() < 0.33f) {
 						t = BREAKABLE_TILE;
 					}
@@ -77,9 +77,9 @@ void HellCrossScene::EnterScene()
 	srand(randomSeed);
 	RandomizeMap();
 
-	for (int y = -1; y < map.sizes.y - 5; y++) { //don't spawn at the bottom rows
-		for (int x = 20; x < map.sizes.x; x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
-			if (map.isSolid(x, y)) {
+	for (int y = -1; y < map.height() - 5; y++) { //don't spawn at the bottom rows
+		for (int x = 20; x < map.width(); x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
+			if (map.getTile(x, y).isSolid()) {
 				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) {

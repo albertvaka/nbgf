@@ -94,9 +94,6 @@ struct TileMap : SingleInstance<TileMap>
 		return getTileUnsafe(x,y);
 	}
 
-	bool isSolid(const veci& pos) const { return isSolid(pos.x, pos.y); }
-	bool isSolid(int x, int y) const { return getTile(x, y).isSolid(); }
-
 	Tile getTileUnsafe(int x, int y) const { return tiles[y * sizes.x + x]; }
 
 
@@ -123,10 +120,6 @@ struct TileMap : SingleInstance<TileMap>
 		return Bounds(x * Tile::size, y * Tile::size, Tile::size, Tile::size);
 	}
 
-	veci sizes;
-	Tile* tiles;
-	GPU_Image* tileset;
-
 	bool isPosOnSlope(const vec& v) const { return isPosOnSlope(v.x,v.y);  }
 	bool isPosOnSlope(float x, float y) const {
 		Tile tile = getTile(toTiles(x, y));
@@ -140,4 +133,13 @@ struct TileMap : SingleInstance<TileMap>
 		}
 		return false;
 	}
+
+	int width() const { return sizes.x; }
+	int height() const { return sizes.y; }
+	const veci& size() const { return sizes; }
+
+private:
+	veci sizes;
+	Tile* tiles;
+	GPU_Image* tileset;
 };

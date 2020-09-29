@@ -345,7 +345,7 @@ vec SteeringBehavior::TileMapAvoidance(TileMap* map)
 	for (int y = yTop; y <= yBottom; y++) {
 		for (int x = xLeft; x <= xRight; x++) {
 			//vec(x * 16 + 8, y * 16 + 8).Debuggerino(sf::Color::White);
-			if (map->isSolid(x, y)) {
+			if (map->getTile(x, y).isSolid()) {
 				Bounds tile = map->getTileBounds(x, y);
 				if (tile.Contains(me.pos)) {
 					minDistToCenterSq = 0;

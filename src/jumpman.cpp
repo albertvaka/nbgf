@@ -132,7 +132,7 @@ grounded_exit:
 			DoPolvitoWallJump();
 		}
 		else {
-			bool ceiling = map->isSolid(TileMap::toTiles(pos.x - center.x + 1.f, pos.y - size.y - 1.f)) || map->isSolid(TileMap::toTiles(pos.x + center.x - 1.f, pos.y - size.y - 1.f));
+			bool ceiling = map->getTile(TileMap::toTiles(pos.x - center.x + 1.f, pos.y - size.y - 1.f)).isSolid() || map->getTile(TileMap::toTiles(pos.x + center.x - 1.f, pos.y - size.y - 1.f)).isSolid();
 			if (!ceiling) {
 				DoPolvitoJump();
 				grounded = false;
