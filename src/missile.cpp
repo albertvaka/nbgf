@@ -126,7 +126,7 @@ void Missile::Draw() const
 
 void Missile::InitParticles() {
 	if (particles.texture != nullptr) {
-		return;
+		return; // It's already been init
 	}
 	particles.SetTexture(Assets::wheelerTexture);
 	particles.AddSprite(TexturePackerRects::BOSSWHEELERXMISSILESMOKE_DEFAULT_002);

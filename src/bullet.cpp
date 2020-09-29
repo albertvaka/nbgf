@@ -92,7 +92,7 @@ void Bullet::Draw() const
 
 void Bullet::InitParticles() {
 	if (particles.texture != nullptr) {
-		return;
+		return; // It's already been init
 	}
 	particles.SetTexture(Assets::marioTexture);
 	particles.AddSprite({ 5, 37, 6, 6 });
