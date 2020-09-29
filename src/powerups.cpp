@@ -11,7 +11,7 @@
 extern float mainClock;
 
 
-void GunUp::Draw() const
+void PowerUp::Draw() const
 {
 	float y = 1.5f * sin(mainClock*2);
 
@@ -67,20 +67,31 @@ void BigItem::Draw()
 	float y = 1.8f * sin(mainClock*2);
 
 	switch(skill) {
+	case Skill::BREAK:
+		Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
+			.withOrigin(16, 8)
+			.withRect(8 * 16, 11 * 16, 16, 16);
+		break;
 	case Skill::GUN:
 		Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
 			.withOrigin(16, 8)
 			.withRect(0 * 16, 3 * 16, 2 * 16, 16);
-
+		DrawPedestal();
 		break;
 	case Skill::WALLJUMP:
 		Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
 			.withOrigin(16, 8)
 			.withRect(4 * 16, 8 * 16, 2 * 16, 16);
+		DrawPedestal();
 		break;
 	default:
 		break;
 	}
+
+}
+
+
+void BigItem::DrawPedestal() {
 
 	auto tilePos = TileMap::alignToTiles(pos);
 
@@ -99,10 +110,8 @@ void BigItem::Draw()
 	float alpha = abs(sin(mainClock));
 	Window::Draw(Assets::marioTexture, tilePos + vec(-16, 16))
 		.withRect(6 * 16, 9 * 16, 16, 16)
-		.withColor(255, 255, 255, alpha*255);
+		.withColor(255, 255, 255, alpha * 255);
 	Window::Draw(Assets::marioTexture, tilePos + vec(0, 16))
 		.withRect(6 * 16, 9 * 16, 16, 16)
-		.withColor(255,255,255,alpha*255);
+		.withColor(255, 255, 255, alpha * 255);
 }
-
-

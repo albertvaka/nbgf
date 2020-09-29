@@ -6,12 +6,12 @@
 #include "skilltree.h"
 #include "partsys.h"
 
-struct GunUp : BoxEntity, SelfRegister<GunUp>
+//UNUSED
+struct PowerUp : BoxEntity, SelfRegister<PowerUp>
 {
-	GunUp(const vec& p) : BoxEntity(p+vec(8,-8), vec(16,16)) { }
+	PowerUp(const vec& p) : BoxEntity(p+vec(8,-8), vec(16,16)) { }
 	void Draw() const;
 };
-
 
 struct HealthUp : BoxEntity, SelfRegister<HealthUp>
 {
@@ -23,6 +23,7 @@ struct BigItem : BoxEntity, SelfRegister<BigItem>
 {
 	BigItem(const vec& p, Skill s);
 	void Draw();
+	void DrawPedestal();
 
 	Skill skill;
 	PartSys particles;

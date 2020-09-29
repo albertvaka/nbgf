@@ -26,8 +26,7 @@ struct JumpScene : Scene {
 	DestroyedTiles destroyedTiles;
 	RotoText rotoText;
 
-	GunUp* gunup_tancaporta;
-	EnemyDoor* gunup_tancaporta_door;
+	EnemyDoor* door_to_close_when_break_skill;
 
 	Lava* raising_lava;
 	float raising_lava_target_height;

@@ -249,17 +249,16 @@ struct TiledEntities
 	static const std::array<vec, 2> healthup;
 	static const std::array<vec, 2> batawake;
 	static const vec spawn;
-	static const vec gun;
+	static const vec skill_gun;
 	static const std::array<vec, 3> enemy_door;
 	static const std::array<vec, 2> angrybat;
-	static const vec walljump;
-	static const std::array<vec, 2> gunup;
-	static const vec gunup_tancaporta;
+	static const vec skill_walljump;
 	static const std::array<vec, 2> save;
 	static const vec lava_initial_height;
 	static const vec boss_bipedal;
 	static const std::array<vec, 2> goomba;
 	static const std::array<vec, 2> goombacharger;
+	static const vec skill_breakblocks;
 	
 };
 

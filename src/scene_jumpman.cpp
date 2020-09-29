@@ -91,15 +91,12 @@ void JumpScene::EnterScene()
 	//	new SaveStation(v);
 	//}
 
-	for (const vec& v : TiledEntities::gunup) {
-		new GunUp(v);
-	}
-	gunup_tancaporta = new GunUp(TiledEntities::gunup_tancaporta);
-	int screen_gunup_tancaporta = screenManager.FindScreenContaining(gunup_tancaporta->pos);
 
+	new BigItem(TiledEntities::skill_walljump, Skill::WALLJUMP);
+	new BigItem(TiledEntities::skill_gun, Skill::GUN);
+	BigItem* break_skill = new BigItem(TiledEntities::skill_breakblocks, Skill::BREAK);
 
-	new BigItem(TiledEntities::walljump, Skill::WALLJUMP);
-	new BigItem(TiledEntities::gun, Skill::GUN);
+	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
 	for (const vec& v : TiledEntities::healthup) {
 		new HealthUp(v);
@@ -116,8 +113,8 @@ void JumpScene::EnterScene()
 				d->AddEnemy(b);
 			}
 		}
-		if (door_screen == screen_gunup_tancaporta) {
-			gunup_tancaporta_door = d;
+		if (door_screen == screen_break_skill) {
+			door_to_close_when_break_skill = d;
 		}
 	}
 
@@ -166,7 +163,6 @@ void JumpScene::ExitScene()
 	EnemyDoor::DeleteAll();
 	BigItem::DeleteAll();
 	HealthUp::DeleteAll();
-	GunUp::DeleteAll();
 }
 void JumpScene::Update(float dt)
 {
@@ -290,22 +286,6 @@ void JumpScene::Update(float dt)
 	Bat::DeleteNotAlive(); //Must happen after enemydoor update
 	Goomba::DeleteNotAlive();
 
-	for (GunUp* g : GunUp::GetAll()) {
-		if (Collide(g->bounds(), player.bounds())) {
-
-			//TODO: PICK UP ANIMATION
-
-			skillTree.gunpoints++;
-			g->alive = false;
-
-			if (g == gunup_tancaporta) {
-				gunup_tancaporta_door->Lock();
-			}
-		}
-	}
-
-	GunUp::DeleteNotAlive();
-
 	for (HealthUp* g : HealthUp::GetAll()) {
 		if (Collide(g->bounds(), player.bounds())) {
 
@@ -336,8 +316,11 @@ void JumpScene::Update(float dt)
 				rotoText.ShowMessage("Big F. Gun");
 				for (const vec& v : TiledEntities::initial_batawake) {
 					Bat* b = new Bat(v, false, true);
-					gunup_tancaporta_door->AddEnemy(b);
+					door_to_close_when_break_skill->AddEnemy(b);
 				}
+				break;
+			case Skill::BREAK:
+				door_to_close_when_break_skill->Lock();
 				break;
 			default:
 				break;
@@ -442,10 +425,6 @@ void JumpScene::Draw()
 		e->Draw();
 	}
 
-
-	for (const GunUp* g : GunUp::GetAll()) {
-		g->Draw();
-	}
 	for (const HealthUp* g : HealthUp::GetAll()) {
 		g->Draw();
 	}
