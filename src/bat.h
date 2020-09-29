@@ -10,8 +10,6 @@
 struct JumpMan;
 struct TileMap;
 
-void AwakeNearbyBats(const vec& pos);
-
 struct Bat : SteeringEntity, SelfRegister<Bat>
 {
 	enum class State {
@@ -19,6 +17,8 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 		FLYING,
 		SEEKING,
 	};
+
+	static void AwakeNearbyBats(const vec& pos);
 
 	SteeringBehaviorApplier steering;
 

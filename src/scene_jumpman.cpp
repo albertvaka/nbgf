@@ -246,38 +246,8 @@ void JumpScene::Update(float dt)
 		}
 	}
 
-	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : Bullet::GetAll()) {
 		e->Update(dt);
-		if (e->explode) continue;
-
-		for (Lava* l : Lava::GetAll()) {
-			if (l->IsInside(e->pos)) {
-				AwakeNearbyBats(e->pos);
-				l->Plof(e->pos.x);
-				e->alive = false;
-				continue;
-			}
-		}
-
-		auto&&[tile, tpos] = CollideBulletTilemap(e, map);
-		if (tile.isFullSolid()) {
-			if (tile.isBreakable() && skillTree.IsEnabled(Skill::BREAK)) {
-				destroyedTiles.Destroy(tpos.x, tpos.y);
-			}
-			AwakeNearbyBats(e->pos);
-			Bullet::particles.pos = e->pos;
-			for (int i = 0; i < 5; i++) {
-				auto& p = Bullet::particles.AddParticle();
-				p.scale = 1.7f;
-				p.vel *= 1.5f;
-			}
-			e->alive = false;
-			continue;
-		}
-
-		Bullet::particles.pos = e->pos + Rand::vecInRange(-4, -4, 4, 4);
-		Bullet::particles.Spawn(dt);
 	}
 	Bullet::DeleteNotAlive();
 
@@ -290,7 +260,7 @@ void JumpScene::Update(float dt)
 			if (tile.isBreakable() && skillTree.IsEnabled(Skill::BREAK)) {
 				destroyedTiles.Destroy(tpos.x, tpos.y);
 			}
-			AwakeNearbyBats(e->pos);
+			Bat::AwakeNearbyBats(e->pos);
 			e->boom();
 			continue;
 		}
@@ -311,7 +281,7 @@ void JumpScene::Update(float dt)
 				b->pos = e->pos;
 				b->explode = true;
 				e->alive = false;
-				AwakeNearbyBats(e->pos);
+				Bat::AwakeNearbyBats(e->pos);
 				break;
 			}
 		}
@@ -331,7 +301,7 @@ void JumpScene::Update(float dt)
 				b->pos = e->pos;
 				b->explode = true;
 				e->alive = false;
-				AwakeNearbyBats(e->pos);
+				Bat::AwakeNearbyBats(e->pos);
 				break;
 			}
 		}

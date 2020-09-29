@@ -4,8 +4,9 @@
 #include "vec.h"
 #include "spawningtile.h"
 #include "partsys.h"
+#include "singleinstance.h"
 
-struct DestroyedTiles
+struct DestroyedTiles : SingleInstance<DestroyedTiles>
 {
 	DestroyedTiles();
 

@@ -10,7 +10,9 @@
 #include "simplexnoise.h"
 #include "bat.h"
 #include "debug.h"
+#include "camera.h"
 #include "collide.h"
+#include "rand.h"
 #include "fxmanager.h"
 
 extern float mainClock;
@@ -203,46 +205,8 @@ void HellCrossScene::Update(float dt)
 
 	UpdateCamera();
 
-	// TODO: Better selfregister that does all the push_backs/erases at once at the end of the frame
 	for (Bullet* e  : Bullet::GetAll()) {
 		e->Update(dt);
-		if (e->explode) continue;
-
-		for (Lava* l : Lava::GetAll()) {
-			if (l->IsInside(e->pos)) {
-				AwakeNearbyBats(e->pos);
-				l->Plof(e->pos.x);
-				e->alive = false;
-				continue;
-			}
-		}
-
-		vec toTheOutside = e->vel.Perp().Normalized()* e->radius * 0.85f;
-		//(e->pos + toTheOutside).Debuggerino(sf::Color::White);
-		//(e->pos - toTheOutside).Debuggerino(sf::Color::White);
-		veci t = map.toTiles(e->pos+ toTheOutside);
-		Tile tile = map.getTile(t);
-		if (!tile.isFullSolid()) {
-			t = map.toTiles(e->pos - toTheOutside);
-			tile = map.getTile(t);
-		}
-		if (tile.isFullSolid()) {
-			if (tile.isBreakable()) {
-				destroyedTiles.Destroy(t.x, t.y);
-			}
-			AwakeNearbyBats(e->pos);
-			Bullet::particles.pos = e->pos;
-			for (int i = 0; i < 5; i++) {
-				auto& p = Bullet::particles.AddParticle();
-				p.scale = 1.7f;
-				p.vel *= 1.5f;
-			}
-			e->alive = false;
-			continue;
-		}
-
-		Bullet::particles.pos = e->pos + Rand::vecInRange(-4, -4, 4, 4);
-		Bullet::particles.Spawn(dt);
 	}
 	Bullet::DeleteNotAlive();
 
@@ -254,7 +218,7 @@ void HellCrossScene::Update(float dt)
 				b->pos = e->pos;
 				b->explode = true;
 				e->alive = false;
-				AwakeNearbyBats(e->pos);
+				Bat::AwakeNearbyBats(e->pos);
 				break;
 			}
 		}

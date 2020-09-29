@@ -14,7 +14,7 @@ float RandomSeekingTime() {
 	return Rand::rollf(0.2f, 1.6f) + Rand::rollf(0.2f, 1.6f); // Random between 0.4 and 3.2, with values closer to 1.7 more likely
 }
 
-void AwakeNearbyBats(const vec& pos) {
+void Bat::AwakeNearbyBats(const vec& pos) {
 	for (Bat* bat : Bat::GetAll()) {
 		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
 			bat->awakened = true;
