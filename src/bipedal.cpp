@@ -173,7 +173,7 @@ void Bipedal::Update(float dt)
 	for (Bullet* b : Bullet::GetAll()) {
 		if (b->explode) continue;
 		if (Collide(headHitBox, b->bounds())) { // Bullets can't hit the legs
-			b->explode = true;
+			b->boom();
 			takeDamage();
 			break;
 		}

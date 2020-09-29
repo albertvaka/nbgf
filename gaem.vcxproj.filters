@@ -265,6 +265,9 @@
     <ClInclude Include="src\goomba.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\base_enemy.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

@@ -47,6 +47,7 @@
     <ClInclude Include="src\anim_data.h" />
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
+    <ClInclude Include="src\base_enemy.h" />
     <ClInclude Include="src\bat.h" />
     <ClInclude Include="src\bipedal.h" />
     <ClInclude Include="src\bullet.h" />

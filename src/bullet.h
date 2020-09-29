@@ -20,6 +20,12 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 		scale = _scale;
 	}
 
+	void boom(const vec& explosionPos) {
+		pos = explosionPos;
+		boom();
+	}
+	void boom();
+
 	void Update(float dt);
 	void Draw() const;
 

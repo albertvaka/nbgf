@@ -1,4 +1,5 @@
 #include "goomba.h"
+#include "bat.h"
 #include "jumpman.h"
 #include "collide.h"
 #include "window.h"
@@ -6,7 +7,6 @@
 #include "tilemap.h"
 #include "rand.h"
 #include "collide.h"
-#include "bat.h"
 #include "bullet.h"
 
 Goomba::Goomba(const vec& pos, bool isCharger) 
@@ -116,26 +116,8 @@ void Goomba::Update(float dt)
 		break;
 	}
 
-	//FIXME: Duplicated from Bat
-	// Take damage from bullets
-	for (Bullet* b : Bullet::GetAll()) {
-		if (b->explode) continue;
-		if (Collide(bounds(), b->bounds())) {
-			b->pos = pos;
-			b->explode = true;
-			alive = false;
-			Bat::AwakeNearbyBats(pos);
-			return;
-		}
-	}
-
-	// Damage player
-	if (!player->isInvencible()) {
-		if (Collide(player->bounds(), bounds())) {
-			player->takeDamage(pos);
-		}
-	}
-	//ENDFIXME
+	TakeDamageFromBullets();
+	DamagePlayer();
 }
 
 

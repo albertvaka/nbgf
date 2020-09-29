@@ -178,25 +178,8 @@ void Bat::Update(float dt)
 	break;
 	}
 
-	// Take damage from bullets
-	for (Bullet* b : Bullet::GetAll()) {
-		if (b->explode) continue;
-		if (Collide(bounds(), b->bounds())) {
-			b->pos = pos;
-			b->explode = true;
-			alive = false;
-			Bat::AwakeNearbyBats(pos);
-			return;
-		}
-	}
-
-	// Damage player
-	JumpMan* player = JumpMan::instance();
-	if (!player->isInvencible()) {
-		if (Collide(player->bounds(), bounds())) {
-			player->takeDamage(pos);
-		}
-	}
+	TakeDamageFromBullets();
+	DamagePlayer();
 }
 
 

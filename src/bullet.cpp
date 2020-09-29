@@ -12,6 +12,11 @@
 
 const float kExplosionTime = 0.3f;
 
+void Bullet::boom() {
+	explode = true;
+	Bat::AwakeNearbyBats(pos);
+}
+
 void Bullet::Update(float dt)
 {
 	if (explode) {

@@ -4,8 +4,9 @@
 #include "selfregister.h"
 #include "animation2.h"
 #include "entity.h"
+#include "base_enemy.h"
 
-struct Goomba : CircleEntity, SelfRegister<Goomba>
+struct Goomba : CircleEntity, SelfRegister<Goomba>, BaseEnemy<Goomba>
 {
 	enum class State
 	{
@@ -25,6 +26,10 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 	Animation2 anim;
 
 	Goomba(const vec& position, bool isCharger);
+
+	void takeDamage() {
+		alive = false; // one hit
+	}
 
 	Bounds ChargeBounds() const;
 
