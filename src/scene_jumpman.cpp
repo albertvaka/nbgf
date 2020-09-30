@@ -313,18 +313,30 @@ void JumpScene::Update(float dt)
 
 			switch(g->skill) {
 			case Skill::WALLJUMP:
+			{
 				raising_lava->SetLevel(raising_lava_target_height);
 				rotoText.ShowMessage("WallJump");
+			}
 				break;
 			case Skill::GUN:
+			{
 				rotoText.ShowMessage("Big F. Gun");
+				int screen_gun = screenManager.FindScreenContaining(g->pos);
+				for (Bat* e : Bat::GetAll()) {
+					if (e->screen == screen_gun) {
+						e->awakened = true;
+					}
+				}
 				for (const vec& v : TiledEntities::initial_batawake) {
 					Bat* b = new Bat(v, false, true);
 					door_to_close_when_break_skill->AddEnemy(b);
 				}
+			}
 				break;
 			case Skill::BREAK:
+			{
 				door_to_close_when_break_skill->Lock();
+			}
 				break;
 			default:
 				break;
