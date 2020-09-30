@@ -148,7 +148,9 @@ struct CircleBounds
 
     void Draw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const;
 
-    [[nodiscard]] float DistanceSq(const Bounds& a) const { return a.DistanceSq(*this); };
+    [[nodiscard]] const vec& Center() const { return pos; }
+
+    [[nodiscard]] float DistanceSq(const Bounds& a) const { return a.DistanceSq(*this); }
     [[nodiscard]] float Distance(const Bounds& a) const { return a.Distance(*this); }
     
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const {

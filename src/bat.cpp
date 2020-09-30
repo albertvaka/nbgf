@@ -9,6 +9,7 @@
 #include "debug.h"
 #include "camera.h"
 #include "collide.h"
+#include "common_enemy.h"
 
 const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 70.f;
@@ -178,8 +179,12 @@ void Bat::Update(float dt)
 	break;
 	}
 
-	TakeDamageFromBullets();
-	DamagePlayer();
+	if (ReceiveDamageFromBullets(bounds())) {
+		die(); //single hit
+		return;
+	}
+
+	DamagePlayerOnCollision(bounds());
 }
 
 

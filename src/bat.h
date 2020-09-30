@@ -6,9 +6,9 @@
 #include "steering_entity.h"
 #include "steering_behavior.h"
 #include "steering_behavior_applier.h"
-#include "base_enemy.h"
+#include "oneshotanim.h"
 
-struct Bat : SteeringEntity, SelfRegister<Bat>, BaseEnemy<Bat>
+struct Bat : SteeringEntity, SelfRegister<Bat>
 {
 	enum class State {
 		SIESTA,
@@ -30,8 +30,9 @@ struct Bat : SteeringEntity, SelfRegister<Bat>, BaseEnemy<Bat>
 
 	Bat(const vec& position, bool aggresive, bool awake);
 
-	void takeDamage() {
-		alive = false; // one hit
+	void die() {
+		alive = false;
+		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION);
 	}
 
 	void Update(float dt);

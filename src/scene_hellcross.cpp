@@ -14,6 +14,7 @@
 #include "collide.h"
 #include "rand.h"
 #include "fxmanager.h"
+#include "oneshotanim.h"
 
 extern float mainClock;
 
@@ -163,6 +164,7 @@ void HellCrossScene::ExitScene()
 	Bullet::particles.Clear();
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
+	OneShotAnim::DeleteAll();
 	destroyedTiles.Clear();
 }
 
@@ -203,6 +205,10 @@ void HellCrossScene::Update(float dt)
 		e->Update(dt);
 	}
 
+	for (OneShotAnim* e : OneShotAnim::GetAll()) {
+		e->Update(dt);
+	}
+	OneShotAnim::DeleteNotAlive();
 
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
@@ -266,6 +272,10 @@ void HellCrossScene::Draw()
 
 	for (const Bat* e : Bat::GetAll()) {
 		e->Draw();
+	}
+
+	for (const OneShotAnim* e : OneShotAnim::GetAll()) {
+		e->Draw(); 
 	}
 
 	Bullet::particles.Draw();

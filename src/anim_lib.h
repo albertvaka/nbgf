@@ -6,6 +6,17 @@
 
 namespace AnimLib {
 
+
+	constexpr const AnimationFrame MAGIC_EXPLOSION[] = {
+		{ {  9 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
+		{ { 10 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
+		{ { 11 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
+		{ { 12 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
+		{ { 13 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
+		{ { 14 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
+		{ { 15 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
+	};
+
 	constexpr const AnimationFrame GOOMBA[] = {
 		{ {12 * 16, 0, 16,16}, .2f },
 		{ {13 * 16, 0, 16,16}, .2f },

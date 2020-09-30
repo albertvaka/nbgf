@@ -51,12 +51,14 @@
     <ClInclude Include="src\bat.h" />
     <ClInclude Include="src\bipedal.h" />
     <ClInclude Include="src\bullet.h" />
+    <ClInclude Include="src\common_enemy.h" />
     <ClInclude Include="src\destroyedtiles.h" />
     <ClInclude Include="src\enemy_door.h" />
     <ClInclude Include="src\goomba.h" />
     <ClInclude Include="src\jumpman.h" />
     <ClInclude Include="src\lava.h" />
     <ClInclude Include="src\missile.h" />
+    <ClInclude Include="src\oneshotanim.h" />
     <ClInclude Include="src\parallax.h" />
     <ClInclude Include="src\popupText.h" />
     <ClInclude Include="src\powerups.h" />

@@ -157,6 +157,7 @@ void JumpScene::ExitScene()
 	Missile::particles.Clear();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
+	OneShotAnim::DeleteAll();
 	Bipedal::DeleteAll();
 	Lava::DeleteAll();
 	destroyedTiles.Clear();
@@ -213,6 +214,10 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 	}
 
+	for (OneShotAnim* e : OneShotAnim::GetAll()) {
+		e->Update(dt);
+	}
+	OneShotAnim::DeleteNotAlive();
 
 #ifdef _DEBUG
 	const SDL_Scancode killall = SDL_SCANCODE_F11;
@@ -246,8 +251,7 @@ void JumpScene::Update(float dt)
 	if (Keyboard::IsKeyJustPressed(killall)) {
 		for (Bat* e : Bat::GetAll()) {
 			if (e->screen == screenManager.CurrentScreen()) {
-				(new Bullet(e->pos, vec(), 1.5f))->explode = true;
-				e->alive = false;
+				e->die();
 			}
 		}
 	}
@@ -405,6 +409,10 @@ void JumpScene::Draw()
 	}
 
 	for (const Goomba* e : Goomba::GetAll()) {
+		e->Draw();
+	}
+
+	for (const OneShotAnim* e : OneShotAnim::GetAll()) {
 		e->Draw();
 	}
 

@@ -10,24 +10,19 @@
 #include "destroyedtiles.h"
 #include "bat.h"
 
-const float kExplosionTime = 0.3f;
-
-void Bullet::boom() {
-	explode = true;
+void Bullet::explode() {
+	alive = false;
 	Bat::AwakeNearbyBats(pos);
+	Bullet::particles.pos = pos;
+	for (int i = 0; i < 5; i++) {
+		auto& p = Bullet::particles.AddParticle();
+		p.scale = 1.7f;
+		p.vel *= 1.5f;
+	}
 }
 
 void Bullet::Update(float dt)
 {
-	if (explode) {
-		vel = vec(0,0);
-		timer_explosion += dt;
-		if (timer_explosion > kExplosionTime) {
-			alive = false;
-		}
-		return;
-	}
-
 	pos += vel * dt;
 	if (!Camera::GetBounds().Contains(pos)) {
 		alive = false;
@@ -43,28 +38,8 @@ void Bullet::Update(float dt)
 		}
 	}
 
-	TileMap* map = TileMap::instance();
-	vec toTheOutside = vel.Perp().Normalized()* radius * 0.85f;
-	//(pos + toTheOutside).Debuggerino(sf::Color::White);
-	//(pos - toTheOutside).Debuggerino(sf::Color::White);
-	veci t = map->toTiles(pos+ toTheOutside);
-	Tile tile = map->getTile(t);
-	if (!tile.isFullSolid()) {
-		t = map->toTiles(pos - toTheOutside);
-		tile = map->getTile(t);
-	}
-	if (tile.isFullSolid()) {
-		if (tile.isBreakable() && SkillTree::instance()->IsEnabled(Skill::BREAK)) {
-			DestroyedTiles::instance()->Destroy(t.x, t.y);
-		}
-		Bat::AwakeNearbyBats(pos);
-		Bullet::particles.pos = pos;
-		for (int i = 0; i < 5; i++) {
-			auto& p = Bullet::particles.AddParticle();
-			p.scale = 1.7f;
-			p.vel *= 1.5f;
-		}
-		alive = false;
+	if (BulletTilemapCollision(this)) {
+		explode();
 		return;
 	}
 
@@ -74,19 +49,9 @@ void Bullet::Update(float dt)
 
 void Bullet::Draw() const
 {
-	vec drawPos = pos;
-	float rotation = 0.f;
-	GPU_Rect rect;
-
-	if (!explode) {
-		rect = { 8 * 16, 10 * 16, 16, 16 };
-		rotation = Rand::roll(0, 360);
-		drawPos += Rand::vecInRange(-1, -1, 1, 1);
-	}
-	else {
-		int frame = (7 * timer_explosion / kExplosionTime);
-		rect = { (9 + frame) * 16.f, 10 * 16.f, 16.f, 16.f };
-	}
+	GPU_Rect rect = { 8 * 16, 10 * 16, 16, 16 };
+	float rotation = Rand::roll(0, 360);
+	vec drawPos = pos + Rand::vecInRange(-1, -1, 1, 1);
 	Window::Draw(Assets::hospitalTexture, drawPos)
 		.withScale(scale)
 		.withOrigin(8, 8)

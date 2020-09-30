@@ -11,6 +11,7 @@
 #include "fxmanager.h"
 #include "camera.h"
 #include "bullet.h"
+#include "common_enemy.h"
 
 const float walking_speed = 30.f; //per second
 
@@ -158,25 +159,11 @@ void Bipedal::Update(float dt)
 		break;
 	}
 
-	// Damage player
-	JumpMan* player = JumpMan::instance();
-	if (!player->isInvencible()) {
-		if (Collide(player->bounds(), headHitBox)) {
-			player->takeDamage(headHitBox.Center());
-		}
-		else if (Collide(player->bounds(), legsHitBox)) {
-			player->takeDamage(legsHitBox.Center());
-		}
-	}
+	DamagePlayerOnCollision(headHitBox);
+	DamagePlayerOnCollision(legsHitBox);
 
-	// Take damage from bullets
-	for (Bullet* b : Bullet::GetAll()) {
-		if (b->explode) continue;
-		if (Collide(headHitBox, b->bounds())) { // Bullets can't hit the legs
-			b->boom();
-			takeDamage();
-			break;
-		}
+	if (ReceiveDamageFromBullets(headHitBox)) { // Bullets don't hit the legs
+		takeDamage();
 	}
 }
 

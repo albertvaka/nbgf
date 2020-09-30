@@ -12,6 +12,7 @@
 #include "destroyedtiles.h"
 #include "collide.h"
 #include "assets.h"
+#include "common_enemy.h"
 
 const float kRadius = 2.f;
 const float kSpeed = 120.f;
@@ -30,7 +31,7 @@ void Missile::Update(float dt)
 {
 	anim.Update(dt);
 
-	if (explode) {
+	if (exploding) {
 		if (anim.complete) {
 			alive = false;
 		}
@@ -70,40 +71,22 @@ void Missile::Update(float dt)
 
 	}
 
-	//FIXME: Code duplicated from Bullet
-	TileMap* map = TileMap::instance();
-	vec toTheOutside = vel.Perp().Normalized()* radius * 0.85f;
-	//(pos + toTheOutside).Debuggerino(sf::Color::White);
-	//(pos - toTheOutside).Debuggerino(sf::Color::White);
-	veci tpos = map->toTiles(pos+ toTheOutside);
-	Tile tile = map->getTile(tpos);
-	if (!tile.isFullSolid()) {
-		tpos = map->toTiles(pos - toTheOutside);
-		tile = map->getTile(tpos);
-	}
-	if (tile.isFullSolid()) {
-		if (tile.isBreakable() && SkillTree::instance()->IsEnabled(Skill::BREAK)) {
-			DestroyedTiles::instance()->Destroy(tpos.x, tpos.y);
-		}
+	if (BulletTilemapCollision(this)) {
 		Bat::AwakeNearbyBats(pos);
-		boom();
+		explode();
 		return;
 	}
-	//ENDFIXME
 
-	JumpMan* player = JumpMan::instance();
-	if (Collide(player->bounds(), bounds())) {
-		boom();
-		if (!player->isInvencible()) {
-			player->takeDamage(pos);
-		}
+	if (DamagePlayerOnCollision(bounds())) {
+		explode();
 		return;
-	}
+	};
+
 }
 
 void Missile::Draw() const
 {
-	if (explode) {
+	if (exploding) {
 		const GPU_Rect& rect = anim.GetCurrentRect();
 		Window::Draw(Assets::scifiTexture, pos)
 			.withRect(rect)

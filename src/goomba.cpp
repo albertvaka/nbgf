@@ -8,6 +8,7 @@
 #include "rand.h"
 #include "collide.h"
 #include "bullet.h"
+#include "common_enemy.h"
 
 Goomba::Goomba(const vec& pos, bool isCharger) 
 	: CircleEntity(pos - vec(0,8), 6)
@@ -116,8 +117,12 @@ void Goomba::Update(float dt)
 		break;
 	}
 
-	TakeDamageFromBullets();
-	DamagePlayer();
+	if (ReceiveDamageFromBullets(bounds())) {
+		die(); //single hit
+		return;
+	}
+
+	DamagePlayerOnCollision(bounds());
 }
 
 

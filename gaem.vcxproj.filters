@@ -268,6 +268,12 @@
     <ClInclude Include="src\base_enemy.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\common_enemy.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\oneshotanim.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

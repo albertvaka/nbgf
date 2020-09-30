@@ -3,10 +3,11 @@
 #include "vec.h"
 #include "selfregister.h"
 #include "animation2.h"
+#include "anim_lib.h"
 #include "entity.h"
-#include "base_enemy.h"
+#include "oneshotanim.h"
 
-struct Goomba : CircleEntity, SelfRegister<Goomba>, BaseEnemy<Goomba>
+struct Goomba : CircleEntity, SelfRegister<Goomba>
 {
 	enum class State
 	{
@@ -27,10 +28,6 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>, BaseEnemy<Goomba>
 
 	Goomba(const vec& position, bool isCharger);
 
-	void takeDamage() {
-		alive = false; // one hit
-	}
-
 	Bounds ChargeBounds() const;
 
 	float WalkDirection() const;
@@ -40,5 +37,10 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>, BaseEnemy<Goomba>
 
 	void Update(float dt);
 	void Draw() const;
+
+	void die() {
+		alive = false;
+		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION);
+	}
 };
 

@@ -8,7 +8,7 @@
 
 struct Missile : CircleEntity, SelfRegister<Missile>
 {
-	bool explode = false;
+	bool exploding = false;
 	Animation2 anim;
 	float smokeTimer = 0;
 
@@ -17,8 +17,8 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 
 	Missile(const vec& position, float angleDegs);
 
-	void boom() {
-		explode = true;
+	void explode() {
+		exploding = true;
 		anim.SetAnimation(AnimLib::EXPLOSION);
 		anim.loopable = false;
 	}
