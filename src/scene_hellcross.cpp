@@ -320,6 +320,8 @@ void HellCrossScene::Draw()
 
 	FxManager::EndDraw();
 
+	map.boundsInWorld().Draw(0,255,0);
+
 	//player.polvito.DrawImGUI("Polvito");
 }
 
