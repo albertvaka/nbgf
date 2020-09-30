@@ -159,7 +159,7 @@ void Bat::Update(float dt)
 	{
 		JumpMan* jumpman = JumpMan::instance();
 		vel = steering.CalculatePrioritized(dt);
-		if (steering.avoidingTileMap) {
+		if (steering.avoidingTileMap || steering.avoidingBounds) {
 			state = State::FLYING;
 		}
 		else {

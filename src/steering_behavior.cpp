@@ -206,6 +206,7 @@ vec SteeringBehavior::BoundsAvoidance(const Bounds& m_bounds)
 	int ClosestWall = -1; //index in wallsv
 
 	vec SteeringForce;
+	avoidingBounds = false;
 
 	//examine each feeler in turn
 	for (unsigned int flr=0; flr < 3; ++flr) {
@@ -247,6 +248,7 @@ vec SteeringBehavior::BoundsAvoidance(const Bounds& m_bounds)
 			//create a force in the direction of the wall normal, with a 
 			//magnitude of the overshoot
 			SteeringForce = normal * OverShoot.Length();
+			avoidingBounds = true;
 		}
 
 	}//next feeler

@@ -64,6 +64,7 @@ struct SteeringBehavior
     vec GetHidingPosition(const vec& posOb, const float radiusOb, const vec& posHunter);
 
 	bool avoidingTileMap = false;
+	bool avoidingBounds = false;
 
 //protected:
 
