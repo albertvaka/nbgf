@@ -43,6 +43,7 @@ HellCrossScene::HellCrossScene()
 
 	skillTree.Enable(Skill::GUN);
 	skillTree.Enable(Skill::WALLJUMP);
+	skillTree.Enable(Skill::BREAK);
 
 	ScreenManager::instance()->AddScreen(map.boundsInWorld());
 	ScreenManager::instance()->UpdateCurrentScreen(map.boundsInWorld().Center());
