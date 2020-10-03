@@ -6,6 +6,24 @@
 
 namespace AnimLib {
 
+	constexpr const AnimationFrame FIRESLIME_WALK[] = {
+		{ { 13 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 14 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 15 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 16 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 17 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 18 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 12 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+	};
+
+	constexpr const AnimationFrame FIRESLIME_ATTACK[] = {
+		{ { 20 * 16.f, 0 * 16.f, 16.f, 16.f }, .2f },
+		{ { 21 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 22 * 16.f, 0 * 16.f, 16.f, 16.f }, .4f },
+		{ { 25 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 26 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+		{ { 12 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
+	};
 
 	constexpr const AnimationFrame MAGIC_EXPLOSION[] = {
 		{ {  9 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
@@ -18,13 +36,13 @@ namespace AnimLib {
 	};
 
 	constexpr const AnimationFrame GOOMBA[] = {
-		{ {12 * 16, 0, 16,16}, .2f },
-		{ {13 * 16, 0, 16,16}, .2f },
+		{ {14 * 16, 16, 16, 16}, .2f },
+		{ {15 * 16, 16, 16, 16}, .2f },
 	};
 
 	constexpr const AnimationFrame GOOMBACHARGER[] = {
-		{ {14 * 16, 0, 16,16}, .2f },
-		{ {15 * 16, 0, 16,16}, .2f },
+		{ {16 * 16, 16, 16, 16}, .2f },
+		{ {17 * 16, 16, 16, 16}, .2f },
 	};
 	constexpr const AnimationFrame BIPEDAL_WALKING[] = {
 		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_000, .25f },
@@ -53,5 +71,7 @@ namespace AnimLib {
 	};
 
 	constexpr const GPU_Rect BIPEDAL_IDLE = TexturePackerRects::BIPEDALUNIT_IDLE_00;
+	
+	constexpr const GPU_Rect FIRESHOT = {437, 5, 6, 6};
 
 }

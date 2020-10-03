@@ -12,10 +12,12 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 	Animation2 anim;
 	vec pos;
 	bool alive = true;
+	float scale;
 
 	template<int size>
-	constexpr OneShotAnim(const vec& pos, const AnimationFrame(&animation)[size])
+	constexpr OneShotAnim(const vec& pos, const AnimationFrame(&animation)[size], float scale = 1.f)
 		: anim(animation)
+		, scale(scale)
 		, pos(pos)
 	{
 		anim.loopable = false;
@@ -32,6 +34,7 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 		const GPU_Rect& rect = anim.GetCurrentRect();
 		Window::Draw(Assets::hospitalTexture, pos)
 			.withRect(rect)
+			.withScale(scale)
 			.withOrigin(rect.w / 2, rect.h / 2);
 	}
 

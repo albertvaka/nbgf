@@ -51,9 +51,12 @@
     <ClInclude Include="src\bat.h" />
     <ClInclude Include="src\bipedal.h" />
     <ClInclude Include="src\bullet.h" />
+    <ClInclude Include="src\common_bullet.h" />
     <ClInclude Include="src\common_enemy.h" />
     <ClInclude Include="src\destroyedtiles.h" />
     <ClInclude Include="src\enemy_door.h" />
+    <ClInclude Include="src\fireshot.h" />
+    <ClInclude Include="src\fireslime.h" />
     <ClInclude Include="src\goomba.h" />
     <ClInclude Include="src\jumpman.h" />
     <ClInclude Include="src\lava.h" />
@@ -120,6 +123,8 @@
     <ClCompile Include="src\bullet.cpp" />
     <ClCompile Include="src\destroyedtiles.cpp" />
     <ClCompile Include="src\enemy_door.cpp" />
+    <ClCompile Include="src\fireshot.cpp" />
+    <ClCompile Include="src\fireslime.cpp" />
     <ClCompile Include="src\fxmanager.cpp" />
     <ClInclude Include="src\fxmanager.h" />
     <ClCompile Include="src\goomba.cpp" />

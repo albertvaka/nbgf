@@ -274,6 +274,15 @@
     <ClInclude Include="src\oneshotanim.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\fireslime.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fireshot.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common_bullet.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -439,6 +448,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\missile.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fireslime.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fireshot.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

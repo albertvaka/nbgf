@@ -372,17 +372,22 @@ const vec TiledEntities::lava_initial_height = vec(2689.75f, 1000.0f);
 
 const vec TiledEntities::boss_bipedal = vec(1376.182f, 1360.174f);
 
+const vec TiledEntities::skill_breakblocks = vec(1711.0f, 766.0f);
+
+const std::array<vec, 2> TiledEntities::fireslime = {
+	vec(1504.344f, 912.063f),
+	vec(1260.909f, 944.0f),
+};
+
 const std::array<vec, 2> TiledEntities::goomba = {
-	vec(1135.7469999999998f, 816.0417f),
-	vec(2128.6667f, 800.3333f),
+	vec(2128.4375f, 800.1875f),
+	vec(1151.5f, 816.0f),
 };
 
 const std::array<vec, 2> TiledEntities::goombacharger = {
-	vec(1088.333f, 928.333f),
-	vec(944.3299999999999f, 848.0f),
+	vec(1088.909f, 928.0f),
+	vec(943.45f, 848.0f),
 };
-
-const vec TiledEntities::skill_breakblocks = vec(1711.0f, 766.0f);
 
 
 

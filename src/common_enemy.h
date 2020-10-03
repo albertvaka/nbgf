@@ -2,6 +2,7 @@
 
 #include "jumpman.h"
 #include "bullet.h"
+#include "collide.h"
 
 template<typename B>
 bool ReceiveDamageFromBullets(const B& bounds) { // returns true if collided

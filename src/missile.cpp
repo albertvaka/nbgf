@@ -5,13 +5,11 @@
 #include "rand.h"
 #include "partsys.h"
 #include "camera.h"
-#include "selfregister.h"
 #include "jumpman.h"
 #include "bat.h"
-#include "skilltree.h"
-#include "destroyedtiles.h"
 #include "collide.h"
 #include "assets.h"
+#include "common_bullet.h"
 #include "common_enemy.h"
 
 const float kRadius = 2.f;
@@ -71,7 +69,7 @@ void Missile::Update(float dt)
 
 	}
 
-	if (BulletTilemapCollision(this)) {
+	if (SmallBulletTilemapCollision(this, true)) {
 		Bat::AwakeNearbyBats(pos);
 		explode();
 		return;

@@ -5,8 +5,9 @@
 
 struct Entity
 {
-	constexpr Entity() : pos (0.f,0.f) {}
+	constexpr Entity() : pos(0.f,0.f) {}
 	constexpr Entity(const vec& pos) : pos(pos) {}
+	constexpr Entity(const vec& pos, const vec& vel) : pos(pos), vel(vel) {}
 	vec pos;
 	vec vel = vec(0.f, 0.f);
 	bool alive = true;
@@ -32,6 +33,7 @@ struct CircleEntity : Entity {
 	constexpr CircleEntity() : radius(8.f) {}
 	constexpr CircleEntity(float radius) : radius(radius) {}
 	constexpr CircleEntity(const vec& pos, float radius) : Entity(pos), radius(radius) {}
+	constexpr CircleEntity(const vec& pos, float radius, const vec& vel) : Entity(pos, vel), radius(radius) {}
 
 	float radius;
 	

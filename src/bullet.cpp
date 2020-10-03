@@ -3,11 +3,10 @@
 #include "rand.h"
 #include "partsys.h"
 #include "camera.h"
-#include "selfregister.h"
 #include "assets.h"
 #include "lava.h"
 #include "skilltree.h"
-#include "destroyedtiles.h"
+#include "common_bullet.h"
 #include "bat.h"
 
 void Bullet::explode() {
@@ -38,7 +37,7 @@ void Bullet::Update(float dt)
 		}
 	}
 
-	if (BulletTilemapCollision(this)) {
+	if (BigBulletTilemapCollision(this, SkillTree::instance()->IsEnabled(Skill::BREAK))) {
 		explode();
 		return;
 	}

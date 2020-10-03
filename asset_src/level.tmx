@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="10" nextobjectid="159">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="10" nextobjectid="165">
  <editorsettings>
   <export target="." format="tmx"/>
  </editorsettings>
@@ -9,8 +9,7 @@
   <tile id="1" type="breakable"/>
   <tile id="10" type="solid"/>
   <tile id="11" type="solid"/>
-  <tile id="12" type="goomba"/>
-  <tile id="14" type="goombacharger"/>
+  <tile id="12" type="fireslime"/>
   <tile id="23" type="solid"/>
   <tile id="24" type="breakable"/>
   <tile id="25" type="rslope"/>
@@ -21,6 +20,8 @@
   <tile id="40" type="lslope"/>
   <tile id="41" type="lslope"/>
   <tile id="42" type="rslope"/>
+  <tile id="43" type="goomba"/>
+  <tile id="45" type="goombacharger"/>
   <tile id="53" type="breakable">
    <properties>
     <property name="alias" value="simple"/>
@@ -985,11 +986,13 @@
   <object id="136" gid="354" x="-1435.5" y="-601.25" width="16" height="16"/>
   <object id="144" type="lava_initial_height" gid="404" x="641.75" y="232" width="16" height="16"/>
   <object id="145" name="boss_bipedal" type="boss_bipedal" gid="195" x="-671.818" y="592.174" width="16" height="16"/>
-  <object id="154" gid="13" x="-912.253" y="48.0417" width="16" height="16"/>
-  <object id="155" gid="13" x="80.6667" y="32.3333" width="16" height="16"/>
-  <object id="156" gid="15" x="-959.667" y="160.333" width="16" height="16"/>
-  <object id="157" gid="15" x="-1103.67" y="80" width="16" height="16"/>
   <object id="158" name="skill_breakblocks" type="skill_breakblocks" gid="328" x="-337" y="-2" width="16" height="16"/>
+  <object id="159" gid="13" x="-543.656" y="144.063" width="16" height="16"/>
+  <object id="160" gid="44" x="80.4375" y="32.1875" width="16" height="16"/>
+  <object id="161" gid="46" x="-959.091" y="160" width="16" height="16"/>
+  <object id="162" gid="46" x="-1104.55" y="80" width="16" height="16"/>
+  <object id="163" gid="44" x="-896.5" y="48" width="16" height="16"/>
+  <object id="164" gid="13" x="-787.091" y="176" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="9" name="Notes" visible="0">
   <object id="112" x="-532.167" y="-16.1667" width="101.667" height="41.6667">
@@ -999,7 +1002,7 @@
    <text wrap="1">Need fly to get here</text>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Areas">
+ <objectgroup id="8" name="Areas" visible="0">
   <object id="83" name="lava" type="lava" x="336" y="46.478" width="618" height="209.5"/>
   <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
   <object id="106" name="lava" type="lava" x="-16" y="363.333" width="240" height="127.455"/>

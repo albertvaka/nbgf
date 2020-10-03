@@ -7,33 +7,27 @@
 #include "entity.h"
 #include "oneshotanim.h"
 
-struct Goomba : CircleEntity, SelfRegister<Goomba>
+struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 {
 	enum class State
 	{
 		WALKING,
-		ENTER_CHARGE,
-		EXIT_CHARGE,
-		CHARGING
+		ATTACKING,
 	};
 
 	State state = State::WALKING;
-
-	bool goingRight = true;
-
 	float timer = 0.0f;
-	bool isCharger;
-
 	Animation2 anim;
 
-	Goomba(const vec& position, bool isCharger);
+	bool willAttack = false; // will attack after landing
+	bool didJustAttack = false; // to force one move between attacks
 
-	Bounds ChargeBounds() const;
+	float direction; // -1 or 1
 
-	float WalkDirection() const;
-	float WalkSpeed() const;
+	FireSlime(const vec& position);
 
-	void Walk(float dt);
+	Bounds AttackBounds() const;
+	bool CanMoveForward() const;
 
 	void Update(float dt);
 	void Draw() const;

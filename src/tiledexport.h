@@ -256,9 +256,10 @@ struct TiledEntities
 	static const std::array<vec, 2> save;
 	static const vec lava_initial_height;
 	static const vec boss_bipedal;
+	static const vec skill_breakblocks;
+	static const std::array<vec, 2> fireslime;
 	static const std::array<vec, 2> goomba;
 	static const std::array<vec, 2> goombacharger;
-	static const vec skill_breakblocks;
 	
 };
 

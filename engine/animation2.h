@@ -85,13 +85,19 @@ struct Animation2
 	}
 
 	template<int size>
+	constexpr void Set(const AnimationFrame(&animation)[size])
+	{
+		anim = animation;
+		anim_size = size;
+		Reset();
+	}
+
+	template<int size>
 	constexpr void Ensure(const AnimationFrame(&animation)[size])
 	{
 		if (animation != anim)
 		{
-			anim = animation;
-			anim_size = size;
-			Reset();
+			Set(animation);
 		}
 	}
 
@@ -107,8 +113,26 @@ struct Animation2
 
 	const float GetTotalDuration() const
 	{
+		return SumDuration(anim, anim_size);
+	}
+
+	template<int size>
+	static constexpr const float GetTotalDuration(const AnimationFrame(&animation)[size])
+	{
+		return SumDuration(animation, size);
+	}
+
+	template<int size>
+	static constexpr const float GetTotalDurationForFrames(const AnimationFrame(&animation)[size], int first_frame, int num_frames)
+	{
+		return SumDuration(&animation[first_frame], num_frames);
+	}
+
+private:
+	static constexpr float SumDuration(const AnimationFrame* anim, int size)
+	{
 		float t = 0;
-		for (int i = 0; i < anim_size; i++) {
+		for (int i = 0; i < size; i++) {
 			t += anim[i].duration;
 		}
 		return t;

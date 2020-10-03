@@ -32,7 +32,7 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 
 	void die() {
 		alive = false;
-		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION);
+		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	}
 
 	void Update(float dt);

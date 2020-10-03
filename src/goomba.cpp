@@ -1,14 +1,17 @@
 #include "goomba.h"
-#include "bat.h"
 #include "jumpman.h"
 #include "collide.h"
 #include "window.h"
 #include "assets.h"
 #include "tilemap.h"
 #include "rand.h"
-#include "collide.h"
-#include "bullet.h"
 #include "common_enemy.h"
+
+constexpr const float speed = 25;
+constexpr const float chargeSpeed = 100;
+
+constexpr const float enterChargeTime = 0.35f;
+constexpr const float exitChargeTime = 0.2f;
 
 Goomba::Goomba(const vec& pos, bool isCharger) 
 	: CircleEntity(pos - vec(0,8), 6)
@@ -17,13 +20,6 @@ Goomba::Goomba(const vec& pos, bool isCharger)
 {
 	goingRight = Rand::OnceEach(2);
 }
-
-const float speed = 25;
-const float chargeSpeed = 100;
-
-const float enterChargeTime = 0.35f;
-const float exitChargeTime = 0.2f;
-
 
 Bounds Goomba::ChargeBounds() const
 {
@@ -81,13 +77,11 @@ void Goomba::Walk(float dt)
 
 void Goomba::Update(float dt)
 {
-	JumpMan* player = JumpMan::instance();
-
 	switch (state)
 	{
 	case State::WALKING:
 		Walk(dt);
-		if (isCharger && Collide(ChargeBounds(), player->bounds()))
+		if (isCharger && Collide(ChargeBounds(), JumpMan::instance()->bounds()))
 		{
 			state = State::ENTER_CHARGE;
 			timer = 0.0f;

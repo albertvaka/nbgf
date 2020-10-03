@@ -11,6 +11,8 @@
 #include "missile.h"
 #include "bipedal.h"
 #include "fxmanager.h"
+#include "fireslime.h"
+#include "fireshot.h"
 #include "lava.h"
 #include "savestation.h"
 #include "debug.h"
@@ -76,6 +78,10 @@ void JumpScene::EnterScene()
 
 	for (const vec& v : TiledEntities::batawake) {
 		new Bat(v, false, true);
+	}
+
+	for (const vec& v : TiledEntities::fireslime) {
+		new FireSlime(v);
 	}
 
 	for (const vec& v : TiledEntities::goomba) {
@@ -154,9 +160,11 @@ void JumpScene::ExitScene()
 	Bullet::DeleteAll();
 	Bullet::particles.Clear();
 	Missile::DeleteAll();
-	Missile::particles.Clear();
+	Missile::DeleteAll();
+	FireShot::DeleteAll();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
+	FireSlime::DeleteAll();
 	OneShotAnim::DeleteAll();
 	Bipedal::DeleteAll();
 	Lava::DeleteAll();
@@ -201,6 +209,11 @@ void JumpScene::Update(float dt)
 	}
 	Bullet::DeleteNotAlive();
 
+	for (FireShot* e : FireShot::GetAll()) {
+		e->Update(dt);
+	}
+	FireShot::DeleteNotAlive();
+	
 	for (Missile* e  : Missile::GetAll()) {
 		e->Update(dt);
 	}
@@ -211,6 +224,10 @@ void JumpScene::Update(float dt)
 	}
 
 	for (Goomba* e : Goomba::GetAll()) {
+		e->Update(dt);
+	}
+
+	for (FireSlime* e : FireSlime::GetAll()) {
 		e->Update(dt);
 	}
 
@@ -289,6 +306,7 @@ void JumpScene::Update(float dt)
 
 	Bat::DeleteNotAlive(); //Must happen after enemydoor update
 	Goomba::DeleteNotAlive();
+	FireSlime::DeleteNotAlive();
 
 	for (HealthUp* g : HealthUp::GetAll()) {
 		if (Collide(g->bounds(), player.bounds())) {
@@ -416,11 +434,15 @@ void JumpScene::Draw()
 		ed->Draw();
 	}
 
-	for (const Bat* e : Bat::GetAll()) {
+	for (const Goomba* e : Goomba::GetAll()) {
 		e->Draw();
 	}
 
-	for (const Goomba* e : Goomba::GetAll()) {
+	for (const FireSlime* e : FireSlime::GetAll()) {
+		e->Draw();
+	}
+
+	for (const Bat* e : Bat::GetAll()) {
 		e->Draw();
 	}
 
@@ -440,7 +462,11 @@ void JumpScene::Draw()
 	for (const Bullet* e : Bullet::GetAll()) {
 		e->Draw();
 	}
-	
+
+	for (const FireShot* e : FireShot::GetAll()) {
+		e->Draw();
+	}
+
 	for (const Missile* e : Missile::GetAll()) {
 		e->Draw();
 	}
