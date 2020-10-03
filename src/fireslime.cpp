@@ -75,7 +75,7 @@ void FireSlime::Update(float dt)
 		break;
 	case State::WALKING:
 		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), JumpMan::instance()->bounds()));
-		if (anim.current_frame >= kFirstFrameOnAir && anim.current_frame < kFirstFrameOnGround) {
+		if (!anim.complete && anim.current_frame >= kFirstFrameOnAir && anim.current_frame < kFirstFrameOnGround) {
 			pos.x += kSpeed * direction * dt;
 		}
 		else if (willAttack) {
