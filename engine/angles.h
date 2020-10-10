@@ -20,4 +20,14 @@ namespace Angles
 	{
 		return (rads * 360.0f) / TwoPi;
 	}
+
+	inline constexpr void KeepDegreesBetween0and360(float& degs)
+	{
+		while (degs >= 360) {
+			degs -= 360;
+		}
+		while (degs < 0) {
+			degs += 360;
+		}
+	}
 }
