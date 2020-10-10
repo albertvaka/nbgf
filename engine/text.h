@@ -180,7 +180,7 @@ private:
 				continue;
 			}
 
-			float leftPad;
+			int leftPad;
 			switch (multilineAlignment) {
 			default:
 			case MultilineAlignment::LEFT:
