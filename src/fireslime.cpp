@@ -1,4 +1,5 @@
 #include "fireslime.h"
+
 #include "jumpman.h"
 #include "collide.h"
 #include "window.h"
@@ -76,9 +77,10 @@ void FireSlime::Update(float dt)
 	case State::WALKING:
 		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), JumpMan::instance()->bounds()));
 		if (!anim.complete && anim.current_frame >= kFirstFrameOnAir && anim.current_frame < kFirstFrameOnGround) {
+			// in this part of the animation we are in the air, here we move and we never start an attack
 			pos.x += kSpeed * direction * dt;
-		}
-		else if (willAttack) {
+			didJustAttack = false;
+		} else if (willAttack) {
 			state = State::ATTACKING;
 			timer = 0.0f;
 			anim.Set(AnimLib::FIRESLIME_ATTACK);
