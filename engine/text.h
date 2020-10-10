@@ -10,6 +10,13 @@
 
 class Text
 {
+public:
+	enum class MultilineAlignment {
+		LEFT,
+		CENTER,
+		RIGHT
+	};
+
 	TTF_Font* font;
 	TTF_Font* font_outline;
 	std::string str;
@@ -18,6 +25,7 @@ class Text
 	int spacing = 0;
 	int empty_line_spacing = 12;
 	mutable GPU_Image* cached = nullptr;
+	MultilineAlignment multilineAlignment = MultilineAlignment::LEFT;
 
 public:
 	Text(TTF_Font* font = nullptr, TTF_Font* font_outline = nullptr) : font(font), font_outline(font_outline) {}
@@ -98,12 +106,16 @@ public:
 		return *this;
 	}
 
+	void SetMultilineAlignment(MultilineAlignment a) {
+		multilineAlignment = a;
+	}
+
 	vec GetSize() const {
 		GPU_Image* image = GetImage();
 		return vec(image->texture_w, image->texture_h);
 	}
+
 private:
-	
 	void Invalidate() {
 		if (cached) {
 			GPU_FreeImage(cached);
@@ -167,7 +179,21 @@ private:
 				totalHeight += empty_line_spacing;
 				continue;
 			}
-			SDL_Rect dest = { 0,totalHeight,surface->w,surface->h };
+
+			float leftPad;
+			switch (multilineAlignment) {
+			default:
+			case MultilineAlignment::LEFT:
+				leftPad = 0;
+				break;
+			case MultilineAlignment::CENTER:
+				leftPad = (maxWidth - surface->w) / 2;
+				break;
+			case MultilineAlignment::RIGHT:
+				leftPad = (maxWidth - surface->w);
+				break;
+			}
+			SDL_Rect dest = { leftPad, totalHeight, surface->w, surface->h };
 			totalHeight += surface->h + spacing;
 			SDL_BlitSurface(surface, NULL, final, &dest);
 			SDL_FreeSurface(surface);

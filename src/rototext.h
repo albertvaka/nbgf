@@ -18,6 +18,7 @@ struct RotoText : Text, SingleInstance<RotoText>
 	{
 		SetFillColor(255,255,255);
 		SetOutlineColor(0,0,0);
+		SetMultilineAlignment(MultilineAlignment::CENTER);
 	}
 
 	void ShowMessage(const std::string& msg)
