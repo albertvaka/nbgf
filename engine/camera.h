@@ -15,36 +15,36 @@ namespace Camera
 		return vec(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
 	}
 
-	inline vec GetTopLeft()
-	{
-		return vec(camera.x/camera.zoom_x, camera.y/camera.zoom_y);
-	}
-
 	inline vec GetCenter()
 	{
-		return GetTopLeft() + GetSize() / 2.f;
+		return vec(camera.x, camera.y);
 	}
 
-	inline void SetTopLeft(float x, float y)
+	inline vec GetTopLeft()
 	{
-		camera.x = x*camera.zoom_x;
-		camera.y = y*camera.zoom_y;
+		return GetCenter() - GetSize() / 2.f;
+	}
+
+	inline void SetCenter(float x, float y)
+	{
+		camera.x = x;
+		camera.y = y;
 		GPU_SetCamera(Window::currentDrawTarget, &camera);
-	}
-
-	inline void SetTopLeft(const vec& pos)
-	{
-		SetTopLeft(pos.x, pos.y);
 	}
 
 	inline void SetCenter(const vec& pos)
 	{
-		SetTopLeft(pos - GetSize() / 2.f);
-
+		SetCenter(pos.x, pos.y);
 	}
-	inline void SetCenter(float x, float y)
+
+	inline void SetTopLeft(const vec& pos)
 	{
-		SetCenter(vec(x, y));
+		SetCenter(pos + GetSize() / 2.f);
+	}
+
+	inline void SetTopLeft(float x, float y)
+	{
+		SetTopLeft(vec(x, y));
 	}
 
 	inline Bounds GetBounds()
@@ -57,7 +57,7 @@ namespace Camera
 	{
 		vec c = GetCenter();
 
-		vec screenSize(Window::GAME_WIDTH/camera.zoom_x, Window::GAME_HEIGHT/camera.zoom_y);
+		vec screenSize(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
 		float halfScreenWidth = std::min(limit.width, screenSize.x) / 2.f;
 		float halfScreenHeight = std::min(limit.height, screenSize.y) / 2.f;
 
@@ -72,20 +72,41 @@ namespace Camera
 	// if preserve_center is false, we will zoom from the top-left corner
 	inline void SetZoom(float z, bool preserve_center = true)
 	{
-		vec c = GetCenter();
-		camera.zoom_x = z;
-		camera.zoom_y = z;
 		if (preserve_center) {
-			SetCenter(c);
+			vec p = GetTopLeft();
+			camera.zoom_x = z;
+			camera.zoom_y = z;
+			SetTopLeft(p);
+		} else {
+			camera.zoom_x = z;
+			camera.zoom_y = z;
 		}
-		else {
-			GPU_SetCamera(Window::currentDrawTarget, &camera);
-		}
+		GPU_SetCamera(Window::currentDrawTarget, &camera);
 	}
 
 	inline float GetZoom()
 	{
 		return camera.zoom_x;
+	}
+
+	inline void SetRotationDegs(float angle)
+	{
+		camera.angle = angle;
+	}
+
+	inline void SetRotationRads(float angle)
+	{
+		camera.angle = Angles::RadsToDegs(angle);
+	}
+
+	inline float GetRotationDegs()
+	{
+		return camera.angle;
+	}
+
+	inline float GetRotationRads()
+	{
+		return Angles::DegsToRads(camera.angle);
 	}
 
 	namespace GUI
@@ -117,6 +138,7 @@ namespace Camera
 	}
 
 	//Useful for debug pourposes
-	void MoveCameraWithArrows(float velocity, float dt);
-	void ChangeZoomWithPlusAndMinus(float zoomVel, float dt);
+	void MoveCameraWithArrows(float dt, float velocity = 50.f);
+	void ChangeZoomWithPlusAndMinus(float dt, float velocity = 1.f);
+	void RotateWithPagUpDown(float dt, float velocity = 45.f);
 }

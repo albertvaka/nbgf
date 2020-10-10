@@ -9,8 +9,8 @@ namespace Camera {
 namespace Camera {
 
     //Useful for debug pourposes
-    void MoveCameraWithArrows(float velocity, float dt) {
-        vec c = GetTopLeft();
+    void MoveCameraWithArrows(float dt, float velocity) {
+        vec c = GetCenter();
         float zoom = GetZoom();
         if (Keyboard::IsKeyPressed(SDL_SCANCODE_RIGHT))
         {
@@ -28,10 +28,10 @@ namespace Camera {
         {
             c.y -= velocity * dt * 10 / zoom;
         }
-        SetTopLeft(c);
+        SetCenter(c);
     }
 
-    void ChangeZoomWithPlusAndMinus(float zoomVel, float dt)
+    void ChangeZoomWithPlusAndMinus(float dt, float zoomVel)
     {
         float zoom = GetZoom();
         if (Keyboard::IsKeyPressed(SDL_SCANCODE_EQUALS) || Keyboard::IsKeyPressed(SDL_SCANCODE_KP_PLUS))
@@ -45,4 +45,18 @@ namespace Camera {
             SetZoom(zoom);
         }
     }
+
+    void RotateWithPagUpDown(float dt, float velocity) {
+        float r = GetRotationDegs();
+        if (Keyboard::IsKeyPressed(SDL_SCANCODE_PAGEDOWN))
+        {
+            r += velocity * dt;
+        }
+        if (Keyboard::IsKeyPressed(SDL_SCANCODE_PAGEUP))
+        {
+            r -= velocity * dt;
+        }
+        SetRotationDegs(r);
+    }
+
 }

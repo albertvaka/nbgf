@@ -180,8 +180,9 @@ void main_loop() {
 		Debug::FrameByFrame = !Debug::FrameByFrame;
 	}
 	if (Debug::FrameByFrame && Debug::Draw) {
-		Camera::MoveCameraWithArrows(50.f, dt);
-		Camera::ChangeZoomWithPlusAndMinus(1.f, dt);
+		Camera::MoveCameraWithArrows(dt);
+		Camera::ChangeZoomWithPlusAndMinus(dt);
+		Camera::RotateWithPagUpDown(dt);
 	}
 
 	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))

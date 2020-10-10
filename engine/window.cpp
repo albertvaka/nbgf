@@ -53,7 +53,6 @@ namespace Window
 
         GPU_EnableCamera(screenTarget, true);
         Camera::camera = GPU_GetDefaultCamera();
-        Camera::camera.use_centered_origin = false;
         Camera::gui_camera = GPU_GetDefaultCamera();
         Camera::gui_camera.use_centered_origin = false;
         Camera::SetTopLeft(0.f, 0.f);
