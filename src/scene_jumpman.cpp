@@ -353,6 +353,7 @@ void JumpScene::Update(float dt)
 				break;
 			case Skill::BREAK:
 			{
+				rotoText.ShowMessage("Shots that\nbreak stuff");
 				door_to_close_when_break_skill->Lock();
 			}
 				break;
