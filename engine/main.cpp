@@ -4,6 +4,7 @@
 #include "input.h"
 #include "mates.h"
 #include "debug.h"
+#include "text.h"
 #include "camera.h"
 
 #include "../src/assets.h"
@@ -24,7 +25,9 @@
 #include <emscripten.h>
 #endif
 
+#ifdef _DEBUG
 #define _FPS_COUNTER
+#endif
 
 Scene* currentScene;
 Scene* SceneManager::currentScene = nullptr;
