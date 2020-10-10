@@ -103,6 +103,10 @@ struct Bounds
         return vec(Right(), Top());
     }
 
+    [[nodiscard]] constexpr vec BottomLeft() const {
+        return vec(Left(), Bottom());
+    }
+
     [[nodiscard]] constexpr vec BottomRight() const {
         return vec(Right(), Bottom());
     }

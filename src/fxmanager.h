@@ -49,7 +49,7 @@ struct FxManager {
 			screenshakeSpeed = speed;
 		}
 	}
-	enum ScreenShakePreset {
+	enum class ScreenShakePreset {
 		Earthquake,
 		LittleStomp,
 		Stomp,
@@ -57,16 +57,16 @@ struct FxManager {
 	};
 	static inline void StartScreenshakePreset(ScreenShakePreset preset) {
 		switch (preset) {
-		case Earthquake: // Call repeatedly for a sustained effect
+		case ScreenShakePreset::Earthquake: // Call repeatedly for a sustained effect
 			StartScreenshake(0.1f, veci(2,2), vec(35.f,45.f));
 			break;
-		case LittleStomp:
+		case ScreenShakePreset::LittleStomp:
 			StartScreenshake(0.17f, veci(0, 2), vec(0.f, 47.f));
 			break;
-		case Stomp:
+		case ScreenShakePreset::Stomp:
 			StartScreenshake(0.17f, veci(0, 3), vec(0.f, 47.f));
 			break;
-		case Electroshok:
+		case ScreenShakePreset::Electroshok:
 			StartScreenshake(0.157f, veci(8, 2), vec(86.7f, 14.1f));
 			break;
 		}

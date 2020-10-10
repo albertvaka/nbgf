@@ -160,7 +160,7 @@ void JumpScene::ExitScene()
 	Bullet::DeleteAll();
 	Bullet::particles.Clear();
 	Missile::DeleteAll();
-	Missile::DeleteAll();
+	Missile::particles.Clear();
 	FireShot::DeleteAll();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();

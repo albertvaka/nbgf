@@ -1,12 +1,10 @@
 #include "powerups.h"
 
-#include "tilemap.h"
 #include "mates.h"
 #include "assets.h"
 #include "window.h"
 #include "tilemap.h"
 #include "rand.h"
-#include "assets.h"
 
 extern float mainClock;
 

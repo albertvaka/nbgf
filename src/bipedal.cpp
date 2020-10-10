@@ -140,7 +140,7 @@ void Bipedal::Update(float dt)
 		if (Camera::GetBounds().Contains(pos)) {
 			bool stomp = (frame != anim.current_frame) && (anim.current_frame == 0 || anim.current_frame == 3);
 			if (stomp) {
-				FxManager::StartScreenshakePreset(charging? FxManager::Stomp : FxManager::LittleStomp);
+				FxManager::StartScreenshakePreset(charging? FxManager::ScreenShakePreset::Stomp : FxManager::ScreenShakePreset::LittleStomp);
 			}
 		}
 
