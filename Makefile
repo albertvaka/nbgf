@@ -72,11 +72,11 @@ obj/%.cpp.o: src/%.cpp engine/*.h src/*.h Makefile
 	@mkdir -p obj
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-obj/vendor/%.c.o: vendor/%.c $(shell find vendor/ -type f -name '*.h') Makefile
+obj/vendor/%.c.o: vendor/%.c $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-obj/vendor/%.cpp.o: vendor/%.cpp $(shell find vendor/ -type f -name '*.h') Makefile
+obj/vendor/%.cpp.o: vendor/%.cpp $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
