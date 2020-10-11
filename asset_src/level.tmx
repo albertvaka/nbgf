@@ -1496,7 +1496,7 @@
   <object id="71" name="Screen" x="337.25" y="-720" width="590.75" height="336"/>
   <object id="105" name="Screen" x="-166.45" y="178" width="403.54" height="200"/>
   <object id="124" name="Screen" x="225.231" y="271.833" width="575.538" height="333"/>
-  <object id="171" name="screen" type="screen" x="-1723.25" y="279.583" width="1561.67" height="424.167"/>
+  <object id="171" name="screen" type="screen" x="-1733.51" y="273.538" width="1571.93" height="430.212"/>
   <object id="173" name="Screen" x="-2331.77" y="273.5" width="599.538" height="333"/>
   <object id="215" name="Screen" x="-2937.1" y="-666.5" width="594.205" height="1026.33"/>
  </objectgroup>
