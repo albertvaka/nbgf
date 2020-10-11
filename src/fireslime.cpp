@@ -29,6 +29,7 @@ FireSlime::FireSlime(const vec& pos)
 {
 	direction = Rand::OnceEach(2) ? 1 : -1;
 	anim.loopable = false;
+	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 
 Bounds FireSlime::AttackBounds() const
@@ -59,6 +60,10 @@ bool FireSlime::CanMoveForward() const
 
 void FireSlime::Update(float dt)
 {
+	if (!InSameScreenAsPlayer(screen)) {
+		return;
+	}
+
 	anim.Update(dt);
 
 	switch (state)

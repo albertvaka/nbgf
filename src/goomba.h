@@ -26,6 +26,8 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 
 	Animation2 anim;
 
+	int screen;
+
 	Goomba(const vec& position, bool isCharger);
 
 	Bounds ChargeBounds() const;

@@ -12,7 +12,7 @@ struct TileMap;
 struct Bipedal : Entity, SelfRegister<Bipedal>
 {
 	enum class State {
-		ASLEEP,
+		DEACTIVATED,
 		WALKING_FORWARD,
 		WALKING_BACK,
 		DRAMATIC_PAUSE,

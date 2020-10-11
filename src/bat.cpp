@@ -84,41 +84,42 @@ void Bat::DrawSenseArea() const
 	CircleBounds(pos, awake_nearby_distance).Draw(0,255,255);
 }
 
-inline bool Bat::inSameScreenAsPlayer() const {
-	return screen == -1 || screen == ScreenManager::instance()->CurrentScreen();
-}
-
 void Bat::Update(float dt)
 {
+	if (!InSameScreenAsPlayer(screen)) {
+		if (state == State::SEEKING) {
+			state = State::FLYING;
+		}
+		return;
+	}
+
 	anim.Update(dt * 1000);
 
 	switch (state) {
+	case State::AWAKENING:
+	{
+		if (anim.complete) {
+			state = State::FLYING;
+			anim.Ensure(BAT_FLYING);
+			anim.loopable = true;
+			AwakeNearbyBats(pos);
+		}
+		break;
+	}
 	case State::SIESTA:
 	{
-		if (anim.GetCurrentAnim() == BAT_AWAKE) {
-			if (anim.complete) {
-				state = State::FLYING;
-				anim.Ensure(BAT_FLYING);
-				anim.loopable = true;
-				AwakeNearbyBats(pos);
-			}
-		}
-		else {
-			if (!inSameScreenAsPlayer()) {
-				return;
-			}
-			if (pos.DistanceSq(JumpMan::instance()->bounds().Center()) < (awake_player_distance * awake_player_distance) || awakened) {
-				anim.Ensure(BAT_AWAKE);
-				anim.Update(Rand::roll(0, anim.GetCurrentAnimDuration()/2)); // Start flying at different time intervals
-				anim.loopable = false;
-			}
+		bool close_to_player = pos.DistanceSq(JumpMan::instance()->bounds().Center()) < (awake_player_distance * awake_player_distance);
+		if (awakened || close_to_player) {
+			state = State::AWAKENING;
+			anim.Ensure(BAT_AWAKE);
+			anim.Update(Rand::roll(0, anim.GetCurrentAnimDuration()/2)); // Start flying at different time intervals
+			anim.loopable = false;
 		}
 		break;
 	}
 	break;
 	case State::FLYING:
 	{
-
 		vec oldVel = vel;
 
 		// Override velocity :D yolo
@@ -129,10 +130,9 @@ void Bat::Update(float dt)
 
 		// Always move at max speed
 		vel = vel.Normalized() * max_speed;
-
 		pos += vel * dt;
 
-		// Flip anim
+		// Change direction animation
 		if ((oldVel.x < 0 && vel.x > 0) || (oldVel.x > 0 && vel.x < 0)) {
 			anim.Ensure(BAT_FLIP);
 			anim.loopable = false;
@@ -142,6 +142,7 @@ void Bat::Update(float dt)
 			anim.loopable = true;
 		}
 
+		// Start seeking at random
 		if (aggresive) {
 			seekingTimer -= dt;
 			if (seekingTimer <= 0.f) {
@@ -158,9 +159,14 @@ void Bat::Update(float dt)
 	case State::SEEKING:
 	{
 		JumpMan* jumpman = JumpMan::instance();
-		vel = steering.CalculatePrioritized(dt);
-		if (steering.avoidingTileMap || steering.avoidingBounds) {
+		if (jumpman->isHit()) {
 			state = State::FLYING;
+			steering.FleeOn(jumpman); // Stop seeking and start fleeing after hitting (me or someone else) the player
+		}
+
+		vel = steering.CalculatePrioritized(dt); // Calling this updates 'avoidingBounds' and 'avoidingTileMap'
+		if (steering.avoidingTileMap || steering.avoidingBounds) {
+			state = State::FLYING; // Stop seeking if we hit an obstacle in the map
 		}
 		else {
 			vel = steering.Seek(jumpman->bounds().Center());
@@ -168,13 +174,6 @@ void Bat::Update(float dt)
 
 		vel = vel.Normalized() * max_speed;
 		pos += vel * dt;
-
-		if (jumpman->isHit() || steering.avoidingTileMap || !inSameScreenAsPlayer()) {
-			state = State::FLYING;
-			if (jumpman->isHit()) {
-				steering.FleeOn(jumpman);
-			}
-		}
 	}
 	break;
 	}

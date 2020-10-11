@@ -3,6 +3,12 @@
 #include "jumpman.h"
 #include "bullet.h"
 #include "collide.h"
+#include "screen.h"
+
+
+inline bool InSameScreenAsPlayer(int myScreen) {
+	return myScreen == -1 || myScreen == ScreenManager::instance()->CurrentScreen();
+}
 
 template<typename B>
 bool ReceiveDamageFromBullets(const B& bounds) { // returns true if collided

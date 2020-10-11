@@ -24,6 +24,8 @@ struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 
 	float direction; // -1 or 1
 
+	int screen;
+
 	FireSlime(const vec& position);
 
 	Bounds AttackBounds() const;

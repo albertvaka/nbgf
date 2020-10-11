@@ -12,6 +12,7 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 {
 	enum class State {
 		SIESTA,
+		AWAKENING,
 		FLYING,
 		SEEKING,
 	};
@@ -37,8 +38,6 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 
 	void Update(float dt);
 	void Draw() const;
-
-	inline bool inSameScreenAsPlayer() const;
 
 	void DrawSenseArea() const;
 private:
