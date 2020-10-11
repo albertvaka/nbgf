@@ -164,6 +164,7 @@ struct TiledTiles
 		ONEWAY_16,
 		ONEWAY_17,
 		ONEWAY_18,
+		ONEWAY_19,
 		RSLOPE_1,
 		RSLOPE_2,
 		RSLOPE_3,
@@ -225,8 +226,8 @@ struct TiledTiles
 	// Aliases
 	static constexpr Value BG_PLAIN_COLOR = BG_33;
 	static constexpr Value BG_DOOR_OPENING = BG_49;
-	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
-	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
+	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_10;
+	static constexpr Value ONEWAY_SIMPLE = ONEWAY_10;
 	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_3;
 	static constexpr Value SOLID_SIMPLE = SOLID_6;
 	static constexpr Value SOLID_PLAIN_COLOR = SOLID_19;
@@ -253,7 +254,6 @@ struct TiledEntities
 	static const vec spawn;
 	static const vec skill_gun;
 	static const std::array<vec, 3> enemy_door;
-	static const std::array<vec, 2> angrybat;
 	static const vec skill_walljump;
 	static const std::array<vec, 2> save;
 	static const vec lava_initial_height;
@@ -262,6 +262,7 @@ struct TiledEntities
 	static const vec boss_bipedal;
 	static const std::array<vec, 2> goombacharger;
 	static const std::array<vec, 16> fireslime;
+	static const std::array<vec, 2> angrybat;
 	
 };
 
