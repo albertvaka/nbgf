@@ -144,6 +144,8 @@ struct TiledTiles
 		BG_129,
 		BG_130,
 		BG_131,
+		BG_132,
+		BG_133,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,

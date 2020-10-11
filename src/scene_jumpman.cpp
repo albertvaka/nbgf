@@ -52,7 +52,7 @@ JumpScene::JumpScene()
 	fogPartSys.max_interval = 6.f;
 
 	for (const Bounds& b : TiledAreas::parallax_forest) {
-		Parallax* p = new Parallax(b, Assets::forestParallaxTextures, 0.f, 1.f, 183.f);
+		Parallax* p = new Parallax(b, Assets::forestParallaxTextures, 0.25f, 1.f, 172.f);
 	}
 
 	for (const Bounds& b : TiledAreas::parallax_cave) {
@@ -542,9 +542,8 @@ void JumpScene::Draw()
 	//fogPartSys.Draw();
 	//fogPartSys.DrawImGUI();
 
-	//int parallax_index = 0;
-	//for (Parallax* p : Parallax::GetAll()) {
-	//	p->DrawImGUI(("parallax_" + std::to_string(parallax_index++)).c_str());
+	//for (int i = 0; i < Parallax::GetAll().size(); i++) {
+	//	Parallax::GetAll()[i]->DrawImGUI(("parallax_" + std::to_string(i)).c_str());
 	//}
 
 	FxManager::EndDraw();
