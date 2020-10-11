@@ -38,7 +38,7 @@ min_y = 0
 max_x = 0
 max_y = 0
 
-for chunk in tiles.data:
+for chunk in tiles.layer_data:
     if chunk.location.x < min_x:
         min_x = chunk.location.x 
     elif chunk.location.x + chunk.width > max_x:
@@ -51,7 +51,7 @@ for chunk in tiles.data:
 out_width = max_x - min_x
 out_height = max_y - min_y
 
-for chunk in tiles.data:
+for chunk in tiles.layer_data:
     y = chunk.location.y - min_y
     for row in chunk.chunk_data:
         x = chunk.location.x - min_x

@@ -244,7 +244,7 @@ struct TiledMap
 
 struct TiledEntities
 {
-	static const std::array<vec, 12> bat;
+	static const std::array<vec, 15> bat;
 	static const std::array<vec, 3> initial_batawake;
 	static const std::array<vec, 2> healthup;
 	static const std::array<vec, 4> batawake;
@@ -259,7 +259,7 @@ struct TiledEntities
 	static const std::array<vec, 2> goomba;
 	static const vec boss_bipedal;
 	static const std::array<vec, 2> goombacharger;
-	static const std::array<vec, 11> fireslime;
+	static const std::array<vec, 16> fireslime;
 	
 };
 

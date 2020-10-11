@@ -17,7 +17,7 @@ constexpr const vec kShotSpeed(70, -90);
 constexpr const vec kShotAccel(0, 150);
 
 constexpr const float kSpriteScale = 1.3f;
-constexpr const float kSpriteOffsetY = 6.f * kSpriteScale;
+constexpr const float kSpriteOffsetY = 7.f;
 
 constexpr const int kFirstFrameOnAir = 2;
 constexpr const int kFirstFrameOnGround = 7;
