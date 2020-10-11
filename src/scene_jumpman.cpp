@@ -52,7 +52,11 @@ JumpScene::JumpScene()
 	fogPartSys.max_interval = 6.f;
 
 	for (const Bounds& p : TiledAreas::parallax_forest) {
-		new Parallax(p);
+		new Parallax(p, Assets::forestParallaxTextures);
+	}
+
+	for (const Bounds& p : TiledAreas::parallax_cave) {
+		new Parallax(p, Assets::caveParallaxTextures);
 	}
 
 	for (const auto& screen : TiledMap::screens) {

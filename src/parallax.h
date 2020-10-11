@@ -5,9 +5,17 @@
 
 struct Parallax : SelfRegister<Parallax>
 {
-	Parallax(const Bounds& bounds) : bounds(bounds) { }
-
+	GPU_Image** layers;
+	int layers_count;
 	Bounds bounds;
+
+	template<std::size_t size>
+	constexpr Parallax(const Bounds& bounds, std::array<GPU_Image*, size> images) 
+		: layers_count(size)
+		, layers(images.data())
+		, bounds(bounds) 
+	{
+	}
 
 	void Draw() const;
 

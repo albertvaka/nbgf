@@ -239,15 +239,15 @@ struct TiledMap
 {
 	static const uint8_t map[];
 	static const vec map_size;
-	static const std::array<Bounds, 11> screens;
+	static const std::array<Bounds, 12> screens;
 };
 
 struct TiledEntities
 {
-	static const std::array<vec, 8> bat;
+	static const std::array<vec, 12> bat;
 	static const std::array<vec, 3> initial_batawake;
 	static const std::array<vec, 2> healthup;
-	static const std::array<vec, 2> batawake;
+	static const std::array<vec, 4> batawake;
 	static const vec spawn;
 	static const vec skill_gun;
 	static const std::array<vec, 3> enemy_door;
@@ -255,11 +255,11 @@ struct TiledEntities
 	static const vec skill_walljump;
 	static const std::array<vec, 2> save;
 	static const vec lava_initial_height;
-	static const vec boss_bipedal;
 	static const vec skill_breakblocks;
-	static const std::array<vec, 2> fireslime;
 	static const std::array<vec, 2> goomba;
+	static const vec boss_bipedal;
 	static const std::array<vec, 2> goombacharger;
+	static const std::array<vec, 11> fireslime;
 	
 };
 
@@ -267,8 +267,9 @@ struct TiledAreas
 {
 	static const std::array<Bounds, 2> lava;
 	static const std::array<Bounds, 1> parallax_forest;
-	static const std::array<Bounds, 2> bat_bounds;
+	static const std::array<Bounds, 3> bat_bounds;
 	static const std::array<Bounds, 1> fog;
+	static const std::array<Bounds, 1> parallax_cave;
 	static const std::array<Bounds, 1> boss_bounds;
 	
 };

@@ -22,14 +22,13 @@ void Parallax::Draw() const
 	//ImGui::SliderFloat("Mouse: %d", &offseterino, 0, 500);
 	//ImGui::End();
 
-	const auto& textures = Assets::forestParallaxTextures;
-
+	//TODO: Make initial depth (and depthIncrement?) configurable
 	float depth = 0.f; //between 0 (moves with camera) and 1 (doesn't move)
 	// We increment at the end of the loop, so the last value after adding depthIncrement won't be used.
-	// For this reason we will never get to depth = 1 (unless we did size-1 here), but I'm ok with having everything move at least a bit.
-	float depthIncrement = 1.f / (textures.size()-1);
-	for (auto* texture : textures) {
-
+	// For this reason we do size-1, so we get to depth = 1
+	float depthIncrement = 1.f / (layers_count-1);
+	for (int i = 0; i < layers_count; i++) {
+		GPU_Image* texture = Assets::caveParallaxTextures[i]; //FIXME: layers[i] blows up
 		float scale = bounds.height / texture->h; // Stretch so it covers the full height on the Y axis, on the X axis we will tile the texture.
 		float moveWithCameraOffset = 0;
 		float doNotMoveOffset = (bounds.Left() - camera.Center().x );

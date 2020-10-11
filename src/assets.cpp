@@ -34,4 +34,9 @@ void Assets::LoadAll() {
         forestParallaxTextures[i]= LoadImage("data/redforest_"+ std::to_string(i)+".png");
         GPU_SetWrapMode(forestParallaxTextures[i], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
     }
+
+    for (size_t i = 0; i < caveParallaxTextures.size(); i++) {
+        caveParallaxTextures[i]= LoadImage("data/cave_"+ std::to_string(i)+".png");
+        GPU_SetWrapMode(caveParallaxTextures[i], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
+    }
 }
