@@ -549,6 +549,13 @@ void JumpMan::Draw() const {
 	}
 
 	Shader::Deactivate();
+
+	if (Debug::Draw) {
+		bounds().Draw();
+		//player.pos.Debuggerino(sf::Color::White);
+		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
+	}
+
 }
 
 

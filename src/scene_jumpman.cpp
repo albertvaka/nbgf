@@ -19,6 +19,7 @@
 #include "collide.h"
 #include "rototext.h"
 #include "goomba.h"
+#include "drawall.h"
 
 extern float mainClock;
 
@@ -424,66 +425,27 @@ void JumpScene::Draw()
 
 	Window::Clear(31, 36, 50);
 
-	for (const Parallax* p : Parallax::GetAll()) {
-		p->Draw();
-	}
-
-	map.Draw();
-	destroyedTiles.Draw();
-
-	for (const SaveStation* ss : SaveStation::GetAll()) {
-		ss->Draw();
-	}
-
-	for (const EnemyDoor* ed : EnemyDoor::GetAll()) {
-		ed->Draw();
-	}
-
-	for (const Goomba* e : Goomba::GetAll()) {
-		e->Draw();
-	}
-
-	for (const FireSlime* e : FireSlime::GetAll()) {
-		e->Draw();
-	}
-
-	for (const Bat* e : Bat::GetAll()) {
-		e->Draw();
-	}
-
-	for (const OneShotAnim* e : OneShotAnim::GetAll()) {
-		e->Draw();
-	}
-
-	for (const Bipedal* e : Bipedal::GetAll()) {
-		e->Draw();
-	}
-	Bullet::particles.Draw();
-	//Bullet::particles.DrawImGUI("BulletTrail");
-
-	Missile::particles.Draw();
-	//Missile::particles.DrawImGUI("MissileSmoke");
-
-	for (const Bullet* e : Bullet::GetAll()) {
-		e->Draw();
-	}
-
-	for (const FireShot* e : FireShot::GetAll()) {
-		e->Draw();
-	}
-
-	for (const Missile* e : Missile::GetAll()) {
-		e->Draw();
-	}
-
-	for (const HealthUp* g : HealthUp::GetAll()) {
-		g->Draw();
-	}
-	for (BigItem* g : BigItem::GetAll()) {
-		g->Draw();
-	}
-
-	player.Draw();
+	DrawAllInOrder(
+		Parallax::GetAll(),
+		&map,
+		&destroyedTiles,
+		SaveStation::GetAll(),
+		EnemyDoor::GetAll(),
+		Goomba::GetAll(),
+		FireSlime::GetAll(),
+		Bat::GetAll(),
+		OneShotAnim::GetAll(),
+		Bipedal::GetAll(),
+		&Bullet::particles,
+		&Missile::particles,
+		Bullet::GetAll(),
+		FireShot::GetAll(),
+		Missile::GetAll(),
+		HealthUp::GetAll(),
+		BigItem::GetAll(),
+		&player,
+		Lava::GetAll()
+	);
 
 	if (contextActionButton != GameKeys::NONE) {
 		AnimationType anim = BUTTON_A_PRESS; // TODO: switch depending on the key
@@ -491,17 +453,8 @@ void JumpScene::Draw()
 			.withRect(Animation::AnimFrame(anim, mainClock * 1000));
 	}
 
-	for (const Lava* l : Lava::GetAll()) {
-		l->Draw();
-	}
-	
-	rotoText.Draw(vec(0,-30));
 
-	if (Debug::Draw) {
-		player.bounds().Draw();
-		//player.pos.Debuggerino(sf::Color::White);
-		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
-	}
+	rotoText.Draw(vec(0,-30));
 
 #ifdef _IMGUI
 	{
@@ -520,6 +473,9 @@ void JumpScene::Draw()
 		//FxManager::DrawImgui();
 	}
 #endif
+
+	//Bullet::particles.DrawImGUI("BulletTrail");
+	//Missile::particles.DrawImGUI("MissileSmoke");
 
 #ifdef _DEBUG
 	if (Debug::Draw) {

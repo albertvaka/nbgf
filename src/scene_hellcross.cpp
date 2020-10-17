@@ -15,6 +15,7 @@
 #include "rand.h"
 #include "fxmanager.h"
 #include "oneshotanim.h"
+#include "drawall.h"
 
 extern float mainClock;
 
@@ -268,35 +269,18 @@ void HellCrossScene::Draw()
 		});
 	}
 
-	map.Draw();
-	destroyedTiles.Draw();
+	DrawAllInOrder(
+		&map,
+		&destroyedTiles,
+		Bat::GetAll(),
+		OneShotAnim::GetAll(),
+		&Bullet::particles,
+		Bullet::GetAll(),
+		&player,
+		Lava::GetAll()
+	);
 
-	for (const Bat* e : Bat::GetAll()) {
-		e->Draw();
-	}
-
-	for (const OneShotAnim* e : OneShotAnim::GetAll()) {
-		e->Draw(); 
-	}
-
-	Bullet::particles.Draw();
 	//Bullet::particles.DrawImGUI("BulletTrail");
-
-	for (const Bullet* e : Bullet::GetAll()) {
-		e->Draw();
-	}
-
-	player.Draw();
-
-	for (const Lava* l : Lava::GetAll()) {
-		l->Draw();
-	}
-	
-	if (Debug::Draw) {
-		player.bounds().Draw();
-		//player.pos.Debuggerino(sf::Color::White);
-		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
-	}
 
 #ifdef _IMGUI
 	{
