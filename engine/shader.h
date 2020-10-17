@@ -58,7 +58,7 @@ struct Shader {
 
 	int GetUniformLocation(const char* name);
 
-    unsigned int program;
+	unsigned int program = -1;
 	GPU_ShaderBlock block;
 	std::string shaderFilePaths;
 

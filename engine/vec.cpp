@@ -21,7 +21,7 @@ void vec::Debuggerino(uint8_t r, uint8_t g, uint8_t b) const {
 
 void DrawDebugVecs() 
 {
-    for (debugvec v : debugvecs) {
+    for (const debugvec& v : debugvecs) {
         Bounds::fromCenter(v.v, vec(4, 4)).Draw(v.r,v.g,v.b);
     }
 }
