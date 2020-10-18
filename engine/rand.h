@@ -19,14 +19,21 @@ namespace Rand
 	inline bool OnceEach(int max) { return roll(0, max) == 0; }
 	inline bool PercentChance(int percent) { return roll(0, 100) < percent; }
 
-	inline vec vecInCircle(float radius)
+	// Unit vector in a random direction
+	inline vec dirInCircle()
 	{
-		float r = rollf(0.0f, radius);
 		float ang = rollf(0.0f, 360.0f);
 
 		float rads = ang * float(M_PI) / 180.0f;
 
-		return vec(r * std::cos(rads), r * std::sin(rads));
+		return vec(std::cos(rads), std::sin(rads));
+	}
+
+	// Randoms-sized vector in a random direction
+	inline vec posInsideCircle(float radius)
+	{
+		float r = rollf(0.0f, radius);
+		return dirInCircle()*r;
 	}
 
 	inline vec vecInRange(float minX, float minY, float maxX, float maxY) {

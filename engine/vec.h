@@ -28,10 +28,12 @@ struct vec
 
 	static const vec Zero;
 
+	//Angle to direction
 	[[nodiscard]] static vec FromAngleRads(float rads, float len=1.0f) {
 		return vec(cos(rads)*len,sin(rads)*len);
 	}
 
+	//Angle to direction
 	[[nodiscard]] static vec FromAngleDegs(float degs, float len = 1.0f) {
 		return FromAngleRads(Angles::DegsToRads(degs), len);
 	}
