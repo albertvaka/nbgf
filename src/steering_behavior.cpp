@@ -16,7 +16,7 @@ const float WanderJitterPerSec = 45.f; //Trompicones que dona (the maximum amoun
 SteeringBehavior::SteeringBehavior(SteeringEntity* agent) : steeringEntity(agent)
 {
 	//create a vector to a target position on the wander circle
-	float theta = Rand::rollf() * Angles::TwoPi;
+	float theta = Rand::rollf() * Angles::Tau;
 	m_vWanderTarget = vec(WanderRad * cos(theta), WanderRad * sin(theta));
 }
 
