@@ -13,6 +13,10 @@ struct Tile : TiledTiles
 	static const int size = 16;
 	static const vec sizevec;
 
+	bool isEmpty() const {
+		return value < ONEWAY_BEGIN;
+	}
+
 	bool isOneWay() const {
 		return value >= ONEWAY_BEGIN && value < RSLOPE_BEGIN;
 	}
