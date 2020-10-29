@@ -61,7 +61,7 @@ void Goomba::Walk(float dt)
 	veci tilePosSide = TileMap::toTiles(new_pos_x + r.w / 2 * walkDir, pos.y);
 	const Tile tileSide = tm->getTile(tilePosSide);
 
-	if ((tileBottom.isFullSolid() || tileBottom.isOneWay()) && !tileSide.isSolid())
+	if ((tileBottom.isFullSolid() || tileBottom.isOneWay()) && !tileSide.isSolid() && ScreenManager::instance()->ScreenBounds(screen).Contains(new_pos_x, pos.y))
 	{
 		pos.x = new_pos_x;
 	}

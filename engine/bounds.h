@@ -111,13 +111,18 @@ struct Bounds
         return vec(Right(), Bottom());
     }
 
+    [[nodiscard]] bool Contains(float x, float y) const
+    {
+        if (x < left) return false;
+        if (x >= left + width) return false;
+        if (y < top) return false;
+        if (y >= top + height) return false;
+        return true;
+    }
+
     [[nodiscard]] bool Contains(const vec& point) const
 	{
-        if (point.x < left) return false;
-        if (point.x >= left+width) return false;
-        if (point.y < top) return false;
-        if (point.y >= top+height) return false;
-		return true;
+        return Contains(point.x, point.y);
     }
 
     [[nodiscard]] bool Contains(const Bounds& b) const
