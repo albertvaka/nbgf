@@ -35,6 +35,21 @@ namespace AnimLib {
 		{ { 15 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
 	};
 
+	constexpr const AnimationFrame MANTIS_PREPARE_JUMP[] = {
+		{ {2 * 32, 8 * 32, 32, 32}, .3f },
+		{ {1 * 32, 8 * 32, 32, 32}, .15f },
+		{ {0 * 32, 8 * 32, 32, 32}, .15f },
+	};
+
+	constexpr const GPU_Rect MANTIS_AIR = { 1 * 32, 8 * 32, 32, 32 };
+
+	constexpr const AnimationFrame MANTIS_WALK[] = {
+		{ {0 * 32, 10 * 32, 32, 32}, .1f },
+		{ {1 * 32, 10 * 32, 32, 32}, .1f },
+		{ {2 * 32, 10 * 32, 32, 32}, .1f },
+		{ {3 * 32, 10 * 32, 32, 32}, .1f },
+	};
+
 	constexpr const AnimationFrame GOOMBA[] = {
 		{ {14 * 16, 16, 16, 16}, .2f },
 		{ {15 * 16, 16, 16, 16}, .2f },

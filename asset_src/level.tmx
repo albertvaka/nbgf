@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#321f2432" nextlayerid="12" nextobjectid="219">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#321f2432" nextlayerid="12" nextobjectid="222">
  <editorsettings>
   <export target="." format="tmx"/>
  </editorsettings>
- <tileset firstgid="1" name="mario" tilewidth="16" tileheight="16" tilecount="464" columns="29">
-  <image source="../bin/data/mario.png" width="464" height="256"/>
+ <tileset firstgid="1" name="mario" tilewidth="16" tileheight="16" tilecount="841" columns="29">
+  <image source="../bin/data/mario.png" width="464" height="464"/>
   <tile id="0" type="spawn"/>
   <tile id="1" type="breakable"/>
   <tile id="10" type="solid"/>
@@ -140,8 +140,9 @@
   <tile id="431" type="solid"/>
   <tile id="461" type="solid"/>
   <tile id="462" type="solid"/>
+  <tile id="464" type="mantis"/>
  </tileset>
- <tileset firstgid="465" name="scifi" tilewidth="16" tileheight="16" tilecount="868" columns="28">
+ <tileset firstgid="842" name="scifi" tilewidth="16" tileheight="16" tilecount="868" columns="28">
   <image source="../bin/data/scifi.png" width="448" height="506"/>
  </tileset>
  <layer id="1" name="World" width="100" height="100">
@@ -1466,6 +1467,8 @@
   <object id="213" gid="354" x="-2031" y="457" width="16" height="16"/>
   <object id="217" type="angrybat" gid="117" x="-2603" y="-113.667" width="16" height="16"/>
   <object id="218" type="angrybat" gid="117" x="-2589" y="-99.6667" width="16" height="16"/>
+  <object id="220" gid="465" x="-165.27" y="175.958" width="16" height="16"/>
+  <object id="221" gid="465" x="274.25" y="96.1042" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="9" name="Notes" visible="0">
   <object id="112" x="-532.167" y="-16.1667" width="101.667" height="41.6667">
@@ -1475,7 +1478,7 @@
    <text wrap="1">Need fly to get here</text>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Areas">
+ <objectgroup id="8" name="Areas" visible="0">
   <object id="83" name="lava" type="lava" x="336" y="46.478" width="618" height="209.5"/>
   <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
   <object id="106" name="lava" type="lava" x="-16" y="363.333" width="175.667" height="127.455"/>
@@ -1486,7 +1489,7 @@
   <object id="194" name="boss_bounds" type="boss_bounds" x="-2278.5" y="561.5" width="476.333" height="39"/>
   <object id="198" name="bat_bounds" type="bat_bounds" x="-1495.4" y="324.72" width="1197.47" height="343.894"/>
  </objectgroup>
- <objectgroup id="2" name="Screens">
+ <objectgroup id="2" name="Screens" visible="0">
   <object id="42" name="Screen" x="-260.455" y="-40" width="591.538" height="256"/>
   <object id="44" name="Screen" x="-1309.12" y="-78.3333" width="1048.45" height="332.997"/>
   <object id="45" name="Screen" x="-261.667" y="-386.667" width="587.333" height="308.667"/>

@@ -14,7 +14,6 @@ void Assets::LoadAll() {
 
     marioTexture = LoadImage("data/mario.png");
     wheelerTexture = LoadImage("data/boss_wheeler.png");
-    mantisTexture = LoadImage("data/mantis.png");
     scifiTexture = LoadImage("data/scifi.png");
 
     menuBgTexture = LoadImage("data/menubg3.png");

@@ -9,6 +9,7 @@
 #include "parallax.h"
 #include "bat.h"
 #include "missile.h"
+#include "mantis.h"
 #include "bipedal.h"
 #include "fxmanager.h"
 #include "fireslime.h"
@@ -97,6 +98,9 @@ void JumpScene::EnterScene()
 		new Goomba(v ,true);
 	}
 
+	for (const vec& v : TiledEntities::mantis) {
+		new Mantis(v);
+	}
 
 	//for (const vec& v : TiledEntities::save) {
 	//	new SaveStation(v);
@@ -169,6 +173,7 @@ void JumpScene::ExitScene()
 	FireShot::DeleteAll();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
+	Mantis::DeleteAll();
 	FireSlime::DeleteAll();
 	OneShotAnim::DeleteAll();
 	Bipedal::DeleteAll();
@@ -229,6 +234,10 @@ void JumpScene::Update(float dt)
 	}
 
 	for (Goomba* e : Goomba::GetAll()) {
+		e->Update(dt);
+	}
+
+	for (Mantis* e : Mantis::GetAll()) {
 		e->Update(dt);
 	}
 
@@ -311,6 +320,7 @@ void JumpScene::Update(float dt)
 
 	Bat::DeleteNotAlive(); //Must happen after enemydoor update
 	Goomba::DeleteNotAlive();
+	Mantis::DeleteNotAlive();
 	FireSlime::DeleteNotAlive();
 
 	for (HealthUp* g : HealthUp::GetAll()) {
@@ -432,6 +442,7 @@ void JumpScene::Draw()
 		SaveStation::GetAll(),
 		EnemyDoor::GetAll(),
 		Goomba::GetAll(),
+		Mantis::GetAll(),
 		FireSlime::GetAll(),
 		Bat::GetAll(),
 		OneShotAnim::GetAll(),

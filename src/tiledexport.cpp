@@ -416,6 +416,11 @@ const std::array<vec, 2> TiledEntities::angrybat = {
 	vec(483.0f, 668.3333f),
 };
 
+const std::array<vec, 2> TiledEntities::mantis = {
+	vec(2900.667f, 940.333f),
+	vec(3343.0f, 860.6667f),
+};
+
 
 
 const std::array<Bounds, 2> TiledAreas::lava = {

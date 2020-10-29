@@ -60,6 +60,7 @@
     <ClInclude Include="src\goomba.h" />
     <ClInclude Include="src\jumpman.h" />
     <ClInclude Include="src\lava.h" />
+    <ClInclude Include="src\mantis.h" />
     <ClInclude Include="src\missile.h" />
     <ClInclude Include="src\oneshotanim.h" />
     <ClInclude Include="src\parallax.h" />
@@ -130,6 +131,7 @@
     <ClCompile Include="src\goomba.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\lava.cpp" />
+    <ClCompile Include="src\mantis.cpp" />
     <ClCompile Include="src\missile.cpp" />
     <ClCompile Include="src\parallax.cpp" />
     <ClCompile Include="src\powerups.cpp" />

@@ -263,6 +263,7 @@ struct TiledEntities
 	static const std::array<vec, 2> goombacharger;
 	static const std::array<vec, 16> fireslime;
 	static const std::array<vec, 2> angrybat;
+	static const std::array<vec, 2> mantis;
 	
 };
 
