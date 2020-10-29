@@ -11,15 +11,15 @@ inline bool InSameScreenAsPlayer(int myScreen) {
 }
 
 template<typename B>
-bool ReceiveDamageFromBullets(const B& bounds) { // returns true if collided
+Bullet* ReceiveDamageFromBullets(const B& bounds) { // returns true if collided
 	for (Bullet* b : Bullet::GetAll()) {
 		if (!b->alive) continue;
 		if (Collide(b->bounds(), bounds)) {
 			b->explode();
-			return true;
+			return b;
 		}
 	}
-	return false;
+	return nullptr;
 }
 
 template<typename B>
