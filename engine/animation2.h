@@ -15,20 +15,38 @@ struct Animation2
 	bool complete = false;
 
 	const AnimationFrame* anim;
-	int anim_size = 0;
+	int anim_size;
 
 	template<int size>
 	constexpr Animation2(const AnimationFrame(&animation)[size])
+		: anim(animation)
+		, anim_size(size)
 	{
-		SetAnimation(animation);
+	}
+
+	constexpr void Reset()
+	{
+		timer = 0;
+		current_frame = 0;
+		loopable = true;
+		complete = false;
 	}
 
 	template<int size>
-	constexpr void SetAnimation(const AnimationFrame(&animation)[size])
-	{ 
+	constexpr void Set(const AnimationFrame(&animation)[size])
+	{
 		anim = animation;
 		anim_size = size;
-		complete = false;
+		Reset();
+	}
+
+	template<int size>
+	constexpr void Ensure(const AnimationFrame(&animation)[size])
+	{
+		if (animation != anim)
+		{
+			Set(animation);
+		}
 	}
 
 	void Update(float dt)
@@ -74,30 +92,6 @@ struct Animation2
 			{
 				complete = true;
 			}
-		}
-	}
-	constexpr void Reset()
-	{
-		timer = 0;
-		current_frame = 0;
-		loopable = true;
-		complete = false;
-	}
-
-	template<int size>
-	constexpr void Set(const AnimationFrame(&animation)[size])
-	{
-		anim = animation;
-		anim_size = size;
-		Reset();
-	}
-
-	template<int size>
-	constexpr void Ensure(const AnimationFrame(&animation)[size])
-	{
-		if (animation != anim)
-		{
-			Set(animation);
 		}
 	}
 
