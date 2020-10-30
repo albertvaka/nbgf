@@ -15,14 +15,17 @@ using namespace magic_enum::ostream_operators;
 constexpr const float gravity_acc = 600; // shared with jumpman
 
 constexpr const float speed = 25;
-constexpr const float jumpSpeed = -350;
+constexpr const float jumpSpeedY = -350;
+constexpr const float maxJumpSpeedX = 200;
 
-constexpr const float attackRadius = 200;
+constexpr const float attackRadius = 150;
 
 constexpr const vec spriteSize = vec(26, 24);
 
-const vec vel_hit(180.f, -150.f);
-const float hitTime = 0.5f;
+constexpr const vec vel_hit(180.f, -150.f);
+constexpr const float hitTime = 0.5f;
+
+constexpr const float jumpCooldown = .35f;
 
 Mantis::Mantis(const vec& pos) 
 	: CircleEntity(pos - vec(0,8), 10)
@@ -35,10 +38,11 @@ Mantis::Mantis(const vec& pos)
 }
 
 vec Mantis::GetJumpSpeedToTarget(const vec& target) {
-	// TODO: Calcular be
+	// TODO: Calcular be quan la alçada es diferent
 	vec displacement = pos - target;
-	float velX = (2*jumpSpeed * displacement.x) / (gravity_acc + 2 * displacement.y);
-	return vec(velX, jumpSpeed);
+	float speedX = (2*jumpSpeedY * displacement.x) / (gravity_acc + 2 * displacement.y);
+	Mates::Clamp(speedX, -maxJumpSpeedX, maxJumpSpeedX);
+	return vec(speedX, jumpSpeedY);
 }
 
 void Mantis::Update(float dt)
@@ -52,10 +56,10 @@ void Mantis::Update(float dt)
 	TileMap* tm = TileMap::instance();
 	float walkDir = vel.x > 0 ? 1 : -1;
 
-	veci tilePosFeet = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, newPos.y + spriteSize.y / 2);
+	veci tilePosFeet = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, newPos.y + spriteSize.y / 2 + 3);
 	const Tile tileFeet = tm->getTile(tilePosFeet);
 
-	veci tilePosAt = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, newPos.y + spriteSize.y/2 - 4);
+	veci tilePosAt = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, newPos.y + spriteSize.y/2 - 3);
 	const Tile tileAt = tm->getTile(tilePosAt);
 
 	veci tilePosBottom = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, pos.y + spriteSize.y);
@@ -69,9 +73,10 @@ void Mantis::Update(float dt)
 
 	//Debug::out << state;
 
-	if (hitTimer > 0.f) {
-		hitTimer -= dt;
-	}
+	hitTimer -= dt;
+	jumpCooldownTimer -= dt;
+
+	JumpMan* player = JumpMan::instance();
 
 	switch (state)
 	{
@@ -88,10 +93,16 @@ void Mantis::Update(float dt)
 			vel.x = -vel.x;
 		}
 
-		if (Collide(CircleBounds(pos, attackRadius), JumpMan::instance()->bounds()))
+		if (collidingWith) {
+			if ((collidingWith->pos.x > pos.x && vel.x > 0) || (collidingWith->pos.x < pos.x && vel.x < 0)) {
+				vel.x = -vel.x;
+			}
+		}
+
+		if (jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, attackRadius), player->bounds()))
 		{
 			//Debug::out << "preparing";
-			playerPosition = JumpMan::instance()->pos;
+			initialPlayerPosition = player->pos;
 			state = State::PREPARE_JUMP;
 			anim.Set(AnimLib::MANTIS_PREPARE_JUMP);
 			anim.loopable = false;
@@ -102,10 +113,12 @@ void Mantis::Update(float dt)
 		anim.Update(dt);
 		if (anim.complete) {
 			//Debug::out << "prepared";
-			vec playerDirection = JumpMan::instance()->pos - playerPosition;
+			vec predictedPlayerPos = player->pos + (player->pos - initialPlayerPosition);
+			//playerPosition.Debuggerino();
+			//predictedPlayerPos.Debuggerino();
+			//Debug::FrameByFrame = true;
+			vel = GetJumpSpeedToTarget(predictedPlayerPos);
 			state = State::JUMP;
-			vel = GetJumpSpeedToTarget(playerPosition + playerDirection);
-			
 		}
 		break;
 
@@ -117,11 +130,21 @@ void Mantis::Update(float dt)
 			vel.x = -vel.x;
 			//Debug::out << "hitwall";
 		}
+
+		// Bounce against other mantis
+		if (collidingWith) {
+			if ((collidingWith->pos.x > pos.x && vel.x > 0) || (collidingWith->pos.x < pos.x && vel.x < 0)) {
+				vel.x = -vel.x*0.5f;
+				break;
+			}
+		}
+		
 		if (tileAt.isFullSolid() || (vel.y >= 0 && tileAt.isEmpty() && tileFeet.isOneWay())) {
 			//Debug::out << "at solid";
-			vel.x = vel.x > 0? speed : -speed;
+			vel.x = player->pos.x > pos.x? speed : -speed;
 			vel.y = 0;
 			state = State::WALKING;
+			jumpCooldownTimer = jumpCooldown;
 			anim.Set(AnimLib::MANTIS_WALK);
 			pos.y = TileMap::alignToTiles(pos.y + 8) + 4;
 		}

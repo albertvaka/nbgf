@@ -41,6 +41,7 @@ inline bool Collide(const CircleEntity* a, const BoxEntity* b) {
     return Collide(a->bounds(), b->bounds());
 }
 
+// Calls callback for each pair of colliding objects
 template <typename A, typename B, typename F>
 void CollideAll(const std::vector<A*>& setA, const std::vector<B*>& setB, F callback)
 {
@@ -61,6 +62,7 @@ void CollideAll(const std::vector<A*>& setA, const std::vector<B*>& setB, F call
     }
 }
 
+// Calls callback for each pair of colliding objects
 template <typename T, typename F>
 void CollideSelf(const std::vector<T*>& setA, F callback)
 {
@@ -78,3 +80,32 @@ void CollideSelf(const std::vector<T*>& setA, F callback)
         }
     }
 }
+
+template <typename T>
+struct SelfColliding
+{
+    T* collidingWith = (T*)0xCACA0BAD; // If you see this value you forgot to call SelfCollide
+
+    static void SelfCollide()
+    {
+        const std::vector<T*>& setA = T::GetAll();
+        size_t sa = setA.size();
+        for (size_t i = 0; i < sa; ++i) {
+            setA[i]->collidingWith = nullptr;
+        }
+        for (size_t i = 0; i < sa; ++i)
+        {
+            T* a = setA[i];
+            for (size_t j = i + 1; j < sa; ++j)
+            {
+                T* b = setA[j];
+                if (Collide(a, b))
+                {
+                    a->collidingWith = b;
+                    b->collidingWith = a;
+                    break;
+                }
+            }
+        }
+    }
+};

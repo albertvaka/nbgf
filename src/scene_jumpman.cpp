@@ -237,6 +237,7 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 	}
 
+	Mantis::SelfCollide();
 	for (Mantis* e : Mantis::GetAll()) {
 		e->Update(dt);
 	}

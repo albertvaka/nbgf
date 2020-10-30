@@ -6,8 +6,9 @@
 #include "anim_lib.h"
 #include "entity.h"
 #include "oneshotanim.h"
+#include "collide.h"
 
-struct Mantis : CircleEntity, SelfRegister<Mantis>
+struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 {
 	enum class State
 	{
@@ -19,8 +20,9 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>
 	State state = State::WALKING;
 
 	float hitTimer = 0.f;
+	float jumpCooldownTimer = 0.f;
 	Animation2 anim;
-	vec playerPosition;
+	vec initialPlayerPosition;
 
 	int screen;
 
