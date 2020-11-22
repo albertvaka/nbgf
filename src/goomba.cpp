@@ -6,12 +6,15 @@
 #include "tilemap.h"
 #include "rand.h"
 #include "common_enemy.h"
+#include "common_tilemapcharacter.h"
 
 constexpr const float speed = 25;
 constexpr const float chargeSpeed = 100;
 
 constexpr const float enterChargeTime = 0.35f;
 constexpr const float exitChargeTime = 0.2f;
+
+constexpr const vec size = AnimLib::GOOMBA[0].GetSize();
 
 Goomba::Goomba(const vec& pos, bool isCharger) 
 	: CircleEntity(pos - vec(0,8), 6)
@@ -20,6 +23,12 @@ Goomba::Goomba(const vec& pos, bool isCharger)
 {
 	goingRight = Rand::OnceEach(2);
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	
+	//Get it to touch the ground in case it's incorrectly placed in the tilemap
+	//FIXME: Find a better way to do this and that works for all entities
+	for (int i = 0; i < 5 && !IsGrounded(this->pos, size, vec()); i++) {
+		this->pos.y += 0.2f;
+	}
 }
 
 Bounds Goomba::ChargeBounds() const
@@ -35,37 +44,16 @@ float Goomba::WalkSpeed() const
 	{
 		return chargeSpeed;
 	}
-
 	return speed;
-}
-
-float Goomba::WalkDirection() const
-{
-	return (goingRight ? 1 : -1);
 }
 
 void Goomba::Walk(float dt)
 {
-	float realSpeed = WalkSpeed();
+	vec vel = vec(GetVel(),0);
 
-	float walkDir = WalkDirection();
-	float new_pos_x = pos.x + dt * realSpeed * walkDir;
-
-	TileMap* tm = TileMap::instance();
-
-	GPU_Rect r = anim.GetCurrentRect();
-
-	veci tilePosBottom = TileMap::toTiles(new_pos_x + r.w / 2 * walkDir, pos.y + r.h);
-	const Tile tileBottom = tm->getTile(tilePosBottom);
-
-	veci tilePosSide = TileMap::toTiles(new_pos_x + r.w / 2 * walkDir, pos.y);
-	const Tile tileSide = tm->getTile(tilePosSide);
-
-	if ((tileBottom.isFullSolid() || tileBottom.isOneWay()) && !tileSide.isSolid() && ScreenManager::instance()->ScreenBounds(screen).Contains(new_pos_x, pos.y))
-	{
-		pos.x = new_pos_x;
-	}
-	else
+	if (IsGoingToHitAWall(pos, size, vel, dt)
+		|| IsGoingToRunOffPlatform(pos, size, vel, dt)
+		|| IsGoingToLeaveTheScreen(pos, size, vel, dt, screen))
 	{
 		goingRight = !goingRight;
 		if (state == State::CHARGING) {
@@ -73,6 +61,10 @@ void Goomba::Walk(float dt)
 			timer = 0.f;
 		}
 	}
+
+	float realSpeed = WalkSpeed();
+	float walkDir = WalkDirection();
+	pos.x += GetVel() * dt;
 }
 
 

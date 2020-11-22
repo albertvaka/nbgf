@@ -286,6 +286,18 @@
     <ClInclude Include="src\mantis.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene_debug.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\debug_walker.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common_tilemapcharacter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene_entrypoint.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -460,6 +472,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\mantis.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_debug.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\debug_walker.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -27,10 +27,6 @@ extern float mainClock;
 const float camSpeed = 2000;
 const float introDuration = 1.f;
 
-#ifdef _DEBUG
-static int currentPlacingTile = 1;
-#endif
-
 JumpScene::JumpScene()
 	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::marioTexture)
 	, fogPartSys(Assets::fogTexture)
@@ -287,31 +283,9 @@ void JumpScene::Update(float dt)
 			}
 		}
 	}
+
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
-		if (Mouse::GetScrollWheelMovement() < 0.f) {
-			currentPlacingTile -= 1;
-			if (currentPlacingTile < 1) currentPlacingTile = magic_enum::enum_count<Tile::Value>() - 1;
-		} else if (Mouse::GetScrollWheelMovement() > 0.f) {
-			currentPlacingTile += 1;
-			if (currentPlacingTile >= int(magic_enum::enum_count<Tile::Value>())) currentPlacingTile = 1;
-		}
-		if (Input::IsJustPressed(0,LEFT)) currentPlacingTile = Tile::LSLOPE_1;
-		if (Input::IsJustPressed(0,RIGHT)) currentPlacingTile = Tile::RSLOPE_1;
-		if (Input::IsJustPressed(0,UP)) currentPlacingTile = Tile::ONEWAY_1;
-		if (Input::IsJustPressed(0,DOWN)) currentPlacingTile = Tile::SOLID_1;
-		bool left = Mouse::IsPressed(Mouse::Button::Left);
-		bool right = Mouse::IsPressed(Mouse::Button::Right);
-		if (left || right) {
-			Tile what_to_set = left ? Tile::Value(currentPlacingTile) : Tile::NONE;
-			vec pos = Mouse::GetPositionInWorld();
-			veci tile = map.toTiles(pos);
-			if (what_to_set == Tile::NONE) {
-				map.setTile(tile.x, tile.y, Tile::NONE);
-			}
-			else if (map.getTile(tile) != what_to_set && map.getTile(tile) != Tile::SOLID_TRANSPARENT) {
-				destroyedTiles.toSpawn.emplace_back(tile.x, tile.y, what_to_set, -1.f);
-			}
-		}
+		map.DebugEdit();
 	}
 #endif
 
@@ -489,15 +463,6 @@ void JumpScene::Draw()
 	//Bullet::particles.DrawImGUI("BulletTrail");
 	//Missile::particles.DrawImGUI("MissileSmoke");
 
-#ifdef _DEBUG
-	if (Debug::Draw) {
-		vec pos = Camera::GetBounds().TopLeft() + vec(0, 16);
-		Bounds(pos, vec(Tile::size, Tile::size)).Draw(0,0,0);
-		Window::Draw(Assets::marioTexture, pos)
-			.withRect(Tile::tileToTextureRect[currentPlacingTile]);
-	}
-#endif
-
 	//for (const Bounds& a : TiledAreas::parallax_forest) {
 		//Assets::fogShader.Activate();
 		//Assets::fogShader.SetUniform("offset", vec(mainClock*0.2f, 0.f));
@@ -513,6 +478,12 @@ void JumpScene::Draw()
 	//for (int i = 0; i < Parallax::GetAll().size(); i++) {
 	//	Parallax::GetAll()[i]->DrawImGUI(("parallax_" + std::to_string(i)).c_str());
 	//}
+
+#ifdef _DEBUG
+	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+		map.DebugEditDraw();
+	}
+#endif
 
 	FxManager::EndDraw();
 

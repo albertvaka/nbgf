@@ -9,6 +9,7 @@
 #include "collide.h"
 #include "fireshot.h"
 #include "common_enemy.h"
+#include "common_tilemapcharacter.h"
 
 constexpr const float kSpeed = 25;
 constexpr const float kShotsPerAttack = 5;
@@ -43,19 +44,11 @@ Bounds FireSlime::AttackBounds() const
 bool FireSlime::CanMoveForward() const
 {
 	constexpr int framesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
-	constexpr const float dt = Animation2::GetTotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, framesOnAir);
-	float new_pos_x = pos.x + dt * kSpeed * direction;
+	constexpr const float bigDt = Animation2::GetTotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, framesOnAir);
 	constexpr const vec spriteSize = AnimLib::FIRESLIME_WALK[0].GetSize() * kSpriteScale;
+	vec vel = vec(kSpeed * direction, 0);
 
-	TileMap* tm = TileMap::instance();
-
-	vec posBottom = vec(new_pos_x + spriteSize.x / 2 * direction, pos.y + spriteSize.y);
-	const Tile tileBottom = tm->getTile(TileMap::toTiles(posBottom));
-
-	vec posSide = vec(new_pos_x + spriteSize.x / 2 * direction, pos.y);
-	const Tile tileSide = tm->getTile(TileMap::toTiles(posSide));
-
-	return ((tileBottom.isFullSolid() || tileBottom.isOneWay()) && !tileSide.isSolid());
+	return !IsGoingToHitAWall(pos, spriteSize, vel, bigDt) && !IsGoingToRunOffPlatform(pos, spriteSize, vel, bigDt);
 }
 
 void FireSlime::Update(float dt)

@@ -33,6 +33,8 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	void Update(float dt);
 	void Draw() const;
 
+	bool IsBouncingAgainstAnotherMantis();
+
 	void die() {
 		alive = false;
 		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION, 1.3f);

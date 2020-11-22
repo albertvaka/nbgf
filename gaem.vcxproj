@@ -53,6 +53,8 @@
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\common_bullet.h" />
     <ClInclude Include="src\common_enemy.h" />
+    <ClInclude Include="src\common_tilemapcharacter.h" />
+    <ClInclude Include="src\debug_walker.h" />
     <ClInclude Include="src\destroyedtiles.h" />
     <ClInclude Include="src\enemy_door.h" />
     <ClInclude Include="src\fireshot.h" />
@@ -68,6 +70,8 @@
     <ClInclude Include="src\powerups.h" />
     <ClInclude Include="src\rototext.h" />
     <ClInclude Include="src\savestation.h" />
+    <ClInclude Include="src\scene_debug.h" />
+    <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_hellcross.h" />
     <ClInclude Include="src\scene_jumpman.h" />
     <ClInclude Include="src\screen.h" />
@@ -122,6 +126,7 @@
     <ClCompile Include="src\bat.cpp" />
     <ClCompile Include="src\bipedal.cpp" />
     <ClCompile Include="src\bullet.cpp" />
+    <ClCompile Include="src\debug_walker.cpp" />
     <ClCompile Include="src\destroyedtiles.cpp" />
     <ClCompile Include="src\enemy_door.cpp" />
     <ClCompile Include="src\fireshot.cpp" />
@@ -136,6 +141,7 @@
     <ClCompile Include="src\parallax.cpp" />
     <ClCompile Include="src\powerups.cpp" />
     <ClCompile Include="src\savestation.cpp" />
+    <ClCompile Include="src\scene_debug.cpp" />
     <ClCompile Include="src\scene_hellcross.cpp" />
     <ClCompile Include="src\scene_jumpman.cpp" />
     <ClCompile Include="src\screen.cpp" />

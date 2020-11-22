@@ -1,4 +1,4 @@
-#include "scene_hellcross.h"
+#include "scene_debug.h"
 
 #ifdef _IMGUI
 #include "imgui.h"
@@ -8,6 +8,7 @@
 #include "bullet.h"
 #include "assets.h"
 #include "simplexnoise.h"
+#include "debug_walker.h"
 #include "bat.h"
 #include "debug.h"
 #include "camera.h"
@@ -26,13 +27,12 @@ const Tile SOLID_TILE = Tile::SOLID_SIMPLE;
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_SIMPLE;
 const Tile ONEWAY_TILE = Tile::ONEWAY_SIMPLE;
 
-const float introDuration = 1.f;
+static vec map_size = vec(100, Window::GAME_HEIGHT/Tile::size);
 
-static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::size);
+static float dummyWalkerVel = 220;
 
-HellCrossScene::HellCrossScene()
+DebugScene::DebugScene()
 	: map(map_size.x, map_size.y, Assets::marioTexture)
-	, lava(Bounds(0, map_size.y*16 - 20, map_size.x*16, 200))
 {
 	Bullet::InitParticles();
 
@@ -46,8 +46,8 @@ HellCrossScene::HellCrossScene()
 
 }
 
-void HellCrossScene::RandomizeMap() {
-	const int start_x = 0;
+void DebugScene::RandomizeMap() {
+	const int start_x = 22;
 	for (int y = 0; y < map.height(); y++) {
 		for (int x = start_x; x < map.width(); x++) {
 			Tile t = Tile::NONE;
@@ -68,9 +68,9 @@ void HellCrossScene::RandomizeMap() {
 	}
 }
 
-void HellCrossScene::EnterScene() 
+void DebugScene::EnterScene() 
 {
-	player.Reset(vec(160,160));
+	player.Reset(vec(160,200));
 
 	randomSeed = Rand::roll(0, 10000);
 	srand(randomSeed);
@@ -109,47 +109,71 @@ void HellCrossScene::EnterScene()
 	map.setTile(pos.x + 0, pos.y + 4, SOLID_TILE);
 	map.setTile(pos.x + 1, pos.y + 4, SOLID_TILE);
 	map.setTile(pos.x + 2, pos.y + 4, SOLID_TILE);
+	map.setTile(pos.x + 3, pos.y + 4, SOLID_TILE);
+	map.setTile(pos.x + 2, pos.y + 3, Tile::RSLOPE_1);
+	map.setTile(pos.x + 3, pos.y + 3, SOLID_TILE);
+	map.setTile(pos.x + 4, pos.y + 2, SOLID_TILE);
+	map.setTile(pos.x + 3, pos.y + 2, Tile::RSLOPE_1);
+	map.setTile(pos.x + 4, pos.y + 1, Tile::RSLOPE_1);
+	map.setTile(pos.x + 5, pos.y + 0, Tile::RSLOPE_1);
+	map.setTile(pos.x + 6, pos.y - 1, Tile::RSLOPE_1);
+	map.setTile(pos.x + 7, pos.y - 2, Tile::RSLOPE_1);
+	map.setTile(pos.x + 5, pos.y + 1, SOLID_TILE);
+	map.setTile(pos.x + 6, pos.y - 0, SOLID_TILE);
+	map.setTile(pos.x + 7, pos.y - 1, SOLID_TILE);
+	map.setTile(pos.x + 10, pos.y - 2, SOLID_TILE);
+	map.setTile(pos.x + 8, pos.y - 2, SOLID_TILE);
+	map.setTile(pos.x + 9, pos.y - 2, SOLID_TILE);
+	map.setTile(pos.x - 2, pos.y + 4, SOLID_TILE);
+	map.setTile(pos.x - 3, pos.y + 4, SOLID_TILE);
+	map.setTile(pos.x - 4, pos.y + 4, SOLID_TILE);
+	map.setTile(pos.x - 5, pos.y + 4, SOLID_TILE);
+	map.setTile(pos.x - 4, pos.y + 3, Tile::LSLOPE_1);
+	map.setTile(pos.x - 5, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x - 4, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x - 3, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x - 2, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x - 1, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x - 0, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x + 1, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x + 2, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x + 3, pos.y + 1, ONEWAY_TILE);
+	map.setTile(pos.x - 5, pos.y + 3, SOLID_TILE);
+	map.setTile(pos.x - 5, pos.y + 2, Tile::LSLOPE_1);
+	map.setTile(pos.x - 6, pos.y + 2, SOLID_TILE);
+	map.setTile(pos.x - 6, pos.y + 1, Tile::LSLOPE_1);
+	map.setTile(pos.x - 7, pos.y + 1, SOLID_TILE);
+	map.setTile(pos.x - 8, pos.y + 1, SOLID_TILE);
+	map.setTile(pos.x - 9, pos.y + 1, SOLID_TILE);
+	map.setTile(pos.x - 10, pos.y + 1, SOLID_TILE);
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
-	FxManager::StartIntroTransition(introDuration);
 	UpdateCamera();
 }
 
-void HellCrossScene::ExitScene()
+void DebugScene::ExitScene()
 {
 	Bullet::particles.Clear();
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
 	OneShotAnim::DeleteAll();
+	DebugWalker::DeleteAll();
 	destroyedTiles.Clear();
 }
 
-void HellCrossScene::UpdateCamera() {
+void DebugScene::UpdateCamera() {
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
 	camPos += FxManager::GetScreenshake();
 	Camera::SetCenter(camPos);
 	Camera::ClampCameraTo(map.boundsInWorld());
 }
 
-void HellCrossScene::Update(float dt)
+void DebugScene::Update(float dt)
 {
 	FxManager::Update(dt);
 
-	if (FxManager::IsIntroTransitionActive() || FxManager::IsOuttroTransitionActive()) {
-		return;
-	} else if (FxManager::IsOuttroTransitionDone()) {
-		FxManager::ResetOuttroTransitionDone();
-		// Restart scene
-		ExitScene();
-		EnterScene();
-		return;
-	}
-
 	player.Update(dt);
-	if (!player.alive) {
-		FxManager::StartOuttroTransition(introDuration);
-	}
 
 	UpdateCamera();
 
@@ -157,6 +181,10 @@ void HellCrossScene::Update(float dt)
 		e->Update(dt);
 	}
 	Bullet::DeleteNotAlive();
+
+	for (DebugWalker* e : DebugWalker::GetAll()) {
+		e->Update(dt);
+	}
 
 	for (Bat* e : Bat::GetAll()) {
 		e->Update(dt);
@@ -170,14 +198,14 @@ void HellCrossScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		FxManager::StartOuttroTransition(introDuration); // Timer to reset scene
+		ExitScene();
+		EnterScene();
 		return;
 	}
 
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 		map.DebugEdit();
 	}
-
 #endif
 
 	Bat::DeleteNotAlive();
@@ -186,22 +214,13 @@ void HellCrossScene::Update(float dt)
 
 	destroyedTiles.Update(dt);
 
-	for (Lava* l : Lava::GetAll()) {
-		l->Update(dt);
-	}
 }
 
-void HellCrossScene::Draw()
+void DebugScene::Draw()
 {
 	FxManager::BeginDraw();
 
-	Window::Clear(31, 36, 50);
-
-	if (Debug::Draw) {
-		Simplex::DebugDraw(Tile::size, [this](int x, int y) {
-			return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
-		});
-	}
+	Window::Clear(90, 180, 50);
 
 	DrawAllInOrder(
 		&map,
@@ -210,24 +229,17 @@ void HellCrossScene::Draw()
 		OneShotAnim::GetAll(),
 		&Bullet::particles,
 		Bullet::GetAll(),
-		&player,
-		Lava::GetAll()
+		DebugWalker::GetAll(),
+		&player
 	);
-
-	//Bullet::particles.DrawImGUI("BulletTrail");
-
-#ifdef _DEBUG
-	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
-		map.DebugEditDraw();
-	}
-#endif
-
-	FxManager::EndDraw();
 
 #ifdef _IMGUI
 	{
-		ImGui::Begin("hellcross scene");
-		ImGui::InputFloat("y", &player.pos.y, 0.5f, 1.f, 2, ImGuiInputTextFlags_CharsDecimal);
+		ImGui::Begin("debug scene");
+		ImGui::SliderFloat("Walker Vel", &dummyWalkerVel, -500.f, 500.f);
+		if (ImGui::Button("Create Walker")) {
+			new DebugWalker(player.pos - vec(0,player.size.y/2), dummyWalkerVel);
+		}
 		vec m = Mouse::GetPositionInWorld();
 		veci t = map.toTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
@@ -235,6 +247,16 @@ void HellCrossScene::Draw()
 		ImGui::End();
 	}
 #endif
+
+#ifdef _DEBUG
+	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+		map.DebugEditDraw();
+	}
+#endif
+	
+	FxManager::EndDraw();
+
+	map.boundsInWorld().Draw(0,255,0);
 
 	//player.polvito.DrawImGUI("Polvito");
 }

@@ -141,8 +141,18 @@ struct TileMap : SingleInstance<TileMap>
 	int height() const { return sizes.y; }
 	const veci& size() const { return sizes; }
 
+#ifdef _DEBUG
+	void DebugEdit();
+	void DebugEditDraw();
+#endif
+
 private:
 	veci sizes;
 	Tile* tiles;
 	GPU_Image* tileset;
+
+#ifdef _DEBUG
+	int debugEditCurrentTile = Tile::NONE;
+#endif
+
 };

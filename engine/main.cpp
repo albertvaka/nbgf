@@ -8,8 +8,7 @@
 #include "camera.h"
 
 #include "../src/assets.h"
-#include "../src/scene_jumpman.h"
-#include "../src/scene_hellcross.h"
+#include "../src/scene_entrypoint.h"
 
 #ifdef _IMGUI
 #include "imgui.h"
@@ -110,8 +109,7 @@ void init() {
 
 	last_ticks = SDL_GetTicks();
 
-	//currentScene = new HellCrossScene();
-	currentScene = new JumpScene();
+	currentScene = new EntryPointScene();
 	SceneManager::SetScene(currentScene);
 	currentScene->EnterScene();
 }

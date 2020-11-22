@@ -32,8 +32,9 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 
 	Bounds ChargeBounds() const;
 
-	float WalkDirection() const;
 	float WalkSpeed() const;
+	float WalkDirection() const { return (goingRight ? 1 : -1); }
+	float GetVel() { return WalkSpeed() * WalkDirection(); }
 
 	void Walk(float dt);
 

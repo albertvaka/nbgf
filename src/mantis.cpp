@@ -7,6 +7,7 @@
 #include "shader.h"
 #include "tilemap.h"
 #include "rand.h"
+#include "common_tilemapcharacter.h"
 #include "common_enemy.h"
 
 #include "magic_enum.h"
@@ -20,7 +21,7 @@ constexpr const float maxJumpSpeedX = 200;
 
 constexpr const float attackRadius = 150;
 
-constexpr const vec spriteSize = vec(26, 24);
+constexpr const vec spriteSize = vec(24, 24);
 
 constexpr const vec vel_hit(180.f, -150.f);
 constexpr const float hitTime = 0.5f;
@@ -45,31 +46,21 @@ vec Mantis::GetJumpSpeedToTarget(const vec& target) {
 	return vec(speedX, jumpSpeedY);
 }
 
+bool Mantis::IsBouncingAgainstAnotherMantis() {
+	if (!collidingWith) {
+		return false;
+	}
+	return (collidingWith->pos.x > pos.x && vel.x > 0) || (collidingWith->pos.x < pos.x&& vel.x < 0);
+}
+
 void Mantis::Update(float dt)
 {
 	if (!InSameScreenAsPlayer(screen)) {
 		return;
 	}
 
-	vec newPos = pos + vel*dt;
-
 	TileMap* tm = TileMap::instance();
 	float walkDir = vel.x > 0 ? 1 : -1;
-
-	veci tilePosFeet = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, newPos.y + spriteSize.y / 2 + 3);
-	const Tile tileFeet = tm->getTile(tilePosFeet);
-
-	veci tilePosAt = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, newPos.y + spriteSize.y/2 - 3);
-	const Tile tileAt = tm->getTile(tilePosAt);
-
-	veci tilePosBottom = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, pos.y + spriteSize.y);
-	const Tile tileBottom = tm->getTile(tilePosBottom);
-
-	veci tilePosAbove = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, newPos.y - spriteSize.y/2);
-	const Tile tileAbove = tm->getTile(tilePosAbove);
-
-	veci tilePosSide = TileMap::toTiles(newPos.x + spriteSize.x / 2 * walkDir, newPos.y);
-	const Tile tileSide = tm->getTile(tilePosSide);
 
 	//Debug::out << state;
 
@@ -80,24 +71,19 @@ void Mantis::Update(float dt)
 
 	switch (state)
 	{
-	case State::WALKING:
+	case State::WALKING: 
+	{
 		anim.Update(dt);
 
-		if ((tileBottom.isFullSolid() || tileBottom.isOneWay()) && !tileSide.isSolid() && ScreenManager::instance()->ScreenBounds(screen).Contains(newPos))
+		if (IsGoingToHitAWall(pos, spriteSize, vel, dt)
+			|| IsGoingToRunOffPlatform(pos, spriteSize, vel, dt)
+			|| IsGoingToLeaveTheScreen(pos, spriteSize, vel, dt, screen)
+			|| IsBouncingAgainstAnotherMantis())
 		{
-			pos = newPos;
-		}
-		else
-		{
-			//Debug::out << "hitwall";
 			vel.x = -vel.x;
 		}
-
-		if (collidingWith) {
-			if ((collidingWith->pos.x > pos.x && vel.x > 0) || (collidingWith->pos.x < pos.x && vel.x < 0)) {
-				vel.x = -vel.x;
-			}
-		}
+		auto ret = MoveAgainstTileMap(pos, spriteSize, vel, dt);
+		pos = ret.pos;
 
 		if (jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, attackRadius), player->bounds()))
 		{
@@ -107,9 +93,10 @@ void Mantis::Update(float dt)
 			anim.Set(AnimLib::MANTIS_PREPARE_JUMP);
 			anim.loopable = false;
 		}
-		break;
-
+	}
+	break;
 	case State::PREPARE_JUMP:
+	{
 		anim.Update(dt);
 		if (anim.complete) {
 			//Debug::out << "prepared";
@@ -120,38 +107,42 @@ void Mantis::Update(float dt)
 			vel = GetJumpSpeedToTarget(predictedPlayerPos);
 			state = State::JUMP;
 		}
-		break;
-
+	}
+	break;
 	case State::JUMP:
+	{
 		vel.y += gravity_acc * dt;
-		if (tileAbove.isFullSolid() && vel.y < 0) {
-			vel.y = 0;
-		} else if (tileSide.isSolid()) {
-			vel.x = -vel.x;
-			//Debug::out << "hitwall";
-		}
+		
+		// Disabled temporarily since the screen where I' testing the mantis has a screen bounds smaller than the actual 
+		// space in the tilemap and makes it go crazy when it reaches that area by jumping. This code is meant to prevent
+		// the mantis from leaving to the sides of the sceen, but not through the top/bottom.
+		//if (IsGoingToLeaveTheScreen(pos, spriteSize, vel, dt, screen))
+		//{
+		//	vel.x = -vel.x;
+		//}
 
 		// Bounce against other mantis
-		if (collidingWith) {
-			if ((collidingWith->pos.x > pos.x && vel.x > 0) || (collidingWith->pos.x < pos.x && vel.x < 0)) {
-				vel.x = -vel.x*0.5f;
-				break;
-			}
+		if (IsBouncingAgainstAnotherMantis()) {
+			vel.x = -vel.x * 0.5f;
 		}
-		
-		if (tileAt.isFullSolid() || (vel.y >= 0 && tileAt.isEmpty() && tileFeet.isOneWay())) {
-			//Debug::out << "at solid";
-			vel.x = player->pos.x > pos.x? speed : -speed;
+
+		auto ret = MoveAgainstTileMap(pos, spriteSize, vel, dt);
+		pos = ret.pos;
+
+		if (ret.groundCollision != Tile::NONE) {
+			vel.x = player->pos.x > pos.x ? speed : -speed;
 			vel.y = 0;
 			state = State::WALKING;
 			jumpCooldownTimer = jumpCooldown;
 			anim.Set(AnimLib::MANTIS_WALK);
-			pos.y = TileMap::alignToTiles(pos.y + 8) + 4;
+		} else if (ret.ceilingCollision != Tile::NONE) {
+			vel.y = 0;
+		} else if (ret.leftWallCollision != Tile::NONE || ret.rightWallCollision != Tile::NONE) {
+			vel.x = -vel.x;
 		}
-		else {
-			pos = newPos;
-		}
-		break;
+
+	}
+	break;
 	}
 
 	Bullet* b = ReceiveDamageFromBullets(bounds());
@@ -182,6 +173,8 @@ void Mantis::Draw() const
 	GPU_Rect rect = (state == State::JUMP)? AnimLib::MANTIS_AIR : anim.GetCurrentRect();
 
 	vec drawPos = pos;
+
+	pos.Debuggerino();
 
 	if (hitTimer > 0.f) {
 		Assets::tintShader.Activate();

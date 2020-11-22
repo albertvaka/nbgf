@@ -11,7 +11,7 @@
 struct JumpMan : Entity, SingleInstance<JumpMan>
 {
     JumpMan();
-    void Update(float GameTime);
+    void Update(float dt);
     void Draw() const;
     void Reset(vec position) {
         pos = position;

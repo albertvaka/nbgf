@@ -1,11 +1,11 @@
 #include "jumpman.h"
-//Based on the work of: Jordi Santiago
 
 #include "input.h"
 #include "bullet.h"
 #include "mates.h"
 #include "assets.h"
 #include "debug.h"
+#include "common_tilemapcharacter.h"
 #include "skilltree.h"
 
 extern float mainClock;
@@ -47,27 +47,6 @@ const vec standing_size = vec(16, 32);
 const vec crouched_size = vec(16, 22);
 const vec center = vec(8, 16);
 
-
-inline vec posOnRightSlope(vec pos) {
-	vec rounded = (TileMap::toTiles(pos) * Tile::size);
-	vec diff = pos - rounded;
-	float targetY = (Tile::size - diff.x);
-	if (targetY < diff.y) {
-		pos.y = rounded.y + targetY;
-	}
-	return pos;
-}
-
-inline vec posOnLeftSlope(vec pos) {
-	vec rounded = (TileMap::toTiles(pos) * Tile::size);
-	vec diff = pos - rounded;
-	float targetY = diff.x;
-	if (targetY < diff.y) {
-		pos.y = rounded.y + targetY;
-	}
-	return pos;
-}
-
 JumpMan::JumpMan()
 	: polvito(Assets::hospitalTexture)
 	, animation(MARIO_IDLE)
@@ -82,35 +61,7 @@ void JumpMan::Update(float dt)
 
 	TileMap* map = TileMap::instance();
 
-	const float marginGrounded = 1.5f; //in pixels
-	grounded = false;
-	Tile t;
-	vec leftFoot(pos.x - center.x + 1.f, pos.y + marginGrounded);
-	vec rightFoot(pos.x + center.x - 1.f, pos.y + marginGrounded);
-	vec middleFoot(pos.x, pos.y + marginGrounded);
-	t = map->getTile(TileMap::toTiles(leftFoot));
-	if (t.isFullSolid()) {
-		grounded = true;
-		goto grounded_exit;
-	} 
-	if (t.isOneWay() && TileMap::alignToTiles(leftFoot.y) + 1.f > pos.y) {
-		grounded = true;
-		goto grounded_exit;
-	}
-	t = map->getTile(TileMap::toTiles(rightFoot));
-	if (t.isFullSolid()) {
-		grounded = true;
-		goto grounded_exit;
-	}
-	if (t.isOneWay() && TileMap::alignToTiles(rightFoot.y) + 1.f > pos.y) {
-		grounded = true;
-		goto grounded_exit;
-	}
-	if (map->isPosOnSlope(middleFoot)) {
-		grounded = true;
-		goto grounded_exit;
-	}
-grounded_exit:
+	grounded = IsGrounded(pos - vec(0,size.y/2), size);
 
 	crouched = ((crouched || grounded) && Input::IsPressed(0,GameKeys::DOWN)) || (crouched && !grounded);
 	if (crouched) {
@@ -240,166 +191,61 @@ grounded_exit:
 	if (vel.y > vel_max.y) vel.y = vel_max.y;
 	if (vel.y < -vel_max.y) vel.y = -vel_max.y;
 
-	vec appliedVel = vel;
-	Tile tileAtMyFeet = map->getTile(TileMap::toTiles(pos.x, pos.y - 0.1f));
-	if (tileAtMyFeet.isSlope()) {
-		// On a slope, we will override the Y displacement with the X displacement, either upwards or downwards.
-		// Pythagoras wouldn't approve that we move at the same velocity on a flat X axis than when move on both X and Y.
-		// The mathematically accurate value would be /2 but we don't want to slow the player that much either.
-		appliedVel.x = sqrt((vel.x * vel.x) / 1.8f);
-		if (vel.x < 0) appliedVel.x = -appliedVel.x;
-	}
-	vec posf = pos + appliedVel * dt;
+	
+	//Do move
+	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
+	pos = moved.pos + vec(0, size.y/2);
 
-	//Debug::out << "----------";
-	//Debug::out << abs(pos.x - posf.x) / dt;
-	//Debug::out << "slope=" << tileAtMyFeet.isSlope();
-
-	vec direction = posf - pos;
-	const float E = 1;
-	vec centerFromRight = size - center;
-
-	//Skip horizontal collisions when on a slope
-	if (tileAtMyFeet.isSlope()) {
-		goto horz_exit;
-	}
-
-	if (direction.x < 0) //Moving left
-	{
-
-		int xo = map->toTiles(pos.x - center.x);
-		int xn = map->toTiles(posf.x - center.x);
-		int yTop = map->toTiles(pos.y - size.y + E);
-		int yBottom = map->toTiles(pos.y - E);
-		for (int x = xo; x >= xn; x--)
-		{
-			for (int y = yTop; y <= yBottom; y++)
-			{
-				Tile t = map->getTile(x, y);
-				if (t.isFullSolid())
-				{
-					posf.x = map->Right(x) + center.x;
-					if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
-						onWall = ONWALL_LEFT;
-						vel.x = -500.f * dt; //stay against wall
-					}
-					else {
-						vel.x = 0;
-					}
-					lookingLeft = true;
-					goto horz_exit;
-				}
-			}
+	if (moved.leftWallCollision != Tile::NONE) {
+		if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+			onWall = ONWALL_LEFT;
+			vel.x = -500.f * dt; //stay against wall
 		}
-		//No collision left
-	}
-	else if (direction.x > 0) //Moving right
-	{
-		int xo = map->toTiles(pos.x + centerFromRight.x);
-		int xn = map->toTiles(posf.x + centerFromRight.x);
-		int yTop = map->toTiles(pos.y - size.y + E);
-		int yBottom = map->toTiles(pos.y - E);
-		for (int x = xo; x <= xn; x++)
-		{
-			for (int y = yTop; y <= yBottom; y++)
-			{
-				Tile t = map->getTile(x, y);
-				if (t.isFullSolid())
-				{
-					posf.x = map->Left(x) - centerFromRight.x;
-					if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
-						onWall = ONWALL_RIGHT;
-						vel.x = 500.f * dt; //stay against wall
-					}
-					else {
-						vel.x = 0;
-					}
-					lookingLeft = false;
-					goto horz_exit;
-				}
-			}
+		else {
+			vel.x = 0;
 		}
-		//No collision right
+		lookingLeft = true;
 	}
-	onWall = ONWALL_NO;
-
-horz_exit:
-	pos.x = posf.x;
-
-	if (direction.y < 0) //Moving up
-	{
-		int yo = map->toTiles(pos.y - size.y); // top edge
-		int yn = map->toTiles(posf.y - size.y);
-		int xl = map->toTiles(pos.x - center.x + E);
-		int xr = map->toTiles(pos.x + centerFromRight.x - E);
-		for (int y = yo; y >= yn; y--)
-		{
-			for (int x = xl; x <= xr; x++)
-			{
-				Tile t = map->getTile(x, y);
-				if (t.isSolid()) //slopes should be collisionable when going up
-				{
-					posf.y = map->Bottom(y) + size.y;
-					vel.y = 0;
-					jumpTimeLeft = 0;
-					goto vert_exit;
-				}
-			}
+	else if (moved.rightWallCollision != Tile::NONE) {
+		if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+			onWall = ONWALL_RIGHT;
+			vel.x = 500.f * dt; //stay against wall
 		}
-		//No collision up
+		else {
+			vel.x = 0;
+		}
+		lookingLeft = false;
 	}
-	else if (direction.y > 0) //Moving down
-	{
-		float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
+	else {
+		onWall = ONWALL_NO;
+	}
 
-		//Debug::out << "getTile from=" << TileMap::offsetInTile(posf.x, pos.y - max_movement_into_slope) << ": " << map->getTile(TileMap::toTiles(vec(posf.x, pos.y - max_movement_into_slope)));
-		//Debug::out << "getTile to=" << TileMap::offsetInTile(posf.x, pos.y + max_movement_into_slope) << ": " << map->getTile(TileMap::toTiles(vec(posf.x, pos.y + max_movement_into_slope)));
-
-		for (int y = floor(pos.y - max_movement_into_slope); y < ceil(pos.y + max_movement_into_slope); y++) {
-			if (map->isPosOnSlope(posf.x, y-0.0001f)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
-				//Debug::out << "set y on slope";
-				posf.y = y;
-				if (vel.y > 50) DoPolvitoLand();
+	if (moved.ceilingCollision != Tile::NONE) {
+		vel.y = 0;
+		jumpTimeLeft = 0;
+	}
+	if (moved.groundCollision != Tile::NONE) {
+		if (moved.groundCollision.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
+			pos.y += 3.f;
+			vel.y = 0;
+			crouched = false;
+			grounded = false;
+		}
+		else {
+			if (vel.y > 50) DoPolvitoLand();
+			if (moved.groundCollision.isSlope()) {
 				vel.y = 30.f; //this helps you get grounded as soon as the slope ends
-				onWall = ONWALL_NO;
-				grounded = true;
-				goto vert_exit;
 			}
-		}
-
-		int yo = map->toTiles(pos.y); // bottom edge
-		int yn = map->toTiles(posf.y);
-		int xl = map->toTiles(pos.x - center.x + E);
-		int xr = map->toTiles(pos.x + centerFromRight.x - E);
-		for (int y = yo; y <= yn; y++)
-		{
-			for (int x = xl; x <= xr; x++)
-			{
-				Tile t = map->getTile(x, y);
-				if ((t.isFullSolid()) || (t.isOneWay() && pos.y-1.f < (y*Tile::size)))
-				{
-					if (t.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
-						posf.y = map->Top(y)+3.f;
-						vel.y = 0;
-						crouched = false;
-						grounded = false;
-						goto vert_exit;
-					} else {
-						//Debug::out << "terra";
-						posf.y = map->Top(y);
-						if (vel.y > 50) DoPolvitoLand();
-						vel.y = 0;
-						onWall = ONWALL_NO;
-						grounded = true;
-						goto vert_exit;
-					}
-				}
+			else {
+				vel.y = 0;
 			}
+			onWall = ONWALL_NO;
+			grounded = true;
 		}
-		//No collision down
 	}
-vert_exit:
-	pos = posf;
+
+
+
 
 	animation.Update((int)(dt * 1000));
 
