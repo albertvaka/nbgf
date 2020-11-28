@@ -29,6 +29,27 @@
     <Filter Include="src">
       <UniqueIdentifier>{4ac15e07-3b9f-47b2-ae09-134038d673c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\scenes">
+      <UniqueIdentifier>{5ac842cf-8e68-4d0f-945e-495c08af9349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\entities">
+      <UniqueIdentifier>{06b18a2c-ec53-482c-a965-c5afa3bcbd23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\entities\enemies">
+      <UniqueIdentifier>{5a3222ce-6390-4169-b7ec-1fe0a4957765}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\entities\bullets">
+      <UniqueIdentifier>{21828536-1fef-417a-9d2c-f0d0cfe4187e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\environment">
+      <UniqueIdentifier>{15866b45-8d39-495f-92cb-7109ecdda311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gui">
+      <UniqueIdentifier>{81a97000-3367-451e-965f-6a12233598f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\generated">
+      <UniqueIdentifier>{8c51efac-7be1-4746-af80-1e0855902e22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\glew\glew.h">
@@ -154,70 +175,13 @@
     <ClInclude Include="engine\window.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\bat.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bullet.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\destroyedtiles.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enemy_door.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\jumpman.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lava.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\parallax.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\popupText.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\powerups.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\savestation.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene_jumpman.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\screen.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\simplexnoise.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\skilltree.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\spawningtile.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\steering_behavior.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\steering_behavior_applier.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\steering_entity.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tiledexport.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\anim_data.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\assets.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rototext.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="engine\asset_load.h">
@@ -235,26 +199,11 @@
     <ClInclude Include="engine\rand.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_hellcross.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\texturepackerexport.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\anim_lib.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="engine\animation2.h">
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\anim_frame.h">
       <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bipedal.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\missile.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="engine\angles.h">
       <Filter>engine</Filter>
@@ -262,41 +211,107 @@
     <ClInclude Include="src\fxmanager.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\goomba.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\base_enemy.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\common_enemy.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\oneshotanim.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\fireslime.h">
-      <Filter>src</Filter>
+      <Filter>src\entities\enemies</Filter>
     </ClInclude>
-    <ClInclude Include="src\fireshot.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\bipedal.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common_enemy.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\goomba.h">
+      <Filter>src\entities\enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\common_bullet.h">
-      <Filter>src</Filter>
+      <Filter>src\entities\bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bullet.h">
+      <Filter>src\entities\bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fireshot.h">
+      <Filter>src\entities\bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\missile.h">
+      <Filter>src\entities\bullets</Filter>
     </ClInclude>
     <ClInclude Include="src\mantis.h">
-      <Filter>src</Filter>
+      <Filter>src\entities\enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_debug.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\debug_walker.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\common_tilemapcharacter.h">
-      <Filter>src</Filter>
+      <Filter>src\scenes</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_entrypoint.h">
-      <Filter>src</Filter>
+      <Filter>src\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene_hellcross.h">
+      <Filter>src\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene_jumpman.h">
+      <Filter>src\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bat.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy_door.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common_tilemapcharacter.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\debug_walker.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lava.h">
+      <Filter>src\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\parallax.h">
+      <Filter>src\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\powerups.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\destroyedtiles.h">
+      <Filter>src\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\savestation.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\spawningtile.h">
+      <Filter>src\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\jumpman.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_behavior.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_behavior_applier.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_entity.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\skilltree.h">
+      <Filter>src\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rototext.h">
+      <Filter>src\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\anim_data.h">
+      <Filter>src\generated</Filter>
+    </ClInclude>
+    <ClInclude Include="src\anim_lib.h">
+      <Filter>src\generated</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tiledexport.h">
+      <Filter>src\generated</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texturepackerexport.h">
+      <Filter>src\generated</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,55 +405,13 @@
     <ClCompile Include="engine\window.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\destroyedtiles.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enemy_door.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\jumpman.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lava.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\parallax.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\powerups.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\savestation.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene_jumpman.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\screen.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\simplexnoise.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\skilltree.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\spawningtile.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\steering_behavior.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tiledexport.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\anim_data.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\assets.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bat.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="engine\camera.cpp">
@@ -447,38 +420,80 @@
     <ClCompile Include="engine\vec.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_hellcross.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bipedal.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\fxmanager.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\fireslime.cpp">
+      <Filter>src\entities\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bipedal.cpp">
+      <Filter>src\entities\enemies</Filter>
+    </ClCompile>
     <ClCompile Include="src\goomba.cpp">
-      <Filter>src</Filter>
+      <Filter>src\entities\enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\bullet.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\missile.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\fireslime.cpp">
-      <Filter>src</Filter>
+      <Filter>src\entities\bullets</Filter>
     </ClCompile>
     <ClCompile Include="src\fireshot.cpp">
-      <Filter>src</Filter>
+      <Filter>src\entities\bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\missile.cpp">
+      <Filter>src\entities\bullets</Filter>
     </ClCompile>
     <ClCompile Include="src\mantis.cpp">
-      <Filter>src</Filter>
+      <Filter>src\entities\enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\scene_debug.cpp">
-      <Filter>src</Filter>
+      <Filter>src\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_hellcross.cpp">
+      <Filter>src\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_jumpman.cpp">
+      <Filter>src\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bat.cpp">
+      <Filter>src\entities\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy_door.cpp">
+      <Filter>src\entities</Filter>
     </ClCompile>
     <ClCompile Include="src\debug_walker.cpp">
-      <Filter>src</Filter>
+      <Filter>src\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lava.cpp">
+      <Filter>src\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="src\parallax.cpp">
+      <Filter>src\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="src\powerups.cpp">
+      <Filter>src\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\destroyedtiles.cpp">
+      <Filter>src\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="src\savestation.cpp">
+      <Filter>src\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spawningtile.cpp">
+      <Filter>src\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jumpman.cpp">
+      <Filter>src\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\steering_behavior.cpp">
+      <Filter>src\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skilltree.cpp">
+      <Filter>src\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\anim_data.cpp">
+      <Filter>src\generated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tiledexport.cpp">
+      <Filter>src\generated</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
