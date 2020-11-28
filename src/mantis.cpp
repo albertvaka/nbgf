@@ -10,9 +10,6 @@
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
 
-#include "magic_enum.h"
-using namespace magic_enum::ostream_operators;
-
 constexpr const float gravity_acc = 600; // shared with jumpman
 
 constexpr const float speed = 25;
@@ -21,7 +18,10 @@ constexpr const float maxJumpSpeedX = 200;
 
 constexpr const float attackRadius = 150;
 
+// Square used to collide against the tilemap
 constexpr const vec spriteSize = vec(24, 24);
+// Radius used to collide against the player (a bit smaller)
+constexpr const float spriteRadius = 10.f;
 
 constexpr const vec vel_hit(180.f, -150.f);
 constexpr const float hitTime = 0.5f;
@@ -29,7 +29,7 @@ constexpr const float hitTime = 0.5f;
 constexpr const float jumpCooldown = .35f;
 
 Mantis::Mantis(const vec& pos) 
-	: CircleEntity(pos - vec(0,8), 10)
+	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, state(State::JUMP)
 	, anim(AnimLib::MANTIS_WALK)
 {
@@ -59,10 +59,9 @@ void Mantis::Update(float dt)
 		return;
 	}
 
-	TileMap* tm = TileMap::instance();
 	float walkDir = vel.x > 0 ? 1 : -1;
 
-	//Debug::out << state;
+	//Debug::out << ENUM_NAME_OF(state);
 
 	hitTimer -= dt;
 	jumpCooldownTimer -= dt;
@@ -170,18 +169,14 @@ void Mantis::Update(float dt)
 void Mantis::Draw() const
 {
 	pos.Debuggerino();
-	GPU_Rect rect = (state == State::JUMP)? AnimLib::MANTIS_AIR : anim.GetCurrentRect();
-
-	vec drawPos = pos;
-
-	pos.Debuggerino();
 
 	if (hitTimer > 0.f) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
-	Window::Draw(Assets::marioTexture, drawPos)
+	GPU_Rect rect = (state == State::JUMP) ? AnimLib::MANTIS_AIR : anim.GetCurrentRect();
+	Window::Draw(Assets::marioTexture, pos)
 		.withRect(rect)
 		.withScale(vel.x> 0? -1: 1, 1)
 		.withOrigin(rect.w / 2, rect.h / 2);
@@ -190,6 +185,7 @@ void Mantis::Draw() const
 
 	if (Debug::Draw) {
 		bounds().Draw();
+		Bounds::fromCenter(pos, spriteSize).Draw();
 		CircleBounds(pos, attackRadius).Draw();
 	}
 
