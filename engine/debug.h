@@ -3,6 +3,9 @@
 #include <iosfwd>
 #include <utility>
 
+// This is a define so we don't have to include magic_enum here, which is potentially slow to compile
+#define ENUM_NAME_OF(e) magic_enum::enum_name(e)
+
 namespace Debug {
 #ifdef _DEBUG
     inline bool Draw = false;
