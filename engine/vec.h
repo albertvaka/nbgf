@@ -23,7 +23,8 @@ struct vec
 {
 	float x, y;
 	explicit constexpr vec() : x(0.f), y(0.f) {}
-	constexpr vec(float a, float b) : x(a), y(b) {}
+	explicit constexpr vec(float xy) : x(xy), y(xy) {}
+	constexpr vec(float x, float y) : x(x), y(y) {}
 	constexpr vec(const veci& v) : x(v.x), y(v.y) {}
 
 	static const vec Zero;
