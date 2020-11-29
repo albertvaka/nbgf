@@ -96,6 +96,11 @@ namespace Mates
 		return (from)+(to - from) * t;
 	}
 
+
+	[[nodiscard]] inline float SmoothDamp(float current, float target, float dampening) {
+		return ((current * (dampening - 1)) + target) / dampening; //weighted average formula
+	}
+
 	//rounds a float up or down depending on its value
 	[[nodiscard]] inline int Rounded(float val)
 	{
