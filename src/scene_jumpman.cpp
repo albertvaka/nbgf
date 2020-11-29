@@ -20,6 +20,7 @@
 #include "collide.h"
 #include "rototext.h"
 #include "goomba.h"
+#include "flyingalien.h"
 #include "drawall.h"
 
 extern float mainClock;
@@ -98,6 +99,10 @@ void JumpScene::EnterScene()
 		new Mantis(v);
 	}
 
+	for (const vec& v : TiledEntities::flyingalien) {
+		new FlyingAlien(v);
+	}
+
 	//for (const vec& v : TiledEntities::save) {
 	//	new SaveStation(v);
 	//}
@@ -139,7 +144,6 @@ void JumpScene::EnterScene()
 	}
 
 	screenManager.UpdateCurrentScreen(player.pos);
-
 	Camera::SetCenter(GetCameraTargetPos());
 
 	FxManager::StartIntroTransition(introDuration);
@@ -170,6 +174,7 @@ void JumpScene::ExitScene()
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
 	Mantis::DeleteAll();
+	FlyingAlien::DeleteAll();
 	FireSlime::DeleteAll();
 	OneShotAnim::DeleteAll();
 	Bipedal::DeleteAll();
@@ -238,6 +243,10 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 	}
 
+	for (FlyingAlien* e : FlyingAlien::GetAll()) {
+		e->Update(dt);
+	}
+
 	for (FireSlime* e : FireSlime::GetAll()) {
 		e->Update(dt);
 	}
@@ -250,7 +259,7 @@ void JumpScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode killall = SDL_SCANCODE_F11;
 	const SDL_Scancode unlockbasics = SDL_SCANCODE_F8;
-	const SDL_Scancode gotoplaces = SDL_SCANCODE_F9;
+	const SDL_Scancode teleport = SDL_SCANCODE_F9;
 	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
@@ -258,12 +267,10 @@ void JumpScene::Update(float dt)
 		FxManager::StartOuttroTransition(introDuration);
 		return;
 	}
-	if (Keyboard::IsKeyJustPressed(gotoplaces)) {
-		player.pos = vec(1748, 1084);
-		for (Bipedal* e : Bipedal::GetAll()) {
-			e->state = Bipedal::State::FIRING;
-			e->timer = 0;
-		}
+	if (Keyboard::IsKeyJustPressed(teleport)) {
+		player.pos = TiledEntities::debug_teleport;
+		screenManager.UpdateCurrentScreen(player.pos);
+		Camera::SetCenter(GetCameraTargetPos());
 	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
 		skillTree.Enable(Skill::GUN);
@@ -295,6 +302,7 @@ void JumpScene::Update(float dt)
 
 	Bat::DeleteNotAlive(); //Must happen after enemydoor update
 	Goomba::DeleteNotAlive();
+	FlyingAlien::DeleteNotAlive();
 	Mantis::DeleteNotAlive();
 	FireSlime::DeleteNotAlive();
 
@@ -418,6 +426,7 @@ void JumpScene::Draw()
 		EnemyDoor::GetAll(),
 		Goomba::GetAll(),
 		Mantis::GetAll(),
+		FlyingAlien::GetAll(),
 		FireSlime::GetAll(),
 		Bat::GetAll(),
 		OneShotAnim::GetAll(),

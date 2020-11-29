@@ -14,6 +14,9 @@ constexpr const float chargeSpeed = 100;
 constexpr const float enterChargeTime = 0.35f;
 constexpr const float exitChargeTime = 0.2f;
 
+// Area in front of it that if intersects with the player will trigger a charge towards them
+constexpr const vec playerNearbyArea = vec(Tile::size * 11, Tile::size * 2);
+
 constexpr const vec size = AnimLib::GOOMBA[0].GetSize();
 
 Goomba::Goomba(const vec& pos, bool isCharger) 
@@ -33,7 +36,7 @@ Goomba::Goomba(const vec& pos, bool isCharger)
 
 Bounds Goomba::ChargeBounds() const
 {
-	Bounds chargeBounds = Bounds::fromCenter(pos, vec(Tile::size * 11, Tile::size * 2));
+	Bounds chargeBounds = Bounds::fromCenter(pos, playerNearbyArea);
 	chargeBounds.left += WalkDirection() * chargeBounds.width / 2;
 	return chargeBounds;
 }

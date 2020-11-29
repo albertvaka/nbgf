@@ -313,6 +313,9 @@
     <ClInclude Include="src\texturepackerexport.h">
       <Filter>src\generated</Filter>
     </ClInclude>
+    <ClInclude Include="src\flyingalien.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -494,6 +497,9 @@
     </ClCompile>
     <ClCompile Include="src\tiledexport.cpp">
       <Filter>src\generated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\flyingalien.cpp">
+      <Filter>src\entities\enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

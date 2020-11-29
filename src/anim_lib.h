@@ -85,6 +85,17 @@ namespace AnimLib {
 		{ TexturePackerRects::EXPLOSION_09, 0.05f },
 	};
 
+	constexpr const AnimationFrame FLYING_ALIEN[] = {
+		{ TexturePackerRects::FLYINGALIEN_01, 0.05f },
+		{ TexturePackerRects::FLYINGALIEN_02, 0.05f },
+		{ TexturePackerRects::FLYINGALIEN_03, 0.05f },
+		{ TexturePackerRects::FLYINGALIEN_04, 0.05f },
+		{ TexturePackerRects::FLYINGALIEN_05, 0.05f },
+		{ TexturePackerRects::FLYINGALIEN_06, 0.05f },
+		{ TexturePackerRects::FLYINGALIEN_07, 0.05f },
+		{ TexturePackerRects::FLYINGALIEN_08, 0.05f },
+	};
+
 	constexpr const GPU_Rect BIPEDAL_IDLE = TexturePackerRects::BIPEDALUNIT_IDLE_00;
 	
 	constexpr const GPU_Rect FIRESHOT = {437, 5, 6, 6};

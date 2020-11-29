@@ -50,7 +50,7 @@ bool Mantis::IsBouncingAgainstAnotherMantis() {
 	if (!collidingWith) {
 		return false;
 	}
-	return (collidingWith->pos.x > pos.x && vel.x > 0) || (collidingWith->pos.x < pos.x&& vel.x < 0);
+	return IsMovingTowardsInY(pos, vel, collidingWith->pos);
 }
 
 void Mantis::Update(float dt)

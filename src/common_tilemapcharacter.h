@@ -35,6 +35,14 @@ inline bool IsGrounded(const vec& pos, const vec& size, const vec& marginPixels 
 	return false;
 }
 
+inline bool IsMovingTowardsInX(const vec& pos, const vec& vel, const vec& target) {
+	return (vel.x < 0 && pos.x > target.x) || (vel.x > 0 && pos.x < target.x);
+}
+
+inline bool IsMovingTowardsInY(const vec& pos, const vec& vel, const vec& target) {
+	return (vel.y < 0 && pos.y > target.y) || (vel.y > 0 && pos.y < target.y);
+}
+
 inline bool IsGoingToRunOffPlatform(const vec& pos, const vec& size, const vec& vel, float dt) {
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
