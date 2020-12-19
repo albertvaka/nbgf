@@ -187,11 +187,12 @@ void JumpScene::ExitScene()
 void JumpScene::Update(float dt)
 {
 	FxManager::Update(dt);
-
-	if (FxManager::IsIntroTransitionActive() || FxManager::IsOuttroTransitionActive()) {
+	if (FxManager::IsTheWorldStopped()) {
 		return;
 	}
-	else if (FxManager::IsOuttroTransitionDone()) {
+	if (FxManager::IsIntroTransitionActive() || FxManager::IsOuttroTransitionActive()) {
+		return;
+	} else if (FxManager::IsOuttroTransitionDone()) {
 		FxManager::ResetOuttroTransitionDone();
 		// Restart scene
 		ExitScene();

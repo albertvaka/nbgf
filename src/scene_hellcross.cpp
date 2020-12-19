@@ -135,7 +135,9 @@ void HellCrossScene::UpdateCamera() {
 void HellCrossScene::Update(float dt)
 {
 	FxManager::Update(dt);
-
+	if (FxManager::IsTheWorldStopped()) {
+		return;
+	}
 	if (FxManager::IsIntroTransitionActive() || FxManager::IsOuttroTransitionActive()) {
 		return;
 	} else if (FxManager::IsOuttroTransitionDone()) {

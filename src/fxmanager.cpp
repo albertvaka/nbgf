@@ -12,6 +12,22 @@
 //static GPU_Image* renderToTextureTarget;
 
 void FxManager::Update(float dt) {
+
+	if (worldStoppedTime > 0) {
+		worldStoppedTime -= dt;
+		if (worldStoppedTime <= 0) {
+			worldStoppedTime = -1.f;
+		}
+	}
+
+	if (nextWorldStopIn >= 0) {
+		nextWorldStopIn -= 1;
+		if (nextWorldStopIn < 0) {
+			worldStoppedTime = nextWorldStopDuration;
+			nextWorldStopIn = -1;
+		}
+	}
+
 	if (introTime > 0) {
 		introTime -= dt;
 		introfinished = introTime <= 0;

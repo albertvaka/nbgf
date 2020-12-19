@@ -4,6 +4,7 @@
 #include "bullet.h"
 #include "mates.h"
 #include "assets.h"
+#include "fxmanager.h"
 #include "debug.h"
 #include "common_tilemapcharacter.h"
 #include "skilltree.h"
@@ -350,6 +351,7 @@ void JumpMan::takeDamage(const vec& src) {
 	jumpTimeLeft = 0;
 	onWall = ONWALL_NO;
 	crouched = false;
+	FxManager::StopTheWorld(2, 0.3f);
 }
 
 Bounds JumpMan::maxBounds() const

@@ -84,6 +84,15 @@ struct FxManager {
 
 	static void DrawImgui();
 
+	static void StopTheWorld(int in_frames, float during_time) {
+		if (nextWorldStopIn < 0) {
+			nextWorldStopIn = in_frames;
+			nextWorldStopDuration = during_time;
+		}
+	}
+
+	static bool IsTheWorldStopped() { return (worldStoppedTime > 0.f); }
+
 private:
 	static inline vec screenshake = vec();
 
@@ -98,4 +107,8 @@ private:
 	static inline float screenshakeTime;
 	static inline veci screenshakeAmplitude = veci(0, 0);
 	static inline vec screenshakeSpeed = veci(0, 0);
+
+	static inline float worldStoppedTime = -1.f;
+	static inline int nextWorldStopIn = -1.f;
+	static inline float nextWorldStopDuration;
 };

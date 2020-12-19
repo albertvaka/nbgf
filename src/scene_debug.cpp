@@ -172,6 +172,9 @@ void DebugScene::UpdateCamera() {
 void DebugScene::Update(float dt)
 {
 	FxManager::Update(dt);
+	if (FxManager::IsTheWorldStopped()) {
+		return;
+	}
 
 	player.Update(dt);
 
