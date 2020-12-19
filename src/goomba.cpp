@@ -65,8 +65,6 @@ void Goomba::Walk(float dt)
 		}
 	}
 
-	float realSpeed = WalkSpeed();
-	float walkDir = WalkDirection();
 	pos.x += GetVel() * dt;
 }
 

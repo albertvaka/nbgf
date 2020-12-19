@@ -36,9 +36,9 @@ namespace AnimLib {
 	};
 
 	constexpr const AnimationFrame MANTIS_PREPARE_JUMP[] = {
-		{ {2 * 32, 8 * 32, 32, 32}, .3f },
-		{ {1 * 32, 8 * 32, 32, 32}, .15f },
-		{ {0 * 32, 8 * 32, 32, 32}, .15f },
+		{ {2 * 32, 8 * 32, 32, 32}, .17f },
+		{ {1 * 32, 8 * 32, 32, 32}, .1f },
+		{ {0 * 32, 8 * 32, 32, 32}, .1f },
 	};
 
 	constexpr const GPU_Rect MANTIS_AIR = { 1 * 32, 8 * 32, 32, 32 };

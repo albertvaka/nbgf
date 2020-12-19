@@ -39,8 +39,6 @@ void DebugWalker::Update(float dt)
 {
 	if (!alive) return;
 
-	TileMap* map = TileMap::instance();
-
 	grounded = IsGrounded(pos, size);
 
 

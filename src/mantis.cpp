@@ -26,7 +26,7 @@ constexpr const float spriteRadius = 10.f;
 constexpr const vec vel_hit(180.f, -150.f);
 constexpr const float hitTime = 0.5f;
 
-constexpr const float jumpCooldown = .35f;
+constexpr const float jumpCooldown = .2f;
 
 Mantis::Mantis(const vec& pos) 
 	: CircleEntity(pos - vec(0,8), spriteRadius)
@@ -39,7 +39,7 @@ Mantis::Mantis(const vec& pos)
 }
 
 vec Mantis::GetJumpSpeedToTarget(const vec& target) {
-	// TODO: Calcular be quan la alçada es diferent
+	// TODO: When pos and target are at different heights maybe the result isn't correct with this formula?
 	vec displacement = pos - target;
 	float speedX = (2*jumpSpeedY * displacement.x) / (gravity_acc + 2 * displacement.y);
 	Mates::Clamp(speedX, -maxJumpSpeedX, maxJumpSpeedX);
@@ -58,8 +58,6 @@ void Mantis::Update(float dt)
 	if (!InSameScreenAsPlayer(screen)) {
 		return;
 	}
-
-	float walkDir = vel.x > 0 ? 1 : -1;
 
 	//Debug::out << ENUM_NAME_OF(state);
 
@@ -112,7 +110,7 @@ void Mantis::Update(float dt)
 	{
 		vel.y += gravity_acc * dt;
 		
-		// Disabled temporarily since the screen where I' testing the mantis has a screen bounds smaller than the actual 
+		// Disabled temporarily since the screen where I'm testing the mantis has a screen bounds smaller than the actual 
 		// space in the tilemap and makes it go crazy when it reaches that area by jumping. This code is meant to prevent
 		// the mantis from leaving to the sides of the sceen, but not through the top/bottom.
 		//if (IsGoingToLeaveTheScreen(pos, spriteSize, vel, dt, screen))
