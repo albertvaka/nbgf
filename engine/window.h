@@ -7,6 +7,14 @@
 
 #include "SDL_gpu.h"
 
+inline void FixTextureBleeding(GPU_Rect& tr) {
+	const float e = 0.1f;
+	tr.x += e;
+	tr.y += e;
+	tr.w -= e;
+	tr.h -= e;
+}
+
 namespace Window
 {
 	constexpr const int GAME_HEIGHT = 21 * 16;
@@ -106,8 +114,7 @@ namespace Window
 	class Draw {
 		GPU_Image* t;
 		vec dest;
-		GPU_Rect src = { 0,0,0,0 };
-		GPU_Rect* srcp = nullptr;
+		GPU_Rect src = { 0, 0, 0, 0};
 		float rotation = 0;
 		vec scale = vec(1.f, 1.f);
 		vec origin = vec(0.f,0.f);
@@ -116,7 +123,11 @@ namespace Window
 		constexpr Draw(GPU_Image* t, float x, float y) : t(t), dest(x,y) { }
 		constexpr Draw(GPU_Image* t, const Bounds& destRect) // sets scale
 			: t(t), dest(destRect.TopLeft())
-			, scale(destRect.width/float(t->w), destRect.height/float(t->h)) { }
+			, scale(destRect.width/float(t->w), destRect.height/float(t->h))
+		{
+			src.w = (float)t->w;
+			src.h = (float)t->h;
+		}
 
 		constexpr Draw& withRect(float x, float y, float w, float h) {
 			return withRect({ x, y, w, h });
@@ -124,7 +135,6 @@ namespace Window
 
 		constexpr Draw& withRect(const GPU_Rect& r) {
 			src = r;
-			srcp = &src;
 			return *this;
 		}
 
@@ -171,6 +181,7 @@ namespace Window
 		}
 
 		~Draw() {
+			FixTextureBleeding(src);
 			#if defined(__APPLE__) //&& defined(SUPERHACK_TO_FIX_MISALIGNED_TEXTRECT)
 			if (Window::currentDrawTarget != Window::screenTarget) {
 				float decimalPart = (dest.y - (int)(dest.y));
@@ -181,7 +192,7 @@ namespace Window
 			}
 			#endif
 			// We pass origin as rotation pivot. We could change that to a different variable.
-			GPU_BlitTransformX(t, srcp, Window::currentDrawTarget, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
+			GPU_BlitTransformX(t, &src, Window::currentDrawTarget, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
 			GPU_SetRGBA(t, 255, 255, 255, 255);
 		}
 	};
@@ -379,6 +390,7 @@ namespace Window
 }
 
 inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {
+	FixTextureBleeding(tr);
 	tr.x /= i->texture_w;
 	tr.y /= i->texture_h;
 	tr.w /= i->texture_w;
