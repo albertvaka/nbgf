@@ -338,7 +338,7 @@ void JumpMan::Update(float dt)
 	}
 }
 
-void JumpMan::takeDamage(const vec& src) {
+void JumpMan::takeDamage(vec src) {
 	invencibleTimer = invencibleTimeAfterHit;
 	if (pos.x > src.x) {
 		vel.x = vel_hit.x;

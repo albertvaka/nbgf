@@ -11,7 +11,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 	static inline PartSys particles = PartSys(nullptr);
 	static void InitParticles();
 
-	Bullet(const vec& position, const vec& velocity, float _scale = 1.f) {
+	Bullet(vec position, vec velocity, float _scale = 1.f) {
 		pos = position;
 		vel = velocity;
 		radius = 5 * _scale;

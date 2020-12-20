@@ -23,15 +23,15 @@ struct SteeringBehavior
     vec Forward();
 
     //this behavior moves the agent towards a target position
-    vec Seek(const vec& TargetPos);
+    vec Seek(vec TargetPos);
 
     //this behavior returns a vector that moves the agent away
     //from a target position
-    vec Flee(const vec& TargetPos);
+    vec Flee(vec TargetPos);
 
     //this behavior is similar to seek but it attempts to arrive 
     //at the target position with a zero velocity
-    vec Arrive(const vec& TargetPos, Deceleration deceleration);
+    vec Arrive(vec TargetPos, Deceleration deceleration);
 
     //this behavior predicts where an agent will be in time T and seeks
     //towards that point to intercept it.
@@ -61,7 +61,7 @@ struct SteeringBehavior
 
     //helper method for Hide. Returns a position located on the other
     //side of an obstacle to the pursuer
-    vec GetHidingPosition(const vec& posOb, const float radiusOb, const vec& posHunter);
+    vec GetHidingPosition(vec posOb, const float radiusOb, vec posHunter);
 
 	bool avoidingTileMap = false;
 	bool avoidingBounds = false;

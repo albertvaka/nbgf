@@ -18,7 +18,7 @@ const float kMaxTurnRateRads = Angles::DegsToRads(90.f);
 const float kFlockAvoidanceDistance = 30.f;
 const float kSmokePerSecond = 30.f;
 
-Missile::Missile(const vec& position, float angleDegs)
+Missile::Missile(vec position, float angleDegs)
 	: CircleEntity(position, kRadius)
 	, anim(AnimLib::MISSILE)
 {

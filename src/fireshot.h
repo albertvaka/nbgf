@@ -9,7 +9,7 @@ struct FireShot : CircleEntity, SelfRegister<FireShot>
 {
 	vec accel;
 
-	FireShot(const vec& pos, const vec& vel, const vec& accel)
+	FireShot(vec pos, vec vel, vec accel)
 		: CircleEntity(pos, kFireShotRadius, vel)
 		, accel(accel)
 	{

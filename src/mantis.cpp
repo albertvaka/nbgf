@@ -28,7 +28,7 @@ constexpr const float hitTime = 0.5f;
 
 constexpr const float jumpCooldown = .2f;
 
-Mantis::Mantis(const vec& pos) 
+Mantis::Mantis(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, state(State::JUMP)
 	, anim(AnimLib::MANTIS_WALK)
@@ -38,7 +38,7 @@ Mantis::Mantis(const vec& pos)
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 
-vec Mantis::GetJumpSpeedToTarget(const vec& target) {
+vec Mantis::GetJumpSpeedToTarget(vec target) {
 	// TODO: When pos and target are at different heights maybe the result isn't correct with this formula?
 	vec displacement = pos - target;
 	float speedX = (2*jumpSpeedY * displacement.x) / (gravity_acc + 2 * displacement.y);

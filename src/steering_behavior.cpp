@@ -33,7 +33,7 @@ vec SteeringBehavior::Forward()
 //  Given a target, this behavior returns a steering force which will
 //  direct the agent towards the target
 //------------------------------------------------------------------------
-vec SteeringBehavior::Seek(const vec& TargetPos)
+vec SteeringBehavior::Seek(vec TargetPos)
 {
 	vec DesiredVelocity = (TargetPos - steeringEntity->pos).Normalized() * steeringEntity->max_speed;
 
@@ -45,7 +45,7 @@ vec SteeringBehavior::Seek(const vec& TargetPos)
 //
 //  Does the opposite of Seek
 //------------------------------------------------------------------------
-vec SteeringBehavior::Flee(const vec& TargetPos)
+vec SteeringBehavior::Flee(vec TargetPos)
 {
 	//only flee if the target is within 'panic distance'. Work in distance
 	//squared space.
@@ -67,7 +67,7 @@ vec SteeringBehavior::Flee(const vec& TargetPos)
 //  This behavior is similar to seek but it attempts to arrive at the
 //  target with a zero velocity
 //------------------------------------------------------------------------
-vec SteeringBehavior::Arrive(const vec& TargetPos, Deceleration deceleration)
+vec SteeringBehavior::Arrive(vec TargetPos, Deceleration deceleration)
 {
 	vec ToTarget = TargetPos - steeringEntity->pos;
 
@@ -262,9 +262,9 @@ vec SteeringBehavior::BoundsAvoidance(const Bounds& m_bounds)
 //  an obstacle, this method calculates a position DistanceFromBoundary 
 //  away from its bounding radius and directly opposite the hunter
 //------------------------------------------------------------------------
-vec SteeringBehavior::GetHidingPosition(const vec& posOb,
+vec SteeringBehavior::GetHidingPosition(vec posOb,
 	const float     radiusOb,
-	const vec& posHunter)
+	vec posHunter)
 {
 	//calculate how far away the agent is to be from the chosen obstacle's
 	//bounding radius

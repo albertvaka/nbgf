@@ -27,7 +27,7 @@ constexpr const vec playerNearbyArea = vec(100, 100);
 
 extern float mainClock;
 
-FlyingAlien::FlyingAlien(const vec& pos) 
+FlyingAlien::FlyingAlien(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, state(State::FLYING)
 	, anim(AnimLib::FLYING_ALIEN)

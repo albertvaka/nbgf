@@ -42,7 +42,7 @@ void HealthUp::Draw() const
 }
 
 
-BigItem::BigItem(const vec& p, Skill s)
+BigItem::BigItem(vec p, Skill s)
 	: BoxEntity(p + vec(8, -8), vec(32, 16))
 	, skill(s)
 	, particles(Assets::marioTexture)

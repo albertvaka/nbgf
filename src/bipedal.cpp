@@ -23,7 +23,7 @@ const vec legsHitBoxSize = vec(40, 60);
 const vec textureOffset = vec(-10, -88); 
 const vec missilesOriginOffset = vec(-10, -110);
 
-Bipedal::Bipedal(const vec& pos)
+Bipedal::Bipedal(vec pos)
 	: Entity(pos)
 	, timer(0)
 	, anim(AnimLib::BIPEDAL_WALKING)

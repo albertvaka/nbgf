@@ -6,7 +6,7 @@
 
 // FIXME: Jumping against a slope that goes up in the same direction you are moving behaves weirdly.
 
-inline bool IsGrounded(const vec& pos, const vec& size, const vec& marginPixels = vec(1, 1.5)) {
+inline bool IsGrounded(vec pos, vec size, vec marginPixels = vec(1, 1.5)) {
 
 	float y_bottom = pos.y + (size.y / 2);
 	float x_left = pos.x - (size.x / 2);
@@ -35,15 +35,15 @@ inline bool IsGrounded(const vec& pos, const vec& size, const vec& marginPixels 
 	return false;
 }
 
-inline bool IsMovingTowardsInX(const vec& pos, const vec& vel, const vec& target) {
+inline bool IsMovingTowardsInX(vec pos, vec vel, vec target) {
 	return (vel.x < 0 && pos.x > target.x) || (vel.x > 0 && pos.x < target.x);
 }
 
-inline bool IsMovingTowardsInY(const vec& pos, const vec& vel, const vec& target) {
+inline bool IsMovingTowardsInY(vec pos, vec vel, vec target) {
 	return (vel.y < 0 && pos.y > target.y) || (vel.y > 0 && pos.y < target.y);
 }
 
-inline bool IsGoingToRunOffPlatform(const vec& pos, const vec& size, const vec& vel, float dt) {
+inline bool IsGoingToRunOffPlatform(vec pos, vec size, vec vel, float dt) {
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
 	vec bottomCorner = vec(newPos.x + toTheSideImMoving, newPos.y + size.y / 2);
@@ -59,7 +59,7 @@ inline bool IsGoingToRunOffPlatform(const vec& pos, const vec& size, const vec& 
 	return true;
 }
 
-inline bool IsGoingToHitAWall(const vec& pos, const vec& size, const vec& vel, float dt) {
+inline bool IsGoingToHitAWall(vec pos, vec size, vec vel, float dt) {
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
 	vec side = vec(newPos.x + toTheSideImMoving, newPos.y);
@@ -68,7 +68,7 @@ inline bool IsGoingToHitAWall(const vec& pos, const vec& size, const vec& vel, f
 	return tileSide.isSolid();
 }
 
-inline bool IsGoingToLeaveTheScreen(const vec& pos, const vec& size, const vec& vel, float dt, int screen) {
+inline bool IsGoingToLeaveTheScreen(vec pos, vec size, vec vel, float dt, int screen) {
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
 	vec side = vec(newPos.x + toTheSideImMoving, newPos.y);
@@ -84,7 +84,7 @@ struct MoveResult {
 };
 
 //Based on code by: Jordi Santiago
-inline MoveResult MoveAgainstTileMap(const vec& position, const vec& size, const vec& vel, float dt) {
+inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) {
 	MoveResult ret;
 
 	vec pos = position;

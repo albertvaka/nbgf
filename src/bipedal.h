@@ -28,7 +28,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 	float damagedTimer = 0.f;
 	Bounds legsHitBox, headHitBox;
 
-	Bipedal(const vec& position);
+	Bipedal(vec position);
 
 	void Update(float dt);
 	void Draw() const;

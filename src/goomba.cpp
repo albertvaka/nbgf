@@ -19,7 +19,7 @@ constexpr const vec playerNearbyArea = vec(Tile::size * 11, Tile::size * 2);
 
 constexpr const vec size = AnimLib::GOOMBA[0].GetSize();
 
-Goomba::Goomba(const vec& pos, bool isCharger) 
+Goomba::Goomba(vec pos, bool isCharger)
 	: CircleEntity(pos - vec(0,8), 6)
 	, anim(isCharger ? AnimLib::GOOMBACHARGER : AnimLib::GOOMBA)
 	, isCharger(isCharger)

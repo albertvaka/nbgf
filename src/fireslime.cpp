@@ -24,7 +24,7 @@ constexpr const int kFirstFrameOnAir = 2;
 constexpr const int kFirstFrameOnGround = 7;
 constexpr const int kFrameShooting = 2;
 
-FireSlime::FireSlime(const vec& pos) 
+FireSlime::FireSlime(vec pos)
 	: CircleEntity(pos - vec(0, kSpriteOffsetY), 5*kSpriteScale)
 	, anim(AnimLib::FIRESLIME_WALK)
 {

@@ -37,11 +37,11 @@ struct Shader {
 		return *this;
 	}
 
-	Shader& SetUniform(int location, const vec& v) { return SetUniform(location, v.x, v.y); }
+	Shader& SetUniform(int location, vec v) { return SetUniform(location, v.x, v.y); }
 	Shader& SetUniform(const char* name, int i) { return SetUniform(GetUniformLocation(name), i); }
 	Shader& SetUniform(const char* name, float f) { return SetUniform(GetUniformLocation(name), f); }
 	Shader& SetUniform(const char* name, float x, float y) { return SetUniform(GetUniformLocation(name), x, y); }
-	Shader& SetUniform(const char* name, const vec& v) { return SetUniform(GetUniformLocation(name), v); }
+	Shader& SetUniform(const char* name, vec v) { return SetUniform(GetUniformLocation(name), v); }
 	Shader& SetUniform(const char* name, float r, float g, float b, float a) { return SetUniform(GetUniformLocation(name), r, g, b, a); }
 
 	Shader& SetTexture(const char* textureSamplerUniformName, GPU_Image* image, int location = 1) { 

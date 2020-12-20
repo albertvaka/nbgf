@@ -19,7 +19,7 @@ struct ScreenManager : SingleInstance<ScreenManager>
 		screens.clear();
 	}
 
-	int FindScreenContaining(const vec& pos) const {
+	int FindScreenContaining(vec pos) const {
 		int i = 0;
 		for (const auto& screen : screens) {
 			if (screen.Contains(pos)) {
@@ -44,7 +44,7 @@ struct ScreenManager : SingleInstance<ScreenManager>
 
 	const void ClampCameraToScreen(vec& camPos) const;
 
-	void UpdateCurrentScreen(const vec& pos);
+	void UpdateCurrentScreen(vec pos);
 
 private:
 	int currentScreen = -1;

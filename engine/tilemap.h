@@ -102,13 +102,13 @@ struct TileMap : SingleInstance<TileMap>
 
 	// Coordinate conversion functions
 
-	static veci toTiles(const vec& pos) { return toTiles(pos.x, pos.y); }
+	static veci toTiles(vec pos) { return toTiles(pos.x, pos.y); }
 	static veci toTiles(float x, float y) { return veci(toTiles(x), toTiles(y)); }
 	static int toTiles(float x) { return Mates::fastfloor(x / Tile::size); } // floor could be just a cast to int if we know we will never get < 0
 
 	static vec fromTiles(int x, int y) { return vec(x*Tile::size, y*Tile::size); }
 
-	static vec alignToTiles(const vec& v) { return toTiles(v) * Tile::size; }
+	static vec alignToTiles(vec v) { return toTiles(v) * Tile::size; }
 	static vec alignToTiles(float x, float y) { return toTiles(x, y) * Tile::size; }
 	static float alignToTiles(float x) { return toTiles(x) * Tile::size; }
 
@@ -123,7 +123,7 @@ struct TileMap : SingleInstance<TileMap>
 		return Bounds(x * Tile::size, y * Tile::size, Tile::size, Tile::size);
 	}
 
-	bool isPosOnSlope(const vec& v) const { return isPosOnSlope(v.x,v.y);  }
+	bool isPosOnSlope(vec v) const { return isPosOnSlope(v.x,v.y);  }
 	bool isPosOnSlope(float x, float y) const {
 		Tile tile = getTile(toTiles(x, y));
 		if (tile.isRightSlope()) {

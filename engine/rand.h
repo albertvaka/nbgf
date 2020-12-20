@@ -40,7 +40,7 @@ namespace Rand
 		return vec(rollf(minX, maxX), rollf(minY, maxY));
 	}
 
-	inline vec vecInRange(const vec& min, const vec& max) {
+	inline vec vecInRange(vec min, vec max) {
 		return vec(rollf(min.x, max.x), rollf(min.y, max.y));
 	}
 

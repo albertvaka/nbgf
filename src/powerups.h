@@ -9,19 +9,19 @@
 //UNUSED
 struct PowerUp : BoxEntity, SelfRegister<PowerUp>
 {
-	PowerUp(const vec& p) : BoxEntity(p+vec(8,-8), vec(16,16)) { }
+	PowerUp(vec p) : BoxEntity(p+vec(8,-8), vec(16,16)) { }
 	void Draw() const;
 };
 
 struct HealthUp : BoxEntity, SelfRegister<HealthUp>
 {
-	HealthUp(const vec& p) : BoxEntity(p+vec(8,-8), vec(16, 16)) { }
+	HealthUp(vec p) : BoxEntity(p+vec(8,-8), vec(16, 16)) { }
 	void Draw() const;
 };
 
 struct BigItem : BoxEntity, SelfRegister<BigItem>
 {
-	BigItem(const vec& p, Skill s);
+	BigItem(vec p, Skill s);
 	void Draw();
 	void DrawPedestal();
 

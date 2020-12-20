@@ -32,7 +32,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     }
     Bounds maxBounds() const;
 
-    void takeDamage(const vec& pos);
+    void takeDamage(vec pos);
     bool isInvencible() const { return invencibleTimer > 0.f; }
     bool isHit() const { return invencibleTimer > 0.1f; }
 

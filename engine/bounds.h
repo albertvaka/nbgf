@@ -17,14 +17,14 @@ struct Bounds
 
     constexpr Bounds(float x, float y, float w, float h) : left(x), top(y), width(w), height(h) { }
     constexpr Bounds() : Bounds(-1,-1,0,0) { }
-    constexpr Bounds(const vec& topleft, const vec& size) : Bounds(topleft.x, topleft.y, size.x, size.y) {}
-    constexpr explicit Bounds(const vec& size) : Bounds(0,0,size.x,size.y) { }
-    constexpr explicit Bounds(const vec& pos, const vec& size, const vec& origin) : Bounds(pos.x, pos.y, size.x, size.y) {
+    constexpr Bounds(vec topleft, vec size) : Bounds(topleft.x, topleft.y, size.x, size.y) {}
+    constexpr explicit Bounds(vec size) : Bounds(0,0,size.x,size.y) { }
+    constexpr explicit Bounds(vec pos, vec size, vec origin) : Bounds(pos.x, pos.y, size.x, size.y) {
         left -= origin.x;
         top -= origin.y;
     }
 
-    [[nodiscard]] static constexpr Bounds fromCenter(const vec& center, const vec& size) { return Bounds(center - size/2, size); }
+    [[nodiscard]] static constexpr Bounds fromCenter(vec center, vec size) { return Bounds(center - size/2, size); }
 
     [[nodiscard]] GPU_Rect AsRect() {
         return GPU_Rect{ left, top, width, height };
@@ -57,7 +57,7 @@ struct Bounds
         top = y - height/2;
     }
 
-    void SetCenter(const vec& center)
+    void SetCenter(vec center)
 	{
         SetCenter(center.x, center.y);
     }
@@ -68,7 +68,7 @@ struct Bounds
         top = y;
     }
 
-    void SetTopLeft(const vec& center)
+    void SetTopLeft(vec center)
     {
         SetTopLeft(center.x, center.y);
     }
@@ -120,7 +120,7 @@ struct Bounds
         return true;
     }
 
-    [[nodiscard]] bool Contains(const vec& point) const
+    [[nodiscard]] bool Contains(vec point) const
 	{
         return Contains(point.x, point.y);
     }
@@ -138,7 +138,7 @@ struct Bounds
         return vec(width, height);
     }
 
-    [[nodiscard]] vec ClosesPointInBounds(const vec& target) const;
+    [[nodiscard]] vec ClosesPointInBounds(vec target) const;
     [[nodiscard]] float DistanceSq(const Bounds& a) const;
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
     [[nodiscard]] float Distance(const Bounds& a) const;
@@ -151,13 +151,13 @@ struct Bounds
 
 struct CircleBounds
 {
-    constexpr CircleBounds(const vec& pos, float radius) : pos(pos), radius(radius) {}
+    constexpr CircleBounds(vec pos, float radius) : pos(pos), radius(radius) {}
     vec pos;
     float radius;
 
     void Draw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const;
 
-    [[nodiscard]] const vec& Center() const { return pos; }
+    [[nodiscard]] vec Center() const { return pos; }
 
     [[nodiscard]] float DistanceSq(const Bounds& a) const { return a.DistanceSq(*this); }
     [[nodiscard]] float Distance(const Bounds& a) const { return a.Distance(*this); }
@@ -190,7 +190,7 @@ inline float Bounds::DistanceSq(const Bounds& a) const {
     return sqrDist;
 }
 
-inline vec Bounds::ClosesPointInBounds(const vec& target) const {
+inline vec Bounds::ClosesPointInBounds(vec target) const {
     vec distance = this->Center() - target;
     distance.Clamp(-this->Size() / 2, this->Size() / 2);
     vec closestPoint = this->Center() - distance;

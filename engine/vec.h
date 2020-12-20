@@ -49,11 +49,11 @@ struct vec
 	inline void      Normalize();
 	[[nodiscard]] inline vec      Normalized() const;
 
-	[[nodiscard]] inline float    Dot(const vec& v2) const;
+	[[nodiscard]] inline float    Dot(vec v2) const;
 
-	[[nodiscard]] inline float    Cross(const vec& v2) const;
+	[[nodiscard]] inline float    Cross(vec v2) const;
 
-	void Clamp(const vec& minv, const vec& maxv)
+	void Clamp(vec minv, vec maxv)
 	{
 		if (x > maxv.x) x = maxv.x;
 		else if (x < minv.x) x = minv.x;
@@ -71,11 +71,11 @@ struct vec
 	//returns positive if v2 is clockwise of this vector,
 	//negative if anticlockwise (assuming the Y axis is pointing down,
 	//X axis to right like a Window app)
-	[[nodiscard]] inline int       Sign(const vec& v2) const;
+	[[nodiscard]] inline int       Sign(vec v2) const;
 
 	// Angle in Rads between the lines (origin to point a) and (origin to point b)
 	// In range [-Pi,Pi]
-	[[nodiscard]] float AngleRads(const vec& other = vec::Zero) const
+	[[nodiscard]] float AngleRads(vec other = vec::Zero) const
 	{
 		float deltaY = other.y - y;
 		float deltaX = other.x - x;
@@ -84,7 +84,7 @@ struct vec
 
 	// Angle in Degrees between the lines (origin to point a) and (origin to point b)
 	// In range [-180,180]
-	[[nodiscard]] float AngleDegs(const vec& other = vec::Zero) const
+	[[nodiscard]] float AngleDegs(vec other = vec::Zero) const
 	{
 		return Angles::RadsToDegs(AngleRads(other));
 	}
@@ -102,11 +102,11 @@ struct vec
 	}
 
 	// Note: If specified, maxTurnRate should to be multiplied by dt
-	[[nodiscard]] inline vec RotatedToFacePositionRads(const vec& target, float maxTurnRateRads = std::numeric_limits<float>::max());
-	[[nodiscard]] inline vec RotatedToFacePositionDegs(const vec& target) {
+	[[nodiscard]] inline vec RotatedToFacePositionRads(vec target, float maxTurnRateRads = std::numeric_limits<float>::max());
+	[[nodiscard]] inline vec RotatedToFacePositionDegs(vec target) {
 		return RotatedToFacePositionRads(target);
 	}
-	[[nodiscard]] inline vec RotatedToFacePositionDegs(const vec& target, float maxTurnRateDegs) {
+	[[nodiscard]] inline vec RotatedToFacePositionDegs(vec target, float maxTurnRateDegs) {
 		return RotatedToFacePositionRads(target, Angles::DegsToRads(maxTurnRateDegs));
 	}
 	//returns the vector that is perpendicular to this one.
@@ -117,13 +117,13 @@ struct vec
 	[[nodiscard]] inline vec      Truncated(const float max); // returns a new vec
 
 	//returns the distance between this vector and th one passed as a parameter
-	[[nodiscard]] inline float    Distance(const vec &v2) const;
+	[[nodiscard]] inline float    Distance(vec v2) const;
 
 	//squared version of above.
-	[[nodiscard]] inline float    DistanceSq(const vec &v2) const;
+	[[nodiscard]] inline float    DistanceSq(vec v2) const;
 
 	//we need some overloaded operators
-	constexpr const vec& operator+=(const vec &rhs)
+	constexpr vec operator+=(vec rhs)
 	{
 		x += rhs.x;
 		y += rhs.y;
@@ -131,7 +131,7 @@ struct vec
 		return *this;
 	}
 
-	constexpr const vec& operator-=(const vec &rhs)
+	constexpr vec operator-=(vec rhs)
 	{
 		x -= rhs.x;
 		y -= rhs.y;
@@ -139,7 +139,7 @@ struct vec
 		return *this;
 	}
 
-	constexpr const vec& operator*=(const float& rhs)
+	constexpr vec operator*=(const float& rhs)
 	{
 		x *= rhs;
 		y *= rhs;
@@ -147,7 +147,7 @@ struct vec
 		return *this;
 	}
 
-	constexpr const vec& operator/=(const float& rhs)
+	constexpr vec operator/=(const float& rhs)
 	{
 		x /= rhs;
 		y /= rhs;
@@ -155,12 +155,12 @@ struct vec
 		return *this;
 	}
 
-	constexpr bool operator==(const vec& rhs) const
+	constexpr bool operator==(vec rhs) const
 	{
 		return (x == rhs.x) && (y == rhs.y);
 	}
 
-	constexpr bool operator!=(const vec& rhs) const
+	constexpr bool operator!=(vec rhs) const
 	{
 		return (x != rhs.x) || (y != rhs.y);
 	}
@@ -200,13 +200,13 @@ inline float vec::LengthSq() const
 
 
 //  calculates the dot product
-inline float vec::Dot(const vec &v2) const
+inline float vec::Dot(vec v2) const
 {
 	return x*v2.x + y*v2.y;
 }
 
 //  calculates the cross product
-inline float vec::Cross(const vec &v2) const
+inline float vec::Cross(vec v2) const
 {
 	return x*v2.y - y*v2.x;
 }
@@ -214,7 +214,7 @@ inline float vec::Cross(const vec &v2) const
 //  returns positive if v2 is clockwise of this vector,
 //  minus if anticlockwise (Y axis pointing down, X axis to right)
 enum {clockwise = 1, anticlockwise = -1};
-inline int vec::Sign(const vec& v2) const
+inline int vec::Sign(vec v2) const
 {
 	if (y*v2.x > x*v2.y)
 	{
@@ -233,7 +233,7 @@ inline vec vec::Perp() const
 }
 
 //  calculates the euclidean distance between two vectors
-inline float vec::Distance(const vec &v2) const
+inline float vec::Distance(vec v2) const
 {
 	float ySeparation = v2.y - y;
 	float xSeparation = v2.x - x;
@@ -243,7 +243,7 @@ inline float vec::Distance(const vec &v2) const
 
 
 //  calculates the euclidean distance squared between two vectors
-inline float vec::DistanceSq(const vec &v2) const
+inline float vec::DistanceSq(vec v2) const
 {
 	float ySeparation = v2.y - y;
 	float xSeparation = v2.x - x;
@@ -305,7 +305,7 @@ inline vec vec::Normalized() const
 
 //------------------------------------------------------------------------non member functions
 
-inline vec Normalize(const vec &v)
+inline vec Normalize(vec v)
 {
 	vec vec = v;
 
@@ -321,7 +321,7 @@ inline vec Normalize(const vec &v)
 }
 
 
-inline float Distance(const vec &v1, const vec &v2)
+inline float Distance(vec v1, vec v2)
 {
 	float ySeparation = v2.y - v1.y;
 	float xSeparation = v2.x - v1.x;
@@ -329,7 +329,7 @@ inline float Distance(const vec &v1, const vec &v2)
 	return sqrt(ySeparation*ySeparation + xSeparation*xSeparation);
 }
 
-inline float DistanceSq(const vec &v1, const vec &v2)
+inline float DistanceSq(vec v1, vec v2)
 {
 	float ySeparation = v2.y - v1.y;
 	float xSeparation = v2.x - v1.x;
@@ -337,33 +337,33 @@ inline float DistanceSq(const vec &v1, const vec &v2)
 	return ySeparation*ySeparation + xSeparation*xSeparation;
 }
 
-inline float Length(const vec& v)
+inline float Length(vec v)
 {
 	return sqrt(v.x*v.x + v.y*v.y);
 }
 
-inline float LengthSq(const vec& v)
+inline float LengthSq(vec v)
 {
 	return (v.x*v.x + v.y*v.y);
 }
 
 
 //------------------------------------------------------------------------operator overloads
-inline constexpr vec operator*(const vec &lhs, float rhs)
+inline constexpr vec operator*(vec lhs, float rhs)
 {
 	vec result(lhs);
 	result *= rhs;
 	return result;
 }
 
-inline constexpr vec operator*(float lhs, const vec &rhs)
+inline constexpr vec operator*(float lhs, vec rhs)
 {
 	vec result(rhs);
 	result *= lhs;
 	return result;
 }
 
-inline constexpr vec operator-(const vec &lhs, const vec &rhs)
+inline constexpr vec operator-(vec lhs, vec rhs)
 {
 	vec result(lhs);
 	result.x -= rhs.x;
@@ -372,7 +372,7 @@ inline constexpr vec operator-(const vec &lhs, const vec &rhs)
 	return result;
 }
 
-inline constexpr vec operator+(const vec &lhs, const vec &rhs)
+inline constexpr vec operator+(vec lhs, vec rhs)
 {
 	vec result(lhs);
 	result.x += rhs.x;
@@ -381,7 +381,7 @@ inline constexpr vec operator+(const vec &lhs, const vec &rhs)
 	return result;
 }
 
-inline constexpr vec operator/(const vec &lhs, float val)
+inline constexpr vec operator/(vec lhs, float val)
 {
 	vec result(lhs);
 	result.x /= val;
@@ -404,9 +404,9 @@ inline void WrapAround(vec &pos, int MaxX, int MaxY)
 
 //  returns true if the target position is in the field of view of the entity
 //  positioned at posFirst facing in facingFirst
-inline bool IsSecondInFOVOfFirst(const vec& posFirst,
-                                 const vec& facingFirst,
-                                 const vec& posSecond,
+inline bool IsSecondInFOVOfFirst(vec posFirst,
+                                 vec facingFirst,
+                                 vec posSecond,
                                  float    fov)
 {
 	vec toTarget = Normalize(posSecond - posFirst);
@@ -421,7 +421,7 @@ inline bool IsSecondInFOVOfFirst(const vec& posFirst,
 //  occurs along AB. Also sets the 2d vector point to the point of
 //  intersection
 //-----------------------------------------------------------------
-inline bool LineIntersection2D(const vec& A, const vec& B, const vec& C, const vec& D, float& dist, vec& point)
+inline bool LineIntersection2D(vec A, vec B, vec C, vec D, float& dist, vec& point)
 {
 
 	float rTop = (A.y-C.y)*(D.x-C.x)-(A.x-C.x)*(D.y-C.y);
@@ -452,7 +452,7 @@ inline bool LineIntersection2D(const vec& A, const vec& B, const vec& C, const v
 	}
 }
 
-inline vec vec::RotatedToFacePositionRads(const vec& target, float maxTurnRateRads)
+inline vec vec::RotatedToFacePositionRads(vec target, float maxTurnRateRads)
 {
 	vec toTarget = (target - *this).Normalized();
 	vec heading = Normalized();
@@ -475,7 +475,7 @@ inline vec vec::RotatedToFacePositionRads(const vec& target, float maxTurnRateRa
 //  printing
 //-----------------------------------------------------------------------------
 
-inline std::ostream& operator<<(std::ostream& os, const vec& rhs)
+inline std::ostream& operator<<(std::ostream& os, vec rhs)
 {
 	os << rhs.x << "," << rhs.y;
 	return os;

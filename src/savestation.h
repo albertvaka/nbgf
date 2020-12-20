@@ -9,7 +9,7 @@ struct SaveStation : BoxEntity, SelfRegister<SaveStation>
 	bool inScene = true;
 	bool enabled = false;
 
-	SaveStation(const vec& p);
+	SaveStation(vec p);
 	void Update(float dt);
 	void Activate();
 	void Draw() const;

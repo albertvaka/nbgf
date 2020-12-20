@@ -32,12 +32,12 @@ namespace Camera
 		GPU_SetCamera(Window::currentDrawTarget, &camera);
 	}
 
-	inline void SetCenter(const vec& pos)
+	inline void SetCenter(vec pos)
 	{
 		SetCenter(pos.x, pos.y);
 	}
 
-	inline void SetTopLeft(const vec& pos)
+	inline void SetTopLeft(vec pos)
 	{
 		SetCenter(pos + GetSize() / 2.f);
 	}

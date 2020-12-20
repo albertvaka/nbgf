@@ -78,7 +78,7 @@ struct FxManager {
 
 	static void EndDraw();
 
-	static inline const vec& GetScreenshake() {
+	static inline vec GetScreenshake() {
 		return screenshake;
 	}
 

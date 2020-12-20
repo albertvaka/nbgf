@@ -29,7 +29,7 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 
 	int screen;
 
-	Goomba(const vec& position, bool isCharger);
+	Goomba(vec position, bool isCharger);
 
 	Bounds ChargeBounds() const;
 

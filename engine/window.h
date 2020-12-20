@@ -70,19 +70,19 @@ namespace Window
 		}
 
 		void Line(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
-		inline void Line(const vec& v1, const vec& v2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+		inline void Line(vec v1, vec v2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Line(v1.x, v1.y, v2.x, v2.y, thickness, r, g, b, a);
 		}
 		inline void Line(float x1, float y1, float x2, float y2, float thickness, const SDL_Color& c) {
 			Line(x1, y1, x2, y2, thickness, c.r, c.g, c.b, c.a);
 		}
-		inline void Line(const vec& v1, const vec& v2, float thickness, const SDL_Color & c) {
+		inline void Line(vec v1, vec v2, float thickness, const SDL_Color & c) {
 			Line(v1.x, v1.y, v2.x, v2.y, thickness, c.r, c.g, c.b, c.a);
 		}
 
 		// pass thickness < 0 to draw a filled shape
 		void Circle(float x, float y, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
-		inline void Circle(const vec& v, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+		inline void Circle(vec v, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Circle(v.x, v.y, radius, thickness, r, g, b, a);
 		}
 		inline void Circle(const CircleBounds& bounds, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
@@ -91,7 +91,7 @@ namespace Window
 		inline void Circle(float x, float y, float radius, float thickness, const SDL_Color& c) {
 			Circle(x, y, radius, thickness, c.r, c.g, c.b, c.a);
 		}
-		inline void Circle(const vec& v, float radius, float thickness, const SDL_Color& c) {
+		inline void Circle(vec v, float radius, float thickness, const SDL_Color& c) {
 			Circle(v.x, v.y, radius, thickness, c.r, c.g, c.b, c.a);
 		}
 		inline void Circle(const CircleBounds& bounds, float thickness, const SDL_Color& c) {
@@ -100,13 +100,13 @@ namespace Window
 
 		// pass thickness < 0 to draw a filled shape
 		void Arc(float x, float y, float radius, float start_angle, float end_angle, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
-		inline void Arc(const vec& v, float radius, float start_angle, float end_angle, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+		inline void Arc(vec v, float radius, float start_angle, float end_angle, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Arc(v.x, v.y, radius, start_angle, end_angle, thickness, r, g, b, a);
 		}
 		inline void Arc(float x, float y, float radius, float start_angle, float end_angle, float thickness, const SDL_Color& c) {
 			Arc(x, y, radius, start_angle, end_angle, thickness, c.r, c.g, c.b, c.a);
 		}
-		inline void Arc(const vec& v, float radius, float start_angle, float end_angle, float thickness, const SDL_Color& c) {
+		inline void Arc(vec v, float radius, float start_angle, float end_angle, float thickness, const SDL_Color& c) {
 			Arc(v.x, v.y, radius, start_angle, end_angle, thickness, c.r, c.g, c.b, c.a);
 		}
 	}
@@ -119,7 +119,7 @@ namespace Window
 		vec scale = vec(1.f, 1.f);
 		vec origin = vec(0.f,0.f);
 	public:
-		constexpr Draw(GPU_Image* t, const vec& pos) : t(t), dest(pos) {
+		constexpr Draw(GPU_Image* t, vec pos) : t(t), dest(pos) {
 			withRect(0,0,t->w,t->h);
 		}
 		constexpr Draw(GPU_Image* t, float x, float y) : t(t), dest(x,y) {
@@ -156,7 +156,7 @@ namespace Window
 			return *this;
 		}
 
-		constexpr Draw& withOrigin(const vec& o) {
+		constexpr Draw& withOrigin(vec o) {
 			return withOrigin(o.x, o.y);
 		}
 
@@ -179,7 +179,7 @@ namespace Window
 			return withScale(s, s);
 		}
 
-		constexpr Draw& withScale(const vec& v) {
+		constexpr Draw& withScale(vec v) {
 			return withScale(v.x, v.y);
 		}
 

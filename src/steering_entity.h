@@ -16,7 +16,7 @@ struct SteeringEntity : public CircleEntity
     float max_speed;
 
     // NOTE: velocity is used by steering behaviours to know the direction of this entity, make sure it's initialized and not 0!
-    SteeringEntity(const vec& position, float radius, float max_speed, const vec& velocity)
+    SteeringEntity(vec position, float radius, float max_speed, vec velocity)
         : CircleEntity(position, radius)
         , max_speed(max_speed)
     {

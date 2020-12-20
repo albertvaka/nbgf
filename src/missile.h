@@ -15,7 +15,7 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 	static inline PartSys particles = PartSys(nullptr);
 	static void InitParticles();
 
-	Missile(const vec& position, float angleDegs);
+	Missile(vec position, float angleDegs);
 
 	void explode() {
 		exploding = true;

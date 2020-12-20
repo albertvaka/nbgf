@@ -27,7 +27,7 @@ struct Matrix
 	inline void  Rotate(float rotation);
 
 	//create a rotation matrix from a fwd and side 2D vector
-	inline void  Rotate(const vec &fwd, const vec &side);
+	inline void  Rotate(vec fwd, vec side);
 
 	//applys a transformation matrix to a std::vector of points
 	inline void TransformVecs(std::vector<vec> &vPoints);
@@ -143,7 +143,7 @@ inline void Matrix::Rotate(float rot)
 }
 
 //create a rotation matrix from a 2D vector
-inline void Matrix::Rotate(const vec &fwd, const vec &side)
+inline void Matrix::Rotate(vec fwd, vec side)
 {
 	Matrix mat;
 
@@ -160,7 +160,7 @@ inline void Matrix::Rotate(const vec &fwd, const vec &side)
 //
 //  Transforms a point from the agent's local space into world space
 //------------------------------------------------------------------------
-inline vec PointToWorldSpace(const vec &point, const vec &AgentHeading, const vec &AgentPosition)
+inline vec PointToWorldSpace(vec point, vec AgentHeading, vec AgentPosition)
 {
 	
 	vec AgentSide = AgentHeading.Perp();
@@ -187,7 +187,7 @@ inline vec PointToWorldSpace(const vec &point, const vec &AgentHeading, const ve
 //
 //  Transforms a vector from the agent's local space into world space
 //------------------------------------------------------------------------
-inline vec VectorToWorldSpace(const vec &point, const vec &AgentHeading)
+inline vec VectorToWorldSpace(vec point, vec AgentHeading)
 {
 	vec AgentSide = AgentHeading.Perp();
 
@@ -209,7 +209,7 @@ inline vec VectorToWorldSpace(const vec &point, const vec &AgentHeading)
 //--------------------- PointToLocalSpace --------------------------------
 //
 //------------------------------------------------------------------------
-inline vec PointToLocalSpace(const vec &point, const vec &AgentHeading, const vec &AgentPosition)
+inline vec PointToLocalSpace(vec point, vec AgentHeading, vec AgentPosition)
 {
 	vec AgentSide = AgentHeading.Perp();
 
@@ -236,7 +236,7 @@ inline vec PointToLocalSpace(const vec &point, const vec &AgentHeading, const ve
 //--------------------- VectorToLocalSpace --------------------------------
 //
 //------------------------------------------------------------------------
-inline vec VectorToLocalSpace(const vec & point, const vec &AgentHeading, const vec &AgentSide)
+inline vec VectorToLocalSpace(vec  point, vec AgentHeading, vec AgentSide)
 { 
 	//make a copy of the point
 	vec TransPoint = point;

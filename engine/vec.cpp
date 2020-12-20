@@ -8,7 +8,7 @@ const vec vec::Zero(0.f, 0.f);
 
 #ifdef _DEBUG
 struct debugvec {
-    debugvec(const vec& v, uint8_t r, uint8_t g, uint8_t b) : v(v), r(r), g(g), b(b) {}
+    debugvec(vec v, uint8_t r, uint8_t g, uint8_t b) : v(v), r(r), g(g), b(b) {}
     vec v; 
     int r,g,b;
 };

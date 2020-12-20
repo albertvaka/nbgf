@@ -35,7 +35,7 @@ struct Lava : SelfRegister<Lava>
 		}
 	}
 
-	bool IsInside(const vec& pos) const {
+	bool IsInside(vec pos) const {
 		return bounds.Contains(pos);
 	}
 

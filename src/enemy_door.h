@@ -19,7 +19,7 @@ struct EnemyDoor : Entity, SelfRegister<EnemyDoor>
 	std::vector<const Entity*> enemies;
 	float openingTimer;
 
-	EnemyDoor(const vec& position);
+	EnemyDoor(vec position);
 
 	void AddEnemy(const Entity* enemy) {
 		enemies.push_back(enemy);

@@ -16,7 +16,7 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 	GPU_Image* texture;
 
 	template<int size>
-	constexpr OneShotAnim(GPU_Image* texture, const vec& pos, const AnimationFrame(&animation)[size], float scale = 1.f, float rotationDegs = 0.f)
+	constexpr OneShotAnim(GPU_Image* texture, vec pos, const AnimationFrame(&animation)[size], float scale = 1.f, float rotationDegs = 0.f)
 		: texture(texture)
 		, anim(animation)
 		, scale(scale)

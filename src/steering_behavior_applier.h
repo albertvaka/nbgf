@@ -9,7 +9,7 @@ struct SteeringBehaviorApplier : SteeringBehavior {
 public:
 	SteeringBehaviorApplier(SteeringEntity* agent, float max_force = 10.f) : SteeringBehavior(agent), max_force(max_force){ }
 
-	bool AccumulateForce(vec& sf, const vec& ForceToAdd);
+	bool AccumulateForce(vec& sf, vec ForceToAdd);
 
 	vec Force() const { return m_vSteeringForce; }
 
@@ -124,7 +124,7 @@ public:
 //  SteeringEntity has left to apply and then applies that amount of the
 //  force to add.
 //------------------------------------------------------------------------
-inline bool SteeringBehaviorApplier::AccumulateForce(vec& RunningTot, const vec& ForceToAdd)
+inline bool SteeringBehaviorApplier::AccumulateForce(vec& RunningTot, vec ForceToAdd)
 {
 
 	//calculate how much steering force the SteeringEntity has used so far

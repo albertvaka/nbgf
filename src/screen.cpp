@@ -4,7 +4,7 @@
 #include "mates.h"
 #include "tiledexport.h"
 
-void ScreenManager::UpdateCurrentScreen(const vec& pos) {
+void ScreenManager::UpdateCurrentScreen(vec pos) {
 	if (currentScreen < 0 || !TiledMap::screens[currentScreen].Contains(pos)) {
 		int screen = FindScreenContaining(pos);
 		if (screen >= 0) currentScreen = screen;

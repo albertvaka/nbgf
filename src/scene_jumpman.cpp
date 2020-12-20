@@ -69,41 +69,41 @@ void JumpScene::EnterScene()
 
 	map.LoadFromTiled();
 
-	for (const vec& v : TiledEntities::bat) {
+	for (vec v : TiledEntities::bat) {
 		new Bat(v, false, false);
 	}
 
 	new Bipedal(TiledEntities::boss_bipedal);
 
-	for (const vec& v : TiledEntities::angrybat) {
+	for (vec v : TiledEntities::angrybat) {
 		new Bat(v, true, false);
 	}
 
-	for (const vec& v : TiledEntities::batawake) {
+	for (vec v : TiledEntities::batawake) {
 		new Bat(v, false, true);
 	}
 
-	for (const vec& v : TiledEntities::fireslime) {
+	for (vec v : TiledEntities::fireslime) {
 		new FireSlime(v);
 	}
 
-	for (const vec& v : TiledEntities::goomba) {
+	for (vec v : TiledEntities::goomba) {
 		new Goomba(v, false);
 	}
 
-	for (const vec& v : TiledEntities::goombacharger) {
+	for (vec v : TiledEntities::goombacharger) {
 		new Goomba(v ,true);
 	}
 
-	for (const vec& v : TiledEntities::mantis) {
+	for (vec v : TiledEntities::mantis) {
 		new Mantis(v);
 	}
 
-	for (const vec& v : TiledEntities::flyingalien) {
+	for (vec v : TiledEntities::flyingalien) {
 		new FlyingAlien(v);
 	}
 
-	//for (const vec& v : TiledEntities::save) {
+	//for (vec v : TiledEntities::save) {
 	//	new SaveStation(v);
 	//}
 
@@ -114,11 +114,11 @@ void JumpScene::EnterScene()
 
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
-	for (const vec& v : TiledEntities::healthup) {
+	for (vec v : TiledEntities::healthup) {
 		new HealthUp(v);
 	}
 
-	for (const vec& v : TiledEntities::enemy_door) {
+	for (vec v : TiledEntities::enemy_door) {
 		EnemyDoor* d = new EnemyDoor(v);
 		int door_screen = screenManager.FindScreenContaining(d->pos);
 		if (door_screen < 0) {
@@ -344,7 +344,7 @@ void JumpScene::Update(float dt)
 						e->awakened = true;
 					}
 				}
-				for (const vec& v : TiledEntities::initial_batawake) {
+				for (vec v : TiledEntities::initial_batawake) {
 					Bat* b = new Bat(v, false, true);
 					door_to_close_when_break_skill->AddEnemy(b);
 				}

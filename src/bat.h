@@ -18,7 +18,7 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 		SEEKING,
 	};
 
-	static void AwakeNearbyBats(const vec& pos);
+	static void AwakeNearbyBats(vec pos);
 
 	SteeringBehaviorApplier steering;
 
@@ -30,7 +30,7 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 	float seekingTimer; // Aggresive bats will start seeking when this gets to 0
 	int screen;
 
-	Bat(const vec& position, bool aggresive, bool awake);
+	Bat(vec position, bool aggresive, bool awake);
 
 	void die() {
 		alive = false;

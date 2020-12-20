@@ -27,7 +27,7 @@ struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 
 	int screen;
 
-	FireSlime(const vec& position);
+	FireSlime(vec position);
 
 	Bounds AttackBounds() const;
 	bool CanMoveForward() const;

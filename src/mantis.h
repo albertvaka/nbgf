@@ -27,9 +27,9 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 
 	int screen;
 
-	Mantis(const vec& position);
+	Mantis(vec position);
 
-	vec GetJumpSpeedToTarget(const vec& pos);
+	vec GetJumpSpeedToTarget(vec pos);
 
 	void Update(float dt);
 	void Draw() const;
