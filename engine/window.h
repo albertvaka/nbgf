@@ -184,8 +184,7 @@ namespace Window
 		}
 
 		~Draw() {
-			FixTextureBleeding(src);
-			#if defined(__APPLE__) //&& defined(SUPERHACK_TO_FIX_MISALIGNED_TEXTRECT)
+			#if defined(__APPLE__)
 			if (Window::currentDrawTarget != Window::screenTarget) {
 				float decimalPart = (dest.y - (int)(dest.y));
 				const float e = 0.004f;
@@ -193,6 +192,8 @@ namespace Window
 					dest.y -= 2*e;
 				}
 			}
+			#else
+				FixTextureBleeding(src);
 			#endif
 			// We pass origin as rotation pivot. We could change that to a different variable.
 			GPU_BlitTransformX(t, &src, Window::currentDrawTarget, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
@@ -393,7 +394,9 @@ namespace Window
 }
 
 inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {
+#if !defined(__APPLE__)
 	FixTextureBleeding(tr);
+#endif
 	tr.x /= i->texture_w;
 	tr.y /= i->texture_h;
 	tr.w /= i->texture_w;
