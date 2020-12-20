@@ -114,19 +114,22 @@ namespace Window
 	class Draw {
 		GPU_Image* t;
 		vec dest;
-		GPU_Rect src = { 0, 0, 0, 0};
+		GPU_Rect src = {};
 		float rotation = 0;
 		vec scale = vec(1.f, 1.f);
 		vec origin = vec(0.f,0.f);
 	public:
-		constexpr Draw(GPU_Image* t, const vec& pos) : t(t), dest(pos) { }
-		constexpr Draw(GPU_Image* t, float x, float y) : t(t), dest(x,y) { }
+		constexpr Draw(GPU_Image* t, const vec& pos) : t(t), dest(pos) {
+			withRect(0,0,t->w,t->h);
+		}
+		constexpr Draw(GPU_Image* t, float x, float y) : t(t), dest(x,y) {
+			withRect(0,0,t->w,t->h);
+		}
 		constexpr Draw(GPU_Image* t, const Bounds& destRect) // sets scale
 			: t(t), dest(destRect.TopLeft())
 			, scale(destRect.width/float(t->w), destRect.height/float(t->h))
 		{
-			src.w = (float)t->w;
-			src.h = (float)t->h;
+			withRect(0,0,t->w,t->h);
 		}
 
 		constexpr Draw& withRect(float x, float y, float w, float h) {
