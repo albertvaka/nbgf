@@ -10,6 +10,7 @@
 #endif
 
 //static GPU_Image* renderToTextureTarget;
+extern float mainClock;
 
 void FxManager::Update(float dt) {
 
@@ -86,7 +87,7 @@ void FxManager::BeginDraw() {
 	//if (!renderToTextureTarget) {
 	//	renderToTextureTarget = Window::CreateTexture(Window::GAME_WIDTH, Window::GAME_HEIGHT);
 	//}
-	//Window::BeginRenderToTexture(renderToTextureTarget(), true);
+	//Window::BeginRenderToTexture(renderToTextureTarget, true);
 }
 
 void FxManager::EndDraw() {
@@ -95,7 +96,7 @@ void FxManager::EndDraw() {
 	//Window::EndRenderToTexture();
 	//Assets::waveShader.Activate();
 	//Assets::waveShader.SetUniform("time", mainClock);
-	//Window::Draw(renderToTextureTarget(), Camera::GetTopLeft());
+	//Window::Draw(renderToTextureTarget, Camera::GetTopLeft());
 	//Shader::Deactivate();
 
 	if (introTime > 0.f) {
