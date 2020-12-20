@@ -109,6 +109,11 @@ void init() {
 
 	last_ticks = SDL_GetTicks();
 
+	// Start with the both buffers fully black
+	Window::Clear(0, 0, 0);
+	GPU_Flip(Window::screenTarget);
+	Window::Clear(0, 0, 0);
+
 	currentScene = new EntryPointScene();
 	SceneManager::SetScene(currentScene);
 	currentScene->EnterScene();
