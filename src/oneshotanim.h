@@ -2,7 +2,6 @@
 
 #include "vec.h"
 #include "selfregister.h"
-#include "assets.h"
 #include "window.h"
 #include "animation2.h"
 #include "entity.h"
@@ -12,13 +11,17 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 	Animation2 anim;
 	vec pos;
 	bool alive = true;
+	float rotation;
 	float scale;
+	GPU_Image* texture;
 
 	template<int size>
-	constexpr OneShotAnim(const vec& pos, const AnimationFrame(&animation)[size], float scale = 1.f)
-		: anim(animation)
+	constexpr OneShotAnim(GPU_Image* texture, const vec& pos, const AnimationFrame(&animation)[size], float scale = 1.f, float rotationDegs = 0.f)
+		: texture(texture)
+		, anim(animation)
 		, scale(scale)
 		, pos(pos)
+		, rotation(rotationDegs)
 	{
 		anim.loopable = false;
 	}
@@ -32,9 +35,10 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 
 	void Draw() const {
 		const GPU_Rect& rect = anim.GetCurrentRect();
-		Window::Draw(Assets::hospitalTexture, pos)
+		Window::Draw(texture, pos)
 			.withRect(rect)
 			.withScale(scale)
+			.withRotationDegs(rotation)
 			.withOrigin(rect.w / 2, rect.h / 2);
 	}
 

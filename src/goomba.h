@@ -6,6 +6,7 @@
 #include "anim_lib.h"
 #include "entity.h"
 #include "oneshotanim.h"
+#include "assets.h"
 
 struct Goomba : CircleEntity, SelfRegister<Goomba>
 {
@@ -43,7 +44,7 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 
 	void die() {
 		alive = false;
-		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
+		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	}
 };
 

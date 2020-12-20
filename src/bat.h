@@ -7,6 +7,7 @@
 #include "steering_behavior.h"
 #include "steering_behavior_applier.h"
 #include "oneshotanim.h"
+#include "assets.h"
 
 struct Bat : SteeringEntity, SelfRegister<Bat>
 {
@@ -33,7 +34,7 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 
 	void die() {
 		alive = false;
-		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
+		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	}
 
 	void Update(float dt);

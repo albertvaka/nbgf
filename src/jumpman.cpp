@@ -5,6 +5,7 @@
 #include "mates.h"
 #include "assets.h"
 #include "fxmanager.h"
+#include "oneshotanim.h"
 #include "debug.h"
 #include "common_tilemapcharacter.h"
 #include "skilltree.h"
@@ -351,7 +352,10 @@ void JumpMan::takeDamage(const vec& src) {
 	jumpTimeLeft = 0;
 	onWall = ONWALL_NO;
 	crouched = false;
-	FxManager::StopTheWorld(2, 0.3f);
+	FxManager::StopTheWorld(0, 0.25f);
+	vec playerCenter = bounds().Center();
+	float direction = (playerCenter-src).AngleDegs();
+	new OneShotAnim(Assets::marioTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
 }
 
 Bounds JumpMan::maxBounds() const

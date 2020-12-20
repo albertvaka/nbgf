@@ -96,6 +96,10 @@ namespace AnimLib {
 		{ TexturePackerRects::FLYINGALIEN_08, 0.05f },
 	};
 
+	constexpr const AnimationFrame HIT_SPLASH[] = {
+		{ { 7 * 32, 8 * 32, 40, 32 }, 0.05f },
+	};
+
 	constexpr const GPU_Rect BIPEDAL_IDLE = TexturePackerRects::BIPEDALUNIT_IDLE_00;
 	
 	constexpr const GPU_Rect FIRESHOT = {437, 5, 6, 6};

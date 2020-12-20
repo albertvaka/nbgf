@@ -6,6 +6,7 @@
 #include "anim_lib.h"
 #include "entity.h"
 #include "oneshotanim.h"
+#include "assets.h"
 #include "collide.h"
 
 struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>, SelfColliding<FlyingAlien>
@@ -38,7 +39,7 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>, SelfColliding<Flyi
 
 	void die() {
 		alive = false;
-		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
+		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	}
 };
 

@@ -200,6 +200,11 @@ void JumpScene::Update(float dt)
 		return;
 	}
 
+	for (OneShotAnim* e : OneShotAnim::GetAll()) { // Update this first so one-frame anims aren't deleted before they are drawn once
+		e->Update(dt);
+	}
+	OneShotAnim::DeleteNotAlive();
+
 	skillTree.Update(dt);
 	if (skillTree.open) return;
 
@@ -251,11 +256,6 @@ void JumpScene::Update(float dt)
 	for (FireSlime* e : FireSlime::GetAll()) {
 		e->Update(dt);
 	}
-
-	for (OneShotAnim* e : OneShotAnim::GetAll()) {
-		e->Update(dt);
-	}
-	OneShotAnim::DeleteNotAlive();
 
 #ifdef _DEBUG
 	const SDL_Scancode killall = SDL_SCANCODE_F11;
@@ -425,12 +425,12 @@ void JumpScene::Draw()
 		&destroyedTiles,
 		SaveStation::GetAll(),
 		EnemyDoor::GetAll(),
+		OneShotAnim::GetAll(),
 		Goomba::GetAll(),
 		Mantis::GetAll(),
 		FlyingAlien::GetAll(),
 		FireSlime::GetAll(),
 		Bat::GetAll(),
-		OneShotAnim::GetAll(),
 		Bipedal::GetAll(),
 		&Bullet::particles,
 		&Missile::particles,

@@ -7,6 +7,7 @@
 #include "entity.h"
 #include "oneshotanim.h"
 #include "collide.h"
+#include "assets.h"
 
 struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 {
@@ -37,7 +38,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 
 	void die() {
 		alive = false;
-		new OneShotAnim(pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
+		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	}
 };
 
