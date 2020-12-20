@@ -13,10 +13,10 @@
 constexpr const float gravity_acc = 600; // shared with jumpman
 
 constexpr const float speed = 25;
-constexpr const float jumpSpeedY = -350;
-constexpr const float maxJumpSpeedX = 200;
+constexpr const float jumpSpeedY = -300;
+constexpr const float maxJumpSpeedX = 250;
 
-constexpr const float attackRadius = 150;
+constexpr const float attackRadius = 250;
 
 // Square used to collide against the tilemap
 constexpr const vec spriteSize = vec(24, 24);

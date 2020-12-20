@@ -84,7 +84,7 @@ void CollideSelf(const std::vector<T*>& setA, F callback)
 template <typename T>
 struct SelfColliding
 {
-    T* collidingWith = (T*)0xCACA0BAD; // If you see this value you forgot to call SelfCollide
+    T* collidingWith = (T*)0xBADCACA; // If you see this value you forgot to call SelfCollide
 
     static void SelfCollide()
     {

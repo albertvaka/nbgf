@@ -130,7 +130,7 @@ void FlyingAlien::Update(float dt)
 				if (IsGoingToHitAWall(chargeBounds.Center(), chargeBounds.Size(), vel, bigDtAttack)
 					|| IsGoingToLeaveTheScreen(chargeBounds.Center(), chargeBounds.Size(), vel, bigDtAttack, screen))
 				{
-					Debug::out << "Flipping because would hit a wall during the attack";
+					//Debug::out << "Flipping because would hit a wall during the attack";
 					vel.x = -vel.x;
 				}
 			}
