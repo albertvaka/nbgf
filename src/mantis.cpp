@@ -166,8 +166,6 @@ void Mantis::Update(float dt)
 
 void Mantis::Draw() const
 {
-	pos.Debuggerino();
-
 	if (hitTimer > 0.f) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
@@ -186,5 +184,4 @@ void Mantis::Draw() const
 		Bounds::fromCenter(pos, spriteSize).Draw();
 		CircleBounds(pos, attackRadius).Draw();
 	}
-
 }

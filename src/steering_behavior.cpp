@@ -164,7 +164,7 @@ vec SteeringBehavior::Wander(float dt)
 	vec Origin = steeringEntity->pos;
 	vec Ret = Target - Origin;
 
-	(steeringEntity->pos + m_vWanderTarget * 20).Debuggerino(0,255,0);
+	//(m_vWanderTarget * 30).DebuggerinoAsArrow(steeringEntity->pos, 0,255,0);
 
 	return Ret;
 }
@@ -182,7 +182,7 @@ vec SteeringBehavior::BoundsAvoidance(const Bounds& m_bounds)
 
 	//feeler pointing straight in front
 	m_Feelers[0] = steeringEntity->pos + m_dWallDetectionFeelerLength * heading;
-	m_Feelers[0].Debuggerino();
+	//m_Feelers[0].Debuggerino();
 
 	//feeler to left
 	vec temp = heading.RotatedAroundOriginRads(Angles::Pi * -0.3f);

@@ -201,10 +201,6 @@ void Bat::Draw() const
 
 	Shader::Deactivate();
 
-	if (state == State::SEEKING) {
-		pos.Debuggerino();
-	}
-
 	if (Debug::Draw && Camera::GetBounds().Contains(pos)) {
 		DrawBounds();
 		DrawSenseArea();
