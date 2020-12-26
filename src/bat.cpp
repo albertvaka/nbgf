@@ -208,6 +208,11 @@ void Bat::Draw() const
 	if (Debug::Draw && Camera::GetBounds().Contains(pos)) {
 		DrawBounds();
 		DrawSenseArea();
+		if (state == State::FLYING) {
+			(Heading() * 15).DebuggerinoAsArrow(pos, 255, 255, 0);
+		} else if (state == State::SEEKING) {
+			(Heading() * 15).DebuggerinoAsArrow(pos, 255, 0, 0);
+		}
 	}
 }
 

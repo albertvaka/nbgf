@@ -175,6 +175,14 @@ struct vec
 		return vec(-x, -y);
 	}
 
+	void DebuggerinoAsArrow(vec from, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const
+#ifdef _DEBUG
+		;
+#else
+	{}
+#endif
+
+
 	void Debuggerino(uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const
 #ifdef _DEBUG
 	;
