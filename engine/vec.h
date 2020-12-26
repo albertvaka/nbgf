@@ -49,6 +49,11 @@ struct vec
 	inline void      Normalize();
 	[[nodiscard]] inline vec      Normalized() const;
 
+	// Dot product: returns the length of the projection of one vector onto the other (order doesn't matter, it's symmetrical)
+	// It can be used to know how alligned the directions of both vectors are, assuming they are normalized:
+	// Perpendicular -> dot product = 0
+	// Parallel, same direction -> dot product = 1
+	// Parallel, opposite direction -> dot product = -1
 	[[nodiscard]] inline float    Dot(vec v2) const;
 
 	[[nodiscard]] inline float    Cross(vec v2) const;
@@ -184,28 +189,21 @@ void DrawDebugVecs();
 void ClearDebugVecs();
 #endif
 
-//------------------------------------------------------------------------member functions
-
-//  returns the length of a 2D vector
 inline float vec::Length() const
 {
 	return sqrt(x * x + y * y);
 }
 
-//  returns the squared length of a 2D vector
 inline float vec::LengthSq() const
 {
 	return (x * x + y * y);
 }
 
-
-//  calculates the dot product
 inline float vec::Dot(vec v2) const
 {
 	return x*v2.x + y*v2.y;
 }
 
-//  calculates the cross product
 inline float vec::Cross(vec v2) const
 {
 	return x*v2.y - y*v2.x;
