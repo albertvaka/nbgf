@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <unordered_map>
 
 #include "vec.h"
 #include "bounds.h"
@@ -43,7 +44,7 @@ struct TiledEntities
 {
 	{% for k, v in entities_by_type.items() -%}
 		{%- if v|length > 1 -%}
-			static const std::array<vec, {{v|length}}> {{k}};
+			static const std::unordered_map<int, vec> {{k}};
 		{%- else -%}
 			static const vec {{k}};
 		{%- endif %}

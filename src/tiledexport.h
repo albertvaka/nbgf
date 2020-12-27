@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <unordered_map>
 
 #include "vec.h"
 #include "bounds.h"
@@ -246,24 +247,24 @@ struct TiledMap
 
 struct TiledEntities
 {
-	static const std::array<vec, 15> bat;
-	static const std::array<vec, 3> initial_batawake;
-	static const std::array<vec, 2> healthup;
-	static const std::array<vec, 4> batawake;
+	static const std::unordered_map<int, vec> bat;
+	static const std::unordered_map<int, vec> initial_batawake;
+	static const std::unordered_map<int, vec> healthup;
+	static const std::unordered_map<int, vec> batawake;
 	static const vec spawn;
 	static const vec skill_gun;
-	static const std::array<vec, 3> enemy_door;
+	static const std::unordered_map<int, vec> enemy_door;
 	static const vec skill_walljump;
-	static const std::array<vec, 3> save;
+	static const std::unordered_map<int, vec> save;
 	static const vec lava_initial_height;
 	static const vec skill_breakblocks;
-	static const std::array<vec, 2> goomba;
+	static const std::unordered_map<int, vec> goomba;
 	static const vec boss_bipedal;
-	static const std::array<vec, 2> goombacharger;
-	static const std::array<vec, 16> fireslime;
-	static const std::array<vec, 2> angrybat;
-	static const std::array<vec, 2> mantis;
-	static const std::array<vec, 4> flyingalien;
+	static const std::unordered_map<int, vec> goombacharger;
+	static const std::unordered_map<int, vec> fireslime;
+	static const std::unordered_map<int, vec> angrybat;
+	static const std::unordered_map<int, vec> mantis;
+	static const std::unordered_map<int, vec> flyingalien;
 	static const vec debug_teleport;
 	
 };

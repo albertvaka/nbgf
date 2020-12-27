@@ -30,13 +30,13 @@ const std::array<Bounds, {{screens|length}}> TiledMap::screens = {
 
 {% for k, v in entities_by_type.items() -%}
 	{%- if v|length > 1 -%}
-const std::array<vec, {{v|length}}> TiledEntities::{{k}} = {
+const std::unordered_map<int, vec> TiledEntities::{{k}} = {
 {%- for e in v %}
-	vec({{e[0]}}f, {{e[1]}}f),
+	{ {{e[0]}}, vec({{e[1]}}f, {{e[2]}}f) },
 {%- endfor %}
 };
 {% else -%}
-	const vec TiledEntities::{{k}} = vec({{v[0][0]}}f, {{v[0][1]}}f);
+	const vec TiledEntities::{{k}} = vec({{v[0][1]}}f, {{v[0][2]}}f);
 {% endif %}
 {% endfor %}
 

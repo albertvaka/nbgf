@@ -120,7 +120,7 @@ for t in known_types:
 entities_by_type = defaultdict(list)
 for e in entities:
     type_ = e.type if e.type != None else tileset[e.gid-1].type_
-    entities_by_type[type_].append((e.location.x-min_x*tilesize, e.location.y-min_y*tilesize))
+    entities_by_type[type_].append((e.id_, e.location.x-min_x*tilesize, e.location.y-min_y*tilesize))
 
 areas_by_type = defaultdict(list)
 for e in areas:

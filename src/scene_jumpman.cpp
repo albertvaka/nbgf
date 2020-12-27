@@ -77,38 +77,38 @@ void JumpScene::EnterScene()
 
 	map.LoadFromTiled();
 
-	for (vec v : TiledEntities::bat) {
-		new Bat(v, false, false);
+	for (auto const& [id, pos] : TiledEntities::bat) {
+		new Bat(pos, false, false);
 	}
 
 	new Bipedal(TiledEntities::boss_bipedal);
 
-	for (vec v : TiledEntities::angrybat) {
-		new Bat(v, true, false);
+	for (auto const& [id, pos] : TiledEntities::angrybat) {
+		new Bat(pos, true, false);
 	}
 
-	for (vec v : TiledEntities::batawake) {
-		new Bat(v, false, true);
+	for (auto const& [id, pos] : TiledEntities::batawake) {
+		new Bat(pos, false, true);
 	}
 
-	for (vec v : TiledEntities::fireslime) {
-		new FireSlime(v);
+	for (auto const& [id, pos] : TiledEntities::fireslime) {
+		new FireSlime(pos);
 	}
 
-	for (vec v : TiledEntities::goomba) {
-		new Goomba(v, false);
+	for (auto const& [id, pos] : TiledEntities::goomba) {
+		new Goomba(pos, false);
 	}
 
-	for (vec v : TiledEntities::goombacharger) {
-		new Goomba(v ,true);
+	for (auto const& [id, pos] : TiledEntities::goombacharger) {
+		new Goomba(pos,true);
 	}
 
-	for (vec v : TiledEntities::mantis) {
-		new Mantis(v);
+	for (auto const& [id, pos] : TiledEntities::mantis) {
+		new Mantis(pos);
 	}
 
-	for (vec v : TiledEntities::flyingalien) {
-		new FlyingAlien(v);
+	for (auto const& [id, pos] : TiledEntities::flyingalien) {
+		new FlyingAlien(pos);
 	}
 
 	//for (vec v : TiledEntities::save) {
@@ -122,12 +122,12 @@ void JumpScene::EnterScene()
 
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
-	for (vec v : TiledEntities::healthup) {
-		new HealthUp(v);
+	for (auto const& [id, pos] : TiledEntities::healthup) {
+		new HealthUp(pos);
 	}
 
-	for (vec v : TiledEntities::enemy_door) {
-		EnemyDoor* d = new EnemyDoor(v);
+	for (auto const& [id, pos] : TiledEntities::enemy_door) {
+		EnemyDoor* d = new EnemyDoor(pos);
 		int door_screen = screenManager.FindScreenContaining(d->pos);
 		if (door_screen < 0) {
 			Debug::out << "Warning: Enemy door outside a screen";
@@ -352,8 +352,8 @@ void JumpScene::Update(float dt)
 						e->awakened = true;
 					}
 				}
-				for (vec v : TiledEntities::initial_batawake) {
-					Bat* b = new Bat(v, false, true);
+				for (auto const& [id, pos] : TiledEntities::initial_batawake) {
+					Bat* b = new Bat(pos, false, true);
 					door_to_close_when_break_skill->AddEnemy(b);
 				}
 			}
