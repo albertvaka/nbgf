@@ -38,4 +38,10 @@ void Assets::LoadAll() {
         caveParallaxTextures[i]= LoadImage("data/cave_"+ std::to_string(i)+".png");
         GPU_SetWrapMode(caveParallaxTextures[i], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
     }
+
+    for (size_t i = 0; i < islandParallaxTextures.size(); i++) {
+        islandParallaxTextures[i] = LoadImage("data/island_" + std::to_string(i) + ".png");
+        GPU_SetWrapMode(islandParallaxTextures[i], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
+    }
+
 }

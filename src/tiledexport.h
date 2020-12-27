@@ -241,7 +241,7 @@ struct TiledMap
 {
 	static const uint8_t map[];
 	static const vec map_size;
-	static const std::array<Bounds, 12> screens;
+	static const std::array<Bounds, 14> screens;
 };
 
 struct TiledEntities
@@ -254,7 +254,7 @@ struct TiledEntities
 	static const vec skill_gun;
 	static const std::array<vec, 3> enemy_door;
 	static const vec skill_walljump;
-	static const std::array<vec, 2> save;
+	static const std::array<vec, 3> save;
 	static const vec lava_initial_height;
 	static const vec skill_breakblocks;
 	static const std::array<vec, 2> goomba;
@@ -276,5 +276,6 @@ struct TiledAreas
 	static const std::array<Bounds, 1> fog;
 	static const std::array<Bounds, 1> parallax_cave;
 	static const std::array<Bounds, 1> boss_bounds;
+	static const std::array<Bounds, 1> parallax_island;
 	
 };

@@ -54,6 +54,10 @@ JumpScene::JumpScene()
 		new Parallax(b, Assets::forestParallaxTextures, 0.25f, 1.f, 172.f);
 	}
 
+	for (const Bounds& b : TiledAreas::parallax_island) {
+		new Parallax(b, Assets::islandParallaxTextures, 0.f, 0.3f, 122.f);
+	}
+
 	for (const Bounds& b : TiledAreas::parallax_cave) {
 		new Parallax(b, Assets::caveParallaxTextures, 0.4f, 0.65f, -165.f);
 	}
@@ -61,6 +65,10 @@ JumpScene::JumpScene()
 	for (const auto& screen : TiledMap::screens) {
 		screenManager.AddScreen(screen);
 	}
+}
+
+JumpScene::~JumpScene() {
+	Parallax::DeleteAll();
 }
 
 void JumpScene::EnterScene()
@@ -448,7 +456,6 @@ void JumpScene::Draw()
 		Window::Draw(Assets::hospitalTexture, player.bounds().TopRight() + vec(2, -6))
 			.withRect(Animation::AnimFrame(anim, mainClock * 1000));
 	}
-
 
 	rotoText.Draw(vec(0,-30));
 

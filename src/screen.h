@@ -15,7 +15,7 @@ struct ScreenManager : SingleInstance<ScreenManager>
 		return screens.size();
 	}
 
-	void ClearScreenList() {
+	void DeleteAllScreens() {
 		screens.clear();
 	}
 
