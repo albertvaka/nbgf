@@ -19,7 +19,7 @@ struct EnemyDoor : Entity, SelfRegister<EnemyDoor>
 	std::vector<const Entity*> enemies;
 	float openingTimer;
 
-	EnemyDoor(vec position);
+	EnemyDoor(int saveId, vec position);
 
 	void AddEnemy(const Entity* enemy) {
 		enemies.push_back(enemy);
@@ -30,8 +30,12 @@ struct EnemyDoor : Entity, SelfRegister<EnemyDoor>
 	void Update(float dt);
 	void Draw() const;
 
+	void SaveState() const {}; // TODO
+	void LoadState() {}; // TODO
+
 private:
 	void SpawnTiles();
+	int saveId;
 
 };
 

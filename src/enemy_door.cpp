@@ -8,8 +8,9 @@
 const float openAnimationTime = 0.4f; //Animation will take twice this time per tile
 const int maxHeight = 10;
 
-EnemyDoor::EnemyDoor(vec p)
+EnemyDoor::EnemyDoor(int saveId, vec p)
 	: Entity(TileMap::alignToTiles(p) - vec(0, Tile::size))
+	, saveId(saveId)
 {
 	SpawnTiles();
 }

@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "scene_jumpman.h"
 #include "input.h"
 #ifdef _IMGUI
@@ -22,11 +24,14 @@
 #include "goomba.h"
 #include "flyingalien.h"
 #include "drawall.h"
+#include "savestate.h"
 
 extern float mainClock;
 
 const float camSpeed = 2000;
 const float introDuration = 1.f;
+
+int saveSlot = 0;
 
 JumpScene::JumpScene()
 	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::marioTexture)
@@ -69,6 +74,34 @@ JumpScene::JumpScene()
 
 JumpScene::~JumpScene() {
 	Parallax::DeleteAll();
+}
+
+void JumpScene::SaveState() const {
+	StateSaver saveState("gaem2020", saveSlot);
+	saveState.Load();
+	if (saveState.HasData()) {
+		Debug::out << "Overwriting data in slot " << saveSlot;
+	}
+	saveState.Clear();
+
+	std::stringstream ss;
+	ss << player.pos.x << " " << player.pos.y;
+	saveState.Put("player", ss.str());
+
+	saveState.Save();
+}
+
+void JumpScene::LoadState() {
+	StateSaver saveState("gaem2020", saveSlot); // Split in statesaver and stateloader?
+	saveState.Load(); // Do this by default?
+	if (!saveState.HasData()) {
+		Debug::out << "No data to load in slot " << saveSlot;
+		return;
+	}
+
+	std::string state = saveState.Get("player"); // Maybe this should be a stream already?
+	std::stringstream ss(state);
+	ss >> player.pos.x >> player.pos.y;
 }
 
 void JumpScene::EnterScene()
@@ -127,7 +160,7 @@ void JumpScene::EnterScene()
 	}
 
 	for (auto const& [id, pos] : TiledEntities::enemy_door) {
-		EnemyDoor* d = new EnemyDoor(pos);
+		EnemyDoor* d = new EnemyDoor(id, pos);
 		int door_screen = screenManager.FindScreenContaining(d->pos);
 		if (door_screen < 0) {
 			Debug::out << "Warning: Enemy door outside a screen";
@@ -468,12 +501,22 @@ void JumpScene::Draw()
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		if (ImGui::Button("Add point")) {
 			skillTree.gunpoints += 1;
-		};
+		}
 		ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
 		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 		ImGui::End();
-
-		//FxManager::DrawImgui();
+	}
+	//FxManager::DrawImgui();
+	{
+		ImGui::Begin("savestate");
+		ImGui::InputInt("Slot", &saveSlot);
+		if (ImGui::Button("Save")) {
+			SaveState();
+		}
+		if (ImGui::Button("Load")) {
+			LoadState();
+		}
+		ImGui::End();
 	}
 #endif
 

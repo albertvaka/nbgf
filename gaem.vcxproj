@@ -68,6 +68,7 @@
     <ClInclude Include="src\parallax.h" />
     <ClInclude Include="src\powerups.h" />
     <ClInclude Include="src\rototext.h" />
+    <ClInclude Include="src\savestate.h" />
     <ClInclude Include="src\savestation.h" />
     <ClInclude Include="src\scene_debug.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
@@ -140,6 +141,7 @@
     <ClCompile Include="src\missile.cpp" />
     <ClCompile Include="src\parallax.cpp" />
     <ClCompile Include="src\powerups.cpp" />
+    <ClCompile Include="src\savestate.cpp" />
     <ClCompile Include="src\savestation.cpp" />
     <ClCompile Include="src\scene_debug.cpp" />
     <ClCompile Include="src\scene_hellcross.cpp" />

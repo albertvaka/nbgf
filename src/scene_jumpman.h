@@ -33,6 +33,9 @@ struct JumpScene : Scene {
 
 	GameKeys contextActionButton = GameKeys::NONE;
 
+	void SaveState() const;
+	void LoadState();
+
 	JumpScene();
 	~JumpScene();
 	void EnterScene() override;
