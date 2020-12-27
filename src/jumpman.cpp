@@ -385,8 +385,8 @@ void JumpMan::Draw() const {
 			rect = { blink ? 32 * 3.f : 32 * 2.f, 3 * 16.f, 2 * 16.f, 16.f };
 		}
 		else {
-			bool blink = (int(mainClock * 6) % 10) > 8;
-			rect = { blink ? 32 : 0.f, 3 * 16.f, 2 * 16.f, 16.f };
+			bool shake = (int(mainClock * 6) % 10) > 8;
+			rect = { shake ? 32 : 0.f, 3 * 16.f, 2 * 16.f, 16.f };
 		}
 		float scale = (0.333f + (std::max(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
 		vec vscale = vec(scale, scale);

@@ -18,8 +18,6 @@
 #include "oneshotanim.h"
 #include "drawall.h"
 
-extern float mainClock;
-
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
 

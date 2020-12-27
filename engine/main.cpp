@@ -207,7 +207,7 @@ void main_loop() {
 			limited_dt *= 3;
 		}
 #endif
-		mainClock += limited_dt;
+		mainClock += limited_dt; // TODO: Should not increase when fxmanager->IsTheWorldStopped()
 		currentScene->Update(limited_dt);
 	}
 

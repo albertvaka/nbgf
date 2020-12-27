@@ -6,8 +6,6 @@
 #include "common_tilemapcharacter.h"
 #include "debug.h"
 
-extern float mainClock;
-
 // accel
 const float gravity_acc = 600;
 

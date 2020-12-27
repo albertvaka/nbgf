@@ -25,8 +25,6 @@ constexpr const float spriteRadius = 15.f;
 // Area that if intersects with the player will trigger an attack
 constexpr const vec playerNearbyArea = vec(100, 100);
 
-extern float mainClock;
-
 FlyingAlien::FlyingAlien(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, state(State::FLYING)
