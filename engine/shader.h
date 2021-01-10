@@ -56,7 +56,7 @@ struct Shader {
 	}
 	static void Deactivate() { GPU_DeactivateShaderProgram(); }
 
-	int GetUniformLocation(const char* name);
+	int GetUniformLocation(const char* name, bool warnIfNotFound = true);
 
 	unsigned int program = -1;
 	GPU_ShaderBlock block;

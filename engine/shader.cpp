@@ -89,7 +89,7 @@ void Shader::Load(const char* vertex_path, const char* geometry_path, const char
 	block = GPU_LoadShaderBlock(program, "gpu_Vertex", "gpu_TexCoord", "gpu_Color", "gpu_ModelViewProjectionMatrix");
 }
 
-int Shader::GetUniformLocation(const char* name) {
+int Shader::GetUniformLocation(const char* name, bool warnIfNotFound) {
 	std::map<std::string, int>::const_iterator it = uniforms.find(name);
 	if (it != uniforms.end()) {
 		return it->second;
@@ -97,7 +97,7 @@ int Shader::GetUniformLocation(const char* name) {
 	else {
 		int location = GPU_GetUniformLocation(program, name);
 		uniforms.insert(std::make_pair(name, location));
-		if (location == -1) {
+		if (location == -1 && warnIfNotFound) {
 			Debug::out << "Uniform \"" << name << "\" not found in shader: " << shaderFilePaths;
 		}
 
