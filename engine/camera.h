@@ -109,6 +109,14 @@ namespace Camera
 		return Angles::DegsToRads(camera.angle);
 	}
 
+	inline vec WorldToScreen(vec world) { // Note: Doesn't handle rotation
+		return (world - Camera::GetTopLeft()) * Camera::camera.zoom_x;
+	}
+
+	inline vec ScreenToWorld(vec screen) { // Note: Doesn't handle rotation
+		return (screen / Camera::camera.zoom_x) + Camera::GetTopLeft();
+	}
+
 	namespace InScreenCoords
 	{
 		// A Camera not affected by the current zoom nor camera displacement. Its top-left is always at 0,0

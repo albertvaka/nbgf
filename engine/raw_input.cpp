@@ -169,7 +169,7 @@ void Mouse::_UpdateInputState()
 
 vec Mouse::GetPositionInWorld()
 {
-    return (GetPositionInWindow() / Camera::camera.zoom_x) + Camera::GetTopLeft();
+    return Camera::ScreenToWorld(GetPositionInWindow());
 }
 
 void Keyboard::_UpdateInputState()
