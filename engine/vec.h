@@ -160,6 +160,14 @@ struct vec
 		return *this;
 	}
 
+	constexpr vec operator/=(const vec& rhs)
+	{
+		x /= rhs.x;
+		y /= rhs.y;
+
+		return *this;
+	}
+
 	constexpr bool operator==(vec rhs) const
 	{
 		return (x == rhs.x) && (y == rhs.y);
@@ -392,6 +400,15 @@ inline constexpr vec operator/(vec lhs, float val)
 	vec result(lhs);
 	result.x /= val;
 	result.y /= val;
+
+	return result;
+}
+
+inline constexpr vec operator/(vec lhs, vec rhs)
+{
+	vec result(lhs);
+	result.x /= rhs.x;
+	result.y /= rhs.y;
 
 	return result;
 }
