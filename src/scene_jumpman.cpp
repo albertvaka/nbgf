@@ -29,7 +29,6 @@
 extern float mainClock;
 
 const float camSpeed = 2000;
-const float introDuration = 1.f;
 
 int saveSlot = 0;
 
@@ -187,7 +186,7 @@ void JumpScene::EnterScene()
 	screenManager.UpdateCurrentScreen(player.pos);
 	Camera::SetCenter(GetCameraTargetPos());
 
-	FxManager::StartIntroTransition(introDuration);
+	FxManager::StartTransition(Assets::fadeInDiamondsShader);
 }
 
 vec JumpScene::GetCameraTargetPos() {
@@ -231,18 +230,25 @@ void JumpScene::Update(float dt)
 	if (FxManager::IsTheWorldStopped()) {
 		return;
 	}
-	if (FxManager::IsIntroTransitionActive() || FxManager::IsOuttroTransitionActive()) {
+	if (FxManager::IsTransitionActive()) {
 		return;
-	} else if (FxManager::IsOuttroTransitionDone()) {
-		FxManager::ResetOuttroTransitionDone();
-		// Restart scene
-		ExitScene();
-		EnterScene();
+	} else if (FxManager::IsTransitionDone()) {
+		FxManager::ResetTransitionDone();
+		if (FxManager::GetCurrentTransition() != &Assets::fadeInDiamondsShader) {
+			// This was a death or outro transition: restart scene
+			ExitScene();
+			EnterScene();
+		}
 		return;
 	}
 
 	if (player.health <= 0) {
-		FxManager::StartOuttroTransition(introDuration); // Timer to reset scene
+		vec normalizedPlayerPos = Camera::WorldToScreen(player.bounds().Center()) / Camera::InScreenCoords::GetSize();
+		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
+		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
+		Shader::Deactivate();
+		FxManager::StartTransition(Assets::fadeOutCircleShader);
+		return;
 	}
 
 	skillTree.Update(dt);
@@ -498,6 +504,8 @@ void JumpScene::Draw()
 	{
 		ImGui::Begin("jumpman scene");
 		//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
+		vec normalizedPlayerPos = Camera::WorldToScreen(player.pos) / Camera::InScreenCoords::GetSize();
+		ImGui::Text("player norm %f %f", normalizedPlayerPos.x, normalizedPlayerPos.y);
 		vec m = Mouse::GetPositionInWorld();
 		veci t = map.toTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);

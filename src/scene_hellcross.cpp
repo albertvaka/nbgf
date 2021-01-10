@@ -24,8 +24,6 @@ const Tile SOLID_TILE = Tile::SOLID_SIMPLE;
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_SIMPLE;
 const Tile ONEWAY_TILE = Tile::ONEWAY_SIMPLE;
 
-const float introDuration = 1.f;
-
 static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::size);
 
 HellCrossScene::HellCrossScene()
@@ -110,7 +108,7 @@ void HellCrossScene::EnterScene()
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
-	FxManager::StartIntroTransition(introDuration);
+	FxManager::StartTransition(Assets::fadeInDiamondsShader);
 	UpdateCamera();
 }
 
@@ -136,18 +134,26 @@ void HellCrossScene::Update(float dt)
 	if (FxManager::IsTheWorldStopped()) {
 		return;
 	}
-	if (FxManager::IsIntroTransitionActive() || FxManager::IsOuttroTransitionActive()) {
+	if (FxManager::IsTransitionActive()) {
 		return;
-	} else if (FxManager::IsOuttroTransitionDone()) {
-		FxManager::ResetOuttroTransitionDone();
-		// Restart scene
-		ExitScene();
-		EnterScene();
+	}
+	else if (FxManager::IsTransitionDone()) {
+		FxManager::ResetTransitionDone();
+		if (FxManager::GetCurrentTransition() != &Assets::fadeInDiamondsShader) {
+			// This was a death or outro transition: restart scene
+			ExitScene();
+			EnterScene();
+		}
 		return;
 	}
 
 	if (player.health <= 0) {
-		FxManager::StartOuttroTransition(introDuration); // Timer to reset scene
+		vec normalizedPlayerPos = Camera::WorldToScreen(player.bounds().Center()) / Camera::InScreenCoords::GetSize();
+		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
+		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
+		Shader::Deactivate();
+		FxManager::StartTransition(Assets::fadeOutCircleShader);
+		return;
 	}
 
 	player.Update(dt);

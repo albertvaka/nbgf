@@ -12,6 +12,16 @@
 //static GPU_Image* renderToTextureTarget;
 extern float mainClock;
 
+void FxManager::StartTransition(Shader& shader, float duration)
+{
+	transitionTime = duration;
+	transitionDuration = duration;
+	transitionFinished = false;
+	transitionShader = &shader;
+	transitionShaderProgressUniform = shader.GetUniformLocation("progress", false);
+	transitionShaderAspectRatioUniform = shader.GetUniformLocation("aspectRatio", false);
+}
+
 void FxManager::Update(float dt) {
 
 	if (worldStoppedTime > 0) {
@@ -29,15 +39,11 @@ void FxManager::Update(float dt) {
 		}
 	}
 
-	if (introTime > 0) {
-		introTime -= dt;
-		introfinished = introTime <= 0;
+	if (transitionTime > 0) {
+		transitionTime -= dt;
+		transitionFinished = transitionTime <= 0;
 	}
 
-	if (outtroTime > 0) {
-		outtroTime -= dt;
-		outtrofinished = outtroTime <= 0;
-	}
 
 	if (screenshakeTime > 0) {
 		screenshakeTime -= dt;
@@ -99,17 +105,20 @@ void FxManager::EndDraw() {
 	//Window::Draw(renderToTextureTarget, Camera::GetTopLeft());
 	//Shader::Deactivate();
 
-	if (introTime > 0.f) {
-		Assets::fadeInDiamondsShader.Activate();
-		Assets::fadeInDiamondsShader.SetUniform("fadeInProgress", introTime / introDuration);
-		Window::Draw(Assets::blankTexture, Camera::GetBounds());
+	if (transitionTime > 0.f) {
+		Camera::InScreenCoords::Begin();
+
+		transitionShader->Activate();
+
+		vec screenSize = Camera::InScreenCoords::GetSize();
+		transitionShader->SetUniform(transitionShaderProgressUniform, transitionTime / transitionDuration);
+		transitionShader->SetUniform(transitionShaderAspectRatioUniform, screenSize.x/screenSize.y);
+
+		Window::Draw(Assets::blankTexture, Camera::InScreenCoords::GetBounds());
+
 		Shader::Deactivate();
-	}
-	if (outtroTime > 0.f) {
-		Assets::fadeOutDiamondsShader.Activate();
-		Assets::fadeOutDiamondsShader.SetUniform("fadeOutProgress", outtroTime / outtroDuration);
-		Window::Draw(Assets::blankTexture, Camera::GetBounds());
-		Shader::Deactivate();
+
+		Camera::InScreenCoords::End();
 	}
 
 }

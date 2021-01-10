@@ -31,6 +31,8 @@ namespace Assets
 	inline Shader waveShader;
 	inline Shader fadeInDiamondsShader;
 	inline Shader fadeOutDiamondsShader;
+	inline Shader fadeOutCircleShader;
+
 
 	inline std::array<GPU_Image*, 3> forestParallaxTextures;
 	inline std::array<GPU_Image*, 4> caveParallaxTextures;

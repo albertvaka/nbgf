@@ -4,7 +4,7 @@ in vec2 texCoord;
 in vec2 vertex;
 
 out vec4 fragColor;
-uniform float fadeInProgress; //0-1, 0 = full covered 1 = full visible
+uniform float progress; //0-1, 0 = full covered 1 = full visible
 
 const float diamondPixelSize = 20.0;
 
@@ -17,7 +17,7 @@ void main() {
     
     float val =  xDistance + yDistance + texCoord.x + texCoord.y;
 
-    if (val >= fadeInProgress * 3.0) {
+    if (val >= progress * 3.0) {
         discard;
     } else {
         fragColor = vec4(0,0,0,255);

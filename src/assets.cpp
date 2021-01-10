@@ -28,6 +28,7 @@ void Assets::LoadAll() {
     //waveShader.Load("data/vertex_out.vert", nullptr, "data/wave.frag");
     fadeInDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadein_diamonds.frag");
     fadeOutDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_diamonds.frag");
+    fadeOutCircleShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_circle.frag");
 
     for (size_t i = 0; i < forestParallaxTextures.size(); i++) {
         forestParallaxTextures[i]= LoadImage("data/redforest_"+ std::to_string(i)+".png");

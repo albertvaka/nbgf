@@ -2,44 +2,25 @@
 
 #include "vec.h"
 
+struct Shader;
+
 struct FxManager {
 
-	static inline bool IsIntroTransitionActive() {
-		return (introTime > 0);
-
+	static inline bool IsTransitionActive() {
+		return (transitionTime > 0);
 	}
 
-	static inline void StartIntroTransition(float time) {
-		introTime = time;
-		introDuration = time;
-		introfinished = false;
+	static inline Shader* GetCurrentTransition() {
+		return transitionShader;
+	}
+	static void StartTransition(Shader& shader, float duration = 1.f);
+
+	static inline bool IsTransitionDone() {
+		return transitionFinished;
 	}
 
-	static inline bool IsOuttroTransitionActive() {
-		return (outtroTime > 0);
-
-	}
-
-	static inline void StartOuttroTransition(float time) {
-		outtroTime = time;
-		outtroDuration = time;
-		outtrofinished = false;
-	}
-
-	static inline bool IsOuttroTransitionDone() {
-		return outtrofinished;
-	}
-
-	static inline void ResetOuttroTransitionDone() {
-		outtrofinished = false;
-	}
-
-	static inline bool IsIntroTransitionDone() {
-		return introfinished;
-	}
-
-	static inline void ResetIntroTransitionDone() {
-		introfinished = false;
+	static inline void ResetTransitionDone() {
+		transitionFinished = false;
 	}
 
 	static inline void StartScreenshake(float time, veci amplitude, vec speed) {
@@ -53,7 +34,7 @@ struct FxManager {
 		Earthquake,
 		LittleStomp,
 		Stomp,
-		Electroshok,
+		ElectricShock,
 	};
 	static inline void StartScreenshakePreset(ScreenShakePreset preset) {
 		switch (preset) {
@@ -66,7 +47,7 @@ struct FxManager {
 		case ScreenShakePreset::Stomp:
 			StartScreenshake(0.17f, veci(0, 3), vec(0.f, 47.f));
 			break;
-		case ScreenShakePreset::Electroshok:
+		case ScreenShakePreset::ElectricShock:
 			StartScreenshake(0.157f, veci(8, 2), vec(86.7f, 14.1f));
 			break;
 		}
@@ -96,13 +77,12 @@ struct FxManager {
 private:
 	static inline vec screenshake = vec();
 
-	static inline float introTime = 0;
-	static inline float introDuration = 0;
-	static inline bool introfinished = false;
-
-	static inline float outtroTime = 0;
-	static inline float outtroDuration = 0;
-	static inline bool outtrofinished = false;
+	static inline Shader* transitionShader = nullptr;
+	static inline int transitionShaderProgressUniform = -1;
+	static inline int transitionShaderAspectRatioUniform = -1;
+	static inline float transitionTime = 0;
+	static inline float transitionDuration = 0;
+	static inline bool transitionFinished = false;
 
 	static inline float screenshakeTime;
 	static inline veci screenshakeAmplitude = veci(0, 0);
