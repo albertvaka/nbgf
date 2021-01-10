@@ -175,7 +175,7 @@ void Bipedal::Draw() const
 	Window::Draw(Assets::scifiTexture, pos+textureOffset)
 		.withScale(2.f)
 		.withOrigin(16.f, 14.f)
-		.withRect(anim.GetCurrentRect());
+		.withRect(anim.GetCurrentFrameRect());
 
 	Shader::Deactivate();
 

@@ -122,7 +122,7 @@ void Goomba::Update(float dt)
 void Goomba::Draw() const
 {
 	pos.Debuggerino();
-	GPU_Rect rect = anim.GetCurrentRect();
+	GPU_Rect rect = anim.GetCurrentFrameRect();
 
 	vec drawPos = pos;
 

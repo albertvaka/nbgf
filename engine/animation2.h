@@ -95,7 +95,7 @@ struct Animation2
 		}
 	}
 
-	const GPU_Rect& GetCurrentRect() const
+	const GPU_Rect& GetCurrentFrameRect() const
 	{
 		return anim[current_frame].rect;
 	}

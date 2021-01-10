@@ -241,13 +241,13 @@ void JumpScene::Update(float dt)
 		return;
 	}
 
+	skillTree.Update(dt);
+	if (skillTree.open) return; // Pause menu
+
 	for (OneShotAnim* e : OneShotAnim::GetAll()) { // Update this first so one-frame anims aren't deleted before they are drawn once
 		e->Update(dt);
 	}
 	OneShotAnim::DeleteNotAlive();
-
-	skillTree.Update(dt);
-	if (skillTree.open) return;
 
 	player.Update(dt);
 	if (!player.alive) {
@@ -520,6 +520,7 @@ void JumpScene::Draw()
 	}
 #endif
 
+
 	//Bullet::particles.DrawImGUI("BulletTrail");
 	//Missile::particles.DrawImGUI("MissileSmoke");
 
@@ -546,8 +547,6 @@ void JumpScene::Draw()
 #endif
 
 	FxManager::EndDraw();
-
-	skillTree.DrawOverlay();
 
 	//player.polvito.DrawImGUI("Polvito");
 }

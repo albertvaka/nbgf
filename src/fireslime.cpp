@@ -112,7 +112,7 @@ void FireSlime::Update(float dt)
 void FireSlime::Draw() const
 {
 	pos.Debuggerino();
-	GPU_Rect rect = anim.GetCurrentRect();
+	GPU_Rect rect = anim.GetCurrentFrameRect();
 
 	vec drawPos = pos - vec(0, kSpriteOffsetY/2.f);
 

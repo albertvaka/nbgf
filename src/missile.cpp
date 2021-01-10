@@ -61,7 +61,7 @@ void Missile::Update(float dt)
 	smokeTimer += dt;
 	if (smokeTimer > 1.f/kSmokePerSecond) {
 		smokeTimer = 0;
-		const GPU_Rect& sprite = anim.GetCurrentRect();
+		const GPU_Rect& sprite = anim.GetCurrentFrameRect();
 		vec rear = pos-(vel.Normalized()*sprite.w);
 		rear.Debuggerino(0,255,0);
 		particles.pos = rear;
@@ -85,13 +85,13 @@ void Missile::Update(float dt)
 void Missile::Draw() const
 {
 	if (exploding) {
-		const GPU_Rect& rect = anim.GetCurrentRect();
+		const GPU_Rect& rect = anim.GetCurrentFrameRect();
 		Window::Draw(Assets::scifiTexture, pos)
 			.withRect(rect)
 			.withScale(0.5f)
 			.withOrigin(rect.w/2, rect.h/2);
 	} else {
-		const GPU_Rect& rect = anim.GetCurrentRect();
+		const GPU_Rect& rect = anim.GetCurrentFrameRect();
 		Window::Draw(Assets::wheelerTexture, pos)
 			.withRect(rect)
 			.withOrigin(0.f, rect.h/2)

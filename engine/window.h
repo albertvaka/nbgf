@@ -131,6 +131,7 @@ namespace Window
 		{
 			withRect(0,0,t->w,t->h);
 		}
+		Draw(const Draw&) = delete;
 
 		constexpr Draw& withRect(float x, float y, float w, float h) {
 			return withRect({ x, y, w, h });

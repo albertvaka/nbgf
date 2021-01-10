@@ -34,7 +34,7 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 	}
 
 	void Draw() const {
-		const GPU_Rect& rect = anim.GetCurrentRect();
+		const GPU_Rect& rect = anim.GetCurrentFrameRect();
 		Window::Draw(texture, pos)
 			.withRect(rect)
 			.withScale(scale)

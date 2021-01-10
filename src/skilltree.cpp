@@ -68,7 +68,7 @@ veci PosInTree(Skill s) {
 }
 
 vec PosInTreeToPosInScreen(veci p) {
-	auto size = Camera::GUI::GetSize();
+	auto size = Camera::InScreenCoords::GetSize();
 	vec dxv = vec(size.x / (tree[0].size()), (size.y / (tree.size())));
 	return vec(p.x * dxv.x / 2, p.y * dxv.y /2) + vec(dxv.x/2, dxv.y);
 }
@@ -242,7 +242,7 @@ void SkillTree::DrawOverlay() {
 
 void SkillTree::DrawMenu() {
 
-	Camera::GUI::Begin();
+	Camera::InScreenCoords::Begin();
 
 	Window::Draw(Assets::menuBgTexture, vec(0,0))
 		.withScale(float(Window::GAME_WIDTH)/Assets::menuBgTexture->w, float(Window::GAME_HEIGHT)/Assets::menuBgTexture->h);
@@ -298,6 +298,6 @@ void SkillTree::DrawMenu() {
 	Window::Draw(textPoints, vec(10, 10)).withScale(0.3f);
 	Window::Draw(textDescription, vec(50, 250)).withScale(0.3f);
 
-	Camera::GUI::End();
+	Camera::InScreenCoords::End();
 
 }

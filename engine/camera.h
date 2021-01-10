@@ -109,9 +109,9 @@ namespace Camera
 		return Angles::DegsToRads(camera.angle);
 	}
 
-	namespace GUI
+	namespace InScreenCoords
 	{
-		// GUI Camera is not affected by the current zoom nor camera displacement. Its top-left is always at 0,0
+		// A Camera not affected by the current zoom nor camera displacement. Its top-left is always at 0,0
 
 		inline void Begin() {
 			GPU_SetCamera(Window::currentDrawTarget, &gui_camera);
@@ -119,6 +119,11 @@ namespace Camera
 
 		inline void End() {
 			GPU_SetCamera(Window::currentDrawTarget, &camera);
+		}
+
+		inline constexpr vec TopLeft()
+		{
+			return vec::Zero;
 		}
 
 		inline constexpr vec GetSize()
