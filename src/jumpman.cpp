@@ -356,6 +356,7 @@ void JumpMan::takeDamage(vec src) {
 	vec playerCenter = bounds().Center();
 	float direction = (playerCenter-src).AngleDegs();
 	new OneShotAnim(Assets::marioTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
+	health--;
 }
 
 Bounds JumpMan::maxBounds() const
@@ -410,7 +411,12 @@ void JumpMan::Draw() const {
 
 }
 
-
+void JumpMan::DrawGUI() const {
+	for (int i = 0; i < maxHealth; i++) {
+		Window::Draw(Assets::marioTexture, 10 + 16 * i, 10)
+			.withRect(i < health ? AnimLib::HEALTH_FULL : AnimLib::HEALTH_EMPTY);
+	}
+}
 
 // BRILLI-BRILLI
 

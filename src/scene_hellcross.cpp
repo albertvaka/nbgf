@@ -146,10 +146,11 @@ void HellCrossScene::Update(float dt)
 		return;
 	}
 
-	player.Update(dt);
-	if (!player.alive) {
-		FxManager::StartOuttroTransition(introDuration);
+	if (player.health <= 0) {
+		FxManager::StartOuttroTransition(introDuration); // Timer to reset scene
 	}
+
+	player.Update(dt);
 
 	UpdateCamera();
 
@@ -170,7 +171,7 @@ void HellCrossScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		FxManager::StartOuttroTransition(introDuration); // Timer to reset scene
+		player.health = -1;
 		return;
 	}
 
@@ -223,6 +224,10 @@ void HellCrossScene::Draw()
 #endif
 
 	FxManager::EndDraw();
+
+	Camera::InScreenCoords::Begin();
+	player.DrawGUI();
+	Camera::InScreenCoords::End();
 
 #ifdef _IMGUI
 	{

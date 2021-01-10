@@ -88,7 +88,7 @@ void Lava::Update(float dt) {
 		player->onWall = JumpMan::ONWALL_NO;
 	}
 	if (IsInside(player->pos - vec(0, 14.f))) {
-		player->alive = false;
+		player->health = 0;
 	}
 }
 

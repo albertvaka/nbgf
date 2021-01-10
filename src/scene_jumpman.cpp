@@ -241,6 +241,10 @@ void JumpScene::Update(float dt)
 		return;
 	}
 
+	if (player.health <= 0) {
+		FxManager::StartOuttroTransition(introDuration); // Timer to reset scene
+	}
+
 	skillTree.Update(dt);
 	if (skillTree.open) return; // Pause menu
 
@@ -250,9 +254,6 @@ void JumpScene::Update(float dt)
 	OneShotAnim::DeleteNotAlive();
 
 	player.Update(dt);
-	if (!player.alive) {
-		FxManager::StartOuttroTransition(introDuration);
-	}
 
 	screenManager.UpdateCurrentScreen(player.pos);
 
@@ -306,7 +307,7 @@ void JumpScene::Update(float dt)
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		FxManager::StartOuttroTransition(introDuration);
+		player.health = -1;
 		return;
 	}
 	if (Keyboard::IsKeyJustPressed(teleport)) {
@@ -353,7 +354,8 @@ void JumpScene::Update(float dt)
 
 			//TODO: PICK UP ANIMATION
 
-			//TODO: Raise health
+			player.health++;
+			player.maxHealth++;
 
 			g->alive = false;
 		}
@@ -547,6 +549,10 @@ void JumpScene::Draw()
 #endif
 
 	FxManager::EndDraw();
+
+	Camera::InScreenCoords::Begin();
+	player.DrawGUI();
+	Camera::InScreenCoords::End();
 
 	//player.polvito.DrawImGUI("Polvito");
 }

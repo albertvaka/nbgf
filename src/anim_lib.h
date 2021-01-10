@@ -104,4 +104,7 @@ namespace AnimLib {
 	
 	constexpr const GPU_Rect FIRESHOT = {437, 5, 6, 6};
 
+	constexpr const GPU_Rect HEALTH_FULL = { 19 * 16, 1 * 16, 16, 16 };
+	constexpr const GPU_Rect HEALTH_EMPTY = { 20 * 16, 1 * 16, 16, 16 };
+
 }

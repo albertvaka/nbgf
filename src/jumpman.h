@@ -13,6 +13,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     JumpMan();
     void Update(float dt);
     void Draw() const;
+    void DrawGUI() const;
     void Reset(vec position) {
         pos = position;
         bfgPos = position + bfgOffset();
@@ -20,6 +21,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         polvito.Clear();
         invencibleTimer = -1.f;
         bfgCooldownTimer = 0;
+        health = maxHealth = 3;
         jumpTimeLeft = 0.0f;
         crouchedTime = 0.0f;
         onWall = ONWALL_NO;
@@ -49,6 +51,9 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     vec size;
     
     enum : int8_t { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
+
+    int health;
+    int maxHealth;
 
     int8_t onWall = ONWALL_NO;
     float jumpTimeLeft = 0.0f;
