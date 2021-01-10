@@ -33,6 +33,7 @@ namespace Assets
 	inline Shader fadeOutDiamondsShader;
 	inline Shader fadeOutCircleShader;
 
+	inline Sound soundDeath;
 
 	inline std::array<GPU_Image*, 3> forestParallaxTextures;
 	inline std::array<GPU_Image*, 4> caveParallaxTextures;
