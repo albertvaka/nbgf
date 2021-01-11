@@ -1,4 +1,5 @@
 #include <string>
+#include <filesystem>
 
 #include "scene_manager.h"
 #include "input.h"
@@ -47,6 +48,10 @@ void main_loop();
 
 int main(int argc, char* argv[])
 {
+	// set working dir to the binary path
+	std::filesystem::path binaryPath(argv[0]);
+	std::filesystem::current_path(binaryPath.parent_path());
+
 	init();
 	
 #ifdef __EMSCRIPTEN__
