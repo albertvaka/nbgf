@@ -5,6 +5,8 @@
 #include "SDL_gpu.h"
 #include "window.h"
 
+#include <cerrno>
+
 void Shader::loadAndAttach(GPU_ShaderEnum type, const char* path) {
 
 	std::stringstream source;
@@ -42,11 +44,17 @@ precision mediump int;\n";
 		if (c == '\n') prefix_lines++;
 	}
 
-	source << std::ifstream(path).rdbuf();
+	std::ifstream shaderfile(path);
+	if (shaderfile.fail()) {
+		Debug::out << "Could not read shader from '" << path << "': " << strerror(errno);
+		return;
+	}
+
+	source << shaderfile.rdbuf();
 
 	int id = GPU_CompileShader(type, source.str().c_str());
 	if (id == 0) {
-		Debug::out << path;
+		Debug::out << path << " failed to compile";
 		Debug::out << "Note: Following line numbers offset by: " << prefix_lines;
 		Debug::out << GPU_GetShaderMessage();
 	}
@@ -83,7 +91,7 @@ void Shader::Load(const char* vertex_path, const char* geometry_path, const char
 	shaderFilePaths = paths.str();
 
 	if (GPU_LinkShaderProgram(program) == GPU_FALSE) {
-		Debug::out << shaderFilePaths;
+		Debug::out << shaderFilePaths << " failed to link";
 		Debug::out << GPU_GetShaderMessage();
 	}
 	block = GPU_LoadShaderBlock(program, "gpu_Vertex", "gpu_TexCoord", "gpu_Color", "gpu_ModelViewProjectionMatrix");
