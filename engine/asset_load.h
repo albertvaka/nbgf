@@ -8,7 +8,7 @@ inline GPU_Image* LoadImage(const std::string& path) {
 
     GPU_Image* texture = GPU_LoadImage(path.c_str());
     if (!texture) {
-        Debug::out << "Unable to load image '" << path.c_str();
+        Debug::out << "Unable to load image '" << path.c_str() << "': " << SDL_GetError();
         return nullptr;
     }
     GPU_SetImageFilter(texture, GPU_FILTER_NEAREST);
