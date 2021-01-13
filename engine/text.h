@@ -8,26 +8,14 @@
 #include "vec.h"
 #include "window.h"
 
-class Text
+struct Text
 {
-public:
 	enum class MultilineAlignment {
 		LEFT,
 		CENTER,
 		RIGHT
 	};
 
-	TTF_Font* font;
-	TTF_Font* font_outline;
-	std::string str;
-	SDL_Color color = { 255,255,255,255 };
-	SDL_Color outline_color = { 0,0,0,255 };
-	int spacing = 0;
-	int empty_line_spacing = 12;
-	mutable GPU_Image* cached = nullptr;
-	MultilineAlignment multilineAlignment = MultilineAlignment::LEFT;
-
-public:
 	Text(TTF_Font* font = nullptr, TTF_Font* font_outline = nullptr) : font(font), font_outline(font_outline) {}
 	~Text() {
 		if (cached) { 
@@ -201,5 +189,16 @@ private:
 
 		return final;
 	}
+
+	TTF_Font* font;
+	TTF_Font* font_outline;
+	std::string str;
+	SDL_Color color = { 255,255,255,255 };
+	SDL_Color outline_color = { 0,0,0,255 };
+	int spacing = 0;
+	int empty_line_spacing = 12;
+	mutable GPU_Image* cached = nullptr;
+	MultilineAlignment multilineAlignment = MultilineAlignment::LEFT;
+
 };
 
