@@ -19,26 +19,26 @@ inline std::string osConfigDir()
 #elif defined(__APPLE__)
 	return "~/Library/Preferences";
 #elif defined(__EMSCRIPTEN__)
-	return "???";
+	return "/"; // TODO
 #else
 	return getenv("XDG_CONFIG_HOME");
 #endif
 }
 
-std::string SaveState::GetConfigFilePath() {
+std::string SaveState::GetSaveFilePath() {
 #ifndef SAVE_IN_LOCAL_DIR
 	std::string basePath = osConfigDir() + "/" + gaemName + "/";
 	std::filesystem::create_directories(basePath);
 #else
 	std::string basePath = "./";
 #endif
-	return basePath + "save" + std::to_string(stateNum) + ".txt";
+	return basePath + "save" + std::to_string(stateNum) + ".save";
 }
 
 void SaveState::Save() {
-	std::ofstream file(GetConfigFilePath(), std::ofstream::out | std::ofstream::trunc);
+	std::ofstream file(GetSaveFilePath(), std::ofstream::out | std::ofstream::trunc);
 	if (file.fail()) {
-		Debug::out << "Could not open " << GetConfigFilePath() << " for writing: " << strerror(errno);
+		Debug::out << "Could not open " << GetSaveFilePath() << " for writing: " << strerror(errno);
 		return;
 	}
 	for (auto const& [id, data] : state) {
@@ -50,14 +50,14 @@ void SaveState::Save() {
 void SaveState::Load() {
 	Clear();
 
-	if (!std::filesystem::exists(GetConfigFilePath())) {
+	if (!std::filesystem::exists(GetSaveFilePath())) {
 		//Debug::out << "Save doesn't exist";
 		return;
 	}
 
-	std::ifstream file(GetConfigFilePath(), std::ifstream::in);
+	std::ifstream file(GetSaveFilePath(), std::ifstream::in);
 	if (file.fail()) {
-		Debug::out << "Could not open " << GetConfigFilePath() << " for reading: " << strerror(errno);
+		Debug::out << "Could not open " << GetSaveFilePath() << " for reading: " << strerror(errno);
 		return;
 	}
 	std::string data;

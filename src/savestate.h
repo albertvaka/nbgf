@@ -35,7 +35,7 @@ private:
 		Load();
 	}
 	void Load();
-	std::string GetConfigFilePath();
+	std::string GetSaveFilePath();
 
 	SaveState& operator=(const SaveState&) = delete;
 	SaveState(const SaveState&) = delete;
