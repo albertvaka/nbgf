@@ -16,14 +16,14 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     void Update(float dt);
     void Draw() const;
     void DrawGUI() const;
-    void Reset(vec position) {
+    void Reset(vec position, int maxHp = 3) {
         pos = position;
         bfgPos = position + bfgOffset();
         vel = vec(0, 0);
         polvito.Clear();
         invencibleTimer = -1.f;
         bfgCooldownTimer = 0;
-        health = maxHealth = 3;
+        health = maxHealth = maxHp;
         jumpTimeLeft = 0.0f;
         crouchedTime = 0.0f;
         onWall = ONWALL_NO;
@@ -84,8 +84,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     };
     void LoadGame(const SaveState& state) {
         state.StreamGet("player") >> pos.x >> pos.y >> maxHealth;
-        Reset(pos);
-        health = maxHealth;
+        Reset(pos, maxHealth);
     }
 };
 
