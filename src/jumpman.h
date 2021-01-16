@@ -7,6 +7,7 @@
 #include "partsys.h"
 #include "animation.h"
 #include "savestate.h"
+#include "screen.h"
 #include "debug.h"
 #include "singleinstance.h"
 
@@ -29,6 +30,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         onWall = ONWALL_NO;
         frozen = false;
         alive = true;
+        ScreenManager::instance()->UpdateCurrentScreen(pos);
     }
 
     Bounds bounds() const {
@@ -81,7 +83,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
 
     void SaveGame(SaveState& state) const {
         state.StreamPut("player") << pos.x << pos.y << maxHealth;
-    };
+    }
     void LoadGame(const SaveState& state) {
         state.StreamGet("player") >> pos.x >> pos.y >> maxHealth;
         Reset(pos, maxHealth);

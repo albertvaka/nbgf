@@ -12,18 +12,18 @@ extern float mainClock;
 
 std::unordered_map<int, std::vector<SaveStation*>> SaveStation::ByScreen;
 
-SaveStation::SaveStation(vec p) 
+SaveStation::SaveStation(int id, vec p) 
 	: BoxEntity(p, vec(32, 32)) 
+	, id(id)
 	, hidden(false)
 	, glowing(false)
 	, prevFrameInScene(true)
 { 
-	int screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::instance()->FindScreenContaining(pos);
 	SaveStation::ByScreen[screen].push_back(this);
 }
 
 SaveStation::~SaveStation() {
-	int screen = ScreenManager::instance()->FindScreenContaining(pos);
 	auto& list = SaveStation::ByScreen[screen];
 	list.erase(std::find(list.begin(), list.end(), this));
 }
@@ -43,7 +43,7 @@ bool SaveStation::Update(float dt)
 	}
 
 	if (!glowing) {
-		bool inScene = Collide(Camera::GetBounds(),bounds());
+		bool inScene = (screen == ScreenManager::instance()->CurrentScreen());
 		if (inScene && !prevFrameInScene) {
 			glowing = true;
 		}

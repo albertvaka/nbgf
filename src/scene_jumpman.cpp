@@ -174,7 +174,7 @@ void JumpScene::EnterScene()
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
 	for (auto const& [id, pos] : TiledEntities::save) {
-		new SaveStation(pos);
+		new SaveStation(id, pos);
 	}
 
 	for (auto const& [id, pos] : TiledEntities::enemy_door) {
@@ -262,7 +262,6 @@ void JumpScene::EnterScene()
 
 	LoadGame();
 
-	screenManager.UpdateCurrentScreen(player.pos);
 	Camera::SetCenter(GetCameraTargetPos());
 
 	FxManager::StartTransition(Assets::fadeInDiamondsShader);
