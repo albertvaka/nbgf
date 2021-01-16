@@ -92,6 +92,8 @@ void JumpScene::SaveGame() const {
 
 	skillTree.SaveGame(saveState);
 
+	saveState.StreamPut("bossdead_bipedal") << (boss_bipedal == nullptr);
+
 	saveState.Save();
 }
 
@@ -111,9 +113,17 @@ void JumpScene::LoadGame() {
 	for (BigItem* g : BigItem::GetAll()) {
 		if (skillTree.IsEnabled(g->skill)) {
 			TriggerPickupItem(g, true);
+			g->alive = false;
 		}
 	}
-	BigItem::DeleteNotAlive();
+
+	bool bossdead_bipedal = false;
+	saveState.StreamGet("bossdead_bipedal") >> bossdead_bipedal;
+	if (bossdead_bipedal) {
+		boss_bipedal->alive = false;
+	}
+
+	Update(0); //Hackish way to make sure the entities with alive=false trigger things on other components before being deleted
 
 	player.LoadGame(saveState);
 }
@@ -149,7 +159,6 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 		break;
 	}
 
-	g->alive = false;
 
 }
 void JumpScene::EnterScene()
@@ -162,7 +171,6 @@ void JumpScene::EnterScene()
 		new Bat(pos, false, false);
 	}
 
-	new Bipedal(TiledEntities::boss_bipedal);
 
 	for (auto const& [id, pos] : TiledEntities::angrybat) {
 		new Bat(pos, true, false);
@@ -196,6 +204,7 @@ void JumpScene::EnterScene()
 		new SaveStation(id, pos);
 	}
 
+	boss_bipedal = new Bipedal(TiledEntities::boss_bipedal);
 
 	new BigItem(TiledEntities::skill_walljump, Skill::WALLJUMP);
 	new BigItem(TiledEntities::skill_gun, Skill::GUN);
@@ -409,6 +418,9 @@ void JumpScene::Update(float dt)
 		ed->Update(dt); // Checks for enemies with alive = false, crashes if they have been deleted already
 	}
 
+	if (boss_bipedal && !boss_bipedal->alive) {
+		boss_bipedal = nullptr;
+	}
 	Bat::DeleteNotAlive(); //Must happen after enemydoor update
 	Goomba::DeleteNotAlive();
 	FlyingAlien::DeleteNotAlive();
@@ -440,6 +452,8 @@ void JumpScene::Update(float dt)
 			}
 
 			TriggerPickupItem(g, false);
+			
+			g->alive = false;
 
 			SaveGame(); // silently save
 		}

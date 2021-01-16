@@ -25,6 +25,7 @@ struct JumpScene : Scene {
 	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;
 	RotoText rotoText;
+	Entity* boss_bipedal;
 	int saveSlot;
 
 	EnemyDoor* door_to_close_when_break_skill;
