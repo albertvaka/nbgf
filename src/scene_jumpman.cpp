@@ -75,32 +75,26 @@ JumpScene::~JumpScene() {
 	Parallax::DeleteAll();
 }
 
-void JumpScene::SaveState() const {
-	StateSaver saveState("gaem2020", saveSlot);
-	saveState.Load();
+void JumpScene::SaveGame() const {
+	SaveState saveState = SaveState::Open("gaem2020", saveSlot);
 	if (saveState.HasData()) {
 		Debug::out << "Overwriting data in slot " << saveSlot;
 	}
 	saveState.Clear();
 
-	std::stringstream ss;
-	ss << player.pos.x << " " << player.pos.y;
-	saveState.Put("player", ss.str());
+	saveState.PutStream("player") << player.pos.x << " " << player.pos.y;
 
 	saveState.Save();
 }
 
-void JumpScene::LoadState() {
-	StateSaver saveState("gaem2020", saveSlot); // Split in statesaver and stateloader?
-	saveState.Load(); // Do this by default?
+void JumpScene::LoadGame() {
+	SaveState saveState = SaveState::Open("gaem2020", saveSlot);
 	if (!saveState.HasData()) {
 		Debug::out << "No data to load in slot " << saveSlot;
 		return;
 	}
 
-	std::string state = saveState.Get("player"); // Maybe this should be a stream already?
-	std::stringstream ss(state);
-	ss >> player.pos.x >> player.pos.y;
+	saveState.GetStream("player") >> player.pos.x >> player.pos.y;
 }
 
 void JumpScene::EnterScene()
@@ -522,10 +516,10 @@ void JumpScene::Draw()
 		ImGui::Begin("savestate");
 		ImGui::InputInt("Slot", &saveSlot);
 		if (ImGui::Button("Save")) {
-			SaveState();
+			SaveGame();
 		}
 		if (ImGui::Button("Load")) {
-			LoadState();
+			LoadGame();
 		}
 		ImGui::End();
 	}

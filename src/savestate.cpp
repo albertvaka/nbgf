@@ -25,7 +25,7 @@ inline std::string osConfigDir()
 #endif
 }
 
-std::string StateSaver::GetConfigFilePath() {
+std::string SaveState::GetConfigFilePath() {
 #ifndef SAVE_IN_LOCAL_DIR
 	std::string basePath = osConfigDir() + "/" + gaemName + "/";
 	std::filesystem::create_directories(basePath);
@@ -35,7 +35,7 @@ std::string StateSaver::GetConfigFilePath() {
 	return basePath + "save" + std::to_string(stateNum) + ".txt";
 }
 
-void StateSaver::Save() {
+void SaveState::Save() {
 	std::ofstream file(GetConfigFilePath(), std::ofstream::out | std::ofstream::trunc);
 	if (file.fail()) {
 		Debug::out << "Could not open " << GetConfigFilePath() << " for writing: " << strerror(errno);
@@ -47,7 +47,7 @@ void StateSaver::Save() {
 	file.close();
 }
 
-void StateSaver::Load() {
+void SaveState::Load() {
 	Clear();
 
 	if (!std::filesystem::exists(GetConfigFilePath())) {
