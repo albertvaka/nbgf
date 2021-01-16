@@ -15,7 +15,7 @@ extern float mainClock;
 // accel
 const float run_acc = 1400;
 const float run_acc_onair = 400;
-const float gravity_acc = 600;
+const float gravity_acc = 660;
 
 // friction X
 const float fri_acc_floor = 1000;
@@ -33,7 +33,7 @@ const float jump_time = 0.35f;
 const float timeCrouchedToJumpDownOneWayTile = 0.2f;
 
 // limits
-const vec vel_max(220, 200);
+const vec vel_max(220, 350);
 
 // bfg
 const float bulletVel = 400.f;
