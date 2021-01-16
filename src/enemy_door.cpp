@@ -31,6 +31,40 @@ void EnemyDoor::Lock() {
 		SpawnTiles();
 	}
 	state = State::LOCKED;
+	enemies.clear(); // we will stop checking for !alive enemies, so the pointers might be freed
+}
+
+void EnemyDoor::Open(bool skipAnim)
+{
+	if (skipAnim) {
+		while (state != State::OPEN) {
+			OpenOneStep();
+		}
+	} else {
+		state = State::OPENING;
+		FxManager::StartScreenshake(3.f, veci(2, 2), vec(35.f, 45.f));
+		openingTimer = 0.f;
+	}
+	enemies.clear(); // we will stop checking for !alive enemies, so the pointers might be freed
+}
+
+void EnemyDoor::OpenOneStep() {
+	TileMap* map = TileMap::instance();
+	auto tilepos = TileMap::toTiles(pos);
+	for (int y = 0; y < maxHeight; y++) {
+		Tile t = map->getTile(tilepos.x, tilepos.y + y);
+		if (t == Tile::SOLID_DOOR_BOTTOM) {
+			map->setTile(tilepos.x, tilepos.y + y, Tile::BG_DOOR_OPENING);
+			if (y == 0) {
+				state = State::OPEN;
+			}
+			break;
+		}
+		else if (t == Tile::BG_DOOR_OPENING) {
+			map->setTile(tilepos.x, tilepos.y + y, Tile::BG_PLAIN_COLOR);
+			map->setTile(tilepos.x, tilepos.y + y - 1, Tile::SOLID_DOOR_BOTTOM);
+		}
+	}
 }
 
 void EnemyDoor::SpawnTiles() {
@@ -55,31 +89,14 @@ void EnemyDoor::Update(float dt)
 			return !e->alive; 
 		}), enemies.end());
 		if (enemies.empty()) {
-			state = State::OPENING;
-			FxManager::StartScreenshake(3.f, veci(2, 2), vec(35.f, 45.f));
-			openingTimer = 0.f;
+			Open();
 		}
 	} break;
 	case State::OPENING: {
 		openingTimer += dt;
 		if (openingTimer > openAnimationTime) {
 			openingTimer -= openAnimationTime;
-			TileMap* map = TileMap::instance();
-			auto tilepos = TileMap::toTiles(pos);
-			for (int y = 0; y < maxHeight; y++) {
-				Tile t = map->getTile(tilepos.x, tilepos.y + y);
-				if (t == Tile::SOLID_DOOR_BOTTOM) {
-					map->setTile(tilepos.x, tilepos.y + y, Tile::BG_DOOR_OPENING);
-					if (y == 0) {
-						state = State::OPEN;
-					}
-					break;
-				}
-				else if (t == Tile::BG_DOOR_OPENING) {
-					map->setTile(tilepos.x, tilepos.y + y, Tile::BG_PLAIN_COLOR);
-					map->setTile(tilepos.x, tilepos.y + y - 1, Tile::SOLID_DOOR_BOTTOM);
-				}
-			}
+			OpenOneStep();
 		}
 	} break;
 	case State::OPEN:

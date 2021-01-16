@@ -31,22 +31,30 @@ struct EnemyDoor : Entity, SelfRegister<EnemyDoor>
 		enemies.push_back(enemy);
 	}
 
-	void Lock(); //Closes immediately and won't open
+	void Open(bool skipAnim=false);
+	void Lock(); // Closes immediately and won't open even after killing the enemies
 
 	void Update(float dt);
 	void Draw() const;
 
 	void SaveGame(SaveState& save) const {
-		save.StreamPut("enemydoor_" + saveId) << int(state);
+		int state_int = int(state == State::OPENING ? State::OPEN : state);
+		save.StreamPut("enemydoor_" + std::to_string(saveId)) << state_int;
 	};
 	void LoadGame(const SaveState& save) {
 		int state_int;
-		if (save.StreamGet("enemydoor_" + saveId) >> state_int) {
-			state = State(state_int);
+		if (save.StreamGet("enemydoor_" + std::to_string(saveId)) >> state_int) {
+			State newstate = State(state_int);
+			if (newstate == State::OPEN) {
+				Open(true);
+			} else if (newstate == State::LOCKED) {
+				Lock();
+			}
 		}
 	};
 
 private:
+	void OpenOneStep();
 	void SpawnTiles();
 	int saveId;
 
