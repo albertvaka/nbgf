@@ -1,6 +1,6 @@
 #pragma once
 
-enum GameKeys
+enum class GameKeys
 {
 	NONE = 0,
 	UP, DOWN, LEFT, RIGHT,

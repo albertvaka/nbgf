@@ -131,10 +131,10 @@ void TileMap::DebugEdit()
 		debugEditCurrentTile += 1;
 		if (debugEditCurrentTile >= int(magic_enum::enum_count<Tile::Value>())) debugEditCurrentTile = 1;
 	}
-	if (Input::IsPressed(0, LEFT)) debugEditCurrentTile = Tile::LSLOPE_1;
-	if (Input::IsPressed(0, RIGHT)) debugEditCurrentTile = Tile::RSLOPE_1;
-	if (Input::IsPressed(0, UP)) debugEditCurrentTile = Tile::ONEWAY_1;
-	if (Input::IsPressed(0, DOWN)) debugEditCurrentTile = Tile::SOLID_1;
+	if (Input::IsPressed(0, GameKeys::LEFT)) debugEditCurrentTile = Tile::LSLOPE_1;
+	if (Input::IsPressed(0, GameKeys::RIGHT)) debugEditCurrentTile = Tile::RSLOPE_1;
+	if (Input::IsPressed(0, GameKeys::UP)) debugEditCurrentTile = Tile::ONEWAY_1;
+	if (Input::IsPressed(0, GameKeys::DOWN)) debugEditCurrentTile = Tile::SOLID_1;
 	bool left = Mouse::IsPressed(Mouse::Button::Left);
 	bool right = Mouse::IsPressed(Mouse::Button::Right);
 	if (left || right) {
