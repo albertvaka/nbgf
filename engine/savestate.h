@@ -6,6 +6,11 @@
 
 struct SaveStream;
 
+#ifdef _DEBUG
+// Savefiles will be stored in the working dir instead of the user's config folder
+#define SAVESTATE_SAVE_IN_LOCAL_DIR
+#endif
+
 struct SaveState
 {
 	// Open creates a SaveState and Loads its contents from disk

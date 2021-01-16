@@ -8,10 +8,6 @@
 
 #include "debug.h"
 
-#ifdef _DEBUG
-//#define SAVE_IN_LOCAL_DIR
-#endif
-
 inline std::string osConfigDir()
 {
 #if _WIN32
@@ -26,7 +22,7 @@ inline std::string osConfigDir()
 }
 
 std::string SaveState::GetSaveFilePath() {
-#ifndef SAVE_IN_LOCAL_DIR
+#ifndef SAVESTATE_SAVE_IN_LOCAL_DIR
 	std::string basePath = osConfigDir() + "/" + gaemName + "/";
 	std::filesystem::create_directories(basePath);
 #else

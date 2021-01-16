@@ -316,8 +316,8 @@
     <ClInclude Include="src\flyingalien.h">
       <Filter>src\entities\enemies</Filter>
     </ClInclude>
-    <ClInclude Include="src\savestate.h">
-      <Filter>src</Filter>
+    <ClInclude Include="engine\savestate.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -504,8 +504,8 @@
     <ClCompile Include="src\flyingalien.cpp">
       <Filter>src\entities\enemies</Filter>
     </ClCompile>
-    <ClCompile Include="src\savestate.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="engine\savestate.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

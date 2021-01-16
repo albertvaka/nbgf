@@ -35,6 +35,7 @@
     <ClInclude Include="engine\partsys.h" />
     <ClInclude Include="engine\rand.h" />
     <ClInclude Include="engine\raw_input.h" />
+    <ClInclude Include="engine\savestate.h" />
     <ClInclude Include="engine\scene_manager.h" />
     <ClInclude Include="engine\selfregister.h" />
     <ClInclude Include="engine\shader.h" />
@@ -68,7 +69,6 @@
     <ClInclude Include="src\parallax.h" />
     <ClInclude Include="src\powerups.h" />
     <ClInclude Include="src\rototext.h" />
-    <ClInclude Include="src\savestate.h" />
     <ClInclude Include="src\savestation.h" />
     <ClInclude Include="src\scene_debug.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
@@ -116,6 +116,7 @@
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\partsys.cpp" />
     <ClCompile Include="engine\raw_input.cpp" />
+    <ClCompile Include="engine\savestate.cpp" />
     <ClCompile Include="engine\shader.cpp" />
     <ClCompile Include="engine\sound.cpp" />
     <ClCompile Include="engine\tilemap.cpp" />
@@ -141,7 +142,6 @@
     <ClCompile Include="src\missile.cpp" />
     <ClCompile Include="src\parallax.cpp" />
     <ClCompile Include="src\powerups.cpp" />
-    <ClCompile Include="src\savestate.cpp" />
     <ClCompile Include="src\savestation.cpp" />
     <ClCompile Include="src\scene_debug.cpp" />
     <ClCompile Include="src\scene_hellcross.cpp" />
