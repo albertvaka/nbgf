@@ -167,69 +167,88 @@ void JumpScene::EnterScene()
 
 	map.LoadFromTiled();
 
-	for (auto const& [id, pos] : TiledEntities::bat) {
-		new Bat(pos, false, false);
-	}
-
-
-	for (auto const& [id, pos] : TiledEntities::angrybat) {
-		new Bat(pos, true, false);
-	}
-
-	for (auto const& [id, pos] : TiledEntities::batawake) {
-		new Bat(pos, false, true);
-	}
-
-	for (auto const& [id, pos] : TiledEntities::fireslime) {
-		new FireSlime(pos);
-	}
-
-	for (auto const& [id, pos] : TiledEntities::goomba) {
-		new Goomba(pos, false);
-	}
-
-	for (auto const& [id, pos] : TiledEntities::goombacharger) {
-		new Goomba(pos,true);
-	}
-
-	for (auto const& [id, pos] : TiledEntities::mantis) {
-		new Mantis(pos);
-	}
-
-	for (auto const& [id, pos] : TiledEntities::flyingalien) {
-		new FlyingAlien(pos);
-	}
-
-	for (auto const& [id, pos] : TiledEntities::save) {
-		new SaveStation(id, pos);
-	}
-
-	boss_bipedal = new Bipedal(TiledEntities::boss_bipedal);
-
 	new BigItem(TiledEntities::skill_walljump, Skill::WALLJUMP);
 	new BigItem(TiledEntities::skill_gun, Skill::GUN);
 	BigItem* break_skill = new BigItem(TiledEntities::skill_breakblocks, Skill::BREAK);
 
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
-	for (auto const& [id, pos] : TiledEntities::healthup) {
-		new HealthUp(id, pos);
+	for (auto const& [id, pos] : TiledEntities::save) {
+		new SaveStation(pos);
 	}
 
 	for (auto const& [id, pos] : TiledEntities::enemy_door) {
 		EnemyDoor* d = new EnemyDoor(id, pos);
 		int door_screen = screenManager.FindScreenContaining(d->pos);
-		if (door_screen < 0) {
-			Debug::out << "Warning: Enemy door outside a screen";
-		}
-		for (const Bat* b : Bat::GetAll()) {
-			if (b->screen == door_screen) {
-				d->AddEnemy(b);
-			}
-		}
 		if (door_screen == screen_break_skill) {
 			door_to_close_when_break_skill = d;
 		}
+	}
+
+	for (auto const& [id, pos] : TiledEntities::bat) {
+		Bat* b = new Bat(pos, false, false);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	for (auto const& [id, pos] : TiledEntities::angrybat) {
+		Bat* b = new Bat(pos, true, false);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	for (auto const& [id, pos] : TiledEntities::batawake) {
+		Bat* b =new Bat(pos, false, true);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	for (auto const& [id, pos] : TiledEntities::fireslime) {
+		auto b = new FireSlime(pos);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	for (auto const& [id, pos] : TiledEntities::goomba) {
+		auto b = new Goomba(pos, false);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	for (auto const& [id, pos] : TiledEntities::goombacharger) {
+		auto b = new Goomba(pos,true);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	for (auto const& [id, pos] : TiledEntities::mantis) {
+		auto b = new Mantis(pos);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	for (auto const& [id, pos] : TiledEntities::flyingalien) {
+		auto b = new FlyingAlien(pos);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	boss_bipedal = new Bipedal(TiledEntities::boss_bipedal);
+
+	for (SaveStation* s : SaveStation::ByScreen[screenManager.FindScreenContaining(boss_bipedal->pos)]) {
+		s->AddHiddenBy(boss_bipedal);
+	}
+
+	for (auto const& [id, pos] : TiledEntities::healthup) {
+		new HealthUp(id, pos);
 	}
 
 	for (const Bounds& a : TiledAreas::lava) {
@@ -316,6 +335,8 @@ void JumpScene::Update(float dt)
 
 	skillTree.Update(dt);
 	if (skillTree.open) return; // Pause menu
+
+	contextActionButton = GameKeys::NONE;
 
 	for (OneShotAnim* e : OneShotAnim::GetAll()) { // Update this first so one-frame anims aren't deleted before they are drawn once
 		e->Update(dt);
@@ -415,13 +436,29 @@ void JumpScene::Update(float dt)
 #endif
 
 	for (EnemyDoor* ed : EnemyDoor::GetAll()) {
-		ed->Update(dt); // Checks for enemies with alive = false, crashes if they have been deleted already
+		// If clossed, it checks for enemies with alive == false to open
+		ed->Update(dt);
+	}
+
+	for (SaveStation* ss : SaveStation::GetAll()) {
+		// If hidden, it checks for enemies with alive == false to unhide
+		if (ss->Update(dt)) { // true if player can interact with it
+			contextActionButton = GameKeys::ACTION;
+			if (Input::IsJustPressed(0, GameKeys::ACTION)) {
+				// TODO: Interaction animation
+				SaveGame();
+				// Exit and Enter the scene again, resetting the state of everything and loading the state we just saved
+				FxManager::StartTransition(Assets::fadeOutDiamondsShader);
+			}
+		}
 	}
 
 	if (boss_bipedal && !boss_bipedal->alive) {
 		boss_bipedal = nullptr;
 	}
-	Bat::DeleteNotAlive(); //Must happen after enemydoor update
+
+	// Delete enemies after updating doors and savestations that might check for them
+	Bat::DeleteNotAlive();
 	Goomba::DeleteNotAlive();
 	FlyingAlien::DeleteNotAlive();
 	Mantis::DeleteNotAlive();
@@ -471,25 +508,6 @@ void JumpScene::Update(float dt)
 	}
 	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);
-	}
-
-	contextActionButton = GameKeys::NONE;
-	for (SaveStation* ss : SaveStation::GetAll()) {
-		ss->Update(dt);
-		if (ss->enabled && Collide(ss->bounds(), player.bounds())) {
-			contextActionButton = GameKeys::ACTION;
-			if (Input::IsJustPressed(0,GameKeys::ACTION)) {
-				ss->Activate();
-
-				// TODO: Animation
-
-				SaveGame();
-				// Exit and Enter the scene again, resetting the state of everything and loading the state we just saved
-				FxManager::StartTransition(Assets::fadeOutDiamondsShader);
-			}
-
-
-		}
 	}
 
 	for (const Bounds& a : TiledAreas::fog) {

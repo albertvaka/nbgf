@@ -3,16 +3,27 @@
 #include "tilemap.h"
 #include "assets.h"
 #include "window.h"
+#include "screen.h"
 #include "fxmanager.h"
 
 const float openAnimationTime = 0.4f; //Animation will take twice this time per tile
 const int maxHeight = 10;
+
+std::unordered_map<int, std::vector<EnemyDoor*>> EnemyDoor::ByScreen;
 
 EnemyDoor::EnemyDoor(int saveId, vec p)
 	: Entity(TileMap::alignToTiles(p) - vec(0, Tile::size))
 	, saveId(saveId)
 {
 	SpawnTiles();
+	int screen = ScreenManager::instance()->FindScreenContaining(pos);
+	EnemyDoor::ByScreen[screen].push_back(this);
+}
+
+EnemyDoor::~EnemyDoor() {
+	int screen = ScreenManager::instance()->FindScreenContaining(pos);
+	auto& list = EnemyDoor::ByScreen[screen];
+	list.erase(std::find(list.begin(), list.end(), this));
 }
 
 void EnemyDoor::Lock() {
