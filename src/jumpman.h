@@ -6,6 +6,8 @@
 #include "tilemap.h"
 #include "partsys.h"
 #include "animation.h"
+#include "savestate.h"
+#include "debug.h"
 #include "singleinstance.h"
 
 struct JumpMan : Entity, SingleInstance<JumpMan>
@@ -77,5 +79,13 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     inline void DoPolvitoLand();
     inline void DoPolvitoRun(float dt, bool toTheLeft, bool doTheExtraPolvitoLikeYouKnowItsDone);
 
+    void SaveGame(SaveState& state) const {
+        state.StreamPut("player") << pos.x << pos.y << maxHealth;
+    };
+    void LoadGame(const SaveState& state) {
+        state.StreamGet("player") >> pos.x >> pos.y >> maxHealth;
+        Reset(pos);
+        health = maxHealth;
+    }
 };
 

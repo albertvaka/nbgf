@@ -1,6 +1,8 @@
 #pragma once
 
 #include "singleinstance.h"
+#include "savestate.h"
+#include "magic_enum.h"
 #include <vector>
 #include "text.h"
 
@@ -23,7 +25,7 @@ struct SkillTree : SingleInstance<SkillTree>
 	void DrawMenu();
 	void DrawOverlay();
 
-	bool IsEnabled(Skill s) {
+	bool IsEnabled(Skill s) const {
 		return enabled[int(s)];
 	}
 
@@ -33,6 +35,21 @@ struct SkillTree : SingleInstance<SkillTree>
 
 	int gunpoints = 0;
 	bool open = false;
+
+	void SaveGame(SaveState& state) const {
+		for (Skill skill : magic_enum::enum_values<Skill>()) {
+			state.StreamPut("skills_" + std::string(magic_enum::enum_name(skill))) << enabled[int(skill)];
+		}
+	};
+
+	void LoadGame(const SaveState& state) {
+		for (Skill skill : magic_enum::enum_values<Skill>()) {
+			bool b;
+			if (state.StreamGet("skills_" + std::string(magic_enum::enum_name(skill))) >> b) {
+				enabled[int(skill)] = b;
+			}
+		}
+	}
 
 private:
 

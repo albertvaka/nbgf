@@ -30,11 +30,12 @@ extern float mainClock;
 
 const float camSpeed = 2000;
 
-int saveSlot = 0;
+const char* kSaveStateGameName = "gaem2020";
 
-JumpScene::JumpScene()
+JumpScene::JumpScene(int saveSlot)
 	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::marioTexture)
 	, fogPartSys(Assets::fogTexture)
+	, saveSlot(saveSlot)
 {
 	Bullet::InitParticles();
 	Missile::InitParticles();
@@ -76,27 +77,80 @@ JumpScene::~JumpScene() {
 }
 
 void JumpScene::SaveGame() const {
-	SaveState saveState = SaveState::Open("gaem2020", saveSlot);
+	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
 	if (saveState.HasData()) {
 		Debug::out << "Overwriting data in slot " << saveSlot;
 	}
 	saveState.Clear();
 
-	saveState.PutStream("player") << player.pos.x << " " << player.pos.y;
+	player.SaveGame(saveState);
+
+	for (HealthUp* g : HealthUp::GetAll()) {
+		g->SaveGame(saveState);
+	}
+
+	skillTree.SaveGame(saveState);
 
 	saveState.Save();
 }
 
 void JumpScene::LoadGame() {
-	SaveState saveState = SaveState::Open("gaem2020", saveSlot);
+	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
 	if (!saveState.HasData()) {
 		Debug::out << "No data to load in slot " << saveSlot;
 		return;
 	}
 
-	saveState.GetStream("player") >> player.pos.x >> player.pos.y;
+	for (HealthUp* g : HealthUp::GetAll()) {
+		g->LoadGame(saveState);
+	}
+
+	skillTree.LoadGame(saveState);
+
+	for (BigItem* g : BigItem::GetAll()) {
+		if (skillTree.IsEnabled(g->skill)) {
+			TriggerPickupItem(g, true);
+		}
+	}
+	BigItem::DeleteNotAlive();
+
+	player.LoadGame(saveState);
 }
 
+void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
+
+	switch (g->skill) {
+	case Skill::WALLJUMP:
+	{
+		raising_lava->SetLevel(raising_lava_target_height);
+	}
+	break;
+	case Skill::GUN:
+	{
+		int screen_gun = screenManager.FindScreenContaining(g->pos);
+		for (Bat* e : Bat::GetAll()) {
+			if (e->screen == screen_gun) {
+				e->awakened = true;
+			}
+		}
+		for (auto const& [id, pos] : TiledEntities::initial_batawake) {
+			Bat* b = new Bat(pos, false, true);
+			door_to_close_when_break_skill->AddEnemy(b);
+		}
+	}
+	break;
+	case Skill::BREAK:
+	{
+		door_to_close_when_break_skill->Lock();
+	}
+	break;
+	default:
+		break;
+	}
+
+	g->alive = false;
+
+}
 void JumpScene::EnterScene()
 {
 	player.Reset(TiledEntities::spawn);
@@ -137,9 +191,9 @@ void JumpScene::EnterScene()
 		new FlyingAlien(pos);
 	}
 
-	//for (vec v : TiledEntities::save) {
-	//	new SaveStation(v);
-	//}
+	for (auto const& [id, pos] : TiledEntities::save) {
+		new SaveStation(id, pos);
+	}
 
 
 	new BigItem(TiledEntities::skill_walljump, Skill::WALLJUMP);
@@ -149,7 +203,7 @@ void JumpScene::EnterScene()
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
 	for (auto const& [id, pos] : TiledEntities::healthup) {
-		new HealthUp(pos);
+		new HealthUp(id, pos);
 	}
 
 	for (auto const& [id, pos] : TiledEntities::enemy_door) {
@@ -176,6 +230,8 @@ void JumpScene::EnterScene()
 			lava->SetLevel(TiledEntities::lava_initial_height.y, true);
 		}
 	}
+
+	LoadGame();
 
 	screenManager.UpdateCurrentScreen(player.pos);
 	Camera::SetCenter(GetCameraTargetPos());
@@ -307,8 +363,14 @@ void JumpScene::Update(float dt)
 	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
+	const SDL_Scancode shift = SDL_SCANCODE_RSHIFT;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		player.health = -1;
+		if (Keyboard::IsKeyJustPressed(shift)) {
+			SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
+			saveState.Clear();
+			saveState.Save();
+		}
+		FxManager::StartTransition(Assets::fadeOutDiamondsShader);
 		return;
 	}
 	if (Keyboard::IsKeyJustPressed(teleport)) {
@@ -351,58 +413,31 @@ void JumpScene::Update(float dt)
 	FireSlime::DeleteNotAlive();
 
 	for (HealthUp* g : HealthUp::GetAll()) {
-		if (Collide(g->bounds(), player.bounds())) {
-
-			//TODO: PICK UP ANIMATION
-
-			player.health++;
-			player.maxHealth++;
-
-			g->alive = false;
-		}
+		g->Update(dt);
 	}
-
-	HealthUp::DeleteNotAlive();
 
 	for (BigItem* g : BigItem::GetAll()) {
 		if (Collide(g->bounds(), player.bounds())) {
-
-			//TODO: PICK UP ANIMATION
-
 			skillTree.Enable(g->skill);
-			g->alive = false;
-
+			
+			//TODO: Pickup animation or popup or something
 			switch(g->skill) {
-			case Skill::WALLJUMP:
-			{
-				raising_lava->SetLevel(raising_lava_target_height);
-				rotoText.ShowMessage("WallJump");
+				case Skill::WALLJUMP:
+					rotoText.ShowMessage("WallJump");
+					break;
+				case Skill::GUN:
+					rotoText.ShowMessage("Big F. Gun");
+					break;
+				case Skill::BREAK:
+					rotoText.ShowMessage("Shots that\nbreak stuff");
+					break;
+				default:
+					break;
 			}
-				break;
-			case Skill::GUN:
-			{
-				rotoText.ShowMessage("Big F. Gun");
-				int screen_gun = screenManager.FindScreenContaining(g->pos);
-				for (Bat* e : Bat::GetAll()) {
-					if (e->screen == screen_gun) {
-						e->awakened = true;
-					}
-				}
-				for (auto const& [id, pos] : TiledEntities::initial_batawake) {
-					Bat* b = new Bat(pos, false, true);
-					door_to_close_when_break_skill->AddEnemy(b);
-				}
-			}
-				break;
-			case Skill::BREAK:
-			{
-				rotoText.ShowMessage("Shots that\nbreak stuff");
-				door_to_close_when_break_skill->Lock();
-			}
-				break;
-			default:
-				break;
-			}
+
+			TriggerPickupItem(g, false);
+
+			SaveGame(); // silently save
 		}
 	}
 
@@ -419,10 +454,6 @@ void JumpScene::Update(float dt)
 	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);
 	}
-	if (player.frozen) {
-		// stop lava to prevent it lowering and suddently us not being inside
-		raising_lava->SetLevel(raising_lava->CurrentLevel());
-	}
 
 	contextActionButton = GameKeys::NONE;
 	for (SaveStation* ss : SaveStation::GetAll()) {
@@ -431,7 +462,15 @@ void JumpScene::Update(float dt)
 			contextActionButton = GameKeys::ACTION;
 			if (Input::IsJustPressed(0,GameKeys::ACTION)) {
 				ss->Activate();
+
+				// TODO: Animation
+
+				SaveGame();
+				// Exit and Enter the scene again, resetting the state of everything and loading the state we just saved
+				FxManager::StartTransition(Assets::fadeOutDiamondsShader);
 			}
+
+
 		}
 	}
 

@@ -3,6 +3,8 @@
 #include "mates.h"
 #include "assets.h"
 #include "window.h"
+#include "jumpman.h"
+#include "collide.h"
 #include "tilemap.h"
 #include "rand.h"
 
@@ -22,9 +24,25 @@ void PowerUp::Draw() const
 	}
 }
 
+void HealthUp::Update(float dt) {
+	JumpMan* player = JumpMan::instance();
+	if (!pickedUp && Collide(bounds(), player->bounds())) {
+		
+		//TODO: Show popup or animation or something
+
+		player->health++;
+		player->maxHealth++;
+
+		pickedUp = true;
+	}
+}
 
 void HealthUp::Draw() const
 {
+	if (pickedUp) {
+		return;
+	}
+
 	if (TileMap::instance()->getTile(TileMap::toTiles(pos)).isBreakable()) {
 		//Don't draw behind breakables
 		return;

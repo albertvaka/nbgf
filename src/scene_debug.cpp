@@ -40,8 +40,6 @@ DebugScene::DebugScene()
 
 	ScreenManager::instance()->AddScreen(map.boundsInWorld());
 	ScreenManager::instance()->UpdateCurrentScreen(map.boundsInWorld().Center());
-
-
 }
 
 void DebugScene::RandomizeMap() {

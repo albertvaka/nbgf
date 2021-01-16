@@ -17,8 +17,6 @@ const float raiseSpeed = 15.f;
 
 extern float mainClock;
 
-
-
 Lava::Lava(const Bounds& b)
 	: bounds(b)
 	, targetY(b.Top())
@@ -80,12 +78,17 @@ void Lava::Update(float dt) {
 
 	// Kill the player
 	JumpMan* player = JumpMan::instance();
-	if (IsInside(player->pos - vec(0,7.f))) {
+	if (IsInside(player->pos - vec(0, 7.f))) {
 		player->frozen = true; // disable movement
 		player->invencibleTimer = 1;
 		player->pos.y += 6 * dt; //sink slowly in the lava
 		player->bfgPos.y = -1000;
 		player->onWall = JumpMan::ONWALL_NO;
+
+		if (targetY > CurrentLevel()) {
+			// stop lava to prevent it lowering and suddently us not being inside
+			targetY = CurrentLevel();
+		}
 	}
 	if (IsInside(player->pos - vec(0, 14.f))) {
 		player->health = 0;

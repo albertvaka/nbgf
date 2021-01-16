@@ -8,7 +8,7 @@
 
 extern float mainClock;
 
-SaveStation::SaveStation(vec p) : BoxEntity(p, vec(32, 32)) { }
+SaveStation::SaveStation(int id, vec p) : id(id), BoxEntity(p, vec(32, 32)) { }
 
 void SaveStation::Update(float dt) {
 	bool prevInScene = inScene;

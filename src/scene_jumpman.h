@@ -25,6 +25,7 @@ struct JumpScene : Scene {
 	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;
 	RotoText rotoText;
+	int saveSlot;
 
 	EnemyDoor* door_to_close_when_break_skill;
 
@@ -36,7 +37,7 @@ struct JumpScene : Scene {
 	void SaveGame() const;
 	void LoadGame();
 
-	JumpScene();
+	JumpScene(int saveSlot = 0);
 	~JumpScene();
 	void EnterScene() override;
 	void ExitScene() override;
@@ -45,4 +46,6 @@ struct JumpScene : Scene {
 	vec GetCameraTargetPos();
 	void UpdateCamera(float dt);
 
+
+	void TriggerPickupItem(BigItem * g, bool fromSave);
 };
