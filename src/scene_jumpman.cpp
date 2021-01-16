@@ -335,7 +335,7 @@ void JumpScene::Update(float dt)
 	skillTree.Update(dt);
 	if (skillTree.open) return; // Pause menu
 
-	contextActionButton = GameKeys::NONE;
+	contextActionButton = false;
 
 	for (OneShotAnim* e : OneShotAnim::GetAll()) { // Update this first so one-frame anims aren't deleted before they are drawn once
 		e->Update(dt);
@@ -442,7 +442,7 @@ void JumpScene::Update(float dt)
 	for (SaveStation* ss : SaveStation::GetAll()) {
 		// If hidden, it checks for enemies with alive == false to unhide
 		if (ss->Update(dt)) { // true if player can interact with it
-			contextActionButton = GameKeys::ACTION;
+			contextActionButton = true;
 			if (Input::IsJustPressed(0, GameKeys::ACTION)) {
 				// TODO: Interaction animation
 				SaveGame();
@@ -561,7 +561,7 @@ void JumpScene::Draw()
 		Lava::GetAll()
 	);
 
-	if (contextActionButton != GameKeys::NONE) {
+	if (contextActionButton) {
 		AnimationType anim = BUTTON_A_PRESS; // TODO: switch depending on the key
 		Window::Draw(Assets::hospitalTexture, player.bounds().TopRight() + vec(2, -6))
 			.withRect(Animation::AnimFrame(anim, mainClock * 1000));

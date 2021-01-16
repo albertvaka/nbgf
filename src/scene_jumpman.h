@@ -33,7 +33,7 @@ struct JumpScene : Scene {
 	Lava* raising_lava;
 	float raising_lava_target_height;
 
-	GameKeys contextActionButton = GameKeys::NONE;
+	bool contextActionButton = false;
 
 	void SaveGame() const;
 	void LoadGame();
