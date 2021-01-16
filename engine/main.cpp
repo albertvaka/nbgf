@@ -193,6 +193,10 @@ void main_loop() {
 		Camera::RotateWithPagUpDown(dt);
 	}
 
+	if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_RETURN) && Keyboard::IsKeyPressed(SDL_SCANCODE_LALT)) {
+		Window::SetFullScreen(!Window::IsFullScreen());
+	}
+
 	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
 #endif
 	{

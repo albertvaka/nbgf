@@ -29,6 +29,18 @@ namespace Window
 
 	int Init();
 	void ProcessEvents();
+	
+	inline bool IsFullScreen() {
+		return SDL_GetWindowFlags(Window::window) & SDL_WINDOW_FULLSCREEN;
+	}
+
+	inline void SetFullScreen(bool b) {
+		SDL_SetWindowFullscreen(Window::window, b ? SDL_WINDOW_FULLSCREEN : 0);
+	}
+
+	inline void SetShowCursor(bool b) {
+		SDL_ShowCursor(b);
+	}
 
 	inline void Clear(uint8_t r, uint8_t g, uint8_t b) {
 		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);
