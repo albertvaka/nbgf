@@ -1,14 +1,9 @@
 #pragma once
 
-#include "raw_input.h"
+#include <functional>
 
-enum GameKeys
-{
-	NONE = 0,
-	UP, DOWN, LEFT, RIGHT,
-	START,
-	ACTION,
-};
+#include "raw_input.h"
+#include "../src/input_conf.h"
 
 // Action-based input
 struct Input {
@@ -68,6 +63,10 @@ struct Input {
 
 private:
 	static int keyboard_player_id; //max 1 player on keyboard
+	static void MapGameKeysToGamePad();
+	static void MapGameKeysToKeyboard();
+	static std::function<bool()> kb_map[magic_enum::enum_count<GameKeys>()];
+	static std::function<bool(int)> gp_map[magic_enum::enum_count<GameKeys>()];
 
 	static KeyStates action_states[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()];
 	static float action_times[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()];
