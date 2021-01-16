@@ -69,6 +69,7 @@ inline bool IsGoingToHitAWall(vec pos, vec size, vec vel, float dt) {
 }
 
 inline bool IsGoingToLeaveTheScreen(vec pos, vec size, vec vel, float dt, int screen) {
+	if (screen < 0) return false;
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
 	vec side = vec(newPos.x + toTheSideImMoving, newPos.y);

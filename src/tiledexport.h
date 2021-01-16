@@ -260,12 +260,12 @@ struct TiledEntities
 	static const vec skill_breakblocks;
 	static const std::unordered_map<int, vec> goomba;
 	static const vec boss_bipedal;
-	static const std::unordered_map<int, vec> goombacharger;
 	static const std::unordered_map<int, vec> fireslime;
 	static const std::unordered_map<int, vec> angrybat;
-	static const std::unordered_map<int, vec> mantis;
 	static const std::unordered_map<int, vec> flyingalien;
 	static const vec debug_teleport;
+	static const std::unordered_map<int, vec> mantis;
+	static const std::unordered_map<int, vec> goombacharger;
 	
 };
 
