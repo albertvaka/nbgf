@@ -16,7 +16,6 @@ namespace Window
     GPU_Target* screenTarget;
     GPU_Target* currentDrawTarget;
     SDL_PixelFormatEnum nativePixelFormat;
-    bool has_focus = true;
 
     int Init() {
         GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
@@ -70,10 +69,10 @@ namespace Window
             switch (event.type)
             {
             case SDL_WINDOWEVENT_FOCUS_LOST:
-                has_focus = false;
+                Debug::out << "Lost focus";
                 break;
             case SDL_WINDOWEVENT_FOCUS_GAINED:
-                has_focus = true;
+                Debug::out << "Gained focus";
                 break;
             case SDL_CONTROLLERDEVICEADDED:
                 GamePad::_Added(SDL_GameControllerOpen(event.jdevice.which));

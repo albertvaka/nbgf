@@ -27,12 +27,8 @@ namespace Window
 	extern GPU_Target* currentDrawTarget;
 	extern SDL_PixelFormatEnum nativePixelFormat;
 
-	extern bool has_focus;
-
 	int Init();
 	void ProcessEvents();
-
-	inline bool HasFocus() { return has_focus; }
 
 	inline void Clear(uint8_t r, uint8_t g, uint8_t b) {
 		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);

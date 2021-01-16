@@ -213,10 +213,8 @@ void main_loop() {
 		}
 #endif
 
-		if (Window::HasFocus()) { // Pause when out of focus
-			mainClock += limited_dt; // TODO: Should not increase when fxmanager->IsTheWorldStopped()
-			currentScene->Update(limited_dt);
-		}
+		mainClock += limited_dt; // TODO: Should not increase when fxmanager->IsTheWorldStopped()
+		currentScene->Update(limited_dt);
 	}
 
 	currentScene->Draw();

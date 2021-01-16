@@ -146,25 +146,25 @@ struct Mouse
 
 	static bool IsPressed(Button b = Button::Left)
 	{
-		if (!Window::HasFocus()) return false;
+		//if (!Window::HasFocus()) return false;
 		return (button_states[b] == PRESSED || button_states[b] == JUST_PRESSED);
 	}
 
 	static bool IsJustPressed(Button b = Button::Left)
 	{
-		if (!Window::HasFocus()) return false;
+		//if (!Window::HasFocus()) return false;
 		return (button_states[b] == JUST_PRESSED);
 	}
 
 	static bool IsReleased(Button b = Button::Left)
 	{
-		if (!Window::HasFocus()) return false;
+		//if (!Window::HasFocus()) return false;
 		return (button_states[b] == RELEASED || button_states[b] == JUST_RELEASED);
 	}
 
 	static bool IsJustReleased(Button b = Left)
 	{
-		if (!Window::HasFocus()) return false;
+		//if (!Window::HasFocus()) return false;
 		return (button_states[b] == JUST_RELEASED);
 	}
 
