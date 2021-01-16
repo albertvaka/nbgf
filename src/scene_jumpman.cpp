@@ -74,6 +74,7 @@ JumpScene::JumpScene(int saveSlot)
 
 JumpScene::~JumpScene() {
 	Parallax::DeleteAll();
+	screenManager.DeleteAllScreens();
 }
 
 void JumpScene::SaveGame() const {
@@ -273,7 +274,9 @@ void JumpScene::ExitScene()
 	EnemyDoor::DeleteAll();
 	BigItem::DeleteAll();
 	HealthUp::DeleteAll();
+	SaveStation::DeleteAll();
 }
+
 void JumpScene::Update(float dt)
 {
 	FxManager::Update(dt);
@@ -363,9 +366,9 @@ void JumpScene::Update(float dt)
 	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	const SDL_Scancode shift = SDL_SCANCODE_RSHIFT;
+	const SDL_Scancode shift = SDL_SCANCODE_LSHIFT;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		if (Keyboard::IsKeyJustPressed(shift)) {
+		if (Keyboard::IsKeyPressed(shift)) {
 			SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
 			saveState.Clear();
 			saveState.Save();
