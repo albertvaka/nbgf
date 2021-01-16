@@ -167,7 +167,7 @@ void SkillTree::Update(float dt) {
 		}
 	}
 found:
-	if (Input::IsJustPressed(0,GameKeys::UP)) {
+	if (Input::IsJustPressed(0,GameKeys::MENU_UP)) {
 		if (current.y > 0) {
 			prev_left = -1;
 			prev_right = -1;
@@ -183,7 +183,7 @@ found:
 			} while (tree[current.y][current.x] == Skill::NO);
 		}
 	}
-	if (Input::IsJustPressed(0,GameKeys::DOWN)) {
+	if (Input::IsJustPressed(0,GameKeys::MENU_DOWN)) {
 		if (current.y < int(tree.size()) - 1) {
 			prev_left = -1;
 			prev_right = -1;

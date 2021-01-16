@@ -3,7 +3,8 @@
 enum class GameKeys
 {
 	NONE = 0,
-	UP, DOWN, LEFT, RIGHT,
+	MENU_UP, MENU_DOWN,
+	JUMP, CROUCH, LEFT, RIGHT,
 	START,
 	ACTION,
 };

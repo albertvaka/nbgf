@@ -65,7 +65,7 @@ void JumpMan::Update(float dt)
 
 	grounded = IsGrounded(pos - vec(0,size.y/2), size);
 
-	crouched = ((crouched || grounded) && Input::IsPressed(0,GameKeys::DOWN)) || (crouched && !grounded);
+	crouched = ((crouched || grounded) && Input::IsPressed(0,GameKeys::CROUCH)) || (crouched && !grounded);
 	if (crouched) {
 		crouchedTime += dt;
 	}
@@ -73,10 +73,10 @@ void JumpMan::Update(float dt)
 		crouchedTime = 0.f;
 	}
 
-	if (Input::IsJustPressed(0,GameKeys::UP, 0.15f) && (grounded || (onWall && !crouched)))
+	if (Input::IsJustPressed(0,GameKeys::JUMP, 0.15f) && (grounded || (onWall && !crouched)))
 	{
-		//if (!Input::IsJustPressed(0,GameKeys::UP)) Debug::out << "cheats";
-		Input::ConsumeJustPressed(0, GameKeys::UP);
+		//if (!Input::IsJustPressed(0,GameKeys::JUMP)) Debug::out << "cheats";
+		Input::ConsumeJustPressed(0, GameKeys::JUMP);
 
 		jumpTimeLeft = jump_time; // the jump upwards velocity can last up to this duration
 		if (onWall && !grounded && !crouched) {
@@ -113,7 +113,7 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	if (Input::IsPressed(0,GameKeys::UP) && jumpTimeLeft > 0)
+	if (Input::IsPressed(0,GameKeys::JUMP) && jumpTimeLeft > 0)
 	{
 		vel.y = vel_jump;
 	}
