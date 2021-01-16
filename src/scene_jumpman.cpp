@@ -411,6 +411,7 @@ void JumpScene::Update(float dt)
 	FlyingAlien::DeleteNotAlive();
 	Mantis::DeleteNotAlive();
 	FireSlime::DeleteNotAlive();
+	Bipedal::DeleteNotAlive();
 
 	for (HealthUp* g : HealthUp::GetAll()) {
 		g->Update(dt);

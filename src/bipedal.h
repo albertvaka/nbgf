@@ -26,6 +26,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 	bool charging = false;
 	float timer = 0.f;
 	float damagedTimer = 0.f;
+	int health = 18;
 	Bounds legsHitBox, headHitBox;
 
 	Bipedal(vec position);
@@ -34,14 +35,17 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 	void Draw() const;
 	void takeDamage() {
 		damagedTimer = 0.3f;
+		health--;
+		if (health <= 0) {
+			alive = false;
+		}
 	}
-	
+
 	/*
 	template<typename T>
 	bool Collides(const T& t) {
 		return Collide(t, headHitBox) || Collide(t, legsHitBox);
 	}*/
 
-	inline bool inSameScreenAsPlayer() const;
 };
 

@@ -158,6 +158,11 @@ void Mantis::Update(float dt)
 			vel.y = vel_hit.y;
 			state = State::JUMP;
 		}
+
+		health--;
+		if (health <= 0) {
+			die();
+		}
 	}
 
 	DamagePlayerOnCollision(bounds());
