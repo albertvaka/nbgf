@@ -53,6 +53,14 @@ namespace Window
 		return texture;
 	}
 
+	inline float GetViewportScale() {
+		return Window::screenTarget->viewport.w / Window::GAME_WIDTH;
+	}
+
+	inline vec GetViewportMargins() {
+		return vec(Window::screenTarget->viewport.x, Window::screenTarget->viewport.y) / GetViewportScale();
+	}
+
 	void BeginRenderToTexture(GPU_Image* targetTexture, bool useCamera);
 	inline void EndRenderToTexture() {
 		Window::currentDrawTarget = Window::screenTarget;

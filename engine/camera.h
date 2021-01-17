@@ -119,7 +119,7 @@ namespace Camera
 
 	namespace InScreenCoords
 	{
-		// A Camera not affected by the current zoom nor camera displacement. Its top-left is always at 0,0
+		// A Camera not affected by the current zoom nor camera displacement, useful for GUIs. Its top-left is always at 0,0
 
 		inline void Begin() {
 			GPU_SetCamera(Window::currentDrawTarget, &gui_camera);
