@@ -4,9 +4,8 @@
 #include "selfregister.h"
 #include "animation2.h"
 #include "entity.h"
-#include "collide.h"
 
-struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>, SelfColliding<FlyingAlien>
+struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
 {
 	enum class State
 	{
