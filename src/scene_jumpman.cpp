@@ -27,6 +27,7 @@
 #include "drawall.h"
 #include "savestate.h"
 #include "bigitem.h"
+#include "health.h"
 #include "healthup.h"
 
 extern float mainClock;
@@ -42,6 +43,7 @@ JumpScene::JumpScene(int saveSlot)
 {
 	Bullet::InitParticles();
 	Missile::InitParticles();
+	Health::InitParticles();
 
 	fogPartSys.AddSprite({ 0, 0, 140, 61 });
 	fogPartSys.AddSprite({140, 0, 140, 61 });
@@ -311,6 +313,8 @@ void JumpScene::ExitScene()
 	EnemyDoor::DeleteAll();
 	BigItem::DeleteAll();
 	HealthUp::DeleteAll();
+	Health::DeleteAll();
+	Health::particles.Clear();
 	SaveStation::DeleteAll();
 }
 
@@ -478,6 +482,11 @@ void JumpScene::Update(float dt)
 		g->Update(dt);
 	}
 
+	for (Health* g : Health::GetAll()) {
+		g->Update(dt);
+	}
+	Health::DeleteNotAlive();
+
 	for (BigItem* g : BigItem::GetAll()) {
 		if (Collide(g->bounds(), player.bounds())) {
 			skillTree.Enable(g->skill);
@@ -509,6 +518,7 @@ void JumpScene::Update(float dt)
 
 	Bullet::particles.UpdateParticles(dt);
 	Missile::particles.UpdateParticles(dt);
+	Health::particles.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
 
@@ -562,6 +572,8 @@ void JumpScene::Draw()
 		Bipedal::GetAll(),
 		&Bullet::particles,
 		&Missile::particles,
+		Health::GetAll(),
+		&Health::particles,
 		Bullet::GetAll(),
 		FireShot::GetAll(),
 		Missile::GetAll(),
@@ -609,7 +621,7 @@ void JumpScene::Draw()
 	}
 #endif
 
-
+	//Health::particles.DrawImGUI("health");
 	//Bullet::particles.DrawImGUI("BulletTrail");
 	//Missile::particles.DrawImGUI("MissileSmoke");
 

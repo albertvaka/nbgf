@@ -3,7 +3,9 @@
 #include "jumpman.h"
 #include "bullet.h"
 #include "collide.h"
+#include "health.h"
 #include "screen.h"
+#include "rand.h"
 #include "oneshotanim.h"
 #include "anim_lib.h"
 #include "assets.h"
@@ -36,7 +38,14 @@ bool DamagePlayerOnCollision(const B& bounds) { // returns true if collided
 	return false;
 }
 
+inline void RandomlySpawnHealth(vec pos, int percentChance = 10) {
+	if (Rand::PercentChance(percentChance)) {
+		new Health(pos + Rand::vecInRange(-6, -6, 6, 6));
+	}
+}
+
 inline void DieWithSmallExplosion(Entity* e) {
 	e->alive = false;
 	new OneShotAnim(Assets::hospitalTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
+	RandomlySpawnHealth(e->pos);
 }

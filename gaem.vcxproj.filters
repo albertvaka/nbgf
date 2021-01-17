@@ -319,6 +319,9 @@
     <ClInclude Include="src\input_conf.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\health.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
     <ClInclude Include="src\bigitem.h">
       <Filter>src\entities</Filter>
     </ClInclude>
@@ -512,6 +515,9 @@
     </ClCompile>
     <ClCompile Include="src\input_conf.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\health.cpp">
+      <Filter>src\entities</Filter>
     </ClCompile>
     <ClCompile Include="src\bigitem.cpp">
       <Filter>src\entities</Filter>
