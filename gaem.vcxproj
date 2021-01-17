@@ -49,6 +49,7 @@
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bat.h" />
+    <ClInclude Include="src\bigitem.h" />
     <ClInclude Include="src\bipedal.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\common_bullet.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="src\fireslime.h" />
     <ClInclude Include="src\flyingalien.h" />
     <ClInclude Include="src\goomba.h" />
+    <ClInclude Include="src\healthup.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\jumpman.h" />
     <ClInclude Include="src\lava.h" />
@@ -68,7 +70,6 @@
     <ClInclude Include="src\missile.h" />
     <ClInclude Include="src\oneshotanim.h" />
     <ClInclude Include="src\parallax.h" />
-    <ClInclude Include="src\powerups.h" />
     <ClInclude Include="src\rototext.h" />
     <ClInclude Include="src\savestation.h" />
     <ClInclude Include="src\scene_debug.h" />
@@ -126,6 +127,7 @@
     <ClCompile Include="src\anim_data.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\bat.cpp" />
+    <ClCompile Include="src\bigitem.cpp" />
     <ClCompile Include="src\bipedal.cpp" />
     <ClCompile Include="src\bullet.cpp" />
     <ClCompile Include="src\debug_walker.cpp" />
@@ -137,13 +139,13 @@
     <ClCompile Include="src\fxmanager.cpp" />
     <ClInclude Include="src\fxmanager.h" />
     <ClCompile Include="src\goomba.cpp" />
+    <ClCompile Include="src\healthup.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\lava.cpp" />
     <ClCompile Include="src\mantis.cpp" />
     <ClCompile Include="src\missile.cpp" />
     <ClCompile Include="src\parallax.cpp" />
-    <ClCompile Include="src\powerups.cpp" />
     <ClCompile Include="src\savestation.cpp" />
     <ClCompile Include="src\scene_debug.cpp" />
     <ClCompile Include="src\scene_hellcross.cpp" />

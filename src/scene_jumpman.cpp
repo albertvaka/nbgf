@@ -26,6 +26,8 @@
 #include "flyingalien.h"
 #include "drawall.h"
 #include "savestate.h"
+#include "bigitem.h"
+#include "healthup.h"
 
 extern float mainClock;
 

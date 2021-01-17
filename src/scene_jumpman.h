@@ -5,7 +5,7 @@
 #include "jumpman.h"
 #include "scene_manager.h"
 #include "destroyedtiles.h"
-#include "powerups.h"
+#include "bigitem.h"
 #include "skilltree.h"
 #include "screen.h"
 #include "input.h"

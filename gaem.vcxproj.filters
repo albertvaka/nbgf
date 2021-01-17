@@ -271,9 +271,6 @@
     <ClInclude Include="src\parallax.h">
       <Filter>src\environment</Filter>
     </ClInclude>
-    <ClInclude Include="src\powerups.h">
-      <Filter>src\entities</Filter>
-    </ClInclude>
     <ClInclude Include="src\destroyedtiles.h">
       <Filter>src\environment</Filter>
     </ClInclude>
@@ -321,6 +318,12 @@
     </ClInclude>
     <ClInclude Include="src\input_conf.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bigitem.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\healthup.h">
+      <Filter>src\entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -477,9 +480,6 @@
     <ClCompile Include="src\parallax.cpp">
       <Filter>src\environment</Filter>
     </ClCompile>
-    <ClCompile Include="src\powerups.cpp">
-      <Filter>src\entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\destroyedtiles.cpp">
       <Filter>src\environment</Filter>
     </ClCompile>
@@ -512,6 +512,12 @@
     </ClCompile>
     <ClCompile Include="src\input_conf.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bigitem.cpp">
+      <Filter>src\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\healthup.cpp">
+      <Filter>src\entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
