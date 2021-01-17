@@ -144,30 +144,34 @@ void Mantis::Update(float dt)
 
 	Bullet* b = ReceiveDamageFromBullets(bounds());
 	if (b) {
-		hitTimer = hitTime;
-
-		vec src = b->pos;
-		if (pos.x > src.x) {
-			vel.x = vel_hit.x;
-		}
-		else {
-			vel.x = -vel_hit.x;
-		}
-
-		if (state != State::JUMP) {
-			vel.y = vel_hit.y;
-			state = State::JUMP;
-		}
-
-		health--;
-		if (health <= 0) {
-			die();
-		}
+		takeDamage(pos);
+		if (alive == false) return;
 	}
 
 	DamagePlayerOnCollision(bounds());
 }
 
+void Mantis::takeDamage(vec src)
+{
+	hitTimer = hitTime;
+
+	if (pos.x > src.x) {
+		vel.x = vel_hit.x;
+	}
+	else {
+		vel.x = -vel_hit.x;
+	}
+
+	if (state != State::JUMP) {
+		vel.y = vel_hit.y;
+		state = State::JUMP;
+	}
+
+	health--;
+	if (health <= 0) {
+		DieWithSmallExplosion(this);
+	}
+}
 
 void Mantis::Draw() const
 {

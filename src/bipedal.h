@@ -4,7 +4,6 @@
 #include "animation2.h"
 #include "selfregister.h"
 #include "entity.h"
-#include "collide.h"
 
 struct JumpMan;
 struct TileMap;
@@ -33,13 +32,8 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 
 	void Update(float dt);
 	void Draw() const;
-	void takeDamage() {
-		damagedTimer = 0.3f;
-		health--;
-		if (health <= 0) {
-			alive = false;
-		}
-	}
+	void takeDamage();
+	void die();
 
 	/*
 	template<typename T>

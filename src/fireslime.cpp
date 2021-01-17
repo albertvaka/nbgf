@@ -100,7 +100,7 @@ void FireSlime::Update(float dt)
 	}
 
 	if (ReceiveDamageFromBullets(bounds())) {
-		die(); //single hit
+		DieWithSmallExplosion(this); //single hit
 		return;
 	}
 

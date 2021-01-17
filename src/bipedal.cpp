@@ -156,11 +156,28 @@ void Bipedal::Update(float dt)
 		break;
 	}
 
-	DamagePlayerOnCollision(headHitBox);
-	DamagePlayerOnCollision(legsHitBox);
-
 	if (ReceiveDamageFromBullets(headHitBox)) { // Bullets don't hit the legs
 		takeDamage();
+		if (alive == false) return;
+	}
+
+
+	DamagePlayerOnCollision(headHitBox);
+	DamagePlayerOnCollision(legsHitBox);
+}
+
+void Bipedal::die() {
+	alive = false;
+	for (int i = 0; i < 6; i++) {
+		RandomlySpawnHealth(Rand::vecInRange(headHitBox), 100);
+	}
+}
+
+void Bipedal::takeDamage() {
+	damagedTimer = 0.3f;
+	health--;
+	if (health <= 0) {
+		die();
 	}
 }
 

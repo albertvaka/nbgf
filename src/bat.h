@@ -6,8 +6,6 @@
 #include "steering_entity.h"
 #include "steering_behavior.h"
 #include "steering_behavior_applier.h"
-#include "oneshotanim.h"
-#include "assets.h"
 
 struct Bat : SteeringEntity, SelfRegister<Bat>
 {
@@ -31,11 +29,6 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 	int screen;
 
 	Bat(vec position, bool aggresive, bool awake);
-
-	void die() {
-		alive = false;
-		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
-	}
 
 	void Update(float dt);
 	void Draw() const;

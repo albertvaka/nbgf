@@ -18,6 +18,7 @@
 #include "fireshot.h"
 #include "lava.h"
 #include "savestation.h"
+#include "common_enemy.h"
 #include "debug.h"
 #include "collide.h"
 #include "rototext.h"
@@ -431,7 +432,7 @@ void JumpScene::Update(float dt)
 	if (Keyboard::IsKeyJustPressed(killall)) {
 		for (Bat* e : Bat::GetAll()) {
 			if (e->screen == screenManager.CurrentScreen()) {
-				e->die();
+				DieWithSmallExplosion(e);
 			}
 		}
 	}

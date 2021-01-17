@@ -4,7 +4,9 @@
 #include "bullet.h"
 #include "collide.h"
 #include "screen.h"
-
+#include "oneshotanim.h"
+#include "anim_lib.h"
+#include "assets.h"
 
 inline bool InSameScreenAsPlayer(int myScreen) {
 	return myScreen == -1 || myScreen == ScreenManager::instance()->CurrentScreen();
@@ -32,4 +34,9 @@ bool DamagePlayerOnCollision(const B& bounds) { // returns true if collided
 		return true;
 	}
 	return false;
+}
+
+inline void DieWithSmallExplosion(Entity* e) {
+	e->alive = false;
+	new OneShotAnim(Assets::hospitalTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 }

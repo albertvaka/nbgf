@@ -3,10 +3,7 @@
 #include "vec.h"
 #include "selfregister.h"
 #include "animation2.h"
-#include "anim_lib.h"
 #include "entity.h"
-#include "oneshotanim.h"
-#include "assets.h"
 #include "collide.h"
 
 struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>, SelfColliding<FlyingAlien>
@@ -29,6 +26,7 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>, SelfColliding<Flyi
 
 	int screen;
 
+	int health = 3;
 	float hitTimer = 0.f;
 
 	FlyingAlien(vec position);
@@ -37,9 +35,7 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>, SelfColliding<Flyi
 	void Update(float dt);
 	void Draw() const;
 
-	void die() {
-		alive = false;
-		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
-	}
+	void takeDamage(vec src);
+
 };
 

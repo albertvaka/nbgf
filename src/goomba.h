@@ -3,10 +3,7 @@
 #include "vec.h"
 #include "selfregister.h"
 #include "animation2.h"
-#include "anim_lib.h"
 #include "entity.h"
-#include "oneshotanim.h"
-#include "assets.h"
 
 struct Goomba : CircleEntity, SelfRegister<Goomba>
 {
@@ -42,9 +39,5 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 	void Update(float dt);
 	void Draw() const;
 
-	void die() {
-		alive = false;
-		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
-	}
 };
 

@@ -3,11 +3,8 @@
 #include "vec.h"
 #include "selfregister.h"
 #include "animation2.h"
-#include "anim_lib.h"
 #include "entity.h"
-#include "oneshotanim.h"
 #include "collide.h"
-#include "assets.h"
 
 struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 {
@@ -37,9 +34,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 
 	bool IsBouncingAgainstAnotherMantis();
 
-	void die() {
-		alive = false;
-		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
-	}
+	void takeDamage(vec src);
+
 };
 

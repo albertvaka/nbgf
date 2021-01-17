@@ -35,9 +35,5 @@ struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 	void Update(float dt);
 	void Draw() const;
 
-	void die() {
-		alive = false;
-		new OneShotAnim(Assets::hospitalTexture, pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
-	}
 };
 

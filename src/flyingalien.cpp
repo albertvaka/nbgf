@@ -143,16 +143,25 @@ void FlyingAlien::Update(float dt)
 
 	Bullet* b = ReceiveDamageFromBullets(bounds());
 	if (b) {
-		hitTimer = hitTime;
-
-		if (state == State::FLYING && IsMovingTowardsInX(pos, vel, b->pos)) {
-			vel.x = -vel.x;
-		}
+		takeDamage(b->pos);
+		if (alive == false) return;
 	}
 
 	DamagePlayerOnCollision(bounds());
 }
 
+void FlyingAlien::takeDamage(vec src) {
+	hitTimer = hitTime;
+
+	if (state == State::FLYING && IsMovingTowardsInX(pos, vel, src)) {
+		vel.x = -vel.x;
+	}
+
+	health--;
+	if (health <= 0) {
+		DieWithSmallExplosion(this);
+	}
+}
 
 void FlyingAlien::Draw() const
 {
