@@ -90,7 +90,8 @@ struct PartSys {
 		sprites.emplace_back(rect);
 	}
 
-	void Spawn(float dt);
+	void Spawn(float dt) { SpawnWithExternalTimer(time, dt); }
+	void SpawnWithExternalTimer(float& timer, float dt);
 	void UpdateParticles(float dt); //Doesn't create new particles, use Spawn() 
 	void Draw() const;
 

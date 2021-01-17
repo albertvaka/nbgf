@@ -7,12 +7,12 @@
 #include "rand.h"
 #include "window.h"
 
-void PartSys::Spawn(float dt) {
-	time += dt;
-	while (time > 0) {
+void PartSys::SpawnWithExternalTimer(float& timer, float dt) {
+	timer += dt;
+	while (timer > 0) {
 		AddParticle();
 		//p.Update(time, *this);
-		time -= Rand::rollf(min_interval, max_interval);
+		timer -= Rand::rollf(min_interval, max_interval);
 	}
 }
 
