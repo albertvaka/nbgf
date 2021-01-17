@@ -166,6 +166,9 @@ void main_loop() {
 	GamePad::_UpdateInputState();
 	Input::Update(dt);
 
+	if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_RETURN) && Keyboard::IsKeyPressed(SDL_SCANCODE_LALT)) {
+		Window::SetFullScreen(!Window::IsFullScreen());
+	}
 
 #ifdef _DEBUG
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME = SDL_SCANCODE_F1;
@@ -193,9 +196,6 @@ void main_loop() {
 		Camera::RotateWithPagUpDown(dt);
 	}
 
-	if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_RETURN) && Keyboard::IsKeyPressed(SDL_SCANCODE_LALT)) {
-		Window::SetFullScreen(!Window::IsFullScreen());
-	}
 
 	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
 #endif
