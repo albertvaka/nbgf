@@ -153,7 +153,7 @@ void FlyingAlien::Update(float dt)
 void FlyingAlien::takeDamage(vec src) {
 	hitTimer = hitTime;
 
-	if (state == State::FLYING && IsMovingTowardsInX(pos, vel, src)) {
+	if (state == State::FLYING && !IsMovingTowardsInX(pos, vel, src)) {
 		vel.x = -vel.x;
 	}
 
