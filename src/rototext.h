@@ -8,7 +8,6 @@
 
 struct RotoText : Text, SingleInstance<RotoText>
 {
-	bool alive = true;
 	float timer = -1;
 
 	const float DURATION = 2.2f;
