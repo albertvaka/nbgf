@@ -7,14 +7,6 @@
 
 #include "SDL_gpu.h"
 
-inline void FixTextureBleeding(GPU_Rect& tr) {
-	const float e = 0.1f;
-	tr.x += e;
-	tr.y += e;
-	tr.w -= e;
-	tr.h -= e;
-}
-
 namespace Window
 {
 	constexpr const int GAME_HEIGHT = 21 * 16;
@@ -209,8 +201,6 @@ namespace Window
 					dest.y -= 2*e;
 				}
 			}
-			#else
-				FixTextureBleeding(src);
 			#endif
 			// We pass origin as rotation pivot. We could change that to a different variable.
 			GPU_BlitTransformX(t, &src, Window::currentDrawTarget, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
@@ -410,10 +400,17 @@ namespace Window
 
 }
 
+inline void FixTextureBleeding(GPU_Rect& tr) {
+	// I made a similar fix in SDL_GPU's BlitTransformX, but when drawing raw vertices it's not used so we need it here as well
+	const float e = 0.1f;
+	tr.x += e;
+	tr.y += e;
+	tr.w -= e;
+	tr.h -= e;
+}
+
 inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {
-#if !defined(__APPLE__)
 	FixTextureBleeding(tr);
-#endif
 	tr.x /= i->texture_w;
 	tr.y /= i->texture_h;
 	tr.w /= i->texture_w;

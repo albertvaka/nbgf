@@ -4550,10 +4550,11 @@ static void BlitTransformX(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* s
     else
     {
         // Scale src_rect tex coords according to actual texture dims
-        x1 = src_rect->x/(float)tex_w;
-        y1 = src_rect->y/(float)tex_h;
-        x2 = (src_rect->x + src_rect->w)/(float)tex_w;
-        y2 = (src_rect->y + src_rect->h)/(float)tex_h;
+        float e = 0.1f; // epsilon added to prevent texture bleeding
+        x1 = (src_rect->x + e)/(float)tex_w;
+        y1 = (src_rect->y + e)/(float)tex_h;
+        x2 = (src_rect->x + src_rect->w - e)/(float)tex_w;
+        y2 = (src_rect->y + src_rect->h - e)/(float)tex_h;
         w = src_rect->w;
         h = src_rect->h;
     }
