@@ -138,7 +138,7 @@ struct Bounds
         return vec(width, height);
     }
 
-    [[nodiscard]] vec ClosesPointInBounds(vec target) const;
+    [[nodiscard]] vec ClosestPointInBounds(vec target) const;
     [[nodiscard]] float DistanceSq(const Bounds& a) const;
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
     [[nodiscard]] float Distance(const Bounds& a) const;
@@ -190,7 +190,7 @@ inline float Bounds::DistanceSq(const Bounds& a) const {
     return sqrDist;
 }
 
-inline vec Bounds::ClosesPointInBounds(vec target) const {
+inline vec Bounds::ClosestPointInBounds(vec target) const {
     vec distance = this->Center() - target;
     distance.Clamp(-this->Size() / 2, this->Size() / 2);
     vec closestPoint = this->Center() - distance;
@@ -198,7 +198,7 @@ inline vec Bounds::ClosesPointInBounds(vec target) const {
 }
 
 inline float Bounds::DistanceSq(const CircleBounds& a) const {
-    vec closestPoint = ClosesPointInBounds(a.pos);
+    vec closestPoint = ClosestPointInBounds(a.pos);
     //closestPoint.Debuggerino();
     return closestPoint.DistanceSq(a.pos) - (a.radius * a.radius);
 }

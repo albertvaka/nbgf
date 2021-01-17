@@ -354,7 +354,7 @@ vec SteeringBehavior::TileMapAvoidance(TileMap* map)
 					closestObstacle = tile.Center();
 					goto im_inside; //exit early
 				}
-				vec closestPoint = tile.ClosesPointInBounds(me.pos);
+				vec closestPoint = tile.ClosestPointInBounds(me.pos);
 				float distSq = closestPoint.DistanceSq(me.pos);
 				if (distSq < minDistToCenterSq) {
 					minDistToCenterSq = distSq;
