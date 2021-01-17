@@ -18,7 +18,10 @@ struct SaveState
 
 	[[nodiscard]] bool HasData() { return !state.empty(); }
 
-	void Clear() { state.clear(); }
+	SaveState& Clear() {
+		state.clear();
+		return *this;
+	}
 
 	[[nodiscard]] bool Has(const std::string& id) const { return state.find(id) != state.cend(); }
 	[[nodiscard]] std::string Get(const std::string& id) const { 
@@ -28,7 +31,10 @@ struct SaveState
 		}
 		return data->second;
 	}
-	void Put(const std::string& id, const std::string& data) { state[id] = data; }
+	SaveState& Put(const std::string& id, const std::string& data) {
+		state[id] = data;
+		return *this;
+	}
 
 	[[nodiscard]] SaveStream StreamPut(const std::string& id);
 	[[nodiscard]] std::istringstream StreamGet(const std::string& id) const { return std::istringstream(Get(id)); }

@@ -594,31 +594,32 @@ void JumpScene::Draw()
 #ifdef _IMGUI
 	{
 		ImGui::Begin("jumpman scene");
-		//ImGui::SliderFloat("y", &player.pos.y, 0.f, 25 * 16.f);
-		vec normalizedPlayerPos = Camera::WorldToScreen(player.pos) / Camera::InScreenCoords::GetSize();
-		ImGui::Text("player norm %f %f", normalizedPlayerPos.x, normalizedPlayerPos.y);
+		ImGui::SliderFloat2("player", (float*)&player.pos, 16.f, 4500.f);
 		vec m = Mouse::GetPositionInWorld();
 		veci t = map.toTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
-		if (ImGui::Button("Add point")) {
-			skillTree.gunpoints += 1;
-		}
-		ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
+		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
 		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
-		ImGui::End();
-	}
-	//FxManager::DrawImgui();
-	{
-		ImGui::Begin("savestate");
-		ImGui::InputInt("Slot", &saveSlot);
+
 		if (ImGui::Button("Save")) {
 			SaveGame();
 		}
-		if (ImGui::Button("Load")) {
+		if (ImGui::Button("Load in same scene")) {
 			LoadGame();
+		}
+		if (ImGui::Button("Load in new scene")) {
+			LoadGame();
+			ExitScene();
+			EnterScene();
+		}
+		if (ImGui::Button("Clear save")) {
+			SaveState::Open(kSaveStateGameName, saveSlot)
+				.Clear()
+				.Save();
 		}
 		ImGui::End();
 	}
+	//FxManager::DrawImgui();
 #endif
 
 	//Health::particles.DrawImGUI("health");

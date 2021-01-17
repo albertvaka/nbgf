@@ -6,6 +6,7 @@
 #include "input.h"
 #include "magic_enum.h"
 #include "debug.h"
+#include "savestate.h"
 
 std::vector<bool> unlocked;
 
@@ -239,6 +240,20 @@ void SkillTree::DrawOverlay() {
 	}
 }
 
+void SkillTree::SaveGame(SaveState& state) const {
+	for (Skill skill : magic_enum::enum_values<Skill>()) {
+		state.StreamPut("skills_" + std::string(magic_enum::enum_name(skill))) << enabled[int(skill)];
+	}
+};
+
+void SkillTree::LoadGame(const SaveState& state) {
+	for (Skill skill : magic_enum::enum_values<Skill>()) {
+		bool b;
+		if (state.StreamGet("skills_" + std::string(magic_enum::enum_name(skill))) >> b) {
+			enabled[int(skill)] = b;
+		}
+	}
+}
 
 void SkillTree::DrawMenu() {
 

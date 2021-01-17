@@ -5,7 +5,6 @@
 
 #include "vec.h"
 #include "entity.h"
-#include "savestate.h"
 #include "selfregister.h"
 
 struct SaveStation : BoxEntity, SelfRegister<SaveStation>

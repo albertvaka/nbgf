@@ -1,11 +1,9 @@
 #pragma once
 
-#include "mates.h"
 #include "tilemap.h"
 #include "jumpman.h"
-#include "scene_manager.h"
+#include "scene.h"
 #include "destroyedtiles.h"
-#include "bigitem.h"
 #include "skilltree.h"
 #include "screen.h"
 #include "input.h"
@@ -14,6 +12,7 @@
 struct Lava;
 struct GunUp;
 struct EnemyDoor;
+struct BigItem;
 
 struct JumpScene : Scene {
 

@@ -7,6 +7,7 @@
 #include "fxmanager.h"
 #include "oneshotanim.h"
 #include "debug.h"
+#include "savestate.h"
 #include "common_tilemapcharacter.h"
 #include "skilltree.h"
 
@@ -55,6 +56,15 @@ JumpMan::JumpMan()
 	, size(standing_size)
 {
 	InitPolvito();
+}
+
+void JumpMan::SaveGame(SaveState& state) const {
+	state.StreamPut("player") << pos.x << pos.y << maxHealth;
+}
+
+void JumpMan::LoadGame(const SaveState& state) {
+	state.StreamGet("player") >> pos.x >> pos.y >> maxHealth;
+	Reset(pos, maxHealth);
 }
 
 void JumpMan::Update(float dt)
