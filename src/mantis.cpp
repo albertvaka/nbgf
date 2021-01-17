@@ -34,7 +34,7 @@ Mantis::Mantis(vec pos)
 	, anim(AnimLib::MANTIS_WALK)
 {
 	vel.y = 10;
-	vel.x = Rand::OnceEach(2)? -speed : speed;
+	vel.x = Rand::OnceEvery(2)? -speed : speed;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 

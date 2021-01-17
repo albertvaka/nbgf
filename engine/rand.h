@@ -8,19 +8,20 @@
 #include <math.h>
 
 #include "vec.h"
+#include "bounds.h"
 
 namespace Rand
 {
-	inline float rollf(float min, float max) { return min + (rand() / (float(RAND_MAX) / (max - min))); } // Range [min, max) most of the time (except when rand() == RAND_MAX, then its [min, max])
-	inline float rollf(float max = 1.f) { return rollf(0.f, max); } // Range [0, max)
+	[[nodiscard]] inline float rollf(float min, float max) { return min + (rand() / (float(RAND_MAX) / (max - min))); } // Range [min, max) most of the time (except when rand() == RAND_MAX, then its [min, max])
+	[[nodiscard]] inline float rollf(float max = 1.f) { return rollf(0.f, max); } // Range [0, max)
 
-	inline int roll(int min, int max) { return min + (rand() % (max - min)); } // Range [min, max)
-	inline int roll(int max) { return roll(0, max); } // Range [0, max)
-	inline bool OnceEach(int max) { return roll(0, max) == 0; }
-	inline bool PercentChance(int percent) { return roll(0, 100) < percent; }
+	[[nodiscard]] inline int roll(int min, int max) { return min + (rand() % (max - min)); } // Range [min, max)
+	[[nodiscard]] inline int roll(int max) { return roll(0, max); } // Range [0, max)
+	[[nodiscard]] inline bool OnceEvery(int n) { return roll(0, n) == 0; }
+	[[nodiscard]] inline bool PercentChance(int percent) { return roll(0, 100) < percent; }
 
 	// Unit vector in a random direction
-	inline vec dirInCircle()
+	[[nodiscard]] inline vec dirInCircle()
 	{
 		float ang = rollf(0.0f, 360.0f);
 
@@ -30,20 +31,23 @@ namespace Rand
 	}
 
 	// Randoms-sized vector in a random direction
-	inline vec posInsideCircle(float radius)
+	[[nodiscard]] inline vec posInsideCircle(float radius)
 	{
 		float r = rollf(0.0f, radius);
 		return dirInCircle()*r;
 	}
 
-	inline vec vecInRange(float minX, float minY, float maxX, float maxY) {
+	[[nodiscard]] inline vec vecInRange(float minX, float minY, float maxX, float maxY) {
 		return vec(rollf(minX, maxX), rollf(minY, maxY));
 	}
 
-	inline vec vecInRange(vec min, vec max) {
-		return vec(rollf(min.x, max.x), rollf(min.y, max.y));
+	[[nodiscard]] inline vec vecInRange(vec min, vec max) {
+		return vecInRange(min.x, min.y, max.x, max.y);
 	}
 
+	[[nodiscard]] inline vec vecInRange(const Bounds& bounds) {
+		return vecInRange(bounds.Left(), bounds.Top(), bounds.Right(), bounds.Bottom());
+	}
 }
 
 namespace GoodRand

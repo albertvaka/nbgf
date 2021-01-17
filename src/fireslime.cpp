@@ -28,7 +28,7 @@ FireSlime::FireSlime(vec pos)
 	: CircleEntity(pos - vec(0, kSpriteOffsetY), 5*kSpriteScale)
 	, anim(AnimLib::FIRESLIME_WALK)
 {
-	direction = Rand::OnceEach(2) ? 1 : -1;
+	direction = Rand::OnceEvery(2) ? 1 : -1;
 	anim.loopable = false;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }

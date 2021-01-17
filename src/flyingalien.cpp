@@ -31,7 +31,7 @@ FlyingAlien::FlyingAlien(vec pos)
 	, anim(AnimLib::FLYING_ALIEN)
 {
 	orig = this->pos;
-	vel.x = Rand::OnceEach(2)? -speed : speed;
+	vel.x = Rand::OnceEvery(2)? -speed : speed;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 

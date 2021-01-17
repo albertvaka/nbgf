@@ -24,7 +24,7 @@ Goomba::Goomba(vec pos, bool isCharger)
 	, anim(isCharger ? AnimLib::GOOMBACHARGER : AnimLib::GOOMBA)
 	, isCharger(isCharger)
 {
-	goingRight = Rand::OnceEach(2);
+	goingRight = Rand::OnceEvery(2);
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 	
 	//Get it to touch the ground in case it's incorrectly placed in the tilemap

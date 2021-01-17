@@ -97,7 +97,7 @@ void Bipedal::Update(float dt)
 				forward = false;
 			}
 			else {
-				forward = Rand::OnceEach(2);
+				forward = Rand::OnceEvery(2);
 			}
 			if (forward) {
 				state = State::WALKING_FORWARD;
@@ -144,7 +144,7 @@ void Bipedal::Update(float dt)
 		bool outOfBounds = (pos.x < minX) || (pos.x > maxX);
 		bool animationLooped = (frame != anim.current_frame) && (anim.current_frame == 0);
 		if (animationLooped && (outOfBounds || Rand::PercentChance(40))) {
-			if (Rand::OnceEach(3)) {
+			if (Rand::OnceEvery(3)) {
 				state = State::DRAMATIC_PAUSE;
 				timer = Rand::rollf(0.5f, 1.0f);
 			}
