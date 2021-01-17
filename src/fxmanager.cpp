@@ -110,15 +110,17 @@ void FxManager::EndDraw() {
 
 		transitionShader->Activate();
 
-		vec screenSize = Camera::InScreenCoords::GetSize();
+		Bounds screenBounds = Camera::InScreenCoords::GetBounds();
 		transitionShader->SetUniform(transitionShaderProgressUniform, transitionTime / transitionDuration);
-		transitionShader->SetUniform(transitionShaderAspectRatioUniform, screenSize.x/screenSize.y);
+		transitionShader->SetUniform(transitionShaderAspectRatioUniform, screenBounds.width/screenBounds.height);
 
-		Window::Draw(Assets::blankTexture, Camera::InScreenCoords::GetBounds());
+		Window::Draw(Assets::blankTexture, screenBounds);
 
 		Shader::Deactivate();
 
 		Camera::InScreenCoords::End();
 	}
+
+
 
 }
