@@ -9,7 +9,7 @@
 
 void Parallax::Draw() const
 {
-	Bounds camera = Camera::GetBounds();
+	BoxBounds camera = Camera::Bounds();
 	if (!Collide(bounds, camera)) {
 		return;
 	}

@@ -67,13 +67,19 @@ namespace Window
 
 		// pass thickness < 0 to draw a filled shape
 		void Rectangle(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
-		inline void Rectangle(const Bounds& box, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+		inline void Rectangle(vec va, vec vb, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+			Rectangle(va.x, va.y, vb.x, vb.y, thickness, r, g, b, a);
+		}
+		inline void Rectangle(const BoxBounds& box, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Rectangle(box.Left(), box.Top(), box.Right(), box.Bottom(), thickness, r, g, b, a);
 		}
 		inline void Rectangle(float x1, float y1, float x2, float y2, float thickness, const SDL_Color& c) {
 			Rectangle(x1, y1, x2, y2, thickness, c.r, c.g, c.b, c.a);
 		}
-		inline void Rectangle(const Bounds& box, float thickness, const SDL_Color& c) {
+		inline void Rectangle(vec a, vec b, float thickness, const SDL_Color& c) {
+			Rectangle(a.x, a.y, b.x, b.y, thickness, c.r, c.g, c.b, c.a);
+		}
+		inline void Rectangle(const BoxBounds& box, float thickness, const SDL_Color& c) {
 			Rectangle(box.Left(), box.Top(), box.Right(), box.Bottom(), thickness, c.r, c.g, c.b, c.a);
 		}
 
@@ -133,7 +139,7 @@ namespace Window
 		constexpr Draw(GPU_Image* t, float x, float y) : t(t), dest(x,y) {
 			withRect(0,0,t->w,t->h);
 		}
-		constexpr Draw(GPU_Image* t, const Bounds& destRect) // sets scale
+		constexpr Draw(GPU_Image* t, const BoxBounds& destRect) // sets scale
 			: t(t), dest(destRect.TopLeft())
 			, scale(destRect.width/float(t->w), destRect.height/float(t->h))
 		{

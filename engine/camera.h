@@ -10,19 +10,19 @@ namespace Camera
 
 namespace Camera
 {
-	inline vec GetSize()
+	inline vec Size()
 	{
 		return vec(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
 	}
 
-	inline vec GetCenter()
+	inline vec Center()
 	{
 		return vec(camera.x, camera.y);
 	}
 
-	inline vec GetTopLeft()
+	inline vec TopLeft()
 	{
-		return GetCenter() - GetSize() / 2.f;
+		return Center() - Size() / 2.f;
 	}
 
 	inline void SetCenter(float x, float y)
@@ -39,7 +39,7 @@ namespace Camera
 
 	inline void SetTopLeft(vec pos)
 	{
-		SetCenter(pos + GetSize() / 2.f);
+		SetCenter(pos + Size() / 2.f);
 	}
 
 	inline void SetTopLeft(float x, float y)
@@ -47,15 +47,15 @@ namespace Camera
 		SetTopLeft(vec(x, y));
 	}
 
-	inline Bounds GetBounds()
+	inline BoxBounds Bounds()
 	{
-		//return Bounds::fromCenter(GetCenter(), GetSize());
-		return Bounds(GetTopLeft(), GetSize());
+		//return BoxBounds::FromCenter(Center(), Size());
+		return BoxBounds(TopLeft(), Size());
 	}
 
-	inline void ClampCameraTo(const Bounds& limit)
+	inline void ClampCameraTo(const BoxBounds& limit)
 	{
-		vec c = GetCenter();
+		vec c = Center();
 
 		vec screenSize(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
 		float halfScreenWidth = std::min(limit.width, screenSize.x) / 2.f;
@@ -73,7 +73,7 @@ namespace Camera
 	inline void SetZoom(float z, bool preserve_center = true)
 	{
 		if (preserve_center) {
-			vec p = GetTopLeft();
+			vec p = TopLeft();
 			camera.zoom_x = z;
 			camera.zoom_y = z;
 			SetTopLeft(p);
@@ -84,7 +84,7 @@ namespace Camera
 		GPU_SetCamera(Window::currentDrawTarget, &camera);
 	}
 
-	inline float GetZoom()
+	inline float Zoom()
 	{
 		return camera.zoom_x;
 	}
@@ -110,11 +110,11 @@ namespace Camera
 	}
 
 	inline vec WorldToScreen(vec world) { // Note: Doesn't handle rotation
-		return (world - Camera::GetTopLeft()) * Camera::camera.zoom_x;
+		return (world - Camera::TopLeft()) * Camera::camera.zoom_x;
 	}
 
 	inline vec ScreenToWorld(vec screen) { // Note: Doesn't handle rotation
-		return (screen / Camera::camera.zoom_x) + Camera::GetTopLeft();
+		return (screen / Camera::camera.zoom_x) + Camera::TopLeft();
 	}
 
 	namespace InScreenCoords
@@ -134,19 +134,19 @@ namespace Camera
 			return vec::Zero;
 		}
 
-		inline constexpr vec GetSize()
+		inline constexpr vec Size()
 		{
 			return vec(Window::GAME_WIDTH, Window::GAME_HEIGHT);
 		}
 
-		inline constexpr Bounds GetBounds()
+		inline constexpr BoxBounds Bounds()
 		{
-			return Bounds(vec::Zero, GetSize());
+			return BoxBounds(vec::Zero, Size());
 		}
 
-		inline constexpr vec GetCenter()
+		inline constexpr vec Center()
 		{
-			return GetSize() / 2.f;
+			return Size() / 2.f;
 		}
 	}
 

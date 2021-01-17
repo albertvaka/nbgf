@@ -102,7 +102,7 @@ void FxManager::EndDraw() {
 	//Window::EndRenderToTexture();
 	//Assets::waveShader.Activate();
 	//Assets::waveShader.SetUniform("time", mainClock);
-	//Window::Draw(renderToTextureTarget, Camera::GetTopLeft());
+	//Window::Draw(renderToTextureTarget, Camera::TopLeft());
 	//Shader::Deactivate();
 
 	if (transitionTime > 0.f) {
@@ -110,7 +110,7 @@ void FxManager::EndDraw() {
 
 		transitionShader->Activate();
 
-		Bounds screenBounds = Camera::InScreenCoords::GetBounds();
+		BoxBounds screenBounds = Camera::InScreenCoords::Bounds();
 		transitionShader->SetUniform(transitionShaderProgressUniform, transitionTime / transitionDuration);
 		transitionShader->SetUniform(transitionShaderAspectRatioUniform, screenBounds.width/screenBounds.height);
 

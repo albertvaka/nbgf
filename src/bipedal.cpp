@@ -134,7 +134,7 @@ void Bipedal::Update(float dt)
 		headHitBox.left = pos.x + headHitBoxOffset.x;
 		legsHitBox.left = pos.x + legsHitBoxOffset.x;
 
-		if (Camera::GetBounds().Contains(pos)) {
+		if (Camera::Bounds().Contains(pos)) {
 			bool stomp = (frame != anim.current_frame) && (anim.current_frame == 0 || anim.current_frame == 3);
 			if (stomp) {
 				FxManager::StartScreenshakePreset(charging? FxManager::ScreenShakePreset::Stomp : FxManager::ScreenShakePreset::LittleStomp);
@@ -157,7 +157,7 @@ void Bipedal::Update(float dt)
 	}
 
 	if (ReceiveDamageFromBullets(headHitBox)) { // Bullets don't hit the legs
-		takeDamage();
+		TakeDamage();
 		if (alive == false) return;
 	}
 
@@ -166,18 +166,18 @@ void Bipedal::Update(float dt)
 	DamagePlayerOnCollision(legsHitBox);
 }
 
-void Bipedal::die() {
+void Bipedal::Die() {
 	alive = false;
 	for (int i = 0; i < 6; i++) {
-		RandomlySpawnHealth(Rand::vecInRange(headHitBox), 100);
+		RandomlySpawnHealth(Rand::VecInRange(headHitBox), 100);
 	}
 }
 
-void Bipedal::takeDamage() {
+void Bipedal::TakeDamage() {
 	damagedTimer = 0.3f;
 	health--;
 	if (health <= 0) {
-		die();
+		Die();
 	}
 }
 
@@ -196,14 +196,12 @@ void Bipedal::Draw() const
 
 	Shader::Deactivate();
 
-	if (Debug::Draw && Camera::GetBounds().Contains(pos)) {
-		legsHitBox.Draw();
-		headHitBox.Draw();
-
-		Bounds(TiledAreas::boss_bounds[0].Left(), pos.y, TiledAreas::boss_bounds[0].width, 2).Draw(255, 255, 0);
-		Bounds(minX, pos.y, maxX - minX, 2).Draw(0, 255, 0);
-	}
-	pos.Debuggerino();
+	// Debug-only
+	legsHitBox.DebugDraw();
+	headHitBox.DebugDraw();
+	BoxBounds(TiledAreas::boss_bounds[0].Left(), pos.y, TiledAreas::boss_bounds[0].width, 2).DebugDraw(255, 255, 0);
+	BoxBounds(minX, pos.y, maxX - minX, 2).DebugDraw(0, 255, 0);
+	pos.DebugDraw();
 
 }
 

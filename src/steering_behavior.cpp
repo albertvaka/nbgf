@@ -164,7 +164,7 @@ vec SteeringBehavior::Wander(float dt)
 	vec Origin = steeringEntity->pos;
 	vec Ret = Target - Origin;
 
-	//(m_vWanderTarget * 30).DebuggerinoAsArrow(steeringEntity->pos, 0,255,0);
+	//(m_vWanderTarget * 30).DebugDrawAsArrow(steeringEntity->pos, 0,255,0);
 
 	return Ret;
 }
@@ -173,7 +173,7 @@ vec SteeringBehavior::Wander(float dt)
 //
 //  This returns a steering force that will keep the agent in an area
 //------------------------------------------------------------------------
-vec SteeringBehavior::BoundsAvoidance(const Bounds& m_bounds)
+vec SteeringBehavior::BoundsAvoidance(const BoxBounds& m_bounds)
 {
 	vec m_Feelers[3];
 	const float m_dWallDetectionFeelerLength = 20; //Front feeler length. Lateral feelers will be half as long.
@@ -182,17 +182,17 @@ vec SteeringBehavior::BoundsAvoidance(const Bounds& m_bounds)
 
 	//feeler pointing straight in front
 	m_Feelers[0] = steeringEntity->pos + m_dWallDetectionFeelerLength * heading;
-	//m_Feelers[0].Debuggerino();
+	//m_Feelers[0].DebugDraw();
 
 	//feeler to left
 	vec temp = heading.RotatedAroundOriginRads(Angles::Pi * -0.3f);
 	m_Feelers[1] = steeringEntity->pos + m_dWallDetectionFeelerLength/2.0f * temp;
-	//m_Feelers[1].Debuggerino();
+	//m_Feelers[1].DebugDraw();
 
 	//feeler to right
 	temp = heading.RotatedAroundOriginRads(Angles::Pi * 0.3f);
 	m_Feelers[2] = steeringEntity->pos + m_dWallDetectionFeelerLength/2.0f * temp;
-	//m_Feelers[2].Debuggerino();
+	//m_Feelers[2].DebugDraw();
 
 	vec wallsv[5] = {vec(m_bounds.left, m_bounds.top),
 		vec(m_bounds.left, m_bounds.top+m_bounds.height),
@@ -339,16 +339,16 @@ vec SteeringBehavior::TileMapAvoidance(TileMap* map)
 	float minDistToCenterSq = Mates::MaxFloat;
 	vec closestObstacle;
 
-	int xLeft = map->toTiles(steeringEntity->pos.x - steeringEntity->radius - Tile::size / 2);
-	int xRight = map->toTiles(steeringEntity->pos.x + steeringEntity->radius + Tile::size /2);
-	int yTop = map->toTiles(steeringEntity->pos.y - steeringEntity->radius - Tile::size / 2);
-	int yBottom = map->toTiles(steeringEntity->pos.y + steeringEntity->radius + Tile::size / 2);
-	CircleBounds me = steeringEntity->bounds();
+	int xLeft = map->ToTiles(steeringEntity->pos.x - steeringEntity->radius - Tile::size / 2);
+	int xRight = map->ToTiles(steeringEntity->pos.x + steeringEntity->radius + Tile::size /2);
+	int yTop = map->ToTiles(steeringEntity->pos.y - steeringEntity->radius - Tile::size / 2);
+	int yBottom = map->ToTiles(steeringEntity->pos.y + steeringEntity->radius + Tile::size / 2);
+	CircleBounds me = steeringEntity->Bounds();
 	for (int y = yTop; y <= yBottom; y++) {
 		for (int x = xLeft; x <= xRight; x++) {
-			//vec(x * 16 + 8, y * 16 + 8).Debuggerino(sf::Color::White);
-			if (map->getTile(x, y).isSolid()) {
-				Bounds tile = map->getTileBounds(x, y);
+			//vec(x * 16 + 8, y * 16 + 8).DebugDraw();
+			if (map->GetTile(x, y).isSolid()) {
+				BoxBounds tile = map->GetTileBounds(x, y);
 				if (tile.Contains(me.pos)) {
 					minDistToCenterSq = 0;
 					closestObstacle = tile.Center();
@@ -366,7 +366,7 @@ vec SteeringBehavior::TileMapAvoidance(TileMap* map)
 
 im_inside:
 
-	//closestObstacle.Debuggerino(sf::Color::Red);
+	//closestObstacle.DebugDraw();
 
 	vec steeringForce;
 	avoidingTileMap = (minDistToCenterSq < Mates::MaxFloat);

@@ -37,7 +37,7 @@ struct TiledMap
 {
 	static const uint8_t map[];
 	static const vec map_size;
-	static const std::array<Bounds, {{screens|length}}> screens;
+	static const std::array<BoxBounds, {{screens|length}}> screens;
 };
 
 struct TiledEntities
@@ -54,6 +54,6 @@ struct TiledEntities
 struct TiledAreas
 {
 	{% for k, v in areas_by_type.items() -%}
-		static const std::array<Bounds, {{v|length}}> {{k}};
+		static const std::array<BoxBounds, {{v|length}}> {{k}};
 	{% endfor %}
 };

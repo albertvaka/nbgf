@@ -7,7 +7,7 @@
 struct ScreenManager : SingleInstance<ScreenManager>
 {
 
-	void AddScreen(const Bounds& b) {
+	void AddScreen(const BoxBounds& b) {
 		screens.push_back(b);
 	}
 
@@ -34,11 +34,11 @@ struct ScreenManager : SingleInstance<ScreenManager>
 		return currentScreen;
 	}
 
-	const Bounds& CurrentBounds() const {
+	const BoxBounds& CurrentBounds() const {
 		return screens[currentScreen];
 	}
 
-	const Bounds& ScreenBounds(int screen) const {
+	const BoxBounds& ScreenBounds(int screen) const {
 		return screens[screen];
 	}
 
@@ -48,7 +48,7 @@ struct ScreenManager : SingleInstance<ScreenManager>
 
 private:
 	int currentScreen = -1;
-	std::vector<Bounds> screens;
+	std::vector<BoxBounds> screens;
 
 };
 

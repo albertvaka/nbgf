@@ -28,7 +28,7 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 
 	Goomba(vec position, bool isCharger);
 
-	Bounds ChargeBounds() const;
+	BoxBounds ChargeBounds() const;
 
 	float WalkSpeed() const;
 	float WalkDirection() const { return (goingRight ? 1 : -1); }

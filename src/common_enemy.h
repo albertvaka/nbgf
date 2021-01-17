@@ -18,7 +18,7 @@ template<typename B>
 Bullet* ReceiveDamageFromBullets(const B& bounds) { // returns true if collided
 	for (Bullet* b : Bullet::GetAll()) {
 		if (!b->alive) continue;
-		if (Collide(b->bounds(), bounds)) {
+		if (Collide(b->Bounds(), bounds)) {
 			b->explode();
 			return b;
 		}
@@ -29,9 +29,9 @@ Bullet* ReceiveDamageFromBullets(const B& bounds) { // returns true if collided
 template<typename B>
 bool DamagePlayerOnCollision(const B& bounds) { // returns true if collided
 	JumpMan* player = JumpMan::instance();
-	if (Collide(player->bounds(), bounds)) {
+	if (Collide(player->Bounds(), bounds)) {
 		if (!player->isInvencible()) {
-			player->takeDamage(bounds.Center());
+			player->TakeDamage(bounds.Center());
 		}
 		return true;
 	}
@@ -40,7 +40,7 @@ bool DamagePlayerOnCollision(const B& bounds) { // returns true if collided
 
 inline void RandomlySpawnHealth(vec pos, int percentChance = 10) {
 	if (Rand::PercentChance(percentChance)) {
-		new Health(pos + Rand::vecInRange(-6, -6, 6, 6));
+		new Health(pos + Rand::VecInRange(-6, -6, 6, 6));
 	}
 }
 

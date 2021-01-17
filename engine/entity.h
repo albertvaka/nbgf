@@ -16,16 +16,12 @@ struct Entity
 struct BoxEntity : Entity {
 	constexpr BoxEntity(vec size) : size(size) {}
 	constexpr BoxEntity(vec pos, vec size) : Entity(pos), size(size) {}
-	constexpr BoxEntity(const Bounds& b) : Entity(b.Center()), size(b.Size()) {} //note that entities position is on their center
+	constexpr BoxEntity(const BoxBounds& b) : Entity(b.Center()), size(b.Size()) {} //note that entities position is on their center
 
 	vec size;
 
-	[[nodiscard]] constexpr Bounds bounds() const {
-		return Bounds::fromCenter(pos, size);
-	}
-
-	void DrawBounds(uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const {
-		bounds().Draw(r,g,b);
+	[[nodiscard]] constexpr BoxBounds Bounds() const {
+		return BoxBounds::FromCenter(pos, size);
 	}
 };
 
@@ -37,12 +33,8 @@ struct CircleEntity : Entity {
 
 	float radius;
 	
-	[[nodiscard]] constexpr CircleBounds bounds() const {
+	[[nodiscard]] constexpr CircleBounds Bounds() const {
 		return CircleBounds(pos, radius);
-	}
-
-	void DrawBounds(uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const {
-		bounds().Draw(r,g,b);
 	}
 };
 

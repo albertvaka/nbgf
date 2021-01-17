@@ -52,7 +52,7 @@ void Bat::EnableBoundsAvoidance() {
 
 }
 Bat::Bat(vec pos, bool aggresive, bool awake)
-	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, Rand::vecInRange(-10.f, 0.f, 10.f, 10.f))
+	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, Rand::VecInRange(-10.f, 0.f, 10.f, 10.f))
 	, steering(this)
 	, state(State::SIESTA)
 	, aggresive(aggresive)
@@ -80,8 +80,7 @@ Bat::Bat(vec pos, bool aggresive, bool awake)
 
 void Bat::DrawSenseArea() const
 {
-	CircleBounds(pos, awake_player_distance).Draw(255,255,0);
-	CircleBounds(pos, awake_nearby_distance).Draw(0,255,255);
+
 }
 
 void Bat::Update(float dt)
@@ -108,7 +107,7 @@ void Bat::Update(float dt)
 	}
 	case State::SIESTA:
 	{
-		bool close_to_player = pos.DistanceSq(JumpMan::instance()->bounds().Center()) < (awake_player_distance * awake_player_distance);
+		bool close_to_player = pos.DistanceSq(JumpMan::instance()->Bounds().Center()) < (awake_player_distance * awake_player_distance);
 		if (awakened || close_to_player) {
 			state = State::AWAKENING;
 			anim.Ensure(BAT_AWAKE);
@@ -169,7 +168,7 @@ void Bat::Update(float dt)
 			state = State::FLYING; // Stop seeking if we hit an obstacle in the map
 		}
 		else {
-			vel = steering.Seek(jumpman->bounds().Center());
+			vel = steering.Seek(jumpman->Bounds().Center());
 		}
 
 		vel = vel.Normalized() * max_speed;
@@ -178,12 +177,12 @@ void Bat::Update(float dt)
 	break;
 	}
 
-	if (ReceiveDamageFromBullets(bounds())) {
+	if (ReceiveDamageFromBullets(Bounds())) {
 		DieWithSmallExplosion(this); //single hit
 		return;
 	}
 
-	DamagePlayerOnCollision(bounds());
+	DamagePlayerOnCollision(Bounds());
 }
 
 
@@ -201,14 +200,14 @@ void Bat::Draw() const
 
 	Shader::Deactivate();
 
-	if (Debug::Draw && Camera::GetBounds().Contains(pos)) {
-		DrawBounds();
-		DrawSenseArea();
-		if (state == State::FLYING) {
-			(Heading() * 15).DebuggerinoAsArrow(pos, 255, 255, 0);
-		} else if (state == State::SEEKING) {
-			(Heading() * 15).DebuggerinoAsArrow(pos, 255, 0, 0);
-		}
+	// Debug-only
+	Bounds().DebugDraw();
+	CircleBounds(pos, awake_player_distance).DebugDraw(255, 255, 0);
+	CircleBounds(pos, awake_nearby_distance).DebugDraw(0, 255, 255);
+	if (state == State::FLYING) {
+		(Heading() * 15).DebugDrawAsArrow(pos, 255, 255, 0);
+	} else if (state == State::SEEKING) {
+		(Heading() * 15).DebugDrawAsArrow(pos, 255, 0, 0);
 	}
 }
 

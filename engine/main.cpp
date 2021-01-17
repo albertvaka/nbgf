@@ -6,6 +6,7 @@
 #include "mates.h"
 #include "debug.h"
 #include "text.h"
+#include "debug.h"
 #include "camera.h"
 
 #include "../src/assets.h"
@@ -41,6 +42,12 @@ bool slowDown = false;
 Text* txt_fps;
 int fps_counter = 0;
 float fpsClock = 0.f;
+#endif
+
+#ifdef _DEBUG
+void BeforeSceneUpdate();
+void BeforeSceneDraw();
+void AfterSceneDraw();
 #endif
 
 void init();
@@ -190,20 +197,16 @@ void main_loop() {
 	if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
 		Debug::FrameByFrame = !Debug::FrameByFrame;
 	}
+
 	if (Debug::FrameByFrame && Debug::Draw) {
 		Camera::MoveCameraWithArrows(dt);
 		Camera::ChangeZoomWithPlusAndMinus(dt);
 		Camera::RotateWithPagUpDown(dt);
 	}
 
-
 	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
 #endif
 	{
-#ifdef _DEBUG
-		ClearDebugVecs();
-#endif
-
 		float limited_dt = dt;
 		if (limited_dt > 0.06f) // less than 17 FPS
 		{
@@ -215,20 +218,22 @@ void main_loop() {
 		if (Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
 			limited_dt *= 3;
 		}
+
+		BeforeSceneUpdate();
 #endif
 
 		mainClock += limited_dt; // TODO: Should not increase when fxmanager->IsTheWorldStopped()
 		currentScene->Update(limited_dt);
 	}
 
+#ifdef _DEBUG
+	BeforeSceneDraw();
+#endif
+
 	currentScene->Draw();
 
-	//(Camera::GetBounds() * 0.99f).Draw();
-
 #ifdef _DEBUG
-	if (Debug::Draw) {
-		DrawDebugVecs();
-	}
+	AfterSceneDraw();
 #endif
 
 	//Draw GUI
@@ -244,7 +249,7 @@ void main_loop() {
 		fps_counter = 0;
 		fpsClock = 0;
 	}
-	Window::Draw(*txt_fps, Camera::InScreenCoords::GetBounds().TopRight() + vec(-5, 5))
+	Window::Draw(*txt_fps, Camera::InScreenCoords::Bounds().TopRight() + vec(-5, 5))
 		.withOrigin(txt_fps->GetSize().x, 0)
 		.withScale(0.5f);
 #endif

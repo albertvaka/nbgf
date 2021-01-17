@@ -23,7 +23,7 @@ void Bullet::explode() {
 void Bullet::Update(float dt)
 {
 	pos += vel * dt;
-	if (!Camera::GetBounds().Contains(pos)) {
+	if (!Camera::Bounds().Contains(pos)) {
 		alive = false;
 		return;
 	}
@@ -42,7 +42,7 @@ void Bullet::Update(float dt)
 		return;
 	}
 
-	Bullet::particles.pos = pos + Rand::vecInRange(-4, -4, 4, 4);
+	Bullet::particles.pos = pos + Rand::VecInRange(-4, -4, 4, 4);
 	Bullet::particles.Spawn(dt);
 }
 
@@ -50,16 +50,15 @@ void Bullet::Draw() const
 {
 	GPU_Rect rect = { 8 * 16, 10 * 16, 16, 16 };
 	float rotation = Rand::roll(0, 360);
-	vec drawPos = pos + Rand::vecInRange(-1, -1, 1, 1);
+	vec drawPos = pos + Rand::VecInRange(-1, -1, 1, 1);
 	Window::Draw(Assets::hospitalTexture, drawPos)
 		.withScale(scale)
 		.withOrigin(8, 8)
 		.withRect(rect)
 		.withRotationDegs(rotation);
 
-	if (Debug::Draw) {
-		DrawBounds();
-	}
+	// Debug-only
+	Bounds().DebugDraw();
 }
 
 void Bullet::InitParticles() {

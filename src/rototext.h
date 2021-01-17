@@ -58,7 +58,7 @@ struct RotoText : Text, SingleInstance<RotoText>
 			sc = messageTime / INTRO_DURATION;
 		}
 
-		Window::Draw(*this, Camera::GetCenter() + pos)
+		Window::Draw(*this, Camera::Center() + pos)
 			.withOrigin(GetSize() / 2.f)
 			.withScale(sc)
 			.withRotationDegs(ang);

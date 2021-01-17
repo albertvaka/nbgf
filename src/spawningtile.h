@@ -8,7 +8,7 @@
 struct SpawningTile : BoxEntity {
 
 	SpawningTile(int x, int y, Tile t, float timeToSpawn)
-		: BoxEntity(TileMap::instance()->getTileBounds(x, y))
+		: BoxEntity(TileMap::instance()->GetTileBounds(x, y))
 		, time(timeToSpawn)
 		, spawning(false)
 		, tile(t)

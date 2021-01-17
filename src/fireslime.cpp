@@ -33,9 +33,9 @@ FireSlime::FireSlime(vec pos)
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 
-Bounds FireSlime::AttackBounds() const
+BoxBounds FireSlime::AttackBounds() const
 {
-	Bounds bounds = Bounds::fromCenter(pos, vec(Tile::size * 9, Tile::size * 5));
+	BoxBounds bounds = BoxBounds::FromCenter(pos, vec(Tile::size * 9, Tile::size * 5));
 	bounds.left += direction * bounds.width / 2;
 	bounds.top += bounds.height / 2 - 25;
 	return bounds;
@@ -73,7 +73,7 @@ void FireSlime::Update(float dt)
 		}
 		break;
 	case State::WALKING:
-		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), JumpMan::instance()->bounds()));
+		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), JumpMan::instance()->Bounds()));
 		if (!anim.complete && anim.current_frame >= kFirstFrameOnAir && anim.current_frame < kFirstFrameOnGround) {
 			// in this part of the animation we are in the air, here we move and we never start an attack
 			pos.x += kSpeed * direction * dt;
@@ -99,19 +99,18 @@ void FireSlime::Update(float dt)
 		anim.loopable = false;
 	}
 
-	if (ReceiveDamageFromBullets(bounds())) {
+	if (ReceiveDamageFromBullets(Bounds())) {
 		DieWithSmallExplosion(this); //single hit
 		return;
 	}
 
-	DamagePlayerOnCollision(bounds());
+	DamagePlayerOnCollision(Bounds());
 
 }
 
 
 void FireSlime::Draw() const
 {
-	pos.Debuggerino();
 	GPU_Rect rect = anim.GetCurrentFrameRect();
 
 	vec drawPos = pos - vec(0, kSpriteOffsetY/2.f);
@@ -121,8 +120,8 @@ void FireSlime::Draw() const
 		.withScale(-direction * kSpriteScale, kSpriteScale)
 		.withOrigin(rect.w / 2, rect.h / 2);
 
-	if (Debug::Draw) {
-		bounds().Draw();
-		AttackBounds().Draw(255, 0, 255);
-	}
+	// Debug-only
+	pos.DebugDraw();
+	Bounds().DebugDraw();
+	AttackBounds().DebugDraw(255, 0, 255);
 }

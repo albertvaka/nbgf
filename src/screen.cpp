@@ -14,10 +14,10 @@ void ScreenManager::UpdateCurrentScreen(vec pos) {
 const void ScreenManager::ClampCameraToScreen(vec& camPos) const {
 	if (currentScreen < 0) return;
 
-	const Bounds& screenBounds = CurrentBounds();
+	const BoxBounds& screenBounds = CurrentBounds();
 
-	float minY = screenBounds.Top() + (Camera::GetSize().y / 2.f);
-	float maxY = screenBounds.Bottom() - (Camera::GetSize().y / 2.f);
+	float minY = screenBounds.Top() + (Camera::Size().y / 2.f);
+	float maxY = screenBounds.Bottom() - (Camera::Size().y / 2.f);
 	if (maxY <= minY) {
 		camPos.y = ScreenManager::CurrentBounds().Center().y;
 	}
@@ -25,8 +25,8 @@ const void ScreenManager::ClampCameraToScreen(vec& camPos) const {
 		Mates::Clamp(camPos.y, minY, maxY);
 	}
 
-	float minX = screenBounds.Left() + (Camera::GetSize().x / 2.f);
-	float maxX = screenBounds.Right() - (Camera::GetSize().x / 2.f);
+	float minX = screenBounds.Left() + (Camera::Size().x / 2.f);
+	float maxX = screenBounds.Right() - (Camera::Size().x / 2.f);
 	if (maxX <= minX) {
 		camPos.x = ScreenManager::CurrentBounds().Center().x;
 	}

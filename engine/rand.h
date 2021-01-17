@@ -37,16 +37,16 @@ namespace Rand
 		return dirInCircle()*r;
 	}
 
-	[[nodiscard]] inline vec vecInRange(float minX, float minY, float maxX, float maxY) {
+	[[nodiscard]] inline vec VecInRange(float minX, float minY, float maxX, float maxY) {
 		return vec(rollf(minX, maxX), rollf(minY, maxY));
 	}
 
-	[[nodiscard]] inline vec vecInRange(vec min, vec max) {
-		return vecInRange(min.x, min.y, max.x, max.y);
+	[[nodiscard]] inline vec VecInRange(vec min, vec max) {
+		return VecInRange(min.x, min.y, max.x, max.y);
 	}
 
-	[[nodiscard]] inline vec vecInRange(const Bounds& bounds) {
-		return vecInRange(bounds.Left(), bounds.Top(), bounds.Right(), bounds.Bottom());
+	[[nodiscard]] inline vec VecInRange(const BoxBounds& bounds) {
+		return VecInRange(bounds.Left(), bounds.Top(), bounds.Right(), bounds.Bottom());
 	}
 }
 

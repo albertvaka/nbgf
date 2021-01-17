@@ -137,12 +137,8 @@ void DebugWalker::Draw() const {
 		.withRect(animation.CurrentFrame())
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 
-	if (Debug::Draw) {
-		bounds().Draw();
-		//player.pos.Debuggerino(sf::Color::White);
-		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
-	}
-
+	// Debug-only
+	Bounds().DebugDraw();
 }
 
 

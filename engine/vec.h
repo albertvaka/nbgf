@@ -94,7 +94,7 @@ struct vec
 		return Angles::RadsToDegs(AngleRads(other));
 	}
 
-	[[nodiscard]] vec RotatedAroundOriginRads(float rads) 
+	[[nodiscard]] vec RotatedAroundOriginRads(float rads) const
 	{
 		float cs = cos(rads);
 		float sn = sin(rads);
@@ -107,11 +107,11 @@ struct vec
 	}
 
 	// Note: If specified, maxTurnRate should to be multiplied by dt
-	[[nodiscard]] inline vec RotatedToFacePositionRads(vec target, float maxTurnRateRads = std::numeric_limits<float>::max());
-	[[nodiscard]] inline vec RotatedToFacePositionDegs(vec target) {
+	[[nodiscard]] vec RotatedToFacePositionRads(vec target, float maxTurnRateRads = std::numeric_limits<float>::max()) const;
+	[[nodiscard]] inline vec RotatedToFacePositionDegs(vec target) const {
 		return RotatedToFacePositionRads(target);
 	}
-	[[nodiscard]] inline vec RotatedToFacePositionDegs(vec target, float maxTurnRateDegs) {
+	[[nodiscard]] inline vec RotatedToFacePositionDegs(vec target, float maxTurnRateDegs) const {
 		return RotatedToFacePositionRads(target, Angles::DegsToRads(maxTurnRateDegs));
 	}
 	//returns the vector that is perpendicular to this one.
@@ -183,27 +183,20 @@ struct vec
 		return vec(-x, -y);
 	}
 
-	void DebuggerinoAsArrow(vec from, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const
+	void DebugDrawAsArrow(vec from, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const
 #ifdef _DEBUG
 		;
 #else
 	{}
 #endif
 
-
-	void Debuggerino(uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const
+	void DebugDraw(uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const
 #ifdef _DEBUG
 	;
 #else
 	{}
 #endif
 };
-
-#ifdef _DEBUG
-namespace sf { class RenderTarget; }
-void DrawDebugVecs();
-void ClearDebugVecs();
-#endif
 
 inline float vec::Length() const
 {
@@ -319,22 +312,6 @@ inline vec vec::Normalized() const
 
 //------------------------------------------------------------------------non member functions
 
-inline vec Normalize(vec v)
-{
-	vec vec = v;
-
-	float vector_length = vec.Length();
-
-	if (vector_length > std::numeric_limits<float>::epsilon())
-	{
-		vec.x /= vector_length;
-		vec.y /= vector_length;
-	}
-
-	return vec;
-}
-
-
 inline float Distance(vec v1, vec v2)
 {
 	float ySeparation = v2.y - v1.y;
@@ -349,16 +326,6 @@ inline float DistanceSq(vec v1, vec v2)
 	float xSeparation = v2.x - v1.x;
 
 	return ySeparation*ySeparation + xSeparation*xSeparation;
-}
-
-inline float Length(vec v)
-{
-	return sqrt(v.x*v.x + v.y*v.y);
-}
-
-inline float LengthSq(vec v)
-{
-	return (v.x*v.x + v.y*v.y);
 }
 
 
@@ -432,8 +399,8 @@ inline bool IsSecondInFOVOfFirst(vec posFirst,
                                  vec posSecond,
                                  float    fov)
 {
-	vec toTarget = Normalize(posSecond - posFirst);
-
+	vec toTarget = (posSecond - posFirst);
+	toTarget.Normalize();
 	return facingFirst.Dot(toTarget) >= cos(fov/2.0);
 }
 
@@ -473,25 +440,6 @@ inline bool LineIntersection2D(vec A, vec B, vec C, vec D, float& dist, vec& poi
 		dist = 0;
 		return false;
 	}
-}
-
-inline vec vec::RotatedToFacePositionRads(vec target, float maxTurnRateRads)
-{
-	vec toTarget = (target - *this).Normalized();
-	vec heading = Normalized();
-
-	//first determine the angle between the heading vector and the target
-	float angle = acos(heading.Dot(toTarget));
-
-	//return true if already facing the target
-	if (angle < 0.00001 || isnan(angle)) {
-		return *this;
-	}
-
-	//clamp the amount to turn to the max turn rate
-	if (fabs(angle) > maxTurnRateRads) angle = maxTurnRateRads;
-
-	return RotatedAroundOriginRads(angle * heading.Sign(toTarget));
 }
 
 //-----------------------------------------------------------------------------

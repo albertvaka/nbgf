@@ -34,7 +34,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 
 	bool IsBouncingAgainstAnotherMantis();
 
-	void takeDamage(vec src);
+	void TakeDamage(vec src);
 
 };
 

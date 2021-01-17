@@ -22,9 +22,9 @@ const uint8_t TiledMap::map[] = {
     {%- endfor %}
 };
 
-const std::array<Bounds, {{screens|length}}> TiledMap::screens = {
+const std::array<BoxBounds, {{screens|length}}> TiledMap::screens = {
 	{%- for s in screens %}
-	Bounds({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
+	BoxBounds({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
 	{%- endfor %}
 };
 
@@ -41,9 +41,9 @@ const std::unordered_map<int, vec> TiledEntities::{{k}} = {
 {% endfor %}
 
 {% for k, v in areas_by_type.items() -%}
-	const std::array<Bounds, {{v|length}}> TiledAreas::{{k}} = {
+	const std::array<BoxBounds, {{v|length}}> TiledAreas::{{k}} = {
 		{%- for s in v %}
-		Bounds({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
+		BoxBounds({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
 		{%- endfor %}
 	};
 {% endfor %}

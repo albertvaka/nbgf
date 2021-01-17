@@ -34,12 +34,12 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         ScreenManager::instance()->UpdateCurrentScreen(pos);
     }
 
-    Bounds bounds() const {
-        return Bounds(pos, size, vec(size.x/2, size.y));
+    BoxBounds Bounds() const {
+        return BoxBounds(pos, size, vec(size.x/2, size.y));
     }
-    Bounds maxBounds() const;
+    BoxBounds MaxBounds() const;
 
-    void takeDamage(vec src);
+    void TakeDamage(vec src);
     bool isInvencible() const { return invencibleTimer > 0.f; }
     bool isHit() const { return invencibleTimer > 0.1f; }
 

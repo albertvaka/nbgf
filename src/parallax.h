@@ -7,7 +7,7 @@ struct Parallax : SelfRegister<Parallax>
 {
 	GPU_Image** layers;
 	int layers_count;
-	Bounds bounds;
+	BoxBounds bounds;
 
 	float depth_max;
 	float depth_min;
@@ -16,7 +16,7 @@ struct Parallax : SelfRegister<Parallax>
 	// depth arguments go between between 0 (moves with camera) and 1 (doesn't move).
 	// set base_offset_x to 0 initially, and tweak it (eg: using DrawImGUI) until you like the framing of the background images.
 	template<std::size_t size>
-	constexpr Parallax(const Bounds& bounds, std::array<GPU_Image*, size>& images, float mindepth, float maxdepth, float base_offset_x)
+	constexpr Parallax(const BoxBounds& bounds, std::array<GPU_Image*, size>& images, float mindepth, float maxdepth, float base_offset_x)
 		: layers_count(size)
 		, layers(images.data())
 		, bounds(bounds)

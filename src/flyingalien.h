@@ -29,12 +29,12 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
 	float hitTimer = 0.f;
 
 	FlyingAlien(vec position);
-	Bounds ChargeBounds() const;
+	BoxBounds ChargeBounds() const;
 
 	void Update(float dt);
 	void Draw() const;
 
-	void takeDamage(vec src);
+	void TakeDamage(vec src);
 
 };
 

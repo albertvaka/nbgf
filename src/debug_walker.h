@@ -16,8 +16,8 @@ struct DebugWalker : Entity, SelfRegister<DebugWalker>
     void Draw() const;
 
 
-    Bounds bounds() const {
-        return Bounds(pos, size, vec(size.x/2, size.y));
+    BoxBounds Bounds() const {
+        return BoxBounds(pos, size, vec(size.x/2, size.y));
     }
 
     Animation animation;

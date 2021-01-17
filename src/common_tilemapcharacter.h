@@ -12,13 +12,13 @@ inline bool IsGrounded(vec pos, vec size, vec marginPixels = vec(1, 1.5)) {
 	float x_left = pos.x - (size.x / 2);
 	float x_right = pos.x + (size.x / 2);
 
-	int ty = TileMap::toTiles(y_bottom + marginPixels.y);
-	int tx_left = TileMap::toTiles(x_left + marginPixels.x);
-	int tx_right = TileMap::toTiles(x_right - marginPixels.x);
+	int ty = TileMap::ToTiles(y_bottom + marginPixels.y);
+	int tx_left = TileMap::ToTiles(x_left + marginPixels.x);
+	int tx_right = TileMap::ToTiles(x_right - marginPixels.x);
 
 	TileMap* tileMap = TileMap::instance();
 	for (int tx = tx_left; tx <= tx_right; tx++) {
-		Tile t = tileMap->getTile(tx, ty);
+		Tile t = tileMap->GetTile(tx, ty);
 		if (t.isFullSolid()) {
 			return true;
 		}
@@ -28,7 +28,7 @@ inline bool IsGrounded(vec pos, vec size, vec marginPixels = vec(1, 1.5)) {
 	}
 
 	// Slopes
-	if (TileMap::instance()->isPosOnSlope(pos)) {
+	if (TileMap::instance()->IsPosOnSlope(pos)) {
 		return true;
 	}
 
@@ -47,9 +47,9 @@ inline bool IsGoingToRunOffPlatform(vec pos, vec size, vec vel, float dt) {
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
 	vec bottomCorner = vec(newPos.x + toTheSideImMoving, newPos.y + size.y / 2);
-	//bottomCorner.Debuggerino();
-	veci tilePosBottom = TileMap::toTiles(bottomCorner);
-	const Tile tileBottom = TileMap::instance()->getTile(tilePosBottom);
+	//bottomCorner.DebugDraw();
+	veci tilePosBottom = TileMap::ToTiles(bottomCorner);
+	const Tile tileBottom = TileMap::instance()->GetTile(tilePosBottom);
 	if (tileBottom.isFullSolid()) {
 		return false;
 	}
@@ -63,8 +63,8 @@ inline bool IsGoingToHitAWall(vec pos, vec size, vec vel, float dt) {
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
 	vec side = vec(newPos.x + toTheSideImMoving, newPos.y);
-	veci tilePosSide = TileMap::toTiles(side);
-	const Tile tileSide = TileMap::instance()->getTile(tilePosSide);
+	veci tilePosSide = TileMap::ToTiles(side);
+	const Tile tileSide = TileMap::instance()->GetTile(tilePosSide);
 	return tileSide.isSolid();
 }
 
@@ -94,7 +94,7 @@ inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) 
 	TileMap* map = TileMap::instance();
 
 	vec appliedVel = vel;
-	Tile tileAtMyFeet = map->getTile(TileMap::toTiles(pos.x, pos.y - 0.1f));
+	Tile tileAtMyFeet = map->GetTile(TileMap::ToTiles(pos.x, pos.y - 0.1f));
 	if (tileAtMyFeet.isSlope()) {
 		// On a slope, we will override the Y displacement with the X displacement, either upwards or downwards.
 		// Pythagoras wouldn't approve that we move at the same velocity on a flat X axis than when move on both X and Y.
@@ -120,15 +120,15 @@ inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) 
 	if (direction.x < 0) //Moving left
 	{
 
-		int xo = map->toTiles(pos.x - halfWidth);
-		int xn = map->toTiles(posf.x - halfWidth);
-		int yTop = map->toTiles(pos.y - size.y + E);
-		int yBottom = map->toTiles(pos.y - E);
+		int xo = map->ToTiles(pos.x - halfWidth);
+		int xn = map->ToTiles(posf.x - halfWidth);
+		int yTop = map->ToTiles(pos.y - size.y + E);
+		int yBottom = map->ToTiles(pos.y - E);
 		for (int x = xo; x >= xn; x--)
 		{
 			for (int y = yTop; y <= yBottom; y++)
 			{
-				Tile t = map->getTile(x, y);
+				Tile t = map->GetTile(x, y);
 				if (t.isFullSolid())
 				{
 					posf.x = map->Right(x) + halfWidth;
@@ -141,15 +141,15 @@ inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) 
 	}
 	else if (direction.x > 0) //Moving right
 	{
-		int xo = map->toTiles(pos.x + halfWidth);
-		int xn = map->toTiles(posf.x + halfWidth);
-		int yTop = map->toTiles(pos.y - size.y + E);
-		int yBottom = map->toTiles(pos.y - E);
+		int xo = map->ToTiles(pos.x + halfWidth);
+		int xn = map->ToTiles(posf.x + halfWidth);
+		int yTop = map->ToTiles(pos.y - size.y + E);
+		int yBottom = map->ToTiles(pos.y - E);
 		for (int x = xo; x <= xn; x++)
 		{
 			for (int y = yTop; y <= yBottom; y++)
 			{
-				Tile t = map->getTile(x, y);
+				Tile t = map->GetTile(x, y);
 				if (t.isFullSolid())
 				{
 					posf.x = map->Left(x) - halfWidth;
@@ -167,15 +167,15 @@ horz_exit:
 
 	if (direction.y < 0) //Moving up
 	{
-		int yo = map->toTiles(pos.y - size.y); // top edge
-		int yn = map->toTiles(posf.y - size.y);
-		int xl = map->toTiles(pos.x - halfWidth + E);
-		int xr = map->toTiles(pos.x + halfWidth - E);
+		int yo = map->ToTiles(pos.y - size.y); // top edge
+		int yn = map->ToTiles(posf.y - size.y);
+		int xl = map->ToTiles(pos.x - halfWidth + E);
+		int xr = map->ToTiles(pos.x + halfWidth - E);
 		for (int y = yo; y >= yn; y--)
 		{
 			for (int x = xl; x <= xr; x++)
 			{
-				Tile t = map->getTile(x, y);
+				Tile t = map->GetTile(x, y);
 				if (t.isSolid()) //slopes should be collisionable when going up
 				{
 					posf.y = map->Bottom(y) + size.y;
@@ -190,27 +190,27 @@ horz_exit:
 	{
 		float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
 
-		//Debug::out << "getTile from=" << TileMap::offsetInTile(posf.x, pos.y - max_movement_into_slope) << ": " << map->getTile(TileMap::toTiles(vec(posf.x, pos.y - max_movement_into_slope)));
-		//Debug::out << "getTile to=" << TileMap::offsetInTile(posf.x, pos.y + max_movement_into_slope) << ": " << map->getTile(TileMap::toTiles(vec(posf.x, pos.y + max_movement_into_slope)));
+		//Debug::out << "getTile from=" << TileMap::offsetInTile(posf.x, pos.y - max_movement_into_slope) << ": " << map->GetTile(TileMap::ToTiles(vec(posf.x, pos.y - max_movement_into_slope)));
+		//Debug::out << "getTile to=" << TileMap::offsetInTile(posf.x, pos.y + max_movement_into_slope) << ": " << map->GetTile(TileMap::ToTiles(vec(posf.x, pos.y + max_movement_into_slope)));
 
 		for (int y = floor(pos.y - max_movement_into_slope); y < ceil(pos.y + max_movement_into_slope); y++) {
 			float E = 0.0001f;
-			if (map->isPosOnSlope(posf.x, y - E)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
+			if (map->IsPosOnSlope(posf.x, y - E)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
 				posf.y = y;
-				ret.groundCollision = map->getTile(posf.x, y - E);
+				ret.groundCollision = map->GetTile(posf.x, y - E);
 				goto vert_exit;
 			}
 		}
 
-		int yo = map->toTiles(pos.y); // bottom edge
-		int yn = map->toTiles(posf.y);
-		int xl = map->toTiles(pos.x - halfWidth + E);
-		int xr = map->toTiles(pos.x + halfWidth - E);
+		int yo = map->ToTiles(pos.y); // bottom edge
+		int yn = map->ToTiles(posf.y);
+		int xl = map->ToTiles(pos.x - halfWidth + E);
+		int xr = map->ToTiles(pos.x + halfWidth - E);
 		for (int y = yo; y <= yn; y++)
 		{
 			for (int x = xl; x <= xr; x++)
 			{
-				Tile t = map->getTile(x, y);
+				Tile t = map->GetTile(x, y);
 				if ((t.isFullSolid()) || (t.isOneWay() && pos.y - 1.f < (y * Tile::size)))
 				{
 					posf.y = map->Top(y);
@@ -229,7 +229,7 @@ vert_exit:
 
 /*
 inline vec posOnRightSlope(vec pos) {
-	vec rounded = (TileMap::toTiles(pos) * Tile::size);
+	vec rounded = (TileMap::ToTiles(pos) * Tile::size);
 	vec diff = pos - rounded;
 	float targetY = (Tile::size - diff.x);
 	if (targetY < diff.y) {
@@ -239,7 +239,7 @@ inline vec posOnRightSlope(vec pos) {
 }
 
 inline vec posOnLeftSlope(vec pos) {
-	vec rounded = (TileMap::toTiles(pos) * Tile::size);
+	vec rounded = (TileMap::ToTiles(pos) * Tile::size);
 	vec diff = pos - rounded;
 	float targetY = diff.x;
 	if (targetY < diff.y) {

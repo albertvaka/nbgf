@@ -29,7 +29,7 @@ struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 
 	FireSlime(vec position);
 
-	Bounds AttackBounds() const;
+	BoxBounds AttackBounds() const;
 	bool CanMoveForward() const;
 
 	void Update(float dt);

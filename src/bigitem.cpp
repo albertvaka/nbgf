@@ -59,7 +59,7 @@ void BigItem::Draw()
 
 void BigItem::DrawPedestal() {
 
-	auto tilePos = TileMap::alignToTiles(pos);
+	auto tilePos = TileMap::AlignToTiles(pos);
 
 	particles.pos.y = tilePos.y + 16;
 	particles.pos.x = Rand::roll(tilePos.x - 13, tilePos.x + 13);

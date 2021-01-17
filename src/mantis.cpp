@@ -82,7 +82,7 @@ void Mantis::Update(float dt)
 		auto ret = MoveAgainstTileMap(pos, spriteSize, vel, dt);
 		pos = ret.pos;
 
-		if (jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, attackRadius), player->bounds()))
+		if (jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, attackRadius), player->Bounds()))
 		{
 			//Debug::out << "preparing";
 			initialPlayerPosition = player->pos;
@@ -98,8 +98,8 @@ void Mantis::Update(float dt)
 		if (anim.complete) {
 			//Debug::out << "prepared";
 			vec predictedPlayerPos = player->pos + (player->pos - initialPlayerPosition);
-			//playerPosition.Debuggerino();
-			//predictedPlayerPos.Debuggerino();
+			//playerPosition.DebugDraw();
+			//predictedPlayerPos.DebugDraw();
 			//Debug::FrameByFrame = true;
 			vel = GetJumpSpeedToTarget(predictedPlayerPos);
 			state = State::JUMP;
@@ -142,16 +142,16 @@ void Mantis::Update(float dt)
 	break;
 	}
 
-	Bullet* b = ReceiveDamageFromBullets(bounds());
+	Bullet* b = ReceiveDamageFromBullets(Bounds());
 	if (b) {
-		takeDamage(pos);
+		TakeDamage(pos);
 		if (alive == false) return;
 	}
 
-	DamagePlayerOnCollision(bounds());
+	DamagePlayerOnCollision(Bounds());
 }
 
-void Mantis::takeDamage(vec src)
+void Mantis::TakeDamage(vec src)
 {
 	hitTimer = hitTime;
 
@@ -188,9 +188,8 @@ void Mantis::Draw() const
 
 	Shader::Deactivate();
 
-	if (Debug::Draw) {
-		bounds().Draw();
-		Bounds::fromCenter(pos, spriteSize).Draw();
-		CircleBounds(pos, attackRadius).Draw();
-	}
+	// Debug-only
+	Bounds().DebugDraw();
+	BoxBounds::FromCenter(pos, spriteSize).DebugDraw();
+	CircleBounds(pos, attackRadius).DebugDraw();
 }

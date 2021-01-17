@@ -35,9 +35,9 @@ FlyingAlien::FlyingAlien(vec pos)
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 
-Bounds FlyingAlien::ChargeBounds() const
+BoxBounds FlyingAlien::ChargeBounds() const
 {
-	Bounds chargeBounds = Bounds(pos, playerNearbyArea);
+	BoxBounds chargeBounds = BoxBounds(pos, playerNearbyArea);
 	if (vel.x < 0) {
 		chargeBounds.left -= chargeBounds.width;
 		chargeBounds.left += spriteRadius;
@@ -103,7 +103,7 @@ void FlyingAlien::Update(float dt)
 	case State::FLYING: 
 	{
 
-		Bounds chargeBounds = ChargeBounds();
+		BoxBounds chargeBounds = ChargeBounds();
 
 		if (IsGoingToHitAWall(chargeBounds.Center(), chargeBounds.Size(), vel, dt)
 			|| IsGoingToLeaveTheScreen(chargeBounds.Center(), chargeBounds.Size(), vel, dt, screen)
@@ -113,7 +113,7 @@ void FlyingAlien::Update(float dt)
 		pos.x += vel.x * dt;
 
 		if (Mates::IsNearlyEqual(pos.y, orig.y, 0.5f)) {
-			if (Collide(player->bounds(), ChargeBounds())) {
+			if (Collide(player->Bounds(), ChargeBounds())) {
 				state = State::ENTER_CHARGE;
 				timer = 0.f;
 
@@ -141,16 +141,16 @@ void FlyingAlien::Update(float dt)
 	break;
 	}
 
-	Bullet* b = ReceiveDamageFromBullets(bounds());
+	Bullet* b = ReceiveDamageFromBullets(Bounds());
 	if (b) {
-		takeDamage(b->pos);
+		TakeDamage(b->pos);
 		if (alive == false) return;
 	}
 
-	DamagePlayerOnCollision(bounds());
+	DamagePlayerOnCollision(Bounds());
 }
 
-void FlyingAlien::takeDamage(vec src) {
+void FlyingAlien::TakeDamage(vec src) {
 	hitTimer = hitTime;
 
 	if (state == State::FLYING && !IsMovingTowardsInX(pos, vel, src)) {
@@ -165,15 +165,12 @@ void FlyingAlien::takeDamage(vec src) {
 
 void FlyingAlien::Draw() const
 {
-	pos.Debuggerino();
-	vec(pos.x, orig.y).Debuggerino(0, 0, 255);
-
 	if (hitTimer > 0.f) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
-	vec drawPos = pos + vec(vel.x > 0? 2 : -2,(std::sin((orig.x + pos.x)*0.1)*4) - 3);
+	vec drawPos = pos + vec(vel.x > 0? 2 : -2,(std::sin((orig.x + pos.x)*0.1f)*4) - 3);
 	if (state == State::ENTER_CHARGE) {
 		drawPos.y -= sinf((timer / prepareAttackTime) * M_PI) * Tile::size;
 	}
@@ -186,9 +183,9 @@ void FlyingAlien::Draw() const
 
 	Shader::Deactivate();
 
-	if (Debug::Draw) {
-		bounds().Draw();
-		ChargeBounds().Draw(255, 0, 255);
-	}
-
+	// Debug-only
+	pos.DebugDraw();
+	vec(pos.x, orig.y).DebugDraw(0, 0, 255);
+	Bounds().DebugDraw();
+	ChargeBounds().DebugDraw(255, 0, 255);
 }

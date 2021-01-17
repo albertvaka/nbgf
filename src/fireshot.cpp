@@ -12,7 +12,7 @@ void FireShot::Update(float dt)
 	vel += accel * dt;
 	pos += vel * dt;
 	
-	if (!Camera::GetBounds().Contains(pos)) {
+	if (!Camera::Bounds().Contains(pos)) {
 		alive = false;
 		return;
 	}
@@ -22,7 +22,7 @@ void FireShot::Update(float dt)
 		return;
 	}
 
-	if (DamagePlayerOnCollision(bounds())) {
+	if (DamagePlayerOnCollision(Bounds())) {
 		alive = false;
 		return;
 	};
@@ -35,7 +35,6 @@ void FireShot::Draw() const
 		.withRect(AnimLib::FIRESHOT)
 		.withOrigin(AnimLib::FIRESHOT.w / 2, AnimLib::FIRESHOT.h / 2);
 
-	if (Debug::Draw) {
-		DrawBounds();
-	}
+	// Debug-only
+	Bounds().DebugDraw();
 }

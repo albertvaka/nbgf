@@ -60,7 +60,7 @@ PartSys::Particle& PartSys::AddParticle() {
 	Particle& p = particles.back();
 	p.ttl = Rand::rollf(min_ttl, max_ttl);
 	p.pos = pos;
-	p.vel = Rand::vecInRange(min_vel, max_vel);
+	p.vel = Rand::VecInRange(min_vel, max_vel);
 	p.sprite = Rand::roll(sprites.size());
 	p.rotation = Rand::rollf(min_rotation, max_rotation);
 	p.scale = Rand::rollf(min_scale, max_scale);

@@ -12,7 +12,7 @@ extern float mainClock;
 
 void HealthUp::Update(float dt) {
 	JumpMan* player = JumpMan::instance();
-	if (!pickedUp && Collide(bounds(), player->bounds())) {
+	if (!pickedUp && Collide(Bounds(), player->Bounds())) {
 
 		//TODO: Show popup or animation or something
 
@@ -29,7 +29,7 @@ void HealthUp::Draw() const
 		return;
 	}
 
-	if (TileMap::instance()->getTile(TileMap::toTiles(pos)).isBreakable()) {
+	if (TileMap::instance()->GetTile(TileMap::ToTiles(pos)).isBreakable()) {
 		//Don't draw behind breakables
 		return;
 	}
@@ -40,7 +40,6 @@ void HealthUp::Draw() const
 		.withOrigin(8, 8)
 		.withRect(6 * 16, 11 * 16, 16, 16);
 
-	if (Debug::Draw) {
-		bounds().Draw();
-	}
+	// Debug-only
+	Bounds().DebugDraw();
 }

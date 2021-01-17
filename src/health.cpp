@@ -17,7 +17,7 @@ vec Health::drawOffset() const {
 void Health::Update(float dt)
 {
 	JumpMan* player = JumpMan::instance();
-	if (Collide(bounds(), player->bounds())) {
+	if (Collide(Bounds(), player->Bounds())) {
 		if (player->health < player->maxHealth) {
 			player->health++;
 		}
@@ -25,7 +25,7 @@ void Health::Update(float dt)
 	}
 
 
-	Health::particles.pos = pos - drawOffset() + Rand::vecInRange(vec(-4, -1), vec(4, 3));
+	Health::particles.pos = pos - drawOffset() + Rand::VecInRange(vec(-4, -1), vec(4, 3));
 	Health::particles.SpawnWithExternalTimer(particlesTimer, dt);
 }
 
@@ -37,9 +37,8 @@ void Health::Draw() const
 		.withRotationDegs(16.f*sin(pos.y+pos.x+mainClock*5))
 		.withRect(340, 21, 8, 6);
 
-	if (Debug::Draw) {
-		bounds().Draw();
-	}
+	// Debug-only
+	Bounds().DebugDraw();
 }
 
 void Health::InitParticles() {

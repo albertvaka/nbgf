@@ -26,14 +26,14 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 	float timer = 0.f;
 	float damagedTimer = 0.f;
 	int health = 18;
-	Bounds legsHitBox, headHitBox;
+	BoxBounds legsHitBox, headHitBox;
 
 	Bipedal(vec position);
 
 	void Update(float dt);
 	void Draw() const;
-	void takeDamage();
-	void die();
+	void TakeDamage();
+	void Die();
 
 	/*
 	template<typename T>

@@ -60,15 +60,15 @@ JumpScene::JumpScene(int saveSlot)
 	fogPartSys.min_interval = 4.5f;
 	fogPartSys.max_interval = 6.f;
 
-	for (const Bounds& b : TiledAreas::parallax_forest) {
+	for (const BoxBounds& b : TiledAreas::parallax_forest) {
 		new Parallax(b, Assets::forestParallaxTextures, 0.25f, 1.f, 172.f);
 	}
 
-	for (const Bounds& b : TiledAreas::parallax_island) {
+	for (const BoxBounds& b : TiledAreas::parallax_island) {
 		new Parallax(b, Assets::islandParallaxTextures, 0.f, 0.3f, 122.f);
 	}
 
-	for (const Bounds& b : TiledAreas::parallax_cave) {
+	for (const BoxBounds& b : TiledAreas::parallax_cave) {
 		new Parallax(b, Assets::caveParallaxTextures, 0.4f, 0.65f, -165.f);
 	}
 
@@ -263,7 +263,7 @@ void JumpScene::EnterScene()
 		new HealthUp(id, pos);
 	}
 
-	for (const Bounds& a : TiledAreas::lava) {
+	for (const BoxBounds& a : TiledAreas::lava) {
 		Lava* lava = new Lava(a);
 		if (a.Contains(TiledEntities::lava_initial_height)) {
 			raising_lava = lava;
@@ -288,7 +288,7 @@ vec JumpScene::GetCameraTargetPos() {
 
 void JumpScene::UpdateCamera(float dt) {
 	vec camPos = GetCameraTargetPos();
-	vec oldPos = Camera::GetCenter();
+	vec oldPos = Camera::Center();
 	vec displacement = camPos - oldPos;
 	displacement.Truncate(camSpeed * dt);
 	Camera::SetCenter(oldPos + displacement + FxManager::GetScreenshake());
@@ -338,7 +338,7 @@ void JumpScene::Update(float dt)
 
 	if (player.health <= 0) {
 		//Assets::soundDeath.Play();
-		vec normalizedPlayerPos = Camera::WorldToScreen(player.bounds().Center()) / Camera::InScreenCoords::GetSize();
+		vec normalizedPlayerPos = Camera::WorldToScreen(player.Bounds().Center()) / Camera::InScreenCoords::Size();
 		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
 		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
 		Shader::Deactivate();
@@ -488,7 +488,7 @@ void JumpScene::Update(float dt)
 	Health::DeleteNotAlive();
 
 	for (BigItem* g : BigItem::GetAll()) {
-		if (Collide(g->bounds(), player.bounds())) {
+		if (Collide(g->Bounds(), player.Bounds())) {
 			skillTree.Enable(g->skill);
 			
 			//TODO: Pickup animation or popup or something
@@ -529,8 +529,8 @@ void JumpScene::Update(float dt)
 		l->Update(dt);
 	}
 
-	for (const Bounds& a : TiledAreas::fog) {
-		if (!Collide(Camera::GetBounds(),(Bounds(a)*2.f))) {
+	for (const BoxBounds& a : TiledAreas::fog) {
+		if (!Collide(Camera::Bounds(),(a*2.f))) {
 			continue;
 		}
 		for (int x = 50; x < a.width - 180; x += 50) {
@@ -585,7 +585,7 @@ void JumpScene::Draw()
 
 	if (contextActionButton) {
 		AnimationType anim = BUTTON_A_PRESS; // TODO: switch depending on the key
-		Window::Draw(Assets::hospitalTexture, player.bounds().TopRight() + vec(2, -6))
+		Window::Draw(Assets::hospitalTexture, player.Bounds().TopRight() + vec(2, -6))
 			.withRect(Animation::AnimFrame(anim, mainClock * 1000));
 	}
 
@@ -596,7 +596,7 @@ void JumpScene::Draw()
 		ImGui::Begin("jumpman scene");
 		ImGui::SliderFloat2("player", (float*)&player.pos, 16.f, 4500.f);
 		vec m = Mouse::GetPositionInWorld();
-		veci t = map.toTiles(m);
+		veci t = map.ToTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
 		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
@@ -626,7 +626,7 @@ void JumpScene::Draw()
 	//Bullet::particles.DrawImGUI("BulletTrail");
 	//Missile::particles.DrawImGUI("MissileSmoke");
 
-	//for (const Bounds& a : TiledAreas::parallax_forest) {
+	//for (const BoxBounds& a : TiledAreas::parallax_forest) {
 		//Assets::fogShader.Activate();
 		//Assets::fogShader.SetUniform("offset", vec(mainClock*0.2f, 0.f));
 		//Assets::fogShader.SetUniform("time", mainClock);

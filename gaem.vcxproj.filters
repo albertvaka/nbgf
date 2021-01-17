@@ -390,9 +390,6 @@
     <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
-    <ClCompile Include="engine\bounds.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="engine\debug.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -430,9 +427,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="engine\camera.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\vec.cpp">
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\fxmanager.cpp">
@@ -524,6 +518,9 @@
     </ClCompile>
     <ClCompile Include="src\healthup.cpp">
       <Filter>src\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\vec.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

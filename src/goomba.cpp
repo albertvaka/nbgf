@@ -34,9 +34,9 @@ Goomba::Goomba(vec pos, bool isCharger)
 	}
 }
 
-Bounds Goomba::ChargeBounds() const
+BoxBounds Goomba::ChargeBounds() const
 {
-	Bounds chargeBounds = Bounds::fromCenter(pos, playerNearbyArea);
+	BoxBounds chargeBounds = BoxBounds::FromCenter(pos, playerNearbyArea);
 	chargeBounds.left += WalkDirection() * chargeBounds.width / 2;
 	return chargeBounds;
 }
@@ -80,7 +80,7 @@ void Goomba::Update(float dt)
 	{
 	case State::WALKING:
 		Walk(dt);
-		if (isCharger && Collide(ChargeBounds(), JumpMan::instance()->bounds()))
+		if (isCharger && Collide(ChargeBounds(), JumpMan::instance()->Bounds()))
 		{
 			state = State::ENTER_CHARGE;
 			timer = 0.0f;
@@ -110,18 +110,17 @@ void Goomba::Update(float dt)
 		break;
 	}
 
-	if (ReceiveDamageFromBullets(bounds())) {
+	if (ReceiveDamageFromBullets(Bounds())) {
 		DieWithSmallExplosion(this); //single hit
 		return;
 	}
 
-	DamagePlayerOnCollision(bounds());
+	DamagePlayerOnCollision(Bounds());
 }
 
 
 void Goomba::Draw() const
 {
-	pos.Debuggerino();
 	GPU_Rect rect = anim.GetCurrentFrameRect();
 
 	vec drawPos = pos;
@@ -139,9 +138,8 @@ void Goomba::Draw() const
 		.withRect(rect)
 		.withOrigin(rect.w / 2, rect.h / 2);
 
-	if (Debug::Draw) {
-		bounds().Draw();
-		ChargeBounds().Draw(255, 0, 255);
-	}
-
+	// Debug-only
+	pos.DebugDraw();
+	Bounds().DebugDraw();
+	ChargeBounds().DebugDraw(255, 0, 255);
 }

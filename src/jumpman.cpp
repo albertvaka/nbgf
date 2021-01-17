@@ -69,6 +69,8 @@ void JumpMan::LoadGame(const SaveState& state) {
 
 void JumpMan::Update(float dt)
 {
+	pos.DebugDraw();
+
 	if (frozen || !alive) return;
 
 	TileMap* map = TileMap::instance();
@@ -95,7 +97,7 @@ void JumpMan::Update(float dt)
 			DoPolvitoWallJump();
 		}
 		else {
-			bool ceiling = map->getTile(TileMap::toTiles(pos.x - center.x + 1.f, pos.y - size.y - 1.f)).isSolid() || map->getTile(TileMap::toTiles(pos.x + center.x - 1.f, pos.y - size.y - 1.f)).isSolid();
+			bool ceiling = map->GetTile(TileMap::ToTiles(pos.x - center.x + 1.f, pos.y - size.y - 1.f)).isSolid() || map->GetTile(TileMap::ToTiles(pos.x + center.x - 1.f, pos.y - size.y - 1.f)).isSolid();
 			if (!ceiling) {
 				DoPolvitoJump();
 				grounded = false;
@@ -141,7 +143,7 @@ void JumpMan::Update(float dt)
 		acc.y += gravity_acc;
 	}
 
-	//FRICTION
+	// Calculate friction
 	vec fri = vec(0, 0);
 	if (grounded)
 	{
@@ -197,14 +199,14 @@ void JumpMan::Update(float dt)
 
 	vel = vel + acc * dt;
 
-	//Clamp vel
+	// Clamp vel
 	if (vel.x > vel_max.x) vel.x = vel_max.x;
 	if (vel.x < -vel_max.x) vel.x = -vel_max.x;
 	if (vel.y > vel_max.y) vel.y = vel_max.y;
 	if (vel.y < -vel_max.y) vel.y = -vel_max.y;
 
-	
-	//Do move
+
+	// Do move
 	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
 	pos = moved.pos + vec(0, size.y/2);
 
@@ -348,7 +350,7 @@ void JumpMan::Update(float dt)
 	}
 }
 
-void JumpMan::takeDamage(vec src) {
+void JumpMan::TakeDamage(vec src) {
 	invencibleTimer = invencibleTimeAfterHit;
 	if (pos.x > src.x) {
 		vel.x = vel_hit.x;
@@ -363,15 +365,15 @@ void JumpMan::takeDamage(vec src) {
 	onWall = ONWALL_NO;
 	crouched = false;
 	FxManager::StopTheWorld(0, 0.25f);
-	vec playerCenter = bounds().Center();
+	vec playerCenter = Bounds().Center();
 	float direction = (playerCenter-src).AngleDegs();
 	new OneShotAnim(Assets::marioTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
 	health--;
 }
 
-Bounds JumpMan::maxBounds() const
+BoxBounds JumpMan::MaxBounds() const
 {
-	return Bounds(pos, standing_size, vec(standing_size.x / 2, standing_size.y));
+	return BoxBounds(pos, standing_size, vec(standing_size.x / 2, standing_size.y));
 }
 
 void JumpMan::Draw() const {
@@ -413,12 +415,10 @@ void JumpMan::Draw() const {
 
 	Shader::Deactivate();
 
-	if (Debug::Draw) {
-		bounds().Draw();
-		//player.pos.Debuggerino(sf::Color::White);
-		//player.bounds().Center().Debuggerino(sf::Color::Magenta);
-	}
-
+	// Debug-only
+	Bounds().DebugDraw();
+	//pos.DebugDraw();
+	//Bounds().Center().DebugDraw();
 }
 
 void JumpMan::DrawGUI() const {

@@ -242,7 +242,7 @@ struct TiledMap
 {
 	static const uint8_t map[];
 	static const vec map_size;
-	static const std::array<Bounds, 14> screens;
+	static const std::array<BoxBounds, 14> screens;
 };
 
 struct TiledEntities
@@ -271,12 +271,12 @@ struct TiledEntities
 
 struct TiledAreas
 {
-	static const std::array<Bounds, 2> lava;
-	static const std::array<Bounds, 1> parallax_forest;
-	static const std::array<Bounds, 3> bat_bounds;
-	static const std::array<Bounds, 1> fog;
-	static const std::array<Bounds, 1> parallax_cave;
-	static const std::array<Bounds, 1> boss_bounds;
-	static const std::array<Bounds, 1> parallax_island;
+	static const std::array<BoxBounds, 2> lava;
+	static const std::array<BoxBounds, 1> parallax_forest;
+	static const std::array<BoxBounds, 3> bat_bounds;
+	static const std::array<BoxBounds, 1> fog;
+	static const std::array<BoxBounds, 1> parallax_cave;
+	static const std::array<BoxBounds, 1> boss_bounds;
+	static const std::array<BoxBounds, 1> parallax_island;
 	
 };

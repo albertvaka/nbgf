@@ -33,8 +33,8 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 	void Update(float dt);
 	void Draw() const;
 
-	void DrawSenseArea() const;
 private:
+	void DrawSenseArea() const;
 	void EnableBoundsAvoidance();
 };
 

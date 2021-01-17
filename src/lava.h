@@ -8,10 +8,10 @@ struct Lava : SelfRegister<Lava>
 {
 	PartSys lavaPartSys;
 
-	Bounds bounds;
+	BoxBounds bounds;
 	float targetY;
 
-	explicit Lava(const Bounds& bounds);
+	explicit Lava(const BoxBounds& bounds);
 	void Update(float dt);
 	void Draw() const;
 

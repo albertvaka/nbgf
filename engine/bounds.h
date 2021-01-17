@@ -10,31 +10,31 @@
 
 struct CircleBounds;
 
-struct Bounds
+struct BoxBounds
 {
     float left, top;
     float width, height;
 
-    constexpr Bounds(float x, float y, float w, float h) : left(x), top(y), width(w), height(h) { }
-    constexpr Bounds() : Bounds(-1,-1,0,0) { }
-    constexpr Bounds(vec topleft, vec size) : Bounds(topleft.x, topleft.y, size.x, size.y) {}
-    constexpr explicit Bounds(vec size) : Bounds(0,0,size.x,size.y) { }
-    constexpr explicit Bounds(vec pos, vec size, vec origin) : Bounds(pos.x, pos.y, size.x, size.y) {
+    constexpr BoxBounds(float x, float y, float w, float h) : left(x), top(y), width(w), height(h) { }
+    constexpr BoxBounds() : BoxBounds(-1,-1,0,0) { }
+    constexpr BoxBounds(vec topleft, vec size) : BoxBounds(topleft.x, topleft.y, size.x, size.y) {}
+    constexpr explicit BoxBounds(vec size) : BoxBounds(0,0,size.x,size.y) { }
+    constexpr explicit BoxBounds(vec pos, vec size, vec origin) : BoxBounds(pos.x, pos.y, size.x, size.y) {
         left -= origin.x;
         top -= origin.y;
     }
 
-    [[nodiscard]] static constexpr Bounds fromCenter(vec center, vec size) { return Bounds(center - size/2, size); }
+    [[nodiscard]] static constexpr BoxBounds FromCenter(vec center, vec size) { return BoxBounds(center - size/2, size); }
 
     [[nodiscard]] GPU_Rect AsRect() {
         return GPU_Rect{ left, top, width, height };
     }
 
     //Expands arround the center by a factor
-    [[nodiscard]] Bounds operator*(float f)
+    [[nodiscard]] BoxBounds operator*(float f) const
 	{
         vec center = Center();
-        Bounds ret = *this;
+        BoxBounds ret = *this;
         ret.width *= f;
         ret.height *= f;
         ret.SetCenter(center);
@@ -73,7 +73,12 @@ struct Bounds
         SetTopLeft(center.x, center.y);
     }
 
-    void Draw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const;
+    void DebugDraw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const
+#ifdef _DEBUG
+    ;
+#else
+    {}
+#endif
 
     [[nodiscard]] constexpr float Top() const
 	{
@@ -125,7 +130,7 @@ struct Bounds
         return Contains(point.x, point.y);
     }
 
-    [[nodiscard]] bool Contains(const Bounds& b) const
+    [[nodiscard]] bool Contains(const BoxBounds& b) const
     {
         if (b.left < left) return false;
         if (b.left+b.width >= left + width) return false;
@@ -139,9 +144,9 @@ struct Bounds
     }
 
     [[nodiscard]] vec ClosestPointInBounds(vec target) const;
-    [[nodiscard]] float DistanceSq(const Bounds& a) const;
+    [[nodiscard]] float DistanceSq(const BoxBounds& a) const;
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
-    [[nodiscard]] float Distance(const Bounds& a) const;
+    [[nodiscard]] float Distance(const BoxBounds& a) const;
     [[nodiscard]] float Distance(const CircleBounds& a) const;
 
     //TODO
@@ -155,12 +160,18 @@ struct CircleBounds
     vec pos;
     float radius;
 
-    void Draw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const;
+
+    void DebugDraw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const
+#ifdef _DEBUG
+    ;
+#else
+    {}
+#endif
 
     [[nodiscard]] vec Center() const { return pos; }
 
-    [[nodiscard]] float DistanceSq(const Bounds& a) const { return a.DistanceSq(*this); }
-    [[nodiscard]] float Distance(const Bounds& a) const { return a.Distance(*this); }
+    [[nodiscard]] float DistanceSq(const BoxBounds& a) const { return a.DistanceSq(*this); }
+    [[nodiscard]] float Distance(const BoxBounds& a) const { return a.Distance(*this); }
     
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const {
         return a.pos.DistanceSq(this->pos) - (a.radius + this->radius) * (a.radius + this->radius);
@@ -170,7 +181,7 @@ struct CircleBounds
     }
 };
 
-inline float Bounds::DistanceSq(const Bounds& a) const {
+inline float BoxBounds::DistanceSq(const BoxBounds& a) const {
     float sqrDist = 0;
     if (a.Right() < this->left) {
         float d = a.Right() - this->left;
@@ -190,30 +201,30 @@ inline float Bounds::DistanceSq(const Bounds& a) const {
     return sqrDist;
 }
 
-inline vec Bounds::ClosestPointInBounds(vec target) const {
+inline vec BoxBounds::ClosestPointInBounds(vec target) const {
     vec distance = this->Center() - target;
     distance.Clamp(-this->Size() / 2, this->Size() / 2);
     vec closestPoint = this->Center() - distance;
     return closestPoint;
 }
 
-inline float Bounds::DistanceSq(const CircleBounds& a) const {
+inline float BoxBounds::DistanceSq(const CircleBounds& a) const {
     vec closestPoint = ClosestPointInBounds(a.pos);
-    //closestPoint.Debuggerino();
+    //closestPoint.DebugDraw();
     return closestPoint.DistanceSq(a.pos) - (a.radius * a.radius);
 }
 
-inline float Bounds::Distance(const Bounds& a) const
+inline float BoxBounds::Distance(const BoxBounds& a) const
 {
     return sqrt(DistanceSq(a));
 }
 
-inline float Bounds::Distance(const CircleBounds& a) const
+inline float BoxBounds::Distance(const CircleBounds& a) const
 {
     return sqrt(DistanceSq(a));
 }
 
-inline std::ostream& operator<<(std::ostream& os, const Bounds& rhs)
+inline std::ostream& operator<<(std::ostream& os, const BoxBounds& rhs)
 {
     os << " " << rhs.left << " " << rhs.top << " " << rhs.width << " " << rhs.height;
     return os;

@@ -51,7 +51,7 @@ bool SaveStation::Update(float dt)
 		return false;
 	}
 
-	return Collide(bounds(), JumpMan::instance()->bounds());
+	return Collide(Bounds(), JumpMan::instance()->Bounds());
 }
 
 void SaveStation::Draw() const

@@ -38,15 +38,15 @@ const vec vel[4] = {
 void DestroyedTiles::Destroy(int x, int y) {
 	TileMap* map = TileMap::instance();
 
-	Tile t = map->getTile(x, y);
-	destroyedParticles.pos = map->getTileBounds(x, y).Center();
+	Tile t = map->GetTile(x, y);
+	destroyedParticles.pos = map->GetTileBounds(x, y).Center();
 	for (int i = 0; i < 4; i++) {
 		PartSys::Particle& p = destroyedParticles.AddParticle();
 		p.pos += displace[i];
 		p.vel = vel[i];
 		p.sprite = int(t);
 	}
-	map->setTile(x, y, t == Tile::BREAKABLE_COVERING_ONEWAY ? Tile::ONEWAY_BEHIND_BREAKABLE : Tile::NONE);
+	map->SetTile(x, y, t == Tile::BREAKABLE_COVERING_ONEWAY ? Tile::ONEWAY_BEHIND_BREAKABLE : Tile::NONE);
 
 	toSpawn.emplace_back(x, y, t, timeToRespawn);
 }

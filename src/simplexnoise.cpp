@@ -545,7 +545,7 @@ float dot( const int* g, const float x, const float y, const float z, const floa
 
 void DebugDraw(float tileSize, std::function<float(int x, int y)> noisefunc)
 {
-    Bounds screen = Camera::GetBounds();
+    BoxBounds screen = Camera::Bounds();
     int left = int(screen.Left() / tileSize) - 1;
     int right = int(screen.Right() / tileSize) + 1;
     int top = int(screen.Top() / tileSize) - 1;

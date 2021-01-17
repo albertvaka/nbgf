@@ -17,7 +17,7 @@ const float raiseSpeed = 15.f;
 
 extern float mainClock;
 
-Lava::Lava(const Bounds& b)
+Lava::Lava(const BoxBounds& b)
 	: bounds(b)
 	, targetY(b.Top())
 	, lavaPartSys(Assets::marioTexture)
@@ -60,11 +60,11 @@ void Lava::Update(float dt) {
 		}
 	}
 
-	if (!Collide(Camera::GetBounds(),bounds)) {
+	if (!Collide(Camera::Bounds(),bounds)) {
 		return;
 	}
 
-	Bounds screen = Camera::GetBounds();
+	BoxBounds screen = Camera::Bounds();
 	float left = std::max(screen.Left(), bounds.Left());
 	float right = std::min(screen.Right(), bounds.Right());
 	float chunkLeft = (Mates::fastfloor(left / chunkSize)) * chunkSize;
@@ -99,7 +99,7 @@ void Lava::Update(float dt) {
 
 void Lava::Draw() const {
 
-	if (!Collide(Camera::GetBounds(),bounds)) {
+	if (!Collide(Camera::Bounds(),bounds)) {
 		return;
 	}
 
@@ -107,7 +107,7 @@ void Lava::Draw() const {
 	//lavaPartSys.DrawImGUI("LavaPartSys");
 
 	if (Debug::Draw) {
-		bounds.Draw();
+		bounds.DebugDraw();
 		return;
 	}
 
@@ -122,7 +122,7 @@ void Lava::Draw() const {
 	*/
 
 	float time = mainClock * speed;
-	Bounds screen = Camera::GetBounds();
+	BoxBounds screen = Camera::Bounds();
 
 	const float heightTopLayer = 5.f;
 	const float heightMiddleLayer = 1.f;

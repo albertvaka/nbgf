@@ -10,7 +10,7 @@ const vec Tile::sizevec = vec(size, size);
 
 void TileMap::Draw() const
 {
-	Bounds screen = Camera::GetBounds();
+	BoxBounds screen = Camera::Bounds();
 	int left = (screen.Left() / Tile::size) - 1;
 	int right = (screen.Right() / Tile::size) + 1;
 	int top = (screen.Top() / Tile::size) - 1;
@@ -96,7 +96,7 @@ void TileMap::Draw() const
 	{
 		for (int x = left; x < right; x++)
 		{
-			Tile t = getTileUnsafe(x, y);
+			Tile t = GetTileUnsafe(x, y);
 			if (t.isInvisible()) {
 				continue;
 			}
@@ -140,15 +140,15 @@ void TileMap::DebugEdit()
 	if (left || right) {
 		Tile what_to_set = left ? Tile::Value(debugEditCurrentTile) : Tile::NONE;
 		vec pos = Mouse::GetPositionInWorld();
-		veci tile = toTiles(pos);
-		setTile(tile.x, tile.y, what_to_set);
+		veci tile = ToTiles(pos);
+		SetTile(tile.x, tile.y, what_to_set);
 	}
 }
 
 void TileMap::DebugEditDraw()
 {
-	vec pos = Camera::GetBounds().TopLeft() + vec(0, 16);
-	Bounds(pos, vec(Tile::size, Tile::size)).Draw(0, 0, 0);
+	vec pos = Camera::Bounds().TopLeft() + vec(0, 16);
+	BoxBounds(pos, vec(Tile::size, Tile::size)).DebugDraw(0, 0, 0);
 	Window::Draw(tileset, pos)
 		.withRect(Tile::tileToTextureRect[debugEditCurrentTile]);
 }

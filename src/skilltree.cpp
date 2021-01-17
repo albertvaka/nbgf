@@ -54,7 +54,7 @@ std::vector<bool> unlocked;
 	{Skill::NO,    Skill::NO,      Skill::RANGE_2},
 };
 
- std::vector<Bounds> skillBounds; // bounds in screen of each skill icon
+ std::vector<BoxBounds> skillBounds; // bounds in screen of each skill icon
 
 veci PosInTree(Skill s) {
 	for (int y = 0; y < int(tree.size()); y++) {
@@ -69,7 +69,7 @@ veci PosInTree(Skill s) {
 }
 
 vec PosInTreeToPosInScreen(veci p) {
-	auto size = Camera::InScreenCoords::GetSize();
+	auto size = Camera::InScreenCoords::Size();
 	vec dxv = vec(size.x / (tree[0].size()), (size.y / (tree.size())));
 	return vec(p.x * dxv.x / 2, p.y * dxv.y /2) + vec(dxv.x/2, dxv.y);
 }
@@ -84,9 +84,9 @@ SkillTree::SkillTree()
 		vec pos = PosInTreeToPosInScreen(PosInTree(s));
 		if (pos.x < 0 || pos.y < 0) {
 			// Skill not in tree
-			skillBounds.push_back(Bounds(0,0,0,0));
+			skillBounds.push_back(BoxBounds(0,0,0,0));
 		} else {
-			skillBounds.push_back(Bounds(pos-vec(8,8), vec(16,16)));
+			skillBounds.push_back(BoxBounds(pos-vec(8,8), vec(16,16)));
 		}
 	}
 
@@ -97,7 +97,7 @@ SkillTree::SkillTree()
 Skill MouseSelectedSkill() {
 	vec pos = Mouse::GetPositionInWindow();
 	int i = 0;
-	for (const Bounds& b : skillBounds) {
+	for (const BoxBounds& b : skillBounds) {
 		if (b.Contains(pos)) {
 			return Skill(i);
 		}
@@ -236,7 +236,7 @@ found:
 }
 void SkillTree::DrawOverlay() {
 	if (gunpoints > 0) {
-		Window::Draw(textPressStart, Camera::GetBounds().TopLeft() + vec(10, 10)).withScale(0.3f);
+		Window::Draw(textPressStart, Camera::Bounds().TopLeft() + vec(10, 10)).withScale(0.3f);
 	}
 }
 
@@ -290,14 +290,14 @@ void SkillTree::DrawMenu() {
 	}
 
 	vec currentPos = PosInTreeToPosInScreen(current);
-	Bounds::fromCenter(currentPos, vec(16, 16)).Draw(255,255,255);
+	BoxBounds::FromCenter(currentPos, vec(16, 16)).DebugDraw(255,255,255);
 
 	if (requirements_not_met_timer > 0) {
 		if (int(requirements_not_met_timer * 10.f) % 2) {
 			for (Skill n : needs[requirements_not_met_skill]) {
 				if (!enabled[int(n)]) {
 					vec pos = PosInTreeToPosInScreen(PosInTree(n));
-					Bounds::fromCenter(pos, vec(16, 16)).Draw(255,0,0);
+					BoxBounds::FromCenter(pos, vec(16, 16)).DebugDraw(255,0,0);
 				}
 			}
 		}

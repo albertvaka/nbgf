@@ -7,7 +7,7 @@
 #include "selfregister.h"
 
 // Boxes with box
-inline bool Collide(const Bounds& a, const Bounds& b) {
+inline bool Collide(const BoxBounds& a, const BoxBounds& b) {
     return (a.left < b.left + b.width &&
         a.left + a.width > b.left &&
         a.top < b.top + b.height &&
@@ -20,11 +20,11 @@ inline bool Collide(const CircleBounds& a, const CircleBounds& b)
 }
 
 // Circle with box
-inline bool Collide(const CircleBounds& a, const Bounds& b)
+inline bool Collide(const CircleBounds& a, const BoxBounds& b)
 {
     return b.DistanceSq(a) < 0;
 }
-inline bool Collide(const Bounds& a, const CircleBounds& b)
+inline bool Collide(const BoxBounds& a, const CircleBounds& b)
 {
     return b.DistanceSq(a) < 0;
 }
@@ -32,13 +32,13 @@ inline bool Collide(const Bounds& a, const CircleBounds& b)
 
 // Entities
 inline bool Collide(const BoxEntity* a, const BoxEntity* b) {
-    return Collide(a->bounds(), b->bounds());
+    return Collide(a->Bounds(), b->Bounds());
 }
 inline bool Collide(const CircleEntity* a, const CircleEntity* b) {
-    return Collide(a->bounds(), b->bounds());
+    return Collide(a->Bounds(), b->Bounds());
 }
 inline bool Collide(const CircleEntity* a, const BoxEntity* b) {
-    return Collide(a->bounds(), b->bounds());
+    return Collide(a->Bounds(), b->Bounds());
 }
 
 // Calls callback for each pair of colliding objects

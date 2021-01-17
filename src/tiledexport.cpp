@@ -307,21 +307,21 @@ const uint8_t TiledMap::map[] = {
 	
 };
 
-const std::array<Bounds, 14> TiledMap::screens = {
-	Bounds(2811.545f,728.0f,591.538f,256.0f),
-	Bounds(1762.88f,689.6667f,1048.45f,332.997f),
-	Bounds(2810.333f,381.333f,587.333f,308.667f),
-	Bounds(1169.9f,688.0f,591.6f,336.0f),
-	Bounds(3401.75f,688.0f,590.25f,336.0f),
-	Bounds(2806.666f,48.0f,594.75f,336.0f),
-	Bounds(3405.25f,48.0f,590.75f,336.0f),
-	Bounds(2905.55f,946.0f,403.54f,200.0f),
-	Bounds(3297.2309999999998f,1039.833f,575.538f,333.0f),
-	Bounds(1338.49f,1041.538f,1571.93f,430.212f),
-	Bounds(744.23f,1041.5f,589.538f,333.0f),
-	Bounds(134.9000000000001f,101.5f,594.205f,1026.33f),
-	Bounds(729.23f,405.5f,592.538f,616.0f),
-	Bounds(1318.73f,265.5f,1489.04f,403.0f),
+const std::array<BoxBounds, 14> TiledMap::screens = {
+	BoxBounds(2811.545f,728.0f,591.538f,256.0f),
+	BoxBounds(1762.88f,689.6667f,1048.45f,332.997f),
+	BoxBounds(2810.333f,381.333f,587.333f,308.667f),
+	BoxBounds(1169.9f,688.0f,591.6f,336.0f),
+	BoxBounds(3401.75f,688.0f,590.25f,336.0f),
+	BoxBounds(2806.666f,48.0f,594.75f,336.0f),
+	BoxBounds(3405.25f,48.0f,590.75f,336.0f),
+	BoxBounds(2905.55f,946.0f,403.54f,200.0f),
+	BoxBounds(3297.2309999999998f,1039.833f,575.538f,333.0f),
+	BoxBounds(1338.49f,1041.538f,1571.93f,430.212f),
+	BoxBounds(744.23f,1041.5f,589.538f,333.0f),
+	BoxBounds(134.9000000000001f,101.5f,594.205f,1026.33f),
+	BoxBounds(729.23f,405.5f,592.538f,616.0f),
+	BoxBounds(1318.73f,265.5f,1489.04f,403.0f),
 };
 
 const std::unordered_map<int, vec> TiledEntities::bat = {
@@ -433,28 +433,28 @@ const std::unordered_map<int, vec> TiledEntities::goombacharger = {
 
 
 
-const std::array<Bounds, 2> TiledAreas::lava = {
-		Bounds(3408.0f,814.478f,618.0f,209.5f),
-		Bounds(3056.0f,1131.333f,175.667f,127.455f),
+const std::array<BoxBounds, 2> TiledAreas::lava = {
+		BoxBounds(3408.0f,814.478f,618.0f,209.5f),
+		BoxBounds(3056.0f,1131.333f,175.667f,127.455f),
 	};
-const std::array<Bounds, 1> TiledAreas::parallax_forest = {
-		Bounds(1862.5f,673.5f,824.0f,289.5f),
+const std::array<BoxBounds, 1> TiledAreas::parallax_forest = {
+		BoxBounds(1862.5f,673.5f,824.0f,289.5f),
 	};
-const std::array<Bounds, 3> TiledAreas::bat_bounds = {
-		Bounds(1174.43f,693.553f,273.47f,147.894f),
-		Bounds(1863.78f,695.4598f,842.45f,291.747f),
-		Bounds(1576.6f,1092.72f,1197.47f,343.894f),
+const std::array<BoxBounds, 3> TiledAreas::bat_bounds = {
+		BoxBounds(1174.43f,693.553f,273.47f,147.894f),
+		BoxBounds(1863.78f,695.4598f,842.45f,291.747f),
+		BoxBounds(1576.6f,1092.72f,1197.47f,343.894f),
 	};
-const std::array<Bounds, 1> TiledAreas::fog = {
-		Bounds(1904.5f,879.5f,734.0f,85.5f),
+const std::array<BoxBounds, 1> TiledAreas::fog = {
+		BoxBounds(1904.5f,879.5f,734.0f,85.5f),
 	};
-const std::array<Bounds, 1> TiledAreas::parallax_cave = {
-		Bounds(1350.83f,1055.25f,1543.67f,385.625f),
+const std::array<BoxBounds, 1> TiledAreas::parallax_cave = {
+		BoxBounds(1350.83f,1055.25f,1543.67f,385.625f),
 	};
-const std::array<Bounds, 1> TiledAreas::boss_bounds = {
-		Bounds(793.5f,1329.5f,476.333f,39.0f),
+const std::array<BoxBounds, 1> TiledAreas::boss_bounds = {
+		BoxBounds(793.5f,1329.5f,476.333f,39.0f),
 	};
-const std::array<Bounds, 1> TiledAreas::parallax_island = {
-		Bounds(1170.16f,297.187f,1625.67f,385.625f),
+const std::array<BoxBounds, 1> TiledAreas::parallax_island = {
+		BoxBounds(1170.16f,297.187f,1625.67f,385.625f),
 	};
 

@@ -52,7 +52,7 @@ void Missile::Update(float dt)
 
 	pos += vel * dt;
 
-	if (!Camera::GetBounds().Contains(pos)) {
+	if (!Camera::Bounds().Contains(pos)) {
 		alive = false;
 		return;
 	}
@@ -63,7 +63,7 @@ void Missile::Update(float dt)
 		smokeTimer = 0;
 		const GPU_Rect& sprite = anim.GetCurrentFrameRect();
 		vec rear = pos-(vel.Normalized()*sprite.w);
-		rear.Debuggerino(0,255,0);
+		rear.DebugDraw(0,255,0);
 		particles.pos = rear;
 		particles.AddParticle();
 
@@ -75,7 +75,7 @@ void Missile::Update(float dt)
 		return;
 	}
 
-	if (DamagePlayerOnCollision(bounds())) {
+	if (DamagePlayerOnCollision(Bounds())) {
 		explode();
 		return;
 	};
@@ -97,11 +97,11 @@ void Missile::Draw() const
 			.withOrigin(0.f, rect.h/2)
 			.withRotationDegs(vel.AngleDegs());
 	}
-	if (Debug::Draw) {
-		pos.Debuggerino();
-		CircleBounds(pos, kFlockAvoidanceDistance).Draw(255,0,0);
-		DrawBounds();
-	}
+
+	// Debug-only
+	pos.DebugDraw();
+	CircleBounds(pos, kFlockAvoidanceDistance).DebugDraw(255,0,0);
+	Bounds().DebugDraw();
 }
 
 
