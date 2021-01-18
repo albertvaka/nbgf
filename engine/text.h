@@ -16,7 +16,7 @@ struct Text
 		RIGHT
 	};
 
-	Text(TTF_Font* font = nullptr, TTF_Font* font_outline = nullptr) : font(font), font_outline(font_outline) {}
+	Text(TTF_Font* font, TTF_Font* font_outline = nullptr) : font(font), font_outline(font_outline) {}
 	~Text() {
 		if (cached) { 
 			GPU_FreeImage(cached); 

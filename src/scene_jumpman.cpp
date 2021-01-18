@@ -38,6 +38,7 @@ const char* kSaveStateGameName = "gaem2020";
 
 JumpScene::JumpScene(int saveSlot)
 	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::marioTexture)
+	, rotoText(Assets::font_30, Assets::font_30_outline)
 	, fogPartSys(Assets::fogTexture)
 	, saveSlot(saveSlot)
 {

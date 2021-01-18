@@ -1,6 +1,5 @@
 #pragma once
 
-#include "assets.h"
 #include "window.h"
 #include "camera.h"
 #include "singleinstance.h"
@@ -13,7 +12,7 @@ struct RotoText : Text, SingleInstance<RotoText>
 	const float DURATION = 2.2f;
 	const float INTRO_DURATION = 0.3f;
 
-	RotoText() : Text(Assets::font_30, Assets::font_30_outline)
+	RotoText(TTF_Font* font, TTF_Font* font_outline = nullptr) : Text(font, font_outline)
 	{
 		SetFillColor(255,255,255);
 		SetOutlineColor(0,0,0);
