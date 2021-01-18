@@ -1,5 +1,7 @@
 #pragma once
 
+#include "mates.h"
+
 namespace Angles
 {
 	const constexpr float   Tau = 6.28318530718f;
@@ -15,13 +17,21 @@ namespace Angles
 		return (rads * 360.0f) / Tau;
 	}
 
-	inline constexpr void KeepDegreesBetween0and360(float& degs)
+	inline constexpr void KeepDegsBetween0and360(float& degs)
 	{
-		while (degs >= 360) {
-			degs -= 360;
+		if (degs > 360.f) {
+			degs = fmod(degs, 360.f);
+		} else {
+			degs = 360.f - fmod(-degs, 360.f);
 		}
-		while (degs < 0) {
-			degs += 360;
+	}
+
+	inline constexpr void KeepRadsBetween0andTau(float& rads)
+	{
+		if (rads > Tau) {
+			rads = fmod(rads, Tau);
+		} else {
+			rads = Tau - fmod(-rads, Tau);
 		}
 	}
 }
