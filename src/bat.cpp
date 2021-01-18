@@ -56,14 +56,14 @@ Bat::Bat(vec pos, bool aggresive, bool awake)
 	, steering(this)
 	, state(State::SIESTA)
 	, aggresive(aggresive)
-	, anim(BAT_SIESTA)
+	, anim(AnimLib::BAT_SIESTA)
 {
 	if (awake) {
 		state = State::FLYING;
-		anim.Ensure(BAT_FLYING);
+		anim.Ensure(AnimLib::BAT_FLYING);
 	}
 
-	anim.Update(Rand::roll(0, anim.GetCurrentAnimDuration())); // Start anim at different time intervals
+	anim.Update(Rand::rollf(0, anim.TotalDuration())); // Start anim at different time intervals
 
 	steering.TileMapAvoidanceOn(TileMap::instance());
 	steering.ForwardOn();
@@ -92,14 +92,14 @@ void Bat::Update(float dt)
 		return;
 	}
 
-	anim.Update(dt * 1000);
+	anim.Update(dt);
 
 	switch (state) {
 	case State::AWAKENING:
 	{
 		if (anim.complete) {
 			state = State::FLYING;
-			anim.Ensure(BAT_FLYING);
+			anim.Ensure(AnimLib::BAT_FLYING);
 			anim.loopable = true;
 			AwakeNearbyBats(pos);
 		}
@@ -110,8 +110,8 @@ void Bat::Update(float dt)
 		bool close_to_player = pos.DistanceSq(JumpMan::instance()->Bounds().Center()) < (awake_player_distance * awake_player_distance);
 		if (awakened || close_to_player) {
 			state = State::AWAKENING;
-			anim.Ensure(BAT_AWAKE);
-			anim.Update(Rand::roll(0, anim.GetCurrentAnimDuration()/2)); // Start flying at different time intervals
+			anim.Ensure(AnimLib::BAT_AWAKE);
+			anim.Update(Rand::rollf(0, anim.TotalDuration()/2)); // Start flying at different time intervals
 			anim.loopable = false;
 		}
 		break;
@@ -133,11 +133,11 @@ void Bat::Update(float dt)
 
 		// Change direction animation
 		if ((oldVel.x < 0 && vel.x > 0) || (oldVel.x > 0 && vel.x < 0)) {
-			anim.Ensure(BAT_FLIP);
+			anim.Ensure(AnimLib::BAT_FLIP);
 			anim.loopable = false;
 		}
 		if (anim.complete) {
-			anim.Ensure(BAT_FLYING);
+			anim.Ensure(AnimLib::BAT_FLYING);
 			anim.loopable = true;
 		}
 
@@ -146,7 +146,7 @@ void Bat::Update(float dt)
 			seekingTimer -= dt;
 			if (seekingTimer <= 0.f) {
 				seekingTimer = RandomSeekingTime();
-				anim.Ensure(BAT_FLYING);
+				anim.Ensure(AnimLib::BAT_FLYING);
 				state = State::SEEKING;
 			}
 			if (steering.isFleeOn() && !JumpMan::instance()->isHit()) {
@@ -196,7 +196,7 @@ void Bat::Draw() const
 	Window::Draw(Assets::marioTexture, pos)
 		.withScale(vel.x < 0 ? 1.f : -1.f, 1.f)
 		.withOrigin(16.f, 14.f)
-		.withRect(anim.CurrentFrame());
+		.withRect(anim.CurrentFrameRect());
 
 	Shader::Deactivate();
 

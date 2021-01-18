@@ -2,7 +2,7 @@
 
 #include "vec.h"
 #include "selfregister.h"
-#include "animation2.h"
+#include "animation.h"
 #include "entity.h"
 
 struct Goomba : CircleEntity, SelfRegister<Goomba>
@@ -22,7 +22,7 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 	float timer = 0.0f;
 	bool isCharger;
 
-	Animation2 anim;
+	Animation anim;
 
 	int screen;
 

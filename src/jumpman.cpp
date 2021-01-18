@@ -52,7 +52,7 @@ const vec center = vec(8, 16);
 
 JumpMan::JumpMan()
 	: polvito(Assets::hospitalTexture)
-	, animation(MARIO_IDLE)
+	, animation(AnimLib::MARIO_IDLE)
 	, size(standing_size)
 {
 	InitPolvito();
@@ -260,15 +260,14 @@ void JumpMan::Update(float dt)
 
 
 
-
-	animation.Update((int)(dt * 1000));
+	animation.Update(dt);
 
 	bool isWalking = false;
 	bool isTurning = false;
 	if (crouched)
 	{
 		size = crouched_size;
-		animation.Ensure(MARIO_CROUCH);
+		animation.Ensure(AnimLib::MARIO_CROUCH);
 	}
 	else
 	{
@@ -280,31 +279,31 @@ void JumpMan::Update(float dt)
 			{
 				isWalking = true;
 				if (vel.x > 0) {
-					animation.Ensure(MARIO_TURN);
+					animation.Ensure(AnimLib::MARIO_TURN);
 					isTurning = true;
 				}
 				else {
-					animation.Ensure(MARIO_WALK);
+					animation.Ensure(AnimLib::MARIO_WALK);
 				}
 			}
 			else if (Input::IsPressed(0,GameKeys::RIGHT) && !Input::IsPressed(0,GameKeys::LEFT))
 			{
 				isWalking = true;
 				if (vel.x < 0) {
-					animation.Ensure(MARIO_TURN);
+					animation.Ensure(AnimLib::MARIO_TURN);
 					isTurning = true;
 				}
-				else animation.Ensure(MARIO_WALK);
+				else animation.Ensure(AnimLib::MARIO_WALK);
 			}
 			else
 			{
-				animation.Ensure(MARIO_IDLE);
+				animation.Ensure(AnimLib::MARIO_IDLE);
 			}
 		}
 		else
 		{
-			if (onWall) animation.Ensure(MARIO_ONWALL);
-			else animation.Ensure(MARIO_JUMP);
+			if (onWall) animation.Ensure(AnimLib::MARIO_ONWALL);
+			else animation.Ensure(AnimLib::MARIO_JUMP);
 		}
 	}
 	if (isWalking) {
@@ -387,7 +386,7 @@ void JumpMan::Draw() const {
 
 	Window::Draw(Assets::marioTexture, pos)
 		.withOrigin(center.x, size.y)
-		.withRect(animation.CurrentFrame())
+		.withRect(animation.CurrentFrameRect())
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 
 	//BFG

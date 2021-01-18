@@ -199,9 +199,6 @@
     <ClInclude Include="engine\rand.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="engine\animation2.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="engine\anim_frame.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -298,12 +295,6 @@
     <ClInclude Include="src\rototext.h">
       <Filter>src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="src\anim_data.h">
-      <Filter>src\generated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\anim_lib.h">
-      <Filter>src\generated</Filter>
-    </ClInclude>
     <ClInclude Include="src\tiledexport.h">
       <Filter>src\generated</Filter>
     </ClInclude>
@@ -327,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="src\healthup.h">
       <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\anim_lib.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -494,9 +488,6 @@
     </ClCompile>
     <ClCompile Include="src\skilltree.cpp">
       <Filter>src\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\anim_data.cpp">
-      <Filter>src\generated</Filter>
     </ClCompile>
     <ClCompile Include="src\tiledexport.cpp">
       <Filter>src\generated</Filter>

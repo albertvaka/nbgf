@@ -175,7 +175,7 @@ void FlyingAlien::Draw() const
 		drawPos.y -= sinf((timer / prepareAttackTime) * M_PI) * Tile::size;
 	}
 
-	GPU_Rect rect = anim.GetCurrentFrameRect();
+	GPU_Rect rect = anim.CurrentFrameRect();
 	Window::Draw(Assets::scifiTexture, drawPos)
 		.withRect(rect)
 		.withScale(vel.x> 0? -spriteScale : spriteScale, spriteScale)

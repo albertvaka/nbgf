@@ -2,119 +2,146 @@
 
 #include "SDL_gpu.h"
 
-#include "../src/anim_data.h"
+#include "vec.h"
 
-struct AnimationData
-{
-	const int frames;
-	const GPU_Rect rect[16];
-	const int timer[16];
-};
-
-extern AnimationData anim_lib[];
+#include "../src/anim_lib.h"
 
 struct Animation
 {
-	AnimationType anim_type;
-	int anim_timer = 0;
+	float timer = 0;
 	int current_frame = 0;
 
 	bool loopable = true;
 	bool complete = false;
 
+	const AnimationFrame* anim;
+	int anim_size;
+
+	template<int size>
+	constexpr Animation(const AnimationFrame(&animation)[size])
+		: anim(animation)
+		, anim_size(size)
+	{
+	}
+
 	constexpr void Reset()
 	{
-		anim_timer = 0;
+		timer = 0;
 		current_frame = 0;
 		loopable = true;
 		complete = false;
 	}
 
-	constexpr Animation(AnimationType initial_anim)
-		: anim_type(initial_anim)
+	template<int size>
+	constexpr void Set(const AnimationFrame(&animation)[size])
 	{
+		anim = animation;
+		anim_size = size;
+		Reset();
 	}
 
-	AnimationType GetCurrentAnim() const {
-		return anim_type;
-	}
-
-	void Update(int dt)
+	template<int size>
+	constexpr void Ensure(const AnimationFrame(&animation)[size])
 	{
-		anim_timer += dt;
-
-		AnimationData* anim_data = &anim_lib[(int)anim_type];
-
-		if (current_frame >= anim_data->frames && !loopable)
+		if (animation != anim)
 		{
-			current_frame = anim_data->frames - 1;
-			return;
+			Set(animation);
 		}
+	}
 
-		if (anim_timer > anim_data->timer[current_frame])
+	void Update(float dt)
+	{
+		timer += dt;
+
+		while (timer > anim[current_frame].duration)
 		{
-			anim_timer -= anim_data->timer[current_frame];
-			if (current_frame < anim_data->frames-1)
+			timer -= anim[current_frame].duration;
+			if (current_frame < anim_size - 1)
 			{
 				current_frame++;
 			}
 			else if (loopable)
 			{
 				current_frame = 0;
-				anim_timer = anim_timer % anim_data->timer[0];
 			}
-			else {
+			else 
+			{
 				complete = true;
+				break;
 			}
 		}
 	}
 
-	int GetCurrentAnimDuration() const {
-		AnimationData* anim_data = &anim_lib[(int)anim_type];
-		return anim_data->timer[current_frame];
-	}
-
-	constexpr void Ensure(AnimationType type)
+	void Reverse(float dt)
 	{
-		if (anim_type != type)
+		timer += dt;
+
+		while (timer > anim[current_frame].duration)
 		{
-			anim_type = type;
-			Reset();
+			timer -= anim[current_frame].duration;
+			if (current_frame > 0)
+			{
+				current_frame--;
+			}
+			else if (loopable)
+			{
+				current_frame = anim_size - 1;
+			}
+			else
+			{
+				complete = true;
+				break;
+			}
 		}
 	}
 
-	void EnsureNoReset(AnimationType type)
+	const GPU_Rect& CurrentFrameRect() const
 	{
-		if (anim_type != type)
-		{
-			anim_type = type;
-		}
+		return anim[current_frame].rect;
 	}
 
-	const GPU_Rect& CurrentFrame() const
+	const float CurrentFrameDuration() const
 	{
-		AnimationData* anim_data = &anim_lib[(int)anim_type];
-		return anim_data->rect[current_frame];
+		return anim[current_frame].duration;
 	}
 
-	static const GPU_Rect& AnimFrame(AnimationType type, int timer)
+	const float TotalDuration() const
 	{
-		AnimationData* anim_data = &anim_lib[(int)type];
+		return SumDuration(anim, anim_size);
+	}
 
-		int time_total = 0;
-		for (int i = 0; i < anim_data->frames; ++i)
-		{
-			time_total += anim_data->timer[i];
+	template<int size>
+	static constexpr float TotalDuration(const AnimationFrame(&animation)[size])
+	{
+		return SumDuration(animation, size);
+	}
+
+	template<int size>
+	static constexpr float TotalDurationForFrames(const AnimationFrame(&animation)[size], int first_frame, int num_frames)
+	{
+		return SumDuration(&animation[first_frame], num_frames);
+	}
+
+	template<int size>
+	static const GPU_Rect& GetRectAtTime(const AnimationFrame(&animation)[size], float time)
+	{
+		// This is not very efficient, but it's handy if you are too lazy to store an Animation between frames and want to use something like the global clock
+		Animation anim(animation);
+		float totalTime = TotalDuration(animation);
+		if (time > totalTime) {
+			time = fmod(time, totalTime);
 		}
+		anim.Update(time);
+		return anim.CurrentFrameRect();
+	}
 
-		timer = timer % time_total;
-
-		int current_frame = 0;
-		while (timer > anim_data->timer[current_frame])
-		{
-			timer -= anim_data->timer[current_frame];
-			current_frame++;
+private:
+	static constexpr float SumDuration(const AnimationFrame* anim, int size)
+	{
+		float t = 0;
+		for (int i = 0; i < size; i++) {
+			t += anim[i].duration;
 		}
-		return anim_data->rect[current_frame];
+		return t;
 	}
 };

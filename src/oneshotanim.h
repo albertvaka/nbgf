@@ -3,12 +3,12 @@
 #include "vec.h"
 #include "selfregister.h"
 #include "window.h"
-#include "animation2.h"
+#include "animation.h"
 #include "entity.h"
 
 struct OneShotAnim : SelfRegister<OneShotAnim>
 {
-	Animation2 anim;
+	Animation anim;
 	vec pos;
 	bool alive = true;
 	float rotation;
@@ -34,7 +34,7 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 	}
 
 	void Draw() const {
-		const GPU_Rect& rect = anim.GetCurrentFrameRect();
+		const GPU_Rect& rect = anim.CurrentFrameRect();
 		Window::Draw(texture, pos)
 			.withRect(rect)
 			.withScale(scale)

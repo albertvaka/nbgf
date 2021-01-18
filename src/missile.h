@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entity.h"
-#include "animation2.h"
+#include "animation.h"
 #include "anim_lib.h"
 #include "partsys.h"
 #include "selfregister.h"
@@ -9,7 +9,7 @@
 struct Missile : CircleEntity, SelfRegister<Missile>
 {
 	bool exploding = false;
-	Animation2 anim;
+	Animation anim;
 	float smokeTimer = 0;
 
 	static inline PartSys particles = PartSys(nullptr);

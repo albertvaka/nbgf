@@ -180,7 +180,7 @@ void Mantis::Draw() const
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
-	GPU_Rect rect = (state == State::JUMP) ? AnimLib::MANTIS_AIR : anim.GetCurrentFrameRect();
+	GPU_Rect rect = (state == State::JUMP) ? AnimLib::MANTIS_AIR : anim.CurrentFrameRect();
 	Window::Draw(Assets::marioTexture, pos)
 		.withRect(rect)
 		.withScale(vel.x> 0? -1: 1, 1)

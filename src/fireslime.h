@@ -2,11 +2,8 @@
 
 #include "vec.h"
 #include "selfregister.h"
-#include "animation2.h"
-#include "anim_lib.h"
+#include "animation.h"
 #include "entity.h"
-#include "oneshotanim.h"
-#include "assets.h"
 
 struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 {
@@ -18,7 +15,7 @@ struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 
 	State state = State::WALKING;
 	float timer = 0.0f;
-	Animation2 anim;
+	Animation anim;
 
 	bool willAttack = false; // will attack after landing
 	bool didJustAttack = false; // to force one move between attacks

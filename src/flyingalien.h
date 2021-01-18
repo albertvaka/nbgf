@@ -2,7 +2,7 @@
 
 #include "vec.h"
 #include "selfregister.h"
-#include "animation2.h"
+#include "animation.h"
 #include "entity.h"
 
 struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
@@ -18,7 +18,7 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
 	State state = State::FLYING;
 	float timer;
 
-	Animation2 anim;
+	Animation anim;
 
 	vec orig;
 	float beginAttackX;

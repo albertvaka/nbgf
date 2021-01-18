@@ -1,7 +1,7 @@
 #pragma once
 
 #include "vec.h"
-#include "animation2.h"
+#include "animation.h"
 #include "selfregister.h"
 #include "entity.h"
 
@@ -18,7 +18,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 		FIRING,
 	};
 
-	Animation2 anim;
+	Animation anim;
 	State state;
 	int screen;
 	float minX, maxX;

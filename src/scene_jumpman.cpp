@@ -584,9 +584,8 @@ void JumpScene::Draw()
 	);
 
 	if (contextActionButton) {
-		AnimationType anim = BUTTON_A_PRESS; // TODO: switch depending on the key
 		Window::Draw(Assets::hospitalTexture, player.Bounds().TopRight() + vec(2, -6))
-			.withRect(Animation::AnimFrame(anim, mainClock * 1000));
+			.withRect(Animation::GetRectAtTime(AnimLib::BUTTON_A_PRESS, mainClock));
 	}
 
 	rotoText.Draw(vec(0,-30));

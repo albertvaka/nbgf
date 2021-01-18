@@ -2,7 +2,7 @@
 
 #include "vec.h"
 #include "selfregister.h"
-#include "animation2.h"
+#include "animation.h"
 #include "entity.h"
 #include "collide.h"
 
@@ -19,7 +19,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 
 	float hitTimer = 0.f;
 	float jumpCooldownTimer = 0.f;
-	Animation2 anim;
+	Animation anim;
 	vec initialPlayerPosition;
 	int health = 3;
 

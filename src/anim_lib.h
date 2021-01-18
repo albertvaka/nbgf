@@ -6,6 +6,62 @@
 
 namespace AnimLib {
 
+	constexpr const AnimationFrame BUTTON_A_PRESS[] = {
+		{ {0,112,8,8}, 0.1f },
+		{ {8,112,8,8}, 0.25f },
+		{ {0,112,8,8}, 0.4f },
+	};
+
+	constexpr const AnimationFrame MARIO_IDLE[] = {
+		{ {0,0,16,32}, 1.f },
+	};
+
+	constexpr const AnimationFrame MARIO_WALK[] = {
+		{ {16,0,16,32}, 0.1f },
+		{ {96 + 32,0,16,32}, 0.1f },
+		{ {32,0,16,32}, 0.1f },
+	};
+
+	constexpr const AnimationFrame MARIO_TURN[] = {
+		{ {48,0,16,32}, 1.f },
+	};
+
+	constexpr const AnimationFrame MARIO_JUMP[] = {
+		{ {64,0,16,32}, 1.f },
+	};
+
+	constexpr const AnimationFrame MARIO_CROUCH[] = {
+		{ {80,10,16,22}, 1.f },
+	};
+
+	constexpr const AnimationFrame MARIO_ONWALL[] = {
+		{ {96,0,16,32}, 1.f },
+	};
+
+	constexpr const AnimationFrame MARIO_CROUCH_LOOK_UP[] = {
+		{ {96 + 16,9,16,22}, 1.f },
+	};
+
+	constexpr const AnimationFrame BAT_FLYING[] = {
+		{ {0 * 32, 2 * 32, 32, 32}, 0.1f },
+		{ {1 * 32, 2 * 32, 32, 32}, 0.1f },
+		{ {2 * 32, 2 * 32, 32, 32}, 0.1f },
+		{ {1 * 32, 2 * 32, 32, 32}, 0.1f },
+	};
+
+	constexpr const AnimationFrame BAT_FLIP[] = {
+		{ {3 * 32, 2 * 32, 32, 32}, 0.1f },
+	};
+
+	constexpr const AnimationFrame BAT_SIESTA[] = {
+		{ {1 * 32, 3 * 32, 32, 32}, 10.f },
+		{ {0 * 32, 3 * 32, 32, 32}, 0.7f },
+	};
+
+	constexpr const AnimationFrame BAT_AWAKE[] = {
+		{ {2 * 32, 3 * 32, 32, 32}, 0.7f },
+	};
+
 	constexpr const AnimationFrame FIRESLIME_WALK[] = {
 		{ { 13 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },
 		{ { 14 * 16.f, 0 * 16.f, 16.f, 16.f }, .1f },

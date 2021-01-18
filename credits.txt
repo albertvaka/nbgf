@@ -1,6 +1,5 @@
 Code
 Tile collision algorithm by Jordi Santiago
-Animation system by Mario Gonzalez
 Steering behaviours based on work from Mat Buckland
 
 Art

@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClInclude Include="engine\angles.h" />
     <ClInclude Include="engine\animation.h" />
-    <ClInclude Include="engine\animation2.h" />
     <ClInclude Include="engine\anim_frame.h" />
     <ClInclude Include="engine\asset_load.h" />
     <ClInclude Include="engine\bounds.h" />
@@ -45,7 +44,6 @@
     <ClInclude Include="engine\tilemap.h" />
     <ClInclude Include="engine\vec.h" />
     <ClInclude Include="engine\window.h" />
-    <ClInclude Include="src\anim_data.h" />
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bat.h" />
@@ -124,7 +122,6 @@
     <ClCompile Include="engine\tilemap.cpp" />
     <ClCompile Include="engine\vec.cpp" />
     <ClCompile Include="engine\window.cpp" />
-    <ClCompile Include="src\anim_data.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\bat.cpp" />
     <ClCompile Include="src\bigitem.cpp" />

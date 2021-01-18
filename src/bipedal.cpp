@@ -46,7 +46,7 @@ Bipedal::Bipedal(vec pos)
 		minX = TiledAreas::boss_bounds[i].Left();
 		maxX = TiledAreas::boss_bounds[i].Right();
 
-		float maxDistanceItCanWalkInOneLoop = anim.GetTotalDuration() * walking_speed;
+		float maxDistanceItCanWalkInOneLoop = anim.TotalDuration() * walking_speed;
 		minX += maxDistanceItCanWalkInOneLoop; // We do this since it never changes direction mid-animation
 		maxX -= maxDistanceItCanWalkInOneLoop;
 	}
@@ -192,7 +192,7 @@ void Bipedal::Draw() const
 	Window::Draw(Assets::scifiTexture, pos+textureOffset)
 		.withScale(2.f)
 		.withOrigin(16.f, 14.f)
-		.withRect(anim.GetCurrentFrameRect());
+		.withRect(anim.CurrentFrameRect());
 
 	Shader::Deactivate();
 

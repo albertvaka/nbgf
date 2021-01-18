@@ -44,7 +44,7 @@ BoxBounds FireSlime::AttackBounds() const
 bool FireSlime::CanMoveForward() const
 {
 	constexpr int framesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
-	constexpr const float bigDt = Animation2::GetTotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, framesOnAir);
+	constexpr const float bigDt = Animation::TotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, framesOnAir);
 	constexpr const vec spriteSize = AnimLib::FIRESLIME_WALK[0].GetSize() * kSpriteScale;
 	vec vel = vec(kSpeed * direction, 0);
 
@@ -111,7 +111,7 @@ void FireSlime::Update(float dt)
 
 void FireSlime::Draw() const
 {
-	GPU_Rect rect = anim.GetCurrentFrameRect();
+	GPU_Rect rect = anim.CurrentFrameRect();
 
 	vec drawPos = pos - vec(0, kSpriteOffsetY/2.f);
 
