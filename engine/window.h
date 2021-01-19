@@ -411,8 +411,8 @@ inline void FixTextureBleeding(GPU_Rect& tr) {
 	const float e = 0.1f;
 	tr.x += e;
 	tr.y += e;
-	tr.w -= e;
-	tr.h -= e;
+	tr.w -= 2*e;
+	tr.h -= 2*e;
 }
 
 inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {
