@@ -199,15 +199,6 @@ namespace Window
 		}
 
 		~Draw() {
-			#if defined(__APPLE__)
-			if (Window::currentDrawTarget != Window::screenTarget) {
-				float decimalPart = (dest.y - (int)(dest.y));
-				const float e = 0.004f;
-				if (decimalPart > 0.5f-e && decimalPart < 0.5f+e) {
-					dest.y -= 2*e;
-				}
-			}
-			#endif
 			// We pass origin as rotation pivot. We could change that to a different variable.
 			GPU_BlitTransformX(t, &src, Window::currentDrawTarget, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
 			GPU_SetRGBA(t, 255, 255, 255, 255);
