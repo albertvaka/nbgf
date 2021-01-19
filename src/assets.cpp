@@ -27,7 +27,7 @@ void Assets::LoadAll() {
 
     tintShader.Load(nullptr, nullptr, "data/tint.frag");
     //fogShader.Load("data/vertex_out.vert", nullptr, "data/fog.frag");
-    //waveShader.Load("data/vertex_out.vert", nullptr, "data/wave.frag");
+    waveShader.Load("data/vertex_out.vert", nullptr, "data/wave.frag");
     fadeInDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadein_diamonds.frag");
     fadeOutDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_diamonds.frag");
     fadeOutCircleShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_circle.frag");

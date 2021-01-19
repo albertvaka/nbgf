@@ -601,6 +601,18 @@ void JumpScene::Draw()
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
 		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 
+
+		if (ImGui::Button("Start waves")) {
+			FxManager::ActivateShaderFullscreen([]() {
+				Assets::waveShader.Activate();
+				Assets::waveShader.SetUniform("time", mainClock);
+			});
+		}
+		if (ImGui::Button("Stop waves")) {
+			FxManager::DeactivateShaderFullscreen();
+		}
+
+
 		if (ImGui::Button("Save")) {
 			SaveGame();
 		}

@@ -9,7 +9,9 @@
 #include "imgui.h"
 #endif
 
-//static GPU_Image* renderToTextureTarget;
+static GPU_Image* renderToTextureTarget;
+static bool renderingToTexture = false;
+static vec renderToTextureSize = vec(-1,-1);
 extern float mainClock;
 
 void FxManager::StartTransition(Shader& shader, float duration)
@@ -90,20 +92,46 @@ void FxManager::DrawImgui() {
 }
 
 void FxManager::BeginDraw() {
-	//if (!renderToTextureTarget) {
-	//	renderToTextureTarget = Window::CreateTexture(Window::GAME_WIDTH, Window::GAME_HEIGHT);
-	//}
-	//Window::BeginRenderToTexture(renderToTextureTarget, true);
+	if (!beforeDrawFullscreen) {
+		renderingToTexture = false;
+		return;
+	}
+	renderingToTexture = true;
+	if (renderToTextureSize.x != Window::screenTarget->base_w || renderToTextureSize.y != Window::screenTarget->base_h) 
+	{
+		if (renderToTextureTarget) {
+			GPU_FreeImage(renderToTextureTarget);
+			renderToTextureTarget = nullptr;
+		}
+		renderToTextureTarget = Window::CreateTexture(Window::screenTarget->base_w, Window::screenTarget->base_h);
+		GPU_Target* target = GPU_GetTarget(renderToTextureTarget);
+		GPU_SetVirtualResolution(target, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+		renderToTextureSize = vec(Window::screenTarget->base_w, Window::screenTarget->base_h);
+		// Start with both buffers fully black
+		Window::Clear(0, 0, 0);
+		GPU_Flip(Window::screenTarget);
+		Window::Clear(0, 0, 0);
+	}
+	Window::BeginRenderToTexture(renderToTextureTarget, true);
 }
 
 void FxManager::EndDraw() {
 	
-	// Apply fullscreen shaders
-	//Window::EndRenderToTexture();
-	//Assets::waveShader.Activate();
-	//Assets::waveShader.SetUniform("time", mainClock);
-	//Window::Draw(renderToTextureTarget, Camera::TopLeft());
-	//Shader::Deactivate();
+	if (renderingToTexture) {
+		Window::EndRenderToTexture();
+
+		if (beforeDrawFullscreen) {
+			beforeDrawFullscreen();
+		}
+
+		GPU_UnsetVirtualResolution(Window::screenTarget);
+		Camera::InScreenCoords::Begin();
+		Window::Draw(renderToTextureTarget, Camera::InScreenCoords::TopLeft());
+		Camera::InScreenCoords::End();
+		GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+
+		Shader::Deactivate();
+	}
 
 	if (transitionTime > 0.f) {
 		Camera::InScreenCoords::Begin();

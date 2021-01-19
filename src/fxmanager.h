@@ -1,9 +1,11 @@
 #pragma once 
 
 #include "vec.h"
+#include <functional>
 
 struct Shader;
 
+//TODO: Split in Fx::Screenshake, Fx::FreezeImage, Fx::ScreenTransition, Fx::FullscreenShader
 struct FxManager {
 
 	static inline bool IsTransitionActive() {
@@ -39,7 +41,7 @@ struct FxManager {
 	static inline void StartScreenshakePreset(ScreenShakePreset preset) {
 		switch (preset) {
 		case ScreenShakePreset::Earthquake: // Call repeatedly for a sustained effect
-			StartScreenshake(0.1f, veci(2,2), vec(35.f,45.f));
+			StartScreenshake(0.1f, veci(2, 2), vec(35.f, 45.f));
 			break;
 		case ScreenShakePreset::LittleStomp:
 			StartScreenshake(0.17f, veci(0, 2), vec(0.f, 47.f));
@@ -55,8 +57,15 @@ struct FxManager {
 
 	static void Update(float dt);
 
-	static void BeginDraw();
+	static void ActivateShaderFullscreen(std::function<void()> shaderActivationLambda) {
+		beforeDrawFullscreen = shaderActivationLambda;
+	}
 
+	static void DeactivateShaderFullscreen() {
+		beforeDrawFullscreen = nullptr;
+	}
+
+	static void BeginDraw();
 	static void EndDraw();
 
 	static inline vec GetScreenshake() {
@@ -91,4 +100,6 @@ private:
 	static inline float worldStoppedTime = -1.f;
 	static inline int nextWorldStopIn = -1.f;
 	static inline float nextWorldStopDuration;
+
+	static inline std::function<void()> beforeDrawFullscreen = nullptr;
 };

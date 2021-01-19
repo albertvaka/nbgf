@@ -8,7 +8,7 @@ in vec2 vertex;
 uniform sampler2D tex;
 uniform float time = 0;
 uniform float scale = 2;
-uniform float intensity = 1.5;
+uniform float intensity = 1.5/6;
 
 out vec4 fragColor;
 
