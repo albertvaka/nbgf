@@ -3,16 +3,12 @@
 #include "angles.h"
 #include "bounds.h"
 
+#include "../src/window_conf.h"
 #include "debug.h"
 
 #include "SDL_gpu.h"
 
-namespace Window
-{
-	constexpr const int GAME_HEIGHT = 21 * 16;
-	constexpr const int GAME_WIDTH = GAME_HEIGHT * 16.f / 9;
-
-	constexpr const char* WINDOW_TITLE = "Gaem";
+namespace Window {
 
 	extern SDL_Window* window;
 	extern GPU_Target* screenTarget;

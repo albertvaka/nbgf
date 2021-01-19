@@ -84,6 +84,7 @@
     <ClInclude Include="src\steering_entity.h" />
     <ClInclude Include="src\texturepackerexport.h" />
     <ClInclude Include="src\tiledexport.h" />
+    <ClInclude Include="src\window_conf.h" />
     <ClInclude Include="vendor\glew\glew.h" />
     <ClInclude Include="vendor\glew\glxew.h" />
     <ClInclude Include="vendor\glew\wglew.h" />

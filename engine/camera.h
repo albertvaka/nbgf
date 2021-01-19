@@ -6,10 +6,7 @@ namespace Camera
 {
 	extern GPU_Camera camera;
 	extern GPU_Camera gui_camera;
-}
 
-namespace Camera
-{
 	inline vec Size()
 	{
 		return vec(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
@@ -119,7 +116,7 @@ namespace Camera
 
 	namespace InScreenCoords
 	{
-		// A Camera not affected by the current zoom nor camera displacement, useful for GUIs. Its top-left is always at 0,0
+		// A Camera not affected by the current zoom nor camera displacement, useful for GUIs. Its top-left is always at 0,0 and its size GAME_WIDTH,GAME_HEIGHT
 
 		inline void Begin() {
 			GPU_SetCamera(Window::currentDrawTarget, &gui_camera);

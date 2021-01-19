@@ -322,6 +322,9 @@
     <ClInclude Include="src\anim_lib.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\window_conf.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
