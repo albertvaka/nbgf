@@ -4,6 +4,7 @@
 
 #include "SDL_gpu.h"
 #include "sound.h"
+#include "musicplayer.h"
 #include "shader.h"
 typedef struct _TTF_Font TTF_Font;
 

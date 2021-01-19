@@ -31,6 +31,7 @@
     <ClInclude Include="engine\input.h" />
     <ClInclude Include="engine\mates.h" />
     <ClInclude Include="engine\matrix2d.h" />
+    <ClInclude Include="engine\musicplayer.h" />
     <ClInclude Include="engine\partsys.h" />
     <ClInclude Include="engine\rand.h" />
     <ClInclude Include="engine\raw_input.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="engine\debug.cpp" />
     <ClCompile Include="engine\input.cpp" />
     <ClCompile Include="engine\main.cpp" />
+    <ClCompile Include="engine\musicplayer.cpp" />
     <ClCompile Include="engine\partsys.cpp" />
     <ClCompile Include="engine\raw_input.cpp" />
     <ClCompile Include="engine\savestate.cpp" />

@@ -325,6 +325,9 @@
     <ClInclude Include="src\window_conf.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="engine\musicplayer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -514,6 +517,9 @@
       <Filter>src\entities</Filter>
     </ClCompile>
     <ClCompile Include="engine\vec.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\musicplayer.cpp">
       <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>

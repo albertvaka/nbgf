@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iosfwd>
-#include <utility>
+#include <ostream>
 
 namespace Debug {
 #ifdef _DEBUG
