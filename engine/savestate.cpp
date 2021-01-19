@@ -8,6 +8,11 @@
 
 #include "debug.h"
 
+#if !(MACOS_VER_MAJOR==10 && MACOS_VER_MINOR<=14)
+	// std::filesystem is only supported on MacOS 10.15+
+	#define SAVESTATE_SAVE_IN_LOCAL_DIR
+#endif
+
 inline std::string osConfigDir()
 {
 #if _WIN32
@@ -46,10 +51,12 @@ void SaveState::Save() {
 void SaveState::Load() {
 	Clear();
 
+#if !(MACOS_VER_MAJOR==10 && MACOS_VER_MINOR<=14)
 	if (!std::filesystem::exists(GetSaveFilePath())) {
 		//Debug::out << "Save doesn't exist";
 		return;
 	}
+#endif
 
 	std::ifstream file(GetSaveFilePath(), std::ifstream::in);
 	if (file.fail()) {
