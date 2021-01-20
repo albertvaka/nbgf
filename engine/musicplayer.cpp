@@ -37,7 +37,7 @@ namespace MusicPlayer
 		Mix_VolumeMusic(volume * (128 / 100.f));
 	}
 	
-	float GetVolume(float volume) {
+	float Volume() {
 		return Mix_VolumeMusic(-1) * (100 / 128.f);
 	}
 }

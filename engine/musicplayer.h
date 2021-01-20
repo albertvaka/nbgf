@@ -15,7 +15,7 @@ namespace MusicPlayer
 	void Stop();
 
 	void SetVolume(float volume); // from 0 to 100
-	float GetVolume(float volume); // from 0 to 100
+	float Volume(); // from 0 to 100
 
 	//TODO: Wrap Mix_FadeInMusic() and Mix_FadeOutMusic()
 }
