@@ -226,6 +226,12 @@ inline float BoxBounds::Distance(const CircleBounds& a) const
 
 inline std::ostream& operator<<(std::ostream& os, const BoxBounds& rhs)
 {
-    os << " " << rhs.left << " " << rhs.top << " " << rhs.width << " " << rhs.height;
+    os << rhs.left << " " << rhs.top << " " << rhs.width << " " << rhs.height;
+    return os;
+}
+
+inline std::ostream& operator<<(std::ostream& os, const CircleBounds& rhs)
+{
+    os << rhs.pos << " r=" << rhs.radius;
     return os;
 }
