@@ -328,6 +328,15 @@
     <ClInclude Include="engine\fx.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="engine\window_draw.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\window_drawprimitive.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\window_drawraw.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

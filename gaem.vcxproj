@@ -46,6 +46,9 @@
     <ClInclude Include="engine\tilemap.h" />
     <ClInclude Include="engine\vec.h" />
     <ClInclude Include="engine\window.h" />
+    <ClInclude Include="engine\window_draw.h" />
+    <ClInclude Include="engine\window_drawprimitive.h" />
+    <ClInclude Include="engine\window_drawraw.h" />
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bat.h" />
