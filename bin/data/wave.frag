@@ -2,13 +2,12 @@
 
 in mediump vec4 color;
 in vec2 texCoord;
-in vec4 gl_FragCoord;
 in vec2 vertex;
 
 uniform sampler2D tex;
-uniform float time = 0;
-uniform float scale = 2;
-uniform float intensity = 1.5/6;
+uniform float time;
+float scale = 2.f;
+float intensity = 1.5f/6.f;
 
 out vec4 fragColor;
 
