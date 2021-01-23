@@ -597,6 +597,7 @@ void JumpScene::Draw()
 		if (ImGui::Button("Start waves")) {
 			Fx::FullscreenShader::SetShader([]() {
 				Assets::waveShader.Activate();
+				Assets::waveShader.SetUniform("camera", Camera::Center()*Window::GetViewportScale()); 
 				Assets::waveShader.SetUniform("time", mainClock * 10);
 			});
 

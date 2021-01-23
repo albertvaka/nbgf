@@ -6,6 +6,7 @@ in vec2 vertex;
 
 uniform sampler2D tex;
 uniform float time;
+uniform vec2 camera;
 float scale = 2.f;
 float intensity = 1.5f/6.f;
 
@@ -31,9 +32,10 @@ float noise(vec2 coord){
 }
 
 void main(){
-
-	vec2 noisecoord1 = vertex * 0.01 * scale;
-	vec2 noisecoord2 = vertex * 0.01 * scale + 4.0;
+	vec2 worldVertex = (camera+vertex);
+	
+	vec2 noisecoord1 = worldVertex * 0.01 * scale;
+	vec2 noisecoord2 = worldVertex * 0.01 * scale + 4.0;
 
 	vec2 motion1 = vec2(time * 0.3, time * -0.4);
 	vec2 motion2 = vec2(time * 0.1, time * 0.5);
