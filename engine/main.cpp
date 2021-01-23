@@ -280,7 +280,7 @@ void main_loop() {
 		fpsClock = 0;
 	}
 	Window::Draw(*txt_fps, Camera::InScreenCoords::Bounds().TopRight() + vec(-5, 5))
-		.withOrigin(txt_fps->GetSize().x, 0)
+		.withOrigin(txt_fps->Size().x, 0)
 		.withScale(0.5f);
 #endif
 

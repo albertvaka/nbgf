@@ -23,52 +23,18 @@ struct Text
 		}
 	}
 
-	operator GPU_Image*() const {
-		return GetImage();
-	}
-
-	GPU_Image* GetImage() const {
-		if (cached == nullptr) {
-			SDL_Surface* surface = const_cast<Text*>(this)->MultiLineRender();
-			cached = GPU_CopyImageFromSurface(surface);
-			GPU_SetImageFilter(cached, GPU_FILTER_NEAREST);
-			GPU_SetSnapMode(cached, GPU_SNAP_NONE);
-			SDL_FreeSurface(surface);
-			if (!cached) {
-				printf("Unable to create text texture. SDL Error: %s\n", SDL_GetError());
-			}
+	Text& SetString(const std::string& newstr) {
+		if (newstr != str) {
+			str = newstr;
+			Invalidate();
 		}
-		return cached;
-	};
+		return *this;
+	}
 
 	Text& SetFont(TTF_Font* newfont, TTF_Font* newfont_outline = nullptr) {
 		if (newfont != font || font_outline != newfont_outline) {
 			font_outline = newfont_outline;
 			font = newfont;
-			Invalidate();
-		}
-		return *this;
-	}
-
-	Text& SetSpacing(int pixels) {
-		if (pixels != spacing) {
-			spacing = pixels;
-			Invalidate();
-		}
-		return *this;
-	}
-
-	Text& SetEmptyLineSpacing(int pixels) {
-		if (pixels != empty_line_spacing) {
-			empty_line_spacing = pixels;
-			Invalidate();
-		}
-		return *this;
-	}
-
-	Text& SetString(const std::string& newstr) {
-		if (newstr != str) {
-			str = newstr;
 			Invalidate();
 		}
 		return *this;
@@ -98,10 +64,44 @@ struct Text
 		multilineAlignment = a;
 	}
 
-	vec GetSize() const {
-		GPU_Image* image = GetImage();
+	Text& SetMultilineSpacing(int pixels) {
+		if (pixels != spacing) {
+			spacing = pixels;
+			Invalidate();
+		}
+		return *this;
+	}
+
+	Text& SetEmptyLinesMultilineSpacing(int pixels) {
+		if (pixels != empty_line_spacing) {
+			empty_line_spacing = pixels;
+			Invalidate();
+		}
+		return *this;
+	}
+
+	vec Size() const {
+		GPU_Image* image = AsImage();
 		return vec(image->texture_w, image->texture_h);
 	}
+
+	operator GPU_Image* () const {
+		return AsImage();
+	}
+
+	GPU_Image* AsImage() const {
+		if (cached == nullptr) {
+			SDL_Surface* surface = const_cast<Text*>(this)->MultiLineRender();
+			cached = GPU_CopyImageFromSurface(surface);
+			GPU_SetImageFilter(cached, GPU_FILTER_NEAREST);
+			GPU_SetSnapMode(cached, GPU_SNAP_NONE);
+			SDL_FreeSurface(surface);
+			if (!cached) {
+				printf("Unable to create text texture. SDL Error: %s\n", SDL_GetError());
+			}
+		}
+		return cached;
+	};
 
 private:
 	void Invalidate() {
