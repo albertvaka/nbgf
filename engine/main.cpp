@@ -51,6 +51,20 @@ void AfterSceneDraw();
 void init();
 void main_loop();
 
+extern "C" void start_main_loop()
+{
+	SceneManager::currentScene = new EntryPointScene();
+	SceneManager::currentScene->EnterScene();
+
+#ifdef __EMSCRIPTEN__
+	emscripten_set_main_loop(main_loop, 0, 1);
+#else
+	while (true) {
+		main_loop();
+	}
+#endif
+}
+
 int main(int argc, char* argv[])
 {
 #if !(MACOS_VER_MAJOR==10 && MACOS_VER_MINOR<=14)
@@ -60,13 +74,24 @@ int main(int argc, char* argv[])
 #endif
 
 	init();
-	
+
 #ifdef __EMSCRIPTEN__
-  	emscripten_set_main_loop(main_loop, 0, 1);
+	// mounting the FS is async, wait for it before we launch the main loop
+	EM_ASM(
+		FS.mkdir('/saves');
+		FS.mount(IDBFS, {}, '/saves');
+		FS.syncfs(true, function (err) {
+			console.log(err ? err : "emscripten: /saves directory mounted");
+			try {
+				ccall('start_main_loop', null);
+			} catch(e) {
+				// https://github.com/emscripten-core/emscripten/issues/12814
+				if (e != 'unwind') throw e;
+			}
+		});
+	);
 #else
-	while (true) {
-		main_loop();
-	}
+	start_main_loop();
 #endif
 
 }
@@ -127,9 +152,6 @@ void init() {
 	Window::Clear(0, 0, 0);
 
 	Fx::Init();
-
-	SceneManager::currentScene = new EntryPointScene();
-	SceneManager::currentScene->EnterScene();
 }
 
 void main_loop() {
