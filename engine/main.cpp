@@ -53,6 +53,8 @@ void main_loop();
 
 extern "C" void start_main_loop()
 {
+	// We wait until here to create the scene since here we know that
+	// the emscripten FS is ready, and the scene could try to use it.
 	SceneManager::currentScene = new EntryPointScene();
 	SceneManager::currentScene->EnterScene();
 
