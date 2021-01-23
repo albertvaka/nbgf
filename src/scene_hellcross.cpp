@@ -23,7 +23,6 @@ const float chanceAngryBat = 0.2f;
 
 const Tile SOLID_TILE = Tile::SOLID_SIMPLE;
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_SIMPLE;
-const Tile ONEWAY_TILE = Tile::ONEWAY_SIMPLE;
 
 static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::size);
 
