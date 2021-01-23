@@ -4,7 +4,7 @@
 #include "bullet.h"
 #include "mates.h"
 #include "assets.h"
-#include "fxmanager.h"
+#include "fx.h"
 #include "oneshotanim.h"
 #include "debug.h"
 #include "savestate.h"
@@ -363,7 +363,7 @@ void JumpMan::TakeDamage(vec src) {
 	jumpTimeLeft = 0;
 	onWall = ONWALL_NO;
 	crouched = false;
-	FxManager::StopTheWorld(0, 0.25f);
+	Fx::FreezeImage::Freeze(0, 0.25f);
 	vec playerCenter = Bounds().Center();
 	float direction = (playerCenter-src).AngleDegs();
 	new OneShotAnim(Assets::marioTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);

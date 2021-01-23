@@ -4,6 +4,7 @@
 #include "imgui.h"
 #endif
 
+#include "scene_manager.h"
 #include "input.h"
 #include "bullet.h"
 #include "assets.h"
@@ -14,7 +15,6 @@
 #include "camera.h"
 #include "collide.h"
 #include "rand.h"
-#include "fxmanager.h"
 #include "oneshotanim.h"
 #include "drawall.h"
 
@@ -160,18 +160,12 @@ void DebugScene::ExitScene()
 
 void DebugScene::UpdateCamera() {
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
-	camPos += FxManager::GetScreenshake();
 	Camera::SetCenter(camPos);
 	Camera::ClampCameraTo(map.BoundsInWorld());
 }
 
 void DebugScene::Update(float dt)
 {
-	FxManager::Update(dt);
-	if (FxManager::IsTheWorldStopped()) {
-		return;
-	}
-
 	player.Update(dt);
 
 	UpdateCamera();
@@ -197,8 +191,7 @@ void DebugScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		ExitScene();
-		EnterScene();
+		SceneManager::RestartScene();
 		return;
 	}
 
@@ -217,8 +210,6 @@ void DebugScene::Update(float dt)
 
 void DebugScene::Draw()
 {
-	FxManager::BeginDraw();
-
 	Window::Clear(90, 180, 50);
 
 	DrawAllInOrder(
@@ -253,8 +244,6 @@ void DebugScene::Draw()
 	}
 #endif
 	
-	FxManager::EndDraw();
-
 	map.BoundsInWorld().DebugDraw(0,255,0);
 
 	//player.polvito.DrawImGUI("Polvito");

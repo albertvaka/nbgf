@@ -1,17 +1,21 @@
 #pragma once
 
 #include "scene.h"
+#include <cassert>
 
 struct SceneManager
 {
-	static Scene* currentScene;
-	static Scene*& CurrentScene()
+	static inline Scene* newScene = nullptr;
+	static inline Scene* currentScene;
+	static void ChangeScene(Scene* s)
 	{
-		return currentScene;
+		assert(!newScene);
+		newScene = s;
 	}
-	static void SetScene(Scene* s)
+	static void RestartScene()
 	{
-		currentScene = s;
+		assert(!newScene);
+		newScene = currentScene;
 	}
 };
 

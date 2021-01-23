@@ -8,6 +8,7 @@
 #include "text.h"
 #include "debug.h"
 #include "camera.h"
+#include "fx.h"
 
 #include "../src/assets.h"
 #include "../src/scene_entrypoint.h"
@@ -29,9 +30,6 @@
 #ifdef _DEBUG
 #define _FPS_COUNTER
 #endif
-
-Scene* currentScene;
-Scene* SceneManager::currentScene = nullptr;
 
 float mainClock;
 int last_ticks;
@@ -128,19 +126,23 @@ void init() {
 	GPU_Flip(Window::screenTarget);
 	Window::Clear(0, 0, 0);
 
-	currentScene = new EntryPointScene();
-	SceneManager::SetScene(currentScene);
-	currentScene->EnterScene();
-}
+	Fx::Init();
 
+	SceneManager::currentScene = new EntryPointScene();
+	SceneManager::currentScene->EnterScene();
+}
 
 void main_loop() {
 
-	if (SceneManager::CurrentScene() != currentScene) {
-		currentScene->ExitScene();
-		delete currentScene;
-		currentScene = SceneManager::CurrentScene();
-		currentScene->EnterScene();
+	if (SceneManager::newScene != nullptr) {
+		SceneManager::currentScene->ExitScene();
+		if (SceneManager::currentScene != SceneManager::newScene) {
+			delete SceneManager::currentScene;
+			SceneManager::currentScene = SceneManager::newScene;
+		}
+		SceneManager::newScene = nullptr;
+		Fx::BeforeEnterScene();
+		SceneManager::currentScene->EnterScene();
 	}
 
 #ifdef _IMGUI
@@ -224,16 +226,20 @@ void main_loop() {
 		BeforeSceneUpdate();
 #endif
 
-		mainClock += limited_dt; // TODO: Should not increase when fxmanager->IsTheWorldStopped()
-		currentScene->Update(limited_dt);
+		Fx::Update(dt);
+		if (!Fx::FreezeImage::IsFrozen()) {
+			mainClock += limited_dt;
+			if (!Fx::ScreenTransition::IsActive()) {
+				SceneManager::currentScene->Update(limited_dt);
+			}
+		}
 	}
 
 #ifdef _DEBUG
 	BeforeSceneDraw();
 #endif
-
-	currentScene->Draw();
-
+	SceneManager::currentScene->Draw();
+	Fx::AfterDraw();
 #ifdef _DEBUG
 	AfterSceneDraw();
 #endif

@@ -12,8 +12,6 @@ namespace Assets
 {
 	extern void LoadAll();
 
-	inline GPU_Image* blankTexture;
-
 	inline GPU_Image* hospitalTexture;
 
 	inline GPU_Image* marioTexture;

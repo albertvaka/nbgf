@@ -8,7 +8,7 @@
 #include "debug.h"
 #include "tiledexport.h"
 #include "missile.h"
-#include "fxmanager.h"
+#include "fx.h"
 #include "camera.h"
 #include "bullet.h"
 #include "common_enemy.h"
@@ -137,7 +137,7 @@ void Bipedal::Update(float dt)
 		if (Camera::Bounds().Contains(pos)) {
 			bool stomp = (frame != anim.current_frame) && (anim.current_frame == 0 || anim.current_frame == 3);
 			if (stomp) {
-				FxManager::StartScreenshakePreset(charging? FxManager::ScreenShakePreset::Stomp : FxManager::ScreenShakePreset::LittleStomp);
+				Fx::Screenshake::StartPreset(charging? Fx::Screenshake::Preset::Stomp : Fx::Screenshake::Preset::LittleStomp);
 			}
 		}
 

@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "scene_jumpman.h"
+#include "scene_manager.h"
 #include "input.h"
 #ifdef _IMGUI
 #include "imgui.h"
@@ -13,7 +14,7 @@
 #include "missile.h"
 #include "mantis.h"
 #include "bipedal.h"
-#include "fxmanager.h"
+#include "fx.h"
 #include "fireslime.h"
 #include "fireshot.h"
 #include "lava.h"
@@ -277,7 +278,7 @@ void JumpScene::EnterScene()
 
 	Camera::SetCenter(GetCameraTargetPos());
 
-	FxManager::StartTransition(Assets::fadeInDiamondsShader);
+	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 }
 
 vec JumpScene::GetCameraTargetPos() {
@@ -292,7 +293,7 @@ void JumpScene::UpdateCamera(float dt) {
 	vec oldPos = Camera::Center();
 	vec displacement = camPos - oldPos;
 	displacement.Truncate(camSpeed * dt);
-	Camera::SetCenter(oldPos + displacement + FxManager::GetScreenshake());
+	Camera::SetCenter(oldPos + displacement);
 }
 
 void JumpScene::ExitScene()
@@ -321,18 +322,10 @@ void JumpScene::ExitScene()
 
 void JumpScene::Update(float dt)
 {
-	FxManager::Update(dt);
-	if (FxManager::IsTheWorldStopped()) {
-		return;
-	}
-	if (FxManager::IsTransitionActive()) {
-		return;
-	} else if (FxManager::IsTransitionDone()) {
-		FxManager::ResetTransitionDone();
-		if (FxManager::GetCurrentTransition() != &Assets::fadeInDiamondsShader) {
+	if (Fx::ScreenTransition::IsJustFinished()) {
+		if (Fx::ScreenTransition::Current() != &Assets::fadeInDiamondsShader) {
 			// This was a death or outro transition: restart scene
-			ExitScene();
-			EnterScene();
+			SceneManager::RestartScene();
 		}
 		return;
 	}
@@ -343,7 +336,7 @@ void JumpScene::Update(float dt)
 		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
 		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
 		Shader::Deactivate();
-		FxManager::StartTransition(Assets::fadeOutCircleShader);
+		Fx::ScreenTransition::Start(Assets::fadeOutCircleShader);
 		return;
 	}
 
@@ -417,7 +410,7 @@ void JumpScene::Update(float dt)
 			saveState.Clear();
 			saveState.Save();
 		}
-		FxManager::StartTransition(Assets::fadeOutDiamondsShader);
+		Fx::ScreenTransition::Start(Assets::fadeOutDiamondsShader);
 		return;
 	}
 	if (Keyboard::IsKeyJustPressed(teleport)) {
@@ -462,7 +455,7 @@ void JumpScene::Update(float dt)
 				// TODO: Interaction animation
 				SaveGame();
 				// Exit and Enter the scene again, resetting the state of everything and loading the state we just saved
-				FxManager::StartTransition(Assets::fadeOutDiamondsShader);
+				Fx::ScreenTransition::Start(Assets::fadeOutDiamondsShader);
 			}
 		}
 	}
@@ -554,7 +547,7 @@ void JumpScene::Draw()
 		return;
 	}
 
-	FxManager::BeginDraw();
+	Fx::FullscreenShader::Activate(); // Does nothing if no shader is set
 
 	Window::Clear(31, 36, 50);
 
@@ -601,17 +594,16 @@ void JumpScene::Draw()
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
 		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
 
-
 		if (ImGui::Button("Start waves")) {
-			FxManager::ActivateShaderFullscreen([]() {
+			Fx::FullscreenShader::SetShader([]() {
 				Assets::waveShader.Activate();
 				Assets::waveShader.SetUniform("time", mainClock * 10);
 			});
+
 		}
 		if (ImGui::Button("Stop waves")) {
-			FxManager::DeactivateShaderFullscreen();
+			Fx::FullscreenShader::SetShader(nullptr);
 		}
-
 
 		if (ImGui::Button("Save")) {
 			SaveGame();
@@ -621,8 +613,7 @@ void JumpScene::Draw()
 		}
 		if (ImGui::Button("Load in new scene")) {
 			LoadGame();
-			ExitScene();
-			EnterScene();
+			SceneManager::RestartScene();
 		}
 		if (ImGui::Button("Clear save")) {
 			SaveState::Open(kSaveStateGameName, saveSlot)
@@ -631,7 +622,6 @@ void JumpScene::Draw()
 		}
 		ImGui::End();
 	}
-	//FxManager::DrawImgui();
 #endif
 
 	//Health::particles.DrawImGUI("health");
@@ -660,7 +650,7 @@ void JumpScene::Draw()
 	}
 #endif
 
-	FxManager::EndDraw();
+	Fx::FullscreenShader::Deactivate(); // Does nothing if no shader was active
 
 	Camera::InScreenCoords::Begin();
 	player.DrawGUI();

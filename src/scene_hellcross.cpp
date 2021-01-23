@@ -4,6 +4,7 @@
 #include "imgui.h"
 #endif
 
+#include "scene_manager.h"
 #include "input.h"
 #include "bullet.h"
 #include "assets.h"
@@ -13,7 +14,7 @@
 #include "camera.h"
 #include "collide.h"
 #include "rand.h"
-#include "fxmanager.h"
+#include "fx.h"
 #include "oneshotanim.h"
 #include "drawall.h"
 
@@ -108,7 +109,7 @@ void HellCrossScene::EnterScene()
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
-	FxManager::StartTransition(Assets::fadeInDiamondsShader);
+	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 	UpdateCamera();
 }
 
@@ -123,26 +124,16 @@ void HellCrossScene::ExitScene()
 
 void HellCrossScene::UpdateCamera() {
 	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
-	camPos += FxManager::GetScreenshake();
 	Camera::SetCenter(camPos);
 	Camera::ClampCameraTo(map.BoundsInWorld());
 }
 
 void HellCrossScene::Update(float dt)
 {
-	FxManager::Update(dt);
-	if (FxManager::IsTheWorldStopped()) {
-		return;
-	}
-	if (FxManager::IsTransitionActive()) {
-		return;
-	}
-	else if (FxManager::IsTransitionDone()) {
-		FxManager::ResetTransitionDone();
-		if (FxManager::GetCurrentTransition() != &Assets::fadeInDiamondsShader) {
+	if (Fx::ScreenTransition::IsJustFinished()) {
+		if (Fx::ScreenTransition::Current() != &Assets::fadeInDiamondsShader) {
 			// This was a death or outro transition: restart scene
-			ExitScene();
-			EnterScene();
+			SceneManager::RestartScene();
 		}
 		return;
 	}
@@ -153,7 +144,7 @@ void HellCrossScene::Update(float dt)
 		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
 		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
 		Shader::Deactivate();
-		FxManager::StartTransition(Assets::fadeOutCircleShader);
+		Fx::ScreenTransition::Start(Assets::fadeOutCircleShader);
 		return;
 	}
 
@@ -178,7 +169,7 @@ void HellCrossScene::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		player.health = -1;
+		Fx::ScreenTransition::Start(Assets::fadeOutDiamondsShader);
 		return;
 	}
 
@@ -201,8 +192,6 @@ void HellCrossScene::Update(float dt)
 
 void HellCrossScene::Draw()
 {
-	FxManager::BeginDraw();
-
 	Window::Clear(31, 36, 50);
 
 	if (Debug::Draw) {
@@ -229,8 +218,6 @@ void HellCrossScene::Draw()
 		map.DebugEditDraw();
 	}
 #endif
-
-	FxManager::EndDraw();
 
 	Camera::InScreenCoords::Begin();
 	player.DrawGUI();

@@ -6,6 +6,7 @@ namespace Camera
 {
 	extern GPU_Camera camera;
 	extern GPU_Camera gui_camera;
+	inline vec screenshake_offset = vec::Zero;
 
 	inline vec Size()
 	{
@@ -14,7 +15,7 @@ namespace Camera
 
 	inline vec Center()
 	{
-		return vec(camera.x, camera.y);
+		return vec(camera.x, camera.y)-screenshake_offset;
 	}
 
 	inline vec TopLeft()
@@ -24,8 +25,8 @@ namespace Camera
 
 	inline void SetCenter(float x, float y)
 	{
-		camera.x = x;
-		camera.y = y;
+		camera.x = x+screenshake_offset.x;
+		camera.y = y+screenshake_offset.y;
 		GPU_SetCamera(Window::currentDrawTarget, &camera);
 	}
 

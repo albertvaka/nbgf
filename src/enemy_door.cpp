@@ -4,7 +4,7 @@
 #include "assets.h"
 #include "window.h"
 #include "screen.h"
-#include "fxmanager.h"
+#include "fx.h"
 
 const float openAnimationTime = 0.4f; //Animation will take twice this time per tile
 const int maxHeight = 10;
@@ -42,7 +42,7 @@ void EnemyDoor::Open(bool skipAnim)
 		}
 	} else {
 		state = State::OPENING;
-		FxManager::StartScreenshake(3.f, veci(2, 2), vec(35.f, 45.f));
+		Fx::Screenshake::Start(3.f, veci(2, 2), vec(35.f, 45.f));
 		openingTimer = 0.f;
 	}
 	enemies.clear(); // we will stop checking for !alive enemies, so the pointers might be freed

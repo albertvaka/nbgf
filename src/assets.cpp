@@ -1,14 +1,8 @@
 #include "assets.h"
 
-#include "window.h"
 #include "asset_load.h"
 
 void Assets::LoadAll() {
-
-    blankTexture = Window::CreateTexture(32,32);
-    Window::BeginRenderToTexture(blankTexture, false);
-    Window::Clear(255,255,0);
-    Window::EndRenderToTexture();
 
     hospitalTexture = LoadImage("data/spritesheet.png");
 
