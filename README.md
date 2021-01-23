@@ -2,7 +2,82 @@
 
 <img src="https://img.shields.io/static/v1.svg?label=no%20tests&message=always%20green&color=green" />
 
-An opinionated C++ framework to make games in minutes. Compiles to Windows, Mac, Linux and web browser (EMSCRIPTEN).
+An opinionated C++ framework to make games in minutes.
+
+Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
+
+# Requisites
+
+### Windows
+- VisualStudio 2019
+- All the dependencies are bundled, the project does just build :)
+
+### Linux and Mac
+- SDL 2.0.12+
+- SDL_ttf 2.0.15+
+- SDL_mixer 2.0.4+
+- SDL_image 2.0.5+
+- Build with `make`
+
+### HTML
+- You will need a working emscripten setup
+- Build with `emmake make`
+
+# Developer's reference
+
+- [Loading assets](#loading-assets)
+	- [Images](#images-gpu_texture)
+	- [Sound effects](#sound-effects-sound)
+	- [Music](#music-mix_music)
+	- [Fonts](#fonts-ttf_font)
+	- [Shaders](#shaders-shader)
+- [Scenes](#scenes)
+	- [The Scene class](#the-scene-class)
+	- [EntryPointScene](#entrypointscene)
+	- [Changing scenes](#changing-scenes-scenemanager)
+- [Drawing on screen 1 (the basics)](#drawing-on-screen-1-the-basics)
+	- [Drawing images](#drawing-images)
+	- [Animated sprites](#animated-sprites)
+	- [Rendering text](#rendering-text)
+	- [Clearing the window](#clearing-the-window)
+	- [The camera](#the-camera)
+		- [Camera for GUIs](#camera-for-guisa)
+- [Playing sounds and music](#playing-sounds-and-music)
+- [Entities and SelfRegister](#entities-and-selfregister)
+- [Points and vectors: the vec struct](#points-and-vectors-the-vec-struct)
+- [Bounding boxes and collisions](#bounding-boxes-and-collisions)
+	- [BoxEntity and CircleEntity](#boxentity-and-circleentity)
+	- [Collisions](#collisions)
+		- [Collisions within entities of the same class](#collisions-within-entities-of-the-same-class)
+- [Input](#input)
+	- [Actions-based input](#actions-based-input)
+	- [Keyboard input](#keyboard-input)
+	- [Mouse input](#mouse-input)
+	- [Gamepad input](#gamepad-input)
+- [Drawing on screen 2 (the advanced stuff)](#drawing-on-screen-2-the-advanced-stuff)
+	- [Particle systems](#particle-systems)
+	- [Using shaders](#using-shaders)
+	- [Screen effects](#screen-effects)
+		- [Screenshake](#screenshake)
+		- [Screen transitions](#screen-transitions)
+		- [Freeze the image](#freeze-the-image)
+		- [Fullscreen shaders](#fullscreen-shaders)
+	- [Drawing primitives](#drawing-primitives)
+	- [Drawing raw quads](#drawing-raw-quads)
+- [Save games](#save-games)
+- [Window properties](#window-properties)
+	- [Game window size](#game-window-size)
+	- [Fullscreen mode](#fullscreen-mode)
+	- [Window title](#window-title)
+	- [Hide the mouse cursor](#hide-the-mouse-cursor)
+- [Debug features](#debug-features) (if you are not convinced to use NBGF yet, read this part first :)
+	- [Frame-by-frame](#frame-by-frame)
+	- [Debug draw mode and DebugDraw functions](#debug-draw-mode-and-debugdraw-functions)
+	- [Reload assets](#reload-assets)
+	- [Free camera movement](#free-camera-movement)
+	- [Fast forward](#fast-forward)
+	- [Imgui](#imgui)
+	- [Printing text](#printing-text)
 
 ## Loading assets
 
@@ -40,27 +115,29 @@ Don't include `#version` or `precision` directives in your shaders, depending on
 
 If any path is `nullptr`, a default shader will be loaded in its place.
 
-## [`Scene`](engine/scene.h)
+## Scenes
 
-Games are organized in scenes. When the game starts, it will load your `EntryPointScene` defined in [`src/scene_entrypoint.h`](src/scene_entrypoint.h). `EntryPointScene` is meant to be a `typedef` to your actual scene class, unless you want to name your scene `EntryPointScene`.
+### The Scene class
 
-All scenes should inherit from the [`Scene`](engine/scene.h) class and implement a few methods. We use `virtual` functions here, but I promise this is the only place. 
+Games are split in scenes. All scenes should inherit from the [`Scene`](engine/scene.h) class and implement these methods:
 
  - `Update(float dt)` will be called once per frame, so you can move your things around. `dt` is the time in seconds since the last frame (capped if too high) so you can make movement time-dependent and not framerate-dependent.
  - `Draw() const` will be called after `Update()` and is where you should put your calls to `Window::Draw` (see "Drawing Images" below).
  - `EnterScene()` and `ExitScene()` will be called before/after the `Update` and `Draw` functions first start/stop being called, respectively. This is different that the constructor given that you could have more than one `Scene` instantiated, but only one running.
 
-## Changing scenes: [`SceneManager`](engine/scene_manager.h)
+### EntryPointScene
+
+When the game starts, it will load your `EntryPointScene` defined in [`src/scene_entrypoint.h`](src/scene_entrypoint.h). `EntryPointScene` is meant to be a `typedef` to your actual scene class, unless you want to name your scene `EntryPointScene`.
+
+### Changing scenes: [`SceneManager`](engine/scene_manager.h)
 
 Use `SceneManager::ChangeScene(new MyAwesomeScene())` to change to a new scene and `SceneManager::RestartScene()` to re-enter the current one.
 
-Note the constructor of the new scene runs right away, while the current scene is still active. Don't put your scene initialization logic there (use `EnterScene` for that), and specially don't instantiate any self-registering entities (since they would show up from your current scene).
+Note the constructor of the new scene runs right away, while the current scene is still active. Don't put your scene initialization logic in the constructor (use `EnterScene` for that), and specially don't instantiate any self-registering entities there (since they would show up from your current scene).
 
-## Clearing the Window between frames
+## Drawing on screen 1 (the basics)
 
-Use `Window::Clear(<color>)`
-
-## Drawing images
+### Drawing images
 
 To draw an asset you have loaded somewhere in the world, call [`Window::Draw(Assets::<my_asset>, <position>)`](engine/window_draw.h) and optionally chain any transformations you want. Eg:
 ```
@@ -72,31 +149,11 @@ Window::Draw(Assets::mySprite, position)
 
 Find all the supported transformations in the definition of `Window::Draw` in [`engine/window_draw.h`](engine/window_draw.h) file.
 
-## Drawing primitives
-
-The `Window::DrawPrimitive` namespace in [`engine/window_drawprimitive.h`](engine/window_drawprimitive.h) contains functions to draw simple geometric shapes:
-
-- `Window::DrawPrimitive::Pixel(...)`
-- `Window::DrawPrimitive::Rectangle(...)`
-- `Window::DrawPrimitive::Line(...)`
-- `Window::DrawPrimitive::Circle(...)`
-- `Window::DrawPrimitive::Arc(...)`
-
-## Drawing raw quads (you probably don't need this)
-
-If you like it hard, you can pass in series of vertex coordinates for them to be drawn in batch.
-
-Do so with the following pairs of batch and flush functions, defined in `Window::DrawRaw` in [`engine/window_drawraw.h`](engine/window_drawraw.h):
-
-- `Window::DrawRaw::BatchTexturedQuad(GPU_Image* image, float x, float y, float w, float h, GPU_Rect& texture_coords)` and `Window::DrawRaw::FlushTexturedQuads(GPU_Image* image)` for textured quads.
-- `Window::DrawRaw::BatchColoredTexturedQuad(...)` and `Window::DrawRaw::FlushColoredTexturedQuads(...)`. for quads textured & colored .
-- `Window::DrawRaw::BatchRGBQuad(...)` and `Window::DrawRaw::FlushRGBQuads()` for untextured quads.
-
-## Animated sprites
+### Animated sprites
 
 TODO
 
-## Displaying [`Text`](engine/text.h)
+### Rendering text
 
 Use the `TTF_Font*` from `Assets` to instantiate the [`Text`](engine/text.h) class, set the string you want to draw and then draw it the same way as an image:
 
@@ -107,7 +164,7 @@ myText.SetString("my cool string");
 Window::Draw(myText, <position>);
 ```
 
-It's best to keep your `Text` instances in scope instead of recreating them each frame, since rendering a string is expensive.
+Keep your `Text` instances in scope instead of recreating them each frame, since rendering a string is expensive.
 
 If you want to render a string with an outline, you will have to pass two `TTF_Font*` to the `Text` constructor.
 
@@ -115,21 +172,27 @@ You can use `SetFillColor(...)` and `SetOutlineColor(...)` to change the color o
 
 You can also draw strings containing newlines. Use `SetMultilineAlignment(...)`, `SetMultilineSpacing(...)` and `SetEmptyLinesMultilineSpacing(...)` to tweak how they are rendered.
 
+### Clearing the window
+
+Unless you are going to draw to every single pixel in you scene's `Draw` method, you probably want to clear the previous image with a solid background color before drawing the new one. Use `Window::Clear(r,g,b)` as defined in [`engine/window.h`](engine/window.h).
+
+### The camera
+
+The default camera has the top left corner at `(0,0)`.
+
+To move it arround, use the `Camera::SetCenter()` and  `Camera::SetTopLeft()` functions, defined in [`engine/camera.h`](engine/camera.h).
+
+The [`Camera`](engine/camera.h) class also provides functions to zoom in and out, rotate the camera, as well as getting the current position, zoom and rotation.
+
+#### Camera for GUIs
+
+It's common to have GUI elements on screen that shouldn't be affected by the camera movement, zoom or rotation. You can draw without applying any camera transformations by placing your `Window::Draw` calls between `Camera::InScreenCoords::Begin()` and `Camera::InScreenCoords::End()`.
+
 ## Playing sounds and music
 
 To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-100>)` method you can use. See `engine/sound.h`.
 
 To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::IsPlaying()`, `MusicPlayer::Pause()`, `MusicPlayer::Resume()`, `MusicPlayer::Stop()` and `MusicPlayer::SetVolume(<0-100>)`. See `engine/musicplayer.h`.
-
-## The [`Camera`](engine/camera.h)
-
-The default camera is positioned so the top left corner of the game window is at `(0,0)`. To move it arround, use the `Camera::SetCenter()` and  `Camera::SetTopLeft()` functions.
-
-TODO
-
-### Camera in screen coordinates for GUIs
-
-TODO
 
 ## Entities and SelfRegister
 
@@ -161,9 +224,9 @@ The collision primitives are rectangles (`BoxBounds`) and circles (`CircleBounds
 Use the `Collide(a,b)` function defined in [`engine/collide.h`](engine/collide.h) to check if two bounds or two `BoxEntity`/`CircleEntity` collide. See this example, which makes use of `SelfRegister` class to check if any `Enemy` collides with any `Bullet`:
 
 ```
-for(Bullet* bullet, Bullet::GetAll())
+for (Bullet* bullet, Bullet::GetAll())
 {
-	for(Enemy* enemy, Enemy::GetAll())
+	for (Enemy* enemy, Enemy::GetAll())
 	{
 		if (Collide(bullet, enemy))
 		{
@@ -182,7 +245,7 @@ CollideWithCallback(Bullet::GetAll(), Enemy::GetAll(), [](Bullet* bullet, Enemy*
 });
 ```
 
-### Optimizing collisions within entities of the same class
+#### Collisions within entities of the same class
 
 When checking collisions between objects of the same class, use `CollideSelf(...)` like this:
 
@@ -200,7 +263,7 @@ This skips checking both `Collide(a,b)` and `Collide(b,a)` for the same pair of 
 
 TODO
 
-### Action-based input
+### Actions-based input
 
 TODO
 
@@ -216,31 +279,57 @@ TODO
 
 TODO
 
-## Particle system: [`PartSys`](engine/partsys.h)
+## Drawing on screen 2 (the advanced stuff)
+
+### Particle systems
+
+[`PartSys`](engine/partsys.h)
 
 TODO
 
-## Using shaders
+### Using shaders
 
 TODO
 
-## Screen effects
+### Screen effects
 
-### Screenshake
-
-TODO
-
-### Screen transitions
+#### Screenshake
 
 TODO
 
-### Freeze the image
+#### Screen transitions
 
 TODO
 
-### Fullscreen shaders
+#### Freeze the image
 
 TODO
+
+#### Fullscreen shaders
+
+Fullscreen shaders do a render-to-texture, then render the result applying the shader.
+
+TODO
+
+### Drawing primitives
+
+The `Window::DrawPrimitive` namespace in [`engine/window_drawprimitive.h`](engine/window_drawprimitive.h) contains functions to draw simple geometric shapes:
+
+- `Window::DrawPrimitive::Pixel(...)`
+- `Window::DrawPrimitive::Rectangle(...)`
+- `Window::DrawPrimitive::Line(...)`
+- `Window::DrawPrimitive::Circle(...)`
+- `Window::DrawPrimitive::Arc(...)`
+
+### Drawing raw quads
+
+If you like it hard, you can submit vertex and texture coordinates directly for them to be drawn in batch.
+
+Do so with the following pairs of batch and flush functions, defined in `Window::DrawRaw` in [`engine/window_drawraw.h`](engine/window_drawraw.h):
+
+- `Window::DrawRaw::BatchTexturedQuad(GPU_Image* image, float x, float y, float w, float h, GPU_Rect& texture_coords)` and `Window::DrawRaw::FlushTexturedQuads(GPU_Image* image)` for textured quads.
+- `Window::DrawRaw::BatchColoredTexturedQuad(...)` and `Window::DrawRaw::FlushColoredTexturedQuads(...)`. for quads textured & colored .
+- `Window::DrawRaw::BatchRGBQuad(...)` and `Window::DrawRaw::FlushRGBQuads()` for untextured quads.
 
 ## Save games
 
@@ -262,7 +351,7 @@ The title can be set in [`src/window_conf.h`](src/window_conf.h).
 
 ### Hide the mouse cursor
 
-Call `Window::SetShowCursor(bool b)` dedined in [`engine/window.h`](engine/window.h) to show and hide the mouse pointer.
+Call `Window::SetShowCursor(bool b)` defined in [`engine/window.h`](engine/window.h) to show and hide the mouse pointer.
 
 ## Debug features
 
@@ -312,7 +401,7 @@ Hold F10 to run the game 3x faster than usual (`dt` is multiplied by 3).
 
 The `ParticleSys` class has a `DrawImGUI()` function that shows an ImGUI window with all the parameters of the particle system, so you can tweak them and see how it looks in-game, before writing them in your code. 
 
-### Printing to console
+### Printing text
 
 Use the `Debug::out` stream to print to stdout like you would with `std::cout` but without having to end with `std::endl` (a newline is added automatically).
 
