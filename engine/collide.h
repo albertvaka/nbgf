@@ -43,7 +43,7 @@ inline bool Collide(const CircleEntity* a, const BoxEntity* b) {
 
 // Calls callback for each pair of colliding objects
 template <typename A, typename B, typename F>
-void CollideAll(const std::vector<A*>& setA, const std::vector<B*>& setB, F callback)
+void CollideWithCallback(const std::vector<A*>& setA, const std::vector<B*>& setB, F callback)
 {
     size_t sa = setA.size();
     for (size_t i = 0; i < sa; ++i)
