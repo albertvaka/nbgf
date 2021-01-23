@@ -61,9 +61,6 @@ endif
 $(EXEC): $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) Makefile
 	$(CXX) $(LDFLAGS) $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) -o $(OUT_FILE)
 
-obj/main.cpp.o: engine/main.cpp src/*.h engine/*.h Makefile
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
 obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/tiledexport.h Makefile
 	@mkdir -p obj/engine
 	$(CXX) $(CXXFLAGS) -c $< -o $@
