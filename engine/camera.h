@@ -71,13 +71,13 @@ namespace Camera
 	inline void SetZoom(float z, bool preserve_center = true)
 	{
 		if (preserve_center) {
+			camera.zoom_x = z;
+			camera.zoom_y = z;
+		} else {
 			vec p = TopLeft();
 			camera.zoom_x = z;
 			camera.zoom_y = z;
 			SetTopLeft(p);
-		} else {
-			camera.zoom_x = z;
-			camera.zoom_y = z;
 		}
 		GPU_SetCamera(Window::currentDrawTarget, &camera);
 	}
