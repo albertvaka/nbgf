@@ -19,8 +19,7 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 
 	void explode() {
 		exploding = true;
-		anim.Set(AnimLib::EXPLOSION);
-		anim.loopable = false;
+		anim.Set(AnimLib::EXPLOSION, false);
 	}
 
 	void Update(float dt);

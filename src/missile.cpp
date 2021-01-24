@@ -29,7 +29,7 @@ void Missile::Update(float dt)
 	anim.Update(dt);
 
 	if (exploding) {
-		if (anim.complete) {
+		if (anim.IsComplete()) {
 			alive = false;
 		}
 		return;

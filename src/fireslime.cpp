@@ -26,10 +26,9 @@ constexpr const int kFrameShooting = 2;
 
 FireSlime::FireSlime(vec pos)
 	: CircleEntity(pos - vec(0, kSpriteOffsetY), 5*kSpriteScale)
-	, anim(AnimLib::FIRESLIME_WALK)
+	, anim(AnimLib::FIRESLIME_WALK, false)
 {
 	direction = Rand::OnceEvery(2) ? 1 : -1;
-	anim.loopable = false;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 
@@ -62,7 +61,7 @@ void FireSlime::Update(float dt)
 	switch (state)
 	{
 	case State::ATTACKING:
-		if (anim.current_frame == kFrameShooting) {
+		if (anim.CurrentFrameNumber() == kFrameShooting) {
 			timer -= dt;
 			constexpr const float anim_duration = AnimLib::FIRESLIME_ATTACK[kFrameShooting].duration;
 			constexpr const float time_between_shots = anim_duration / (kShotsPerAttack-1);
@@ -74,29 +73,27 @@ void FireSlime::Update(float dt)
 		break;
 	case State::WALKING:
 		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), JumpMan::instance()->Bounds()));
-		if (!anim.complete && anim.current_frame >= kFirstFrameOnAir && anim.current_frame < kFirstFrameOnGround) {
+		if (!anim.IsComplete() && anim.CurrentFrameNumber() >= kFirstFrameOnAir && anim.CurrentFrameNumber() < kFirstFrameOnGround) {
 			// in this part of the animation we are in the air, here we move and we never start an attack
 			pos.x += kSpeed * direction * dt;
 			didJustAttack = false;
 		} else if (willAttack) {
 			state = State::ATTACKING;
 			timer = 0.0f;
-			anim.Set(AnimLib::FIRESLIME_ATTACK);
-			anim.loopable = false;
+			anim.Set(AnimLib::FIRESLIME_ATTACK, false);
 			willAttack = false;
 		}
 		break;
 	}
 
-	if (anim.complete) {
+	if (anim.IsComplete()) {
 		if (!CanMoveForward()) {
 			direction = -direction;
 			willAttack = false;
 		}
 		didJustAttack = (state == State::ATTACKING);
 		state = State::WALKING;
-		anim.Set(AnimLib::FIRESLIME_WALK);
-		anim.loopable = false;
+		anim.Set(AnimLib::FIRESLIME_WALK, false);
 	}
 
 	if (ReceiveDamageFromBullets(Bounds())) {

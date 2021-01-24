@@ -8,45 +8,42 @@
 
 struct Animation
 {
-	float timer = 0;
-	int current_frame = 0;
-
-	bool loopable = true;
-	bool complete = false;
-
-	const AnimationFrame* anim;
-	int anim_size;
-
 	template<int size>
-	constexpr Animation(const AnimationFrame(&animation)[size])
+	constexpr Animation(const AnimationFrame(&animation)[size], bool is_loopable = true)
 		: anim(animation)
 		, anim_size(size)
+		, loopable(is_loopable)
 	{
-	}
-
-	constexpr void Reset()
-	{
-		timer = 0;
-		current_frame = 0;
-		loopable = true;
-		complete = false;
 	}
 
 	template<int size>
-	constexpr void Set(const AnimationFrame(&animation)[size])
+	constexpr void Set(const AnimationFrame(&animation)[size], bool is_loopable = true) // Sets an animation and restarts it
 	{
 		anim = animation;
 		anim_size = size;
-		Reset();
+		loopable = is_loopable;
+		Restart();
 	}
 
 	template<int size>
-	constexpr void Ensure(const AnimationFrame(&animation)[size])
+	constexpr void Ensure(const AnimationFrame(&animation)[size], bool is_loopable = true) // Sets an animation if not alreay set
 	{
 		if (animation != anim)
 		{
-			Set(animation);
+			Set(animation, is_loopable);
 		}
+	}
+
+	bool IsComplete() const // Only for non-looping animations
+	{
+		return complete;
+	}
+
+	constexpr void Restart()
+	{
+		timer = 0;
+		current_frame = 0;
+		complete = false;
 	}
 
 	void Update(float dt)
@@ -72,7 +69,7 @@ struct Animation
 		}
 	}
 
-	void Reverse(float dt)
+	void UpdateReverse(float dt)
 	{
 		timer += dt;
 
@@ -93,6 +90,16 @@ struct Animation
 				break;
 			}
 		}
+	}
+
+	int CurrentFrameNumber() const
+	{
+		return current_frame;
+	}
+
+	int TotalFrames() const
+	{
+		return anim_size;
 	}
 
 	const GPU_Rect& CurrentFrameRect() const
@@ -134,6 +141,15 @@ struct Animation
 		anim.Update(time);
 		return anim.CurrentFrameRect();
 	}
+
+	float timer = 0;
+	int current_frame = 0;
+
+	bool loopable = true;
+	bool complete = false;
+
+	const AnimationFrame* anim;
+	int anim_size;
 
 private:
 	static constexpr float SumDuration(const AnimationFrame* anim, int size)

@@ -87,15 +87,14 @@ void Mantis::Update(float dt)
 			//Debug::out << "preparing";
 			initialPlayerPosition = player->pos;
 			state = State::PREPARE_JUMP;
-			anim.Set(AnimLib::MANTIS_PREPARE_JUMP);
-			anim.loopable = false;
+			anim.Set(AnimLib::MANTIS_PREPARE_JUMP, false);
 		}
 	}
 	break;
 	case State::PREPARE_JUMP:
 	{
 		anim.Update(dt);
-		if (anim.complete) {
+		if (anim.IsComplete()) {
 			//Debug::out << "prepared";
 			vec predictedPlayerPos = player->pos + (player->pos - initialPlayerPosition);
 			//playerPosition.DebugDraw();

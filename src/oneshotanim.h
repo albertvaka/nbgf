@@ -18,17 +18,16 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 	template<int size>
 	constexpr OneShotAnim(GPU_Image* texture, vec pos, const AnimationFrame(&animation)[size], float scale = 1.f, float rotationDegs = 0.f)
 		: texture(texture)
-		, anim(animation)
+		, anim(animation, false)
 		, scale(scale)
 		, pos(pos)
 		, rotation(rotationDegs)
 	{
-		anim.loopable = false;
 	}
 
 	void Update(float dt) {
 		anim.Update(dt);
-		if (anim.complete) {
+		if (anim.IsComplete()) {
 			alive = false;
 		}
 	}

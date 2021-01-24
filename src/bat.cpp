@@ -97,10 +97,9 @@ void Bat::Update(float dt)
 	switch (state) {
 	case State::AWAKENING:
 	{
-		if (anim.complete) {
+		if (anim.IsComplete()) {
 			state = State::FLYING;
 			anim.Ensure(AnimLib::BAT_FLYING);
-			anim.loopable = true;
 			AwakeNearbyBats(pos);
 		}
 		break;
@@ -110,9 +109,8 @@ void Bat::Update(float dt)
 		bool close_to_player = pos.DistanceSq(JumpMan::instance()->Bounds().Center()) < (awake_player_distance * awake_player_distance);
 		if (awakened || close_to_player) {
 			state = State::AWAKENING;
-			anim.Ensure(AnimLib::BAT_AWAKE);
+			anim.Ensure(AnimLib::BAT_AWAKE, false);
 			anim.Update(Rand::rollf(0, anim.TotalDuration()/2)); // Start flying at different time intervals
-			anim.loopable = false;
 		}
 		break;
 	}
@@ -133,12 +131,10 @@ void Bat::Update(float dt)
 
 		// Change direction animation
 		if ((oldVel.x < 0 && vel.x > 0) || (oldVel.x > 0 && vel.x < 0)) {
-			anim.Ensure(AnimLib::BAT_FLIP);
-			anim.loopable = false;
+			anim.Ensure(AnimLib::BAT_FLIP, false);
 		}
-		if (anim.complete) {
+		if (anim.IsComplete()) {
 			anim.Ensure(AnimLib::BAT_FLYING);
-			anim.loopable = true;
 		}
 
 		// Start seeking at random

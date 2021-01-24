@@ -126,7 +126,7 @@ void Bipedal::Update(float dt)
 			speed = walking_speed;
 		}
 		else {
-			anim.Reverse(dt);
+			anim.UpdateReverse(dt);
 			speed = -walking_speed;
 		}
 
