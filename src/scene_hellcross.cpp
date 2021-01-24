@@ -70,10 +70,11 @@ void HellCrossScene::EnterScene()
 	srand(randomSeed);
 	RandomizeMap();
 
+	SimplexNoise simplex;
 	for (int y = -1; y < map.Height() - 5; y++) { //don't spawn at the bottom rows
 		for (int x = 20; x < map.Width(); x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
 			if (map.GetTile(x, y).isSolid()) {
-				float noise = Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
+				float noise = simplex.noise(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) {
 					bool angry = (Rand::rollf() < chanceAngryBat);
@@ -192,8 +193,8 @@ void HellCrossScene::Draw()
 	Window::Clear(31, 36, 50);
 
 	if (Debug::Draw) {
-		Simplex::DebugDraw(Tile::size, [this](int x, int y) {
-			return Simplex::raw_noise_2d(randomSeed + x / batClusterSize, y / batClusterSize);
+		SimplexNoise::DebugDraw(Tile::size, [this](int x, int y) {
+			return SimplexNoise().noise(randomSeed + x / batClusterSize, y / batClusterSize);
 		});
 	}
 
