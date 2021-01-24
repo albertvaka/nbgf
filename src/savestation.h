@@ -9,7 +9,7 @@
 
 struct SaveStation : BoxEntity, SelfRegister<SaveStation>
 {
-	[[maybe_unused]] int id;
+	int id;
 	bool hidden; // will be hidden when in a room with enemies
 	bool glowing;
 	bool prevFrameInScene;

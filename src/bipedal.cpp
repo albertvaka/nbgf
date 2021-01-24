@@ -31,7 +31,7 @@ Bipedal::Bipedal(vec pos)
 	, headHitBox(pos + headHitBoxOffset, headHitBoxSize)
 	, legsHitBox(pos + legsHitBoxOffset, legsHitBoxSize)
 {
-	int i = 0;
+	unsigned int i = 0;
 	for (const auto& bounds : TiledAreas::boss_bounds) {
 		if (bounds.Contains(pos)) {
 			break;
