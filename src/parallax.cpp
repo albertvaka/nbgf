@@ -4,7 +4,11 @@
 
 #include "debug.h"
 #include "mates.h"
+
+#ifdef _IMGUI
 #include "imgui.h"
+#endif
+
 #include "collide.h"
 
 void Parallax::Draw() const
@@ -38,9 +42,11 @@ void Parallax::Draw() const
 
 void Parallax::DrawImGUI(const char* title)
 {
+#ifdef _IMGUI
 	ImGui::Begin(title);
 	ImGui::SliderFloat("Depth min:", &depth_min, 0, 1);
 	ImGui::SliderFloat("Depth max:", &depth_max, 0, 1);
 	ImGui::SliderFloat("Base offset:", &base_offset, -500, 500);
 	ImGui::End();
+#endif
 }

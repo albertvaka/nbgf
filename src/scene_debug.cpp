@@ -27,8 +27,6 @@ const Tile ONEWAY_TILE = Tile::ONEWAY_SIMPLE;
 
 static vec map_size = vec(100, Window::GAME_HEIGHT/Tile::size);
 
-static float dummyWalkerVel = 220;
-
 DebugScene::DebugScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
 {
@@ -227,6 +225,7 @@ void DebugScene::Draw()
 #ifdef _IMGUI
 	{
 		ImGui::Begin("debug scene");
+		static float dummyWalkerVel = 220;
 		ImGui::SliderFloat("Walker Vel", &dummyWalkerVel, -500.f, 500.f);
 		if (ImGui::Button("Create Walker")) {
 			new DebugWalker(player.pos - vec(0,player.size.y/2), dummyWalkerVel);
