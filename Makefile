@@ -63,22 +63,38 @@ $(EXEC): $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) Makefile
 
 obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/tiledexport.h Makefile
 	@mkdir -p obj/engine
+	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(call time_end,$@)
 
 obj/%.cpp.o: src/%.cpp engine/*.h src/*.h Makefile
 	@mkdir -p obj
+	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(call time_end,$@)
 
 obj/vendor/%.c.o: vendor/%.c $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
+	$(call time_begin,$@)
 	$(CC) $(CFLAGS) -c $< -o $@
+	$(call time_end,$@)
 
 obj/vendor/%.cpp.o: vendor/%.cpp $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
+	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(call time_end,$@)
 
 clean:
 	$(RM) $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) $(OUT_FILE)
 
 www:
 	emmake $(MAKE)
+
+define time_begin
+	@date +%s%3N > $(1).time
+endef
+
+define time_end
+	@echo "Built $(1) in $$(($$(date +%s%3N)-$$(cat $(1).time))) ms"
+endef
