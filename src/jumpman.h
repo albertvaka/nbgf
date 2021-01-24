@@ -9,6 +9,7 @@
 #include "screen.h"
 #include "debug.h"
 #include "singleinstance.h"
+#include "raw_input.h"
 
 struct SaveState;
 
@@ -49,6 +50,13 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         } else {
             return vec(0, -16);
         }
+    }
+
+    vec GetCameraTargetPos() {
+        // TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
+        vec camPos = (pos * 17 + (pos + Mouse::GetPositionInWindow()) * 2) / 19.f;
+        ScreenManager::instance()->ClampCameraToScreen(camPos);
+        return camPos;
     }
 
     Animation animation;

@@ -137,9 +137,9 @@ void JumpScene::LoadGame() {
 		boss_bipedal->alive = false;
 	}
 
-	Update(0); //Hackish way to make sure the entities with alive=false trigger things on other components before being deleted
-
 	player.LoadGame(saveState);
+
+	Update(0); //Hackish way to make sure the entities with alive=false trigger things on other components before being deleted
 }
 
 void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
@@ -276,20 +276,13 @@ void JumpScene::EnterScene()
 
 	LoadGame();
 
-	Camera::SetCenter(GetCameraTargetPos());
+	Camera::SetCenter(player.GetCameraTargetPos());
 
 	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 }
 
-vec JumpScene::GetCameraTargetPos() {
-	// TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
-	vec camPos = (player.pos * 17 + Mouse::GetPositionInWorld() * 2) / 19.f;
-	screenManager.ClampCameraToScreen(camPos);
-	return camPos;
-}
-
 void JumpScene::UpdateCamera(float dt) {
-	vec camPos = GetCameraTargetPos();
+	vec camPos = player.GetCameraTargetPos();
 	vec oldPos = Camera::Center();
 	vec displacement = camPos - oldPos;
 	displacement.Truncate(camSpeed * dt);
@@ -416,7 +409,7 @@ void JumpScene::Update(float dt)
 	if (Keyboard::IsKeyJustPressed(teleport)) {
 		player.pos = TiledEntities::debug_teleport;
 		screenManager.UpdateCurrentScreen(player.pos);
-		Camera::SetCenter(GetCameraTargetPos());
+		Camera::SetCenter(player.GetCameraTargetPos());
 	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
 		skillTree.Enable(Skill::GUN);

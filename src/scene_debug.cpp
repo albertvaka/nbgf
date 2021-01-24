@@ -159,7 +159,7 @@ void DebugScene::ExitScene()
 }
 
 void DebugScene::UpdateCamera() {
-	vec camPos = (player.pos* 17 + Mouse::GetPositionInWorld()*2) / 19.f;
+	vec camPos = player.GetCameraTargetPos();
 	Camera::SetCenter(camPos);
 	Camera::ClampCameraTo(map.BoundsInWorld());
 }
