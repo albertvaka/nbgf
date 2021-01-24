@@ -1,5 +1,5 @@
 
-EXEC	= bin/gaem2020
+EXEC	= bin/gaem
 
 SRC	= $(wildcard src/*.cpp)
 OBJ	= $(patsubst src/%, obj/%.o, $(SRC))
