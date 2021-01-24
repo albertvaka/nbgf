@@ -1,13 +1,11 @@
 import json
 from jinja2 import Template
 from pathlib import Path
-from collections import defaultdict
+import glob
 
 rects = {}
 
-import glob, os
 for file in glob.glob("*.json"):
-
     with open(file) as json_file:
         data = json.load(json_file)
         for frame in data['frames']:
