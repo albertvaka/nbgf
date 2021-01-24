@@ -112,7 +112,7 @@ void FireSlime::Draw() const
 
 	vec drawPos = pos - vec(0, kSpriteOffsetY/2.f);
 
-	Window::Draw(Assets::marioTexture, drawPos)
+	Window::Draw(Assets::spritesheetTexture, drawPos)
 		.withRect(rect)
 		.withScale(-direction * kSpriteScale, kSpriteScale)
 		.withOrigin(rect.w / 2, rect.h / 2);

@@ -134,7 +134,7 @@ void Goomba::Draw() const
 		drawPos.y -= sinf((timer / exitChargeTime) * M_PI) * 2;
 	}
 
-	Window::Draw(Assets::marioTexture, drawPos)
+	Window::Draw(Assets::spritesheetTexture, drawPos)
 		.withRect(rect)
 		.withOrigin(rect.w / 2, rect.h / 2);
 

@@ -133,7 +133,7 @@ void DebugWalker::Update(float dt)
 
 void DebugWalker::Draw() const {
 
-	Window::Draw(Assets::marioTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos)
 		.withOrigin(center.x, center.y)
 		.withRect(animation.CurrentFrameRect())
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);

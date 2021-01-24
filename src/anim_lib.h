@@ -7,9 +7,9 @@
 namespace AnimLib {
 
 	constexpr const AnimationFrame BUTTON_A_PRESS[] = {
-		{ {0,112,8,8}, 0.1f },
-		{ {8,112,8,8}, 0.25f },
-		{ {0,112,8,8}, 0.4f },
+		{ {448 + 0, 0, 8, 8}, 0.1f },
+		{ {448 + 8, 0, 8, 8}, 0.25f },
+		{ {448 + 0, 0, 8, 8}, 0.4f },
 	};
 
 	constexpr const AnimationFrame MARIO_IDLE[] = {
@@ -82,13 +82,13 @@ namespace AnimLib {
 	};
 
 	constexpr const AnimationFrame MAGIC_EXPLOSION[] = {
-		{ {  9 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
-		{ { 10 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
-		{ { 11 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
-		{ { 12 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
-		{ { 13 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
-		{ { 14 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
-		{ { 15 * 16.f, 10 * 16.f, 16.f, 16.f }, .05f },
+		{ { 128 +  9 * 16.f, 256.f, 16.f, 16.f }, .05f },
+		{ { 128 + 10 * 16.f, 256.f, 16.f, 16.f }, .05f },
+		{ { 128 + 11 * 16.f, 256.f, 16.f, 16.f }, .05f },
+		{ { 128 + 12 * 16.f, 256.f, 16.f, 16.f }, .05f },
+		{ { 128 + 13 * 16.f, 256.f, 16.f, 16.f }, .05f },
+		{ { 128 + 14 * 16.f, 256.f, 16.f, 16.f }, .05f },
+		{ { 128 + 15 * 16.f, 256.f, 16.f, 16.f }, .05f },
 	};
 
 	constexpr const AnimationFrame MANTIS_PREPARE_JUMP[] = {
@@ -157,10 +157,14 @@ namespace AnimLib {
 	};
 
 	constexpr const GPU_Rect BIPEDAL_IDLE = TexturePackerRects::BIPEDALUNIT_IDLE_00;
-	
+
 	constexpr const GPU_Rect FIRESHOT = {437, 5, 6, 6};
 
 	constexpr const GPU_Rect HEALTH_FULL = { 19 * 16, 1 * 16, 16, 16 };
 	constexpr const GPU_Rect HEALTH_EMPTY = { 20 * 16, 1 * 16, 16, 16 };
+
+	constexpr const GPU_Rect BULLET = { 128 + 8 * 16, 256, 16, 16 };
+
+	constexpr const GPU_Rect POLVITO_PARTICLE = { 50.f, 34.f, 2.f, 2.f };
 
 }

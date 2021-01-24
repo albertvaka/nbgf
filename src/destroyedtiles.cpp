@@ -7,7 +7,7 @@
 const float timeToRespawn = 10.f;
 
 DestroyedTiles::DestroyedTiles()
-	: destroyedParticles(Assets::marioTexture)
+	: destroyedParticles(Assets::spritesheetTexture)
 {
 	for (size_t i = 0; i < magic_enum::enum_count<Tile::Value>(); ++i) {
 		destroyedParticles.AddSprite(Tile::tileToTextureRect[i]);

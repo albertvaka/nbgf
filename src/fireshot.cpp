@@ -31,7 +31,7 @@ void FireShot::Update(float dt)
 
 void FireShot::Draw() const
 {
-	Window::Draw(Assets::marioTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRect(AnimLib::FIRESHOT)
 		.withOrigin(AnimLib::FIRESHOT.w / 2, AnimLib::FIRESHOT.h / 2);
 

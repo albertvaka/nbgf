@@ -12,9 +12,7 @@ namespace Assets
 {
 	extern void LoadAll();
 
-	inline GPU_Image* hospitalTexture;
-
-	inline GPU_Image* marioTexture;
+	inline GPU_Image* spritesheetTexture;
 	inline GPU_Image* wheelerTexture;
 	inline GPU_Image* scifiTexture;
 

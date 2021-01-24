@@ -4,6 +4,7 @@
 #include "partsys.h"
 #include "camera.h"
 #include "assets.h"
+#include "anim_lib.h"
 #include "lava.h"
 #include "skilltree.h"
 #include "common_bullet.h"
@@ -48,13 +49,12 @@ void Bullet::Update(float dt)
 
 void Bullet::Draw() const
 {
-	GPU_Rect rect = { 8 * 16, 10 * 16, 16, 16 };
 	float rotation = Rand::roll(0, 360);
 	vec drawPos = pos + Rand::VecInRange(-1, -1, 1, 1);
-	Window::Draw(Assets::hospitalTexture, drawPos)
+	Window::Draw(Assets::spritesheetTexture, drawPos)
 		.withScale(scale)
 		.withOrigin(8, 8)
-		.withRect(rect)
+		.withRect(AnimLib::BULLET)
 		.withRotationDegs(rotation);
 
 	// Debug-only
@@ -65,7 +65,7 @@ void Bullet::InitParticles() {
 	if (particles.texture != nullptr) {
 		return; // It's already been init
 	}
-	particles.SetTexture(Assets::marioTexture);
+	particles.SetTexture(Assets::spritesheetTexture);
 	particles.AddSprite({ 5, 37, 6, 6 });
 
 	float vel = 15;

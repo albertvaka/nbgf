@@ -20,7 +20,7 @@ extern float mainClock;
 Lava::Lava(const BoxBounds& b)
 	: bounds(b)
 	, targetY(b.Top())
-	, lavaPartSys(Assets::marioTexture)
+	, lavaPartSys(Assets::spritesheetTexture)
 {
 	lavaPartSys.AddSprite({ 5 + 16, 37, 6, 6 });
 	lavaPartSys.AddSprite({ 38, 37, 5, 5 });

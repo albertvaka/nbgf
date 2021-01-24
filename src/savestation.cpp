@@ -60,12 +60,12 @@ void SaveStation::Draw() const
 		return;
 	}
 
-	Window::Draw(Assets::marioTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRect(4 * 16, 12 * 16, 32, 32)
 		.withOrigin(16, 16);
 
 	if (glowing) {
-		Window::Draw(Assets::marioTexture, pos)
+		Window::Draw(Assets::spritesheetTexture, pos)
 			.withRect(6 * 16, 12 * 16, 32, 32)
 			.withOrigin(16, 16)
 			.withColor(255, 255, 255, 128 + 128 * sin(mainClock*2));

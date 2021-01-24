@@ -38,7 +38,7 @@ const float camSpeed = 2000;
 const char* kSaveStateGameName = "gaem2020";
 
 JumpScene::JumpScene(int saveSlot)
-	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::marioTexture)
+	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::spritesheetTexture)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
 	, fogPartSys(Assets::fogTexture)
 	, saveSlot(saveSlot)
@@ -571,7 +571,7 @@ void JumpScene::Draw()
 	);
 
 	if (contextActionButton) {
-		Window::Draw(Assets::hospitalTexture, player.Bounds().TopRight() + vec(2, -6))
+		Window::Draw(Assets::spritesheetTexture, player.Bounds().TopRight() + vec(2, -6))
 			.withRect(Animation::GetRectAtTime(AnimLib::BUTTON_A_PRESS, mainClock));
 	}
 
@@ -627,7 +627,7 @@ void JumpScene::Draw()
 		//Assets::fogShader.SetUniform("offset", vec(mainClock*0.2f, 0.f));
 		//Assets::fogShader.SetUniform("time", mainClock);
 		// The texture is not used by the shader at all
-		//Window::Draw(Assets::hospitalTexture, a);
+		//Window::Draw(Assets::spritesheetTexture, a);
 		//Shader::Deactivate();
 	//}
 

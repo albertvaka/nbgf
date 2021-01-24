@@ -52,7 +52,7 @@ const vec crouched_size = vec(16, 22);
 const vec center = vec(8, 16);
 
 JumpMan::JumpMan()
-	: polvito(Assets::hospitalTexture)
+	: polvito(Assets::spritesheetTexture)
 	, animation(AnimLib::MARIO_IDLE)
 	, size(standing_size)
 {
@@ -367,7 +367,7 @@ void JumpMan::TakeDamage(vec src) {
 	Fx::FreezeImage::Freeze(0, 0.25f);
 	vec playerCenter = Bounds().Center();
 	float direction = (playerCenter-src).AngleDegs();
-	new OneShotAnim(Assets::marioTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
+	new OneShotAnim(Assets::spritesheetTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
 	health--;
 }
 
@@ -385,7 +385,7 @@ void JumpMan::Draw() const {
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
-	Window::Draw(Assets::marioTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos)
 		.withOrigin(center.x, size.y)
 		.withRect(animation.CurrentFrameRect())
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
@@ -406,7 +406,7 @@ void JumpMan::Draw() const {
 		if (bfgAngle < 270 || bfgAngle  > 450) {
 			vscale.y = -vscale.y;
 		}
-		Window::Draw(Assets::marioTexture, bfgPos)
+		Window::Draw(Assets::spritesheetTexture, bfgPos)
 			.withRect(rect)
 			.withOrigin(10, 8)
 			.withRotationDegs(bfgAngle)
@@ -423,7 +423,7 @@ void JumpMan::Draw() const {
 
 void JumpMan::DrawGUI() const {
 	for (int i = 0; i < maxHealth; i++) {
-		Window::Draw(Assets::marioTexture, 10 + 16 * i, 10)
+		Window::Draw(Assets::spritesheetTexture, 10 + 16 * i, 10)
 			.withRect(i < health ? AnimLib::HEALTH_FULL : AnimLib::HEALTH_EMPTY);
 	}
 }
@@ -431,7 +431,7 @@ void JumpMan::DrawGUI() const {
 // BRILLI-BRILLI
 
 void JumpMan::InitPolvito() {
-	polvito.AddSprite({ 69.f, 50.f, 2.f, 2.f });
+	polvito.AddSprite(AnimLib::POLVITO_PARTICLE);
 
 	polvito.min_interval = 0.01f;
 	polvito.max_interval = 0.05f;

@@ -13,7 +13,7 @@ extern float mainClock;
 BigItem::BigItem(vec p, Skill s)
 	: BoxEntity(p + vec(8, -8), vec(32, 16))
 	, skill(s)
-	, particles(Assets::marioTexture)
+	, particles(Assets::spritesheetTexture)
 {
 	particles.AddSprite({ 5, 37, 6, 6 });
 	particles.max_vel = vec(0, -12);
@@ -34,18 +34,18 @@ void BigItem::Draw()
 
 	switch(skill) {
 	case Skill::BREAK:
-		Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
+		Window::Draw(Assets::spritesheetTexture, pos.x, pos.y - y)
 			.withOrigin(16, 8)
 			.withRect(8 * 16, 11 * 16, 16, 16);
 		break;
 	case Skill::GUN:
-		Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
+		Window::Draw(Assets::spritesheetTexture, pos.x, pos.y - y)
 			.withOrigin(16, 8)
 			.withRect(0 * 16, 3 * 16, 2 * 16, 16);
 		DrawPedestal();
 		break;
 	case Skill::WALLJUMP:
-		Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
+		Window::Draw(Assets::spritesheetTexture, pos.x, pos.y - y)
 			.withOrigin(16, 8)
 			.withRect(4 * 16, 8 * 16, 2 * 16, 16);
 		DrawPedestal();
@@ -69,15 +69,15 @@ void BigItem::DrawPedestal() {
 
 	//particles.DrawImGUI();
 
-	Window::Draw(Assets::marioTexture, tilePos + vec(-16, 16))
+	Window::Draw(Assets::spritesheetTexture, tilePos + vec(-16, 16))
 		.withRect(5 * 16, 9 * 16, 16, 16);
-	Window::Draw(Assets::marioTexture, tilePos + vec(0, 16))
+	Window::Draw(Assets::spritesheetTexture, tilePos + vec(0, 16))
 		.withRect(5 * 16, 9 * 16, 16, 16);
 	float alpha = abs(sin(mainClock));
-	Window::Draw(Assets::marioTexture, tilePos + vec(-16, 16))
+	Window::Draw(Assets::spritesheetTexture, tilePos + vec(-16, 16))
 		.withRect(6 * 16, 9 * 16, 16, 16)
 		.withColor(255, 255, 255, alpha * 255);
-	Window::Draw(Assets::marioTexture, tilePos + vec(0, 16))
+	Window::Draw(Assets::spritesheetTexture, tilePos + vec(0, 16))
 		.withRect(6 * 16, 9 * 16, 16, 16)
 		.withColor(255, 255, 255, alpha * 255);
 }

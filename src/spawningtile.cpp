@@ -19,7 +19,7 @@ bool SpawningTile::CanSpawn() const {
 
 void SpawningTile::Draw() const {
 	if (spawning) {
-		Window::Draw(Assets::marioTexture, pos)
+		Window::Draw(Assets::spritesheetTexture, pos)
 			.withScale(1.f - time / respawnAnimTime)
 			.withOrigin(Tile::size / 2, Tile::size / 2)
 			.withRect(tile.textureRect());

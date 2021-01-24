@@ -36,7 +36,7 @@ void HealthUp::Draw() const
 
 	float y = 1.5f * -sin(mainClock*2);
 
-	Window::Draw(Assets::marioTexture, pos.x, pos.y - y)
+	Window::Draw(Assets::spritesheetTexture, pos.x, pos.y - y)
 		.withOrigin(8, 8)
 		.withRect(6 * 16, 11 * 16, 16, 16);
 

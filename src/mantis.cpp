@@ -180,7 +180,7 @@ void Mantis::Draw() const
 	}
 
 	GPU_Rect rect = (state == State::JUMP) ? AnimLib::MANTIS_AIR : anim.CurrentFrameRect();
-	Window::Draw(Assets::marioTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRect(rect)
 		.withScale(vel.x> 0? -1: 1, 1)
 		.withOrigin(rect.w / 2, rect.h / 2);

@@ -281,7 +281,7 @@ void SkillTree::DrawMenu() {
 				if (enabled[skill]) {
 					color = { 250, 100, 100, 255 };
 				}
-				Window::Draw(Assets::marioTexture, pos)
+				Window::Draw(Assets::spritesheetTexture, pos)
 					.withRect(rect)
 					.withOrigin(8,8)
 					.withColor(color);

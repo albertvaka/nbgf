@@ -189,7 +189,7 @@ void Bat::Draw() const
 		Assets::tintShader.SetUniform("flashColor", 0.7f, 0.1f, 0.2f, 0.4f);
 	}
 
-	Window::Draw(Assets::marioTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos)
 		.withScale(vel.x < 0 ? 1.f : -1.f, 1.f)
 		.withOrigin(16.f, 14.f)
 		.withRect(anim.CurrentFrameRect());

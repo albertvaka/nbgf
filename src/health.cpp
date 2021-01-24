@@ -31,7 +31,7 @@ void Health::Update(float dt)
 
 void Health::Draw() const
 {
-	Window::Draw(Assets::marioTexture, pos - drawOffset())
+	Window::Draw(Assets::spritesheetTexture, pos - drawOffset())
 		.withOrigin(4, 3)
 		.withScale(0.7f)
 		.withRotationDegs(16.f*sin(pos.y+pos.x+mainClock*5))
@@ -45,7 +45,7 @@ void Health::InitParticles() {
 	if (particles.texture != nullptr) {
 		return; // It's already been init
 	}
-	particles.SetTexture(Assets::marioTexture);
+	particles.SetTexture(Assets::spritesheetTexture);
 	particles.AddSprite({ 353, 18, 4, 4 });
 
 	particles.max_vel = vec(12, -13);

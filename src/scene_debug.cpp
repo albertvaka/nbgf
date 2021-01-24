@@ -30,7 +30,7 @@ static vec map_size = vec(100, Window::GAME_HEIGHT/Tile::size);
 static float dummyWalkerVel = 220;
 
 DebugScene::DebugScene()
-	: map(map_size.x, map_size.y, Assets::marioTexture)
+	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
 {
 	Bullet::InitParticles();
 

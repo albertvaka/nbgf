@@ -46,6 +46,6 @@ inline void RandomlySpawnHealth(vec pos, int percentChance = 10) {
 
 inline void DieWithSmallExplosion(Entity* e) {
 	e->alive = false;
-	new OneShotAnim(Assets::hospitalTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
+	new OneShotAnim(Assets::spritesheetTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	RandomlySpawnHealth(e->pos);
 }

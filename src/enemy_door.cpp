@@ -106,7 +106,7 @@ void EnemyDoor::Update(float dt)
 
 void EnemyDoor::Draw() const
 {
-	Window::Draw(Assets::marioTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos)
 		.withOrigin(0, 0)
 		.withRect({ 7 * 16, 6 * 16, 16, 16 });
 }

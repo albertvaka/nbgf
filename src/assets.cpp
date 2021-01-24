@@ -4,9 +4,7 @@
 
 void Assets::LoadAll() {
 
-    hospitalTexture = LoadImage("data/spritesheet.png");
-
-    marioTexture = LoadImage("data/mario.png");
+    spritesheetTexture = LoadImage("data/spritesheet.png");
     wheelerTexture = LoadImage("data/boss_wheeler.png");
     scifiTexture = LoadImage("data/scifi.png");
 
