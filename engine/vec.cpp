@@ -1,7 +1,5 @@
 #include "vec.h"
 
-const vec vec::Zero(0.f, 0.f);
-
 vec vec::RotatedToFacePositionRads(vec target, float maxTurnRateRads) const
 {
 	vec toTarget = (target - *this).Normalized();

@@ -198,6 +198,8 @@ struct vec
 #endif
 };
 
+constexpr vec vec::Zero = vec(0,0);
+
 inline float vec::Length() const
 {
 	return sqrt(x * x + y * y);
@@ -451,3 +453,4 @@ inline std::ostream& operator<<(std::ostream& os, vec rhs)
 	os << rhs.x << "," << rhs.y;
 	return os;
 }
+
