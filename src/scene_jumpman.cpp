@@ -178,6 +178,7 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 void JumpScene::EnterScene()
 {
 	player.Reset(TiledEntities::spawn);
+	skillTree.Reset();
 
 	map.LoadFromTiled();
 

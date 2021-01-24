@@ -2,6 +2,7 @@
 
 #include "singleinstance.h"
 #include <vector>
+#include <algorithm>    // std::fill
 #include "text.h"
 
 enum class Skill {
@@ -31,6 +32,10 @@ struct SkillTree : SingleInstance<SkillTree>
 
 	void Enable(Skill s) {
 		enabled[int(s)] = true;
+	}
+
+	void Reset() {
+		std::fill(enabled.begin(), enabled.end(), false);
 	}
 
 	int gunpoints = 0;
