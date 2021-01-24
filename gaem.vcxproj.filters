@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui_sfml\imgui-SFML.cpp" />
+    <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\rand.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui_sfml\imconfig-SFML.h" />
+    <ClInclude Include="imgui_sfml\imgui-SFML.h" />
+    <ClInclude Include="imgui_sfml\imgui-SFML_export.h" />
+    <ClInclude Include="src\animation.h" />
+    <ClInclude Include="src\anim_data.h" />
+    <ClInclude Include="src\bounds.h" />
+    <ClInclude Include="src\cleaner.h" />
+    <ClInclude Include="src\collider.h" />
+    <ClInclude Include="src\entity.h" />
+    <ClInclude Include="src\extremity.h" />
+    <ClInclude Include="src\lever.h" />
+    <ClInclude Include="src\mesa.h" />
+    <ClInclude Include="src\cadaver.h" />
+    <ClInclude Include="src\player.h" />
+    <ClInclude Include="src\selfregister.h" />
+    <ClInclude Include="src\entity_system.h" />
+    <ClInclude Include="src\game_data.h" />
+    <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\mates.h" />
+    <ClInclude Include="src\rand.h" />
+    <ClInclude Include="src\spawner.h" />
+    <ClInclude Include="src\vector.h" />
+    <ClInclude Include="src\popupText.h" />
+    <ClInclude Include="src\door.h" />
+    <ClInclude Include="src\tile.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\cinta.h" />
+    <Text Include="src\taca.h" />
+  </ItemGroup>
+</Project>
