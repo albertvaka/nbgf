@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClInclude Include="engine\angles.h" />
     <ClInclude Include="engine\animation.h" />
-    <ClInclude Include="engine\anim_frame.h" />
+    <ClInclude Include="engine\animation_frame.h" />
     <ClInclude Include="engine\asset_load.h" />
     <ClInclude Include="engine\bounds.h" />
     <ClInclude Include="engine\camera.h" />

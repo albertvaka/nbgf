@@ -4,6 +4,7 @@
 #include "bullet.h"
 #include "mates.h"
 #include "assets.h"
+#include "anim_lib.h"
 #include "fx.h"
 #include "oneshotanim.h"
 #include "debug.h"

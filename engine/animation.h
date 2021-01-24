@@ -3,8 +3,7 @@
 #include "SDL_gpu.h"
 
 #include "vec.h"
-
-#include "../src/anim_lib.h"
+#include "animation_frame.h"
 
 struct Animation
 {

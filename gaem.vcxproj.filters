@@ -199,9 +199,6 @@
     <ClInclude Include="engine\rand.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="engine\anim_frame.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="engine\angles.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -335,6 +332,9 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\window_drawraw.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\animation_frame.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>

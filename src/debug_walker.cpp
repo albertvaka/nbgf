@@ -2,6 +2,7 @@
 
 #include "mates.h"
 #include "assets.h"
+#include "anim_lib.h"
 #include "window.h"
 #include "common_tilemapcharacter.h"
 #include "debug.h"

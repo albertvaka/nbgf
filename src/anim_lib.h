@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../engine/anim_frame.h"
+#include "animation_frame.h"
 
 #include "texturepackerexport.h"
 

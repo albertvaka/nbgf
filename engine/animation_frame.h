@@ -2,6 +2,8 @@
 
 #include "SDL_gpu.h"
 
+#include "vec.h"
+
 struct AnimationFrame
 {
 	const GPU_Rect rect;
