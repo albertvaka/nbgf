@@ -37,7 +37,7 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 	- [Changing scenes](#changing-scenes-scenemanager)
 - [Drawing on screen 1 (the basics)](#drawing-on-screen-1-the-basics)
 	- [Drawing images](#drawing-images)
-	- [Animated sprites](#animated-sprites)
+	- [Spritesheets and animated sprites](#spritesheets-and-animated-sprites)
 	- [Rendering text](#rendering-text)
 	- [Clearing the window](#clearing-the-window)
 	- [The camera](#the-camera)
@@ -56,6 +56,7 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 	- [Gamepad input](#gamepad-input)
 - [Drawing on screen 2 (the advanced stuff)](#drawing-on-screen-2-the-advanced-stuff)
 	- [Particle systems](#particle-systems)
+	- [Tile maps](#tile-maps)
 	- [Using shaders](#using-shaders)
 	- [Screen effects](#screen-effects)
 		- [Screenshake](#screenshake)
@@ -78,6 +79,9 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 	- [Fast forward](#fast-forward)
 	- [Imgui](#imgui)
 	- [Printing text](#printing-text)
+- [Importers](#importers)
+	- [Tiled importer](#tiled-importer)
+	- [TexturePacker importer](#texturepacker-importer)
 
 ## Loading assets
 
@@ -149,9 +153,48 @@ Window::Draw(Assets::mySprite, position)
 
 Find all the supported transformations in the definition of `Window::Draw` in [`engine/window_draw.h`](engine/window_draw.h) file.
 
-### Animated sprites
+### Spritesheets and animated sprites
 
-TODO
+It is possible to draw only a portion of an image, which lets you use spritesheets. The follow code will draw a rectangle of 16*16 pixels starting at (`32,32`) from `Assets::mySprite` on the top left corner of the screen:
+
+```
+Window::Draw(Assets::mySprite, vec(0,0))
+	.withRect(32,32,16,16);
+```
+
+A common use for spritesheets are sprite animations. You can use the [`Animation`](engine/animation.h) class to play them.
+
+First, create an array of [`AnimationFrame`](engine/animation.h), with the spritesheet coordinates and the duration of each frame (in seconds):
+
+```
+constexpr const AnimationFrame EnemyWalkingFrames[] = {
+	{ {  0, 0, 32, 32 }, 0.1f },
+	{ { 32, 0, 32, 32 }, 0.1f },
+	{ { 64, 0, 32, 32 }, 0.1f },
+	{ { 96, 0, 32, 32 }, 0.3f },
+};
+```
+
+Then create an `Animation` object:
+
+```
+Animation animation(EnemyWalkingFrames);
+```
+
+You must update the animation each frame:
+
+```
+animation.Update(dt);
+```
+
+And finally use it to find the current frame to draw:
+
+```
+Window::Draw(Assets::mySprite, vec(0,0))
+	.withRect(animation.CurrentFrameRect());
+```
+
+You can also change the animation that is playing without any additional changes to your `Draw` function, by using `anim.Set(newAnimFrames)` or `anim.Ensure(newAnimFrames)`. Check the [`engine/animation.h`](engine/animation.h) header for everything `Animation` can do.
 
 ### Rendering text
 
@@ -287,6 +330,10 @@ TODO
 
 TODO
 
+### Tile maps
+
+TODO
+
 ### Using shaders
 
 TODO
@@ -408,3 +455,15 @@ Use the `Debug::out` stream to print to stdout like you would with `std::cout` b
 The classes `vec`, `BoxBounds`, `CircleBounds` and `GPU_Rect` all can be streamed to `Debug::out` and have a text representation.
 
 On Windows, the Debug build of the game will also open a terminal window so you can see the stdout output.
+
+## Importers
+
+Python scripts are provided to generate C++ code from Tiled and TexturePacker projects. By using code generation, you compiler can ensure that all the resources you reference exist (avoiding runtime-only errors), and your IDE con provide code completion for them.
+
+### Tiled importer
+
+TODO
+
+### TexturePacker importer
+
+TODO
