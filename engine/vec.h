@@ -198,7 +198,7 @@ struct vec
 #endif
 };
 
-constexpr vec vec::Zero = vec(0,0);
+inline constexpr vec vec::Zero = vec(0,0);
 
 inline float vec::Length() const
 {
