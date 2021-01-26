@@ -1,6 +1,8 @@
 
 EXEC	= bin/gaem
 
+.PHONY = clean run www
+
 SRC	= $(wildcard src/*.cpp)
 OBJ	= $(patsubst src/%, obj/%.o, $(SRC))
 
@@ -90,6 +92,9 @@ clean:
 
 www:
 	emmake $(MAKE)
+
+run: $(EXEC)
+	@$(EXEC)
 
 define time_begin
 	@date +%s%3N > $(1).time
