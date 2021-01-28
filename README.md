@@ -53,7 +53,8 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 	- [Actions-based input](#actions-based-input)
 	- [Keyboard input](#keyboard-input)
 	- [Mouse input](#mouse-input)
-	- [Gamepad input](#gamepad-input)
+	- [GamePad input](#gamepad-input)
+- [Random](#random)
 - [Drawing on screen 2 (the advanced stuff)](#drawing-on-screen-2-the-advanced-stuff)
 	- [Particle systems](#particle-systems)
 	- [Tile maps](#tile-maps)
@@ -131,7 +132,7 @@ Games are split in scenes. All scenes should inherit from the [`Scene`](engine/s
 
 ### EntryPointScene
 
-When the game starts, it will load your `EntryPointScene` defined in [`src/scene_entrypoint.h`](src/scene_entrypoint.h). `EntryPointScene` is meant to be a `typedef` to your actual scene class, unless you want to name your scene `EntryPointScene`.
+When the game starts, it will load the `EntryPointScene` you have defined in [`src/scene_entrypoint.h`](src/scene_entrypoint.h). `EntryPointScene` is meant to be a `typedef` to your actual scene class (unless you want to name your scene `EntryPointScene`).
 
 ### Changing scenes: [`SceneManager`](engine/scene_manager.h)
 
@@ -237,19 +238,30 @@ To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolum
 
 To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::IsPlaying()`, `MusicPlayer::Pause()`, `MusicPlayer::Resume()`, `MusicPlayer::Stop()` and `MusicPlayer::SetVolume(<0-100>)`. See `engine/musicplayer.h`.
 
+## Points and vectors: the [`vec`](engine/vec.h) struct
+
+You will be using lots of (x,y) pairs when making your game. If you are lazy like me, you will appreciate this struct is only 3 letters long. You should pass `vec` arguments by value.
+
+The `vec` struct has all the goodies you can image: `+`, `-`, `/` and `*` operators, methods to rotate, normalize, get the lenght... See the definitions in the [`engine/vec.h`](engine/vec.h) header.
+
 ## Entities and SelfRegister
 
 You can organize your game code however you like but, if I were you, I would define classes for my different game entities (enemies, powerups, bullets, player...) and make them extend `Entity` and `SelfRegister`.
 
 Inheriting `MyClass` from `SelfRegister<MyClass>`, will give you a `MyClass::GetAll()` method that will return all the instances of `MyClass` you have created (and not destroyed yet). Use it as follows:
 
-TODO
+```
+new Enemy(1);
+new Enemy(2); // No need to store these anywhere
 
-## Points and vectors: the [`vec`](engine/vec.h) struct
+for (Enemy* e : Enemy::GetAll()) {
+	e->Update(dt);
+}
+```
 
-You will be using lots of (x,y) pairs when making your game. If you are lazy like me, you will appreciate this struct is only 3 letters long. You should pass `vec` arguments by value.
+`SelfRegister<MyClass>` also provides the `MyClass::DeleteAll()` and `MyClass::DeleteNotAlive()` methods, meant to be used on `ExitScene` and at the end of each frame, respectively. To use `DeleteNotAlive` your class must contain an `alive` boolean, and will destroy your objects if it is `true`. Waiting to delete your entities until the end of the frame can help you avoid use-after-free bugs: just make sure to let go any pointers to entities where `alive` is `false`.
 
-The `vec` struct has all the goodies you can image: `+`, `-`, `/` and `*` operators, methods to rotate, normalize, get the lenght... See the definitions in the [`engine/vec.h`](engine/vec.h) header.
+Inheriting from `Entity` already gives you an `alive` boolean in your class, as well as a `pos` and `vel` vectors (which you probably want to have on all objects). Feel free to add any other properties in common to all your game entities.
 
 ## Bounding boxes and collisions
 
@@ -304,23 +316,56 @@ This skips checking both `Collide(a,b)` and `Collide(b,a)` for the same pair of 
 
 ## Input
 
-TODO
-
 ### Actions-based input
 
-TODO
+The Input class is an abstraction over the different input methods which uses actions (eg: "jump", "move left") as your input events. Each action can then be mapped to keys on a gamepad, keyboard and/or mouse for each player.
+
+Define your game actions in the `GameKeys` enum in [`src/input_conf.h`](src/input_conf.h) and initialize the mapping in `MapGameKeys` in [`src/input_conf.cpp`](src/input_conf.cpp). The mapping consists of an array of `std::functions` indexed by `GameKeys`, where each function should return true if the given action key/button is pressed. See the next sections about how to query each separate input method.
+
+Eg:
+```
+    action_mapping[(int)GameKeys::JUMP] = [](int p) // p is the player number, 0-based
+    {
+		// Gamepad: jump with X or joystick up
+        if (GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
+			GamePad::AnalogStick::Left.get(p).y < -50.0f) {
+				return true;
+		}
+		if (p == 0) {
+			// Player 1 keyboard: jump with W
+			return Keyboard::IsKeyPressed(SDL_SCANCODE_W);
+		} else {
+			// Player 2 keyboard: jump with arrow up
+			return Keyboard::IsKeyPressed(SDL_SCANCODE_UP);
+		}
+    };
+```
+
+To query if an action is being pressed, use the `Input` class defined in [`engine/input.h`](engine/input.h):
+
+```
+if (Input::IsJustPressed(player, GameKeys::Jump)) {
+	// ...
+}
+```
+
+Check the [`engine/input.h`](engine/input.h) header for everything `Input` can do.
 
 ### Keyboard input
 
-TODO
+The `Keyboard` struct is defined in [`engine/raw_input.h`](engine/raw_input.h). It contains the `IsKeyPressed`, `IsKeyJustPressed`, `IsKeyReleased` and `IsKeyJustReleased` static functions, which directly take an [`SDL_Scancode`](https://wiki.libsdl.org/SDL_Scancode).
 
 ### Mouse input
 
-TODO
+The `Mouse` struct is defined in [`engine/raw_input.h`](engine/raw_input.h), with functions to access the buttons, scrollwheel and cursor position. The position can be queried both in world coordinates (affected by the camera position and zoom) or in window coordinates (in virtual, scaled pixels, between `0,0` and `GAME_WIDTH,GAME_HEIGHT`).
 
-### Gamepad input
+### GamePad input
 
-TODO
+The `GamePad` struct is defined in [`engine/raw_input.h`](engine/raw_input.h) with functions to access the buttons (as [`SDL_GameControllerButton`](https://wiki.libsdl.org/SDL_GameControllerButton)) as well as the analog joytsticks (as `GamePad::AnalogStick::Left` and `GamePad::AnalogStick::Right`) and triggers (as `GamePad::Trigger::Left` and `GamePad::Trigger::Right`).
+
+## Random
+
+The `Rand` and `GoodRand` namespaces provide a source of RNG for your speedruners to hate. See the definition in [`engine/rand.h`](engine/rand.h) for a list of available methods. `Rand` is faster but "less random" than `GoodRand`, use the second if making something serious like a poker game where people play with real money.
 
 ## Drawing on screen 2 (the advanced stuff)
 
