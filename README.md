@@ -249,7 +249,7 @@ for (Enemy* e : Enemy::GetAll()) {
 
 `SelfRegister<MyClass>` also provides the `MyClass::DeleteAll()` and `MyClass::DeleteNotAlive()` methods, meant to be used on `ExitScene` and at the end of each frame, respectively. To use `DeleteNotAlive` your class must contain an `alive` boolean, and will destroy your objects if it is `true`. Waiting to delete your entities until the end of the frame can help you avoid use-after-free bugs: just make sure to let go any pointers to entities where `alive` is `false`.
 
-Inheriting from `Entity` already gives you an `alive` boolean in your class, as well as a `pos` and `vel` vectors (which you probably want to have on all objects). It's a good idea to edit this class to add any other properties in common to all your game entities.
+Inheriting from `Entity` already gives you an `alive` boolean in your class, as well as two vectors `pos` and `vel` (which you probably want to have on all objects). It's a good idea to edit this class to add any other properties in common to all your game entities.
 
 ## Points and vectors: the [`vec`](engine/vec.h) struct
 
@@ -350,21 +350,23 @@ Check the [`engine/input.h`](engine/input.h) header for everything `Input` can d
 
 ### Keyboard input
 
-The `Keyboard` struct is defined in [`engine/raw_input.h`](engine/raw_input.h). It contains the `IsKeyPressed`, `IsKeyJustPressed`, `IsKeyReleased` and `IsKeyJustReleased` static functions, which directly take an [`SDL_Scancode`](https://wiki.libsdl.org/SDL_Scancode).
+The `Keyboard` struct is defined in [`engine/raw_input.h`](engine/raw_input.h). It contains the `IsKeyPressed`, `IsKeyJustPressed`, `IsKeyReleased` and `IsKeyJustReleased` static functions, which take an [`SDL_Scancode`](https://wiki.libsdl.org/SDL_Scancode) and return a `bool`.
 
 ### Mouse input
 
-The `Mouse` struct is defined in [`engine/raw_input.h`](engine/raw_input.h), with functions to access the buttons, scrollwheel and cursor position. The position can be queried both in world coordinates (affected by the camera position and zoom) or in window coordinates (in virtual, scaled pixels, between `0,0` and `GAME_WIDTH,GAME_HEIGHT`).
+The `Mouse` struct is defined in [`engine/raw_input.h`](engine/raw_input.h). It contains functions to access the buttons, scrollwheel and cursor position. The position can be queried both in world coordinates (affected by the camera position and zoom) or in window coordinates (in virtual, scaled pixels, between `0,0` and `GAME_WIDTH,GAME_HEIGHT`).
 
 ### GamePad input
 
-The `GamePad` struct is defined in [`engine/raw_input.h`](engine/raw_input.h) with functions to access the buttons (as [`SDL_GameControllerButton`](https://wiki.libsdl.org/SDL_GameControllerButton)) as well as the analog joytsticks (as `GamePad::AnalogStick::Left` and `GamePad::AnalogStick::Right`) and triggers (as `GamePad::Trigger::Left` and `GamePad::Trigger::Right`).
+The `GamePad` struct is defined in [`engine/raw_input.h`](engine/raw_input.h). It contains functions to access the buttons (given as [`SDL_GameControllerButton`](https://wiki.libsdl.org/SDL_GameControllerButton)) as well as the position of analog joytsticks (as `GamePad::AnalogStick::Left` and `GamePad::AnalogStick::Right`) and triggers (as `GamePad::Trigger::Left` and `GamePad::Trigger::Right`).
 
 ## Random
 
-The `Rand` and `GoodRand` namespaces provide a source of RNG for your speedruners to hate. See the available functions in [`engine/rand.h`](engine/rand.h).
+The `Rand` and `GoodRand` namespaces defined in in [`engine/rand.h`](engine/rand.h) provide a source of RNG for your speedruners to hate.
 
 `Rand` is faster but "less random" than `GoodRand`: use the second if making something serious like a poker game where people play with real money.
+
+The `Rand::OnceEvery(n)` and `Rand::PercentChance(percentage)` functions are very expresive and awesome, use them. You also have `Rand::VecInRange` and `Rand::DirInCircle` functions which return a `vec`.
 
 ## Playing sounds and music
 
@@ -500,7 +502,7 @@ The `ParticleSys` class has a `DrawImGUI()` function that shows an ImGUI window 
 
 ### Printing text
 
-Use the `Debug::out` stream to print to stdout like you would with `std::cout` but without having to end with `std::endl` (a newline is added automatically).
+Use the `Debug::out` stream to print to stdout, like you would with `std::cout` but without having to end with `std::endl` (a newline is added automatically).
 
 The classes `vec`, `BoxBounds`, `CircleBounds` and `GPU_Rect` all can be streamed to `Debug::out` and have a text representation.
 
