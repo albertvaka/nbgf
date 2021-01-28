@@ -21,7 +21,7 @@ namespace Rand
 	[[nodiscard]] inline bool PercentChance(int percent) { return roll(0, 100) < percent; }
 
 	// Unit vector in a random direction
-	[[nodiscard]] inline vec dirInCircle()
+	[[nodiscard]] inline vec DirInCircle()
 	{
 		float ang = rollf(0.0f, 360.0f);
 
@@ -31,10 +31,10 @@ namespace Rand
 	}
 
 	// Randoms-sized vector in a random direction
-	[[nodiscard]] inline vec posInsideCircle(float radius)
+	[[nodiscard]] inline vec PosInsideCircle(float radius)
 	{
 		float r = rollf(0.0f, radius);
-		return dirInCircle()*r;
+		return DirInCircle()*r;
 	}
 
 	[[nodiscard]] inline vec VecInRange(float minX, float minY, float maxX, float maxY) {
