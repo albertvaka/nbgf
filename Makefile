@@ -63,7 +63,7 @@ endif
 $(EXEC): $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) Makefile
 	$(CXX) $(LDFLAGS) $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) -o $(OUT_FILE)
 
-obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/tiledexport.h Makefile
+obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h Makefile
 	@mkdir -p obj/engine
 	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@

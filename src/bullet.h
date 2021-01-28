@@ -1,26 +1,41 @@
 #pragma once
 
 #include "entity.h"
-#include "partsys.h"
+#include "anim_lib.h"
 #include "selfregister.h"
+#include "assets.h"
+#include "window.h"
+#include "camera.h"
+
+extern float mainClock;
 
 struct Bullet : CircleEntity, SelfRegister<Bullet>
 {
-	float scale;
+	vec vel;
 
-	static inline PartSys particles = PartSys(nullptr);
-	static void InitParticles();
-
-	Bullet(vec position, vec velocity, float _scale = 1.f) {
+	Bullet(const vec& position, const vec& velocity)
+		: CircleEntity(pos, 10)
+	{
 		pos = position;
 		vel = velocity;
-		radius = 5 * _scale;
-		scale = _scale;
 	}
 
-	void explode();
+	void Update(float dt)
+	{
+		pos += vel * dt;
 
-	void Update(float dt);
-	void Draw() const;
+		if (!Camera::Bounds().Contains(pos)) {
+			alive = false;
+		}
+	}
 
+	void Draw() const
+	{
+		const GPU_Rect& rect = AnimLib::BULLET;
+		Window::Draw(Assets::invadersTexture, pos)
+			.withRect(rect)
+			.withOrigin(vec(rect.w,rect.h)/2)
+			.withRotationDegs(Camera::Center().AngleDegs(pos) + 90)
+			.withScale(int(mainClock*4)%2 ? -1 : 1, 1);
+	}
 };

@@ -2,39 +2,25 @@
 
 #include <array>
 
-#include "SDL_gpu.h"
 #include "sound.h"
-#include "musicplayer.h"
 #include "shader.h"
+
+struct GPU_Image;
 typedef struct _TTF_Font TTF_Font;
+typedef struct _Mix_Music Mix_Music;
 
-namespace Assets
+struct Assets
 {
-	extern void LoadAll();
+	static void LoadAll();
 
-	inline GPU_Image* spritesheetTexture;
-	inline GPU_Image* wheelerTexture;
-	inline GPU_Image* scifiTexture;
+	static GPU_Image* invadersTexture;
+	
+	static GPU_Image* backgroundTexture;
 
-	inline GPU_Image* menuBgTexture;
+	static TTF_Font* font_30;
+	static TTF_Font* font_30_outline;
 
-	inline GPU_Image* fogTexture;
-
-	inline TTF_Font* font_30;
-	inline TTF_Font* font_30_outline;
-
-	inline Shader tintShader;
-	inline Shader fogShader;
-	inline Shader waveShader;
-	inline Shader fadeInDiamondsShader;
-	inline Shader fadeOutDiamondsShader;
-	inline Shader fadeOutCircleShader;
-
-	inline Sound soundDeath;
-
-	inline std::array<GPU_Image*, 3> forestParallaxTextures;
-	inline std::array<GPU_Image*, 4> caveParallaxTextures;
-	inline std::array<GPU_Image*, 4> islandParallaxTextures;
+	static Shader tintShader;
 
 };
 
