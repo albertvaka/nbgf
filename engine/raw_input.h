@@ -17,28 +17,14 @@ enum KeyStates { JUST_RELEASED, RELEASED, JUST_PRESSED, PRESSED };
 
 struct GamePad
 {
+	static const int MAX_GAMEPADS = 4;
 
-private:
-	GamePad() { }
+	static bool IsButtonPressed(int player, SDL_GameControllerButton b) { return (button_states[player][b] == PRESSED || button_states[player][b] == JUST_PRESSED); }
+	static bool IsButtonJustPressed(int player, SDL_GameControllerButton b) { return (button_states[player][b] == JUST_PRESSED); }
+	static bool IsButtonReleased(int player, SDL_GameControllerButton b) { return (button_states[player][b] == RELEASED || button_states[player][b] == JUST_RELEASED); }
+	static bool IsButtonJustReleased(int player, SDL_GameControllerButton b) { return (button_states[player][b] == JUST_RELEASED); }
 
-	static const int max_gamepads = 4;
-
-	static KeyStates button_states[max_gamepads][SDL_CONTROLLER_BUTTON_MAX];
-	static SDL_GameController* joysticks[max_gamepads];
-
-	static KeyStates calculateJustPressed(bool pressed, KeyStates state);
-
-public:
-
-	static inline int ConnectedGamepads() {
-		int a = 0;
-		for (SDL_GameController* c : joysticks) {
-			if (c != nullptr) {
-				a++;
-			}
-		}
-		return a;
-	}
+	static int ConnectedGamepads();
 
 	struct Trigger
 	{
@@ -50,7 +36,7 @@ public:
 			bool IsReleased(int player) { return (state[player] == RELEASED || state[player] == JUST_RELEASED); }
 			bool IsJustReleased(int player) { return (state[player] == JUST_RELEASED); }
 		private:
-			KeyStates state[max_gamepads];
+			KeyStates state[MAX_GAMEPADS];
 		};
 		struct LeftTrigger : public TriggerBase
 		{
@@ -96,15 +82,19 @@ public:
 		SDL_GameControllerAxis x, y;
 	};
 
-	static bool IsButtonPressed(int player, SDL_GameControllerButton b) { return (button_states[player][b] == PRESSED || button_states[player][b] == JUST_PRESSED); }
-	static bool IsButtonJustPressed(int player, SDL_GameControllerButton b) { return (button_states[player][b] == JUST_PRESSED); }
-	static bool IsButtonReleased(int player, SDL_GameControllerButton b) { return (button_states[player][b] == RELEASED || button_states[player][b] == JUST_RELEASED); }
-	static bool IsButtonJustReleased(int player, SDL_GameControllerButton b) { return (button_states[player][b] == JUST_RELEASED); }
-
-	static void _UpdateInputState__XboxNormal(SDL_GameController* joy, int player);
+	static void _UpdateInputState__Xbox(SDL_GameController* joy, int player);
 	static void _UpdateInputState();
 	static void _Added(SDL_GameController* joystick);
 	static void _Removed(SDL_GameController* joystick);
+
+private:
+	GamePad() { }
+
+	static KeyStates button_states[MAX_GAMEPADS][SDL_CONTROLLER_BUTTON_MAX];
+	static SDL_GameController* joysticks[MAX_GAMEPADS];
+
+	static KeyStates calculateJustPressed(bool pressed, KeyStates state);
+
 };
 
 //KEYBOARD ACCESS

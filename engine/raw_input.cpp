@@ -9,8 +9,8 @@ const GamePad::AnalogStick GamePad::AnalogStick::Left(SDL_CONTROLLER_AXIS_LEFTX,
 const GamePad::AnalogStick GamePad::AnalogStick::Right(SDL_CONTROLLER_AXIS_RIGHTX, SDL_CONTROLLER_AXIS_RIGHTY);
 GamePad::Trigger::LeftTrigger GamePad::Trigger::Left;
 GamePad::Trigger::RightTrigger GamePad::Trigger::Right;
-SDL_GameController* GamePad::joysticks[max_gamepads];
-KeyStates GamePad::button_states[max_gamepads][SDL_CONTROLLER_BUTTON_MAX];
+SDL_GameController* GamePad::joysticks[MAX_GAMEPADS];
+KeyStates GamePad::button_states[MAX_GAMEPADS][SDL_CONTROLLER_BUTTON_MAX];
 
 KeyStates Mouse::button_states[magic_enum::enum_count<Button>()] = { RELEASED };
 float Mouse::scrollWheel = 0;
@@ -20,6 +20,17 @@ vec Mouse::oldPos(0, 0);
 Uint8 Keyboard::state_buffers[2][SDL_NUM_SCANCODES] = { { 0 } };
 Uint8* Keyboard::state = state_buffers[0];
 Uint8* Keyboard::prev_state = state_buffers[1];
+
+int GamePad::ConnectedGamepads()
+{
+    int a = 0;
+    for (SDL_GameController* c : joysticks) {
+        if (c != nullptr) {
+            a++;
+        }
+    }
+    return a;
+}
 
 KeyStates GamePad::calculateJustPressed(bool pressed, KeyStates state)
 {
@@ -48,7 +59,7 @@ KeyStates GamePad::calculateJustPressed(bool pressed, KeyStates state)
     return state;
 }
 
-void GamePad::_UpdateInputState__XboxNormal(SDL_GameController* joystick, int player)
+void GamePad::_UpdateInputState__Xbox(SDL_GameController* joystick, int player)
 {
     for (int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; i++)
     {
@@ -68,7 +79,7 @@ void GamePad::_UpdateInputState__XboxNormal(SDL_GameController* joystick, int pl
 
 void GamePad::_Added(SDL_GameController* joystick) {
     Debug::out << "Added joystick " << joystick;
-    for (int player = 0; player < max_gamepads; player++) {
+    for (int player = 0; player < MAX_GAMEPADS; player++) {
         if (!joysticks[player]) {
             joysticks[player] = joystick;
             break;
@@ -78,7 +89,7 @@ void GamePad::_Added(SDL_GameController* joystick) {
 
 void GamePad::_Removed(SDL_GameController* joystick) {
     Debug::out << "Removed joystick " << joystick;
-    for (int player = 0; player < max_gamepads; player++) {
+    for (int player = 0; player < MAX_GAMEPADS; player++) {
         if (joystick == joysticks[player]) {
             joysticks[player] = nullptr;
             break;
@@ -87,10 +98,10 @@ void GamePad::_Removed(SDL_GameController* joystick) {
 }
 
 void GamePad::_UpdateInputState() {
-    for (int player = 0; player < max_gamepads; player++) {
+    for (int player = 0; player < MAX_GAMEPADS; player++) {
         SDL_GameController* joystick = joysticks[player];
         if (joystick) {
-            _UpdateInputState__XboxNormal(joystick, player);
+            _UpdateInputState__Xbox(joystick, player);
         }
         else {
             for (int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; i++) {
