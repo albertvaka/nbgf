@@ -21,53 +21,49 @@ struct Input {
 		return false;
 	}
 
-	static bool IsJustPressed(int player, GameKeys k) {
-		return (action_states[player][int(k)] == JUST_PRESSED);
-	}
-
-	static bool IsJustPressedAnyPlayer(GameKeys k) {
-		for (int i = 0; i < kMaxPlayers; i++) {
-			if (IsJustPressed(i, k)) return true;
-		}
-		return false;
-	}
-
-	static bool IsJustPressed(int player, GameKeys k, float interval) {
-		return action_states[player][int(k)] == JUST_PRESSED || (action_states[player][int(k)] == PRESSED && action_times[player][int(k)] < interval);
-	}
-
 	static bool IsReleased(int player, GameKeys k) {
 		return (action_states[player][int(k)] == RELEASED || action_states[player][int(k)] == JUST_RELEASED);
 	}
 
+	// True for one frame after the action is pressed
+	static bool IsJustPressed(int player, GameKeys k) {
+		return (action_states[player][int(k)] == JUST_PRESSED);
+	}
+
+	// True for `interval` time after the key is pressed
+	static bool IsJustPressed(int player, GameKeys k, float interval) {
+		return action_states[player][int(k)] == JUST_PRESSED || (action_states[player][int(k)] == PRESSED && action_times[player][int(k)] < interval);
+	}
+
+	// True for one frame after the action is pressed
 	static bool IsJustReleased(int player, GameKeys k) {
 		return (action_states[player][int(k)] == JUST_RELEASED);
 	}
 
+	// True for `interval` time after the key is pressed
 	static bool IsJustReleased(int player, GameKeys k, float interval) {
 		return action_states[player][int(k)] == JUST_RELEASED || (action_states[player][int(k)] == RELEASED && action_times[player][int(k)] < interval);
 	}
 
+	// Consume a just pressed event so the next call to IsJustPressed for that action returns false
 	static void ConsumeJustPressed(int player, GameKeys k) {
 		action_states[player][int(k)] = PRESSED;
 		action_times[player][int(k)] += 1000.f;
 	}
 
+	// Consume a just released event so the next call to IsJustReleased for that action returns false
 	static void ConsumeJustReleased(int player, GameKeys k) {
 		action_states[player][int(k)] = RELEASED;
 		action_times[player][int(k)] += 1000.f;
 	}
 
-	static void Init();
+	// Called from main.cpp
 	static void Update(float dt);
+	static void Init();
 
 private:
-	static int keyboard_player_id; //max 1 player on keyboard
-	static void MapGameKeysToGamePad();
-	static void MapGameKeysToKeyboard();
-	static std::function<bool()> kb_map[magic_enum::enum_count<GameKeys>()];
-	static std::function<bool(int)> gp_map[magic_enum::enum_count<GameKeys>()];
-
+	static void MapGameKeys();
+	static std::function<bool(int)> action_mapping[magic_enum::enum_count<GameKeys>()];
 	static KeyStates action_states[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()];
 	static float action_times[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()];
 };
