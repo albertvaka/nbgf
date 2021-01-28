@@ -31,18 +31,17 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 	- [Music](#music-mix_music)
 	- [Fonts](#fonts-ttf_font)
 	- [Shaders](#shaders-shader)
-- [Scenes](#scenes)
-	- [The Scene class](#the-scene-class)
-	- [EntryPointScene](#entrypointscene)
-	- [Changing scenes](#changing-scenes-scenemanager)
-- [Drawing on screen 1 (the basics)](#drawing-on-screen-1-the-basics)
+- [Drawing on screen: part one (the basics)](#drawing-on-screen-part-one-the-basics)
 	- [Drawing images](#drawing-images)
 	- [Spritesheets and animated sprites](#spritesheets-and-animated-sprites)
 	- [Rendering text](#rendering-text)
 	- [Clearing the window](#clearing-the-window)
 	- [The camera](#the-camera)
 		- [Camera for GUIs](#camera-for-guisa)
-- [Playing sounds and music](#playing-sounds-and-music)
+- [Scenes](#scenes)
+	- [The Scene class](#the-scene-class)
+	- [EntryPointScene](#entrypointscene)
+	- [Changing scenes](#changing-scenes-scenemanager)
 - [Entities and SelfRegister](#entities-and-selfregister)
 - [Points and vectors: the vec struct](#points-and-vectors-the-vec-struct)
 - [Bounding boxes and collisions](#bounding-boxes-and-collisions)
@@ -55,7 +54,8 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 	- [Mouse input](#mouse-input)
 	- [GamePad input](#gamepad-input)
 - [Random](#random)
-- [Drawing on screen 2 (the advanced stuff)](#drawing-on-screen-2-the-advanced-stuff)
+- [Playing sounds and music](#playing-sounds-and-music)
+- [Drawing on screen: part two (the advanced stuff)](#drawing-on-screen-part-two-the-advanced-stuff)
 	- [Particle systems](#particle-systems)
 	- [Tile maps](#tile-maps)
 	- [Using shaders](#using-shaders)
@@ -86,7 +86,7 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 
 ## Loading assets
 
-Place your assets in `bin/data/`. Your game is small enough so all your assets fit in RAM. For this reason, we are going to load all the assets at once and keep them loaded until your game exits.
+Place your assets in `bin/data/`. Your game is small enough for all your assets to fit in RAM. For this reason, we are going to load all the assets at once and keep them loaded until your game exits.
 
 Your assets should be defined in code in [`src/assets.h`](src/assets.h) as global objects inside the `Assets` namespace, and should be loaded in [`src/assets.cpp`](src/assets.cpp) inside the `Assets::LoadAll()` function.
 
@@ -106,7 +106,7 @@ All your music files must be in OGG format. Use [`LoadMusic("<path>")`](engine/a
 
 ### Fonts: `TTF_Font*`
 
-Fonts are used to render strings of text. Use [`LoadFont("<path>", <size>)`](engine/asset_load.h) and [`LoadFontOutline("data/PressStart2P.ttf", <size>, <outline_size>)`](engine/asset_load.h) to load them into a `TTF_Font*`.
+TTF fonts can be used to render strings of text. Use [`LoadFont("<path>", <size>)`](engine/asset_load.h) and [`LoadFontOutline("data/PressStart2P.ttf", <size>, <outline_size>)`](engine/asset_load.h) to load them into a `TTF_Font*`.
 
 Caveats:
  - You will need to store one `TTF_Font*` per font size you want to render text at.
@@ -120,32 +120,12 @@ Don't include `#version` or `precision` directives in your shaders, depending on
 
 If any path is `nullptr`, a default shader will be loaded in its place.
 
-## Scenes
-
-### The Scene class
-
-Games are split in scenes. All scenes should inherit from the [`Scene`](engine/scene.h) class and implement these methods:
-
- - `Update(float dt)` will be called once per frame, so you can move your things around. `dt` is the time in seconds since the last frame (capped if too high) so you can make movement time-dependent and not framerate-dependent.
- - `Draw() const` will be called after `Update()` and is where you should put your calls to `Window::Draw` (see "Drawing Images" below).
- - `EnterScene()` and `ExitScene()` will be called before/after the `Update` and `Draw` functions first start/stop being called, respectively. This is different that the constructor given that you could have more than one `Scene` instantiated, but only one running.
-
-### EntryPointScene
-
-When the game starts, it will load the `EntryPointScene` you have defined in [`src/scene_entrypoint.h`](src/scene_entrypoint.h). `EntryPointScene` is meant to be a `typedef` to your actual scene class (unless you want to name your scene `EntryPointScene`).
-
-### Changing scenes: [`SceneManager`](engine/scene_manager.h)
-
-Use `SceneManager::ChangeScene(new MyAwesomeScene())` to change to a new scene and `SceneManager::RestartScene()` to re-enter the current one.
-
-Note the constructor of the new scene runs right away, while the current scene is still active. Don't put your scene initialization logic in the constructor (use `EnterScene` for that), and specially don't instantiate any self-registering entities there (since they would show up from your current scene).
-
-## Drawing on screen 1 (the basics)
+## Drawing on screen: part one (the basics)
 
 ### Drawing images
 
 To draw an asset you have loaded somewhere in the world, call [`Window::Draw(Assets::<my_asset>, <position>)`](engine/window_draw.h) and optionally chain any transformations you want. Eg:
-```
+```C++
 vec position = vec(0,0);
 Window::Draw(Assets::mySprite, position)
 	.withRotationDegs(45)
@@ -158,7 +138,7 @@ Find all the supported transformations in the definition of `Window::Draw` in [`
 
 It is possible to draw only a portion of an image, which lets you use spritesheets. The follow code will draw a rectangle of 16*16 pixels starting at (`32,32`) from `Assets::mySprite` on the top left corner of the screen:
 
-```
+```C++
 Window::Draw(Assets::mySprite, vec(0,0))
 	.withRect(32,32,16,16);
 ```
@@ -167,7 +147,7 @@ A common use for spritesheets are sprite animations. You can use the [`Animation
 
 First, create an array of [`AnimationFrame`](engine/animation.h), with the spritesheet coordinates and the duration of each frame (in seconds):
 
-```
+```C++
 constexpr const AnimationFrame EnemyWalkingFrames[] = {
 	{ {  0, 0, 32, 32 }, 0.1f },
 	{ { 32, 0, 32, 32 }, 0.1f },
@@ -178,19 +158,19 @@ constexpr const AnimationFrame EnemyWalkingFrames[] = {
 
 Then create an `Animation` object:
 
-```
+```C++
 Animation animation(EnemyWalkingFrames);
 ```
 
 You must update the animation each frame:
 
-```
+```C++
 animation.Update(dt);
 ```
 
 And finally use it to find the current frame to draw:
 
-```
+```C++
 Window::Draw(Assets::mySprite, vec(0,0))
 	.withRect(animation.CurrentFrameRect());
 ```
@@ -201,7 +181,7 @@ You can also change the animation that is playing without any additional changes
 
 Use the `TTF_Font*` from `Assets` to instantiate the [`Text`](engine/text.h) class, set the string you want to draw and then draw it the same way as an image:
 
-```
+```C++
 Text myText(Assets::myAwesomeFont);
 myText.SetFillColor(255,128,128);
 myText.SetString("my cool string");
@@ -232,17 +212,25 @@ The [`Camera`](engine/camera.h) class also provides functions to zoom in and out
 
 It's common to have GUI elements on screen that shouldn't be affected by the camera movement, zoom or rotation. You can draw without applying any camera transformations by placing your `Window::Draw` calls between `Camera::InScreenCoords::Begin()` and `Camera::InScreenCoords::End()`.
 
-## Playing sounds and music
+## Scenes
 
-To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-100>)` method you can use. See `engine/sound.h`.
+### The Scene class
 
-To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::IsPlaying()`, `MusicPlayer::Pause()`, `MusicPlayer::Resume()`, `MusicPlayer::Stop()` and `MusicPlayer::SetVolume(<0-100>)`. See `engine/musicplayer.h`.
+Games are split in scenes. All scenes should inherit from the [`Scene`](engine/scene.h) class and implement these methods:
 
-## Points and vectors: the [`vec`](engine/vec.h) struct
+ - `Update(float dt)` will be called once per frame, so you can move your things around. `dt` is the time in seconds since the last frame (capped if too high) so you can make movement time-dependent and not framerate-dependent.
+ - `Draw() const` will be called after `Update()` and is where you should put your calls to `Window::Draw` (see "Drawing Images" below).
+ - `EnterScene()` and `ExitScene()` will be called before/after the `Update` and `Draw` functions first start/stop being called, respectively. This is different that the constructor given that you could have more than one `Scene` instantiated, but only one running.
 
-You will be using lots of (x,y) pairs when making your game. If you are lazy like me, you will appreciate this struct is only 3 letters long. You should pass `vec` arguments by value.
+### EntryPointScene
 
-The `vec` struct has all the goodies you can image: `+`, `-`, `/` and `*` operators, methods to rotate, normalize, get the lenght... See the definitions in the [`engine/vec.h`](engine/vec.h) header.
+When the game starts, it will load the `EntryPointScene` you have defined in [`src/scene_entrypoint.h`](src/scene_entrypoint.h). `EntryPointScene` is meant to be a `typedef` to your actual scene class (unless you want to name your scene `EntryPointScene`).
+
+### Changing scenes: [`SceneManager`](engine/scene_manager.h)
+
+Use `SceneManager::ChangeScene(new MyAwesomeScene())` to change to a new scene and `SceneManager::RestartScene()` to re-enter the current one.
+
+Note the constructor of the new scene runs right away, while the current scene is still active. Because of this, don't put your scene initialization logic in the scene constructor (use `EnterScene` for that), and specifically don't instantiate any self-registering (see below) entities there, since they would show up from your current scene.
 
 ## Entities and SelfRegister
 
@@ -250,7 +238,7 @@ You can organize your game code however you like but, if I were you, I would def
 
 Inheriting `MyClass` from `SelfRegister<MyClass>`, will give you a `MyClass::GetAll()` method that will return all the instances of `MyClass` you have created (and not destroyed yet). Use it as follows:
 
-```
+```C++
 new Enemy(1);
 new Enemy(2); // No need to store these anywhere
 
@@ -261,7 +249,15 @@ for (Enemy* e : Enemy::GetAll()) {
 
 `SelfRegister<MyClass>` also provides the `MyClass::DeleteAll()` and `MyClass::DeleteNotAlive()` methods, meant to be used on `ExitScene` and at the end of each frame, respectively. To use `DeleteNotAlive` your class must contain an `alive` boolean, and will destroy your objects if it is `true`. Waiting to delete your entities until the end of the frame can help you avoid use-after-free bugs: just make sure to let go any pointers to entities where `alive` is `false`.
 
-Inheriting from `Entity` already gives you an `alive` boolean in your class, as well as a `pos` and `vel` vectors (which you probably want to have on all objects). Feel free to add any other properties in common to all your game entities.
+Inheriting from `Entity` already gives you an `alive` boolean in your class, as well as a `pos` and `vel` vectors (which you probably want to have on all objects). It's a good idea to edit this class to add any other properties in common to all your game entities.
+
+## Points and vectors: the [`vec`](engine/vec.h) struct
+
+You will be using lots of (x,y) pairs when making your game. If you are lazy like me, you will appreciate this struct is only 3 letters long.
+
+The `vec` struct has all the goodies you might want: `+`, `-`, `/` and `*` operators, methods to rotate, normalize, get the lenght... See the definitions in the [`engine/vec.h`](engine/vec.h) header.
+
+When your functions take `vec` as arguments, pass them by value.
 
 ## Bounding boxes and collisions
 
@@ -278,7 +274,7 @@ The collision primitives are rectangles (`BoxBounds`) and circles (`CircleBounds
 
 Use the `Collide(a,b)` function defined in [`engine/collide.h`](engine/collide.h) to check if two bounds or two `BoxEntity`/`CircleEntity` collide. See this example, which makes use of `SelfRegister` class to check if any `Enemy` collides with any `Bullet`:
 
-```
+```C++
 for (Bullet* bullet, Bullet::GetAll())
 {
 	for (Enemy* enemy, Enemy::GetAll())
@@ -293,7 +289,7 @@ for (Bullet* bullet, Bullet::GetAll())
 
 If you are into the brevity thing, a more compact way to achieve the same result is using the `CollideWithCallback(...)` method which takes both sets of objects as returned by `GetAll()` and a lambda:
 
-```
+```C++
 CollideWithCallback(Bullet::GetAll(), Enemy::GetAll(), [](Bullet* bullet, Enemy* enemy)
 {
 	enemy->HitByBullet(bullet);
@@ -304,7 +300,7 @@ CollideWithCallback(Bullet::GetAll(), Enemy::GetAll(), [](Bullet* bullet, Enemy*
 
 When checking collisions between objects of the same class, use `CollideSelf(...)` like this:
 
-```
+```C++
 CollideSelf(Enemy::GetAll(), [](Enemy* enemy_a, Enemy* enemy_b)
 {
 	enemy_a->HitOtherEnemy(enemy_b);
@@ -323,27 +319,28 @@ The Input class is an abstraction over the different input methods which uses ac
 Define your game actions in the `GameKeys` enum in [`src/input_conf.h`](src/input_conf.h) and initialize the mapping in `MapGameKeys` in [`src/input_conf.cpp`](src/input_conf.cpp). The mapping consists of an array of `std::functions` indexed by `GameKeys`, where each function should return true if the given action key/button is pressed. See the next sections about how to query each separate input method.
 
 Eg:
-```
-    action_mapping[(int)GameKeys::JUMP] = [](int p) // p is the player number, 0-based
-    {
-		// Gamepad: jump with X or joystick up
-        if (GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
-			GamePad::AnalogStick::Left.get(p).y < -50.0f) {
-				return true;
-		}
-		if (p == 0) {
-			// Player 1 keyboard: jump with W
-			return Keyboard::IsKeyPressed(SDL_SCANCODE_W);
-		} else {
-			// Player 2 keyboard: jump with arrow up
-			return Keyboard::IsKeyPressed(SDL_SCANCODE_UP);
-		}
-    };
+
+```C++
+action_mapping[(int)GameKeys::JUMP] = [](int p) // p is the player number, 0-based
+{
+	// Gamepad: jump with X or joystick up
+	if (GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
+		GamePad::AnalogStick::Left.get(p).y < -50.0f) {
+			return true;
+	}
+	if (p == 0) {
+		// Player 1 keyboard: jump with W
+		return Keyboard::IsKeyPressed(SDL_SCANCODE_W);
+	} else {
+		// Player 2 keyboard: jump with arrow up
+		return Keyboard::IsKeyPressed(SDL_SCANCODE_UP);
+	}
+};
 ```
 
 To query if an action is being pressed, use the `Input` class defined in [`engine/input.h`](engine/input.h):
 
-```
+```C++
 if (Input::IsJustPressed(player, GameKeys::Jump)) {
 	// ...
 }
@@ -365,9 +362,17 @@ The `GamePad` struct is defined in [`engine/raw_input.h`](engine/raw_input.h) wi
 
 ## Random
 
-The `Rand` and `GoodRand` namespaces provide a source of RNG for your speedruners to hate. See the definition in [`engine/rand.h`](engine/rand.h) for a list of available methods. `Rand` is faster but "less random" than `GoodRand`, use the second if making something serious like a poker game where people play with real money.
+The `Rand` and `GoodRand` namespaces provide a source of RNG for your speedruners to hate. See the available functions in [`engine/rand.h`](engine/rand.h).
 
-## Drawing on screen 2 (the advanced stuff)
+`Rand` is faster but "less random" than `GoodRand`: use the second if making something serious like a poker game where people play with real money.
+
+## Playing sounds and music
+
+To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-100>)` method you can use. See `engine/sound.h`.
+
+To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::IsPlaying()`, `MusicPlayer::Pause()`, `MusicPlayer::Resume()`, `MusicPlayer::Stop()` and `MusicPlayer::SetVolume(<0-100>)`. See `engine/musicplayer.h`.
+
+## Drawing on screen: part two (the advanced stuff)
 
 ### Particle systems
 
