@@ -22,13 +22,25 @@ void SceneMain::EnterScene()
 void SceneMain::SpawnBuildings() {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			new Building(vec(i*100+200, j*100+200), vec(30, 30));
+			new Building(vec(i*70+200, j*70+200), vec(30, 30));
 		}
 	}
 }
 
 void SceneMain::SpawnPeople() {
-	new Person(vec(0,0));
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			Person* p = new Person(vec(i*31+200,j*31+200));
+			for (const Building* b : Building::GetAll()) {
+				if (Collide(p, b)) {
+					vec away = p->pos - b->pos;
+					away.Normalize();
+					float awayDistance = sqrt(-p->Bounds().DistanceSq(b->Bounds()))+15;
+					p->pos += away*awayDistance;
+				}
+			}
+		}
+	}
 }
 
 void SceneMain::ExitScene()
