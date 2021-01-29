@@ -8,47 +8,80 @@
 #include "selfregister.h"
 #include "assets.h"
 #include "window.h"
+#include "animation.h"
 #include "camera.h"
 
+static const float scale = 0.3f;
+static const float speed = 100.f;
 
-struct Person : CircleEntity, SelfRegister<Person>
+struct Person : BoxEntity, SelfRegister<Person>
 {
-	int velo;
+	mutable bool goingLeft;
+	mutable Animation anim;
 	Person(const vec& position)
-		: CircleEntity(pos, 10)
+		: BoxEntity(pos, vec(200, 400)*scale)
+		, anim(AnimLib::NPC_1_DOWN)
 	{
 		pos = position;
-		velo = 100;
 	}
 
 	void Update(float dt)
 	{
-		vec oldPos = pos;
-		if(Input::IsPressedAnyPlayer(GameKeys::UP)) {
-			pos.y -= velo *dt; 
+		vel = vec::Zero;
+
+		if(Input::IsPressed(0, GameKeys::UP)) {
+			vel.y = -speed;
 		}
-		if(Input::IsPressedAnyPlayer(GameKeys::RIGHT)) {
-			pos.x += velo *dt; 
+		if(Input::IsPressed(0, GameKeys::RIGHT)) {
+			vel.x = speed;
 		}
-		if(Input::IsPressedAnyPlayer(GameKeys::LEFT)) {
-			pos.x -= velo *dt; 
+		if(Input::IsPressed(0, GameKeys::LEFT)) {
+			vel.x = -speed;
 		}
-		if(Input::IsPressedAnyPlayer(GameKeys::DOWN)) {
-			pos.y += velo *dt; 
+		if(Input::IsPressed(0, GameKeys::DOWN)) {
+			vel.y = speed;
 		}
-		for (const Building* b : Building::GetAll()) {
-			if (Collide(this, b)) {
-				/*vec away = this->pos - b->pos;
-				away.Normalize();
-				float awayDistance = sqrt(-this->Bounds().DistanceSq(b->Bounds()));
-				pos += away*awayDistance;*/
-				pos = oldPos;
+
+		if (vel != vec::Zero) {
+			vec oldPos = pos;
+			pos.x += vel.x * dt;
+			for (const Building* b : Building::GetAll()) {
+				if (Collide(this, b)) {
+					pos.x = oldPos.x;
+					vel.x = 0;
+				}
+			}
+			pos.y += vel.y * dt;
+			for (const Building* b : Building::GetAll()) {
+				if (Collide(this, b)) {
+					pos.y = oldPos.y;
+					vel.y = 0;
+				}
+			}
+			if (pos != oldPos) {
+				anim.Update(dt);
 			}
 		}
 	}
 
 	void Draw() const
 	{
-		
+		if (vel.x != 0) {
+			anim.Ensure(AnimLib::NPC_1_LEFT);
+			goingLeft = (vel.x < 0);
+		} else if (vel.y != 0) {
+			if (vel.y < 0) {
+				anim.Ensure(AnimLib::NPC_1_UP);
+			} else {
+				anim.Ensure(AnimLib::NPC_1_DOWN);
+			}
+		}
+
+		const GPU_Rect& rect = anim.CurrentFrameRect();
+		Window::Draw(Assets::npcTexture, pos)
+			.withRect(rect)
+			.withOrigin(rect.w / 2, rect.h / 2)
+			.withScale(goingLeft? -scale : scale, scale);
+
 	}
 };

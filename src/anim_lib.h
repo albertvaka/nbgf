@@ -4,6 +4,29 @@
 
 namespace AnimLib {
 
+	constexpr const float frameDuration = 0.1f;
+	constexpr const float frameSize = 400.f;
+
+	constexpr const AnimationFrame NPC_1_LEFT[] = {
+		{ {0 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {1 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {2 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {3 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {4 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {5 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {6 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+	};
+
+	constexpr const AnimationFrame NPC_1_DOWN[] = {
+		{ {7 * frameSize, 0 * frameSize, frameSize, frameSize}, 2 * frameDuration },
+		{ {8 * frameSize, 0 * frameSize, frameSize, frameSize}, 2 * frameDuration },
+	};
+
+	constexpr const AnimationFrame NPC_1_UP[] = {
+		{ {11 * frameSize, 0 * frameSize, frameSize, frameSize}, 2 *frameDuration },
+		{ {12 * frameSize, 0 * frameSize, frameSize, frameSize}, 2 * frameDuration },
+	};
+
 	constexpr const AnimationFrame ALIEN_1[] = {
 		{ {0,0,71,55}, 0.3f },
 		{ {71,0,71,55}, 0.3f },

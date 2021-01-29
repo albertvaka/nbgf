@@ -2,16 +2,10 @@
 
 #include "asset_load.h"
 
-GPU_Image* Assets::invadersTexture;
-GPU_Image* Assets::backgroundTexture;
-
-TTF_Font* Assets::font_30;
-TTF_Font* Assets::font_30_outline;
-
-Shader Assets::tintShader;
-
 void Assets::LoadAll() {
 
+    npcTexture = LoadImage("data/npc1.png");
+    buildingTexture = LoadImage("data/building.png");
     invadersTexture = LoadImage("data/invaders.png");
     backgroundTexture = LoadImage("data/bg.png");
 

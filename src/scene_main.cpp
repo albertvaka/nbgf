@@ -22,7 +22,7 @@ void SceneMain::EnterScene()
 void SceneMain::SpawnBuildings() {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			new Building(vec(i*70+200, j*70+200), vec(30, 30));
+			new Building(vec(i*400+200, j*400+200), vec(200, 200));
 		}
 	}
 }
@@ -68,10 +68,6 @@ void SceneMain::Update(float dt)
 void SceneMain::Draw()
 {
 	Window::Clear(0, 0, 0);
-
-	Window::Draw(Assets::backgroundTexture, Camera::Center())
-		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
-
 
 	for (const Building* b : Building::GetAll()) {
 		b->Draw();
