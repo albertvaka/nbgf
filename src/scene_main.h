@@ -7,11 +7,7 @@
 
 struct SceneMain : Scene {
 
-	Player player;
-	PartSys alienPartSys;
-	int currentLevel = 1;
-	int deadAliens = 0;
-	Text deadAliensText;
+	
 
 	SceneMain();
 
@@ -20,7 +16,10 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
-	void SpawnAliens();
+	void SpawnBuildings();
+	void SpawnPeople();
 
 
 };
+
+
