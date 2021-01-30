@@ -1,5 +1,6 @@
 #include "scene_main.h"
 #include "raw_input.h"
+#include "scene_manager.h"
 #ifdef _IMGUI
 #include "imgui.h"
 #endif
@@ -176,6 +177,7 @@ void SceneMain::ExitScene()
 	Waypoint::DeleteAll();
 }
 
+std::vector<EntityUpdate> entities;
 void SceneMain::Update(float dt)
 {
 	Camera::MoveCameraWithArrows(dt);
@@ -188,16 +190,25 @@ void SceneMain::Update(float dt)
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		ExitScene();
-		EnterScene();
+		SceneManager::RestartScene();
 		return;
 	}
 #endif
+
+	entities.clear();
+	for (Person* p : Person::GetAll()) {
+		entities.push_back(p->Serialize());
+	}
+
+	for (Client& client : lobby.clients) {
+		if (!client.in_use) continue;
+		send_entity_data(client.socket, &entities[0], entities.size());
+	}
 }
 
 void SceneMain::Draw()
 {
-	Window::Clear(0, 0, 0);
+	Window::Clear(30, 30, 30);
 
 	for (const Building* b : Building::GetAll()) {
 		b->Draw();

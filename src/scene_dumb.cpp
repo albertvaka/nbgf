@@ -29,7 +29,28 @@ void SceneDumb::ExitScene()
 
 void SceneDumb::Update(float dt)
 {
+	packet_player_input input;
+	int index = 0;
+	
+	if (Input::IsPressed(0, GameKeys::UP)) {
+		input.inputs[index++] = INPUT::UP;
+	}
+	else if (Input::IsPressed(0, GameKeys::DOWN)) {
+		input.inputs[index++] = INPUT::DOWN;
+	}
 
+	if (Input::IsPressed(0, GameKeys::LEFT)) {
+		input.inputs[index++] = INPUT::LEFT;
+	}
+	else if (Input::IsPressed(0, GameKeys::RIGHT)) {
+		input.inputs[index++] = INPUT::RIGHT;
+	}
+
+	if (Input::IsJustPressed(0, GameKeys::ACTION)) {
+		input.inputs[index++] = INPUT::ACTION;
+	}
+
+	//send_data
 }
 
 void SceneDumb::Draw()

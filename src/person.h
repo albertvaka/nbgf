@@ -131,6 +131,16 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	}
 
+	EntityUpdate Serialize() {
+		int frame = anim.CurrentFrameRect().x / AnimLib::frameSize;
+		return {
+			pos.x,
+			pos.y,
+			id,
+			goingLeft ? -frame : frame,
+		};
+	}
+
 	static void DumbDraw(EntityUpdate* entity) {
 		
 		int sprite = entity->sprite;

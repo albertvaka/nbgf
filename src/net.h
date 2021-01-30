@@ -26,8 +26,10 @@ struct Client {
 
 struct Lobby {
     std::string id;
-    std::array<Client, MAX_CLIENTS> clients();
+    std::array<Client, MAX_CLIENTS> clients;
 };
+
+inline Lobby lobby;
 
 enum INPUT {
     NONE,
