@@ -1,8 +1,8 @@
 #ifndef __NET_H_
 #define __NET_H_
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_net.h>
+#include <SDL.h>
+#include <SDL_net.h>
 
 #define MAX_PACKET 0xFFFFFF
 #define MAX_CLIENTS 32

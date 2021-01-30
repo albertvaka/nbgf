@@ -382,6 +382,24 @@ inline constexpr vec operator/(vec lhs, vec rhs)
 	return result;
 }
 
+inline constexpr veci operator+(veci lhs, veci rhs)
+{
+	veci result(lhs);
+	result.x += rhs.x;
+	result.y += rhs.y;
+
+	return result;
+}
+
+inline constexpr veci operator-(veci lhs, veci rhs)
+{
+	veci result(lhs);
+	result.x -= rhs.x;
+	result.y -= rhs.y;
+
+	return result;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

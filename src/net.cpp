@@ -93,7 +93,7 @@ bool send_data(TCPsocket &socket, uint8_t *packet_data, int packet_len) {
 }
 
 bool send_join_lobby(TCPsocket &socket) {
-    int packet_size = sizeof(PACKET_TYPE) + sizeof(packet_join_lobby);
+    constexpr int packet_size = sizeof(PACKET_TYPE) + sizeof(packet_join_lobby);
     uint8_t packet[packet_size];
     uint8_t *packet_ptr = packet;
 
@@ -104,7 +104,7 @@ bool send_join_lobby(TCPsocket &socket) {
 }
 
 bool send_join_lobby_response(TCPsocket &socket, int client_id) {
-    int packet_size = sizeof(PACKET_TYPE) + sizeof(packet_join_lobby_response);
+    constexpr size_t packet_size = sizeof(PACKET_TYPE) + sizeof(packet_join_lobby_response);
     uint8_t packet[packet_size];
     uint8_t *packet_ptr = packet;
 
@@ -117,7 +117,7 @@ bool send_join_lobby_response(TCPsocket &socket, int client_id) {
 }
 
 bool send_player_ready(TCPsocket &socket, int client_id, bool ready) {
-    int packet_size = sizeof(PACKET_TYPE) + sizeof(packet_join_lobby_response);
+    constexpr int packet_size = sizeof(PACKET_TYPE) + sizeof(packet_join_lobby_response);
     uint8_t packet[packet_size];
     uint8_t *packet_ptr = packet;
 

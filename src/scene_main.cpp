@@ -12,9 +12,9 @@
 #include <stack>
 #include <vector>
 
-int STREET_SIZE = 200;
-int GRID_OFFSET = 200;
-int BUILDING_SIZE = 200;
+const int STREET_SIZE = 200;
+const int GRID_OFFSET = 200;
+const int BUILDING_SIZE = 200;
 
 SceneMain::SceneMain() {
 	
@@ -40,62 +40,16 @@ void SceneMain::SpawnCity()
 	std::array < std::array<char, h>, w> maze;
 	for (int x = 0; x < w; x++) {
 		for (int y = 0; y < h; y++) {
-			if (x == 0 || x == w - 1 || y == 0 || y == h - 1) {
-				maze[x][y] = 'b';
+			maze[x][y] = 'b';
+			if (x == 1 || x == w - 2 || y == 1 || y == h - 2) {
+				maze[x][y] = 'e';
 			}
 			else {
-				maze[x][y] = (x % 2 || y % 2) ? 'e' : 'b';
-				if ((x % 2 == 0) && (y % 2 == 0) && (maze[x - 1][y] == 'b' || maze[x][y - 1] == 'b')) {
-					if (Rand::OnceEvery(2)) {
-						maze[x][y] = 'b';
-					}
-				}
+				maze[x][y] = 'b';
 			}
 		}
 	}
-	std::stack<veci> pathStack;
-	pathStack.push(veci(w/2,h/2));
 
-	std::array<veci, 4> dirs = { veci(0,1),veci(0,-1),veci(1,0),veci(-1,0) };
-	/*
-	// While there is node to be handled in the stack
-	while (!pathStack.empty())
-	{
-		// Handle the cell at the top of the stack:
-		// Get available neighbors from bottom, left, right, top and unvisited
-		veci cell = pathStack.top(); pathStack.pop();
-
-		std::vector<veci> neighbours;
-		
-		for (veci dir : dirs) {
-			veci newCell = cell + dir;
-			if (maze[newCell.x][newCell.y] == 'a') {
-
-			}
-		}
-		auto neighbors = GetAvailableneighbors(maze, cell);
-
-		// If there is available node to process (loop to backtrack - 'pop' otherwise)
-		if (!neighbors.empty())
-		{
-			// Randomly select a node to be processed
-			auto randIdx = Random() % neighbors.size();
-
-			// For each available node: connect to the cell, mark it as visited
-			// and push it into the stack.
-			for (auto i = 0; i < neighbors.size(); ++i)
-			{
-				cell->Connect(Cell::Visite(neighbors[i]));
-
-				// Only the chosen item should be add to the top following a DFS strategy
-				if (i != randIdx) pathStack.push(neighbors[i]);
-			}
-
-			// Add the chosen node as the next one to be processed
-			pathStack.push(neighbors[randIdx]);
-		}
-	}
-	*/
 
 
 	std::vector< std::vector<Waypoint*> > grid(h, std::vector<Waypoint*>(w));

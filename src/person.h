@@ -8,6 +8,7 @@
 #include "waypoint.h"
 #include "selfregister.h"
 #include "assets.h"
+#include "net.h"
 #include "window.h"
 #include "animation.h"
 #include "camera.h"
@@ -128,7 +129,6 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void Draw() const
 	{
-
 		const GPU_Rect& rect = anim.CurrentFrameRect();
 		Window::Draw(Assets::npcTexture, pos - vec(0, 80*scale))
 			.withRect(rect)
@@ -136,4 +136,23 @@ struct Person : BoxEntity, SelfRegister<Person>
 			.withScale(goingLeft? -scale : scale, scale);
 
 	}
+
+	static void DumbDraw(EntityUpdate* entity) {
+		
+		int sprite = entity->sprite;
+		bool mirror = false;
+		if (sprite < 0) {
+			sprite = -sprite;
+			mirror = true;
+		}
+		int sheet_x = sprite;
+		int sheet_y = 0;
+
+		GPU_Rect rect = { sheet_x * AnimLib::frameSize, sheet_y * AnimLib::frameSize, AnimLib::frameSize, AnimLib::frameSize };
+		Window::Draw(Assets::npcTexture, entity->x, entity->y - 80 * scale)
+			.withRect(rect)
+			.withOrigin(rect.w / 2, rect.h / 2)
+			.withScale(mirror ? -scale : scale, scale);
+	}
+
 };
