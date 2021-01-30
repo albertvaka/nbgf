@@ -25,9 +25,10 @@ const int BUILDING_SIZE = 200;
 const int WAYPOINT_SIZE = STREET_SIZE * 0.3;
 
 constexpr int bsp_levels = 4;
+constexpr float bsp_margin_ratio = 0.2f;
 
-constexpr int w = 19;
-constexpr int h = 11;
+constexpr int w = 18;
+constexpr int h = 10;
 
 SceneMain::SceneMain(bool is_server)
 	: textTime(Assets::font_30)
@@ -35,8 +36,8 @@ SceneMain::SceneMain(bool is_server)
 {
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
 
-	Camera::SetZoom(0.4f);
-	Camera::SetTopLeft(vec(0, -40));
+	Camera::SetZoom(0.425f);
+	Camera::SetTopLeft(vec(20, -80));
 }
 
 void SceneMain::EnterScene() {
@@ -52,10 +53,9 @@ void BSP(std::array<std::array<char,h>,w>& maze, veci min, veci max, int level) 
 	if (level == 0) return;
 	int width = max.x - min.x;
 	int height = max.y - min.y;
-	float marginratio = 0.3f;
 	if (width > height)
 	{
-		int margin = ceilf((max.x - min.x) * marginratio);
+		int margin = ceilf((max.x - min.x) * bsp_margin_ratio);
 		if (min.x + margin >= max.x - margin) return;
 		int x = Rand::roll(min.x + margin, max.x - margin);
 		for (int y = min.y; y < max.y; y++) {
@@ -66,7 +66,7 @@ void BSP(std::array<std::array<char,h>,w>& maze, veci min, veci max, int level) 
 	}
 	else 
 	{
-		int margin = ceilf((max.y - min.y)* marginratio);
+		int margin = ceilf((max.y - min.y)* bsp_margin_ratio);
 		if (min.y + margin >= max.y - margin) return;
 		int y = Rand::roll(min.y+margin, max.y-margin);
 		for (int x = min.x; x < max.x; x++) {
@@ -143,7 +143,7 @@ void SceneMain::SpawnCity()
 
 	std::vector<Waypoint*> empty_wp;
 	for (Waypoint* p : Waypoint::GetAll()) {
-		if (Rand::OnceEvery(2)) {
+		if (Rand::PercentChance(35)) {
 			new Person(p->pos, -1);
 		}
 		else {
