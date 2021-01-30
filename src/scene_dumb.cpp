@@ -14,7 +14,7 @@
 #include <vector>
 
 SceneDumb::SceneDumb(bool is_server) {
-	
+	socket = client_connect("127.0.0.1", 8099, &socket_set);
 }
 
 void SceneDumb::EnterScene()

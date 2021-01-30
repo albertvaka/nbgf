@@ -4,8 +4,11 @@
 #include "partsys.h"
 #include "text.h"
 #include "player.h"
+#include "net.h"
 
 struct SceneDumb : Scene {
+	TCPsocket socket;
+	SDLNet_SocketSet socket_set;
 
 	SceneDumb(bool is_server);
 
@@ -13,7 +16,4 @@ struct SceneDumb : Scene {
 	void ExitScene() override;
 	void Update(float dt) override;
 	void Draw() override;
-
 };
-
-
