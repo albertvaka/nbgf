@@ -30,7 +30,7 @@ namespace Window {
 		SDL_ShowCursor(b);
 	}
 
-	inline void Clear(uint8_t r, uint8_t g, uint8_t b) {
+	inline void Clear(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0) {
 		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);
 	}
 
