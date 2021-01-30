@@ -104,8 +104,9 @@ void SceneMain::SpawnCity()
 		}
 	}
 
+	int id = 0;
 	for (Waypoint* p : Waypoint::GetAll()) {
-		new Person(p->pos);
+		new Person(p->pos, id++);
 	}
 }
 

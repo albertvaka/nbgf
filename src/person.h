@@ -23,9 +23,11 @@ struct Person : BoxEntity, SelfRegister<Person>
 	Waypoint* old_waypoint;
 	bool goingLeft;
 	Animation anim;
-	Person(const vec& position)
+	int id;
+	Person(const vec& position, int id)
 		: BoxEntity(pos, vec(150, 150)*scale)
 		, anim(AnimLib::NPC_1_DOWN)
+		, id(id)
 	{
 		pos = position;
 		SetNearestWaypoint();

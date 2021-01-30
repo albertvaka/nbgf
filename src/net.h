@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <SDL_net.h>
 
+#include <array>
+
 #define MAX_PACKET 0xFFFFFF
 #define MAX_CLIENTS 32
 
