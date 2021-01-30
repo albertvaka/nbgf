@@ -24,11 +24,14 @@ struct Person : BoxEntity, SelfRegister<Person>
 	bool goingLeft;
 	Animation anim;
 	int id;
+	bool alive;
+
 	Person(const vec& position, int id)
 		: BoxEntity(pos, vec(150, 150)*scale)
 		, anim(AnimLib::NPC_1_DOWN)
 		, id(id)
 	{
+		alive = true;
 		pos = position;
 		SetNearestWaypoint();
 		old_waypoint = next_waypoint;
@@ -48,6 +51,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 	}
 
 	void UpdatePlayer(float dt, const packet_player_input& input) {
+		if(!alive) { return; }
 		vel = vec::Zero;
 		for (INPUT action : input.inputs) {
 			if (action == INPUT::UP) {
@@ -87,6 +91,8 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void UpdateNpc(float dt)
 	{
+		if(!alive) { return; }
+
 		anim.Update(dt);
 		vec direction = next_point - pos;
 		direction.Normalize();
@@ -126,6 +132,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void Draw() const
 	{
+		if(!alive) {
+			Window::DrawPrimitive::Circle(pos, 10, 5, 255, 0, 0);
+		}
+
 		const GPU_Rect& rect = anim.CurrentFrameRect();
 		Window::Draw(Assets::npcTexture, pos - vec(0, 80*scale))
 			.withRect(rect)
@@ -142,6 +152,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 			id,
 			goingLeft ? -frame : frame,
 		};
+	}
+
+	void Kill() {
+		alive = false;
 	}
 
 	static void DumbDraw(EntityUpdate* entity) {

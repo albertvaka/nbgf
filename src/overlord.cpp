@@ -1,9 +1,10 @@
 
 #include "overlord.h"
 
-#include "input.h"
+#include "raw_input.h"
 #include "window.h"
 #include "debug.h"
+#include "person.h"
 #include "anim_lib.h"
 
 
@@ -11,10 +12,59 @@ Overlord::Overlord()
 {
 }
 
+bool killPersonAt(vec pos) {
+	bool hasKilled = false;
+	for(Person* p : Person::GetAll()) {
+		if(p->Bounds().Contains(pos)) {
+			// Kill all persons in point? otherwise how to choose?
+			p->Kill();
+			hasKilled = true;
+		}
+	}
+	return hasKilled;
+}
+
 void Overlord::Update(float dt)
 {
 	cursorPos = Mouse::GetPositionInWorld();
-		
+	for (int i = 0; i < std::size(skill_keys); i++) {
+		if (Keyboard::IsKeyJustPressed(skill_keys[i])) {
+			if (cooldowns[i] <= 0) {
+				state = static_cast<OverlordState>(i);
+			} else {
+				Debug::out << i << " is still in cooldown " << cooldowns[i];
+			}
+		}
+	}
+	if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
+		state = OverlordState::IDLE;
+	}
+
+	if (Mouse::IsJustPressed(Mouse::Button::Left)) {
+		switch(state) {
+			case OverlordState::THROWING_KILL: {
+				Debug::out << "Trying to kill at " << cursorPos;
+				if (killPersonAt(cursorPos)) {
+					Debug::out << "Successful kill";
+					state = OverlordState::IDLE;
+					cooldowns[CooldownIndex::KILL] = COOLDOWN_TIME[CooldownIndex::KILL];
+				}
+				break;
+			}
+			case OverlordState::THROWING_WAVE: {
+				Debug::out << "Throwing wave at" << cursorPos;
+				state = OverlordState::IDLE;
+				cooldowns[CooldownIndex::WAVE] = COOLDOWN_TIME[CooldownIndex::WAVE];
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < std::size(cooldowns); i++) {
+		if (cooldowns[i] > 0) {
+			cooldowns[i] -= dt;
+		}
+	}
 }
 
 void Overlord::Draw() const
