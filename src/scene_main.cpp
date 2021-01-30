@@ -6,6 +6,7 @@
 #include "assets.h"
 #include "building.h"
 #include "person.h"
+#include "waypoint.h"
 #include "collide.h"
 #include "debug.h"
 
@@ -16,8 +17,39 @@ SceneMain::SceneMain() {
 void SceneMain::EnterScene() 
 {
 	SpawnBuildings();
+	SpawnWaypoint();
 	SpawnPeople();
 }
+
+
+void SceneMain::SpawnWaypoint() {
+	std::vector< std::vector<Waypoint*> > grid;
+	for (int i = 0; i < 10; i++) {
+		std::vector<Waypoint*> aux;
+		for (int j = 0; j < 10; j++) {
+			Waypoint* w =new Waypoint(vec(i*70+200+35, j*70+200+35), 10);
+			aux.push_back(w);
+		}
+		grid.push_back(aux);
+	}
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			if (i > 0) {
+				grid[i][j]->AddLink(grid[i-1][j]);
+			}
+			if (j > 0) {
+				grid[i][j]->AddLink(grid[i][j-1]);
+			}
+			if (j < grid[i].size()-1) {
+				grid[i][j]->AddLink(grid[i][j+1]);
+			}
+			if (i < grid.size()-1) {
+				grid[i][j]->AddLink(grid[i+1][j]);
+			}
+		}
+	}	
+}
+
 
 void SceneMain::SpawnBuildings() {
 	for (int i = 0; i < 10; i++) {
@@ -81,6 +113,17 @@ void SceneMain::Draw()
 	for (const Person* p : Person::GetAll()) {
 		p->Draw();
 		p->Bounds().DebugDraw(255,0,0);
+	}
+
+	for (auto w : Waypoint::GetAll()) {
+		w->Draw();
+		w->Bounds().DebugDraw(0,255,0);
+
+		if(Debug::Draw) {
+			for (auto link : w->links) {
+				Window::DrawPrimitive::Line(w->pos, link->pos, 2, {0, 255, 0, 255});
+			}
+		}
 	}
 
 #ifdef _IMGUI
