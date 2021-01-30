@@ -52,6 +52,10 @@ struct packet_join_lobby_response {
     int client_id;
 };
 
+struct packet_lobby_update {
+
+};
+
 struct packet_player_ready {
     int client_id;
     bool ready;
@@ -70,6 +74,7 @@ struct packet_player_input {
 enum PACKET_TYPE {
     JOIN_LOBBY,
     JOIN_LOBBY_RESPONSE,
+    LOBBY_UPDATE,
     PLAYER_READY,
     PLAYER_INPUT,
     GAME_START,

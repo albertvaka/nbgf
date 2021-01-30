@@ -6,8 +6,9 @@
 #include "player.h"
 
 struct SceneMain : Scene {
+	bool is_server;
 
-	SceneMain();
+	SceneMain(bool is_server);
 
 	void EnterScene() override;
 	void ExitScene() override;

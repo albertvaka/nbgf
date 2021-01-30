@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SDL2/SDL_net.h>
+
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
@@ -23,8 +25,11 @@ struct SceneMenu : Scene {
 	bool player_ready = false;
 	char ip_text[16] = "127.0.0.1";
 	int attempt = 0;
+	int client_id = -1;
 	LobbyState state = IDLE;
-	SceneMenu();
+	TCPsocket player_socket;
+	SDLNet_SocketSet client_socket_set;
+	SceneMenu(bool is_server);
 	std::vector<OnlinePlayer> players;
 
 	void EnterScene() override;
@@ -33,5 +38,3 @@ struct SceneMenu : Scene {
 	void Draw() override;
 
 };
-
-

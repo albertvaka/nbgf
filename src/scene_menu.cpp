@@ -5,10 +5,11 @@
 #endif
 #include "assets.h"
 #include "debug.h"
+#include "net.h"
 
 int MAX_ATTEMPTS = 3;
 
-SceneMenu::SceneMenu()
+SceneMenu::SceneMenu(bool is_server)
 {
 }
 
@@ -45,47 +46,41 @@ void SceneMenu::Draw() {
 			{
 				Debug::out << "Connecting to..." << ip_text;
 				state = CONNECTING;
+				player_socket = client_connect(ip_text, 8099, &client_socket_set);
 			}
 			break;
 
 		case LobbyState::CONNECTING:
 			ImGui::Text("Trying to connect...");
 
-			for (int n = 0; n < attempt; n++) {
-				player_client_connect
-				ImGui::Text("Attempt to connect failed. %d more tries to go...", MAX_ATTEMPTS-n);
-			}
+			if (attempt == 0) {
+				player_socket = client_connect(ip_text, 8099, &client_socket_set);
+				send_join_lobby(player_socket);
+				PACKET_TYPE ptype;
+				void* data = recv_data(player_socket, &ptype);
 
-			if (ImGui::Button("Cancel")) {
-				attempt = 0;
-				state = LobbyState::IDLE;
-			}
-
-			if (ImGui::Button("Fake Attempt")) {
-				attempt += 1;
-				if(attempt >= MAX_ATTEMPTS) {
-					attempt = 0;
-					state = LobbyState::IDLE;
+				if (ptype != JOIN_LOBBY_RESPONSE) {
+					Debug::out << "Expected a JOIN LOBBY RESPONSE";
 				}
+				else {
+					packet_join_lobby_response pjlr = parse_join_lobby_response(data);
+					client_id = pjlr.client_id;
+				}
+
+				attempt += 1;
 			}
 
-			if (ImGui::Button("Fake Connect"))
-			{
+			if (player_socket == NULL) {
+				ImGui::Text("CONNECTION FAILED");
+			}
+			else {
 				state = LobbyState::CONNECTED;
-				OnlinePlayer testPlayer = {
-					0,
-					"Pepito",
-					false
-				};
-				players.push_back(testPlayer);
 			}
 
 			break;
 
 		case LobbyState::CONNECTED:
-			ImGui::Begin("Lobby");
 			ImGui::Text("The game will start when everyone is ready:");
-			ImGui::BeginChild("Scrolling");
 			if (player_ready) {
 				ImGui::Text("%s (You) - Ready", player_name);
 			} else {
@@ -99,21 +94,23 @@ void SceneMenu::Draw() {
 					ImGui::Text("%s - Not Ready", players[n].name);
 				}
 			}
-			ImGui::EndChild();
+
 			if(player_ready) {
 				if (ImGui::Button("Ready")) {
-					player_ready = true;
+					player_ready = false;
+					send_player_ready(player_socket, client_id, player_ready);
 				}
 			} else {
 				if (ImGui::Button("Not ready")) {
-					player_ready = false;
+					player_ready = true;
 				}
 			}
+
 			if (ImGui::Button("Disconnect")) {
 				state = LobbyState::IDLE;
 				players.clear();
 			}
-			ImGui::End();
+
 			break;
 	}
 	ImGui::End();

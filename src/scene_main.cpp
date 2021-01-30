@@ -16,9 +16,7 @@ const int STREET_SIZE = 200;
 const int GRID_OFFSET = 200;
 const int BUILDING_SIZE = 200;
 
-SceneMain::SceneMain() {
-	
-}
+SceneMain::SceneMain(bool is_server) : is_server(is_server) {}
 
 void SceneMain::EnterScene() 
 {

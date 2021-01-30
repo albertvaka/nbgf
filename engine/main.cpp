@@ -50,20 +50,26 @@ void AfterSceneDraw();
 #endif
 
 void init();
-void main_loop();
+void main_loop(bool draw);
+
+bool is_server = false;
+bool draw = true;
 
 extern "C" void start_main_loop()
 {
 	// We wait until here to create the scene since here we know that
 	// the emscripten FS is ready, and the scene could try to use it.
-	SceneManager::currentScene = new EntryPointScene();
-	SceneManager::currentScene->EnterScene();
+	if (is_server) {
+		SceneManager::currentScene = new ServerScene(is_server);
+	} else {
+		SceneManager::currentScene = new EntryPointScene(is_server);
+	}
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(main_loop, 0, 1);
 #else
 	while (true) {
-		main_loop();
+		main_loop(draw);
 	}
 #endif
 }
@@ -80,7 +86,14 @@ int main(int argc, char* argv[])
 
 	for (int i = 0; i < argc; i++) {
 		if (std::string(argv[i]) == "--server") {
+			is_server = true;
+			draw = false;
+		}
+	}
 
+	for (int i = 0; i < argc; i++) {
+		if (std::string(argv[i]) == "--draw") {
+			draw = true;
 		}
 	}
 
@@ -167,7 +180,7 @@ void init() {
 	Fx::Init();
 }
 
-void main_loop() {
+void main_loop(bool draw) {
 
 	if (SceneManager::newScene != nullptr) {
 		SceneManager::currentScene->ExitScene();

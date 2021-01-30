@@ -135,5 +135,5 @@ bool send_entity_data(TCPsocket &socket, EntityUpdate* data, uint16_t num_entiti
     memcpy(temp_data+offset, data, num_entities * sizeof(EntityUpdate));
     offset += num_entities * sizeof(EntityUpdate);
 
-    return true;
+    return send_data(socket, temp_data, offset);
 }
