@@ -5,7 +5,9 @@
 namespace MusicPlayer
 {
 	Mix_Music* toPlayAfterIntro;
-	void introFinishedHook() { Mix_PlayMusic(toPlayAfterIntro, -1); }
+	void introFinishedHook() { 
+		Mix_PlayMusic(toPlayAfterIntro, -1);
+	}
 
 	void Play(Mix_Music* music) {
 		Mix_PlayMusic(music, -1);

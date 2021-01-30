@@ -14,8 +14,9 @@ struct Assets
 	static void LoadAll();
 
 	inline static GPU_Image* npcTexture;
-	inline static GPU_Image* building1;
-	inline static std::array<GPU_Image*, 3> buildings1x1;
+	inline static std::array<GPU_Image*, 8> buildings1x1;
+	inline static std::array<GPU_Image*, 2> buildings2x1;
+	inline static std::array<GPU_Image*, 4> buildings1x2;
 	inline static GPU_Image* buildingTexture;
 
 	inline static GPU_Image* backgroundTexture;
@@ -24,6 +25,9 @@ struct Assets
 	inline static TTF_Font* font_30_outline;
 
 	inline static Shader tintShader;
+
+	inline static Mix_Music* music;
+	inline static Mix_Music* music_intro;
 
 };
 
