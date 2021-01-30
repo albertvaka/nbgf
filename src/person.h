@@ -47,24 +47,22 @@ struct Person : BoxEntity, SelfRegister<Person>
 		}
 	}
 
-	void Update(float dt)
-	{
+	void UpdatePlayer(float dt, const packet_player_input& input) {
 		vel = vec::Zero;
-		/*
-
-		if(Input::IsPressed(0, GameKeys::UP)) {
-			vel.y = -speed;
+		for (INPUT action : input.inputs) {
+			if (action == INPUT::UP) {
+				vel.y = -speed;
+			}
+			if (action == INPUT::DOWN) {
+				vel.y = speed;
+			}
+			if (action == INPUT::RIGHT) {
+				vel.x = speed;
+			}
+			if (action == INPUT::LEFT) {
+				vel.x = -speed;
+			}
 		}
-		if(Input::IsPressed(0, GameKeys::RIGHT)) {
-			vel.x = speed;
-		}
-		if(Input::IsPressed(0, GameKeys::LEFT)) {
-			vel.x = -speed;
-		}
-		if(Input::IsPressed(0, GameKeys::DOWN)) {
-			vel.y = speed;
-		}
-
 		if (vel != vec::Zero) {
 			vec oldPos = pos;
 			pos.x += vel.x * dt;
@@ -85,7 +83,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 				anim.Update(dt);
 			}
 		}
-		*/		
+	}
+
+	void UpdateNpc(float dt)
+	{
 		anim.Update(dt);
 		vec direction = next_point - pos;
 		direction.Normalize();

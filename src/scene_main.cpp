@@ -124,8 +124,25 @@ void SceneMain::Update(float dt)
 	Camera::MoveCameraWithArrows(dt);
 	Camera::ChangeZoomWithPlusAndMinus(dt);
 
+	std::map<int, packet_player_input> inputs;
+	for (Client& client : lobby.clients) {
+		if (!client.in_use) continue;
+		PACKET_TYPE type;
+		void* data = recv_data(client.socket, &type);
+		if (type == PACKET_TYPE::PLAYER_INPUT) {
+			packet_player_input input = parse_player_input(data);
+			inputs[input.client_id] = input;
+		}
+	}
+
 	for (auto p : Person::GetAll()) {
-		p->Update(dt);
+		auto inp = inputs.find(p->id);
+		if (inp != inputs.end()) {
+			p->UpdatePlayer(dt, inp->second);
+		}
+		else {
+			p->UpdateNpc(dt);
+		}
 	}
 
 #ifdef _DEBUG
