@@ -25,7 +25,7 @@ SHELL = bash
 #NOTE: Dynamic casts are disabled by fno-rtti
 CFLAGS = -pipe -I/opt/brew/include -I./engine $(DEP_INCLUDE) -Wall -Wno-unused-parameter $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
 CXXFLAGS = $(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions -Wno-reorder
-LDFLAGS	 = $(CXXFLAGS) -lSDL2_ttf -lSDL2_mixer $(PLATFORM_LDFLAGS)
+LDFLAGS	 = $(CXXFLAGS) -L/opt/brew/lib -lSDL2_net -lSDL2_ttf -lSDL2_mixer $(PLATFORM_LDFLAGS)
 
 ifdef EMSCRIPTEN
 	OUT_FILE=$(EXEC).js
