@@ -32,6 +32,12 @@ namespace AnimLib {
 		{ {12 * frameSize, 0 * frameSize, frameSize, frameSize}, 0.5f },
 	};
 
+	constexpr const AnimationFrame NPC_1_DIE[] = {
+		{ {15 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {14 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {13 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+	};
+
 	constexpr const AnimationFrame ALIEN_1[] = {
 		{ {0,0,71,55}, 0.3f },
 		{ {71,0,71,55}, 0.3f },

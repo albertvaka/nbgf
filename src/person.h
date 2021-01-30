@@ -70,7 +70,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 	}
 
 	void UpdatePlayer(float dt) {
-		if (!alive) { return; }
+		if (!alive) { 
+			anim.Update(dt);
+			return; 
+		}
 		vec dir = vec::Zero;
 		if (Input::IsPressed(player_id, GameKeys::UP)) {
 			dir.y = -1;
@@ -122,7 +125,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void Kill() {
 		alive = false;
-
+		anim.Ensure(AnimLib::NPC_1_DIE, false);
 		for (auto p : Person::GetAll()) {
 			if (p->pos.Distance(pos) < 600) {
 				p->Panic(p->pos - pos);
@@ -139,7 +142,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void UpdateNpc(float dt)
 	{
-		if (!alive) { return; }
+		if (!alive) {
+			anim.Update(dt);
+			return;
+		}
 
 		vec dir;
 		if (in_panic) {
