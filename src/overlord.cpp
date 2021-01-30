@@ -7,6 +7,7 @@
 #include "person.h"
 #include "anim_lib.h"
 
+const int SKILL_SIZE = 100;
 
 Overlord::Overlord()
 {
@@ -69,10 +70,19 @@ void Overlord::Update(float dt)
 
 void Overlord::Draw() const
 {
+
 	if(Debug::Draw) {
 		vec mouseEnd = cursorPos + vec(-1,-1)*20;
 		Window::DrawPrimitive::Arrow(mouseEnd, cursorPos, 2, 10, {0, 255, 255, 255});
 	}
+	
+	for (int i =0; i < std::size(cooldowns); i++) {
+		int c = ((COOLDOWN_TIME[i]-cooldowns[i])/COOLDOWN_TIME[i]) * 255;
+		//Camera::InScreenCoords::Begin();
+		Window::DrawPrimitive::Rectangle(0, SKILL_SIZE*i, SKILL_SIZE, SKILL_SIZE*(i+1), 5, c,c,c);
+		//Camera::InScreenCoords::End();
+	}
+
 	/*
 	const GPU_Rect& animRect = AnimLib::Overlord;
 	Window::Draw(Assets::overlordTexture, pos)

@@ -198,9 +198,7 @@ void SceneMain::Draw()
 		p->Bounds().DebugDraw(255,0,0);
 	}
 
-	for (auto o : Overlord::GetAll()) {
-		o->Draw();
-	}
+	
 
 	for (auto w : Waypoint::GetAll()) {
 		w->Bounds().DebugDraw(0,255,0);
@@ -225,6 +223,10 @@ void SceneMain::Draw()
 		pd->DoDraw();
 	}
 
+	// Has to be last because contains GUI
+	for (auto o : Overlord::GetAll()) {
+		o->Draw();
+	}
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
