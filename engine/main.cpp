@@ -108,9 +108,13 @@ void init() {
 	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 #endif
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0) {
 		Debug::out << SDL_GetError();
 		exit(1);
+	}
+
+	if (SDLNet_Init() != 0) {
+		Debug::out << SDLNet_GetError();
 	}
 
 	if (TTF_Init() != 0) {

@@ -23,7 +23,7 @@ WEBGL_VER = 2
 SHELL = bash
 
 #NOTE: Dynamic casts are disabled by fno-rtti
-CFLAGS = -pipe -I./engine $(DEP_INCLUDE) -Wall -Wno-unused-parameter $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
+CFLAGS = -pipe -I/opt/brew/include -I./engine $(DEP_INCLUDE) -Wall -Wno-unused-parameter $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
 CXXFLAGS = $(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions -Wno-reorder
 LDFLAGS	 = $(CXXFLAGS) -lSDL2_ttf -lSDL2_mixer $(PLATFORM_LDFLAGS)
 
@@ -65,27 +65,27 @@ $(EXEC): $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) Makefile
 
 obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h Makefile
 	@mkdir -p obj/engine
-	$(call time_begin,$@)
+	# $(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	$(call time_end,$@)
+	# $(call time_end,$@)
 
 obj/%.cpp.o: src/%.cpp engine/*.h src/*.h Makefile
 	@mkdir -p obj
-	$(call time_begin,$@)
+	# $(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	$(call time_end,$@)
+	# $(call time_end,$@)
 
 obj/vendor/%.c.o: vendor/%.c $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
-	$(call time_begin,$@)
+	# $(call time_begin,$@)
 	$(CC) $(CFLAGS) -c $< -o $@
-	$(call time_end,$@)
+	# $(call time_end,$@)
 
 obj/vendor/%.cpp.o: vendor/%.cpp $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
-	$(call time_begin,$@)
+	# $(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	$(call time_end,$@)
+	# $(call time_end,$@)
 
 clean:
 	$(RM) $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) $(OUT_FILE)
