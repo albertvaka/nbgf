@@ -7,8 +7,6 @@
 
 struct SceneMain : Scene {
 
-	
-
 	SceneMain();
 
 	void EnterScene() override;
@@ -18,6 +16,7 @@ struct SceneMain : Scene {
 
 	void SpawnBuildings();
 	void SpawnPeople();
+	void SpawnCity();
 	void SpawnWaypoint();
 
 

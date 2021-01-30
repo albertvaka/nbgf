@@ -88,10 +88,7 @@ void AfterSceneDraw()
             Window::DrawPrimitive::Rectangle(v.v - vec(2, 2), v.v + vec(2, 2), 1, v.color);
         }
         for (const debugvec& v : debugarrows) {
-            Window::DrawPrimitive::Line(v.from, v.from + v.v, 1, v.color);
-            vec toTheSide = (v.v).Perp().Normalized() * 3.f;
-            Window::DrawPrimitive::Line(v.from + v.v, v.from + v.v - toTheSide.RotatedAroundOriginDegs(-45), 1, v.color);
-            Window::DrawPrimitive::Line(v.from + v.v, v.from + v.v + toTheSide.RotatedAroundOriginDegs(45), 1, v.color);
+            Window::DrawPrimitive::Arrow(v.from, v.from + v.v, 1, 3, v.color);
         }
         for (const debugvec& v : debugbounds) {
             if (v.radius < 0) {
