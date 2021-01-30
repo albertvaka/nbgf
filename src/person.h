@@ -12,6 +12,8 @@
 #include "window.h"
 #include "animation.h"
 #include "camera.h"
+#include "freeze_skill.h"
+
 
 static const float scale = 0.3f;
 static const float speed = 100.f;
@@ -97,6 +99,13 @@ struct Person : BoxEntity, SelfRegister<Person>
 		vec direction = next_point - pos;
 		direction.Normalize();
 		vel = direction * speed;
+
+		for(auto f :FreezeSkill::GetAll()) {
+			if(f->freezeNow) {
+				vel *= 0;
+			}
+		}
+
 		pos += vel * dt;
 		next_point.DebugDraw();
 

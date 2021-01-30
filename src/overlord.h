@@ -5,33 +5,38 @@
 
 enum OverlordState {
 	IDLE = -1,
-
 	THROWING_KILL,
+	THROWING_FREEZE,
 	THROWING_WAVE,
 };
 
 enum CooldownIndex {
 	KILL = 0,
+	FREEZE,
 	WAVE
 };
 
-const float COOLDOWN_TIME[2] = {
+const float COOLDOWN_TIME[3] = {
 	//Kill
+	10,
+	//Freeze
 	20,
 	//Wave
-	20
+	10
 };
 
-const SDL_Scancode skill_keys[2] = {
+const SDL_Scancode skill_keys[3] = {
 	SDL_SCANCODE_1,
-	SDL_SCANCODE_2
+	SDL_SCANCODE_2,
+	SDL_SCANCODE_3,
 };
 
 struct Overlord : Entity, SelfRegister<Overlord>
 {
-	float cooldowns[2] = {
+	float cooldowns[3] = {
 		0,
-		0
+		0,
+		0,
 	};
 	OverlordState state = OverlordState::IDLE;
 	vec cursorPos;

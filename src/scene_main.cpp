@@ -11,6 +11,7 @@
 #include "overlord.h"
 #include "collide.h"
 #include "debug.h"
+#include "freeze_skill.h"
 #include <stack>
 #include <vector>
 
@@ -157,8 +158,10 @@ void SceneMain::Update(float dt)
 		}
 	}
 
-	// TODO: network stuff
 	for (auto o : Overlord::GetAll()) {
+		o->Update(dt);
+	}
+	for (auto o : FreezeSkill::GetAll()) {
 		o->Update(dt);
 	}
 
@@ -225,6 +228,9 @@ void SceneMain::Draw()
 
 	// Has to be last because contains GUI
 	for (auto o : Overlord::GetAll()) {
+		o->Draw();
+	}
+	for (auto o : FreezeSkill::GetAll()) {
 		o->Draw();
 	}
 #ifdef _IMGUI

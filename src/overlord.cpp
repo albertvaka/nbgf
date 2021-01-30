@@ -40,7 +40,16 @@ void Overlord::Update(float dt)
 	if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
 		state = OverlordState::IDLE;
 	}
-
+	// Skills that don't need a target
+	switch(state) {
+		case OverlordState::THROWING_FREEZE: {
+			new FreezeSkill();
+			state = OverlordState::IDLE;
+			cooldowns[CooldownIndex::FREEZE] = COOLDOWN_TIME[CooldownIndex::FREEZE];
+			break;
+		}
+	}
+	// Skills that need a target
 	if (Mouse::IsJustPressed(Mouse::Button::Left)) {
 		switch(state) {
 			case OverlordState::THROWING_KILL: {
