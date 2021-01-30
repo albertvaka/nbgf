@@ -21,7 +21,7 @@ struct SceneMenu : Scene {
 
 	char player_name[30] = "Player";
 	bool player_ready = false;
-	char ip_text[16] = "0.0.0.0";
+	char ip_text[16] = "127.0.0.1";
 	int attempt = 0;
 	LobbyState state = IDLE;
 	SceneMenu();

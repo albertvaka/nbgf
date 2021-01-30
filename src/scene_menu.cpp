@@ -34,12 +34,11 @@ void SceneMenu::Update(float dt)
 #endif
 }
 
-void SceneMenu::Draw()
-{
+void SceneMenu::Draw() {
 	Window::Clear();
+	ImGui::Begin("Connect");
 	switch(state) {
 		case LobbyState::IDLE:
-			ImGui::Begin("Connect");
 			ImGui::InputText(" Name", player_name, IM_ARRAYSIZE(player_name));
 			ImGui::InputText(" IP", ip_text, IM_ARRAYSIZE(ip_text));
 			if (ImGui::Button("Connect"))
@@ -47,29 +46,29 @@ void SceneMenu::Draw()
 				Debug::out << "Connecting to..." << ip_text;
 				state = CONNECTING;
 			}
-			ImGui::End();
 			break;
 
 		case LobbyState::CONNECTING:
-			ImGui::Begin("Trying to connect");
-			ImGui::BeginChild("Scrolling");
-			for (int n = 0; n < attempt; n++)
+			ImGui::Text("Trying to connect...");
+
+			for (int n = 0; n < attempt; n++) {
+				player_client_connect
 				ImGui::Text("Attempt to connect failed. %d more tries to go...", MAX_ATTEMPTS-n);
-			ImGui::EndChild();
-			ImGui::End();
-			if (ImGui::Button("Cancel"))
-			{
+			}
+
+			if (ImGui::Button("Cancel")) {
 				attempt = 0;
 				state = LobbyState::IDLE;
 			}
-			if (ImGui::Button("Fake Attempt"))
-			{
+
+			if (ImGui::Button("Fake Attempt")) {
 				attempt += 1;
 				if(attempt >= MAX_ATTEMPTS) {
 					attempt = 0;
 					state = LobbyState::IDLE;
 				}
 			}
+
 			if (ImGui::Button("Fake Connect"))
 			{
 				state = LobbyState::CONNECTED;
@@ -80,6 +79,7 @@ void SceneMenu::Draw()
 				};
 				players.push_back(testPlayer);
 			}
+
 			break;
 
 		case LobbyState::CONNECTED:
@@ -116,4 +116,5 @@ void SceneMenu::Draw()
 			ImGui::End();
 			break;
 	}
+	ImGui::End();
 }
