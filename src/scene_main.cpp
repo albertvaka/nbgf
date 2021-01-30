@@ -36,10 +36,6 @@ SceneMain::SceneMain(bool is_server) : is_server(is_server) {
 }
 
 void SceneMain::EnterScene() {
-	if (is_server) {
-		server_socket = server_setup(8099, &server_socket_set);
-	}
-
 	SpawnCity();
 }
 
@@ -211,17 +207,6 @@ void SceneMain::Update(float dt)
 		return;
 	}
 #endif
-
-	/*
-	entities.clear();
-	for (Person* p : Person::GetAll()) {
-		entities.push_back(p->Serialize());
-	}
-
-	for (Client& client : lobby.clients) {
-		if (!client.in_use) continue;
-		send_entity_data(client.socket, &entities[0], entities.size());
-	}*/
 }
 
 std::vector<Window::PartialDraw> draws;

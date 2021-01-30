@@ -27,6 +27,13 @@ struct Person : BoxEntity, SelfRegister<Person>
 	Animation anim;
 	int player_id;
 	bool alive;
+
+	bool in_panic;
+	vec panic_dir;
+	float panic_left;
+
+	float speed_multiplier;
+
 	Person(const vec& position, int player_id)
 		: BoxEntity(pos, vec(150, 150)*scale)
 		, anim(AnimLib::NPC_1_DOWN)
@@ -38,6 +45,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 		old_waypoint = next_waypoint;
 		next_waypoint = next_waypoint->GetRandomNext();
 		next_point = next_waypoint->GetRandomPoint();
+		in_panic = false;
+		panic_left = 0.0f;
+		panic_dir = vec::Zero;
+		speed_multiplier = 1.0f;
 	}
 
 	void SetNearestWaypoint() {
@@ -66,10 +77,16 @@ struct Person : BoxEntity, SelfRegister<Person>
 		if (Input::IsPressed(player_id, GameKeys::LEFT)) {
 			dir.x = -1;
 		}
+		if (Input::IsPressed(player_id, GameKeys::RUN)) {
+			speed_multiplier = 1.7f;
+		}
+		else {
+			speed_multiplier = 1.0f;
+		}
 
 		if (dir != vec::Zero) {
 			dir.Normalize();
-			vel = dir * speed;
+			vel = dir * speed * speed_multiplier;
 
 			UpdateAnim(dir);
 
@@ -98,28 +115,72 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void Kill() {
 		alive = false;
+
+		for (auto p : Person::GetAll()) {
+			if (p->pos.Distance(pos) < 600) {
+				p->Panic(p->pos - pos);
+			}
+		}
 	}
+
+	void Panic(vec dir) {
+		in_panic = true;
+		panic_dir = dir;
+		panic_left = 2.5f;
+		speed_multiplier = 1.7f;
+	}
+
 	void UpdateNpc(float dt)
 	{
 		if (!alive) { return; }
 
-		vec direction = next_point - pos;
-		direction.Normalize();
+		vec dir;
+		if (in_panic) {
+			dir = panic_dir;
+		}
+		else {
+			dir = next_point - pos;
+		}
+
+		dir.Normalize();
 
 		for (auto f : FreezeSkill::GetAll()) {
 			if (f->freezeNow) {
-				direction = vec::Zero;
+				dir = vec::Zero;
 			}
 		}
 
-		vel = direction * speed;
-		pos += vel * dt;
-		next_point.DebugDraw();
-		if (direction != vec::Zero) {
-			anim.Update(dt);
+		if (dir != vec::Zero) {
+			dir.Normalize();
+			vel = dir * speed * speed_multiplier;
+
+			UpdateAnim(dir);
+
+			if (vel != vec::Zero) {
+				vec oldPos = pos;
+				pos.x += vel.x * dt;
+				for (const Building* b : Building::GetAll()) {
+					if (Collide(this, b)) {
+						pos.x = oldPos.x;
+						vel.x = 0;
+					}
+				}
+				pos.y += vel.y * dt;
+				for (const Building* b : Building::GetAll()) {
+					if (Collide(this, b)) {
+						pos.y = oldPos.y;
+						vel.y = 0;
+					}
+				}
+				if (pos != oldPos) {
+					anim.Update(dt);
+				}
+			}
 		}
 
-		UpdateAnim(direction);
+		// vel = direction * speed * speed_multiplier;
+		// pos += vel * dt;
+		next_point.DebugDraw();
 
 		if (this->pos.DistanceSq(next_point) < 5) {
 			Waypoint* current = next_waypoint;
@@ -135,6 +196,13 @@ struct Person : BoxEntity, SelfRegister<Person>
 			}
 			old_waypoint = current;
 			next_point = next_waypoint->GetRandomPoint();
+		}
+
+		panic_left -= dt;
+
+		if (panic_left <= 0) {
+			in_panic = false;
+			speed_multiplier = 1.0f;
 		}
 	}
 
@@ -166,38 +234,4 @@ struct Person : BoxEntity, SelfRegister<Person>
 			}
 		}
 	}
-
-	/*
-	EntityUpdate Serialize() {
-		int frame = anim.CurrentFrameRect().x / AnimLib::frameSize;
-		return {
-			pos.x,
-			pos.y,
-			id,
-			goingLeft ? -frame : frame,
-		};
-	}
-
-	void Kill() {
-		alive = false;
-	}
-
-	static Window::PartialDraw DumbDraw(EntityUpdate* entity) {
-		
-		int sprite = entity->sprite;
-		bool mirror = false;
-		if (sprite < 0) {
-			sprite = -sprite;
-			mirror = true;
-		}
-		int sheet_x = sprite;
-		int sheet_y = 0;
-
-		GPU_Rect rect = { sheet_x * AnimLib::frameSize, sheet_y * AnimLib::frameSize, AnimLib::frameSize, AnimLib::frameSize };
-		return Window::PartialDraw(Assets::npcTexture, entity->x, entity->y - 80 * scale)
-			.withRect(rect)
-			.withOrigin(rect.w / 2, rect.h / 2)
-			.withScale(mirror ? -scale : scale, scale);
-	}
-	*/
 };

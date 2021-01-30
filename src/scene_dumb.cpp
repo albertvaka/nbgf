@@ -77,8 +77,6 @@ void SceneDumb::Draw()
 
 	int num_entities = -1;
 	for (int i = 0; i < num_entities;  i++) {
-		// EntityUpdate* entity = nullptr;
-		// Person::DumbDraw(entity);
 	}
 
 }

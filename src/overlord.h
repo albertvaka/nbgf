@@ -18,7 +18,7 @@ enum CooldownIndex {
 
 const float COOLDOWN_TIME[3] = {
 	//Kill
-	10,
+	0,
 	//Freeze
 	20,
 	//Wave
