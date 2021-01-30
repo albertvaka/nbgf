@@ -103,20 +103,21 @@ struct Person : BoxEntity, SelfRegister<Person>
 	{
 		if (!alive) { return; }
 
-		anim.Update(dt);
 		vec direction = next_point - pos;
 		direction.Normalize();
-		vel = direction * speed;
 
-		for(auto f :FreezeSkill::GetAll()) {
-			if(f->freezeNow) {
-				vel *= 0;
+		for (auto f : FreezeSkill::GetAll()) {
+			if (f->freezeNow) {
+				direction = vec::Zero;
 			}
 		}
 
+		vel = direction * speed;
 		pos += vel * dt;
 		next_point.DebugDraw();
-
+		if (direction != vec::Zero) {
+			anim.Update(dt);
+		}
 
 		UpdateAnim(direction);
 
