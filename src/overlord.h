@@ -20,9 +20,9 @@ const float COOLDOWN_TIME[3] = {
 	//Kill
 	0,
 	//Freeze
-	20,
+	10,
 	//Wave
-	10
+	5
 };
 
 const SDL_Scancode skill_keys[3] = {

@@ -14,6 +14,7 @@
 #include "collide.h"
 #include "debug.h"
 #include "freeze_skill.h"
+#include "wave_skill.h"
 #include <stack>
 #include "musicplayer.h"
 #include <vector>
@@ -31,7 +32,7 @@ constexpr int h = 11;
 SceneMain::SceneMain(bool is_server) : is_server(is_server) {
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
 
-	Camera::SetZoom(0.4);
+	Camera::SetZoom(0.4f);
 	Camera::SetTopLeft(vec(0, 0));
 }
 
@@ -200,6 +201,11 @@ void SceneMain::Update(float dt)
 		o->Update(dt);
 	}
 
+	for (auto o : WaveSkill::GetAll()) {
+		o->Update(dt);
+	}
+	WaveSkill::DeleteNotAlive();
+
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
@@ -216,6 +222,7 @@ void SceneMain::Draw()
 	Window::Clear(1, 10, 33);
 
 	draws.clear();
+
 	for (const Building* b : Building::GetAll()) {
 		draws.push_back(b->Draw());
 		b->Bounds().DebugDraw(255,0,0);
@@ -225,8 +232,6 @@ void SceneMain::Draw()
 		draws.push_back(p->Draw());
 		p->Bounds().DebugDraw(255,0,0);
 	}
-
-	
 
 	for (auto w : Waypoint::GetAll()) {
 		w->Bounds().DebugDraw(0,255,0);
@@ -249,6 +254,10 @@ void SceneMain::Draw()
 
 	for (Window::PartialDraw* pd : drawps) {
 		pd->DoDraw();
+	}
+
+	for (const WaveSkill* b : WaveSkill::GetAll()) {
+		b->Draw();
 	}
 
 	// Has to be last because contains GUI

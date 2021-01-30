@@ -13,6 +13,7 @@
 #include "animation.h"
 #include "camera.h"
 #include "freeze_skill.h"
+#include "wave_skill.h"
 
 
 static const float scale = 0.3f;
@@ -26,6 +27,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 	bool goingLeft;
 	Animation anim;
 	int player_id;
+	bool jump = false;
 	bool alive;
 
 	bool in_panic;
@@ -34,6 +36,11 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	float speed_multiplier;
 
+	BoxBounds ClickBounds() const
+	{
+		return BoxBounds(pos, vec(150, 300)*scale, vec(150/2,300-80) * scale)*1.1;
+	}
+		
 	Person(const vec& position, int player_id)
 		: BoxEntity(pos, vec(150, 150)*scale)
 		, anim(AnimLib::NPC_1_DOWN)
@@ -149,6 +156,21 @@ struct Person : BoxEntity, SelfRegister<Person>
 				dir = vec::Zero;
 			}
 		}
+		for (WaveSkill* f : WaveSkill::GetAll()) {
+			if (f->InWave(pos)) {
+				jump = true;
+				anim.Ensure(AnimLib::NPC_1_JUMP, false);
+			}
+		}
+
+		if (jump) {
+			dir = vec::Zero;
+			anim.Update(dt);
+			if (anim.IsComplete()) {
+				Debug::out << "complete";
+				jump = false;
+			}
+		}
 
 		if (dir != vec::Zero) {
 			dir.Normalize();
@@ -212,6 +234,8 @@ struct Person : BoxEntity, SelfRegister<Person>
 			Window::DrawPrimitive::Circle(pos, 10, 5, 255, 0, 0);
 		}
 
+		ClickBounds().DebugDraw(0, 0, 255);
+
 		const GPU_Rect& rect = anim.CurrentFrameRect();
 		return Window::PartialDraw(Assets::npcTexture, pos - vec(0, 80*scale))
 			.withRect(rect)
@@ -234,4 +258,5 @@ struct Person : BoxEntity, SelfRegister<Person>
 			}
 		}
 	}
+
 };

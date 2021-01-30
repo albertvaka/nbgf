@@ -5,6 +5,7 @@
 #include "window.h"
 #include "debug.h"
 #include "person.h"
+#include "wave_skill.h"
 #include "anim_lib.h"
 
 const int SKILL_SIZE = 100;
@@ -16,10 +17,10 @@ Overlord::Overlord()
 bool killPersonAt(vec pos) {
 	bool hasKilled = false;
 	for(Person* p : Person::GetAll()) {
-		if(p->Bounds().Contains(pos)) {
-			// Kill all persons in point? otherwise how to choose?
+		if(p->ClickBounds().Contains(pos)) {
 			p->Kill();
 			hasKilled = true;
+			break; // Kill only the first person found
 		}
 	}
 	return hasKilled;
@@ -63,6 +64,7 @@ void Overlord::Update(float dt)
 			}
 			case OverlordState::THROWING_WAVE: {
 				Debug::out << "Throwing wave at" << cursorPos;
+				new WaveSkill(cursorPos);
 				state = OverlordState::IDLE;
 				cooldowns[CooldownIndex::WAVE] = COOLDOWN_TIME[CooldownIndex::WAVE];
 				break;
