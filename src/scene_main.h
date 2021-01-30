@@ -7,8 +7,6 @@
 
 struct SceneMain : Scene {
 
-	
-
 	SceneMain();
 
 	void EnterScene() override;

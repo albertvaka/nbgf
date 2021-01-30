@@ -20,10 +20,10 @@ struct OnlinePlayer {
 struct SceneMenu : Scene {
 
 	char player_name[30] = "Player";
-	bool player_ready;
+	bool player_ready = false;
 	char ip_text[16] = "0.0.0.0";
-	int attempt;
-	LobbyState state;
+	int attempt = 0;
+	LobbyState state = IDLE;
 	SceneMenu();
 	std::vector<OnlinePlayer> players;
 
