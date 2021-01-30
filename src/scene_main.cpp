@@ -106,8 +106,7 @@ void SceneMain::SpawnCity()
 						vec(BUILDING_SIZE, BUILDING_SIZE * 2)
 					);
 					maze[x][y + 1] = 'm';
-				}
-				if (x < w-1 && maze[x + 1][y] == 'b' && Rand::OnceEvery(2)) {
+				} else if (x < w-1 && maze[x + 1][y] == 'b' && Rand::OnceEvery(2)) {
 					//2x1
 					new Building(
 						Assets::buildings2x1[Rand::roll(Assets::buildings2x1.size())],
@@ -151,7 +150,10 @@ void SceneMain::SpawnCity()
 	}
 
 	std::shuffle(empty_wp.begin(), empty_wp.end(), GoodRand::r.gen);
-	int num_players = 1;
+	int num_players = GamePad::ConnectedGamepads();
+	if (num_players == 0) {
+		num_players = 1;
+	}
 	int player_id = 0;
 	for (Waypoint* p : empty_wp) {
 		new Person(p->pos, player_id++);
