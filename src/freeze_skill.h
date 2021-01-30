@@ -50,7 +50,6 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 	}
 	void Draw(){
 		Window::Draw(actionText, vec(Camera::Center().x, 60))
-			.withOrigin(actionText.Size()/2)
-			.withScale(0.8f);
+			.withOrigin(actionText.Size() / 2);
 	}
 };
