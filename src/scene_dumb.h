@@ -4,7 +4,7 @@
 #include "partsys.h"
 #include "text.h"
 #include "net.h"
-
+ 
 struct SceneDumb : Scene {
 	TCPsocket socket;
 	SDLNet_SocketSet socket_set;

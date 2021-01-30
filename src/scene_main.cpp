@@ -185,7 +185,7 @@ std::vector<Window::PartialDraw> draws;
 std::vector<Window::PartialDraw*> drawps;
 void SceneMain::Draw()
 {
-	Window::Clear(50, 50, 50);
+	Window::Clear(55, 22, 35);
 
 	draws.clear();
 	for (const Building* b : Building::GetAll()) {

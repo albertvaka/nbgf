@@ -223,6 +223,9 @@
     <ClInclude Include="src\net.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\overlord.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -340,6 +343,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\net.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\overlord.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

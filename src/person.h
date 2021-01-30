@@ -49,17 +49,17 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void UpdatePlayer(float dt, const packet_player_input& input) {
 		vel = vec::Zero;
-		for (INPUT action : input.inputs) {
-			if (action == INPUT::UP) {
+		for (INPUT_ACTION action : input.inputs) {
+			if (action == INPUT_ACTION::UP) {
 				vel.y = -speed;
 			}
-			if (action == INPUT::DOWN) {
+			if (action == INPUT_ACTION::DOWN) {
 				vel.y = speed;
 			}
-			if (action == INPUT::RIGHT) {
+			if (action == INPUT_ACTION::RIGHT) {
 				vel.x = speed;
 			}
-			if (action == INPUT::LEFT) {
+			if (action == INPUT_ACTION::LEFT) {
 				vel.x = -speed;
 			}
 		}
