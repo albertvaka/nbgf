@@ -16,7 +16,7 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 	FreezeSkill() : actionText(Assets::font_30, Assets::font_30_outline) 
 	{
 		actionText.SetFillColor(0, 0, 0);
-		actionText.SetOutlineColor(255, 0, 0);
+		actionText.SetOutlineColor(255, 255, 0);
 	}
 	void Update(float dt){
 		if (countdown > 3) {
