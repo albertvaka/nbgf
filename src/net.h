@@ -33,7 +33,7 @@ struct Lobby {
 
 inline Lobby lobby;
 
-enum INPUT {
+enum INPUT_ACTION {
     NONE,
     UP,
     DOWN,
@@ -72,7 +72,7 @@ struct packet_game_start {
 
 struct packet_player_input {
     int client_id;
-    INPUT inputs[4];
+    INPUT_ACTION inputs[4];
 };
 
 enum PACKET_TYPE {

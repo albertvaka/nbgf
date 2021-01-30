@@ -9,22 +9,18 @@
 
 struct Building : BoxEntity, SelfRegister<Building>
 {
-
-	Building(const vec& position, const vec& s)
+	GPU_Image* texture;
+	Building(GPU_Image* texture, const vec& position, const vec& s)
 		: BoxEntity(pos, size)
+		, texture(texture)
 	{
 		pos = position;
 		size = s;
 	}
 
-	void Update(float dt)
+	Window::PartialDraw Draw() const
 	{
-	}
-
-	void Draw() const
-	{
-		Window::Draw(Assets::buildingTexture, pos)
-			.withScale(0.5f)
-			.withOrigin(Assets::buildingTexture->w/2, Assets::buildingTexture->h / 2);
+		return Window::PartialDraw(texture, pos)
+			.withOrigin(texture->w/2, texture->h - Bounds().height/2);
 	}
 };

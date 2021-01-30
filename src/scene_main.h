@@ -3,7 +3,6 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
-#include "player.h"
 #include "net.h"
 
 struct SceneMain : Scene {
@@ -18,9 +17,6 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
-	void SpawnBuildings();
-	void SpawnPeople();
 	void SpawnCity();
-	void SpawnWaypoint();
 	void BPS(veci min, veci max, int level);
 };

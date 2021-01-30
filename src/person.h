@@ -53,17 +53,17 @@ struct Person : BoxEntity, SelfRegister<Person>
 	void UpdatePlayer(float dt, const packet_player_input& input) {
 		if(!alive) { return; }
 		vel = vec::Zero;
-		for (INPUT action : input.inputs) {
-			if (action == INPUT::UP) {
+		for (INPUT_ACTION action : input.inputs) {
+			if (action == INPUT_ACTION::UP) {
 				vel.y = -speed;
 			}
-			if (action == INPUT::DOWN) {
+			if (action == INPUT_ACTION::DOWN) {
 				vel.y = speed;
 			}
-			if (action == INPUT::RIGHT) {
+			if (action == INPUT_ACTION::RIGHT) {
 				vel.x = speed;
 			}
-			if (action == INPUT::LEFT) {
+			if (action == INPUT_ACTION::LEFT) {
 				vel.x = -speed;
 			}
 		}
@@ -130,14 +130,14 @@ struct Person : BoxEntity, SelfRegister<Person>
 		}
 	}
 
-	void Draw() const
+	Window::PartialDraw Draw() const
 	{
 		if(!alive) {
 			Window::DrawPrimitive::Circle(pos, 10, 5, 255, 0, 0);
 		}
 
 		const GPU_Rect& rect = anim.CurrentFrameRect();
-		Window::Draw(Assets::npcTexture, pos - vec(0, 80*scale))
+		return Window::PartialDraw(Assets::npcTexture, pos - vec(0, 80*scale))
 			.withRect(rect)
 			.withOrigin(rect.w / 2, rect.h / 2)
 			.withScale(goingLeft? -scale : scale, scale);
@@ -158,7 +158,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 		alive = false;
 	}
 
-	static void DumbDraw(EntityUpdate* entity) {
+	static Window::PartialDraw DumbDraw(EntityUpdate* entity) {
 		
 		int sprite = entity->sprite;
 		bool mirror = false;
@@ -170,7 +170,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 		int sheet_y = 0;
 
 		GPU_Rect rect = { sheet_x * AnimLib::frameSize, sheet_y * AnimLib::frameSize, AnimLib::frameSize, AnimLib::frameSize };
-		Window::Draw(Assets::npcTexture, entity->x, entity->y - 80 * scale)
+		return Window::PartialDraw(Assets::npcTexture, entity->x, entity->y - 80 * scale)
 			.withRect(rect)
 			.withOrigin(rect.w / 2, rect.h / 2)
 			.withScale(mirror ? -scale : scale, scale);

@@ -48,15 +48,13 @@
     <ClInclude Include="engine\window_draw.h" />
     <ClInclude Include="engine\window_drawprimitive.h" />
     <ClInclude Include="engine\window_drawraw.h" />
-    <ClInclude Include="src\alien.h" />
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\building.h" />
-    <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\net.h" />
+    <ClInclude Include="src\overlord.h" />
     <ClInclude Include="src\person.h" />
-    <ClInclude Include="src\player.h" />
     <ClInclude Include="src\scene_dumb.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
@@ -104,7 +102,7 @@
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\net.cpp" />
-    <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\overlord.cpp" />
     <ClCompile Include="src\scene_dumb.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
     <ClCompile Include="src\scene_menu.cpp" />

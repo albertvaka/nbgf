@@ -30,13 +30,4 @@ struct Waypoint : CircleEntity, SelfRegister<Waypoint>
 		return links[i];
 	}
 	
-
-	void Update(float dt)
-	{
-	}
-
-	void Draw() const
-	{
-		
-	}
 };

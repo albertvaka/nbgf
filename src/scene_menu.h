@@ -5,7 +5,6 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
-#include "player.h"
 
 enum LobbyState {
 	IDLE,

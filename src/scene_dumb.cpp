@@ -13,7 +13,8 @@
 #include <stack>
 #include <vector>
 
-SceneDumb::SceneDumb(bool is_server) {
+SceneDumb::SceneDumb(bool is_server)
+{
 	socket = client_connect("127.0.0.1", 8099, &socket_set);
 }
 
@@ -45,21 +46,21 @@ void SceneDumb::Update(float dt) {
 	int index = 0;
 	
 	if (Input::IsPressed(0, GameKeys::UP)) {
-		input.inputs[index++] = INPUT::UP;
+		input.inputs[index++] = INPUT_ACTION::UP;
 	}
 	else if (Input::IsPressed(0, GameKeys::DOWN)) {
-		input.inputs[index++] = INPUT::DOWN;
+		input.inputs[index++] = INPUT_ACTION::DOWN;
 	}
 
 	if (Input::IsPressed(0, GameKeys::LEFT)) {
-		input.inputs[index++] = INPUT::LEFT;
+		input.inputs[index++] = INPUT_ACTION::LEFT;
 	}
 	else if (Input::IsPressed(0, GameKeys::RIGHT)) {
-		input.inputs[index++] = INPUT::RIGHT;
+		input.inputs[index++] = INPUT_ACTION::RIGHT;
 	}
 
 	if (Input::IsJustPressed(0, GameKeys::ACTION)) {
-		input.inputs[index++] = INPUT::ACTION;
+		input.inputs[index++] = INPUT_ACTION::ACTION;
 	}
 
 	//send_data

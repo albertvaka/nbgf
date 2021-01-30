@@ -90,10 +90,18 @@ void SceneMain::SpawnCity()
 	for (int x = 0; x < w; x++) {
 		for (int y = 0; y < h; y++) {
 			if (maze[x][y] == 'b') {
-				new Building(vec(x, y) * STREET_SIZE, vec(BUILDING_SIZE, BUILDING_SIZE));
+				if (x < w-1 && maze[x + 1][y] == 'b' && Rand::OnceEvery(2)) {
+					//2x1
+					new Building(Assets::building1, vec(x, y) * STREET_SIZE + vec(BUILDING_SIZE/2,0), vec(BUILDING_SIZE*2, BUILDING_SIZE));
+					maze[x + 1][y] = 'm';
+				}
+				else 
+				{
+					new Building(Assets::buildings1x1[Rand::roll(Assets::buildings1x1.size())], vec(x, y) * STREET_SIZE, vec(BUILDING_SIZE, BUILDING_SIZE));
+				}
 				grid[x][y] = nullptr;
 			}
-			else {
+			else if (maze[x][y] == 'e') {
 				Waypoint* p = new Waypoint(vec(x, y) * STREET_SIZE, WAYPOINT_SIZE);
 				grid[x][y] = p;
 				if (grid[x - 1][y]) {
@@ -173,17 +181,20 @@ void SceneMain::Update(float dt)
 	}
 }
 
+std::vector<Window::PartialDraw> draws;
+std::vector<Window::PartialDraw*> drawps;
 void SceneMain::Draw()
 {
-	Window::Clear(30, 30, 30);
+	Window::Clear(55, 22, 35);
 
+	draws.clear();
 	for (const Building* b : Building::GetAll()) {
-		b->Draw();
+		draws.push_back(b->Draw());
 		b->Bounds().DebugDraw(255,0,0);
 	}
 
 	for (const Person* p : Person::GetAll()) {
-		p->Draw();
+		draws.push_back(p->Draw());
 		p->Bounds().DebugDraw(255,0,0);
 	}
 
@@ -192,7 +203,6 @@ void SceneMain::Draw()
 	}
 
 	for (auto w : Waypoint::GetAll()) {
-		w->Draw();
 		w->Bounds().DebugDraw(0,255,0);
 
 		if(Debug::Draw) {
@@ -200,6 +210,19 @@ void SceneMain::Draw()
 				Window::DrawPrimitive::Arrow(w->pos, link->pos, 2, 10, {0, 255, 0, 255});
 			}
 		}
+	}
+
+	drawps.clear();
+	for (Window::PartialDraw& pd : draws) {
+		drawps.push_back(&pd);
+	}
+
+	std::sort(drawps.begin(), drawps.end(), [](Window::PartialDraw* a, Window::PartialDraw* b) {
+		return (a->dest.y) < (b->dest.y);
+	});
+
+	for (Window::PartialDraw* pd : drawps) {
+		pd->DoDraw();
 	}
 
 #ifdef _IMGUI

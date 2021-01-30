@@ -190,19 +190,10 @@
     <ClInclude Include="engine\animation_frame.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\alien.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\anim_lib.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\assets.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bullet.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\player.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_main.h">
@@ -230,6 +221,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\net.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\overlord.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -336,9 +330,6 @@
     <ClCompile Include="src\assets.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\player.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene_main.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -352,6 +343,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\net.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\overlord.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
