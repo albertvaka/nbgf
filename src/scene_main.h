@@ -18,6 +18,7 @@ struct SceneMain : Scene {
 
 	void SpawnBuildings();
 	void SpawnPeople();
+	void SpawnCity();
 	void SpawnWaypoint();
 
 

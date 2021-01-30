@@ -17,20 +17,20 @@ static const float speed = 100.f;
 
 struct Person : BoxEntity, SelfRegister<Person>
 {
-	int velo;
 	vec next_point;
 	Waypoint* next_waypoint;
 	Waypoint* old_waypoint;
-	mutable bool goingLeft;
-	mutable Animation anim;
+	bool goingLeft;
+	Animation anim;
 	Person(const vec& position)
-		: BoxEntity(pos, vec(200, 400)*scale)
+		: BoxEntity(pos, vec(150, 150)*scale)
 		, anim(AnimLib::NPC_1_DOWN)
 	{
 		pos = position;
-		velo = 30;
 		SetNearestWaypoint();
 		old_waypoint = next_waypoint;
+		next_waypoint = next_waypoint->GetRandomNext();
+		next_point = next_waypoint->GetRandomPoint();
 	}
 
 	void SetNearestWaypoint() {
@@ -40,7 +40,6 @@ struct Person : BoxEntity, SelfRegister<Person>
 			float current_distance = this->pos.Distance(next_waypoint->pos);
 			if (w_distance < current_distance) {
 				next_waypoint = w;
-				next_point = w->GetRandomPoint();
 			}
 		}
 	}
@@ -87,11 +86,36 @@ struct Person : BoxEntity, SelfRegister<Person>
 		anim.Update(dt);
 		vec direction = next_point - pos;
 		direction.Normalize();
-		vel = direction * velo;
+		vel = direction * speed;
 		pos += vel * dt;
+		next_point.DebugDraw();
+
+		if (abs(direction.x) > 0.5) {
+			anim.Ensure(AnimLib::NPC_1_LEFT);
+			goingLeft = (direction.x < 0);
+		}
+		else if (direction.y != 0) {
+			if (direction.y < 0) {
+				anim.Ensure(AnimLib::NPC_1_UP);
+			}
+			else {
+				anim.Ensure(AnimLib::NPC_1_DOWN);
+			}
+		}
+
 		if (this->pos.Distance(next_point) < 1) {
-			old_waypoint = next_waypoint;
-			next_waypoint = next_waypoint->GetRandomNext();
+			Waypoint* current = next_waypoint;
+			if (current->links.size() == 1) {
+				// If there's only one link, I have to take it even if it goes back
+				next_waypoint = current->links[0];
+			}
+			else {
+				// Do not go back to previous waypoint
+				do {
+					next_waypoint = current->GetRandomNext();
+				} while (next_waypoint == old_waypoint);
+			}
+			old_waypoint = current;
 			next_point = next_waypoint->GetRandomPoint();
 		}
 		for (const Building* b : Building::GetAll()) {
@@ -104,19 +128,9 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void Draw() const
 	{
-		if (vel.x != 0) {
-			anim.Ensure(AnimLib::NPC_1_LEFT);
-			goingLeft = (vel.x < 0);
-		} else if (vel.y != 0) {
-			if (vel.y < 0) {
-				anim.Ensure(AnimLib::NPC_1_UP);
-			} else {
-				anim.Ensure(AnimLib::NPC_1_DOWN);
-			}
-		}
 
 		const GPU_Rect& rect = anim.CurrentFrameRect();
-		Window::Draw(Assets::npcTexture, pos)
+		Window::Draw(Assets::npcTexture, pos - vec(0, 80*scale))
 			.withRect(rect)
 			.withOrigin(rect.w / 2, rect.h / 2)
 			.withScale(goingLeft? -scale : scale, scale);

@@ -40,6 +40,16 @@ namespace Window {
 			Line(v1.x, v1.y, v2.x, v2.y, thickness, c.r, c.g, c.b, c.a);
 		}
 
+		inline void Arrow(vec from, vec to, float thickness, float head_lenght, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+			Window::DrawPrimitive::Line(from, to, thickness, r,g,b,a);
+			vec toTheSide = (to-from).Perp().Normalized() * head_lenght;
+			Window::DrawPrimitive::Line(to, to - toTheSide.RotatedAroundOriginDegs(-45), thickness, r, g, b, a);
+			Window::DrawPrimitive::Line(to, to + toTheSide.RotatedAroundOriginDegs(45), thickness, r, g, b, a);
+		}
+		inline void Arrow(vec from, vec to, float thickness, float head_lenght, const SDL_Color& c) {
+			Arrow(from, to, thickness, head_lenght, c.r, c.g, c.b, c.a);
+		}
+
 		// pass thickness < 0 to draw a filled shape
 		void Circle(float x, float y, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 		inline void Circle(vec v, float radius, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {

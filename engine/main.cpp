@@ -77,6 +77,12 @@ int main(int argc, char* argv[])
 
 	init();
 
+	for (int i = 0; i < argc; i++) {
+		if (std::string(argv[i]) == "--server") {
+
+		}
+	}
+
 #ifdef __EMSCRIPTEN__
 	// mounting the FS is async, wait for it before we launch the main loop
 	EM_ASM(
