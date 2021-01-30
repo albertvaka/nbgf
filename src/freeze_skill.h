@@ -7,6 +7,15 @@
 #include "window.h"
 #include "text.h"
 
+template <typename T>
+inline std::string to_string_with_precision(const T a_value, const int n = 2)
+{
+	std::ostringstream out;
+	out.precision(n);
+	out << std::fixed << a_value;
+	return out.str();
+}
+
 struct FreezeSkill : SelfRegister<FreezeSkill>
 {
 	Text actionText;
@@ -28,7 +37,7 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 		} else if (countdown > 0) {
 			actionText.SetString("Freeze in... 1");
 		} else if (actionLength > 0) {
-			actionText.SetString("Freeze!");
+			actionText.SetString("Freeze!" + to_string_with_precision(actionLength, 2));
 			freezeNow = true;
 		} else {
 			FreezeSkill::DeleteAll();
