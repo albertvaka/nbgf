@@ -104,7 +104,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 			}
 		}
 
-		if (this->pos.Distance(next_point) < 1) {
+		if (this->pos.DistanceSq(next_point) < 5) {
 			Waypoint* current = next_waypoint;
 			if (current->links.size() == 1) {
 				// If there's only one link, I have to take it even if it goes back
@@ -118,12 +118,6 @@ struct Person : BoxEntity, SelfRegister<Person>
 			}
 			old_waypoint = current;
 			next_point = next_waypoint->GetRandomPoint();
-		}
-		for (const Building* b : Building::GetAll()) {
-			if (Collide(this, b)) {
-				SetNearestWaypoint();
-				next_point = next_waypoint->GetRandomPoint();		
-			}
 		}
 	}
 
