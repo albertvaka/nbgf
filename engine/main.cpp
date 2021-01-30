@@ -64,6 +64,7 @@ extern "C" void start_main_loop()
 	} else {
 		SceneManager::currentScene = new EntryPointScene(is_server);
 	}
+	SceneManager::currentScene->EnterScene();
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(main_loop, 0, 1);
@@ -86,6 +87,7 @@ int main(int argc, char* argv[])
 
 	for (int i = 0; i < argc; i++) {
 		if (std::string(argv[i]) == "--server") {
+			Debug::out << "IS SERVER";
 			is_server = true;
 			draw = false;
 		}

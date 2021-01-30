@@ -21,13 +21,14 @@ const int WAYPOINT_SIZE = STREET_SIZE * 0.3;
 constexpr int w = 25;
 constexpr int h = 25;
 
-SceneMain::SceneMain(bool is_server) : is_server(is_server) {}
+SceneMain::SceneMain(bool is_server) : is_server(is_server) {
+}
 
-void SceneMain::EnterScene() 
-{
-	//SpawnBuildings();
-	//SpawnWaypoint();
-	//SpawnPeople();
+void SceneMain::EnterScene() {
+	if (is_server) {
+		server_socket = server_setup(8099, &server_socket_set);
+	}
+
 	SpawnCity();
 }
 

@@ -13,13 +13,13 @@
 #include <stack>
 #include <vector>
 
-SceneDumb::SceneDumb() {
+SceneDumb::SceneDumb(bool is_server) {
 	
 }
 
 void SceneDumb::EnterScene()
 {
-
+	Debug::out << "DUMB SCENE";
 }
 
 void SceneDumb::ExitScene()

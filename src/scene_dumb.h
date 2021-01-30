@@ -7,7 +7,7 @@
 
 struct SceneDumb : Scene {
 
-	SceneDumb();
+	SceneDumb(bool is_server);
 
 	void EnterScene() override;
 	void ExitScene() override;

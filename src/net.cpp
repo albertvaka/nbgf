@@ -29,6 +29,8 @@ TCPsocket server_setup(int port, SDLNet_SocketSet *socket_set) {
         Debug::out << SDLNet_GetError();
     }
 
+    Debug::out << "Server initialized at port " << port;
+
     return server_socket;
 }
 
@@ -81,6 +83,8 @@ PACKET_PARSE(game_start)
 PACKET_PARSE(player_input)
 
 bool send_data(TCPsocket &socket, uint8_t *packet_data, int packet_len) {
+    Debug::out << "Sending " << packet_len << " bytes";
+
     int num_sent = SDLNet_TCP_Send(socket, packet_data, packet_len);
 
     if (num_sent < packet_len) {
@@ -134,6 +138,7 @@ bool send_entity_data(TCPsocket &socket, EntityUpdate* data, uint16_t num_entiti
     offset += sizeof(uint16_t);
     memcpy(temp_data+offset, data, num_entities * sizeof(EntityUpdate));
     offset += num_entities * sizeof(EntityUpdate);
+
 
     return send_data(socket, temp_data, offset);
 }
