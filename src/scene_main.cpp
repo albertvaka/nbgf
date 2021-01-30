@@ -1,4 +1,6 @@
 #include "scene_main.h"
+#include <random>
+#include <algorithm>
 #include "raw_input.h"
 #include "scene_manager.h"
 #ifdef _IMGUI
@@ -13,6 +15,7 @@
 #include "debug.h"
 #include "freeze_skill.h"
 #include <stack>
+#include "musicplayer.h"
 #include <vector>
 
 const int STREET_SIZE = 200;
@@ -20,10 +23,16 @@ const int GRID_OFFSET = 200;
 const int BUILDING_SIZE = 200;
 const int WAYPOINT_SIZE = STREET_SIZE * 0.3;
 
-constexpr int w = 25;
-constexpr int h = 25;
+constexpr int bsp_levels = 4;
+
+constexpr int w = 19;
+constexpr int h = 11;
 
 SceneMain::SceneMain(bool is_server) : is_server(is_server) {
+	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
+
+	Camera::SetZoom(0.4);
+	Camera::SetTopLeft(vec(0, 0));
 }
 
 void SceneMain::EnterScene() {
@@ -85,20 +94,37 @@ void SceneMain::SpawnCity()
 		maze[x][h-2] = 'e';
 	}
 
-	BSP(maze, veci(1, 1), veci(w - 1, h - 1), 8);
+	BSP(maze, veci(1, 1), veci(w - 1, h - 1), bsp_levels);
 
-	std::vector< std::vector<Waypoint*> > grid(h, std::vector<Waypoint*>(w));
+	std::vector< std::vector<Waypoint*> > grid(w, std::vector<Waypoint*>(h));
 	for (int x = 0; x < w; x++) {
 		for (int y = 0; y < h; y++) {
 			if (maze[x][y] == 'b') {
-				if (x < w-1 && maze[x + 1][y] == 'b' && Rand::OnceEvery(2)) {
+				if (y < h-1 && maze[x][y + 1] == 'b' && Rand::OnceEvery(2)) {
+					//1x2
+					new Building(
+						Assets::buildings1x2[Rand::roll(Assets::buildings1x2.size())],
+						vec(x, y) * STREET_SIZE + vec(0, BUILDING_SIZE / 2),
+						vec(BUILDING_SIZE, BUILDING_SIZE * 2)
+					);
+					maze[x][y + 1] = 'm';
+				} else if (x < w-1 && maze[x + 1][y] == 'b' && Rand::OnceEvery(2)) {
 					//2x1
-					new Building(Assets::building1, vec(x, y) * STREET_SIZE + vec(BUILDING_SIZE/2,0), vec(BUILDING_SIZE*2, BUILDING_SIZE));
+					new Building(
+						Assets::buildings2x1[Rand::roll(Assets::buildings2x1.size())],
+						vec(x, y) * STREET_SIZE + vec(BUILDING_SIZE/2,0),
+						vec(BUILDING_SIZE*2, BUILDING_SIZE)
+					);
 					maze[x + 1][y] = 'm';
 				}
 				else 
 				{
-					new Building(Assets::buildings1x1[Rand::roll(Assets::buildings1x1.size())], vec(x, y) * STREET_SIZE, vec(BUILDING_SIZE, BUILDING_SIZE));
+					//1x1
+					new Building(
+						Assets::buildings1x1[Rand::roll(Assets::buildings1x1.size())],
+						vec(x, y) * STREET_SIZE, 
+						vec(BUILDING_SIZE, BUILDING_SIZE)
+					);
 				}
 				grid[x][y] = nullptr;
 			}
@@ -115,10 +141,27 @@ void SceneMain::SpawnCity()
 		}
 	}
 
-	int id = 0;
+	std::vector<Waypoint*> empty_wp;
 	for (Waypoint* p : Waypoint::GetAll()) {
-		new Person(p->pos, id++);
+		if (Rand::OnceEvery(2)) {
+			new Person(p->pos, -1);
+		}
+		else {
+			empty_wp.push_back(p);
+		}
 	}
+
+	std::shuffle(empty_wp.begin(), empty_wp.end(), GoodRand::r.gen);
+	int num_players = GamePad::ConnectedGamepads();
+	if (num_players == 0) {
+		num_players = 1;
+	}
+	int player_id = 0;
+	for (Waypoint* p : empty_wp) {
+		new Person(p->pos, player_id++);
+		if (player_id == num_players) break;
+	}
+
 
 	new Overlord();
 }
@@ -134,9 +177,7 @@ void SceneMain::ExitScene()
 std::vector<EntityUpdate> entities;
 void SceneMain::Update(float dt)
 {
-	Camera::MoveCameraWithArrows(dt);
-	Camera::ChangeZoomWithPlusAndMinus(dt);
-
+	
 	std::map<int, packet_player_input> inputs;
 	for (Client& client : lobby.clients) {
 		if (!client.in_use) continue;
@@ -149,11 +190,9 @@ void SceneMain::Update(float dt)
 	}
 
 	for (auto p : Person::GetAll()) {
-		auto inp = inputs.find(p->id);
-		if (inp != inputs.end()) {
-			p->UpdatePlayer(dt, inp->second);
-		}
-		else {
+		if (p->player_id >= 0) {
+			p->UpdatePlayer(dt);
+		} else {
 			p->UpdateNpc(dt);
 		}
 	}
@@ -173,6 +212,7 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
+	/*
 	entities.clear();
 	for (Person* p : Person::GetAll()) {
 		entities.push_back(p->Serialize());
@@ -181,14 +221,14 @@ void SceneMain::Update(float dt)
 	for (Client& client : lobby.clients) {
 		if (!client.in_use) continue;
 		send_entity_data(client.socket, &entities[0], entities.size());
-	}
+	}*/
 }
 
 std::vector<Window::PartialDraw> draws;
 std::vector<Window::PartialDraw*> drawps;
 void SceneMain::Draw()
 {
-	Window::Clear(55, 22, 35);
+	Window::Clear(1, 10, 33);
 
 	draws.clear();
 	for (const Building* b : Building::GetAll()) {

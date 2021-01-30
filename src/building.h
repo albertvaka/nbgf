@@ -14,6 +14,7 @@ struct Building : BoxEntity, SelfRegister<Building>
 		: BoxEntity(pos, size)
 		, texture(texture)
 	{
+		assert(texture != nullptr);
 		pos = position;
 		size = s;
 	}

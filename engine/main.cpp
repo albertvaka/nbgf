@@ -52,7 +52,7 @@ void AfterSceneDraw();
 void init();
 void main_loop(bool draw);
 
-bool is_server = false;
+bool is_server = true;
 bool draw = true;
 
 extern "C" void start_main_loop()

@@ -25,13 +25,12 @@ struct Person : BoxEntity, SelfRegister<Person>
 	Waypoint* old_waypoint;
 	bool goingLeft;
 	Animation anim;
-	int id;
+	int player_id;
 	bool alive;
-
-	Person(const vec& position, int id)
+	Person(const vec& position, int player_id)
 		: BoxEntity(pos, vec(150, 150)*scale)
 		, anim(AnimLib::NPC_1_DOWN)
-		, id(id)
+		, player_id(player_id)
 	{
 		alive = true;
 		pos = position;
@@ -52,48 +51,57 @@ struct Person : BoxEntity, SelfRegister<Person>
 		}
 	}
 
-	void UpdatePlayer(float dt, const packet_player_input& input) {
-		if(!alive) { return; }
-		vel = vec::Zero;
-		for (INPUT_ACTION action : input.inputs) {
-			if (action == INPUT_ACTION::UP) {
-				vel.y = -speed;
-			}
-			if (action == INPUT_ACTION::DOWN) {
-				vel.y = speed;
-			}
-			if (action == INPUT_ACTION::RIGHT) {
-				vel.x = speed;
-			}
-			if (action == INPUT_ACTION::LEFT) {
-				vel.x = -speed;
-			}
+	void UpdatePlayer(float dt) {
+		if (!alive) { return; }
+		vec dir = vec::Zero;
+		if (Input::IsPressed(player_id, GameKeys::UP)) {
+			dir.y = -1;
 		}
-		if (vel != vec::Zero) {
-			vec oldPos = pos;
-			pos.x += vel.x * dt;
-			for (const Building* b : Building::GetAll()) {
-				if (Collide(this, b)) {
-					pos.x = oldPos.x;
-					vel.x = 0;
+		if (Input::IsPressed(player_id, GameKeys::DOWN)) {
+			dir.y = 1;
+		}
+		if (Input::IsPressed(player_id, GameKeys::RIGHT)) {
+			dir.x = 1;
+		}
+		if (Input::IsPressed(player_id, GameKeys::LEFT)) {
+			dir.x = -1;
+		}
+
+		if (dir != vec::Zero) {
+			dir.Normalize();
+			vel = dir * speed;
+
+			UpdateAnim(dir);
+
+			if (vel != vec::Zero) {
+				vec oldPos = pos;
+				pos.x += vel.x * dt;
+				for (const Building* b : Building::GetAll()) {
+					if (Collide(this, b)) {
+						pos.x = oldPos.x;
+						vel.x = 0;
+					}
 				}
-			}
-			pos.y += vel.y * dt;
-			for (const Building* b : Building::GetAll()) {
-				if (Collide(this, b)) {
-					pos.y = oldPos.y;
-					vel.y = 0;
+				pos.y += vel.y * dt;
+				for (const Building* b : Building::GetAll()) {
+					if (Collide(this, b)) {
+						pos.y = oldPos.y;
+						vel.y = 0;
+					}
 				}
-			}
-			if (pos != oldPos) {
-				anim.Update(dt);
+				if (pos != oldPos) {
+					anim.Update(dt);
+				}
 			}
 		}
 	}
 
+	void Kill() {
+		alive = false;
+	}
 	void UpdateNpc(float dt)
 	{
-		if(!alive) { return; }
+		if (!alive) { return; }
 
 		anim.Update(dt);
 		vec direction = next_point - pos;
@@ -109,18 +117,8 @@ struct Person : BoxEntity, SelfRegister<Person>
 		pos += vel * dt;
 		next_point.DebugDraw();
 
-		if (abs(direction.x) > 0.5) {
-			anim.Ensure(AnimLib::NPC_1_LEFT);
-			goingLeft = (direction.x < 0);
-		}
-		else if (direction.y != 0) {
-			if (direction.y < 0) {
-				anim.Ensure(AnimLib::NPC_1_UP);
-			}
-			else {
-				anim.Ensure(AnimLib::NPC_1_DOWN);
-			}
-		}
+
+		UpdateAnim(direction);
 
 		if (this->pos.DistanceSq(next_point) < 5) {
 			Waypoint* current = next_waypoint;
@@ -153,6 +151,22 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	}
 
+	void UpdateAnim(vec direction) {
+		if (abs(direction.x) > 0.5) {
+			anim.Ensure(AnimLib::NPC_1_LEFT);
+			goingLeft = (direction.x < 0);
+		}
+		else if (direction.y != 0) {
+			if (direction.y < 0) {
+				anim.Ensure(AnimLib::NPC_1_UP);
+			}
+			else {
+				anim.Ensure(AnimLib::NPC_1_DOWN);
+			}
+		}
+	}
+
+	/*
 	EntityUpdate Serialize() {
 		int frame = anim.CurrentFrameRect().x / AnimLib::frameSize;
 		return {
@@ -184,5 +198,5 @@ struct Person : BoxEntity, SelfRegister<Person>
 			.withOrigin(rect.w / 2, rect.h / 2)
 			.withScale(mirror ? -scale : scale, scale);
 	}
-
+	*/
 };
