@@ -10,6 +10,10 @@ struct SceneMain : Scene {
 	TCPsocket server_socket;
 	SDLNet_SocketSet server_socket_set;
 
+	Text textTime;
+	
+	float gametime = 90;
+
 	SceneMain(bool is_server);
 
 	void EnterScene() override;

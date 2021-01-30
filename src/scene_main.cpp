@@ -29,11 +29,14 @@ constexpr int bsp_levels = 4;
 constexpr int w = 19;
 constexpr int h = 11;
 
-SceneMain::SceneMain(bool is_server) : is_server(is_server) {
+SceneMain::SceneMain(bool is_server)
+	: textTime(Assets::font_30)
+	, is_server(is_server) 
+{
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
 
 	Camera::SetZoom(0.4f);
-	Camera::SetTopLeft(vec(0, 0));
+	Camera::SetTopLeft(vec(0, -40));
 }
 
 void SceneMain::EnterScene() {
@@ -206,6 +209,9 @@ void SceneMain::Update(float dt)
 	}
 	WaveSkill::DeleteNotAlive();
 
+	gametime -= dt;
+	textTime.SetString(std::to_string(int(gametime)));
+
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
@@ -267,6 +273,15 @@ void SceneMain::Draw()
 	for (auto o : FreezeSkill::GetAll()) {
 		o->Draw();
 	}
+
+	Camera::InScreenCoords::Begin();
+
+	Window::Draw(textTime, vec(5, 5))
+		.withOrigin(0, 0)
+		.withScale(0.5f);
+
+	Camera::InScreenCoords::End();
+
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
