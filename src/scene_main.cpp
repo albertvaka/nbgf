@@ -19,6 +19,8 @@
 #include "musicplayer.h"
 #include <vector>
 
+const int GAME_TIME = 120;
+
 const int STREET_SIZE = 200;
 const int GRID_OFFSET = 200;
 const int BUILDING_SIZE = 200;
@@ -32,6 +34,7 @@ constexpr int h = 10;
 
 SceneMain::SceneMain(bool is_server)
 	: textTime(Assets::font_30)
+	, rotoText(Assets::font_30, Assets::font_30_outline)
 	, is_server(is_server) 
 {
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
@@ -42,6 +45,9 @@ SceneMain::SceneMain(bool is_server)
 
 void SceneMain::EnterScene() {
 	SpawnCity();
+	gameover = false;
+	rotoText.timer = -1;
+	gametime = GAME_TIME;
 }
 
 void AddLinks(Waypoint* p1, Waypoint* p2) {
@@ -177,21 +183,24 @@ void SceneMain::ExitScene()
 std::vector<EntityUpdate> entities;
 void SceneMain::Update(float dt)
 {
-	
-	std::map<int, packet_player_input> inputs;
-	for (Client& client : lobby.clients) {
-		if (!client.in_use) continue;
-		PACKET_TYPE type;
-		void* data = recv_data(client.socket, &type);
-		if (type == PACKET_TYPE::PLAYER_INPUT) {
-			packet_player_input input = parse_player_input(data);
-			inputs[input.client_id] = input;
-		}
+	const SDL_Scancode restart = SDL_SCANCODE_F5;
+	if (Keyboard::IsKeyJustPressed(restart)) {
+		SceneManager::RestartScene();
+		return;
 	}
 
+	if (gameover) {
+		rotoText.Update(dt);
+		return;
+	}
+
+	bool playersAlive = false;
 	for (auto p : Person::GetAll()) {
 		if (p->player_id >= 0) {
 			p->UpdatePlayer(dt);
+			if (p->alive) {
+				playersAlive = true;
+			}
 		} else {
 			p->UpdateNpc(dt);
 		}
@@ -203,6 +212,7 @@ void SceneMain::Update(float dt)
 	for (auto o : FreezeSkill::GetAll()) {
 		o->Update(dt);
 	}
+	FreezeSkill::DeleteNotAlive();
 
 	for (auto o : WaveSkill::GetAll()) {
 		o->Update(dt);
@@ -210,15 +220,14 @@ void SceneMain::Update(float dt)
 	WaveSkill::DeleteNotAlive();
 
 	gametime -= dt;
-	textTime.SetString(std::to_string(int(gametime)));
-
-#ifdef _DEBUG
-	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	if (Keyboard::IsKeyJustPressed(restart)) {
-		SceneManager::RestartScene();
-		return;
+	if (gametime < 0 || !playersAlive) {
+		gameover = true;
+		rotoText.ShowMessage(playersAlive?"The dissidents\ngot away" : "The regime\ntriumphs");
+		WaveSkill::DeleteAll();
+		FreezeSkill::DeleteAll();
 	}
-#endif
+	textTime.SetString(std::to_string((int)ceilf(gametime)));
+
 }
 
 std::vector<Window::PartialDraw> draws;
@@ -281,6 +290,8 @@ void SceneMain::Draw()
 		.withScale(0.5f);
 
 	Camera::InScreenCoords::End();
+
+	rotoText.Draw();
 
 #ifdef _IMGUI
 	{

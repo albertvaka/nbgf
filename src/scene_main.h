@@ -3,6 +3,7 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
+#include "rototext.h"
 #include "net.h"
 
 struct SceneMain : Scene {
@@ -11,8 +12,10 @@ struct SceneMain : Scene {
 	SDLNet_SocketSet server_socket_set;
 
 	Text textTime;
+	bool gameover;
 	
-	float gametime = 90;
+	float gametime;
+	RotoText rotoText;
 
 	SceneMain(bool is_server);
 
