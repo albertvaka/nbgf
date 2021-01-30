@@ -55,6 +55,10 @@ TCPsocket client_connect(const char* server_ip, int server_port, SDLNet_SocketSe
         Debug::out << SDLNet_GetError();
     }
 
+    if (socket != NULL) {
+        Debug::out << "Connected to server";
+    }
+
     return socket;
 }
 

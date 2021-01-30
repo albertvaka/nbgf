@@ -27,8 +27,20 @@ void SceneDumb::ExitScene()
 	Building::DeleteAll();
 }
 
-void SceneDumb::Update(float dt)
-{
+void SceneDumb::Update(float dt) {
+	Debug::out << "UPDATE";
+	int num_sockets = SDLNet_CheckSockets(socket_set, 100);
+	while (num_sockets <= 0) {
+		Debug::out << "Didn't find, checking...";
+		num_sockets = SDLNet_CheckSockets(socket_set, 100);
+	}
+
+	Debug::out << "Got DATA";
+
+	PACKET_TYPE ptype;
+	void *data = recv_data(socket, &ptype);
+	Debug::out << "Receive data";
+
 	packet_player_input input;
 	int index = 0;
 	
@@ -57,7 +69,6 @@ void SceneDumb::Draw()
 {
 	Window::Clear(0, 0, 0);
 
-
 	for (const Building* b : Building::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255,0,0);
@@ -65,8 +76,8 @@ void SceneDumb::Draw()
 
 	int num_entities = -1;
 	for (int i = 0; i < num_entities;  i++) {
-		EntityUpdate* entity =nullptr;
-		Person::DumbDraw(entity);
+		// EntityUpdate* entity = nullptr;
+		// Person::DumbDraw(entity);
 	}
 
 }
