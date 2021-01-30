@@ -3,7 +3,7 @@
 
 uint8_t temp_data[MAX_PACKET];
 
-#define PACKET_PARSE(packet_type) packet_ fun_name(void *packet_data) { return_type result; memcpy(&result, packet_data, sizeof(return_type)); return result; }
+#define PACKET_PARSE(packet_type) packet_##packet_type parse_##packet_type(void *packet_data) { packet_##packet_type result; memcpy(&result, packet_data, sizeof(packet_##packet_type)); return result; }
 
 // Connection Setup
 
@@ -74,12 +74,11 @@ EntityUpdate* parse_state_update(void *packet_data, int *num_entities) {
     return (EntityUpdate*)packet;
 }
 
-// PACKET_PARSE(parse_join_lobby
-packet_join_lobby parse_join_lobby(void *packet_data) {
-    packet_join_lobby result;
-    memcpy(&result, packet_data, sizeof(packet_join_lobby));
-    return result;
-}
+PACKET_PARSE(join_lobby)
+PACKET_PARSE(join_lobby_response)
+PACKET_PARSE(player_ready)
+PACKET_PARSE(game_start)
+PACKET_PARSE(player_input)
 
 bool send_data(TCPsocket &socket, uint8_t *packet_data, int packet_len) {
     int num_sent = SDLNet_TCP_Send(socket, packet_data, packet_len);
