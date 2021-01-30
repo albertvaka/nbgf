@@ -8,6 +8,7 @@
 #include "building.h"
 #include "person.h"
 #include "waypoint.h"
+#include "overlord.h"
 #include "collide.h"
 #include "debug.h"
 #include <stack>
@@ -109,6 +110,8 @@ void SceneMain::SpawnCity()
 	for (Waypoint* p : Waypoint::GetAll()) {
 		new Person(p->pos, id++);
 	}
+
+	new Overlord();
 }
 
 void SceneMain::ExitScene()
@@ -116,6 +119,7 @@ void SceneMain::ExitScene()
 	Building::DeleteAll();
 	Person::DeleteAll();
 	Waypoint::DeleteAll();
+	Overlord::DeleteAll();
 }
 
 std::vector<EntityUpdate> entities;
@@ -143,6 +147,11 @@ void SceneMain::Update(float dt)
 		else {
 			p->UpdateNpc(dt);
 		}
+	}
+
+	// TODO: network stuff
+	for (auto o : Overlord::GetAll()) {
+		o->Update(dt);
 	}
 
 #ifdef _DEBUG
@@ -176,6 +185,10 @@ void SceneMain::Draw()
 	for (const Person* p : Person::GetAll()) {
 		p->Draw();
 		p->Bounds().DebugDraw(255,0,0);
+	}
+
+	for (auto o : Overlord::GetAll()) {
+		o->Draw();
 	}
 
 	for (auto w : Waypoint::GetAll()) {
