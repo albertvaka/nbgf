@@ -110,67 +110,6 @@ void SceneMain::SpawnCity()
 	}
 }
 
-void SceneMain::SpawnWaypoint() {
-	std::vector< std::vector<Waypoint*> > grid;
-	for (int i = 0; i < 10; i++) {
-		std::vector<Waypoint*> aux;
-		for (int j = 0; j < 10; j++) {
-			Waypoint* w =new Waypoint(
-				vec(i*STREET_SIZE+GRID_OFFSET+STREET_SIZE/2, j*STREET_SIZE+GRID_OFFSET+STREET_SIZE/2), 
-				STREET_SIZE*0.25
-			);
-			aux.push_back(w);
-		}
-		grid.push_back(aux);
-	}
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			if (i > 0) {
-				grid[i][j]->AddLink(grid[i-1][j]);
-			}
-			if (j > 0) {
-				grid[i][j]->AddLink(grid[i][j-1]);
-			}
-			if (j < grid[i].size()-1) {
-				grid[i][j]->AddLink(grid[i][j+1]);
-			}
-			if (i < grid.size()-1) {
-				grid[i][j]->AddLink(grid[i+1][j]);
-			}
-		}
-	}	
-}
-
-
-void SceneMain::SpawnBuildings() {
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			new Building(
-				vec(i*STREET_SIZE+GRID_OFFSET, j*STREET_SIZE+GRID_OFFSET), 
-				vec(BUILDING_SIZE, BUILDING_SIZE)
-			);
-		}
-	}
-}
-
-void SceneMain::SpawnPeople() {
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			Person* p = new Person(
-				vec(i*STREET_SIZE+GRID_OFFSET+STREET_SIZE/2,j*STREET_SIZE+GRID_OFFSET+STREET_SIZE/2)
-			);
-			for (const Building* b : Building::GetAll()) {
-				if (Collide(p, b)) {
-					vec away = p->pos - b->pos;
-					away.Normalize();
-					float awayDistance = sqrt(-p->Bounds().DistanceSq(b->Bounds()))+15;
-					p->pos += away*awayDistance;
-				}
-			}
-		}
-	}
-}
-
 void SceneMain::ExitScene()
 {
 	Building::DeleteAll();
