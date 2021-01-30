@@ -19,6 +19,7 @@ struct SceneMain : Scene {
 	void SpawnPeople();
 	void SpawnCity();
 	void SpawnWaypoint();
+	void BPS(veci min, veci max, int level);
 
 
 };
