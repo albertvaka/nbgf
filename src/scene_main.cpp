@@ -41,16 +41,16 @@ void SceneMain::SpawnCity()
 	for (int x = 0; x < w; x++) {
 		for (int y = 0; y < h; y++) {
 			maze[x][y] = 'b';
-			if (x == 1 || x == w - 2 || y == 1 || y == h - 2) {
-				maze[x][y] = 'e';
-			}
-			else {
-				maze[x][y] = 'b';
-			}
 		}
 	}
-
-
+	for (int y = 1; y < h-1; y++) {
+		maze[1][y] = 'e';
+		maze[w-2][y] = 'e';
+	}
+	for (int x = 1; x < w-1; x++) {
+		maze[x][1] = 'e';
+		maze[x][h-2] = 'e';
+	}
 
 	std::vector< std::vector<Waypoint*> > grid(h, std::vector<Waypoint*>(w));
 	for (int x = 0; x < w; x++) {
