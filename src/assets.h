@@ -14,8 +14,9 @@ struct Assets
 	static void LoadAll();
 
 	inline static GPU_Image* npcTexture;
+	inline static GPU_Image* building1;
+	inline static std::array<GPU_Image*, 3> buildings1x1;
 	inline static GPU_Image* buildingTexture;
-	inline static GPU_Image* invadersTexture;
 
 	inline static GPU_Image* backgroundTexture;
 

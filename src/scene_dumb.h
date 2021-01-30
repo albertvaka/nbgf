@@ -3,7 +3,6 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
-#include "player.h"
 #include "net.h"
 
 struct SceneDumb : Scene {

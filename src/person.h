@@ -124,10 +124,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 		}
 	}
 
-	void Draw() const
+	Window::PartialDraw Draw() const
 	{
 		const GPU_Rect& rect = anim.CurrentFrameRect();
-		Window::Draw(Assets::npcTexture, pos - vec(0, 80*scale))
+		return Window::PartialDraw(Assets::npcTexture, pos - vec(0, 80*scale))
 			.withRect(rect)
 			.withOrigin(rect.w / 2, rect.h / 2)
 			.withScale(goingLeft? -scale : scale, scale);
@@ -144,7 +144,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 		};
 	}
 
-	static void DumbDraw(EntityUpdate* entity) {
+	static Window::PartialDraw DumbDraw(EntityUpdate* entity) {
 		
 		int sprite = entity->sprite;
 		bool mirror = false;
@@ -156,7 +156,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 		int sheet_y = 0;
 
 		GPU_Rect rect = { sheet_x * AnimLib::frameSize, sheet_y * AnimLib::frameSize, AnimLib::frameSize, AnimLib::frameSize };
-		Window::Draw(Assets::npcTexture, entity->x, entity->y - 80 * scale)
+		return Window::PartialDraw(Assets::npcTexture, entity->x, entity->y - 80 * scale)
 			.withRect(rect)
 			.withOrigin(rect.w / 2, rect.h / 2)
 			.withScale(mirror ? -scale : scale, scale);
