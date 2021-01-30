@@ -7,6 +7,15 @@
 #include "window.h"
 #include "text.h"
 
+template <typename T>
+inline std::string to_string_with_precision(const T a_value, const int n = 2)
+{
+	std::ostringstream out;
+	out.precision(n);
+	out << std::fixed << a_value;
+	return out.str();
+}
+
 struct FreezeSkill : SelfRegister<FreezeSkill>
 {
 	Text actionText;
@@ -16,7 +25,7 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 	FreezeSkill() : actionText(Assets::font_30, Assets::font_30_outline) 
 	{
 		actionText.SetFillColor(0, 0, 0);
-		actionText.SetOutlineColor(255, 0, 0);
+		actionText.SetOutlineColor(255, 255, 0);
 	}
 	void Update(float dt){
 		if (countdown > 3) {
@@ -28,7 +37,7 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 		} else if (countdown > 0) {
 			actionText.SetString("Freeze in... 1");
 		} else if (actionLength > 0) {
-			actionText.SetString("Freeze!");
+			actionText.SetString("Freeze!" + to_string_with_precision(actionLength, 2));
 			freezeNow = true;
 		} else {
 			FreezeSkill::DeleteAll();
@@ -41,7 +50,6 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 	}
 	void Draw(){
 		Window::Draw(actionText, vec(Camera::Center().x, 60))
-			.withOrigin(actionText.Size()/2)
-			.withScale(0.8f);
+			.withOrigin(actionText.Size() / 2);
 	}
 };
