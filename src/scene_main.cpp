@@ -15,6 +15,10 @@
 const int STREET_SIZE = 200;
 const int GRID_OFFSET = 200;
 const int BUILDING_SIZE = 200;
+const int WAYPOINT_SIZE = STREET_SIZE * 0.3;
+
+constexpr int w = 25;
+constexpr int h = 25;
 
 SceneMain::SceneMain() {
 	
@@ -33,10 +37,37 @@ void AddLinks(Waypoint* p1, Waypoint* p2) {
 	p2->AddLink(p1);
 }
 
+void BSP(std::array<std::array<char,h>,w>& maze, veci min, veci max, int level) {
+	if (level == 0) return;
+	int width = max.x - min.x;
+	int height = max.y - min.y;
+	float marginratio = 0.3f;
+	if (width > height)
+	{
+		int margin = ceilf((max.x - min.x) * marginratio);
+		if (min.x + margin >= max.x - margin) return;
+		int x = Rand::roll(min.x + margin, max.x - margin);
+		for (int y = min.y; y < max.y; y++) {
+			maze[x][y] = 'e';
+		}
+		BSP(maze, min, veci(x, max.y), level - 1);
+		BSP(maze, veci(x, min.y), max, level - 1);
+	}
+	else 
+	{
+		int margin = ceilf((max.y - min.y)* marginratio);
+		if (min.y + margin >= max.y - margin) return;
+		int y = Rand::roll(min.y+margin, max.y-margin);
+		for (int x = min.x; x < max.x; x++) {
+			maze[x][y] = 'e';
+		}
+		BSP(maze, min, veci(max.x, y), level - 1);
+		BSP(maze, veci(min.x, y), max, level - 1);
+	}
+}
+
 void SceneMain::SpawnCity()
 {
-	constexpr int w = 25;
-	constexpr int h = 25;
 	std::array < std::array<char, h>, w> maze;
 	for (int x = 0; x < w; x++) {
 		for (int y = 0; y < h; y++) {
@@ -52,6 +83,8 @@ void SceneMain::SpawnCity()
 		maze[x][h-2] = 'e';
 	}
 
+	BSP(maze, veci(1, 1), veci(w - 1, h - 1), 8);
+
 	std::vector< std::vector<Waypoint*> > grid(h, std::vector<Waypoint*>(w));
 	for (int x = 0; x < w; x++) {
 		for (int y = 0; y < h; y++) {
@@ -60,7 +93,7 @@ void SceneMain::SpawnCity()
 				grid[x][y] = nullptr;
 			}
 			else {
-				Waypoint* p = new Waypoint(vec(x, y) * STREET_SIZE, STREET_SIZE * 0.25);
+				Waypoint* p = new Waypoint(vec(x, y) * STREET_SIZE, WAYPOINT_SIZE);
 				grid[x][y] = p;
 				if (grid[x - 1][y]) {
 					AddLinks(p, grid[x - 1][y]);
