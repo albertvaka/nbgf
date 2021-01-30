@@ -10,6 +10,10 @@
 #include "collide.h"
 #include "debug.h"
 
+int STREET_SIZE = 400;
+int GRID_OFFSET = 200;
+int BUILDING_SIZE = 200;
+
 SceneMain::SceneMain() {
 	
 }
@@ -27,7 +31,10 @@ void SceneMain::SpawnWaypoint() {
 	for (int i = 0; i < 10; i++) {
 		std::vector<Waypoint*> aux;
 		for (int j = 0; j < 10; j++) {
-			Waypoint* w =new Waypoint(vec(i*70+200+35, j*70+200+35), 10);
+			Waypoint* w =new Waypoint(
+				vec(i*STREET_SIZE+GRID_OFFSET+STREET_SIZE/2, j*STREET_SIZE+GRID_OFFSET+STREET_SIZE/2), 
+				STREET_SIZE*0.25
+			);
 			aux.push_back(w);
 		}
 		grid.push_back(aux);
@@ -54,7 +61,10 @@ void SceneMain::SpawnWaypoint() {
 void SceneMain::SpawnBuildings() {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			new Building(vec(i*70+200, j*70+200), vec(30, 30));
+			new Building(
+				vec(i*STREET_SIZE+GRID_OFFSET, j*STREET_SIZE+GRID_OFFSET), 
+				vec(BUILDING_SIZE, BUILDING_SIZE)
+			);
 		}
 	}
 }
@@ -62,7 +72,9 @@ void SceneMain::SpawnBuildings() {
 void SceneMain::SpawnPeople() {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			Person* p = new Person(vec(i*31+200,j*31+200));
+			Person* p = new Person(
+				vec(i*STREET_SIZE+GRID_OFFSET+STREET_SIZE/2,j*STREET_SIZE+GRID_OFFSET+STREET_SIZE/2)
+			);
 			for (const Building* b : Building::GetAll()) {
 				if (Collide(p, b)) {
 					vec away = p->pos - b->pos;
@@ -100,10 +112,6 @@ void SceneMain::Update(float dt)
 void SceneMain::Draw()
 {
 	Window::Clear(0, 0, 0);
-
-	Window::Draw(Assets::backgroundTexture, Camera::Center())
-		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
-
 
 	for (const Building* b : Building::GetAll()) {
 		b->Draw();

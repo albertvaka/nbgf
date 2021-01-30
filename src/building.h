@@ -23,10 +23,8 @@ struct Building : BoxEntity, SelfRegister<Building>
 
 	void Draw() const
 	{
-		/*Window::Draw(Assets::invadersTexture, pos)
-			.withRect(rect)
-			.withOrigin(vec(rect.w,rect.h)/2)
-			.withRotationDegs(Camera::Center().AngleDegs(pos) + 90)
-			.withScale(int(mainClock*4)%2 ? -1 : 1, 1);*/
+		Window::Draw(Assets::buildingTexture, pos)
+			.withScale(0.5f)
+			.withOrigin(Assets::buildingTexture->w/2, Assets::buildingTexture->h / 2);
 	}
 };
