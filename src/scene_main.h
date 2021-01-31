@@ -5,8 +5,6 @@
 #include "text.h"
 #include "rototext.h"
 
-constexpr float stage_duration = 3.0f;
-
 enum INTRO_STAGES {
     OVERSEER_CLOSE_EYES,
 	SHOW_ARROWS,
@@ -15,8 +13,7 @@ enum INTRO_STAGES {
 
 struct SceneMain : Scene {
 	INTRO_STAGES curr_stage;
-	float time_until_next_stage = stage_duration;
-	Text close_eyes_text;
+	float time_until_next_stage;
 
 	Text textTime;
 	bool gameover;

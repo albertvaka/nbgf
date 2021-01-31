@@ -11,7 +11,7 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 {
 	Text actionText;
 	float countdown = 2;
-	float actionLength = 1;
+	float actionLength = 1.5;
 	bool freezeNow = false;
 	bool alive = true;
 	FreezeSkill() : actionText(Assets::font_30, Assets::font_30_outline) 
@@ -33,6 +33,7 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 	}
 	void Draw(){
 		Window::Draw(actionText, vec(Camera::Center().x, 60))
-			.withOrigin(actionText.Size() / 2);
+			.withOrigin(actionText.Size() / 2)
+			.withScale(1.5f);
 	}
 };

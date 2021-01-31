@@ -21,7 +21,7 @@
 #include "musicplayer.h"
 #include <vector>
 
-const int NUM_GOALS = 4;
+constexpr float stage_duration = 3.0f;
 
 const int STREET_SIZE = 200;
 const int GRID_OFFSET = 200;
@@ -32,26 +32,29 @@ const int MARKS_PER_PLAYER = 4;
 constexpr int bsp_levels = 4;
 constexpr float bsp_margin_ratio = 0.2f;
 
-constexpr int w = 19;
+constexpr int w = 20;
 constexpr int h = 11;
 
 SceneMain::SceneMain()
 	: textTime(Assets::font_30)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
-	, close_eyes_text(Assets::font_120, Assets::font_120_outline)
 {
-	close_eyes_text.SetOutlineColor(255, 0, 0);
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
 
+	rotoText.SetMultilineAlignment(Text::MultilineAlignment::CENTER);
+
 	Camera::SetZoom(0.375f);
-	Camera::SetTopLeft(vec(0, -60));
+	Camera::SetTopLeft(vec(0, -10));
 }
 
 void SceneMain::EnterScene() {
 	SpawnCity();
 	curr_stage = OVERSEER_CLOSE_EYES;
+	time_until_next_stage = stage_duration;
 	gameover = false;
 	rotoText.timer = -1;
+
+	rotoText.ShowMessage("OVERSEER CLOSE\nYOUR EYES");
 }
 
 void AddLinks(Waypoint* p1, Waypoint* p2) {
@@ -155,7 +158,7 @@ void SceneMain::SpawnCity()
 
 	std::vector<Waypoint*> empty_wp;
 	for (Waypoint* p : Waypoint::GetAll()) {
-		if (Rand::PercentChance(35)) {
+		if (Rand::PercentChance(55)) {
 			new Person(p->pos, -1);
 		}
 		else {
@@ -207,13 +210,10 @@ void SceneMain::Update(float dt)
 		return;
 	}
 
+	rotoText.Update(dt);
 	if (gameover) {
-		rotoText.Update(dt);
 		return;
 	}
-
-	close_eyes_text.SetString("OVERSEER CLOSE\nYOUR EYES");
-	close_eyes_text.SetMultilineAlignment(Text::MultilineAlignment::CENTER);
 
 	time_until_next_stage -= dt;
 	if (curr_stage == OVERSEER_CLOSE_EYES) {
@@ -223,6 +223,7 @@ void SceneMain::Update(float dt)
 		}
 	}
 	else if (curr_stage == SHOW_ARROWS) {
+		rotoText.timer = -1;
 		if (time_until_next_stage <= 0.0f) {
 			curr_stage = GAME;
 			time_until_next_stage = stage_duration;
@@ -276,7 +277,7 @@ void SceneMain::Update(float dt)
 		WaveSkill::DeleteAll();
 		FreezeSkill::DeleteAll();
 	}
-	textTime.SetString("Bombs planted: "+ std::to_string(goalsdone) + "/" + std::to_string(num_goals));
+	textTime.SetString(std::to_string(goalsdone) + "/" + std::to_string(num_goals));
 }
 
 std::vector<Window::PartialDraw> draws;
@@ -343,15 +344,13 @@ void SceneMain::Draw()
 		o->Draw();
 	}
 
-	if (curr_stage == OVERSEER_CLOSE_EYES) {
-		Window::Draw(close_eyes_text, Camera::Center())
-			.withOrigin(close_eyes_text.Size()/2);
-	}
-
 	Camera::InScreenCoords::Begin();
 
-	Window::Draw(textTime, vec(5, 5))
-		.withOrigin(0, 0)
+	Window::Draw(Assets::markTexture, Camera::InScreenCoords::Bounds().BottomRight() - vec(90, 5) - textTime.Size() / 2)
+		.withScale(0.7f);
+		
+	Window::Draw(textTime, Camera::InScreenCoords::Bounds().BottomRight()-vec(15,5))
+		.withOrigin(textTime.Size())
 		.withScale(0.5f);
 
 	Camera::InScreenCoords::End();
