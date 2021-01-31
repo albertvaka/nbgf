@@ -24,7 +24,6 @@
 constexpr float stage_duration = 3.0f;
 
 const int STREET_SIZE = 200;
-const int GRID_OFFSET = 200;
 const int BUILDING_SIZE = 200;
 const int WAYPOINT_SIZE = STREET_SIZE * 0.3;
 const int MARKS_PER_PLAYER = 4;

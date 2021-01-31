@@ -22,7 +22,6 @@ Overlord::Overlord()
 
 	float realBgXSize = SKILL_BG_X*BG_SCALE;
 	float realBgYSize = SKILL_BG_Y*BG_SCALE;
-	float realIconSize = SKILL_SIZE*ICON_SCALE;
 	float iconMarginTop = realBgYSize * 0.1;
 	float iconLeftMargin = ((realBgXSize)/3)/2;
 	vec iconLeftMarginVec = vec(iconLeftMargin, 0);
@@ -73,6 +72,8 @@ void Overlord::Update(float dt)
 			cooldowns[CooldownIndex::FREEZE] = COOLDOWN_TIME[CooldownIndex::FREEZE];
 			break;
 		}
+		default:
+		break;
 	}
 	// Skills that need a target
 	if (Mouse::IsJustPressed(Mouse::Button::Left)) {
@@ -103,6 +104,8 @@ void Overlord::Update(float dt)
 					cooldowns[CooldownIndex::WAVE] = COOLDOWN_TIME[CooldownIndex::WAVE];
 					break;
 				}
+				default:
+					break;
 			}
 		}
 	}
@@ -170,7 +173,6 @@ void Overlord::Draw() const
 	if(Debug::Draw) {
 		vec mouseEnd = cursorPos + vec(-1,-1)*20;
 		Window::DrawPrimitive::Arrow(mouseEnd, cursorPos, 2, 10, {0, 255, 255, 255});
-		float realIconSize = SKILL_SIZE*ICON_SCALE;
 		Window::DrawPrimitive::Circle(
 			buttonPos[0], 
 			54, 5,
