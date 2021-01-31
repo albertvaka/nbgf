@@ -6,6 +6,8 @@
 #include "assets.h"
 #include "debug.h"
 
+float timermenu = 0;
+
 SceneMenu::SceneMenu()
 	: overanim(AnimLib::OVERSEER)
 	, npcanim(AnimLib::NPC_1_LEFT)
@@ -16,6 +18,7 @@ SceneMenu::SceneMenu()
 
 void SceneMenu::EnterScene() 
 {
+	 timermenu = 0;
 }
 
 
@@ -25,9 +28,10 @@ void SceneMenu::ExitScene()
 
 void SceneMenu::Update(float dt)
 {
+	timermenu+=dt;
 	overanim.Update(dt);
 	npcanim.Update(dt);
-	if (Input::IsPressedAnyPlayer(GameKeys::START)) {
+	if (timermenu > 2.f && Input::IsPressedAnyPlayer(GameKeys::START)) {
 		SceneManager::ChangeScene(new SceneMain());
 	}
 }

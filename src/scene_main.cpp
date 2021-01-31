@@ -54,7 +54,7 @@ void SceneMain::EnterScene() {
 	gameover = false;
 	rotoText.timer = -1;
 
-	rotoText.ShowMessage("OVERSEER CLOSE\nYOUR EYES");
+	rotoText.ShowMessage("DICTATOR CLOSE\nYOUR EYES");
 }
 
 void AddLinks(Waypoint* p1, Waypoint* p2) {
@@ -212,7 +212,7 @@ void SceneMain::Update(float dt)
 
 	rotoText.Update(dt);
 	if (gameover) {
-		if (Input::IsPressedAnyPlayer(GameKeys::START)) {
+		if (rotoText.timer > 3.f && Input::IsPressedAnyPlayer(GameKeys::START)) {
 			SceneManager::ChangeScene(new SceneMenu());
 		}
 		return;
