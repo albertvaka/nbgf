@@ -262,7 +262,7 @@ std::vector<Window::PartialDraw> draws;
 std::vector<Window::PartialDraw*> drawps;
 void SceneMain::Draw()
 {
-	Window::Clear(1, 10, 33);
+	Window::Clear(0, 5, 20);
 
 	draws.clear();
 

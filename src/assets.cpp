@@ -4,7 +4,7 @@
 
 void Assets::LoadAll() {
 
-    npcTexture = LoadImage("data/npc1.png");
+    npcTexture = LoadImage("data/ppl.png");
     buildings1x1[0] = LoadImage("data/1.png");
     buildings1x1[1] = LoadImage("data/2.png");
     buildings1x1[2] = LoadImage("data/2.png"); // more common
@@ -22,9 +22,8 @@ void Assets::LoadAll() {
 
     arrowTexture = LoadImage("data/arrow.png");
 
-    font_30 = LoadFont("data/PressStart2P.ttf", 60);
-    font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 60, 6);
-    font_120 = LoadFont("data/PressStart2P.ttf", 120);
+    font_30 = LoadFont("data/Raleway-BlackItalic.ttf", 90);
+    font_30_outline = LoadFontOutline("data/Raleway-BlackItalic.ttf", 90, 6);
 
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
     

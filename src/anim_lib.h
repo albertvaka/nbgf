@@ -5,38 +5,42 @@
 namespace AnimLib {
 
 	constexpr const float frameDuration = 0.1f;
-	constexpr const float frameSize = 400.f;
+	constexpr const float frameSize = 330.f;
+	constexpr const float frameSizeY = 400.f;
 
 	constexpr const AnimationFrame NPC_1_LEFT[] = {
-		{ {0 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
-		{ {1 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
-		{ {2 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
-		{ {3 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
-		{ {4 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
-		{ {5 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
-		{ {6 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {0 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
+		{ {1 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
+		{ {2 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
+		{ {3 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
+		{ {4 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
+		{ {5 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
+		{ {6 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
 	};
 
 	constexpr const AnimationFrame NPC_1_DOWN[] = {
-		{ {7 * frameSize, 0 * frameSize, frameSize, frameSize}, 2 * frameDuration },
-		{ {8 * frameSize, 0 * frameSize, frameSize, frameSize}, 2 * frameDuration },
+		{ {7 * frameSize, 20, frameSize, frameSizeY}, 2 * frameDuration },
+		{ {8 * frameSize, 20, frameSize, frameSizeY}, 2 * frameDuration },
 	};
 
 	constexpr const AnimationFrame NPC_1_UP[] = {
-		{ {11 * frameSize, 0 * frameSize, frameSize, frameSize}, 2 *frameDuration },
-		{ {12 * frameSize, 0 * frameSize, frameSize, frameSize}, 2 * frameDuration },
+		{ {11 * frameSize, 20, frameSize, frameSizeY}, 2 *frameDuration },
+		{ {12 * frameSize, 20, frameSize, frameSizeY}, 2 * frameDuration },
 	};
 
 	constexpr const AnimationFrame NPC_1_DIE[] = {
-		{ {15 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
-		{ {14 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
-		{ {13 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {15 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
+		{ {14 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
+		{ {13 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
 	};
 
 	constexpr const AnimationFrame NPC_1_JUMP[] = {
-		{ {16 * frameSize, 0 * frameSize, frameSize, frameSize},  frameDuration },
-		{ {17 * frameSize, 0 * frameSize, frameSize, frameSize}, 0.5 * frameDuration },
-		{ {18 * frameSize, 0 * frameSize, frameSize, frameSize}, 0.5 * frameDuration },
+		{ {16 * frameSize, 20, frameSize, frameSizeY},  0.5 * frameDuration },
+		{ {17 * frameSize, 20, frameSize, frameSizeY}, 0.5 * frameDuration },
+		{ {18 * frameSize, 20, frameSize, frameSizeY}, 2 * frameDuration },
+		{ {19 * frameSize, 0, frameSize, frameSizeY}, frameDuration },
+		{ {20 * frameSize, 0, frameSize, frameSizeY}, frameDuration },
+		{ {7 * frameSize, 20, frameSize, frameSizeY}, frameDuration },
 	};
 
 	constexpr const AnimationFrame ALIEN_1[] = {

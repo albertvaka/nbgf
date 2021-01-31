@@ -7,6 +7,7 @@
 #endif
 #include <math.h>
 #include <limits>
+#include <string>
 #include <cassert>
 
 namespace Mates
@@ -41,6 +42,13 @@ namespace Mates
 			else return false;
 		}
 	}
+
+	[[nodiscard]] inline float map(float x, float in_min, float in_max, float out_min, float out_max)
+	{
+		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+	}
+
+	[[nodiscard]] std::string to_string_with_precision(const float a_value, const int n = 2);
 
 	//-----------------------------------------------------------------------
 	//

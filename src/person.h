@@ -17,7 +17,7 @@
 
 static const float JUMP_TIME = 0.6f;
 
-static const float scale = 0.3f;
+static const float scale = 0.36f;
 static const float speed = 100.f;
 
 static const float panic_multiplier = 2.3f;
@@ -186,6 +186,9 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 		if (jump > 0) {
 			jump -= dt;
+			if (jump <= 0) {
+				jump = -1;
+			}
 			dir = vec::Zero;
 			anim.Update(dt);
 		}

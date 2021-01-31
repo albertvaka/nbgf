@@ -357,6 +357,9 @@
     <ClCompile Include="src\overlord.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="engine\mates.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">
