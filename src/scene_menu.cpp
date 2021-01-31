@@ -1,8 +1,7 @@
 #include "scene_menu.h"
-#include "raw_input.h"
-#ifdef _IMGUI
-#include "imgui.h"
-#endif
+#include "input.h"
+#include "scene_manager.h"
+#include "scene_main.h"
 #include "assets.h"
 #include "debug.h"
 
@@ -21,15 +20,9 @@ void SceneMenu::ExitScene()
 
 void SceneMenu::Update(float dt)
 {
-
-#ifdef _DEBUG
-	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	if (Keyboard::IsKeyJustPressed(restart)) {
-		ExitScene();
-		EnterScene();
-		return;
+	if (Input::IsPressedAnyPlayer(GameKeys::START)) {
+		SceneManager::ChangeScene(new SceneMain());
 	}
-#endif
 }
 
 void SceneMenu::Draw() {

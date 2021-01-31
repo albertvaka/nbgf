@@ -20,7 +20,7 @@
 #include "musicplayer.h"
 #include <vector>
 
-const int GAME_TIME = 120;
+const int NUM_GOALS = 4;
 
 const int STREET_SIZE = 200;
 const int GRID_OFFSET = 200;
@@ -36,8 +36,9 @@ constexpr int h = 10;
 SceneMain::SceneMain()
 	: textTime(Assets::font_30)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
-	, close_eyes_text(Assets::font_120)
+	, close_eyes_text(Assets::font_120, Assets::font_120_outline)
 {
+	close_eyes_text.SetOutlineColor(255, 0, 0);
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
 
 	Camera::SetZoom(0.425f);
@@ -46,9 +47,9 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() {
 	SpawnCity();
+	curr_stage = OVERSEER_CLOSE_EYES;
 	gameover = false;
 	rotoText.timer = -1;
-	gametime = GAME_TIME;
 }
 
 void AddLinks(Waypoint* p1, Waypoint* p2) {
@@ -198,7 +199,8 @@ void SceneMain::Update(float dt)
 		return;
 	}
 
-	close_eyes_text.SetString("OVERSEER CLOSE\n   YOUR EYES");
+	close_eyes_text.SetString("OVERSEER CLOSE\nYOUR EYES");
+	close_eyes_text.SetMultilineAlignment(Text::MultilineAlignment::CENTER);
 
 	time_until_next_stage -= dt;
 	if (curr_stage == OVERSEER_CLOSE_EYES) {
@@ -245,14 +247,18 @@ void SceneMain::Update(float dt)
 	}
 	WaveSkill::DeleteNotAlive();
 
-	gametime -= dt;
-	if (gametime < 0 || !playersAlive) {
+	int goalsdone = 0;
+	/*for (auto o : Goal::GetAll()) {
+		o->Update(dt);
+	}
+	*/
+	if (goalsdone  == NUM_GOALS || !playersAlive) {
 		gameover = true;
 		rotoText.ShowMessage(playersAlive?"The dissidents\ngot away" : "The regime\ntriumphs");
 		WaveSkill::DeleteAll();
 		FreezeSkill::DeleteAll();
 	}
-	textTime.SetString(std::to_string((int)ceilf(gametime)));
+	textTime.SetString("Bombs planted: "+ std::to_string(goalsdone) + "/" + std::to_string(NUM_GOALS));
 
 }
 
@@ -316,7 +322,8 @@ void SceneMain::Draw()
 	}
 
 	if (curr_stage == OVERSEER_CLOSE_EYES) {
-		Window::Draw(close_eyes_text, Camera::Size().x/2 - 800, Camera::Size().y/2);
+		Window::Draw(close_eyes_text, Camera::Center())
+			.withOrigin(close_eyes_text.Size()/2);
 	}
 
 	Camera::InScreenCoords::Begin();
