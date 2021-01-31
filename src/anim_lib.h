@@ -7,6 +7,13 @@ namespace AnimLib {
 	constexpr const float frameDuration = 0.1f;
 	constexpr const float frameSize = 330.f;
 	constexpr const float frameSizeY = 400.f;
+	
+	constexpr const AnimationFrame OVERSEER[] = {
+		{ {0, 0, 1033/3, frameSizeY}, 0.5f },
+		{ {1/3.f * 1033, 0, 1033/3, frameSizeY}, 0.1f },
+		{ {2/3.f *1033, 0, 1033/3, frameSizeY}, 1.f },
+		{ {1/3.f * 1033, 0, 1033/3, frameSizeY}, 0.1f },
+	};
 
 	constexpr const AnimationFrame NPC_1_LEFT[] = {
 		{ {0 * frameSize, 20, frameSize, frameSizeY}, frameDuration },

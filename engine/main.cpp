@@ -202,9 +202,11 @@ void main_loop() {
 	GamePad::_UpdateInputState();
 	Input::Update(dt);
 
+#ifndef __EMSCRIPTEN__
 	if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_RETURN) && Keyboard::IsKeyPressed(SDL_SCANCODE_LALT)) {
 		Window::SetFullScreen(!Window::IsFullScreen());
 	}
+#endif
 
 #ifdef _DEBUG
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME = SDL_SCANCODE_F1;

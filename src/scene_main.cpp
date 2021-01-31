@@ -14,6 +14,7 @@
 #include "waypoint.h"
 #include "overlord.h"
 #include "collide.h"
+#include "scene_menu.h"
 #include "debug.h"
 #include "freeze_skill.h"
 #include "wave_skill.h"
@@ -24,7 +25,6 @@
 constexpr float stage_duration = 3.0f;
 
 const int STREET_SIZE = 200;
-const int GRID_OFFSET = 200;
 const int BUILDING_SIZE = 200;
 const int WAYPOINT_SIZE = STREET_SIZE * 0.3;
 const int MARKS_PER_PLAYER = 4;
@@ -54,7 +54,7 @@ void SceneMain::EnterScene() {
 	gameover = false;
 	rotoText.timer = -1;
 
-	rotoText.ShowMessage("OVERSEER CLOSE\nYOUR EYES");
+	rotoText.ShowMessage("DICTATOR CLOSE\nYOUR EYES");
 }
 
 void AddLinks(Waypoint* p1, Waypoint* p2) {
@@ -158,7 +158,7 @@ void SceneMain::SpawnCity()
 
 	std::vector<Waypoint*> empty_wp;
 	for (Waypoint* p : Waypoint::GetAll()) {
-		if (Rand::PercentChance(55)) {
+		if (Rand::PercentChance(60)) {
 			new Person(p->pos, -1);
 		}
 		else {
@@ -207,12 +207,15 @@ void SceneMain::Update(float dt)
 {
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		SceneManager::RestartScene();
+		SceneManager::ChangeScene(new SceneMenu());
 		return;
 	}
 
 	rotoText.Update(dt);
 	if (gameover) {
+		if (rotoText.timer > 3.f && Input::IsPressedAnyPlayer(GameKeys::START)) {
+			SceneManager::ChangeScene(new SceneMenu());
+		}
 		return;
 	}
 

@@ -18,11 +18,11 @@ enum CooldownIndex {
 
 const float COOLDOWN_TIME[3] = {
 	//Kill
-	10.f,
-	//Freeze
-	10.f,
-	//Wave
 	5.f,
+	//Freeze
+	8.0f,
+	//Wave
+	4.0f,
 };
 
 const SDL_Scancode skill_keys[3] = {

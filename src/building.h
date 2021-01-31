@@ -11,12 +11,10 @@ struct Building : BoxEntity, SelfRegister<Building>
 {
 	GPU_Image* texture;
 	Building(GPU_Image* texture, const vec& position, const vec& s)
-		: BoxEntity(pos, size)
+		: BoxEntity(position, s)
 		, texture(texture)
 	{
 		assert(texture != nullptr);
-		pos = position;
-		size = s;
 	}
 
 	Window::PartialDraw Draw() const

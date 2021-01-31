@@ -53,6 +53,6 @@ void Input::MapGameKeys()
     { 
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) ||
             Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN) ||
-            Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE);
+            Mouse::IsJustPressed();
     };
 }
