@@ -9,6 +9,7 @@
 #include "assets.h"
 #include "building.h"
 #include "person.h"
+#include "arrow.h"
 #include "waypoint.h"
 #include "overlord.h"
 #include "collide.h"
@@ -28,11 +29,16 @@ constexpr int bsp_levels = 4;
 constexpr int w = 19;
 constexpr int h = 11;
 
-SceneMain::SceneMain(bool is_server) : is_server(is_server) {
+SceneMain::SceneMain(bool is_server)
+	: is_server(is_server)
+	, close_eyes_text(Assets::font_120)
+{
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
 
 	Camera::SetZoom(0.4);
 	Camera::SetTopLeft(vec(0, 0));
+	curr_stage = OVERSEER_CLOSE_EYES;
+
 }
 
 void SceneMain::EnterScene() {
@@ -154,7 +160,11 @@ void SceneMain::SpawnCity()
 	}
 	int player_id = 0;
 	for (Waypoint* p : empty_wp) {
-		new Person(p->pos, player_id++);
+		Person *per = new Person(p->pos, player_id++);
+		if (player_id <= num_players) {
+			new Arrow(per);
+		}
+
 		if (player_id == num_players) break;
 	}
 
@@ -173,7 +183,22 @@ void SceneMain::ExitScene()
 std::vector<EntityUpdate> entities;
 void SceneMain::Update(float dt)
 {
-	
+	close_eyes_text.SetString("OVERSEER CLOSE\n   YOUR EYES");
+
+	time_until_next_stage -= dt;
+	if (curr_stage == OVERSEER_CLOSE_EYES) {
+		if (time_until_next_stage <= 0.0f) {
+			curr_stage = SHOW_ARROWS;
+			time_until_next_stage = stage_duration;
+		}
+	}
+	else if (curr_stage == SHOW_ARROWS) {
+		if (time_until_next_stage <= 0.0f) {
+			curr_stage = GAME;
+			time_until_next_stage = stage_duration;
+		}
+	}
+
 	std::map<int, packet_player_input> inputs;
 	for (Client& client : lobby.clients) {
 		if (!client.in_use) continue;
@@ -193,9 +218,14 @@ void SceneMain::Update(float dt)
 		}
 	}
 
+	for (auto a : Arrow::GetAll()) {
+		a->Update(dt);
+	}
+
 	for (auto o : Overlord::GetAll()) {
 		o->Update(dt);
 	}
+
 	for (auto o : FreezeSkill::GetAll()) {
 		o->Update(dt);
 	}
@@ -226,7 +256,11 @@ void SceneMain::Draw()
 		p->Bounds().DebugDraw(255,0,0);
 	}
 
-	
+	if (curr_stage == SHOW_ARROWS) {
+		for (const Arrow* a : Arrow::GetAll()) {
+			draws.push_back(a->Draw());
+		}
+	}
 
 	for (auto w : Waypoint::GetAll()) {
 		w->Bounds().DebugDraw(0,255,0);
@@ -257,6 +291,10 @@ void SceneMain::Draw()
 	}
 	for (auto o : FreezeSkill::GetAll()) {
 		o->Draw();
+	}
+
+	if (curr_stage == OVERSEER_CLOSE_EYES) {
+		Window::Draw(close_eyes_text, Camera::Size().x/2 - 800, Camera::Size().y/2);
 	}
 #ifdef _IMGUI
 	{

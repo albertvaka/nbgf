@@ -18,6 +18,8 @@
 static const float scale = 0.3f;
 static const float speed = 100.f;
 
+static const float panic_multiplier = 2.3f;
+
 struct Person : BoxEntity, SelfRegister<Person>
 {
 	vec next_point;
@@ -78,7 +80,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 			dir.x = -1;
 		}
 		if (Input::IsPressed(player_id, GameKeys::RUN)) {
-			speed_multiplier = 1.7f;
+			speed_multiplier = panic_multiplier;
 		}
 		else {
 			speed_multiplier = 1.0f;
@@ -127,7 +129,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 		in_panic = true;
 		panic_dir = dir;
 		panic_left = 2.5f;
-		speed_multiplier = 1.7f;
+		speed_multiplier = panic_multiplier;
 	}
 
 	void UpdateNpc(float dt)
