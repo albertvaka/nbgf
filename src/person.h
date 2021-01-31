@@ -15,6 +15,7 @@
 #include "freeze_skill.h"
 #include "wave_skill.h"
 
+static const float JUMP_TIME = 0.6f;
 
 static const float scale = 0.3f;
 static const float speed = 100.f;
@@ -29,7 +30,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 	bool goingLeft;
 	Animation anim;
 	int player_id;
-	bool jump = false;
+	float jump = -1;
 	bool alive;
 
 	bool in_panic;
@@ -89,11 +90,23 @@ struct Person : BoxEntity, SelfRegister<Person>
 		if (Input::IsPressed(player_id, GameKeys::LEFT)) {
 			dir.x = -1;
 		}
+		if (Input::IsJustPressed(player_id, GameKeys::ACTION)) {
+			if (jump < 0) {
+				jump = JUMP_TIME;
+				anim.Set(AnimLib::NPC_1_JUMP, false);
+			}
+		}
 		if (Input::IsPressed(player_id, GameKeys::RUN)) {
 			speed_multiplier = panic_multiplier;
 		}
 		else {
 			speed_multiplier = 1.0f;
+		}
+
+		if (jump > 0) {
+			jump -= dt;
+			dir = vec::Zero;
+			anim.Update(dt);
 		}
 
 		if (dir != vec::Zero) {
@@ -166,18 +179,15 @@ struct Person : BoxEntity, SelfRegister<Person>
 		}
 		for (WaveSkill* f : WaveSkill::GetAll()) {
 			if (f->InWave(pos)) {
-				jump = true;
+				jump = JUMP_TIME;
 				anim.Ensure(AnimLib::NPC_1_JUMP, false);
 			}
 		}
 
-		if (jump) {
+		if (jump > 0) {
+			jump -= dt;
 			dir = vec::Zero;
 			anim.Update(dt);
-			if (anim.IsComplete()) {
-				Debug::out << "complete";
-				jump = false;
-			}
 		}
 
 		if (dir != vec::Zero) {
@@ -236,6 +246,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 		}
 	}
 
+
 	Window::PartialDraw Draw() const
 	{
 		if(!alive) {
@@ -244,8 +255,14 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 		ClickBounds().DebugDraw(0, 0, 255);
 
+		vec jumpoffset = vec::Zero;
+
+		if (jump > 0) {
+			jumpoffset.y = -70*sin(Mates::map(jump, JUMP_TIME, 0.f, 0.f, M_PI));
+		}
+
 		const GPU_Rect& rect = anim.CurrentFrameRect();
-		return Window::PartialDraw(Assets::npcTexture, pos - vec(0, 80*scale))
+		return Window::PartialDraw(Assets::npcTexture, pos - vec(0, 80*scale) + jumpoffset)
 			.withRect(rect)
 			.withOrigin(rect.w / 2, rect.h / 2)
 			.withScale(goingLeft? -scale : scale, scale);
