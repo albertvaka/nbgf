@@ -24,6 +24,8 @@ struct SceneMain : Scene {
 	float gametime;
 	RotoText rotoText;
 
+	int num_goals;
+
 	SceneMain();
 
 	void EnterScene() override;

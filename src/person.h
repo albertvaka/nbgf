@@ -31,6 +31,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 	int player_id;
 	float jump = -1;
 	bool alive;
+	float timerdead = 0;
 
 	bool in_panic;
 	vec panic_dir;
@@ -73,6 +74,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void UpdatePlayer(float dt) {
 		if (!alive) { 
+			timerdead += dt;
 			anim.Update(dt);
 			return; 
 		}
@@ -154,9 +156,14 @@ struct Person : BoxEntity, SelfRegister<Person>
 		speed_multiplier = panic_multiplier;
 	}
 
+	bool isAlive() {
+		return alive || timerdead < 1.f;
+	}
+
 	void UpdateNpc(float dt)
 	{
 		if (!alive) {
+			timerdead += dt;
 			anim.Update(dt);
 			return;
 		}
@@ -251,8 +258,12 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	Window::PartialDraw Draw() const
 	{
-		if(!alive) {
-			Window::DrawPrimitive::Circle(pos, 10, 5, 255, 0, 0);
+		if (!alive) {
+			float scale = std::min(timerdead/2.f, 0.6f);
+			Window::Draw(Assets::bloodTexture, pos + vec(0, 20))
+				.withOrigin(Assets::bloodTexture->w / 2, Assets::bloodTexture->h / 2)
+				.withScale(int(pos.y*100)%2? scale : -scale, int(pos.x*100)%2? scale : -scale);
+
 		}
 
 		ClickBounds().DebugDraw(0, 0, 255);

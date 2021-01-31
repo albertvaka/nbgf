@@ -10,6 +10,7 @@
 #include "building.h"
 #include "person.h"
 #include "arrow.h"
+#include "mark.h"
 #include "waypoint.h"
 #include "overlord.h"
 #include "collide.h"
@@ -26,6 +27,7 @@ const int STREET_SIZE = 200;
 const int GRID_OFFSET = 200;
 const int BUILDING_SIZE = 200;
 const int WAYPOINT_SIZE = STREET_SIZE * 0.3;
+const int MARKS_PER_PLAYER = 4;
 
 constexpr int bsp_levels = 4;
 constexpr float bsp_margin_ratio = 0.2f;
@@ -93,10 +95,12 @@ void SceneMain::SpawnCity()
 			maze[x][y] = 'b';
 		}
 	}
+
 	for (int y = 1; y < h-1; y++) {
 		maze[1][y] = 'e';
 		maze[w-2][y] = 'e';
 	}
+
 	for (int x = 1; x < w-1; x++) {
 		maze[x][1] = 'e';
 		maze[x][h-2] = 'e';
@@ -164,14 +168,21 @@ void SceneMain::SpawnCity()
 	if (num_players == 0) {
 		num_players = 1;
 	}
+	num_goals = num_players * MARKS_PER_PLAYER;
 	int player_id = 0;
+	int mark_count = 0;
 	for (Waypoint* p : empty_wp) {
-		Person *per = new Person(p->pos, player_id++);
-		if (player_id <= num_players) {
+		if (player_id < num_players) {
+			Person *per = new Person(p->pos, player_id++);
 			new Arrow(per);
 		}
-
-		if (player_id == num_players) break;
+		else if (mark_count < num_goals){
+			new Mark(p->pos);
+			mark_count++;
+		}
+		else {
+			break;
+		}
 	}
 
 
@@ -184,6 +195,8 @@ void SceneMain::ExitScene()
 	Person::DeleteAll();
 	Waypoint::DeleteAll();
 	Overlord::DeleteAll();
+	Arrow::DeleteAll();
+	Mark::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
@@ -221,7 +234,7 @@ void SceneMain::Update(float dt)
 	for (auto p : Person::GetAll()) {
 		if (p->player_id >= 0) {
 			p->UpdatePlayer(dt);
-			if (p->alive) {
+			if (p->isAlive()) {
 				playersAlive = true;
 			}
 		} else {
@@ -248,18 +261,18 @@ void SceneMain::Update(float dt)
 	WaveSkill::DeleteNotAlive();
 
 	int goalsdone = 0;
-	/*for (auto o : Goal::GetAll()) {
-		o->Update(dt);
+	for (auto m : Mark::GetAll()) {
+		m->Update(dt);
+		goalsdone += 1 ? m->planted : 0;
 	}
-	*/
-	if (goalsdone  == NUM_GOALS || !playersAlive) {
+
+	if (goalsdone == num_goals || !playersAlive) {
 		gameover = true;
 		rotoText.ShowMessage(playersAlive?"The dissidents\ngot away" : "The regime\ntriumphs");
 		WaveSkill::DeleteAll();
 		FreezeSkill::DeleteAll();
 	}
 	textTime.SetString("Bombs planted: "+ std::to_string(goalsdone) + "/" + std::to_string(NUM_GOALS));
-
 }
 
 std::vector<Window::PartialDraw> draws;
@@ -273,6 +286,11 @@ void SceneMain::Draw()
 	for (const Building* b : Building::GetAll()) {
 		draws.push_back(b->Draw());
 		b->Bounds().DebugDraw(255,0,0);
+	}
+
+	for (const Mark* m : Mark::GetAll()) {
+		m->Draw();
+		m->Bounds().DebugDraw(255,0,0);
 	}
 
 	for (const Person* p : Person::GetAll()) {
