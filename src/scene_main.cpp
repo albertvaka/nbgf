@@ -171,6 +171,7 @@ void SceneMain::SpawnCity()
 	if (num_players == 0) {
 		num_players = 1;
 	}
+
 	num_goals = num_players * MARKS_PER_PLAYER;
 	int player_id = 0;
 	int mark_count = 0;
@@ -227,7 +228,7 @@ void SceneMain::Update(float dt)
 		if (time_until_next_stage <= 0.0f) {
 			curr_stage = GAME;
 			time_until_next_stage = stage_duration;
-			// Assets::game_start_sound.Play();
+			Assets::game_start_sound.Play();
 		}
 	}
 

@@ -41,7 +41,7 @@ Overlord::Overlord()
 bool killPersonAt(vec pos) {
 	bool hasKilled = false;
 	for(Person* p : Person::GetAll()) {
-		if(p->ClickBounds().Contains(pos)) {
+		if(p->alive && p->ClickBounds().Contains(pos)) {
 			p->Kill();
 			hasKilled = true;
 			break; // Kill only the first person found
