@@ -195,6 +195,8 @@ void SceneMain::ExitScene()
 	Person::DeleteAll();
 	Waypoint::DeleteAll();
 	Overlord::DeleteAll();
+	Arrow::DeleteAll();
+	Mark::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
@@ -236,7 +238,7 @@ void SceneMain::Update(float dt)
 			} else {
 				p->UpdatePlayer(dt);
 			}
-			if (p->alive) {
+			if (p->isAlive()) {
 				playersAlive = true;
 			}
 		} else {

@@ -17,6 +17,26 @@ const float ICON_SCALE = 2.5;
 
 Overlord::Overlord()
 {
+	float w = Camera::Size().x + Camera::TopLeft().x; 
+	float h = Camera::Size().y + Camera::TopLeft().y;
+
+	float realBgXSize = SKILL_BG_X*BG_SCALE;
+	float realBgYSize = SKILL_BG_Y*BG_SCALE;
+	float realIconSize = SKILL_SIZE*ICON_SCALE;
+	float iconMarginTop = realBgYSize * 0.1;
+	float iconLeftMargin = ((realBgXSize)/3)/2;
+	vec iconLeftMarginVec = vec(iconLeftMargin, 0);
+	vec bottomCenter = vec(w/2, h-realBgYSize/2); 
+	vec bottomLeft = vec(w/2-realBgXSize/2, h-realBgYSize/2); 
+
+	bottomPos = bottomCenter-vec(realBgXSize/2,realBgYSize/2);
+
+	vec pos1 = bottomLeft + vec(iconLeftMargin, iconMarginTop);
+
+	for(int i = 0; i < 3; i++) {
+		buttonPos[i] = pos1 + iconLeftMarginVec*i*2;
+	}
+
 }
 
 bool killPersonAt(vec pos) {
@@ -57,29 +77,33 @@ void Overlord::Update(float dt)
 	}
 	// Skills that need a target
 	if (Mouse::IsJustPressed(Mouse::Button::Left)) {
-		switch(state) {
-			case OverlordState::THROWING_KILL: {
-				Debug::out << "Trying to kill at " << cursorPos;
-				if (killPersonAt(cursorPos)) {
-					Debug::out << "Successful kill";
-					state = OverlordState::IDLE;
-					cooldowns[CooldownIndex::KILL] = COOLDOWN_TIME[CooldownIndex::KILL];
+		bool menuClick = false;
+		// Check skill menu
+		for (int i = 0; i < std::size(buttonPos);i++) {
+			if (buttonPos[i].Distance(cursorPos) < 100) {
+				state = static_cast<OverlordState>(i);
+				menuClick = true;
+			}
+		}
+		if(!menuClick) {
+			// Check skill action on map
+			switch(state) {
+				case OverlordState::THROWING_KILL: {
+					Debug::out << "Trying to kill at " << cursorPos;
+					if (killPersonAt(cursorPos)) {
+						Debug::out << "Successful kill";
+						state = OverlordState::IDLE;
+						cooldowns[CooldownIndex::KILL] = COOLDOWN_TIME[CooldownIndex::KILL];
+					}
+					break;
 				}
-				break;
-			}
-			case OverlordState::THROWING_WAVE: {
-				Debug::out << "Throwing wave at" << cursorPos;
-				new WaveSkill(cursorPos);
-				state = OverlordState::IDLE;
-				cooldowns[CooldownIndex::WAVE] = COOLDOWN_TIME[CooldownIndex::WAVE];
-				break;
-			}
-			case OverlordState::THROWING_GATH: {
-				Debug::out << "TODO: Throwing gath at" << cursorPos;
-				//new WaveSkill(cursorPos);
-				state = OverlordState::IDLE;
-				cooldowns[CooldownIndex::GATH] = COOLDOWN_TIME[CooldownIndex::GATH];
-				break;
+				case OverlordState::THROWING_WAVE: {
+					Debug::out << "Throwing wave at" << cursorPos;
+					new WaveSkill(cursorPos);
+					state = OverlordState::IDLE;
+					cooldowns[CooldownIndex::WAVE] = COOLDOWN_TIME[CooldownIndex::WAVE];
+					break;
+				}
 			}
 		}
 	}
@@ -89,6 +113,8 @@ void Overlord::Update(float dt)
 			cooldowns[i] -= dt;
 		}
 	}
+	
+
 }
 
 void Overlord::Draw() const
@@ -112,8 +138,8 @@ void Overlord::Draw() const
 	vec bottomLeft = vec(w/2 - realBgXSize/2, h - realBgYSize/2);
 	Window::DrawPrimitive::Rectangle(vec(0, h - 180), vec(w, h), -1, 0x37, 0x16, 0x23);
 
-	float iconAlphas[4];
-	float iconColors[4];
+	float iconAlphas[3];
+	float iconColors[3];
 	for (int i = 0; i < std::size(cooldowns); i++) {
 		float mc = ((COOLDOWN_TIME[i]-cooldowns[i])/COOLDOWN_TIME[i]) * 255;
 		iconColors[i] = 255; 
@@ -126,27 +152,44 @@ void Overlord::Draw() const
 		iconAlphas[i] = mc;
 	}
 
-	vec pos1 = bottomLeft 
-		// First quarter's center 
-		+ vec(iconLeftMargin, iconMarginTop)
-		// Icon center 
-		- vec(realIconSize/2, realIconSize/2);
-	Window::Draw(Assets::mortIcon, 	pos1)
+	float realIconSize = SKILL_SIZE*ICON_SCALE;
+
+	Window::Draw(Assets::mortIcon, 	buttonPos[0] - vec(realIconSize/2, realIconSize/2))
 		.withScale(ICON_SCALE)
 		.withColor(iconColors[0],iconColors[0],iconColors[0],iconAlphas[0]);
-	Window::Draw(Assets::freezeIcon,pos1+vec(iconLeftMargin*2, 0))
+	Window::Draw(Assets::freezeIcon,buttonPos[1]- vec(realIconSize/2, realIconSize/2))
 		.withScale(ICON_SCALE)
 		.withColor(iconColors[1],iconColors[1],iconColors[1],iconAlphas[1]);
-	Window::Draw(Assets::waveIcon, 	pos1+vec(iconLeftMargin*4, 0))
+	Window::Draw(Assets::waveIcon, 	buttonPos[2]- vec(realIconSize/2, realIconSize/2))
 		.withScale(ICON_SCALE)
 		.withColor(iconColors[2],iconColors[2],iconColors[2],iconAlphas[2]);
-	Window::Draw(Assets::gathIcon, 	pos1+vec(iconLeftMargin*6, 0))
-		.withScale(ICON_SCALE)
-		.withColor(iconColors[3],iconColors[3],iconColors[3],iconAlphas[3]);
 	/*
 	const GPU_Rect& animRect = AnimLib::Overlord;
 	Window::Draw(Assets::overlordTexture, pos)
 		.withRect(animRect)
 		.withOrigin(vec(animRect.w, 0)/2)
 	*/
+
+	if(Debug::Draw) {
+		vec mouseEnd = cursorPos + vec(-1,-1)*20;
+		Window::DrawPrimitive::Arrow(mouseEnd, cursorPos, 2, 10, {0, 255, 255, 255});
+		float realIconSize = SKILL_SIZE*ICON_SCALE;
+		Window::DrawPrimitive::Circle(
+			buttonPos[0], 
+			54, 5,
+			255,255,0,255
+		);
+
+		Window::DrawPrimitive::Circle(
+			buttonPos[1], 
+			54, 5,
+			255,0,255,255
+		);
+
+		Window::DrawPrimitive::Circle(
+			buttonPos[2], 
+			54, 5,
+			0,255,255,255
+		);
+	}
 }
