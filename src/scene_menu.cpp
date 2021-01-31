@@ -10,8 +10,8 @@ SceneMenu::SceneMenu()
 	: overanim(AnimLib::OVERSEER)
 	, npcanim(AnimLib::NPC_1_LEFT)
 {
-	Camera::SetCenter(0,0);
 	Camera::SetZoom(1.f);
+	Camera::SetTopLeft(0,0);
 }
 
 void SceneMenu::EnterScene() 
