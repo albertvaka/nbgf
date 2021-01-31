@@ -26,8 +26,6 @@ struct Assets
 
 	inline static TTF_Font* font_30;
 	inline static TTF_Font* font_30_outline;
-	inline static TTF_Font* font_120;
-	inline static TTF_Font* font_120_outline;
 
 	inline static Shader tintShader;
 
@@ -41,6 +39,5 @@ struct Assets
 	inline static GPU_Image* freezeIcon;
 	inline static GPU_Image* gathIcon;
 
-	inline static GPU_Image* skillBg;
 };
 

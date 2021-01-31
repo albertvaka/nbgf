@@ -27,8 +27,6 @@ void Assets::LoadAll() {
 
     font_30 = LoadFont("data/Raleway-BlackItalic.ttf", 90);
     font_30_outline = LoadFontOutline("data/Raleway-BlackItalic.ttf", 90, 6);
-    font_120 = LoadFont("data/Raleway-BlackItalic.ttf", 180);
-    font_120_outline = LoadFontOutline("data/Raleway-BlackItalic.ttf", 180,36);
 
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
     
@@ -41,8 +39,5 @@ void Assets::LoadAll() {
     freezeIcon = LoadImage("data/freeze.png");
     waveIcon = LoadImage("data/wave.png");
     gathIcon = LoadImage("data/gath.png");
-    
-    skillBg = LoadImage("data/skillsolid.png");
-
 
 }

@@ -144,8 +144,6 @@ void Overlord::Draw() const
 		iconAlphas[i] = mc;
 	}
 
-	float realIconSize = SKILL_SIZE*ICON_SCALE;
-
 	Window::Draw(Assets::mortIcon, 	buttonPos[0] - vec(realIconSize/2, realIconSize/2))
 		.withScale(ICON_SCALE)
 		.withColor(iconColors[0],iconColors[0],iconColors[0],iconAlphas[0]);
