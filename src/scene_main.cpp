@@ -195,6 +195,8 @@ void SceneMain::ExitScene()
 	Person::DeleteAll();
 	Waypoint::DeleteAll();
 	Overlord::DeleteAll();
+	Arrow::DeleteAll();
+	Mark::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
