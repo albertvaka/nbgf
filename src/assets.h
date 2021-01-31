@@ -19,6 +19,7 @@ struct Assets
 	inline static std::array<GPU_Image*, 4> buildings1x2;
 	inline static GPU_Image* arrowTexture;
 	inline static GPU_Image* markTexture;
+	inline static GPU_Image* bloodTexture;
 	inline static GPU_Image* buildingTexture;
 
 	inline static GPU_Image* backgroundTexture;

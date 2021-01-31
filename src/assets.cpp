@@ -19,6 +19,8 @@ void Assets::LoadAll() {
     buildings1x2[1] = LoadImage("data/8.png");
     buildings1x2[2] = LoadImage("data/9.png");
     buildings1x2[3] = LoadImage("data/10.png");
+    
+    bloodTexture = LoadImage("data/blood.png");
 
     arrowTexture = LoadImage("data/arrow.png");
     markTexture = LoadImage("data/mark.png");

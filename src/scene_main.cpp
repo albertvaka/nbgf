@@ -232,7 +232,7 @@ void SceneMain::Update(float dt)
 	for (auto p : Person::GetAll()) {
 		if (p->player_id >= 0) {
 			p->UpdatePlayer(dt);
-			if (p->alive) {
+			if (p->isAlive()) {
 				playersAlive = true;
 			}
 		} else {
