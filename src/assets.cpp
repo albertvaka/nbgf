@@ -21,6 +21,7 @@ void Assets::LoadAll() {
     buildings1x2[3] = LoadImage("data/10.png");
 
     arrowTexture = LoadImage("data/arrow.png");
+    markTexture = LoadImage("data/mark.png")
 
     font_30 = LoadFont("data/PressStart2P.ttf", 60);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 60, 6);

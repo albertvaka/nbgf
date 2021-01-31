@@ -93,10 +93,12 @@ void SceneMain::SpawnCity()
 			maze[x][y] = 'b';
 		}
 	}
+
 	for (int y = 1; y < h-1; y++) {
 		maze[1][y] = 'e';
 		maze[w-2][y] = 'e';
 	}
+
 	for (int x = 1; x < w-1; x++) {
 		maze[x][1] = 'e';
 		maze[x][h-2] = 'e';
