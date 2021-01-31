@@ -28,8 +28,6 @@ void Assets::LoadAll() {
     font_30 = LoadFont("data/Raleway-BlackItalic.ttf", 90);
     font_30_outline = LoadFontOutline("data/Raleway-BlackItalic.ttf", 90, 6);
 
-    tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
-    
     music = LoadMusic("data/sadfaces.ogg");
     music_intro = LoadMusic("data/sadfaces_intro.ogg");
 
