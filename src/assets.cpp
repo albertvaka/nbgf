@@ -20,8 +20,11 @@ void Assets::LoadAll() {
     buildings1x2[2] = LoadImage("data/9.png");
     buildings1x2[3] = LoadImage("data/10.png");
 
+    arrowTexture = LoadImage("data/arrow.png");
+
     font_30 = LoadFont("data/PressStart2P.ttf", 60);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 60, 6);
+    font_120 = LoadFont("data/PressStart2P.ttf", 120);
 
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
     

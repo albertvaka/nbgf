@@ -32,6 +32,12 @@ namespace AnimLib {
 		{ {12 * frameSize, 0 * frameSize, frameSize, frameSize}, 0.5f },
 	};
 
+	constexpr const AnimationFrame NPC_1_DIE[] = {
+		{ {15 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {14 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+		{ {13 * frameSize, 0 * frameSize, frameSize, frameSize}, frameDuration },
+	};
+
 	constexpr const AnimationFrame ALIEN_1[] = {
 		{ {0,0,71,55}, 0.3f },
 		{ {71,0,71,55}, 0.3f },
@@ -44,5 +50,17 @@ namespace AnimLib {
 
 	constexpr const GPU_Rect BULLET = { 241,196,20,30 };
 	constexpr const GPU_Rect PLAYER = { 73,317,44,30 };
+
+	constexpr const float arrowFrameSize = 100.0f;
+	constexpr const AnimationFrame ARROW[] = {
+	    { {0 * arrowFrameSize, 0 * arrowFrameSize, arrowFrameSize, arrowFrameSize}, frameDuration },
+		{ {1 * arrowFrameSize, 0 * arrowFrameSize, arrowFrameSize, arrowFrameSize}, frameDuration },
+		{ {2 * arrowFrameSize, 0 * arrowFrameSize, arrowFrameSize, arrowFrameSize}, frameDuration },
+		{ {3 * arrowFrameSize, 0 * arrowFrameSize, arrowFrameSize, arrowFrameSize}, frameDuration },
+		{ {4 * arrowFrameSize, 0 * arrowFrameSize, arrowFrameSize, arrowFrameSize}, frameDuration },
+		{ {5 * arrowFrameSize, 0 * arrowFrameSize, arrowFrameSize, arrowFrameSize}, frameDuration },
+		{ {6 * arrowFrameSize, 0 * arrowFrameSize, arrowFrameSize, arrowFrameSize}, frameDuration },
+	};
+
 
 }

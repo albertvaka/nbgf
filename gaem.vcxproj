@@ -56,6 +56,7 @@
     <ClInclude Include="src\net.h" />
     <ClInclude Include="src\overlord.h" />
     <ClInclude Include="src\person.h" />
+    <ClInclude Include="src\rototext.h" />
     <ClInclude Include="src\scene_dumb.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />

@@ -99,8 +99,8 @@ void Overlord::Draw() const
 		Window::DrawPrimitive::Arrow(mouseEnd, cursorPos, 2, 10, {0, 255, 255, 255});
 	}
 
-	float w = Camera::Size().x; 
-	float h = Camera::Size().y;
+	float w = Camera::Size().x + Camera::TopLeft().x; 
+	float h = Camera::Size().y + Camera::TopLeft().y;
 
 	
 	float realBgXSize = SKILL_BG_X*BG_SCALE;

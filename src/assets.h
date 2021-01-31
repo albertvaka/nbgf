@@ -17,12 +17,14 @@ struct Assets
 	inline static std::array<GPU_Image*, 8> buildings1x1;
 	inline static std::array<GPU_Image*, 2> buildings2x1;
 	inline static std::array<GPU_Image*, 4> buildings1x2;
+	inline static GPU_Image* arrowTexture;
 	inline static GPU_Image* buildingTexture;
 
 	inline static GPU_Image* backgroundTexture;
 
 	inline static TTF_Font* font_30;
 	inline static TTF_Font* font_30_outline;
+	inline static TTF_Font* font_120;
 
 	inline static Shader tintShader;
 
