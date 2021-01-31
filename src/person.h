@@ -8,7 +8,6 @@
 #include "waypoint.h"
 #include "selfregister.h"
 #include "assets.h"
-#include "net.h"
 #include "window.h"
 #include "animation.h"
 #include "camera.h"

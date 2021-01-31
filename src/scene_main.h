@@ -4,7 +4,6 @@
 #include "partsys.h"
 #include "text.h"
 #include "rototext.h"
-#include "net.h"
 
 constexpr float stage_duration = 3.0f;
 
@@ -15,8 +14,6 @@ enum INTRO_STAGES {
 };
 
 struct SceneMain : Scene {
-	bool is_server;
-
 	INTRO_STAGES curr_stage;
 	float time_until_next_stage = stage_duration;
 	Text close_eyes_text;
@@ -27,7 +24,7 @@ struct SceneMain : Scene {
 	float gametime;
 	RotoText rotoText;
 
-	SceneMain(bool is_server);
+	SceneMain();
 
 	void EnterScene() override;
 	void ExitScene() override;

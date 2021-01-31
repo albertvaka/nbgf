@@ -127,8 +127,6 @@ void Overlord::Draw() const
 		iconAlphas[i] = mc;
 	}
 
-	Debug::out << iconAlphas[0];
-
 	vec pos1 = bottomLeft 
 		// First quarter's center 
 		+ vec(iconLeftMargin, iconMarginTop)

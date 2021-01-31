@@ -22,7 +22,6 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-#include <SDL_net.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -50,27 +49,21 @@ void AfterSceneDraw();
 #endif
 
 void init();
-void main_loop(bool draw);
+void main_loop();
 
-bool is_server = true;
-bool draw = true;
 
 extern "C" void start_main_loop()
 {
 	// We wait until here to create the scene since here we know that
 	// the emscripten FS is ready, and the scene could try to use it.
-	if (is_server) {
-		SceneManager::currentScene = new ServerScene(is_server);
-	} else {
-		SceneManager::currentScene = new EntryPointScene(is_server);
-	}
+	SceneManager::currentScene = new EntryPointScene();
 	SceneManager::currentScene->EnterScene();
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(main_loop, 0, 1);
 #else
 	while (true) {
-		main_loop(draw);
+		main_loop();
 	}
 #endif
 }
@@ -84,20 +77,6 @@ int main(int argc, char* argv[])
 #endif
 
 	init();
-
-	for (int i = 0; i < argc; i++) {
-		if (std::string(argv[i]) == "--server") {
-			Debug::out << "IS SERVER";
-			is_server = true;
-			draw = false;
-		}
-	}
-
-	for (int i = 0; i < argc; i++) {
-		if (std::string(argv[i]) == "--draw") {
-			draw = true;
-		}
-	}
 
 #ifdef __EMSCRIPTEN__
 	// mounting the FS is async, wait for it before we launch the main loop
@@ -130,13 +109,9 @@ void init() {
 	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 #endif
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0) {
 		Debug::out << SDL_GetError();
 		exit(1);
-	}
-
-	if (SDLNet_Init() != 0) {
-		Debug::out << SDLNet_GetError();
 	}
 
 	if (TTF_Init() != 0) {
@@ -182,7 +157,7 @@ void init() {
 	Fx::Init();
 }
 
-void main_loop(bool draw) {
+void main_loop() {
 
 	if (SceneManager::newScene != nullptr) {
 		SceneManager::currentScene->ExitScene();
