@@ -44,10 +44,10 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::RUN] = [](int p)
     {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
-            GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) ||
-            Keyboard::IsKeyPressed(SDL_SCANCODE_E) ||
-            Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE);
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) ||
+            GamePad::Trigger::Right.IsPressed(p) ||
+            Keyboard::IsKeyPressed(SDL_SCANCODE_RSHIFT) ||
+            Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT);
     };
     action_mapping[(int)GameKeys::START] = [](int p)
     { 

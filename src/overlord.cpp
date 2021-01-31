@@ -119,7 +119,7 @@ void Overlord::Draw() const
 		float mc = ((COOLDOWN_TIME[i]-cooldowns[i])/COOLDOWN_TIME[i]) * 255;
 		iconColors[i] = 255; 
 		if(mc < 255) {
-			mc *= 0.7;
+			mc *= 0.7f;
 			iconColors[i] = 125; 
 		} else {
 			mc = 255;

@@ -40,7 +40,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	BoxBounds ClickBounds() const
 	{
-		return BoxBounds(pos, vec(150, 300)*scale, vec(150/2,300-80) * scale)*1.1;
+		return BoxBounds(pos, vec(150, 300)*scale, vec(150/2,300-80) * scale)*1.1f;
 	}
 		
 	Person(const vec& position, int player_id)
@@ -260,7 +260,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 		vec jumpoffset = vec::Zero;
 
 		if (jump > 0) {
-			jumpoffset.y = -70*sin(Mates::map(jump, JUMP_TIME, 0.f, 0.f, M_PI));
+			jumpoffset.y = -70*sin(Mates::map(jump, JUMP_TIME, 0.f, 0.f, 3.1416f));
 		}
 
 		const GPU_Rect& rect = anim.CurrentFrameRect();
