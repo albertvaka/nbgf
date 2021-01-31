@@ -65,27 +65,19 @@ $(EXEC): $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) Makefile
 
 obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/scene_entrypoint.h src/window_conf.h Makefile
 	@mkdir -p obj/engine
-	# $(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	# $(call time_end,$@)
 
 obj/%.cpp.o: src/%.cpp engine/*.h src/*.h Makefile
 	@mkdir -p obj
-	# $(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	# $(call time_end,$@)
 
 obj/vendor/%.c.o: vendor/%.c $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
-	# $(call time_begin,$@)
 	$(CC) $(CFLAGS) -c $< -o $@
-	# $(call time_end,$@)
 
 obj/vendor/%.cpp.o: vendor/%.cpp $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
-	# $(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	# $(call time_end,$@)
 
 clean:
 	$(RM) $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) $(OUT_FILE)

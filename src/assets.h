@@ -21,8 +21,8 @@ struct Assets
 	inline static GPU_Image* markTexture;
 	inline static GPU_Image* bloodTexture;
 	inline static GPU_Image* buildingTexture;
-
-	inline static GPU_Image* backgroundTexture;
+	inline static GPU_Image* splashTexture;
+	inline static GPU_Image* overseerTexture;
 
 	inline static TTF_Font* font_30;
 	inline static TTF_Font* font_30_outline;

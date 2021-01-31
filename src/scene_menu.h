@@ -3,10 +3,13 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
+#include "animation.h"
 
 struct SceneMenu : Scene {
 
 	SceneMenu();
+	Animation overanim;
+	Animation npcanim;
 
 	void EnterScene() override;
 	void ExitScene() override;

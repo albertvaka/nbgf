@@ -14,6 +14,7 @@
 #include "waypoint.h"
 #include "overlord.h"
 #include "collide.h"
+#include "scene_menu.h"
 #include "debug.h"
 #include "freeze_skill.h"
 #include "wave_skill.h"
@@ -157,7 +158,7 @@ void SceneMain::SpawnCity()
 
 	std::vector<Waypoint*> empty_wp;
 	for (Waypoint* p : Waypoint::GetAll()) {
-		if (Rand::PercentChance(55)) {
+		if (Rand::PercentChance(60)) {
 			new Person(p->pos, -1);
 		}
 		else {
@@ -205,12 +206,15 @@ void SceneMain::Update(float dt)
 {
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
-		SceneManager::RestartScene();
+		SceneManager::ChangeScene(new SceneMenu());
 		return;
 	}
 
 	rotoText.Update(dt);
 	if (gameover) {
+		if (Input::IsPressedAnyPlayer(GameKeys::START)) {
+			SceneManager::ChangeScene(new SceneMenu());
+		}
 		return;
 	}
 
