@@ -28,40 +28,25 @@ struct GamePad
 
 	struct Trigger
 	{
-		struct TriggerBase
-		{
-			friend struct GamePad;
-			bool IsPressed(int player) { return (state[player] == PRESSED || state[player] == JUST_PRESSED); }
-			bool IsJustPressed(int player) { return (state[player] == JUST_PRESSED); }
-			bool IsReleased(int player) { return (state[player] == RELEASED || state[player] == JUST_RELEASED); }
-			bool IsJustReleased(int player) { return (state[player] == JUST_RELEASED); }
-		private:
-			KeyStates state[MAX_GAMEPADS];
-		};
-		struct LeftTrigger : public TriggerBase
-		{
-			float get(int player) const
-			{ //Pos between 0 and 100
-				//if (player > Input::kMaxPlayers) return vec();
-				SDL_GameController* joystick = joysticks[player];
-				if (!joystick) return 0;
-				float a = SDL_GameControllerGetAxis(joystick, SDL_CONTROLLER_AXIS_TRIGGERLEFT) / 327.67f;
-				return a > 0.1 ? a : 0;
-			}
-		};
-		struct RightTrigger : public TriggerBase
-		{
-			float get(int player) const
-			{ //Pos between 0 and 100
-				//if (player > Input::kMaxPlayers) return vec();
-				SDL_GameController* joystick = joysticks[player];
-				if (!joystick) return 0;
-				float a = SDL_GameControllerGetAxis(joystick, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) / 327.67f;
-				return a > 0.1 ? a : 0;
-			}
-		};
-		static LeftTrigger Left;
-		static RightTrigger Right;
+		static Trigger Left;
+		static Trigger Right;
+		float get(int player) const
+		{ //Pos between 0 and 100
+			//if (player > Input::kMaxPlayers) return vec();
+			SDL_GameController* joystick = joysticks[player];
+			if (!joystick) return 0;
+			float a = SDL_GameControllerGetAxis(joystick, axis) / 327.67f;
+			return a > 0.1 ? a : 0;
+		}
+		bool IsPressed(int player) const { return (state[player] == PRESSED || state[player] == JUST_PRESSED); }
+		bool IsJustPressed(int player) const { return (state[player] == JUST_PRESSED); }
+		bool IsReleased(int player) const { return (state[player] == RELEASED || state[player] == JUST_RELEASED); }
+		bool IsJustReleased(int player) const { return (state[player] == JUST_RELEASED); }
+	private:
+		Trigger(SDL_GameControllerAxis axis) : axis(axis) { }
+		SDL_GameControllerAxis axis;
+		KeyStates state[MAX_GAMEPADS];
+		friend struct GamePad;
 	};
 
 	struct AnalogStick
