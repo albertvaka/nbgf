@@ -33,10 +33,9 @@ constexpr float bsp_margin_ratio = 0.2f;
 constexpr int w = 18;
 constexpr int h = 10;
 
-SceneMain::SceneMain(bool is_server)
+SceneMain::SceneMain()
 	: textTime(Assets::font_30)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
-	, is_server(is_server)
 	, close_eyes_text(Assets::font_120)
 {
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
@@ -188,7 +187,6 @@ void SceneMain::ExitScene()
 	Overlord::DeleteAll();
 }
 
-std::vector<EntityUpdate> entities;
 void SceneMain::Update(float dt)
 {
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
@@ -264,7 +262,7 @@ std::vector<Window::PartialDraw> draws;
 std::vector<Window::PartialDraw*> drawps;
 void SceneMain::Draw()
 {
-	Window::Clear(1, 10, 33);
+	Window::Clear(0, 5, 20);
 
 	draws.clear();
 

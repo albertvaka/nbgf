@@ -10,8 +10,7 @@ void Input::MapGameKeys()
 {
     action_mapping[(int)GameKeys::UP] = [](int p) // p is the player number, 0-based
     {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
-            GamePad::AnalogStick::Left.get(p, 30.f).y < -50.0f ||
+        return GamePad::AnalogStick::Left.get(p, 30.f).y < -50.0f ||
             GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_UP) ||
             Keyboard::IsKeyPressed(SDL_SCANCODE_W) ||
             Keyboard::IsKeyPressed(SDL_SCANCODE_UP);
@@ -45,10 +44,10 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::RUN] = [](int p)
     {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
-            GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) ||
-            Keyboard::IsKeyPressed(SDL_SCANCODE_E) ||
-            Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE);
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) ||
+            GamePad::Trigger::Right.IsPressed(p) ||
+            Keyboard::IsKeyPressed(SDL_SCANCODE_RSHIFT) ||
+            Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT);
     };
     action_mapping[(int)GameKeys::START] = [](int p)
     { 

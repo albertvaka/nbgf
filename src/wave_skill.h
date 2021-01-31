@@ -8,7 +8,7 @@
 #include "text.h"
 
 static const float kMaxRadius = 2000;
-static const float kSpeed = 250;
+static const float kSpeed = 300;
 
 struct WaveSkill : SelfRegister<WaveSkill>
 {

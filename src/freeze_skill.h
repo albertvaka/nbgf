@@ -7,20 +7,11 @@
 #include "window.h"
 #include "text.h"
 
-template <typename T>
-inline std::string to_string_with_precision(const T a_value, const int n = 2)
-{
-	std::ostringstream out;
-	out.precision(n);
-	out << std::fixed << a_value;
-	return out.str();
-}
-
 struct FreezeSkill : SelfRegister<FreezeSkill>
 {
 	Text actionText;
-	float countdown = 1;
-	float actionLength = 0.5;
+	float countdown = 2;
+	float actionLength = 1;
 	bool freezeNow = false;
 	bool alive = true;
 	FreezeSkill() : actionText(Assets::font_30, Assets::font_30_outline) 
@@ -31,10 +22,10 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 	void Update(float dt){
 		if (countdown > 0) {
 			countdown -= dt;
-			actionText.SetString("Freeze in" + to_string_with_precision(countdown, 2));
+			actionText.SetString("Freeze in " + Mates::to_string_with_precision(std::max(0.f, countdown), 2));
 		} else if (actionLength > 0) {
 			actionLength -= dt;
-			actionText.SetString("Freeze!" + to_string_with_precision(actionLength, 2));
+			actionText.SetString("Freeze! " + Mates::to_string_with_precision(std::max(0.f,actionLength), 2));
 			freezeNow = true;
 		} else {
 			alive = false;

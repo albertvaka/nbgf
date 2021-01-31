@@ -217,12 +217,6 @@
     <ClInclude Include="src\scene_menu.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_dumb.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\net.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\overlord.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -348,14 +342,11 @@
     <ClCompile Include="src\scene_menu.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_dumb.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\net.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\overlord.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\mates.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
