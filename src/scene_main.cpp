@@ -15,9 +15,12 @@
 #include "collide.h"
 #include "debug.h"
 #include "freeze_skill.h"
+#include "wave_skill.h"
 #include <stack>
 #include "musicplayer.h"
 #include <vector>
+
+const int GAME_TIME = 120;
 
 const int STREET_SIZE = 200;
 const int GRID_OFFSET = 200;
@@ -25,24 +28,28 @@ const int BUILDING_SIZE = 200;
 const int WAYPOINT_SIZE = STREET_SIZE * 0.3;
 
 constexpr int bsp_levels = 4;
+constexpr float bsp_margin_ratio = 0.2f;
 
-constexpr int w = 19;
-constexpr int h = 11;
+constexpr int w = 18;
+constexpr int h = 10;
 
 SceneMain::SceneMain(bool is_server)
-	: is_server(is_server)
+	: textTime(Assets::font_30)
+	, rotoText(Assets::font_30, Assets::font_30_outline)
+	, is_server(is_server)
 	, close_eyes_text(Assets::font_120)
 {
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
 
-	Camera::SetZoom(0.4);
-	Camera::SetTopLeft(vec(0, 0));
-	curr_stage = OVERSEER_CLOSE_EYES;
-
+	Camera::SetZoom(0.425f);
+	Camera::SetTopLeft(vec(20, -80));
 }
 
 void SceneMain::EnterScene() {
 	SpawnCity();
+	gameover = false;
+	rotoText.timer = -1;
+	gametime = GAME_TIME;
 }
 
 void AddLinks(Waypoint* p1, Waypoint* p2) {
@@ -54,10 +61,9 @@ void BSP(std::array<std::array<char,h>,w>& maze, veci min, veci max, int level) 
 	if (level == 0) return;
 	int width = max.x - min.x;
 	int height = max.y - min.y;
-	float marginratio = 0.3f;
 	if (width > height)
 	{
-		int margin = ceilf((max.x - min.x) * marginratio);
+		int margin = ceilf((max.x - min.x) * bsp_margin_ratio);
 		if (min.x + margin >= max.x - margin) return;
 		int x = Rand::roll(min.x + margin, max.x - margin);
 		for (int y = min.y; y < max.y; y++) {
@@ -68,7 +74,7 @@ void BSP(std::array<std::array<char,h>,w>& maze, veci min, veci max, int level) 
 	}
 	else 
 	{
-		int margin = ceilf((max.y - min.y)* marginratio);
+		int margin = ceilf((max.y - min.y)* bsp_margin_ratio);
 		if (min.y + margin >= max.y - margin) return;
 		int y = Rand::roll(min.y+margin, max.y-margin);
 		for (int x = min.x; x < max.x; x++) {
@@ -145,7 +151,7 @@ void SceneMain::SpawnCity()
 
 	std::vector<Waypoint*> empty_wp;
 	for (Waypoint* p : Waypoint::GetAll()) {
-		if (Rand::OnceEvery(2)) {
+		if (Rand::PercentChance(35)) {
 			new Person(p->pos, -1);
 		}
 		else {
@@ -183,6 +189,17 @@ void SceneMain::ExitScene()
 std::vector<EntityUpdate> entities;
 void SceneMain::Update(float dt)
 {
+	const SDL_Scancode restart = SDL_SCANCODE_F5;
+	if (Keyboard::IsKeyJustPressed(restart)) {
+		SceneManager::RestartScene();
+		return;
+	}
+
+	if (gameover) {
+		rotoText.Update(dt);
+		return;
+	}
+
 	close_eyes_text.SetString("OVERSEER CLOSE\n   YOUR EYES");
 
 	time_until_next_stage -= dt;
@@ -199,20 +216,14 @@ void SceneMain::Update(float dt)
 		}
 	}
 
-	std::map<int, packet_player_input> inputs;
-	for (Client& client : lobby.clients) {
-		if (!client.in_use) continue;
-		PACKET_TYPE type;
-		void* data = recv_data(client.socket, &type);
-		if (type == PACKET_TYPE::PLAYER_INPUT) {
-			packet_player_input input = parse_player_input(data);
-			inputs[input.client_id] = input;
-		}
-	}
 
+	bool playersAlive = false;
 	for (auto p : Person::GetAll()) {
 		if (p->player_id >= 0) {
 			p->UpdatePlayer(dt);
+			if (p->alive) {
+				playersAlive = true;
+			}
 		} else {
 			p->UpdateNpc(dt);
 		}
@@ -229,14 +240,22 @@ void SceneMain::Update(float dt)
 	for (auto o : FreezeSkill::GetAll()) {
 		o->Update(dt);
 	}
+	FreezeSkill::DeleteNotAlive();
 
-#ifdef _DEBUG
-	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	if (Keyboard::IsKeyJustPressed(restart)) {
-		SceneManager::RestartScene();
-		return;
+	for (auto o : WaveSkill::GetAll()) {
+		o->Update(dt);
 	}
-#endif
+	WaveSkill::DeleteNotAlive();
+
+	gametime -= dt;
+	if (gametime < 0 || !playersAlive) {
+		gameover = true;
+		rotoText.ShowMessage(playersAlive?"The dissidents\ngot away" : "The regime\ntriumphs");
+		WaveSkill::DeleteAll();
+		FreezeSkill::DeleteAll();
+	}
+	textTime.SetString(std::to_string((int)ceilf(gametime)));
+
 }
 
 std::vector<Window::PartialDraw> draws;
@@ -246,6 +265,7 @@ void SceneMain::Draw()
 	Window::Clear(1, 10, 33);
 
 	draws.clear();
+
 	for (const Building* b : Building::GetAll()) {
 		draws.push_back(b->Draw());
 		b->Bounds().DebugDraw(255,0,0);
@@ -285,6 +305,10 @@ void SceneMain::Draw()
 		pd->DoDraw();
 	}
 
+	for (const WaveSkill* b : WaveSkill::GetAll()) {
+		b->Draw();
+	}
+
 	// Has to be last because contains GUI
 	for (auto o : Overlord::GetAll()) {
 		o->Draw();
@@ -296,6 +320,17 @@ void SceneMain::Draw()
 	if (curr_stage == OVERSEER_CLOSE_EYES) {
 		Window::Draw(close_eyes_text, Camera::Size().x/2 - 800, Camera::Size().y/2);
 	}
+
+	Camera::InScreenCoords::Begin();
+
+	Window::Draw(textTime, vec(5, 5))
+		.withOrigin(0, 0)
+		.withScale(0.5f);
+
+	Camera::InScreenCoords::End();
+
+	rotoText.Draw();
+
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");

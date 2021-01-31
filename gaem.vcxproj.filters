@@ -229,6 +229,12 @@
     <ClInclude Include="src\freeze_skill.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\wave_skill.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rototext.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

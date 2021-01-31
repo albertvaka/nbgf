@@ -56,10 +56,12 @@
     <ClInclude Include="src\net.h" />
     <ClInclude Include="src\overlord.h" />
     <ClInclude Include="src\person.h" />
+    <ClInclude Include="src\rototext.h" />
     <ClInclude Include="src\scene_dumb.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\scene_menu.h" />
+    <ClInclude Include="src\wave_skill.h" />
     <ClInclude Include="src\window_conf.h" />
     <ClInclude Include="vendor\glew\glew.h" />
     <ClInclude Include="vendor\glew\glxew.h" />

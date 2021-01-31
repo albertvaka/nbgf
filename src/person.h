@@ -13,6 +13,7 @@
 #include "animation.h"
 #include "camera.h"
 #include "freeze_skill.h"
+#include "wave_skill.h"
 
 
 static const float scale = 0.3f;
@@ -28,6 +29,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 	bool goingLeft;
 	Animation anim;
 	int player_id;
+	bool jump = false;
 	bool alive;
 
 	bool in_panic;
@@ -36,6 +38,11 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	float speed_multiplier;
 
+	BoxBounds ClickBounds() const
+	{
+		return BoxBounds(pos, vec(150, 300)*scale, vec(150/2,300-80) * scale)*1.1;
+	}
+		
 	Person(const vec& position, int player_id)
 		: BoxEntity(pos, vec(150, 150)*scale)
 		, anim(AnimLib::NPC_1_DOWN)
@@ -65,7 +72,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 	}
 
 	void UpdatePlayer(float dt) {
-		if (!alive) { return; }
+		if (!alive) { 
+			anim.Update(dt);
+			return; 
+		}
 		vec dir = vec::Zero;
 		if (Input::IsPressed(player_id, GameKeys::UP)) {
 			dir.y = -1;
@@ -117,7 +127,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void Kill() {
 		alive = false;
-
+		anim.Ensure(AnimLib::NPC_1_DIE, false);
 		for (auto p : Person::GetAll()) {
 			if (p->pos.Distance(pos) < 600) {
 				p->Panic(p->pos - pos);
@@ -134,7 +144,10 @@ struct Person : BoxEntity, SelfRegister<Person>
 
 	void UpdateNpc(float dt)
 	{
-		if (!alive) { return; }
+		if (!alive) {
+			anim.Update(dt);
+			return;
+		}
 
 		vec dir;
 		if (in_panic) {
@@ -149,6 +162,21 @@ struct Person : BoxEntity, SelfRegister<Person>
 		for (auto f : FreezeSkill::GetAll()) {
 			if (f->freezeNow) {
 				dir = vec::Zero;
+			}
+		}
+		for (WaveSkill* f : WaveSkill::GetAll()) {
+			if (f->InWave(pos)) {
+				jump = true;
+				anim.Ensure(AnimLib::NPC_1_JUMP, false);
+			}
+		}
+
+		if (jump) {
+			dir = vec::Zero;
+			anim.Update(dt);
+			if (anim.IsComplete()) {
+				Debug::out << "complete";
+				jump = false;
 			}
 		}
 
@@ -214,6 +242,8 @@ struct Person : BoxEntity, SelfRegister<Person>
 			Window::DrawPrimitive::Circle(pos, 10, 5, 255, 0, 0);
 		}
 
+		ClickBounds().DebugDraw(0, 0, 255);
+
 		const GPU_Rect& rect = anim.CurrentFrameRect();
 		return Window::PartialDraw(Assets::npcTexture, pos - vec(0, 80*scale))
 			.withRect(rect)
@@ -236,4 +266,5 @@ struct Person : BoxEntity, SelfRegister<Person>
 			}
 		}
 	}
+
 };
