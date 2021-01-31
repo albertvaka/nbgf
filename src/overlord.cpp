@@ -119,7 +119,6 @@ void Overlord::Update(float dt)
 
 void Overlord::Draw() const
 {
-
 	if(Debug::Draw) {
 		vec mouseEnd = cursorPos + vec(-1,-1)*20;
 		Window::DrawPrimitive::Arrow(mouseEnd, cursorPos, 2, 10, {0, 255, 255, 255});
@@ -129,13 +128,6 @@ void Overlord::Draw() const
 	float h = Camera::Size().y + Camera::TopLeft().y;
 
 	
-	float realBgXSize = SKILL_BG_X*BG_SCALE;
-	float realBgYSize = SKILL_BG_Y*BG_SCALE;
-	float realIconSize = SKILL_SIZE*ICON_SCALE;
-	float iconMarginTop = realBgYSize * 0.1;
-	float iconLeftMargin = ((realBgXSize)/4)/2;
-	vec bottomCenter = vec(w/2, h-realBgYSize/2);
-	vec bottomLeft = vec(w/2 - realBgXSize/2, h - realBgYSize/2);
 	Window::DrawPrimitive::Rectangle(vec(0, h - 180), vec(w, h), -1, 0x37, 0x16, 0x23);
 
 	float iconAlphas[3];

@@ -226,6 +226,7 @@ void SceneMain::Update(float dt)
 		if (time_until_next_stage <= 0.0f) {
 			curr_stage = GAME;
 			time_until_next_stage = stage_duration;
+			Assets::game_start_sound.Play();
 		}
 	}
 
