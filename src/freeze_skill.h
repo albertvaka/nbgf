@@ -30,7 +30,7 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 	FreezeSkill() : actionText(Assets::font_30, Assets::font_30_outline) 
 	{
 		actionText.SetFillColor(0, 0, 0);
-		actionText.SetOutlineColor(255, 255, 0);
+		actionText.SetOutlineColor(255, 0, 0);
 	}
 
 	void Update(float dt){
@@ -51,7 +51,7 @@ struct FreezeSkill : SelfRegister<FreezeSkill>
 			actionText.SetString("Freeze in " + Mates::to_string_with_precision(std::max(0.f, countdown), 2));
 		} else if (actionLength > 0) {
 			actionLength -= dt;
-			actionText.SetString("Freeze! " + Mates::to_string_with_precision(std::max(0.f,actionLength), 2));
+			actionText.SetString("Now freeze! " + Mates::to_string_with_precision(std::max(0.f,actionLength), 2));
 			freezeNow = true;
 
 			if (fade_in >= 0) {

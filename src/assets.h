@@ -27,8 +27,6 @@ struct Assets
 	inline static TTF_Font* font_30;
 	inline static TTF_Font* font_30_outline;
 
-	inline static Shader tintShader;
-
 	inline static Mix_Music* music;
 	inline static Mix_Music* music_intro;
 
