@@ -32,8 +32,8 @@ const int MARKS_PER_PLAYER = 4;
 constexpr int bsp_levels = 4;
 constexpr float bsp_margin_ratio = 0.2f;
 
-constexpr int w = 18;
-constexpr int h = 10;
+constexpr int w = 19;
+constexpr int h = 11;
 
 SceneMain::SceneMain()
 	: textTime(Assets::font_30)
@@ -43,8 +43,8 @@ SceneMain::SceneMain()
 	close_eyes_text.SetOutlineColor(255, 0, 0);
 	MusicPlayer::PlayWithIntro(Assets::music, Assets::music_intro);
 
-	Camera::SetZoom(0.425f);
-	Camera::SetTopLeft(vec(20, -80));
+	Camera::SetZoom(0.375f);
+	Camera::SetTopLeft(vec(0, -60));
 }
 
 void SceneMain::EnterScene() {
@@ -231,7 +231,11 @@ void SceneMain::Update(float dt)
 	bool playersAlive = false;
 	for (auto p : Person::GetAll()) {
 		if (p->player_id >= 0) {
-			p->UpdatePlayer(dt);
+			if (curr_stage == OVERSEER_CLOSE_EYES) {
+				p->UpdateNpc(dt);
+			} else {
+				p->UpdatePlayer(dt);
+			}
 			if (p->alive) {
 				playersAlive = true;
 			}
@@ -270,7 +274,7 @@ void SceneMain::Update(float dt)
 		WaveSkill::DeleteAll();
 		FreezeSkill::DeleteAll();
 	}
-	textTime.SetString("Bombs planted: "+ std::to_string(goalsdone) + "/" + std::to_string(NUM_GOALS));
+	textTime.SetString("Bombs planted: "+ std::to_string(goalsdone) + "/" + std::to_string(num_goals));
 }
 
 std::vector<Window::PartialDraw> draws;

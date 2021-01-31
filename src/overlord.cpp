@@ -108,10 +108,9 @@ void Overlord::Draw() const
 	float realIconSize = SKILL_SIZE*ICON_SCALE;
 	float iconMarginTop = realBgYSize * 0.1;
 	float iconLeftMargin = ((realBgXSize)/4)/2;
-	vec bottomCenter = vec(w/2, h-realBgYSize/2); 
-	vec bottomLeft = vec(w/2-realBgXSize/2, h-realBgYSize/2); 
-	Window::Draw(Assets::skillBg, bottomCenter-vec(realBgXSize/2,realBgYSize/2))
-		.withScale(BG_SCALE);
+	vec bottomCenter = vec(w/2, h-realBgYSize/2);
+	vec bottomLeft = vec(w/2 - realBgXSize/2, h - realBgYSize/2);
+	Window::DrawPrimitive::Rectangle(vec(0, h - 180), vec(w, h), -1, 0x37, 0x16, 0x23);
 
 	float iconAlphas[4];
 	float iconColors[4];
