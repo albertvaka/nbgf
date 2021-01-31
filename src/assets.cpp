@@ -34,6 +34,7 @@ void Assets::LoadAll() {
     music_intro = LoadMusic("data/sadfaces_intro.ogg");
 
     game_start_sound.Load("data/game_start.ogg");
+    freeze_sound.Load("data/freeze.ogg");
 
     mortIcon = LoadImage("data/mort.png");
     freezeIcon = LoadImage("data/freeze.png");
