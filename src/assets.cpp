@@ -28,4 +28,12 @@ void Assets::LoadAll() {
     music = LoadMusic("data/sadfaces.ogg");
     music_intro = LoadMusic("data/sadfaces_intro.ogg");
 
+    mortIcon = LoadImage("data/mort.png");
+    freezeIcon = LoadImage("data/freeze.png");
+    waveIcon = LoadImage("data/wave.png");
+    gathIcon = LoadImage("data/gath.png");
+    
+    skillBg = LoadImage("data/skillsolid.png");
+
+
 }

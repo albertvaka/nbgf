@@ -29,5 +29,11 @@ struct Assets
 	inline static Mix_Music* music;
 	inline static Mix_Music* music_intro;
 
+	inline static GPU_Image* mortIcon;
+	inline static GPU_Image* waveIcon;
+	inline static GPU_Image* freezeIcon;
+	inline static GPU_Image* gathIcon;
+
+	inline static GPU_Image* skillBg;
 };
 

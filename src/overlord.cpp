@@ -8,7 +8,12 @@
 #include "wave_skill.h"
 #include "anim_lib.h"
 
-const int SKILL_SIZE = 100;
+const int SKILL_BG_X = 358;
+const int SKILL_BG_Y = 112;
+const int SKILL_SIZE = 54;
+
+const float BG_SCALE = 2;
+const float ICON_SCALE = 2.5;
 
 Overlord::Overlord()
 {
@@ -69,6 +74,13 @@ void Overlord::Update(float dt)
 				cooldowns[CooldownIndex::WAVE] = COOLDOWN_TIME[CooldownIndex::WAVE];
 				break;
 			}
+			case OverlordState::THROWING_GATH: {
+				Debug::out << "TODO: Throwing gath at" << cursorPos;
+				//new WaveSkill(cursorPos);
+				state = OverlordState::IDLE;
+				cooldowns[CooldownIndex::GATH] = COOLDOWN_TIME[CooldownIndex::GATH];
+				break;
+			}
 		}
 	}
 
@@ -86,14 +98,54 @@ void Overlord::Draw() const
 		vec mouseEnd = cursorPos + vec(-1,-1)*20;
 		Window::DrawPrimitive::Arrow(mouseEnd, cursorPos, 2, 10, {0, 255, 255, 255});
 	}
+
+	float w = Camera::Size().x; 
+	float h = Camera::Size().y;
+
 	
-	for (int i =0; i < std::size(cooldowns); i++) {
-		int c = ((COOLDOWN_TIME[i]-cooldowns[i])/COOLDOWN_TIME[i]) * 255;
-		//Camera::InScreenCoords::Begin();
-		Window::DrawPrimitive::Rectangle(0, SKILL_SIZE*i, SKILL_SIZE, SKILL_SIZE*(i+1), 5, c,c,c);
-		//Camera::InScreenCoords::End();
+	float realBgXSize = SKILL_BG_X*BG_SCALE;
+	float realBgYSize = SKILL_BG_Y*BG_SCALE;
+	float realIconSize = SKILL_SIZE*ICON_SCALE;
+	float iconMarginTop = realBgYSize * 0.1;
+	float iconLeftMargin = ((realBgXSize)/4)/2;
+	vec bottomCenter = vec(w/2, h-realBgYSize/2); 
+	vec bottomLeft = vec(w/2-realBgXSize/2, h-realBgYSize/2); 
+	Window::Draw(Assets::skillBg, bottomCenter-vec(realBgXSize/2,realBgYSize/2))
+		.withScale(BG_SCALE);
+
+	float iconAlphas[4];
+	float iconColors[4];
+	for (int i = 0; i < std::size(cooldowns); i++) {
+		float mc = ((COOLDOWN_TIME[i]-cooldowns[i])/COOLDOWN_TIME[i]) * 255;
+		iconColors[i] = 255; 
+		if(mc < 255) {
+			mc *= 0.7;
+			iconColors[i] = 125; 
+		} else {
+			mc = 255;
+		}
+		iconAlphas[i] = mc;
 	}
 
+	Debug::out << iconAlphas[0];
+
+	vec pos1 = bottomLeft 
+		// First quarter's center 
+		+ vec(iconLeftMargin, iconMarginTop)
+		// Icon center 
+		- vec(realIconSize/2, realIconSize/2);
+	Window::Draw(Assets::mortIcon, 	pos1)
+		.withScale(ICON_SCALE)
+		.withColor(iconColors[0],iconColors[0],iconColors[0],iconAlphas[0]);
+	Window::Draw(Assets::freezeIcon,pos1+vec(iconLeftMargin*2, 0))
+		.withScale(ICON_SCALE)
+		.withColor(iconColors[1],iconColors[1],iconColors[1],iconAlphas[1]);
+	Window::Draw(Assets::waveIcon, 	pos1+vec(iconLeftMargin*4, 0))
+		.withScale(ICON_SCALE)
+		.withColor(iconColors[2],iconColors[2],iconColors[2],iconAlphas[2]);
+	Window::Draw(Assets::gathIcon, 	pos1+vec(iconLeftMargin*6, 0))
+		.withScale(ICON_SCALE)
+		.withColor(iconColors[3],iconColors[3],iconColors[3],iconAlphas[3]);
 	/*
 	const GPU_Rect& animRect = AnimLib::Overlord;
 	Window::Draw(Assets::overlordTexture, pos)
