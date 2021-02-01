@@ -18,7 +18,7 @@ struct SceneMain : Scene {
 	Text textTime;
 	bool gameover;
 	
-	float gametime;
+	float corner_anim_timer;
 	RotoText rotoText;
 
 	int num_goals;

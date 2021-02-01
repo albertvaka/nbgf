@@ -31,6 +31,10 @@ struct Text
 		return *this;
 	}
 
+	bool HasChanges() {
+		return (cached == nullptr);
+	}
+
 	Text& SetFont(TTF_Font* newfont, TTF_Font* newfont_outline = nullptr) {
 		if (newfont != font || font_outline != newfont_outline) {
 			font_outline = newfont_outline;

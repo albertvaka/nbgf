@@ -35,6 +35,8 @@ constexpr float bsp_margin_ratio = 0.2f;
 constexpr int w = 20;
 constexpr int h = 11;
 
+extern float mainClock;
+
 SceneMain::SceneMain()
 	: textTime(Assets::font_30)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
@@ -53,6 +55,7 @@ void SceneMain::EnterScene() {
 	time_until_next_stage = stage_duration;
 	gameover = false;
 	rotoText.timer = -1;
+	corner_anim_timer = 0.f;
 
 	rotoText.ShowMessage("DICTATOR CLOSE\nYOUR EYES");
 }
@@ -231,7 +234,7 @@ void SceneMain::Update(float dt)
 		if (time_until_next_stage <= 0.0f) {
 			curr_stage = GAME;
 			time_until_next_stage = stage_duration;
-			Assets::game_start_sound.Play();
+			//Assets::game_start_sound.Play();
 		}
 	}
 
@@ -282,7 +285,15 @@ void SceneMain::Update(float dt)
 		WaveSkill::DeleteAll();
 		FreezeSkill::DeleteAll();
 	}
+	if (corner_anim_timer > 0) {
+		corner_anim_timer -= dt;
+		if (corner_anim_timer <= 0) {
+			corner_anim_timer = 0;
+		}
+	}
 	textTime.SetString(std::to_string(goalsdone) + "/" + std::to_string(num_goals));
+	if (goalsdone != 0 && textTime.HasChanges()) corner_anim_timer = 0.3f;
+	
 }
 
 std::vector<Window::PartialDraw> draws;
@@ -351,12 +362,14 @@ void SceneMain::Draw()
 
 	Camera::InScreenCoords::Begin();
 
-	Window::Draw(Assets::markTexture, Camera::InScreenCoords::Bounds().BottomRight() - vec(90, 5) - textTime.Size() / 2)
-		.withScale(0.7f);
+	Window::Draw(Assets::markTexture, Camera::InScreenCoords::Bounds().BottomRight()-textTime.Size() / vec(1,2) + vec(30,18))
+		.withOrigin(Assets::markTexture->w/2, Assets::markTexture->h/2)
+		.withRotationRads(2*mainClock)
+		.withScale(0.55f + 2*corner_anim_timer);
 		
-	Window::Draw(textTime, Camera::InScreenCoords::Bounds().BottomRight()-vec(15,5))
-		.withOrigin(textTime.Size())
-		.withScale(0.5f);
+	Window::Draw(textTime, Camera::InScreenCoords::Bounds().BottomRight()-textTime.Size()/2 + vec(25,18))
+		.withOrigin(textTime.Size()/2)
+		.withScale(0.5f + 2*corner_anim_timer);
 
 	Camera::InScreenCoords::End();
 
