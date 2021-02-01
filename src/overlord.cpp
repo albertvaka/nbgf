@@ -128,15 +128,7 @@ void Overlord::Draw() const
 
 	float w = Camera::Size().x + Camera::TopLeft().x; 
 	float h = Camera::Size().y + Camera::TopLeft().y;
-
-	float realBgXSize = SKILL_BG_X*BG_SCALE;
-	float realBgYSize = SKILL_BG_Y*BG_SCALE;
 	float realIconSize = SKILL_SIZE*ICON_SCALE;
-	float iconMarginTop = realBgYSize * 0.1;
-	float iconLeftMargin = ((realBgXSize)/3)/2;
-	vec iconLeftMarginVec = vec(iconLeftMargin, 0);
-	vec bottomCenter = vec(w/2, h-realBgYSize/2);
-	vec bottomLeft = vec(w/2-realBgXSize/2, h-realBgYSize/2);
 	
 	Window::DrawPrimitive::Rectangle(vec(0, h - 180), vec(w, h), -1, 0x37, 0x16, 0x23);
 
