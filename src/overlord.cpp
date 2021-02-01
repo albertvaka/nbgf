@@ -145,16 +145,18 @@ void Overlord::Draw() const
 		}
 		iconAlphas[i] = mc;
 	}
+	int selectedKill = state == OverlordState::THROWING_KILL? 255 : 0;
+	int selectedWave = state == OverlordState::THROWING_WAVE ? 255 : 0;
 
 	Window::Draw(Assets::mortIcon, 	buttonPos[0] - vec(realIconSize/2, realIconSize/2))
 		.withScale(ICON_SCALE)
-		.withColor(iconColors[0],iconColors[0],iconColors[0],iconAlphas[0]);
+		.withColor(iconColors[0],iconColors[0],iconColors[0]-selectedKill,iconAlphas[0]);
 	Window::Draw(Assets::freezeIcon,buttonPos[1]- vec(realIconSize/2, realIconSize/2))
 		.withScale(ICON_SCALE)
 		.withColor(iconColors[1],iconColors[1],iconColors[1],iconAlphas[1]);
 	Window::Draw(Assets::waveIcon, 	buttonPos[2]- vec(realIconSize/2, realIconSize/2))
 		.withScale(ICON_SCALE)
-		.withColor(iconColors[2],iconColors[2],iconColors[2],iconAlphas[2]);
+		.withColor(iconColors[2],iconColors[2],iconColors[2]-selectedWave,iconAlphas[2]);
 	/*
 	const GPU_Rect& animRect = AnimLib::Overlord;
 	Window::Draw(Assets::overlordTexture, pos)
