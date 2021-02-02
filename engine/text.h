@@ -103,6 +103,10 @@ struct Text
 		return cached;
 	};
 
+    bool HasChanges() {
+        return (cached == nullptr);
+    }
+
 private:
 	void Invalidate() {
 		if (cached) {
