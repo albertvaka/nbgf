@@ -22,9 +22,7 @@ namespace Window {
 		return SDL_GetWindowFlags(Window::window) & SDL_WINDOW_FULLSCREEN;
 	}
 
-	inline void SetFullScreen(bool b) {
-		SDL_SetWindowFullscreen(Window::window, b ? SDL_WINDOW_FULLSCREEN : 0);
-	}
+	void SetFullScreen(bool b);
 
 	inline void SetShowCursor(bool b) {
 		SDL_ShowCursor(b);
