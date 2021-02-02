@@ -8,6 +8,8 @@
 static int keyboard_player_id = 0; // Keyboard controls player one
 
 std::function<bool(int)> Input::action_mapping[magic_enum::enum_count<GameKeys>()];
+std::function<vec(int)> Input::analog_mapping[magic_enum::enum_count<AnalogInput>()];
+
 void Input::MapGameKeys()
 {
     action_mapping[(int)GameKeys::MENU_UP] = [](int p) // p is the player id
@@ -88,6 +90,29 @@ void Input::MapGameKeys()
                    Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE)
                )
         );
+    };
+    analog_mapping[(int)AnalogInput::MOVE] = [](int p)
+    {
+        vec ret = vec::Zero;
+        if (p == keyboard_player_id) {
+            if (Keyboard::IsKeyPressed(SDL_SCANCODE_W) ||
+                Keyboard::IsKeyPressed(SDL_SCANCODE_UP)) {
+                   ret.y = -100;
+            }
+            if (Keyboard::IsKeyPressed(SDL_SCANCODE_S) ||
+                Keyboard::IsKeyPressed(SDL_SCANCODE_DOWN)) {
+                   ret.y = 100;
+            }
+            if (Keyboard::IsKeyPressed(SDL_SCANCODE_A) ||
+                Keyboard::IsKeyPressed(SDL_SCANCODE_LEFT)) {
+                   ret.x = -100;
+            }
+            if (Keyboard::IsKeyPressed(SDL_SCANCODE_D) ||
+                Keyboard::IsKeyPressed(SDL_SCANCODE_RIGHT)) {
+                   ret.x = 100;
+            }
+        }
+        return ret != vec::Zero? ret : GamePad::AnalogStick::Left.get(p, 30.f);
     };
 }
 

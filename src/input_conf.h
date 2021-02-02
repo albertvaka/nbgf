@@ -8,3 +8,9 @@ enum class GameKeys
 	START,
 	ACTION,
 };
+
+enum class AnalogInput
+{
+	NONE = 0,
+	MOVE,
+};
