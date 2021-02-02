@@ -7,8 +7,8 @@
 
 const GamePad::AnalogStick GamePad::AnalogStick::Left(SDL_CONTROLLER_AXIS_LEFTX, SDL_CONTROLLER_AXIS_LEFTY);
 const GamePad::AnalogStick GamePad::AnalogStick::Right(SDL_CONTROLLER_AXIS_RIGHTX, SDL_CONTROLLER_AXIS_RIGHTY);
-GamePad::Trigger::LeftTrigger GamePad::Trigger::Left;
-GamePad::Trigger::RightTrigger GamePad::Trigger::Right;
+GamePad::Trigger GamePad::Trigger::Left(SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+GamePad::Trigger GamePad::Trigger::Right(SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
 SDL_GameController* GamePad::joysticks[MAX_GAMEPADS];
 KeyStates GamePad::button_states[MAX_GAMEPADS][SDL_CONTROLLER_BUTTON_MAX];
 
