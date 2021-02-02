@@ -61,6 +61,24 @@ namespace Window
         return 0;
     }
 
+    void SetFullScreen(bool b) {
+#ifdef __EMSCRIPTEN__
+        EM_ASM({
+            if ($0) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        },b);
+        if (!b) {
+            // Here to trigger a SDL_WINDOWEVENT
+            SDL_SetWindowFullscreen(Window::window, 0);
+        }
+#else
+        SDL_SetWindowFullscreen(Window::window, b ? SDL_WINDOW_FULLSCREEN : 0);
+#endif
+    }
+
     void ProcessEvents()
     {
         SDL_Event event;
