@@ -384,6 +384,26 @@ inline constexpr vec operator/(vec lhs, vec rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+inline constexpr veci operator+(veci lhs, veci rhs)
+{
+    veci result(lhs);
+    result.x += rhs.x;
+    result.y += rhs.y;
+
+    return result;
+}
+
+inline constexpr veci operator-(veci lhs, veci rhs)
+{
+    veci result(lhs);
+    result.x -= rhs.x;
+    result.y -= rhs.y;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 //treats a window as a toroid
 inline void WrapAround(vec &pos, int MaxX, int MaxY)
