@@ -78,19 +78,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 			anim.Update(dt);
 			return; 
 		}
-		vec dir = vec::Zero;
-		if (Input::IsPressed(player_id, GameKeys::UP)) {
-			dir.y = -1;
-		}
-		if (Input::IsPressed(player_id, GameKeys::DOWN)) {
-			dir.y = 1;
-		}
-		if (Input::IsPressed(player_id, GameKeys::RIGHT)) {
-			dir.x = 1;
-		}
-		if (Input::IsPressed(player_id, GameKeys::LEFT)) {
-			dir.x = -1;
-		}
+		vec dir = Input::GetAnalog(player_id, AnalogInput::MOVE).Normalized();
 		if (Input::IsJustPressed(player_id, GameKeys::ACTION)) {
 			if (jump < 0) {
 				jump = JUMP_TIME;
