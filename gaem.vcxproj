@@ -121,6 +121,7 @@
     <ClCompile Include="engine\fx.cpp" />
     <ClCompile Include="engine\input.cpp" />
     <ClCompile Include="engine\main.cpp" />
+    <ClCompile Include="engine\mates.cpp" />
     <ClCompile Include="engine\musicplayer.cpp" />
     <ClCompile Include="engine\partsys.cpp" />
     <ClCompile Include="engine\raw_input.cpp" />
