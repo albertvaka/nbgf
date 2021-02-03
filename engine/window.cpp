@@ -98,9 +98,16 @@ namespace Window
             case SDL_CONTROLLERDEVICEREMOVED:
                 GamePad::_Removed(SDL_GameControllerFromInstanceID(event.jdevice.which));
                 break;
-            case SDL_MOUSEWHEEL:
-                Mouse::scrollWheel += event.wheel.y;
-                break;
+            case SDL_MOUSEWHEEL: {
+                float wheel = event.wheel.y;
+#ifdef __APPLE__
+                if (Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT) || Keyboard::IsKeyPressed(SDL_SCANCODE_RSHIFT)) {
+                    wheel = event.wheel.x; //shift makes the axis change on osx for some reason
+                }
+#endif
+                Mouse::scrollWheel += wheel;
+            }
+            break;
             case SDL_QUIT:
                 exit(0);
                 break;
