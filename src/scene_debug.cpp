@@ -188,12 +188,6 @@ void DebugScene::Update(float dt)
 	OneShotAnim::DeleteNotAlive();
 
 #ifdef _DEBUG
-	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	if (Keyboard::IsKeyJustPressed(restart)) {
-		SceneManager::RestartScene();
-		return;
-	}
-
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 		map.DebugEdit();
 	}

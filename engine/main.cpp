@@ -218,6 +218,7 @@ void main_loop() {
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME_NEXT = SDL_SCANCODE_E;
 	const SDL_Scancode DEBUG_MODE = SDL_SCANCODE_F2;
 	const SDL_Scancode DEBUG_RELOAD_ASSETS = SDL_SCANCODE_F4;
+	const SDL_Scancode DEBUG_RESTART_SCENE = SDL_SCANCODE_F5;
 	const SDL_Scancode DEBUG_FAST_FORWARD = SDL_SCANCODE_F10;
 
 	if (Keyboard::IsKeyJustPressed(DEBUG_RELOAD_ASSETS)) {
@@ -232,6 +233,10 @@ void main_loop() {
 
 	if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
 		Debug::FrameByFrame = !Debug::FrameByFrame;
+	}
+
+	if (Keyboard::IsKeyJustPressed(DEBUG_RESTART_SCENE)) {
+		SceneManager::RestartScene();
 	}
 
 	if (Debug::FrameByFrame && Debug::Draw) {

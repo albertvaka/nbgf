@@ -409,12 +409,12 @@ void JumpScene::Update(float dt)
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	const SDL_Scancode shift = SDL_SCANCODE_LSHIFT;
 	if (Keyboard::IsKeyJustPressed(restart)) {
+		// actual restart is done in main.cpp, this is here only to clear the save
 		if (Keyboard::IsKeyPressed(shift)) {
 			SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
 			saveState.Clear();
 			saveState.Save();
 		}
-		Fx::ScreenTransition::Start(Assets::fadeOutDiamondsShader);
 		return;
 	}
 	if (Keyboard::IsKeyJustPressed(teleport)) {

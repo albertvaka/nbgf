@@ -165,16 +165,9 @@ void HellCrossScene::Update(float dt)
 	OneShotAnim::DeleteNotAlive();
 
 #ifdef _DEBUG
-	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	if (Keyboard::IsKeyJustPressed(restart)) {
-		Fx::ScreenTransition::Start(Assets::fadeOutDiamondsShader);
-		return;
-	}
-
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 		map.DebugEdit();
 	}
-
 #endif
 
 	Bat::DeleteNotAlive();
