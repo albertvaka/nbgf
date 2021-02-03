@@ -32,9 +32,7 @@
 #endif
 
 float mainClock;
-int last_ticks;
-
-bool slowDown = false;
+static int last_ticks;
 
 #ifdef _FPS_COUNTER
 Text* txt_fps;
@@ -146,14 +144,14 @@ void init() {
 	txt_fps->SetString("0");
 #endif
 
-	last_ticks = SDL_GetTicks();
-
 	// Start with the both buffers fully black
 	Window::Clear(0, 0, 0);
 	GPU_Flip(Window::screenTarget);
 	Window::Clear(0, 0, 0);
 
 	Fx::Init();
+
+	last_ticks = SDL_GetTicks();
 }
 
 void main_loop() {
@@ -180,8 +178,16 @@ void main_loop() {
 #endif
 
 	int ticks = SDL_GetTicks();
-	float dt = (ticks - last_ticks) / 1000.f;
+	float uncapped_dt = (ticks - last_ticks) / 1000.f;
 	last_ticks = ticks;
+
+	float dt = uncapped_dt;
+	bool slowDown = false;
+	if (uncapped_dt > 0.06f) // less than 17 FPS
+	{
+		dt = 0.06f; //Slow game down instead of epic jumps
+		slowDown = true;
+	}
 
 	//Input
 	Mouse::scrollWheel = 0.f;
@@ -234,38 +240,30 @@ void main_loop() {
 		Camera::RotateWithPagUpDown(dt);
 	}
 
-	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
-#endif
-	{
-		float limited_dt = dt;
-		if (limited_dt > 0.06f) // less than 17 FPS
-		{
-			limited_dt = 0.06f; //Slow game down instead of epic jumps
-			slowDown = true;
-		}
-
-#ifdef _DEBUG
-		if (Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
-			limited_dt *= 3;
-		}
-
-		BeforeSceneUpdate();
-#endif
-
-		Fx::Update(dt);
-		if (!Fx::FreezeImage::IsFrozen()) {
-			mainClock += limited_dt;
-			if (!Fx::ScreenTransition::IsActive()) {
-				SceneManager::currentScene->Update(limited_dt);
-			}
-		}
+	if (Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
+		dt *= 3;
 	}
 
+	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
+	{
+		BeforeSceneUpdate();
+#endif
+		Fx::Update(dt);
+		if (!Fx::FreezeImage::IsFrozen()) {
+			mainClock += dt;
+			if (!Fx::ScreenTransition::IsActive()) {
+				SceneManager::currentScene->Update(dt);
+			}
+		}
 #ifdef _DEBUG
+	}
+
 	BeforeSceneDraw();
 #endif
+
 	SceneManager::currentScene->Draw();
 	Fx::AfterDraw();
+
 #ifdef _DEBUG
 	AfterSceneDraw();
 #endif
@@ -275,7 +273,7 @@ void main_loop() {
 	
 #ifdef _FPS_COUNTER
 	fps_counter++;
-	fpsClock += dt;
+	fpsClock += uncapped_dt;
 	if (fpsClock > 0.5f)
 	{
 		txt_fps->SetString(std::to_string(int(fps_counter / fpsClock)) + (slowDown ? "!" : ""));
@@ -298,4 +296,3 @@ void main_loop() {
 
 	GPU_Flip(Window::screenTarget);
 }
-
