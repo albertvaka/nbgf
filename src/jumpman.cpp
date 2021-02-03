@@ -364,7 +364,7 @@ void JumpMan::TakeDamage(vec src) {
 	jumpTimeLeft = 0;
 	onWall = ONWALL_NO;
 	crouched = false;
-	Fx::FreezeImage::Freeze(0, 0.25f);
+	Fx::FreezeImage::Freeze(0.25f);
 	vec playerCenter = Bounds().Center();
 	float direction = (playerCenter-src).AngleDegs();
 	new OneShotAnim(Assets::spritesheetTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
