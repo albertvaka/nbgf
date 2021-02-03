@@ -165,6 +165,8 @@ void main_loop() {
 			SceneManager::currentScene = SceneManager::newScene;
 		}
 		SceneManager::newScene = nullptr;
+		Camera::SetZoom(1.f);
+		Camera::SetTopLeft(0,0);
 		Fx::BeforeEnterScene();
 		SceneManager::currentScene->EnterScene();
 	}
