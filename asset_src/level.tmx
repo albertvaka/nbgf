@@ -4,7 +4,7 @@
   <export target="." format="tmx"/>
  </editorsettings>
  <tileset firstgid="1" name="mario" tilewidth="16" tileheight="16" tilecount="841" columns="29">
-  <image source="../bin/data/mario.png" width="464" height="464"/>
+  <image source="../bin/data/spritesheet.png" width="464" height="464"/>
   <tile id="0" type="spawn"/>
   <tile id="1" type="breakable"/>
   <tile id="10" type="solid"/>
