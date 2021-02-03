@@ -23,11 +23,14 @@ void Bullet::explode() {
 
 void Bullet::Update(float dt)
 {
-	pos += vel * dt;
-	if (!Camera::Bounds().Contains(pos)) {
+	BoxBounds cam = Camera::Bounds();
+	cam.Grow(Tile::size, Tile::size);
+	if (!cam.Contains(pos)) {
 		alive = false;
 		return;
 	}
+
+	pos += vel * dt;
 
 	for (Lava* l : Lava::GetAll()) {
 		if (l->IsInside(pos)) {
