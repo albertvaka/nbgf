@@ -183,9 +183,11 @@ void main_loop() {
 
 	float dt = uncapped_dt;
 	bool slowDown = false;
-	if (uncapped_dt > 0.06f) // less than 17 FPS
+	constexpr float kMinDt = 0.06f; // less than 17 FPS
+	if (uncapped_dt > kMinDt)
 	{
-		dt = 0.06f; //Slow game down instead of epic jumps
+		//Slow game down instead of epic jumps
+		dt = kMinDt;
 		slowDown = true;
 	}
 
@@ -246,7 +248,7 @@ void main_loop() {
 	}
 
 	if (Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
-		dt *= 3;
+		dt = kMinDt;
 	}
 
 	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
