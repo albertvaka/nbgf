@@ -67,7 +67,7 @@ namespace Mates
 	inline void Clamp(T& arg, const U& minVal, const V& maxVal)
 	{
 #if _DEBUG
-		assert(((double)minVal < (double)maxVal) && "<Clamp>MaxVal < MinVal!");
+		assert(((double)minVal <= (double)maxVal) && "<Clamp>MaxVal < MinVal!");
 #endif
 
 		if (arg < (T)minVal)
