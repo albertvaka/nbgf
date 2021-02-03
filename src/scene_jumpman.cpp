@@ -173,9 +173,8 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 	default:
 		break;
 	}
-
-
 }
+
 void JumpScene::EnterScene()
 {
 	player.Reset(TiledEntities::spawn);
@@ -592,6 +591,12 @@ void JumpScene::Draw()
 #ifdef _IMGUI
 	{
 		ImGui::Begin("jumpman scene");
+		static bool invincible = false;
+		ImGui::Checkbox("invincible", &invincible);
+		if (invincible) {
+			player.health = std::max(player.health, player.maxHealth);
+		}
+		ImGui::SliderInt("health", &player.health, 0, 10);
 		ImGui::SliderFloat2("player", (float*)&player.pos, 16.f, 4500.f);
 		vec m = Mouse::GetPositionInWorld();
 		veci t = map.ToTiles(m);
