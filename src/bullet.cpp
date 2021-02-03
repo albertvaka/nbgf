@@ -30,8 +30,6 @@ void Bullet::Update(float dt)
 		return;
 	}
 
-	pos += vel * dt;
-
 	for (Lava* l : Lava::GetAll()) {
 		if (l->IsInside(pos)) {
 			Bat::AwakeNearbyBats(pos);
@@ -45,6 +43,8 @@ void Bullet::Update(float dt)
 		explode();
 		return;
 	}
+
+	pos += vel * dt;
 
 	Bullet::particles.pos = pos + Rand::VecInRange(-4, -4, 4, 4);
 	Bullet::particles.Spawn(dt);

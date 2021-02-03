@@ -326,7 +326,7 @@ void JumpMan::Update(float dt)
 		else if (Mouse::IsPressed() && !(Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT))) {
 			bfgCooldownTimer = bfgCooldown;
 			vec gunDirection = vec::FromAngleDegs(bfgAngle);
-			vec tipOfTheGun = bfgPos + gunDirection*17.f;
+			vec tipOfTheGun = bfgPos + gunDirection*16.f;
 			new Bullet(tipOfTheGun, gunDirection*bulletVel, 1.5f);
 			vel -= gunDirection*bfgPushBack;
 			jumpTimeLeft = 0; // Overrides jump impulse
