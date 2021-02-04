@@ -13,7 +13,6 @@ namespace Window {
 	extern SDL_Window* window;
 	extern GPU_Target* screenTarget;
 	extern GPU_Target* currentDrawTarget;
-	extern SDL_PixelFormatEnum nativePixelFormat;
 
 	int Init();
 	void ProcessEvents();

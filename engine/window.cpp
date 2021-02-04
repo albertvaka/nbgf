@@ -15,7 +15,6 @@ namespace Window
     SDL_Window* window;
     GPU_Target* screenTarget;
     GPU_Target* currentDrawTarget;
-    SDL_PixelFormatEnum nativePixelFormat;
 
     int Init() {
         GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
@@ -37,10 +36,6 @@ namespace Window
         }
         window = SDL_GetWindowFromID(screenTarget->context->windowID);
         SDL_SetWindowTitle(window, Window::WINDOW_TITLE);
-
-        // SDL_GetWindowPixelFormat() doesn't always do what we want (eg: on Windows it returns a format without alpha)
-        // We should probably use glGetInternalFormativ() instead, but for now I'm hardcoding it.
-        nativePixelFormat = SDL_PIXELFORMAT_ARGB8888;
 
         // SDL-gpu anchors images at the center by default, change it to the top-left corner
         GPU_SetDefaultAnchor(0.f, 0.f);

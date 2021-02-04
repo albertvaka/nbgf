@@ -164,7 +164,7 @@ private:
 			return surfaces[0];
 		}
 
-		SDL_Surface* final = SDL_CreateRGBSurfaceWithFormat(0, maxWidth, totalHeight, 32, Window::nativePixelFormat);
+		SDL_Surface* final = SDL_CreateRGBSurfaceWithFormat(0, maxWidth, totalHeight, 32, SDL_PIXELFORMAT_ARGB8888);
 		totalHeight = 0;
 		for (SDL_Surface* surface : surfaces) {
 			if (!surface) {
