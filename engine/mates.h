@@ -50,6 +50,8 @@ namespace Mates
 
 	[[nodiscard]] std::string to_string_with_precision(const float a_value, const int n = 2);
 
+	[[nodiscard]] std::string to_hexa(int a_value);
+
 	//-----------------------------------------------------------------------
 	//
 	//  some handy little functions
