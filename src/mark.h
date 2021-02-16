@@ -7,12 +7,12 @@
 
 extern float mainClock;
 
-struct Mark : BoxEntity, SelfRegister<Mark>
+struct Mark : CircleEntity, SelfRegister<Mark>
 {
     bool planted;
 
     Mark(vec pos)
-        : BoxEntity(pos, vec(200, 200))
+        : CircleEntity(pos, 80)
     {
         planted = false;
     }
@@ -27,6 +27,7 @@ struct Mark : BoxEntity, SelfRegister<Mark>
     }
 
     void Draw() const {
+        Bounds().DebugDraw();
         Window::Draw(Assets::markTexture, pos)
             .withOrigin(Assets::markTexture->w/2, Assets::markTexture->h/2)
             .withRotationRads(2*mainClock)
