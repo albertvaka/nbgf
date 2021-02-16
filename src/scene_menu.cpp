@@ -30,7 +30,7 @@ void SceneMenu::Update(float dt)
 	timermenu+=dt;
 	overanim.Update(dt);
 	npcanim.Update(dt);
-	if (timermenu > 2.f && Input::IsPressedAnyPlayer(GameKeys::START)) {
+	if (timermenu > 2.f && Input::IsJustPressedAnyPlayer(GameKeys::START)) {
 		SceneManager::ChangeScene(new SceneMain());
 	}
 }
