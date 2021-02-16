@@ -18,7 +18,6 @@ SceneMenu::SceneMenu()
 
 void SceneMenu::EnterScene() 
 {
-	 timermenu = 0;
 }
 
 
