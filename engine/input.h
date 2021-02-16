@@ -25,6 +25,13 @@ struct Input {
 		return false;
 	}
 
+	static bool IsJustPressedAnyPlayer(GameKeys k) {
+		for (int i = 0; i < kMaxPlayers; i++) {
+			if (IsJustPressed(i, k)) return true;
+		}
+		return false;
+	}
+
 	static bool IsReleased(int player, GameKeys k) {
 		return (action_states[player][int(k)] == RELEASED || action_states[player][int(k)] == JUST_RELEASED);
 	}
