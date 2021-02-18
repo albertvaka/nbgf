@@ -31,6 +31,7 @@ struct Assets
 	inline static Mix_Music* music_intro;
 
 	inline static Sound game_start_sound;
+	inline static Sound target_sound;
 	inline static Sound freeze_sound;
 
 	inline static GPU_Image* mortIcon;

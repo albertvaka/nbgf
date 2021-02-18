@@ -292,7 +292,10 @@ void SceneMain::Update(float dt)
 		}
 	}
 	textTime.SetString(std::to_string(goalsdone) + "/" + std::to_string(num_goals));
-	if (goalsdone != 0 && goalsdone != num_goals && textTime.HasChanges()) corner_anim_timer = 0.3f;
+	if (goalsdone != 0 && goalsdone != num_goals && textTime.HasChanges()) {
+		corner_anim_timer = 0.3f;
+		Assets::target_sound.Play();
+	}
 	
 }
 
