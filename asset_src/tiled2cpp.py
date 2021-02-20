@@ -135,8 +135,8 @@ out_h = tm.render(
     gids=all_gids,
     tilenames=tilenames,
     aliases=aliases,
-    entities_by_type=entities_by_type,
-    areas_by_type=areas_by_type,
+    entities_by_type=sorted(entities_by_type.items()),
+    areas_by_type=sorted(areas_by_type.items()),
     screens=out_screens,
 )
 
@@ -160,8 +160,8 @@ out_cpp = tm.render(
     height = out_height,
     gid_to_tileid= gid_to_tileid,
     map = out_map,
-    entities_by_type=entities_by_type,
-    areas_by_type=areas_by_type,
+    entities_by_type=sorted(entities_by_type.items()),
+    areas_by_type=sorted(areas_by_type.items()),
     screens=out_screens,
     debug = False,
 )

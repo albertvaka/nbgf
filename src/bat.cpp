@@ -1,6 +1,7 @@
 #include "bat.h"
 
 #include "jumpman.h"
+#include "tiledexport.h"
 #include "screen.h"
 #include "assets.h"
 #include "window.h"

@@ -28,22 +28,22 @@ const std::array<BoxBounds, {{screens|length}}> TiledMap::screens = {
 	{%- endfor %}
 };
 
-{% for k, v in entities_by_type.items() -%}
-	{%- if v|length > 1 -%}
-const std::unordered_map<int, vec> TiledEntities::{{k}} = {
-{%- for e in v %}
-	{ {{e[0]}}, vec({{e[1]}}f, {{e[2]}}f) },
-{%- endfor %}
-};
-{% else -%}
-	const vec TiledEntities::{{k}} = vec({{v[0][1]}}f, {{v[0][2]}}f);
-{% endif %}
+{% for type, positions in entities_by_type -%}
+	{%- if positions|length > 1 -%}
+		const std::unordered_map<int, vec> TiledEntities::{{type}} = {
+		{%- for pos in positions %}
+			{ {{pos[0]}}, vec({{pos[1]}}f, {{pos[2]}}f) },
+		{%- endfor %}
+		};
+	{% else -%}
+		const vec TiledEntities::{{type}} = vec({{positions[0][1]}}f, {{positions[0][2]}}f);
+	{% endif %}
 {% endfor %}
 
-{% for k, v in areas_by_type.items() -%}
-	const std::array<BoxBounds, {{v|length}}> TiledAreas::{{k}} = {
-		{%- for s in v %}
-		BoxBounds({{s[0]}}f,{{s[1]}}f,{{s[2]}}f,{{s[3]}}f),
+{% for type, bounds_list in areas_by_type -%}
+	const std::array<BoxBounds, {{bounds_list|length}}> TiledAreas::{{type}} = {
+		{%- for b in bounds_list %}
+		BoxBounds({{b[0]}}f,{{b[1]}}f,{{b[2]}}f,{{b[3]}}f),
 		{%- endfor %}
 	};
 {% endfor %}
