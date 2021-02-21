@@ -3,7 +3,6 @@
 #include "entity.h"
 #include "vec.h"
 #include "bounds.h"
-#include "tilemap.h"
 #include "partsys.h"
 #include "animation.h"
 #include "screen.h"

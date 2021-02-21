@@ -7,7 +7,6 @@
 #include "selfregister.h"
 #include "entity.h"
 #include "savestate.h"
-#include "tilemap.h"
 
 struct EnemyDoor : Entity, SelfRegister<EnemyDoor>
 {

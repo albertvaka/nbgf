@@ -4,7 +4,6 @@
 #include "vec.h"
 #include "spawningtile.h"
 #include "partsys.h"
-#include "tilemap.h"
 #include "singleinstance.h"
 
 struct DestroyedTiles : SingleInstance<DestroyedTiles>

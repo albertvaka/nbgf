@@ -28,7 +28,7 @@ inline bool IsGrounded(vec pos, vec size, vec marginPixels = vec(1, 1.5)) {
 	}
 
 	// Slopes
-	if (TileMap::instance()->IsPosOnSlope(pos)) {
+	if (tileMap->IsPosOnSlope(pos)) {
 		return true;
 	}
 

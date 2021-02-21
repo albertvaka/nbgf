@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include "magic_enum.h"
+#include "tilemap.h"
 #include "assets.h"
 
 const float timeToRespawn = 10.f;

@@ -5,9 +5,6 @@
 #include "selfregister.h"
 #include "entity.h"
 
-struct JumpMan;
-struct TileMap;
-
 struct Bipedal : Entity, SelfRegister<Bipedal>
 {
 	enum class State {
