@@ -74,7 +74,7 @@ void JumpMan::Update(float dt)
 
 	if (frozen || !alive) return;
 
-	TileMap* map = TileMap::instance();
+	GaemTileMap* map = GaemTileMap::instance();
 
 	grounded = IsGrounded(pos - vec(0,size.y/2), size);
 
@@ -98,7 +98,7 @@ void JumpMan::Update(float dt)
 			DoPolvitoWallJump();
 		}
 		else {
-			bool ceiling = map->GetTile(TileMap::ToTiles(pos.x - center.x + 1.f, pos.y - size.y - 1.f)).isSolid() || map->GetTile(TileMap::ToTiles(pos.x + center.x - 1.f, pos.y - size.y - 1.f)).isSolid();
+			bool ceiling = map->GetTile(Tile::ToTiles(pos.x - center.x + 1.f, pos.y - size.y - 1.f)).isSolid() || map->GetTile(Tile::ToTiles(pos.x + center.x - 1.f, pos.y - size.y - 1.f)).isSolid();
 			if (!ceiling) {
 				DoPolvitoJump();
 				grounded = false;

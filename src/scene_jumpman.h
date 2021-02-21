@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tilemap.h"
+#include "gaemtilemap.h"
 #include "jumpman.h"
 #include "scene.h"
 #include "destroyedtiles.h"
@@ -18,7 +18,7 @@ struct JumpScene : Scene {
 
 	ScreenManager screenManager;
 
-	TileMap map;
+	GaemTileMap map;
 	JumpMan player;
 	SkillTree skillTree;
 	PartSys fogPartSys;

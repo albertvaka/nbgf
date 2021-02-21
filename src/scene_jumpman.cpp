@@ -30,6 +30,10 @@
 #include "bigitem.h"
 #include "health.h"
 #include "healthup.h"
+#include "tiled_objects_areas.h"
+#include "tiled_tilemap.h"
+#include "tiled_objects_entities.h"
+#include "tiled_objects_screens.h"
 
 extern float mainClock;
 
@@ -39,7 +43,7 @@ const float camZoomSpeed = 0.2f;
 const char* kSaveStateGameName = "gaem2020";
 
 JumpScene::JumpScene(int saveSlot)
-	: map(TiledMap::map_size.x, TiledMap::map_size.y, Assets::spritesheetTexture)
+	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
 	, fogPartSys(Assets::fogTexture)
 	, saveSlot(saveSlot)
@@ -63,19 +67,19 @@ JumpScene::JumpScene(int saveSlot)
 	fogPartSys.min_interval = 4.5f;
 	fogPartSys.max_interval = 6.f;
 
-	for (const BoxBounds& b : TiledAreas::parallax_forest) {
+	for (const BoxBounds& b : Tiled::Areas::parallax_forest) {
 		new Parallax(b, Assets::forestParallaxTextures, 0.25f, 1.f, 172.f);
 	}
 
-	for (const BoxBounds& b : TiledAreas::parallax_island) {
+	for (const BoxBounds& b : Tiled::Areas::parallax_island) {
 		new Parallax(b, Assets::islandParallaxTextures, 0.f, 0.3f, 122.f);
 	}
 
-	for (const BoxBounds& b : TiledAreas::parallax_cave) {
+	for (const BoxBounds& b : Tiled::Areas::parallax_cave) {
 		new Parallax(b, Assets::caveParallaxTextures, 0.4f, 0.65f, -165.f);
 	}
 
-	for (const auto& screen : TiledMap::screens) {
+	for (const auto& screen : Tiled::Screens::screen) {
 		screenManager.AddScreen(screen);
 	}
 }
@@ -134,7 +138,7 @@ void JumpScene::LoadGame() {
 
 	bool bossdead_bipedal = false;
 	saveState.StreamGet("bossdead_bipedal") >> bossdead_bipedal;
-	if (bossdead_bipedal) {
+	if (bossdead_bipedal && boss_bipedal) {
 		boss_bipedal->alive = false;
 	}
 
@@ -159,7 +163,7 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 				e->awakened = true;
 			}
 		}
-		for (auto const& [id, pos] : TiledEntities::initial_batawake) {
+		for (auto const& [id, pos] : Tiled::Entities::initial_batawake) {
 			Bat* b = new Bat(pos, false, true);
 			door_to_close_when_break_skill->AddEnemy(b);
 		}
@@ -177,22 +181,22 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 
 void JumpScene::EnterScene()
 {
-	player.Reset(TiledEntities::spawn);
+	player.Reset(Tiled::Entities::spawn);
 	skillTree.Reset();
 
-	map.LoadFromTiled();
+	map.LoadFromTiled<Tiled::TileMap>();
 
-	new BigItem(TiledEntities::skill_walljump, Skill::WALLJUMP);
-	new BigItem(TiledEntities::skill_gun, Skill::GUN);
-	BigItem* break_skill = new BigItem(TiledEntities::skill_breakblocks, Skill::BREAK);
+	new BigItem(Tiled::Entities::skill_walljump, Skill::WALLJUMP);
+	new BigItem(Tiled::Entities::skill_gun, Skill::GUN);
+	BigItem* break_skill = new BigItem(Tiled::Entities::skill_breakblocks, Skill::BREAK);
 
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
-	for (auto const& [id, pos] : TiledEntities::save) {
+	for (auto const& [id, pos] : Tiled::Entities::save) {
 		new SaveStation(id, pos);
 	}
 
-	for (auto const& [id, pos] : TiledEntities::enemy_door) {
+	for (auto const& [id, pos] : Tiled::Entities::enemy_door) {
 		EnemyDoor* d = new EnemyDoor(id, pos);
 		int door_screen = screenManager.FindScreenContaining(d->pos);
 		if (door_screen == screen_break_skill) {
@@ -200,78 +204,78 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	for (auto const& [id, pos] : TiledEntities::bat) {
+	for (auto const& [id, pos] : Tiled::Entities::bat) {
 		Bat* b = new Bat(pos, false, false);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
-	for (auto const& [id, pos] : TiledEntities::angrybat) {
+	for (auto const& [id, pos] : Tiled::Entities::angrybat) {
 		Bat* b = new Bat(pos, true, false);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
-	for (auto const& [id, pos] : TiledEntities::batawake) {
+	for (auto const& [id, pos] : Tiled::Entities::batawake) {
 		Bat* b =new Bat(pos, false, true);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
-	for (auto const& [id, pos] : TiledEntities::fireslime) {
+	for (auto const& [id, pos] : Tiled::Entities::fireslime) {
 		auto b = new FireSlime(pos);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
-	for (auto const& [id, pos] : TiledEntities::goomba) {
+	for (auto const& [id, pos] : Tiled::Entities::goomba) {
 		auto b = new Goomba(pos, false);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
-	for (auto const& [id, pos] : TiledEntities::goombacharger) {
+	for (auto const& [id, pos] : Tiled::Entities::goombacharger) {
 		auto b = new Goomba(pos,true);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
-	for (auto const& [id, pos] : TiledEntities::mantis) {
+	for (auto const& [id, pos] : Tiled::Entities::mantis) {
 		auto b = new Mantis(pos);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
-	for (auto const& [id, pos] : TiledEntities::flyingalien) {
+	for (auto const& [id, pos] : Tiled::Entities::flyingalien) {
 		auto b = new FlyingAlien(pos);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
-	boss_bipedal = new Bipedal(TiledEntities::boss_bipedal);
+	boss_bipedal = new Bipedal(Tiled::Entities::boss_bipedal);
 
 	for (SaveStation* s : SaveStation::ByScreen[screenManager.FindScreenContaining(boss_bipedal->pos)]) {
 		s->AddHiddenBy(boss_bipedal);
 	}
 
-	for (auto const& [id, pos] : TiledEntities::healthup) {
+	for (auto const& [id, pos] : Tiled::Entities::healthup) {
 		new HealthUp(id, pos);
 	}
 
-	for (const BoxBounds& a : TiledAreas::lava) {
+	for (const BoxBounds& a : Tiled::Areas::lava) {
 		Lava* lava = new Lava(a);
-		if (a.Contains(TiledEntities::lava_initial_height)) {
+		if (a.Contains(Tiled::Entities::lava_initial_height)) {
 			raising_lava = lava;
 			raising_lava_target_height = lava->CurrentLevel();
-			lava->SetLevel(TiledEntities::lava_initial_height.y, true);
+			lava->SetLevel(Tiled::Entities::lava_initial_height.y, true);
 		}
 	}
 
@@ -418,7 +422,7 @@ void JumpScene::Update(float dt)
 		return;
 	}
 	if (Keyboard::IsKeyJustPressed(teleport)) {
-		player.pos = TiledEntities::debug_teleport;
+		player.pos = Tiled::Entities::debug_teleport;
 		screenManager.UpdateCurrentScreen(player.pos);
 		Camera::SetCenter(player.GetCameraTargetPos());
 	}
@@ -521,13 +525,13 @@ void JumpScene::Update(float dt)
 	destroyedTiles.Update(dt);
 
 	if (raising_lava->CurrentLevel() <= raising_lava_target_height+1.f) {
-		raising_lava->SetLevel(TiledEntities::lava_initial_height.y);
+		raising_lava->SetLevel(Tiled::Entities::lava_initial_height.y);
 	}
 	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);
 	}
 
-	for (const BoxBounds& a : TiledAreas::fog) {
+	for (const BoxBounds& a : Tiled::Areas::fog) {
 		if (!Collide(Camera::Bounds(),(a*2.f))) {
 			continue;
 		}
@@ -599,10 +603,10 @@ void JumpScene::Draw()
 		ImGui::SliderInt("health", &player.health, 0, 10);
 		ImGui::SliderFloat2("player", (float*)&player.pos, 16.f, 4500.f);
 		vec m = Mouse::GetPositionInWorld();
-		veci t = map.ToTiles(m);
+		veci t = Tile::ToTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
-		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (TiledMap::map_size.y - 1) * 16, (TiledMap::map_size.y - 1) * 16 - 1000);
+		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (map.Size().y - 1) * 16, (map.Size().y - 1) * 16 - 1000);
 
 		if (ImGui::Button("Start waves")) {
 			Fx::FullscreenShader::SetShader([]() {
@@ -639,7 +643,7 @@ void JumpScene::Draw()
 	//Bullet::particles.DrawImGUI("BulletTrail");
 	//Missile::particles.DrawImGUI("MissileSmoke");
 
-	//for (const BoxBounds& a : TiledAreas::parallax_forest) {
+	//for (const BoxBounds& a : Tiled::Areas::parallax_forest) {
 		//Assets::fogShader.Activate();
 		//Assets::fogShader.SetUniform("offset", vec(mainClock*0.2f, 0.f));
 		//Assets::fogShader.SetUniform("time", mainClock);

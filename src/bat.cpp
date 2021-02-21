@@ -1,7 +1,8 @@
 #include "bat.h"
 
 #include "jumpman.h"
-#include "tiledexport.h"
+#include "gaemtilemap.h"
+#include "tiled_objects_areas.h"
 #include "screen.h"
 #include "assets.h"
 #include "window.h"
@@ -31,7 +32,7 @@ void Bat::EnableBoundsAvoidance() {
 	int i = 0;
 	int smallest_i = -1;
 	float smallest_area = Mates::MaxFloat;
-	for (const auto& bounds : TiledAreas::bat_bounds) {
+	for (const auto& bounds : Tiled::Areas::bat_bounds) {
 		if (bounds.Contains(pos)) {
 			float area = bounds.width * bounds.height;
 			if (area < smallest_area) {
@@ -43,7 +44,7 @@ void Bat::EnableBoundsAvoidance() {
 	}
 
 	if (smallest_i > -1) {
-		steering.BoundsAvoidanceOn(TiledAreas::bat_bounds[smallest_i]);
+		steering.BoundsAvoidanceOn(Tiled::Areas::bat_bounds[smallest_i]);
 	} else if (screen > -1) {
 		steering.BoundsAvoidanceOn(ScreenManager::instance()->ScreenBounds(screen));
 	}
@@ -66,7 +67,7 @@ Bat::Bat(vec pos, bool aggresive, bool awake)
 
 	anim.Update(Rand::rollf(0, anim.TotalDuration())); // Start anim at different time intervals
 
-	steering.TileMapAvoidanceOn(TileMap::instance());
+	steering.TileMapAvoidanceOn(GaemTileMap::instance());
 	steering.ForwardOn();
 	steering.WanderOn();
 

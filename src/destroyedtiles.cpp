@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include "magic_enum.h"
-#include "tilemap.h"
+#include "gaemtilemap.h"
 #include "assets.h"
 
 const float timeToRespawn = 10.f;
@@ -11,7 +11,7 @@ DestroyedTiles::DestroyedTiles()
 	: destroyedParticles(Assets::spritesheetTexture)
 {
 	for (size_t i = 0; i < magic_enum::enum_count<Tile::Value>(); ++i) {
-		destroyedParticles.AddSprite(Tile::tileToTextureRect[i]);
+		destroyedParticles.AddSprite(Tile::TileToTextureRect[i]);
 	}
 	destroyedParticles.acc.y = 50.f;
 	destroyedParticles.min_ttl = 0.5f;
@@ -37,10 +37,10 @@ const vec vel[4] = {
 };
 
 void DestroyedTiles::Destroy(int x, int y) {
-	TileMap* map = TileMap::instance();
+	GaemTileMap* map = GaemTileMap::instance();
 
 	Tile t = map->GetTile(x, y);
-	destroyedParticles.pos = map->GetTileBounds(x, y).Center();
+	destroyedParticles.pos = Tile::Bounds(x, y).Center();
 	for (int i = 0; i < 4; i++) {
 		PartSys::Particle& p = destroyedParticles.AddParticle();
 		p.pos += displace[i];

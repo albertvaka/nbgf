@@ -4,6 +4,7 @@
 #include "assets.h"
 #include "collide.h"
 #include "bat.h"
+#include "gaemtilemap.h"
 #include "window.h"
 #include "debug.h"
 
@@ -21,7 +22,7 @@ void SpawningTile::Draw() const {
 	if (spawning) {
 		Window::Draw(Assets::spritesheetTexture, pos)
 			.withScale(1.f - time / respawnAnimTime)
-			.withOrigin(Tile::size / 2, Tile::size / 2)
+			.withOrigin(Tile::Size / 2, Tile::Size / 2)
 			.withRect(tile.textureRect());
 	}
 
@@ -34,13 +35,13 @@ bool SpawningTile::Update(float dt) { //Returns true if it should be destroyed
 	time -= dt;
 	if (time < 0.f) {
 		if (spawning) {
-			TileMap::instance()->SetTile(TileMap::ToTiles(pos), tile);
+			GaemTileMap::instance()->SetTile(Tile::ToTiles(pos), tile);
 			return true;
 		}
 		else if (CanSpawn()) {
 			spawning = true;
 			time = respawnAnimTime;
-			TileMap::instance()->SetTile(TileMap::ToTiles(pos), Tile::SOLID_TRANSPARENT);
+			GaemTileMap::instance()->SetTile(Tile::ToTiles(pos), Tile::SOLID_TRANSPARENT);
 		}
 	}
 	return false;

@@ -47,7 +47,7 @@
     <Filter Include="src\gui">
       <UniqueIdentifier>{81a97000-3367-451e-965f-6a12233598f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\generated">
+    <Filter Include="generated">
       <UniqueIdentifier>{8c51efac-7be1-4746-af80-1e0855902e22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -289,12 +289,6 @@
     <ClInclude Include="src\rototext.h">
       <Filter>src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="src\tiledexport.h">
-      <Filter>src\generated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\texturepackerexport.h">
-      <Filter>src\generated</Filter>
-    </ClInclude>
     <ClInclude Include="src\flyingalien.h">
       <Filter>src\entities\enemies</Filter>
     </ClInclude>
@@ -336,6 +330,30 @@
     </ClInclude>
     <ClInclude Include="engine\animation_frame.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\texturepackerexport.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gaemtilemap.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tile.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\tiled_objects_areas.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\tiled_objects_entities.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\tiled_objects_screens.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\tiled_tilemap.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\tiled_tile.h">
+      <Filter>generated</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -420,9 +438,6 @@
     <ClCompile Include="engine\sound.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="engine\tilemap.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="engine\window.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -501,9 +516,6 @@
     <ClCompile Include="src\skilltree.cpp">
       <Filter>src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="src\tiledexport.cpp">
-      <Filter>src\generated</Filter>
-    </ClCompile>
     <ClCompile Include="src\flyingalien.cpp">
       <Filter>src\entities\enemies</Filter>
     </ClCompile>
@@ -533,6 +545,21 @@
     </ClCompile>
     <ClCompile Include="engine\mates.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\tiled_objects_areas.cpp">
+      <Filter>generated</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\tiled_objects_entities.cpp">
+      <Filter>generated</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\tiled_objects_screens.cpp">
+      <Filter>generated</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\tiled_tilemap.cpp">
+      <Filter>generated</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\tiled_tile.cpp">
+      <Filter>generated</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

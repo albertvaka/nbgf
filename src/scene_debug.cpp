@@ -25,7 +25,7 @@ const Tile SOLID_TILE = Tile::SOLID_SIMPLE;
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_SIMPLE;
 const Tile ONEWAY_TILE = Tile::ONEWAY_SIMPLE;
 
-static vec map_size = vec(100, Window::GAME_HEIGHT/Tile::size);
+static vec map_size = vec(100, Window::GAME_HEIGHT/Tile::Size);
 
 DebugScene::DebugScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
@@ -78,7 +78,7 @@ void DebugScene::EnterScene()
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) {
 					bool angry = (Rand::rollf() < chanceAngryBat);
-					new Bat(TileMap::FromTiles(x,y+2), angry, false);
+					new Bat(Tile::FromTiles(x,y+2), angry, false);
 					map.SetTile(x - 1, y + 1, Tile::NONE);
 					map.SetTile(x, y + 1, Tile::NONE);
 					map.SetTile(x + 1, y + 1, Tile::NONE);
@@ -90,7 +90,7 @@ void DebugScene::EnterScene()
 		}
 	}
 
-	veci pos = map.ToTiles(player.pos);
+	veci pos = Tile::ToTiles(player.pos);
 	map.SetTile(pos.x - 1, pos.y + 3, Tile::NONE);
 	map.SetTile(pos.x + 0, pos.y + 3, Tile::NONE);
 	map.SetTile(pos.x + 1, pos.y + 3, Tile::NONE);
@@ -225,7 +225,7 @@ void DebugScene::Draw()
 			new DebugWalker(player.pos - vec(0,player.size.y/2), dummyWalkerVel);
 		}
 		vec m = Mouse::GetPositionInWorld();
-		veci t = map.ToTiles(m);
+		veci t = Tile::ToTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
 		ImGui::End();

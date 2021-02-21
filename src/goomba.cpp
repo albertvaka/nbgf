@@ -14,7 +14,7 @@ constexpr const float enterChargeTime = 0.35f;
 constexpr const float exitChargeTime = 0.2f;
 
 // Area in front of it that if intersects with the player will trigger a charge towards them
-constexpr const vec playerNearbyArea = vec(Tile::size * 11, Tile::size * 2);
+constexpr const vec playerNearbyArea = vec(Tile::Size * 11, Tile::Size * 2);
 
 constexpr const vec size = AnimLib::GOOMBA[0].GetSize();
 
@@ -126,7 +126,7 @@ void Goomba::Draw() const
 
 	if (state == State::ENTER_CHARGE)
 	{
-		drawPos.y -= sinf((timer / enterChargeTime) * M_PI) * Tile::size;
+		drawPos.y -= sinf((timer / enterChargeTime) * M_PI) * Tile::Size;
 	}
 	else if (state == State::EXIT_CHARGE)
 	{ 

@@ -5,7 +5,7 @@
 #include "angles.h"
 #include "rand.h"
 #include "steering_entity.h"
-#include "tilemap.h"
+#include "gaemtilemap.h"
 
 // TODO: pass these as params to Wander
 // Valors putamare pel ratpenat
@@ -334,21 +334,21 @@ vec SteeringBehavior::OffsetPursuit(const Entity*  leader, const float offset)
 }
 
 
-vec SteeringBehavior::TileMapAvoidance(TileMap* map)
+vec SteeringBehavior::TileMapAvoidance(GaemTileMap* map)
 {
 	float minDistToCenterSq = Mates::MaxFloat;
 	vec closestObstacle;
 
-	int xLeft = map->ToTiles(steeringEntity->pos.x - steeringEntity->radius - Tile::size / 2);
-	int xRight = map->ToTiles(steeringEntity->pos.x + steeringEntity->radius + Tile::size /2);
-	int yTop = map->ToTiles(steeringEntity->pos.y - steeringEntity->radius - Tile::size / 2);
-	int yBottom = map->ToTiles(steeringEntity->pos.y + steeringEntity->radius + Tile::size / 2);
+	int xLeft = Tile::ToTiles(steeringEntity->pos.x - steeringEntity->radius - Tile::Size / 2);
+	int xRight = Tile::ToTiles(steeringEntity->pos.x + steeringEntity->radius + Tile::Size /2);
+	int yTop = Tile::ToTiles(steeringEntity->pos.y - steeringEntity->radius - Tile::Size / 2);
+	int yBottom = Tile::ToTiles(steeringEntity->pos.y + steeringEntity->radius + Tile::Size / 2);
 	CircleBounds me = steeringEntity->Bounds();
 	for (int y = yTop; y <= yBottom; y++) {
 		for (int x = xLeft; x <= xRight; x++) {
 			//vec(x * 16 + 8, y * 16 + 8).DebugDraw();
 			if (map->GetTile(x, y).isSolid()) {
-				BoxBounds tile = map->GetTileBounds(x, y);
+				BoxBounds tile = Tile::Bounds(x, y);
 				if (tile.Contains(me.pos)) {
 					minDistToCenterSq = 0;
 					closestObstacle = tile.Center();

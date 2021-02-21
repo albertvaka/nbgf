@@ -33,7 +33,7 @@ FireSlime::FireSlime(vec pos)
 
 BoxBounds FireSlime::AttackBounds() const
 {
-	BoxBounds bounds = BoxBounds::FromCenter(pos, vec(Tile::size * 9, Tile::size * 5));
+	BoxBounds bounds = BoxBounds::FromCenter(pos, vec(Tile::Size * 9, Tile::Size * 5));
 	bounds.left += direction * bounds.width / 2;
 	bounds.top += bounds.height / 2 - 25;
 	return bounds;

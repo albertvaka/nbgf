@@ -1,6 +1,6 @@
 #include "enemy_door.h"
 
-#include "tilemap.h"
+#include "gaemtilemap.h"
 #include "assets.h"
 #include "window.h"
 #include "screen.h"
@@ -12,7 +12,7 @@ const int maxHeight = 10;
 std::unordered_map<int, std::vector<EnemyDoor*>> EnemyDoor::ByScreen;
 
 EnemyDoor::EnemyDoor(int saveId, vec p)
-	: Entity(TileMap::AlignToTiles(p) - vec(0, Tile::size))
+	: Entity(Tile::AlignToTiles(p) - vec(0, Tile::Size))
 	, saveId(saveId)
 {
 	SpawnTiles();
@@ -49,8 +49,8 @@ void EnemyDoor::Open(bool skipAnim)
 }
 
 void EnemyDoor::OpenOneStep() {
-	TileMap* map = TileMap::instance();
-	auto tilepos = TileMap::ToTiles(pos);
+	GaemTileMap* map = GaemTileMap::instance();
+	auto tilepos = Tile::ToTiles(pos);
 	for (int y = 0; y < maxHeight; y++) {
 		Tile t = map->GetTile(tilepos.x, tilepos.y + y);
 		if (t == Tile::SOLID_DOOR_BOTTOM) {
@@ -68,8 +68,8 @@ void EnemyDoor::OpenOneStep() {
 }
 
 void EnemyDoor::SpawnTiles() {
-	TileMap* map = TileMap::instance();
-	auto tilepos = TileMap::ToTiles(pos);
+	GaemTileMap* map = GaemTileMap::instance();
+	auto tilepos = Tile::ToTiles(pos);
 	for (int y = 0; y < maxHeight; y++) {
 		Tile t = map->GetTile(tilepos.x, tilepos.y + y);
 		if (t.isSolid() && t != Tile::SOLID_DOOR_BOTTOM && t != Tile::SOLID_DOOR) {

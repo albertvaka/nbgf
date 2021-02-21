@@ -1,0 +1,19 @@
+#include "tiled_tilemap.h"
+
+namespace Tiled {
+
+const vec TileMap::Size = vec({{ width }}, {{ height }});
+
+const uint8_t TileMap::Map[] = {
+    {% for t in map -%}
+		{%- if debug -%}
+			{%- if t == 0 -%}{{ ' ' }}{%- else -%}{{ 'x' }}{% endif %} 
+		{%- else -%}
+			{{ t }},
+		{%- endif -%}
+	{%- if loop.index%width == 0 %}
+	{% endif -%} 
+    {%- endfor %}
+};
+
+}

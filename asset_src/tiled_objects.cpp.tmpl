@@ -1,0 +1,25 @@
+#include "tiled_objects_{{name.lower()}}.h"
+
+namespace Tiled {
+
+{% for type, positions in entities_by_type %}
+{%- if positions|length > 1 -%}
+const std::unordered_map<int, vec> {{name}}::{{type}} = {
+	{%- for pos in positions %}
+	{ {{pos[0]}}, vec({{pos[1]}}f, {{pos[2]}}f) },
+	{%- endfor %}
+};
+{% else -%}
+	const vec {{name}}::{{type}} = vec({{positions[0][1]}}f, {{positions[0][2]}}f);
+{% endif %}
+{% endfor %}
+
+{%- for type, bounds_list in areas_by_type %}
+const std::array<BoxBounds, {{bounds_list|length}}> {{name}}::{{type}} = {
+	{%- for b in bounds_list %}
+	BoxBounds({{b[0]}}f,{{b[1]}}f,{{b[2]}}f,{{b[3]}}f),
+	{%- endfor %}
+};
+{% endfor %}
+
+}

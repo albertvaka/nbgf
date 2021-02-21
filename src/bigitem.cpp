@@ -5,7 +5,7 @@
 #include "window.h"
 #include "jumpman.h"
 #include "collide.h"
-#include "tilemap.h"
+#include "tile.h"
 #include "rand.h"
 
 extern float mainClock;
@@ -59,7 +59,7 @@ void BigItem::Draw()
 
 void BigItem::DrawPedestal() {
 
-	auto tilePos = TileMap::AlignToTiles(pos);
+	auto tilePos = Tile::AlignToTiles(pos);
 
 	particles.pos.y = tilePos.y + 16;
 	particles.pos.x = Rand::roll(tilePos.x - 13, tilePos.x + 13);

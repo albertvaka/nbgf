@@ -172,7 +172,7 @@ void FlyingAlien::Draw() const
 
 	vec drawPos = pos + vec(vel.x > 0? 2 : -2,(std::sin((orig.x + pos.x)*0.1f)*4) - 3);
 	if (state == State::ENTER_CHARGE) {
-		drawPos.y -= sinf((timer / prepareAttackTime) * M_PI) * Tile::size;
+		drawPos.y -= sinf((timer / prepareAttackTime) * M_PI) * Tile::Size;
 	}
 
 	GPU_Rect rect = anim.CurrentFrameRect();

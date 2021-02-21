@@ -2,13 +2,13 @@
 
 #include <vector>
 #include "vec.h"
-#include "tilemap.h"
+#include "tile.h"
 #include "entity.h"
 
 struct SpawningTile : BoxEntity {
 
 	SpawningTile(int x, int y, Tile t, float timeToSpawn)
-		: BoxEntity(TileMap::instance()->GetTileBounds(x, y))
+		: BoxEntity(Tile::Bounds(x, y))
 		, time(timeToSpawn)
 		, spawning(false)
 		, tile(t)

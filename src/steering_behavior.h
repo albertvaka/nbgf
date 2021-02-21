@@ -11,7 +11,7 @@
 #include "bounds.h"
 #include "steering_entity.h"
 
-struct TileMap;
+struct GaemTileMap;
 
 struct SteeringBehavior
 {
@@ -49,7 +49,7 @@ struct SteeringBehavior
     template<typename T>
     vec ObstacleAvoidance(const std::vector<T*>& obstacles, float margin = 0.f);
 
-	vec TileMapAvoidance(TileMap* map);
+	vec TileMapAvoidance(GaemTileMap* map);
 
     //this returns a steering force which will keep the agent in its bounds
     vec BoundsAvoidance(const BoxBounds& m_bounds);

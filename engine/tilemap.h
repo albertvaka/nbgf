@@ -1,67 +1,13 @@
 #pragma once
 
 #include <vector>
-#include "vec.h"
-#include "singleinstance.h"
-#include "bounds.h"
-#include "mates.h"
-#include "../src/tiledexport.h"
 #include "SDL_gpu.h"
+#include "vec.h"
+#include "bounds.h"
+#include "camera.h"
 
-struct Tile : TiledTiles
-{
-	static const int size = 16;
-	static const vec sizevec;
-
-	bool isEmpty() const {
-		return value < ONEWAY_BEGIN;
-	}
-
-	bool isOneWay() const {
-		return value >= ONEWAY_BEGIN && value < RSLOPE_BEGIN;
-	}
-
-	bool isSlope() const {
-		return value >= RSLOPE_BEGIN && value < SOLID_BEGIN;
-	}
-
-	bool isLeftSlope() const {
-		return value >= LSLOPE_BEGIN && value < SOLID_BEGIN;
-	}
-
-	bool isRightSlope() const {
-		return value >= RSLOPE_BEGIN && value < LSLOPE_BEGIN;
-	}
-
-	bool isInvisible() const {
-		return value == NONE || value == SOLID_TRANSPARENT;
-	}
-
-	bool isSolid() const {
-		return value >= RSLOPE_BEGIN;
-	}
-
-	bool isFullSolid() const { //Excludes slopes
-		return value >= SOLID_BEGIN;
-	}
-
-	bool isBreakable() const {
-		return value >= BREAKABLE_BEGIN && value < SOLID_TRANSPARENT;
-	}
-
-	Tile() = default;
-	constexpr Tile(Value t) : value(t) { }
-
-	constexpr operator Value() const { return value; }  // Allow switch and comparisons.
-	explicit constexpr operator bool() = delete;        // Prevent if(tile)
-
-	constexpr const GPU_Rect& textureRect() const { return tileToTextureRect[int(value)]; }
-
-private:
-	Value value;
-};
-
-struct TileMap : SingleInstance<TileMap>
+template<class Tile> // A TileSet as exported from Tiled (or a class that inherits from it)
+struct TileMap
 {
 	TileMap(int width, int height, GPU_Image* texture)
 		: sizes(width, height)
@@ -73,86 +19,134 @@ struct TileMap : SingleInstance<TileMap>
 	~TileMap() {
 		delete[] tiles;
 	}
-
+	
+	template<typename TiledTileMap> // A TileMap as exported from Tiled
 	void LoadFromTiled() {
-		memcpy((void*)tiles, (void*)TiledMap::map, TiledMap::map_size.x * TiledMap::map_size.y * sizeof(Tile));
+		assert(TiledTileMap::Size.x == sizes.x);
+		assert(TiledTileMap::Size.y == sizes.y);
+		memcpy((void*)tiles, (void*)TiledTileMap::Map, TiledTileMap::Size.x * TiledTileMap::Size.y * sizeof(Tile));
 	}
-	void Draw() const;
 
-	BoxBounds BoundsInWorld() const { return BoxBounds(0.f, 0.f, sizes.x * Tile::size, sizes.y * Tile::size); }
+	BoxBounds BoundsInWorld() const { return BoxBounds(0.f, 0.f, sizes.x * Tile::Size, sizes.y * Tile::Size); }
 
 	bool InBounds(int x, int y) const {
 		return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y);
 	}
+
 	void SetTile(int x, int y, Tile col) {
 		if (!InBounds(x, y)) return;
-		tiles[y * sizes.x + x] = col;
+		SetTileUnsafe(x, y, col);
 	}
 
-	void SetTile(const veci& pos, Tile tile) { return SetTile(pos.x, pos.y, tile); }
-	Tile GetTile(const veci& pos) const { return GetTile(pos.x, pos.y); }
-
 	Tile GetTile(int x, int y) const {
-		if (!InBounds(x, y)) return Tile::SOLID_1;
+		if (!InBounds(x, y)) return outOfBoundsTile;
 		return GetTileUnsafe(x,y);
 	}
 
 	Tile GetTileUnsafe(int x, int y) const { return tiles[y * sizes.x + x]; }
+	void SetTileUnsafe(int x, int y, Tile col) { tiles[y * sizes.x + x] = col; }
 
-
-	// Coordinate conversion functions
-
-	static veci ToTiles(vec pos) { return ToTiles(pos.x, pos.y); }
-	static veci ToTiles(float x, float y) { return veci(ToTiles(x), ToTiles(y)); }
-	static int ToTiles(float x) { return Mates::fastfloor(x / Tile::size); } // floor could be just a cast to int if we know we will never get < 0
-
-	static vec FromTiles(int x, int y) { return vec(x*Tile::size, y*Tile::size); }
-
-	static vec AlignToTiles(vec v) { return ToTiles(v) * Tile::size; }
-	static vec AlignToTiles(float x, float y) { return ToTiles(x, y) * Tile::size; }
-	static float AlignToTiles(float x) { return ToTiles(x) * Tile::size; }
-
-	static vec OffsetInTile(float x, float y) { return vec(x, y) - AlignToTiles(x, y); }
-
-	static float Bottom(int y) { return float(y + 1) * Tile::size; }
-	static float Top(int y) { return float(y) * Tile::size; }
-	static float Left(int x) { return float(x) * Tile::size;  }
-	static float Right(int x) { return float(x + 1) * Tile::size; }
-
-	static BoxBounds GetTileBounds(int x, int y) {
-		return BoxBounds(x * Tile::size, y * Tile::size, Tile::size, Tile::size);
-	}
-
-	bool IsPosOnSlope(vec v) const { return IsPosOnSlope(v.x,v.y);  }
-	bool IsPosOnSlope(float x, float y) const {
-		Tile tile = GetTile(ToTiles(x, y));
-		if (tile.isRightSlope()) {
-			vec offset = OffsetInTile(x, y);
-			return offset.y >= (Tile::size - offset.x);
-		}
-		if (tile.isLeftSlope()) {
-			vec offset = OffsetInTile(x, y);
-			return offset.y >= offset.x;
-		}
-		return false;
-	}
+	void SetTile(const veci& pos, Tile tile) { return SetTile(pos.x, pos.y, tile); }
+	Tile GetTile(const veci& pos) const { return GetTile(pos.x, pos.y); }
 
 	int Width() const { return sizes.x; }
 	int Height() const { return sizes.y; }
 	const veci& Size() const { return sizes; }
 
-#ifdef _DEBUG
-	void DebugEdit();
-	void DebugEditDraw();
-#endif
+	void Draw() const
+	{
+		BoxBounds screen = Camera::Bounds();
+		int left = (screen.Left() / Tile::Size) - 1;
+		int right = (screen.Right() / Tile::Size) + 1;
+		int top = (screen.Top() / Tile::Size) - 1;
+		int bottom = (screen.Bottom() / Tile::Size) + 1;
+
+		if (outOfBoundsTile != Tile::NONE) {
+			DrawOutOfBounds(left, right, top, bottom);
+		}
+
+		if (left < 0) {
+			left = 0;
+		}
+
+		if (right >= sizes.x) {
+			right = sizes.x;
+		}
+
+		if (top < 0) {
+			top = 0;
+		}
+
+		if (bottom >= sizes.y) {
+			bottom = sizes.y;
+		}
+
+		for (int y = top; y < bottom; y++)
+		{
+			for (int x = left; x < right; x++)
+			{
+				Tile t = GetTileUnsafe(x, y);
+				if (t.isInvisible()) {
+					continue;
+				}
+				GPU_Rect rect = t.textureRect();
+				RectToTextureCoordinates(tileset, rect);
+				Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, rect);
+			}
+		}
+
+		Window::DrawRaw::FlushTexturedQuads(tileset);
+
+	}
+
+	Tile outOfBoundsTile = Tile::NONE;
+	GPU_Image* tileset;
 
 private:
 	veci sizes;
 	Tile* tiles;
-	GPU_Image* tileset;
 
-#ifdef _DEBUG
-	int debugEditCurrentTile = Tile::NONE;
-#endif
+	void DrawOutOfBounds(int left, int right, int top, int bottom) const {
+		GPU_Rect outOfBounds = Tile::TileToTextureRect[outOfBoundsTile];
+		RectToTextureCoordinates(tileset, outOfBounds);
+
+		if (left < 0) {
+			for (int y = top; y < bottom; y++) {
+				for (int x = left; x < std::min(0, right); x++) {
+					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, outOfBounds);
+				}
+			}
+			left = 0;
+		}
+
+		if (right >= sizes.x) {
+			for (int y = top; y < bottom; y++) {
+				for (int x = std::max(left, sizes.x); x < right; x++) {
+					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, outOfBounds);
+				}
+			}
+			right = sizes.x;
+		}
+
+		if (top < 0) {
+			for (int y = top; y < std::min(0, bottom); y++) {
+				for (int x = left; x < right; x++) {
+					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, outOfBounds);
+				}
+			}
+			top = 0;
+		}
+
+		if (bottom >= sizes.y) {
+			for (int y = std::max(top, sizes.y); y < bottom; y++) {
+				for (int x = left; x < right; x++) {
+					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, outOfBounds);
+				}
+			}
+			bottom = sizes.y;
+		}
+
+		Window::DrawRaw::FlushTexturedQuads(tileset);
+	}
 
 };

@@ -42,7 +42,7 @@ public:
 	float max_force;
 
 	//what type of method is used to sum any active behavior
-	TileMap* m_tilemap;
+	GaemTileMap* m_tilemap;
 
 	//the steering force created by the combined effect of all
 	//the selected behaviors
@@ -91,7 +91,7 @@ public:
 	void BoundsAvoidanceOn(const BoxBounds& bounds) { m_bounds = bounds; m_iFlags |= bounds_avoidance; }
 	void HideOn(Entity* v) { m_iFlags |= hide; hideTarget = v; }
 	void OffsetPursuitOn(Entity* v1, const float offset) { m_iFlags |= offset_pursuit; m_vOffset = offset; pursuitTarget = v1; }
-	void TileMapAvoidanceOn(TileMap* tilemap) { m_iFlags |= tilemap_avoidance; m_tilemap = tilemap; }
+	void TileMapAvoidanceOn(GaemTileMap* tilemap) { m_iFlags |= tilemap_avoidance; m_tilemap = tilemap; }
 
 	void ForwardOff() { if (On(forward)) m_iFlags ^= forward; }
 	void FleeOff() { if (On(flee)) m_iFlags ^= flee; }

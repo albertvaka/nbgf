@@ -1,15 +1,40 @@
 #pragma once
 
-#include <array>
-#include <unordered_map>
-
 #include "vec.h"
 #include "bounds.h"
+#include "mates.h"
 #include "SDL_gpu.h"
 
-struct TiledTiles
-{
-	static const GPU_Rect tileToTextureRect[];
+namespace Tiled {
+
+struct Tile {
+	
+	static constexpr const int Size = 16;
+	static constexpr const vec Sizes = vec(16,16);
+
+	static const GPU_Rect TileToTextureRect[];
+	constexpr const GPU_Rect& textureRect() const { return TileToTextureRect[int(value)]; }
+
+	// Coordinate conversion functions
+
+	static veci ToTiles(vec pos) { return ToTiles(pos.x, pos.y); }
+	static veci ToTiles(float x, float y) { return veci(ToTiles(x), ToTiles(y)); }
+	static int ToTiles(float x) { return Mates::fastfloor(x / Tile::Size); } // floor could be just a cast to int if we know we will never get < 0
+
+	static vec FromTiles(int x, int y) { return vec(x * Tile::Size, y * Tile::Size); }
+
+	static vec AlignToTiles(vec v) { return ToTiles(v) * Tile::Size; }
+	static vec AlignToTiles(float x, float y) { return ToTiles(x, y) * Tile::Size; }
+	static float AlignToTiles(float x) { return ToTiles(x) * Tile::Size; }
+
+	static vec OffsetInTile(float x, float y) { return vec(x, y) - AlignToTiles(x, y); }
+
+	static float Bottom(int y) { return float(y + 1) * Tile::Size; }
+	static float Top(int y) { return float(y) * Tile::Size; }
+	static float Left(int x) { return float(x) * Tile::Size; }
+	static float Right(int x) { return float(x + 1) * Tile::Size; }
+	
+	static BoxBounds Bounds(int x, int y) { return BoxBounds(x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size); }
 
 	enum Value : uint8_t
 	{
@@ -217,12 +242,6 @@ struct TiledTiles
 		SOLID_TRANSPARENT,
 	};
 
-	static constexpr Value ONEWAY_BEGIN = ONEWAY_1;
-	static constexpr Value RSLOPE_BEGIN = RSLOPE_1;
-	static constexpr Value LSLOPE_BEGIN = LSLOPE_1;
-	static constexpr Value SOLID_BEGIN = SOLID_1;
-	static constexpr Value BREAKABLE_BEGIN = BREAKABLE_1;
-
 	// Aliases
 	static constexpr Value BG_PLAIN_COLOR = BG_33;
 	static constexpr Value BG_DOOR_OPENING = BG_49;
@@ -236,47 +255,14 @@ struct TiledTiles
 	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_3;
 	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_4;
 
+	constexpr operator Value() const { return value; }  // Allow switch and comparisons.
+	explicit constexpr operator bool() = delete;        // Prevent if(tile)
+
+	Tile() = default;
+	constexpr Tile(Value t) : value(t) { }
+
+protected:
+	Value value;
 };
 
-struct TiledMap
-{
-	static const uint8_t map[];
-	static const vec map_size;
-	static const std::array<BoxBounds, 14> screens;
-};
-
-struct TiledEntities
-{
-	static const std::unordered_map<int, vec> angrybat;
-	static const std::unordered_map<int, vec> bat;
-	static const std::unordered_map<int, vec> batawake;
-	static const vec boss_bipedal;
-	static const vec debug_teleport;
-	static const std::unordered_map<int, vec> enemy_door;
-	static const std::unordered_map<int, vec> fireslime;
-	static const std::unordered_map<int, vec> flyingalien;
-	static const std::unordered_map<int, vec> goomba;
-	static const std::unordered_map<int, vec> goombacharger;
-	static const std::unordered_map<int, vec> healthup;
-	static const std::unordered_map<int, vec> initial_batawake;
-	static const vec lava_initial_height;
-	static const std::unordered_map<int, vec> mantis;
-	static const std::unordered_map<int, vec> save;
-	static const vec skill_breakblocks;
-	static const vec skill_gun;
-	static const vec skill_walljump;
-	static const vec spawn;
-	
-};
-
-struct TiledAreas
-{
-	static const std::array<BoxBounds, 3> bat_bounds;
-	static const std::array<BoxBounds, 1> boss_bounds;
-	static const std::array<BoxBounds, 1> fog;
-	static const std::array<BoxBounds, 2> lava;
-	static const std::array<BoxBounds, 1> parallax_cave;
-	static const std::array<BoxBounds, 1> parallax_forest;
-	static const std::array<BoxBounds, 1> parallax_island;
-	
-};
+}

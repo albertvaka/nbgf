@@ -24,7 +24,7 @@ const float chanceAngryBat = 0.2f;
 const Tile SOLID_TILE = Tile::SOLID_SIMPLE;
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_SIMPLE;
 
-static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::size);
+static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::Size);
 
 HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
@@ -78,7 +78,7 @@ void HellCrossScene::EnterScene()
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) {
 					bool angry = (Rand::rollf() < chanceAngryBat);
-					new Bat(TileMap::FromTiles(x,y+2), angry, false);
+					new Bat(Tile::FromTiles(x,y+2), angry, false);
 					map.SetTile(x - 1, y + 1, Tile::NONE);
 					map.SetTile(x, y + 1, Tile::NONE);
 					map.SetTile(x + 1, y + 1, Tile::NONE);
@@ -90,7 +90,7 @@ void HellCrossScene::EnterScene()
 		}
 	}
 
-	veci pos = map.ToTiles(player.pos);
+	veci pos = Tile::ToTiles(player.pos);
 	map.SetTile(pos.x - 1, pos.y + 3, Tile::NONE);
 	map.SetTile(pos.x + 0, pos.y + 3, Tile::NONE);
 	map.SetTile(pos.x + 1, pos.y + 3, Tile::NONE);
@@ -186,7 +186,7 @@ void HellCrossScene::Draw()
 	Window::Clear(31, 36, 50);
 
 	if (Debug::Draw) {
-		SimplexNoise::DebugDraw(Tile::size, [this](int x, int y) {
+		SimplexNoise::DebugDraw(Tile::Size, [this](int x, int y) {
 			return SimplexNoise().noise(randomSeed + x / batClusterSize, y / batClusterSize);
 		});
 	}
@@ -219,7 +219,7 @@ void HellCrossScene::Draw()
 		ImGui::Begin("hellcross scene");
 		ImGui::InputFloat("y", &player.pos.y, 0.5f, 1.f, 2, ImGuiInputTextFlags_CharsDecimal);
 		vec m = Mouse::GetPositionInWorld();
-		veci t = map.ToTiles(m);
+		veci t = Tile::ToTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse on tile: %d,%d", t.x, t.y);
 		ImGui::End();

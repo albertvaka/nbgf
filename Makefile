@@ -9,6 +9,9 @@ OBJ	= $(patsubst src/%, obj/%.o, $(SRC))
 ENGINE_SRC	= $(wildcard engine/*.cpp)
 ENGINE_OBJ	= $(patsubst engine/%, obj/engine/%.o, $(ENGINE_SRC))
 
+GENERATED_SRC	= $(wildcard generated/*.cpp)
+GENERATED_OBJ	= $(patsubst generated/%, obj/generated/%.o, $(GENERATED_SRC))
+
 DEP_SRC = $(shell find vendor -type f -name '*.cpp' -o -name '*.c' ! -path 'vendor/glew/*')
 DEP_OBJ = $(patsubst vendor/%, obj/vendor/%.o, $(DEP_SRC))
 DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include ! -path vendor/SDL2/include) $(shell find vendor -mindepth 1 -maxdepth 1 ! -path vendor/glew -type d '!' -exec test -e "{}/include" ';' -print ))
@@ -23,7 +26,7 @@ WEBGL_VER = 2
 SHELL = bash
 
 #NOTE: Dynamic casts are disabled by fno-rtti
-CFLAGS = -pipe -I./engine $(DEP_INCLUDE) -Wall -Wno-unused-parameter $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
+CFLAGS = -pipe -I./engine -I./generated $(DEP_INCLUDE) -Wall -Wno-unused-parameter $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
 CXXFLAGS = $(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions -Wno-reorder
 LDFLAGS	 = $(CXXFLAGS) -lSDL2_ttf -lSDL2_mixer $(PLATFORM_LDFLAGS)
 
@@ -60,16 +63,22 @@ ifeq ($(strip $(IMGUI)),1)
 	IMGUIFLAGS=-D_IMGUI -DIMGUI_DISABLE_DEMO_WINDOWS
 endif
 
-$(EXEC): $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) Makefile
-	$(CXX) $(LDFLAGS) $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) -o $(OUT_FILE)
+$(EXEC): $(OBJ) $(ENGINE_OBJ) $(GENERATED_OBJ) $(DEP_OBJ) Makefile
+	$(CXX) $(LDFLAGS) $(OBJ) $(GENERATED_OBJ) $(ENGINE_OBJ) $(DEP_OBJ) -o $(OUT_FILE)
 
-obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/tiledexport.h src/scene_entrypoint.h src/window_conf.h Makefile
+obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/scene_entrypoint.h src/window_conf.h Makefile
 	@mkdir -p obj/engine
 	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 	$(call time_end,$@)
 
-obj/%.cpp.o: src/%.cpp engine/*.h src/*.h Makefile
+obj/generated/%.cpp.o: generated/%.cpp engine/*.h Makefile
+	@mkdir -p obj/generated
+	$(call time_begin,$@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(call time_end,$@)
+
+obj/%.cpp.o: src/%.cpp engine/*.h generated/*.h src/*.h Makefile
 	@mkdir -p obj
 	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -88,7 +97,7 @@ obj/vendor/%.cpp.o: vendor/%.cpp $(shell find vendor/ -name '*.h' -o -name '*.in
 	$(call time_end,$@)
 
 clean:
-	$(RM) $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) $(OUT_FILE)
+	$(RM) $(OBJ) $(ENGINE_OBJ) $(GENERATED_OBJ) $(DEP_OBJ) $(OUT_FILE)
 
 www:
 	emmake $(MAKE)

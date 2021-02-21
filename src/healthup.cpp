@@ -5,7 +5,7 @@
 #include "window.h"
 #include "jumpman.h"
 #include "collide.h"
-#include "tilemap.h"
+#include "gaemtilemap.h"
 #include "rand.h"
 
 extern float mainClock;
@@ -29,7 +29,7 @@ void HealthUp::Draw() const
 		return;
 	}
 
-	if (TileMap::instance()->GetTile(TileMap::ToTiles(pos)).isBreakable()) {
+	if (GaemTileMap::instance()->GetTile(Tile::ToTiles(pos)).isBreakable()) {
 		//Don't draw behind breakables
 		return;
 	}

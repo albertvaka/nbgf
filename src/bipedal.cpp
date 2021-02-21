@@ -6,7 +6,7 @@
 #include "window.h"
 #include "rand.h"
 #include "debug.h"
-#include "tiledexport.h"
+#include "tiled_objects_areas.h"
 #include "missile.h"
 #include "fx.h"
 #include "camera.h"
@@ -32,19 +32,19 @@ Bipedal::Bipedal(vec pos)
 	, legsHitBox(pos + legsHitBoxOffset, legsHitBoxSize)
 {
 	unsigned int i = 0;
-	for (const auto& bounds : TiledAreas::boss_bounds) {
+	for (const auto& bounds : Tiled::Areas::boss_bounds) {
 		if (bounds.Contains(pos)) {
 			break;
 		}
 		i++;
 	}
-	if (i >= TiledAreas::boss_bounds.size()) {
+	if (i >= Tiled::Areas::boss_bounds.size()) {
 		Debug::out << "Bipedal boss outside boss_bounds";
 		minX = pos.x;
 		maxX = pos.x;
 	} else {
-		minX = TiledAreas::boss_bounds[i].Left();
-		maxX = TiledAreas::boss_bounds[i].Right();
+		minX = Tiled::Areas::boss_bounds[i].Left();
+		maxX = Tiled::Areas::boss_bounds[i].Right();
 
 		float maxDistanceItCanWalkInOneLoop = anim.TotalDuration() * walking_speed;
 		minX += maxDistanceItCanWalkInOneLoop; // We do this since it never changes direction mid-animation
@@ -199,7 +199,7 @@ void Bipedal::Draw() const
 	// Debug-only
 	legsHitBox.DebugDraw();
 	headHitBox.DebugDraw();
-	BoxBounds(TiledAreas::boss_bounds[0].Left(), pos.y, TiledAreas::boss_bounds[0].width, 2).DebugDraw(255, 255, 0);
+	BoxBounds(Tiled::Areas::boss_bounds[0].Left(), pos.y, Tiled::Areas::boss_bounds[0].width, 2).DebugDraw(255, 255, 0);
 	BoxBounds(minX, pos.y, maxX - minX, 2).DebugDraw(0, 255, 0);
 	pos.DebugDraw();
 

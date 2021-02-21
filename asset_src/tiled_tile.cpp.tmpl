@@ -1,0 +1,13 @@
+#include "tiled_tile.h"
+
+namespace Tiled {
+
+const GPU_Rect Tile::TileToTextureRect[] = {
+	{},	//NONE
+	{% for t in gids -%}
+		{ {{t%tileset_cols}} * {{tilesize}}, {{t//tileset_cols}} * {{tilesize}}, {{tilesize}}, {{tilesize}} }, //={{gid_to_tileid[t]}}, {{ tilenames[t] }}, gid={{t}}
+	{% endfor -%}
+	{},	//SOLID_TRANSPARENT
+};
+
+}

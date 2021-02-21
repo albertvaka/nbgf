@@ -1,19 +1,19 @@
 #pragma once
 
 #include "vec.h"
-#include "tilemap.h"
+#include "gaemtilemap.h"
 #include "destroyedtiles.h"
 
 // Takes the bullet radius into account to calculate collisions,
 // use SmallBulletTilemapCollision for single-pixel collisions
 template<class T>
 bool BigBulletTilemapCollision(T* bullet, bool breakTiles = false) {
-	TileMap* map = TileMap::instance();
+	GaemTileMap* map = GaemTileMap::instance();
 	vec toTheOutside = bullet->vel.Perp().Normalized() * bullet->radius * 0.85f;
-	veci t = map->ToTiles(bullet->pos + toTheOutside);
+	veci t = Tile::ToTiles(bullet->pos + toTheOutside);
 	Tile tile = map->GetTile(t);
 	if (!tile.isFullSolid()) {
-		t = map->ToTiles(bullet->pos - toTheOutside);
+		t = Tile::ToTiles(bullet->pos - toTheOutside);
 		tile = map->GetTile(t);
 	}
 	if (tile.isFullSolid()) {
@@ -29,8 +29,8 @@ bool BigBulletTilemapCollision(T* bullet, bool breakTiles = false) {
 // take the radius of the bullet into account
 template<class T>
 bool SmallBulletTilemapCollision(T* bullet, bool breakTiles = false) {
-	TileMap* map = TileMap::instance();
-	veci t = map->ToTiles(bullet->pos);
+	GaemTileMap* map = GaemTileMap::instance();
+	veci t = Tile::ToTiles(bullet->pos);
 	Tile tile = map->GetTile(t);
 	if (tile.isFullSolid()) {
 		if (breakTiles && tile.isBreakable()) {

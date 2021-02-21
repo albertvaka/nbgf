@@ -24,7 +24,7 @@ void Bullet::explode() {
 void Bullet::Update(float dt)
 {
 	BoxBounds cam = Camera::Bounds();
-	cam.Grow(Tile::size, Tile::size);
+	cam.Grow(Tile::Size, Tile::Size);
 	if (!cam.Contains(pos)) {
 		alive = false;
 		return;

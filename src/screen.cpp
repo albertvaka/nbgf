@@ -2,10 +2,10 @@
 
 #include "camera.h"
 #include "mates.h"
-#include "tiledexport.h"
+#include "tiled_objects_screens.h"
 
 void ScreenManager::UpdateCurrentScreen(vec pos) {
-	if (currentScreen < 0 || !TiledMap::screens[currentScreen].Contains(pos)) {
+	if (currentScreen < 0 || !Tiled::Screens::screen[currentScreen].Contains(pos)) {
 		int screen = FindScreenContaining(pos);
 		if (screen >= 0) currentScreen = screen;
 	}

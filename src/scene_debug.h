@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene.h"
-#include "tilemap.h"
+#include "gaemtilemap.h"
 #include "jumpman.h"
 #include "lava.h"
 #include "partsys.h"
@@ -13,7 +13,7 @@ struct DebugScene : Scene {
 
 	int randomSeed;
 	
-	TileMap map;
+	GaemTileMap map;
 	JumpMan player;
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;
