@@ -28,7 +28,7 @@ struct Parallax : SelfRegister<Parallax>
 
 	void Draw() const;
 
-	void DrawImGUI(const char* title);
+	void DrawImGUI(const char* title = "parallax");
 
 };
 
