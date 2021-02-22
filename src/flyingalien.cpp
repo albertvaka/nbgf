@@ -30,13 +30,19 @@ constexpr const vec playerNearbyArea = vec(100, 100);
 
 FlyingAlien::FlyingAlien(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
-	, state(State::FLYING)
 	, anim(AnimLib::FLYING_ALIEN)
-	, health(flyingAlienHealth)
 {
-	orig = this->pos;
-	vel.x = Rand::OnceEvery(2)? -speedInitial : speedInitial;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	initialPos = this->pos;
+	initialVelX = Rand::OnceEvery(2) ? -speedInitial : speedInitial;
+	Reset();
+}
+
+void FlyingAlien::Reset() {
+	pos = initialPos;
+	health = flyingAlienHealth;
+	vel.x = initialVelX;
+	state = State::FLYING;
 }
 
 BoxBounds FlyingAlien::ChargeBounds() const
@@ -55,6 +61,11 @@ BoxBounds FlyingAlien::ChargeBounds() const
 void FlyingAlien::Update(float dt)
 {
 	if (!InSameScreenAsPlayer(screen)) {
+		if (pos != initialPos) {
+			if (!Camera::Bounds().Contains(pos)) {
+				Reset();
+			}
+		}
 		return;
 	}
 
@@ -71,7 +82,7 @@ void FlyingAlien::Update(float dt)
 	case State::CHARGING:
 	{
 		pos.x += vel.x * dt;
-		pos.y = orig.y + walkDir*std::sin(((pos.x - beginAttackX) / playerNearbyArea.x) * M_PI) * playerNearbyArea.y;
+		pos.y = initialPos.y + walkDir*std::sin(((pos.x - beginAttackX) / playerNearbyArea.x) * M_PI) * playerNearbyArea.y;
 		if (walkDir*(pos.x - beginAttackX) > playerNearbyArea.x) {
 			timer = 0.f;
 			state = State::EXIT_CHARGE;
@@ -82,7 +93,7 @@ void FlyingAlien::Update(float dt)
 	{
 		timer += dt;
 		pos.x += Mates::Lerp(speedAttack, speedAlert, (timer / exitAttackTime)) * walkDir * dt;
-		pos.y = orig.y - std::sin((timer/exitAttackTime) * M_PI/2) * overshotEndCharge;
+		pos.y = initialPos.y - std::sin((timer/exitAttackTime) * M_PI/2) * overshotEndCharge;
 		if (timer >= exitAttackTime) {
 			state = State::FLYING;
 			if (pos.x < player->pos.x) {
@@ -116,7 +127,7 @@ void FlyingAlien::Update(float dt)
 		}
 		pos.x += vel.x * dt;
 
-		if (Mates::IsNearlyEqual(pos.y, orig.y, 0.5f)) {
+		if (Mates::IsNearlyEqual(pos.y, initialPos.y, 0.5f)) {
 			if (Collide(player->Bounds(), ChargeBounds())) {
 				state = State::ENTER_CHARGE;
 				timer = 0.f;
@@ -136,9 +147,9 @@ void FlyingAlien::Update(float dt)
 					vel.x = -vel.x;
 				}
 			}
-		} else if (pos.y > orig.y) {
+		} else if (pos.y > initialPos.y) {
 			pos.y -= overshotReturnSpeed*dt;
-		} else if (pos.y < orig.y) {
+		} else if (pos.y < initialPos.y) {
 			pos.y += overshotReturnSpeed*dt;
 		}
 	}
@@ -179,7 +190,7 @@ void FlyingAlien::Draw() const
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
-	vec drawPos = pos + vec(vel.x > 0? 2 : -2,(std::sin((orig.x + pos.x)*0.1f)*4) - 3);
+	vec drawPos = pos + vec(vel.x > 0? 2 : -2,(std::sin((initialPos.x + pos.x)*0.1f)*4) - 3);
 	if (state == State::ENTER_CHARGE) {
 		drawPos.y -= sinf((timer / prepareAttackTime) * M_PI) * Tile::Size;
 	}
@@ -194,7 +205,7 @@ void FlyingAlien::Draw() const
 
 	// Debug-only
 	pos.DebugDraw();
-	vec(pos.x, orig.y).DebugDraw(0, 0, 255);
+	vec(pos.x, initialPos.y).DebugDraw(0, 0, 255);
 	Bounds().DebugDraw();
 	ChargeBounds().DebugDraw(255, 0, 255);
 }

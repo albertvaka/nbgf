@@ -20,7 +20,9 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
 
 	Animation anim;
 
-	vec orig;
+	vec initialPos;
+	float initialVelX;
+
 	float beginAttackX;
 
 	int screen;
@@ -35,6 +37,7 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
 	void Draw() const;
 
 	void TakeDamage(vec src);
+	void Reset();
 
 };
 
