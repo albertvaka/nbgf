@@ -154,8 +154,13 @@ void FlyingAlien::Update(float dt)
 void FlyingAlien::TakeDamage(vec src) {
 	hitTimer = hitTime;
 
-	if (state == State::FLYING && !IsMovingTowardsInX(pos, vel, src)) {
-		vel.x = -vel.x;
+	if (state == State::FLYING) {
+		if (pos.x < JumpMan::instance()->pos.x) {
+			vel.x = speedAttack;
+		}
+		else {
+			vel.x = -speedAttack;
+		}
 	}
 
 	health--;
