@@ -72,7 +72,7 @@ JumpScene::JumpScene(int saveSlot)
 	}
 
 	for (const BoxBounds& b : Tiled::Areas::parallax_island) {
-		new Parallax(b, Assets::islandParallaxTextures, 0.f, 0.3f, 122.f);
+		new Parallax(b, Assets::islandParallaxTextures, 0.f, 0.3f, -88.9f);
 	}
 
 	for (const BoxBounds& b : Tiled::Areas::parallax_cave) {

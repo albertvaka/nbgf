@@ -3,111 +3,117 @@
 namespace Tiled {
 
 const std::unordered_map<int, vec> Entities::angrybat = {
-	{ 217, vec(572.0900000000001f, 422.697f) },
-	{ 218, vec(586.0900000000001f, 436.697f) },
+	{ 261, vec(2784.227272727273f, 511.636363636364f) },
+	{ 262, vec(2656.363636363636f, 479.636363636364f) },
+	{ 263, vec(2895.75f, 479.5f) },
+	{ 265, vec(2752.25f, 448.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::bat = {
-	{ 50, vec(2672.0f, 816.0f) },
-	{ 61, vec(3728.0f, 800.0f) },
-	{ 62, vec(3648.0f, 800.0f) },
-	{ 63, vec(3744.25f, 895.75f) },
-	{ 64, vec(3632.0f, 896.5f) },
-	{ 65, vec(3775.25f, 976.0f) },
-	{ 117, vec(3270.0f, 1068.0f) },
-	{ 127, vec(1228.0f, 751.5f) },
-	{ 196, vec(2362.667f, 1157.667f) },
-	{ 197, vec(2397.667f, 1141.333f) },
-	{ 203, vec(1804.92f, 1208.542f) },
-	{ 204, vec(1832.42f, 1188.792f) },
-	{ 205, vec(2052.67f, 1157.667f) },
-	{ 206, vec(2029.33f, 1157.333f) },
-	{ 207, vec(1710.25f, 1294.5f) },
+	{ 50, vec(2928.0f, 816.0f) },
+	{ 62, vec(3904.0f, 800.0f) },
+	{ 63, vec(4031.0f, 929.0f) },
+	{ 65, vec(4110.75f, 800.5f) },
+	{ 117, vec(3526.0f, 1068.0f) },
+	{ 127, vec(1468.0f, 751.5f) },
+	{ 196, vec(2618.667f, 1157.667f) },
+	{ 197, vec(2653.667f, 1141.333f) },
+	{ 203, vec(2060.92f, 1208.542f) },
+	{ 204, vec(2088.42f, 1188.792f) },
+	{ 205, vec(2308.67f, 1157.667f) },
+	{ 206, vec(2285.33f, 1157.333f) },
+	{ 207, vec(1966.25f, 1294.5f) },
+	{ 247, vec(3919.333333333333f, 894.666666666667f) },
 };
 
 const std::unordered_map<int, vec> Entities::batawake = {
-	{ 68, vec(2952.0f, 165.0f) },
-	{ 69, vec(3298.0f, 212.0f) },
-	{ 191, vec(2435.0f, 1277.0f) },
-	{ 192, vec(2120.0f, 1320.667f) },
+	{ 61, vec(4024.416666666667f, 854.25f) },
+	{ 68, vec(3208.0f, 165.0f) },
+	{ 69, vec(3554.0f, 212.0f) },
+	{ 191, vec(2691.0f, 1277.0f) },
+	{ 192, vec(2376.0f, 1320.667f) },
 };
 
-const vec Entities::boss_bipedal = vec(819.27f, 1360.754f);
+const vec Entities::boss_bipedal = vec(1075.27f, 1376.754f);
 
-const vec Entities::debug_teleport = vec(365.0f, 741.3333f);
+const vec Entities::debug_teleport = vec(621.0f, 741.3333f);
 
 const std::unordered_map<int, vec> Entities::enemy_door = {
-	{ 93, vec(2658.0f, 722.0f) },
-	{ 118, vec(2913.667f, 1072.667f) },
-	{ 129, vec(1458.55f, 898.545f) },
+	{ 93, vec(2914.0f, 722.0f) },
+	{ 118, vec(3169.667f, 1072.667f) },
+	{ 129, vec(1698.55f, 898.545f) },
 };
 
+const vec Entities::explosive = vec(2991.75f, 686.0f);
+
 const std::unordered_map<int, vec> Entities::fireslime = {
-	{ 176, vec(2676.25f, 1184.0f) },
-	{ 177, vec(2535.5f, 1264.0f) },
-	{ 178, vec(2605.25f, 1344.25f) },
-	{ 180, vec(2376.5f, 1440.5f) },
-	{ 181, vec(2078.114f, 1408.364f) },
-	{ 182, vec(2033.2f, 1344.182f) },
-	{ 183, vec(2236.25f, 1328.75f) },
-	{ 184, vec(1808.25f, 1376.25f) },
-	{ 199, vec(2328.25f, 1296.875f) },
-	{ 200, vec(2165.75f, 1264.125f) },
-	{ 201, vec(1877.5f, 1312.5f) },
-	{ 202, vec(2005.68f, 1264.182f) },
-	{ 208, vec(1501.5f, 1360.417f) },
-	{ 210, vec(1486.33f, 1424.167f) },
-	{ 211, vec(1546.0f, 1424.333f) },
-	{ 212, vec(1825.33f, 1440.333f) },
+	{ 176, vec(2932.25f, 1184.0f) },
+	{ 177, vec(2791.5f, 1264.0f) },
+	{ 178, vec(2861.25f, 1344.25f) },
+	{ 180, vec(2632.5f, 1440.5f) },
+	{ 181, vec(2334.114f, 1408.364f) },
+	{ 182, vec(2289.2f, 1344.182f) },
+	{ 183, vec(2492.25f, 1328.75f) },
+	{ 184, vec(2064.25f, 1376.25f) },
+	{ 199, vec(2584.25f, 1296.875f) },
+	{ 200, vec(2421.75f, 1264.125f) },
+	{ 201, vec(2133.5f, 1312.5f) },
+	{ 202, vec(2261.6800000000003f, 1264.182f) },
+	{ 208, vec(1757.5f, 1360.417f) },
+	{ 210, vec(1742.33f, 1424.167f) },
+	{ 211, vec(1802.0f, 1424.333f) },
+	{ 212, vec(2081.33f, 1440.333f) },
+	{ 253, vec(2408.666666666667f, 431.666666666667f) },
 };
 
 const std::unordered_map<int, vec> Entities::flyingalien = {
-	{ 222, vec(263.30999999999995f, 633.788f) },
-	{ 223, vec(482.4200000000001f, 635.091f) },
-	{ 224, vec(270.1199999999999f, 857.2420999999999f) },
-	{ 225, vec(537.6700000000001f, 797.2727f) },
+	{ 222, vec(570.6433333333298f, 543.121333333333f) },
+	{ 223, vec(779.0866666666702f, 545.757666666667f) },
+	{ 224, vec(572.78666666667f, 799.9087666666667f) },
+	{ 225, vec(769.6700000000001f, 795.9393666666667f) },
 };
 
 const std::unordered_map<int, vec> Entities::goomba = {
-	{ 160, vec(3796.438f, 256.187f) },
-	{ 195, vec(3600.667f, 304.0f) },
+	{ 160, vec(4052.438f, 256.187f) },
+	{ 195, vec(3856.667f, 304.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::goombacharger = {
-	{ 237, vec(3705.045f, 303.924f) },
-	{ 238, vec(3653.44f, 239.77300000000002f) },
+	{ 237, vec(3961.045f, 303.924f) },
+	{ 238, vec(3909.44f, 239.77300000000002f) },
 };
 
 const std::unordered_map<int, vec> Entities::healthup = {
-	{ 58, vec(3168.25f, 510.25f) },
-	{ 60, vec(3537.333f, 847.3333f) },
+	{ 58, vec(3440.25f, 510.25f) },
+	{ 60, vec(4160.083f, 892.3333f) },
 };
 
 const std::unordered_map<int, vec> Entities::initial_batawake = {
-	{ 51, vec(2546.834f, 836.0f) },
-	{ 76, vec(2339.0f, 884.5f) },
-	{ 77, vec(2041.5f, 804.0f) },
+	{ 51, vec(2802.834f, 836.0f) },
+	{ 76, vec(2595.0f, 884.5f) },
+	{ 77, vec(2297.5f, 804.0f) },
 };
 
-const vec Entities::lava_initial_height = vec(3713.75f, 1000.0f);
+const vec Entities::lava_initial_height = vec(3969.75f, 1016.0f);
 
 const std::unordered_map<int, vec> Entities::mantis = {
-	{ 239, vec(1030.25f, 858.3333f) },
-	{ 240, vec(896.4200000000001f, 882.333f) },
+	{ 245, vec(1306.24833333333f, 511.333483333333f) },
+	{ 246, vec(1172.4183333333299f, 535.333183333333f) },
+	{ 248, vec(1407.33333333333f, 597.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::save = {
-	{ 126, vec(2977.5336f, 911.114f) },
-	{ 213, vec(1041.0f, 1225.0f) },
+	{ 126, vec(3249.5336f, 911.114f) },
+	{ 213, vec(1297.0f, 1241.0f) },
 };
 
-const vec Entities::skill_breakblocks = vec(2735.0f, 766.0f);
+const vec Entities::skill_breakblocks = vec(2991.0f, 766.0f);
 
-const vec Entities::skill_gun = vec(1288.37f, 922.0f);
+const vec Entities::skill_gun = vec(1528.37f, 922.0f);
 
-const vec Entities::skill_walljump = vec(3928.977f, 922.568f);
+const vec Entities::skill_walljump = vec(4233.477f, 926.818f);
 
-const vec Entities::spawn = vec(3122.333f, 876.0f);
+const vec Entities::spawn = vec(3378.333f, 876.0f);
 
 
 

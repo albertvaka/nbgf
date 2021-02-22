@@ -17,6 +17,7 @@ struct Entities {
 	static const vec boss_bipedal;
 	static const vec debug_teleport;
 	static const std::unordered_map<int, vec> enemy_door;
+	static const vec explosive;
 	static const std::unordered_map<int, vec> fireslime;
 	static const std::unordered_map<int, vec> flyingalien;
 	static const std::unordered_map<int, vec> goomba;
