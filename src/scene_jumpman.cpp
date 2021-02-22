@@ -312,7 +312,7 @@ void JumpScene::UpdateCamera(float dt) {
 	vec camPos = player.GetCameraTargetPos();
 	vec oldPos = Camera::Center();
 	vec displacement = camPos - oldPos;
-	displacement.Truncate(camSpeed * dt);
+	ScreenManager::InScreenTransition = displacement.Truncate(camSpeed * dt);
 	Camera::SetCenter(oldPos + displacement);
 }
 
@@ -339,6 +339,7 @@ void JumpScene::ExitScene()
 	Health::DeleteAll();
 	Health::particles.Clear();
 	SaveStation::DeleteAll();
+	ScreenManager::InScreenTransition = false;
 }
 
 void JumpScene::Update(float dt)

@@ -55,6 +55,9 @@ Bipedal::Bipedal(vec pos)
 
 void Bipedal::Update(float dt)
 {
+	if (ScreenManager::InScreenTransition) {
+		return;
+	}
 	if (!InSameScreenAsPlayer(screen)) {
 		return;
 	}

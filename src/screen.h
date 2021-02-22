@@ -6,6 +6,7 @@
 
 struct ScreenManager : SingleInstance<ScreenManager>
 {
+	static inline bool InScreenTransition = false;
 
 	void AddScreen(const BoxBounds& b) {
 		screens.push_back(b);
@@ -49,6 +50,5 @@ struct ScreenManager : SingleInstance<ScreenManager>
 private:
 	int currentScreen = -1;
 	std::vector<BoxBounds> screens;
-
 };
 

@@ -60,11 +60,12 @@ BoxBounds FlyingAlien::ChargeBounds() const
 
 void FlyingAlien::Update(float dt)
 {
+	if (ScreenManager::InScreenTransition) {
+		return;
+	}
 	if (!InSameScreenAsPlayer(screen)) {
 		if (pos != initialPos) {
-			if (!Camera::Bounds().Contains(pos)) {
-				Reset();
-			}
+			Reset();
 		}
 		return;
 	}

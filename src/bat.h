@@ -34,7 +34,6 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 	void Draw() const;
 
 private:
-	void DrawSenseArea() const;
 	void EnableBoundsAvoidance();
 };
 

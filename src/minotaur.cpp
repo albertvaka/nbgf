@@ -45,11 +45,12 @@ void Minotaur::Reset()
 
 void Minotaur::Update(float dt)
 {
+	if (ScreenManager::InScreenTransition) {
+		return;
+	}
 	if (!InSameScreenAsPlayer(screen)) {
 		if (pos != initialPos) {
-			if (!Collide(Camera::Bounds(), Bounds())) { // FIXME: You can still see it pop if the destination position is in camera. Find a better way to do this.
-				Reset();
-			}
+			Reset();
 		}
 		return;
 	}
