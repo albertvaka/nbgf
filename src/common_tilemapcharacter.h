@@ -60,12 +60,26 @@ inline bool IsGoingToRunOffPlatform(vec pos, vec size, vec vel, float dt) {
 }
 
 inline bool IsGoingToHitAWall(vec pos, vec size, vec vel, float dt) {
+	GaemTileMap* map = GaemTileMap::instance();
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
-	vec side = vec(newPos.x + toTheSideImMoving, newPos.y);
-	veci tilePosSide = Tile::ToTiles(side);
-	const Tile tileSide = GaemTileMap::instance()->GetTile(tilePosSide);
-	return tileSide.isSolid();
+	if (size.y < Tile::Size) {
+		vec side = vec(newPos.x + toTheSideImMoving, newPos.y);
+		veci tilePosSide = Tile::ToTiles(side);
+		return map->GetTile(tilePosSide).isSolid();
+	} else {
+		const float E = 1;
+		int x = Tile::ToTiles(newPos.x + toTheSideImMoving);
+		int yTop = Tile::ToTiles(newPos.y - size.y/2 + E);
+		int yBottom = Tile::ToTiles(pos.y + size.y/2 - E);
+		for (int y = yTop; y <= yBottom; y++)
+		{
+			if (map->GetTile(x, y).isSolid()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 inline bool IsGoingToLeaveTheScreen(vec pos, vec size, vec vel, float dt, int screen) {
