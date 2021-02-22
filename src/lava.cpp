@@ -140,9 +140,8 @@ void Lava::Draw() const {
 
 	float left = std::max(screen.Left(), bounds.Left());
 	float right = std::min(screen.Right(), bounds.Right());
-	float chunkLeft = (floor(left / chunkSize)) * chunkSize;
-	float chunkRight = (floor(right / chunkSize)) * chunkSize;
-	for (float x = chunkLeft; x < chunkRight; x += chunkSize)
+	right = (floor(right / chunkSize)) * chunkSize; //align to chunks
+	for (float x = left; x < right; x += chunkSize)
 	{
 		float y = bounds.top - waveHeight * sin(x * waveAmplitude + time);
 
