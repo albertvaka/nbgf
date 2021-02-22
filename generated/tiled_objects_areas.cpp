@@ -36,7 +36,7 @@ const std::array<BoxBounds, 1> Areas::parallax_forest = {
 };
 
 const std::array<BoxBounds, 1> Areas::parallax_island = {
-	BoxBounds(1607.16f,228.187f,848.836666666667f,339.125f),
+	BoxBounds(1591.16f,228.187f,848.836666666667f,339.125f),
 };
 
 

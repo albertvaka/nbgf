@@ -42,6 +42,7 @@ const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 93, vec(2914.0f, 722.0f) },
 	{ 118, vec(3169.667f, 1072.667f) },
 	{ 129, vec(1698.55f, 898.545f) },
+	{ 266, vec(1585.33333333333f, 433.333333333333f) },
 };
 
 const vec Entities::explosive = vec(2991.75f, 686.0f);
@@ -97,9 +98,9 @@ const std::unordered_map<int, vec> Entities::initial_batawake = {
 const vec Entities::lava_initial_height = vec(3969.75f, 1016.0f);
 
 const std::unordered_map<int, vec> Entities::mantis = {
-	{ 245, vec(1306.24833333333f, 511.333483333333f) },
-	{ 246, vec(1172.4183333333299f, 535.333183333333f) },
-	{ 248, vec(1407.33333333333f, 597.0f) },
+	{ 245, vec(1221.4983333333298f, 367.583483333333f) },
+	{ 246, vec(1277.9183333333299f, 363.833183333333f) },
+	{ 248, vec(1329.58333333333f, 360.75f) },
 };
 
 const std::unordered_map<int, vec> Entities::save = {
