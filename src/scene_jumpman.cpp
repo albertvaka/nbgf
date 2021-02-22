@@ -302,7 +302,7 @@ void JumpScene::EnterScene()
 	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 }
 
-void JumpScene::UpdateCamera(float dt) {
+bool JumpScene::UpdateCamera(float dt) {
 	float camZoom = Fx::FreezeImage::IsFrozen()? 1.5f : 1.f;
 	float oldZoom = Camera::Zoom();
 	float zoomChange = camZoom - oldZoom;
@@ -312,8 +312,9 @@ void JumpScene::UpdateCamera(float dt) {
 	vec camPos = player.GetCameraTargetPos();
 	vec oldPos = Camera::Center();
 	vec displacement = camPos - oldPos;
-	ScreenManager::InScreenTransition = displacement.Truncate(camSpeed * dt);
+	bool inScreenTransition = displacement.Truncate(camSpeed * dt);
 	Camera::SetCenter(oldPos + displacement);
+	return inScreenTransition;
 }
 
 void JumpScene::ExitScene()
@@ -339,7 +340,6 @@ void JumpScene::ExitScene()
 	Health::DeleteAll();
 	Health::particles.Clear();
 	SaveStation::DeleteAll();
-	ScreenManager::InScreenTransition = false;
 }
 
 void JumpScene::Update(float dt)
@@ -376,7 +376,10 @@ void JumpScene::Update(float dt)
 
 	screenManager.UpdateCurrentScreen(player.pos);
 
-	UpdateCamera(dt);
+	bool inScreenTransition = UpdateCamera(dt);
+	if (inScreenTransition) {
+		return;
+	}
 
 	for (Bipedal* e : Bipedal::GetAll()) {
 		e->Update(dt);

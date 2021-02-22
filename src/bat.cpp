@@ -82,9 +82,6 @@ Bat::Bat(vec pos, bool aggresive, bool awake)
 
 void Bat::Update(float dt)
 {
-	if (ScreenManager::InScreenTransition) {
-		return;
-	}
 	if (!InSameScreenAsPlayer(screen)) {
 		if (state == State::SEEKING) {
 			state = State::FLYING;

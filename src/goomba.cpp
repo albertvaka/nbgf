@@ -70,9 +70,6 @@ void Goomba::Walk(float dt)
 
 void Goomba::Update(float dt)
 {
-	if (ScreenManager::InScreenTransition) {
-		return;
-	}
 	if (!InSameScreenAsPlayer(screen)) {
 		goingRight = pos.x < JumpMan::instance()->pos.x; // so we are facing towards the player when they enter the screem
 		return;

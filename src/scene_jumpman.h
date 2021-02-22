@@ -43,7 +43,7 @@ struct JumpScene : Scene {
 	void ExitScene() override;
 	void Update(float dt) override;
 	void Draw() override;
-	void UpdateCamera(float dt);
+	bool UpdateCamera(float dt);
 
 
 	void TriggerPickupItem(BigItem * g, bool fromSave);

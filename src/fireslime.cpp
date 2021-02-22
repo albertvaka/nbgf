@@ -51,9 +51,6 @@ bool FireSlime::CanMoveForward() const
 
 void FireSlime::Update(float dt)
 {
-	if (ScreenManager::InScreenTransition) {
-		return;
-	}
 	if (!InSameScreenAsPlayer(screen)) {
 		return;
 	}

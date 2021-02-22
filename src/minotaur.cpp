@@ -45,9 +45,6 @@ void Minotaur::Reset()
 
 void Minotaur::Update(float dt)
 {
-	if (ScreenManager::InScreenTransition) {
-		return;
-	}
 	if (!InSameScreenAsPlayer(screen)) {
 		if (pos != initialPos) {
 			Reset();

@@ -6,8 +6,6 @@
 
 struct ScreenManager : SingleInstance<ScreenManager>
 {
-	static inline bool InScreenTransition = false;
-
 	void AddScreen(const BoxBounds& b) {
 		screens.push_back(b);
 	}

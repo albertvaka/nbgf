@@ -66,9 +66,6 @@ bool Mantis::IsBouncingAgainstAnotherMantis() {
 
 void Mantis::Update(float dt)
 {
-	if (ScreenManager::InScreenTransition) {
-		return;
-	}
 	if (!InSameScreenAsPlayer(screen)) {
 		if (pos != initialPos) {
 			Reset();
