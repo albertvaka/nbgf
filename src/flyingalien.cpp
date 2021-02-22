@@ -9,8 +9,9 @@
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
 
-constexpr const float speed = 25;
-constexpr const float speedAttack = 100; 
+constexpr const float speedInitial = 25;
+constexpr const float speedAlert = 75;
+constexpr const float speedAttack = 100;
 
 constexpr const float overshotEndCharge = 10;
 constexpr const float overshotReturnSpeed = 50;
@@ -31,7 +32,7 @@ FlyingAlien::FlyingAlien(vec pos)
 	, anim(AnimLib::FLYING_ALIEN)
 {
 	orig = this->pos;
-	vel.x = Rand::OnceEvery(2)? -speed : speed;
+	vel.x = Rand::OnceEvery(2)? -speedInitial : speedInitial;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 }
 
@@ -77,15 +78,15 @@ void FlyingAlien::Update(float dt)
 	case State::EXIT_CHARGE:
 	{
 		timer += dt;
-		pos.x += Mates::Lerp(speedAttack, speed, (timer / exitAttackTime)) * walkDir * dt;
+		pos.x += Mates::Lerp(speedAttack, speedAlert, (timer / exitAttackTime)) * walkDir * dt;
 		pos.y = orig.y - std::sin((timer/exitAttackTime) * M_PI/2) * overshotEndCharge;
 		if (timer >= exitAttackTime) {
 			state = State::FLYING;
 			if (pos.x < player->pos.x) {
-				vel.x = speed;
+				vel.x = speedAlert;
 			} 
 			else {
-				vel.x = -speed;
+				vel.x = -speedAlert;
 			}
 		}
 	}
