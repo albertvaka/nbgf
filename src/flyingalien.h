@@ -25,7 +25,7 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
 
 	int screen;
 
-	int health = 3;
+	int health;
 	float hitTimer = 0.f;
 
 	FlyingAlien(vec position);

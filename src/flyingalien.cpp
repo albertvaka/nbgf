@@ -16,6 +16,8 @@ constexpr const float speedAttack = 100;
 constexpr const float overshotEndCharge = 10;
 constexpr const float overshotReturnSpeed = 50;
 
+constexpr const float flyingAlienHealth = 4;
+
 constexpr const float hitTime = 0.5f;
 constexpr const float prepareAttackTime = 0.5f;
 constexpr const float exitAttackTime = 0.2f;
@@ -30,6 +32,7 @@ FlyingAlien::FlyingAlien(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, state(State::FLYING)
 	, anim(AnimLib::FLYING_ALIEN)
+	, health(flyingAlienHealth)
 {
 	orig = this->pos;
 	vel.x = Rand::OnceEvery(2)? -speedInitial : speedInitial;
