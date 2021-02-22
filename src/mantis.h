@@ -21,7 +21,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	float jumpCooldownTimer = 0.f;
 	Animation anim;
 	vec initialPlayerPosition;
-	int health = 3;
+	int health;
 
 	int screen;
 

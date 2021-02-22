@@ -9,18 +9,22 @@
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
 
-constexpr const float gravity_acc = 600; // shared with jumpman
+constexpr const float gravity_acc = 660; // TODO: reuse from jumpman for consistency
 
-constexpr const float speed = 25;
-constexpr const float jumpSpeedY = -300;
-constexpr const float maxJumpSpeedX = 250;
+constexpr const float speed = 60;
+constexpr const float jumpSpeedY = -350;
+constexpr const float maxJumpSpeedX = 300;
 
-constexpr const float attackRadius = 250;
+constexpr const float attackRadius = 310;
+
+constexpr const float scale = 1.5f;
+constexpr const float mantisHealth = 5;
 
 // Square used to collide against the tilemap
-constexpr const vec spriteSize = vec(24, 24);
+constexpr const vec spriteSize = vec(24* scale, 24* scale);
 // Radius used to collide against the player (a bit smaller)
-constexpr const float spriteRadius = 10.f;
+constexpr const float spriteRadius = 10.f* scale;
+
 
 constexpr const vec vel_hit(180.f, -150.f);
 constexpr const float hitTime = 0.5f;
@@ -31,6 +35,7 @@ Mantis::Mantis(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, state(State::JUMP)
 	, anim(AnimLib::MANTIS_WALK)
+	, health(mantisHealth)
 {
 	vel.y = 10;
 	vel.x = Rand::OnceEvery(2)? -speed : speed;
@@ -182,7 +187,7 @@ void Mantis::Draw() const
 	GPU_Rect rect = (state == State::JUMP) ? AnimLib::MANTIS_AIR : anim.CurrentFrameRect();
 	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRect(rect)
-		.withScale(vel.x> 0? -1: 1, 1)
+		.withScale(vel.x> 0? -scale : scale, scale)
 		.withOrigin(rect.w / 2, rect.h / 2);
 
 	Shader::Deactivate();
