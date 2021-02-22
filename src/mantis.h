@@ -23,6 +23,8 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	vec initialPlayerPosition;
 	int health;
 
+	vec initialPos;
+	float initialVelX;
 	int screen;
 
 	Mantis(vec position);
@@ -35,6 +37,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	bool IsBouncingAgainstAnotherMantis();
 
 	void TakeDamage(vec src);
+	void Reset();
 
 };
 

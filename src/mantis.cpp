@@ -33,13 +33,20 @@ constexpr const float jumpCooldown = .2f;
 
 Mantis::Mantis(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
-	, state(State::JUMP)
 	, anim(AnimLib::MANTIS_WALK)
-	, health(mantisHealth)
 {
-	vel.y = 10;
-	vel.x = Rand::OnceEvery(2)? -speed : speed;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	initialPos = this->pos;
+	initialVelX = Rand::OnceEvery(2) ? -speed : speed;
+	Reset();
+}
+
+void Mantis::Reset() {
+	pos = initialPos;
+	health = mantisHealth;
+	vel.y = 10;
+	vel.x = initialVelX;
+	state = State::JUMP;
 }
 
 vec Mantis::GetJumpSpeedToTarget(vec target) {
@@ -60,6 +67,11 @@ bool Mantis::IsBouncingAgainstAnotherMantis() {
 void Mantis::Update(float dt)
 {
 	if (!InSameScreenAsPlayer(screen)) {
+		if (pos != initialPos) {
+			if (!Camera::Bounds().Contains(pos)) {
+				Reset();
+			}
+		}
 		return;
 	}
 
