@@ -15,6 +15,7 @@ namespace Assets
 	inline GPU_Image* spritesheetTexture;
 	inline GPU_Image* wheelerTexture;
 	inline GPU_Image* scifiTexture;
+	inline GPU_Image* minotaurTexture;
 
 	inline GPU_Image* menuBgTexture;
 

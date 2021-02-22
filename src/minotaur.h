@@ -1,0 +1,40 @@
+#pragma once
+
+#include "vec.h"
+#include "selfregister.h"
+#include "animation.h"
+#include "entity.h"
+
+struct Minotaur : BoxEntity, SelfRegister<Minotaur>
+{
+	enum class State
+	{
+		IDLE,
+		RUN,
+		TAUNT,
+		FLIP,
+		ATTACK_BIG,
+		TAKE_DAMAGE,
+		DIE,
+	};
+
+	State state;
+	float timer = 0.0f;
+
+	Animation anim;
+
+	int screen;
+	int health;
+	vec initialPos;
+
+	bool goingRight = true;
+
+	Minotaur(vec position);
+
+	void Reset();
+
+	void Update(float dt);
+	void Draw() const;
+
+};
+

@@ -7,6 +7,7 @@ void Assets::LoadAll() {
     spritesheetTexture = LoadImage("data/spritesheet.png");
     wheelerTexture = LoadImage("data/boss_wheeler.png");
     scifiTexture = LoadImage("data/scifi.png");
+    minotaurTexture = LoadImage("data/minotaur.png");
 
     menuBgTexture = LoadImage("data/menubg3.png");
 

@@ -21,6 +21,7 @@
 #include "savestation.h"
 #include "common_enemy.h"
 #include "debug.h"
+#include "minotaur.h"
 #include "collide.h"
 #include "rototext.h"
 #include "goomba.h"
@@ -246,6 +247,13 @@ void JumpScene::EnterScene()
 		}
 	}
 
+	for (auto const& [id, pos] : Tiled::Entities::save) { //TODO add to tiled
+		auto b = new Minotaur(pos);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
 	for (auto const& [id, pos] : Tiled::Entities::mantis) {
 		auto b = new Mantis(pos);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
@@ -317,6 +325,7 @@ void JumpScene::ExitScene()
 	FireShot::DeleteAll();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
+	Minotaur::DeleteAll();
 	Mantis::DeleteAll();
 	FlyingAlien::DeleteAll();
 	FireSlime::DeleteAll();
@@ -392,6 +401,10 @@ void JumpScene::Update(float dt)
 	}
 
 	for (Goomba* e : Goomba::GetAll()) {
+		e->Update(dt);
+	}
+
+	for (Minotaur* e : Minotaur::GetAll()) {
 		e->Update(dt);
 	}
 
@@ -478,6 +491,7 @@ void JumpScene::Update(float dt)
 
 	// Delete enemies after updating doors and savestations that might check for them
 	Bat::DeleteNotAlive();
+	Minotaur::DeleteNotAlive();
 	Goomba::DeleteNotAlive();
 	FlyingAlien::DeleteNotAlive();
 	Mantis::DeleteNotAlive();
@@ -571,6 +585,7 @@ void JumpScene::Draw()
 		EnemyDoor::GetAll(),
 		OneShotAnim::GetAll(),
 		Goomba::GetAll(),
+		Minotaur::GetAll(),
 		Mantis::GetAll(),
 		FlyingAlien::GetAll(),
 		FireSlime::GetAll(),
