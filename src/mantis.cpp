@@ -160,7 +160,7 @@ void Mantis::Update(float dt)
 
 	Bullet* b = ReceiveDamageFromBullets(Bounds());
 	if (b) {
-		TakeDamage(pos);
+		TakeDamage(b->pos);
 		if (alive == false) return;
 	}
 
