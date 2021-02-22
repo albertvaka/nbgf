@@ -117,7 +117,8 @@ void Mantis::Update(float dt)
 		//}
 
 		// Bounce against other mantis
-		if (IsBouncingAgainstAnotherMantis()) {
+		if (IsBouncingAgainstAnotherMantis()
+			|| IsGoingToLeaveTheScreen(pos, spriteSize, vel, dt, screen)) {
 			vel.x = -vel.x * 0.5f;
 		}
 
