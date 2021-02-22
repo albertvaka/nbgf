@@ -24,6 +24,7 @@ namespace Window
 #else
         SDL_DisplayMode dm;
         SDL_GetDesktopDisplayMode(0, &dm);
+        dm.h -= 64; // Account for some pixels used by the window decorations
         int scale = std::min(dm.w / GAME_WIDTH, dm.h / GAME_HEIGHT);
         Debug::out << "Scaling to x" << scale;
         //Debug::out << dm.w << " " << dm.h;
