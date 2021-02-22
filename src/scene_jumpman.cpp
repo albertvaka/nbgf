@@ -260,7 +260,11 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	boss_bipedal = new Bipedal(Tiled::Entities::boss_bipedal);
+	Bipedal* bipedal = new Bipedal(Tiled::Entities::boss_bipedal);
+	for (EnemyDoor* s : EnemyDoor::ByScreen[bipedal->screen]) {
+		s->AddEnemy(bipedal);
+	}
+	boss_bipedal = bipedal;
 
 	for (SaveStation* s : SaveStation::ByScreen[screenManager.FindScreenContaining(boss_bipedal->pos)]) {
 		s->AddHiddenBy(boss_bipedal);
