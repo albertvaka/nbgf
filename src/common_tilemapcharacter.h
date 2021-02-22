@@ -85,7 +85,9 @@ inline bool IsGoingToHitAWall(vec pos, vec size, vec vel, float dt) {
 inline bool IsGoingToLeaveTheScreen(vec pos, vec size, vec vel, float dt, int screen) {
 	if (screen < 0) return false;
 	vec newPos = pos + vel * dt;
-	return !ScreenManager::instance()->ScreenBounds(screen).Contains(newPos);
+	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
+	vec side = vec(newPos.x + toTheSideImMoving, newPos.y);
+	return !ScreenManager::instance()->ScreenBounds(screen).Contains(side);
 }
 
 struct MoveResult {
