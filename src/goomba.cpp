@@ -26,11 +26,7 @@ Goomba::Goomba(vec pos, bool isCharger)
 	goingRight = Rand::OnceEvery(2);
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 	
-	//Get it to touch the ground in case it's incorrectly placed in the tilemap
-	//FIXME: Find a better way to do this and that works for all entities
-	for (int i = 0; i < 5 && !IsGrounded(this->pos, size, vec()); i++) {
-		this->pos.y += 0.2f;
-	}
+	AlignWithGround(this, size);
 }
 
 BoxBounds Goomba::ChargeBounds() const

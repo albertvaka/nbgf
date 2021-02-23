@@ -247,7 +247,7 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	for (auto const& [id, pos] : Tiled::Entities::save) { //TODO add to tiled
+	for (auto const& [id, pos] : Tiled::Entities::minotaur) {
 		auto b = new Minotaur(pos);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);

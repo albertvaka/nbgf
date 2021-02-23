@@ -1,6 +1,5 @@
 #include "minotaur.h"
 #include "jumpman.h"
-#include "collide.h"
 #include "window.h"
 #include "assets.h"
 #include "rand.h"
@@ -8,27 +7,19 @@
 #include "common_tilemapcharacter.h"
 
 constexpr const float kRunSpeed = 80;
-
-constexpr const float kScale = 2.0f;
+constexpr const float kExitIdleDistance = 200.f;
 constexpr const float kMinotaurHealth = 9.0f;
 
-constexpr const float kExitIdleDistance = 200.f;
-
+constexpr const float kScale = 2.0f;
 constexpr const vec kMinotaurSize = vec(25, 38)*kScale;
-constexpr const vec kOffsetCenter = vec(3, 3)*kScale;
 
 Minotaur::Minotaur(vec pos)
 	: BoxEntity(pos-vec(0,kMinotaurSize.y/2), kMinotaurSize)
 	, anim(AnimLib::MINOTAUR_IDLE)
 {
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
-	
-	//Get it to touch the ground in case it's incorrectly placed in the tilemap
-	//FIXME: Find a better way to do this and that works for all entities
-	for (int i = 0; i < 400 && !IsGrounded(this->pos, size, vec()); i++) { // FIXME: Change 400 to 5 when we place this guy on the ground and not on a savestation
-		this->pos.y += 0.2f;
-	}
-	
+
+	AlignWithGround(this, size);
 	initialPos = this->pos;
 
 	Reset();
@@ -40,7 +31,6 @@ void Minotaur::Reset()
 	anim.Ensure(AnimLib::MINOTAUR_IDLE);
 	pos = initialPos;
 	health = kMinotaurHealth;
-	goingRight = pos.x < JumpMan::instance()->pos.x; // so we are facing towards the player when they enter the screen
 }
 
 void Minotaur::Update(float dt)
@@ -49,6 +39,7 @@ void Minotaur::Update(float dt)
 		if (pos != initialPos) {
 			Reset();
 		}
+		goingRight = pos.x < JumpMan::instance()->pos.x; // so we are facing towards the player when they enter the screen
 		return;
 	}
 
@@ -56,8 +47,12 @@ void Minotaur::Update(float dt)
 
 	bool wasAttacked = false;
 	if (ReceiveDamageFromBullets(Bounds())) {
-		health -= 1;
 		wasAttacked = true;
+		health--;
+		if (health <= 0) {
+			DieWithSmallExplosion(this);
+			return;
+		}
 	}
 
 	switch (state)
@@ -94,7 +89,7 @@ void Minotaur::Draw() const
 {
 	GPU_Rect rect = anim.CurrentFrameRect();
 
-	Window::Draw(Assets::minotaurTexture, pos+vec(goingRight? kOffsetCenter.x : -kOffsetCenter.x, kOffsetCenter.y))
+	Window::Draw(Assets::minotaurTexture, pos)
 		.withRect(rect)
 		.withOrigin(rect.w / 2, rect.h / 2)
 		.withScale(goingRight? kScale : -kScale, kScale);

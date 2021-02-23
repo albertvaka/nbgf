@@ -26,6 +26,7 @@ struct Entities {
 	static const std::unordered_map<int, vec> initial_batawake;
 	static const vec lava_initial_height;
 	static const std::unordered_map<int, vec> mantis;
+	static const std::unordered_map<int, vec> minotaur;
 	static const std::unordered_map<int, vec> save;
 	static const vec skill_breakblocks;
 	static const vec skill_gun;

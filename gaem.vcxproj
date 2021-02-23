@@ -70,6 +70,7 @@
     <ClInclude Include="src\fireshot.h" />
     <ClInclude Include="src\fireslime.h" />
     <ClInclude Include="src\flyingalien.h" />
+    <ClInclude Include="src\minotaur.h" />
     <ClInclude Include="src\tile.h" />
     <ClInclude Include="src\gaemtilemap.h" />
     <ClInclude Include="src\goomba.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\lava.cpp" />
     <ClCompile Include="src\mantis.cpp" />
+    <ClCompile Include="src\minotaur.cpp" />
     <ClCompile Include="src\missile.cpp" />
     <ClCompile Include="src\parallax.cpp" />
     <ClCompile Include="src\savestation.cpp" />

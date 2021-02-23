@@ -75,13 +75,13 @@ const std::unordered_map<int, vec> Entities::flyingalien = {
 };
 
 const std::unordered_map<int, vec> Entities::goomba = {
-	{ 160, vec(4052.438f, 256.187f) },
-	{ 195, vec(3856.667f, 304.0f) },
+	{ 160, vec(4076.619818181818f, 254.55063636363604f) },
+	{ 195, vec(3812.667f, 255.27272727272702f) },
 };
 
 const std::unordered_map<int, vec> Entities::goombacharger = {
-	{ 237, vec(3961.045f, 303.924f) },
-	{ 238, vec(3909.44f, 239.77300000000002f) },
+	{ 237, vec(4002.317727272727f, 302.469454545455f) },
+	{ 238, vec(3950.530909090909f, 238.86390909090903f) },
 };
 
 const std::unordered_map<int, vec> Entities::healthup = {
@@ -101,6 +101,11 @@ const std::unordered_map<int, vec> Entities::mantis = {
 	{ 245, vec(1221.4983333333298f, 367.583483333333f) },
 	{ 246, vec(1277.9183333333299f, 363.833183333333f) },
 	{ 248, vec(1329.58333333333f, 360.75f) },
+};
+
+const std::unordered_map<int, vec> Entities::minotaur = {
+	{ 267, vec(1944.625f, 526.125f) },
+	{ 273, vec(3786.909090909091f, 365.818181818182f) },
 };
 
 const std::unordered_map<int, vec> Entities::save = {

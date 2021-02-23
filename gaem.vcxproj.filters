@@ -355,6 +355,9 @@
     <ClInclude Include="generated\tiled_tile.h">
       <Filter>generated</Filter>
     </ClInclude>
+    <ClInclude Include="src\minotaur.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -560,6 +563,9 @@
     </ClCompile>
     <ClCompile Include="generated\tiled_tile.cpp">
       <Filter>generated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\minotaur.cpp">
+      <Filter>src\entities\enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

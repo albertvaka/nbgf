@@ -23,12 +23,16 @@ constexpr const int kFirstFrameOnAir = 2;
 constexpr const int kFirstFrameOnGround = 7;
 constexpr const int kFrameShooting = 2;
 
+constexpr const vec kGroundCollision = vec(10,10) * kSpriteScale;
+
 FireSlime::FireSlime(vec pos)
 	: CircleEntity(pos - vec(0, kSpriteOffsetY), 5*kSpriteScale)
 	, anim(AnimLib::FIRESLIME_WALK, false)
 {
 	direction = Rand::OnceEvery(2) ? 1 : -1;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
+
+	AlignWithGround(this, kGroundCollision);
 }
 
 BoxBounds FireSlime::AttackBounds() const
@@ -43,10 +47,9 @@ bool FireSlime::CanMoveForward() const
 {
 	constexpr int framesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
 	constexpr const float bigDt = Animation::TotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, framesOnAir);
-	constexpr const vec spriteSize = AnimLib::FIRESLIME_WALK[0].GetSize() * kSpriteScale;
 	vec vel = vec(kSpeed * direction, 0);
 
-	return !IsGoingToHitAWall(pos, spriteSize, vel, bigDt) && !IsGoingToRunOffPlatform(pos, spriteSize, vel, bigDt);
+	return !IsGoingToHitAWall(pos, kGroundCollision, vel, bigDt) && !IsGoingToRunOffPlatform(pos, kGroundCollision, vel, bigDt);
 }
 
 void FireSlime::Update(float dt)
@@ -120,4 +123,5 @@ void FireSlime::Draw() const
 	pos.DebugDraw();
 	Bounds().DebugDraw();
 	AttackBounds().DebugDraw(255, 0, 255);
+	BoxBounds::FromCenter(pos, kGroundCollision).DebugDraw();
 }
