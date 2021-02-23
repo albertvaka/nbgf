@@ -14,8 +14,9 @@ struct Minotaur : BoxEntity, SelfRegister<Minotaur>
 		TAUNT,
 		FLIP,
 		ATTACK_BIG,
-		TAKE_DAMAGE,
-		DIE,
+		//ATTACK_SMALL,
+		//TAKE_DAMAGE,
+		//DIE,
 	};
 
 	State state;
@@ -32,6 +33,8 @@ struct Minotaur : BoxEntity, SelfRegister<Minotaur>
 	Minotaur(vec position);
 
 	void Reset();
+	BoxBounds AttackBounds() const;
+	BoxBounds FlipAttackBounds() const;
 
 	void Update(float dt);
 	void Draw() const;
