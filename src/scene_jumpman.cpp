@@ -17,6 +17,7 @@
 #include "fx.h"
 #include "fireslime.h"
 #include "fireshot.h"
+#include "explosive.h"
 #include "lava.h"
 #include "savestation.h"
 #include "common_enemy.h"
@@ -107,6 +108,10 @@ void JumpScene::SaveGame() const {
 		g->SaveGame(saveState);
 	}
 
+	for (Explosive* g : Explosive::GetAll()) {
+		g->SaveGame(saveState);
+	}
+
 	skillTree.SaveGame(saveState);
 
 	saveState.StreamPut("bossdead_bipedal") << (boss_bipedal == nullptr);
@@ -126,6 +131,10 @@ void JumpScene::LoadGame() {
 	}
 
 	for (EnemyDoor* g : EnemyDoor::GetAll()) {
+		g->LoadGame(saveState);
+	}
+
+	for (Explosive* g : Explosive::GetAll()) {
 		g->LoadGame(saveState);
 	}
 
@@ -282,6 +291,10 @@ void JumpScene::EnterScene()
 		new HealthUp(id, pos);
 	}
 
+	for (auto const& [id, pos] : Tiled::Entities::explosive) {
+		new Explosive(id, pos, false);
+	}
+
 	for (const BoxBounds& a : Tiled::Areas::lava) {
 		Lava* lava = new Lava(a);
 		if (a.Contains(Tiled::Entities::single_lava_initial_height)) {
@@ -337,6 +350,7 @@ void JumpScene::ExitScene()
 	EnemyDoor::DeleteAll();
 	BigItem::DeleteAll();
 	HealthUp::DeleteAll();
+	Explosive::DeleteAll();
 	Health::DeleteAll();
 	Health::particles.Clear();
 	SaveStation::DeleteAll();

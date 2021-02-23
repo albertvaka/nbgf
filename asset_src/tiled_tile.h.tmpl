@@ -35,6 +35,7 @@ struct Tile {
 	static float Right(int x) { return float(x + 1) * Tile::Size; }
 	
 	static BoxBounds Bounds(int x, int y) { return BoxBounds(x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size); }
+	static BoxBounds Bounds(veci pos) { return Bounds(pos.x, pos.y); }
 
 	enum Value : uint8_t
 	{

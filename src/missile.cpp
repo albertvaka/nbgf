@@ -5,6 +5,7 @@
 #include "partsys.h"
 #include "camera.h"
 #include "jumpman.h"
+#include "explosive.h"
 #include "bat.h"
 #include "collide.h"
 #include "assets.h"
@@ -65,7 +66,13 @@ void Missile::Update(float dt)
 		rear.DebugDraw(0,255,0);
 		particles.pos = rear;
 		particles.AddParticle();
+	}
 
+	for (Explosive* e : Explosive::GetAll()) {
+		if (e->CheckBulletCollision(Bounds())) {
+			explode();
+			return;
+		}
 	}
 
 	if (SmallBulletTilemapCollision(this, true)) {

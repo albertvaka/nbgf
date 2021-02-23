@@ -6,6 +6,7 @@
 #include "assets.h"
 #include "anim_lib.h"
 #include "lava.h"
+#include "explosive.h"
 #include "skilltree.h"
 #include "common_bullet.h"
 #include "bat.h"
@@ -35,6 +36,13 @@ void Bullet::Update(float dt)
 			Bat::AwakeNearbyBats(pos);
 			l->Plof(pos.x);
 			alive = false;
+			return;
+		}
+	}
+
+	for (Explosive* e : Explosive::GetAll()) {
+		if (e->CheckBulletCollision(Bounds())) {
+			explode();
 			return;
 		}
 	}
