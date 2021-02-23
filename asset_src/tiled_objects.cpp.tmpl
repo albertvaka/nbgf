@@ -3,14 +3,13 @@
 namespace Tiled {
 
 {% for type, positions in entities_by_type %}
-{%- if positions|length > 1 -%}
 const std::unordered_map<int, vec> {{name}}::{{type}} = {
 	{%- for pos in positions %}
 	{ {{pos[0]}}, vec({{pos[1]}}f, {{pos[2]}}f) },
 	{%- endfor %}
 };
-{% else -%}
-	const vec {{name}}::{{type}} = vec({{positions[0][1]}}f, {{positions[0][2]}}f);
+{%- if positions|length == 1 -%}
+	const vec {{name}}::single_{{type}} = vec({{positions[0][1]}}f, {{positions[0][2]}}f);
 {% endif %}
 {% endfor %}
 

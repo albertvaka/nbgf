@@ -182,14 +182,14 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 
 void JumpScene::EnterScene()
 {
-	player.Reset(Tiled::Entities::spawn);
+	player.Reset(Tiled::Entities::single_spawn);
 	skillTree.Reset();
 
 	map.LoadFromTiled<Tiled::TileMap>();
 
-	new BigItem(Tiled::Entities::skill_walljump, Skill::WALLJUMP);
-	new BigItem(Tiled::Entities::skill_gun, Skill::GUN);
-	BigItem* break_skill = new BigItem(Tiled::Entities::skill_breakblocks, Skill::BREAK);
+	new BigItem(Tiled::Entities::single_skill_walljump, Skill::WALLJUMP);
+	new BigItem(Tiled::Entities::single_skill_gun, Skill::GUN);
+	BigItem* break_skill = new BigItem(Tiled::Entities::single_skill_breakblocks, Skill::BREAK);
 
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
@@ -268,7 +268,7 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	Bipedal* bipedal = new Bipedal(Tiled::Entities::boss_bipedal);
+	Bipedal* bipedal = new Bipedal(Tiled::Entities::single_boss_bipedal);
 	for (EnemyDoor* s : EnemyDoor::ByScreen[bipedal->screen]) {
 		s->AddEnemy(bipedal);
 	}
@@ -284,10 +284,10 @@ void JumpScene::EnterScene()
 
 	for (const BoxBounds& a : Tiled::Areas::lava) {
 		Lava* lava = new Lava(a);
-		if (a.Contains(Tiled::Entities::lava_initial_height)) {
+		if (a.Contains(Tiled::Entities::single_lava_initial_height)) {
 			raising_lava = lava;
 			raising_lava_target_height = lava->CurrentLevel();
-			lava->SetLevel(Tiled::Entities::lava_initial_height.y, true);
+			lava->SetLevel(Tiled::Entities::single_lava_initial_height.y, true);
 		}
 	}
 
@@ -443,7 +443,7 @@ void JumpScene::Update(float dt)
 		return;
 	}
 	if (Keyboard::IsKeyJustPressed(teleport)) {
-		player.pos = Tiled::Entities::debug_teleport;
+		player.pos = Tiled::Entities::single_debug_teleport;
 		screenManager.UpdateCurrentScreen(player.pos);
 		Camera::SetCenter(player.GetCameraTargetPos());
 	}
@@ -547,7 +547,7 @@ void JumpScene::Update(float dt)
 	destroyedTiles.Update(dt);
 
 	if (raising_lava->CurrentLevel() <= raising_lava_target_height+1.f) {
-		raising_lava->SetLevel(Tiled::Entities::lava_initial_height.y);
+		raising_lava->SetLevel(Tiled::Entities::single_lava_initial_height.y);
 	}
 	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);

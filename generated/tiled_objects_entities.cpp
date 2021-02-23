@@ -2,6 +2,7 @@
 
 namespace Tiled {
 
+
 const std::unordered_map<int, vec> Entities::angrybat = {
 	{ 261, vec(2784.227272727273f, 511.636363636364f) },
 	{ 262, vec(2656.363636363636f, 479.636363636364f) },
@@ -34,9 +35,15 @@ const std::unordered_map<int, vec> Entities::batawake = {
 	{ 192, vec(2376.0f, 1320.667f) },
 };
 
-const vec Entities::boss_bipedal = vec(1075.27f, 1376.754f);
+const std::unordered_map<int, vec> Entities::boss_bipedal = {
+	{ 167, vec(1075.27f, 1376.754f) },
+};const vec Entities::single_boss_bipedal = vec(1075.27f, 1376.754f);
 
-const vec Entities::debug_teleport = vec(621.0f, 741.3333f);
+
+const std::unordered_map<int, vec> Entities::debug_teleport = {
+	{ 230, vec(621.0f, 741.3333f) },
+};const vec Entities::single_debug_teleport = vec(621.0f, 741.3333f);
+
 
 const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 93, vec(2914.0f, 722.0f) },
@@ -45,7 +52,10 @@ const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 266, vec(1585.33333333333f, 433.333333333333f) },
 };
 
-const vec Entities::explosive = vec(2991.75f, 686.0f);
+const std::unordered_map<int, vec> Entities::explosive = {
+	{ 259, vec(2991.75f, 686.0f) },
+};const vec Entities::single_explosive = vec(2991.75f, 686.0f);
+
 
 const std::unordered_map<int, vec> Entities::fireslime = {
 	{ 176, vec(2932.25f, 1184.0f) },
@@ -95,7 +105,10 @@ const std::unordered_map<int, vec> Entities::initial_batawake = {
 	{ 77, vec(2297.5f, 804.0f) },
 };
 
-const vec Entities::lava_initial_height = vec(3969.75f, 1016.0f);
+const std::unordered_map<int, vec> Entities::lava_initial_height = {
+	{ 144, vec(3969.75f, 1016.0f) },
+};const vec Entities::single_lava_initial_height = vec(3969.75f, 1016.0f);
+
 
 const std::unordered_map<int, vec> Entities::mantis = {
 	{ 245, vec(1221.4983333333298f, 367.583483333333f) },
@@ -113,13 +126,24 @@ const std::unordered_map<int, vec> Entities::save = {
 	{ 213, vec(1297.0f, 1241.0f) },
 };
 
-const vec Entities::skill_breakblocks = vec(2991.0f, 766.0f);
+const std::unordered_map<int, vec> Entities::skill_breakblocks = {
+	{ 158, vec(2991.0f, 766.0f) },
+};const vec Entities::single_skill_breakblocks = vec(2991.0f, 766.0f);
 
-const vec Entities::skill_gun = vec(1528.37f, 922.0f);
 
-const vec Entities::skill_walljump = vec(4233.477f, 926.818f);
+const std::unordered_map<int, vec> Entities::skill_gun = {
+	{ 92, vec(1528.37f, 922.0f) },
+};const vec Entities::single_skill_gun = vec(1528.37f, 922.0f);
 
-const vec Entities::spawn = vec(3378.333f, 876.0f);
+
+const std::unordered_map<int, vec> Entities::skill_walljump = {
+	{ 115, vec(4233.477f, 926.818f) },
+};const vec Entities::single_skill_walljump = vec(4233.477f, 926.818f);
+
+
+const std::unordered_map<int, vec> Entities::spawn = {
+	{ 73, vec(3378.333f, 876.0f) },
+};const vec Entities::single_spawn = vec(3378.333f, 876.0f);
 
 
 

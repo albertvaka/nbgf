@@ -13,10 +13,9 @@ struct {{name}} {
 	// Objects
 {%- endif %}
 {%- for type, positions in entities_by_type %}
-	{%- if positions|length > 1 %}
 	static const std::unordered_map<int, vec> {{type}};
-	{%- else %}
-	static const vec {{type}};
+	{%- if positions|length == 1 %}
+	static const vec single_{{type}};
 	{%- endif %}
 {%- endfor %}
 
