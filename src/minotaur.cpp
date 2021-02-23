@@ -10,7 +10,7 @@ constexpr const float kScale = 2.0f;
 constexpr const vec kMinotaurSize = vec(25, 38) * kScale;
 
 constexpr const float kRunSpeed = 80;
-constexpr const float kMinotaurHealth = 9.0f;
+constexpr const int kMinotaurHealth = 9;
 constexpr const float kExitIdleDistance = 200.f;
 constexpr const float kDistanceAttack = 115.0f;
 
