@@ -67,6 +67,7 @@
     <ClInclude Include="src\debug_walker.h" />
     <ClInclude Include="src\destroyedtiles.h" />
     <ClInclude Include="src\enemy_door.h" />
+    <ClInclude Include="src\explosive.h" />
     <ClInclude Include="src\fireshot.h" />
     <ClInclude Include="src\fireslime.h" />
     <ClInclude Include="src\flyingalien.h" />

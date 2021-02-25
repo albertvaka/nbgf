@@ -172,6 +172,7 @@ struct Tile {
 		BG_130,
 		BG_131,
 		BG_132,
+		BG_133,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -237,12 +238,13 @@ struct Tile {
 		SOLID_37,
 		BREAKABLE_1,
 		BREAKABLE_2,
+		BREAKABLE_3,
 		SOLID_TRANSPARENT,
 	};
 
 	// Aliases
-	static constexpr Value BG_PLAIN_COLOR = BG_33;
-	static constexpr Value BG_DOOR_OPENING = BG_49;
+	static constexpr Value BG_PLAIN_COLOR = BG_34;
+	static constexpr Value BG_DOOR_OPENING = BG_50;
 	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
 	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
 	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_3;
@@ -252,6 +254,7 @@ struct Tile {
 	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_24;
 	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_1;
 	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_2;
+	static constexpr Value BREAKABLE_EXPLOSIVE_BLOCK = BREAKABLE_3;
 
 	constexpr operator Value() const { return value; }  // Allow switch and comparisons.
 	explicit constexpr operator bool() = delete;        // Prevent if(tile)

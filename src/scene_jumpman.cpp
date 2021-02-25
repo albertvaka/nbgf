@@ -277,12 +277,20 @@ void JumpScene::EnterScene()
 		}
 	}
 
+	/*
+	for (auto const& [id, pos] : Tiled::Entities::bipedal) {
+		auto b = new Bipedal(pos);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+	*/
+
 	Bipedal* bipedal = new Bipedal(Tiled::Entities::single_boss_bipedal);
 	for (EnemyDoor* s : EnemyDoor::ByScreen[bipedal->screen]) {
 		s->AddEnemy(bipedal);
 	}
 	boss_bipedal = bipedal;
-
 	for (SaveStation* s : SaveStation::ByScreen[screenManager.FindScreenContaining(boss_bipedal->pos)]) {
 		s->AddHiddenBy(boss_bipedal);
 	}
@@ -293,6 +301,10 @@ void JumpScene::EnterScene()
 
 	for (auto const& [id, pos] : Tiled::Entities::explosive) {
 		new Explosive(id, pos, false);
+	}
+
+	for (auto const& [id, pos] : Tiled::Entities::temp_explosive) {
+		new Explosive(id, pos, true);
 	}
 
 	for (const BoxBounds& a : Tiled::Areas::lava) {

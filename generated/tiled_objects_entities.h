@@ -20,7 +20,6 @@ struct Entities {
 	static const vec single_debug_teleport;
 	static const std::unordered_map<int, vec> enemy_door;
 	static const std::unordered_map<int, vec> explosive;
-	static const vec single_explosive;
 	static const std::unordered_map<int, vec> fireslime;
 	static const std::unordered_map<int, vec> flyingalien;
 	static const std::unordered_map<int, vec> goomba;
@@ -31,6 +30,7 @@ struct Entities {
 	static const vec single_lava_initial_height;
 	static const std::unordered_map<int, vec> mantis;
 	static const std::unordered_map<int, vec> minotaur;
+	static const std::unordered_map<int, vec> rocket_launcher;
 	static const std::unordered_map<int, vec> save;
 	static const std::unordered_map<int, vec> skill_breakblocks;
 	static const vec single_skill_breakblocks;
@@ -40,6 +40,7 @@ struct Entities {
 	static const vec single_skill_walljump;
 	static const std::unordered_map<int, vec> spawn;
 	static const vec single_spawn;
+	static const std::unordered_map<int, vec> temp_explosive;
 
 };
 
