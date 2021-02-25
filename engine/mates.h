@@ -12,7 +12,6 @@
 
 namespace Mates
 {
-
 	//a few useful constants
 	const constexpr int     MaxInt = (std::numeric_limits<int>::max)();
 	const constexpr int     MinInt = (std::numeric_limits<int>::min)();
@@ -198,4 +197,18 @@ namespace Mates
 	}
 
 	[[nodiscard]] inline int fastfloor(const float x) { return x > 0 ? (int)x : (int)x - 1; }
+
+	struct Range {
+		float min;
+		float max;
+	};
+
+	[[nodiscard]] inline Range SortTwo(float a, float b) {
+		if (a > b) {
+			return Range{ b, a };
+		}
+		else {
+			return Range{ a, b };
+		}
+	}
 }

@@ -38,6 +38,17 @@ Lava::Lava(const BoxBounds& b)
 	lavaPartSys.acc = vec(0, 60.f);
 }
 
+Mates::Range Lava::GetChunksOnScreen() const {
+	BoxBounds screen = Camera::Bounds();
+	float screenChunkLeft = (Mates::fastfloor(screen.Left() / chunkSize)) * chunkSize;
+	float screenChunkRight = (Mates::fastfloor(screen.Right() / chunkSize)) * chunkSize;
+	float boundsChunkLeft = (Mates::fastfloor(bounds.Left() / chunkSize)) * chunkSize;
+	float boundsChunkRight = (Mates::fastfloor(bounds.Right() / chunkSize)) * chunkSize;
+	float chunkLeft = std::max(screenChunkLeft, boundsChunkLeft);
+	float chunkRight = std::min(screenChunkRight, boundsChunkRight);
+	return Mates::Range{ chunkLeft,chunkRight };
+}
+
 void Lava::Update(float dt) {
 	if (targetY > bounds.top) {
 		if (targetY - bounds.top < raiseSpeed * dt) {
@@ -64,13 +75,9 @@ void Lava::Update(float dt) {
 		return;
 	}
 
-	BoxBounds screen = Camera::Bounds();
-	float left = std::max(screen.Left(), bounds.Left());
-	float right = std::min(screen.Right(), bounds.Right());
-	float chunkLeft = (Mates::fastfloor(left / chunkSize)) * chunkSize;
-	float chunkRight = (Mates::fastfloor(right / chunkSize)) * chunkSize;
+	Mates::Range chunks = GetChunksOnScreen();
 	lavaPartSys.pos.y = bounds.Top() - 2;
-	for (float x = chunkLeft; x < chunkRight; x += distanceBetweenParticleSpawners) {
+	for (float x = chunks.min; x < chunks.max; x += distanceBetweenParticleSpawners) {
 		lavaPartSys.pos.x = x;
 		lavaPartSys.Spawn(dt);
 	}
@@ -122,7 +129,6 @@ void Lava::Draw() const {
 	*/
 
 	float time = mainClock * speed;
-	BoxBounds screen = Camera::Bounds();
 
 	const float heightTopLayer = 5.f;
 	const float heightMiddleLayer = 1.f;
@@ -138,10 +144,8 @@ void Lava::Draw() const {
 	Bounds bottomLayer(vec(chunkSize, heightBottomLayer));
 #endif
 
-	float left = std::max(screen.Left(), bounds.Left());
-	float right = std::min(screen.Right(), bounds.Right());
-	right = (floor(right / chunkSize)) * chunkSize; //align to chunks
-	for (float x = left; x < right; x += chunkSize)
+	Mates::Range chunks = GetChunksOnScreen();
+	for (float x = chunks.min; x < chunks.max; x += chunkSize)
 	{
 		float y = bounds.top - waveHeight * sin(x * waveAmplitude + time);
 

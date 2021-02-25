@@ -39,5 +39,7 @@ struct Lava : SelfRegister<Lava>
 		return bounds.Contains(pos);
 	}
 
+	Mates::Range GetChunksOnScreen() const;
+
 };
 
