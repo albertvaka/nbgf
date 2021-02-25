@@ -53,7 +53,7 @@ struct EnemyDoor : Entity, SelfRegister<EnemyDoor>
 	};
 
 private:
-	void OpenOneStep();
+	bool OpenOneStep();
 	void SpawnTiles();
 	int saveId;
 

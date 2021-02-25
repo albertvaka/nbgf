@@ -4,6 +4,7 @@
 #include "assets.h"
 #include "window.h"
 #include "screen.h"
+#include "debug.h"
 #include "fx.h"
 
 const float openAnimationTime = 0.4f; //Animation will take twice this time per tile
@@ -37,9 +38,7 @@ void EnemyDoor::Lock() {
 void EnemyDoor::Open(bool skipAnim)
 {
 	if (skipAnim) {
-		while (state != State::OPEN) {
-			OpenOneStep();
-		}
+		while (OpenOneStep());
 	} else {
 		state = State::OPENING;
 		Fx::Screenshake::Start(3.f, veci(2, 2), vec(35.f, 45.f));
@@ -48,7 +47,11 @@ void EnemyDoor::Open(bool skipAnim)
 	enemies.clear(); // we will stop checking for !alive enemies, so the pointers might be freed
 }
 
-void EnemyDoor::OpenOneStep() {
+bool EnemyDoor::OpenOneStep() // returns true if there are more steps remaining
+{
+	if (state == State::OPEN) {
+		return false;
+	}
 	GaemTileMap* map = GaemTileMap::instance();
 	auto tilepos = Tile::ToTiles(pos);
 	for (int y = 0; y < maxHeight; y++) {
@@ -57,28 +60,35 @@ void EnemyDoor::OpenOneStep() {
 			map->SetTile(tilepos.x, tilepos.y + y, Tile::BG_DOOR_OPENING);
 			if (y == 0) {
 				state = State::OPEN;
+				return false;
 			}
-			break;
+			return true;
 		}
 		else if (t == Tile::BG_DOOR_OPENING) {
 			map->SetTile(tilepos.x, tilepos.y + y, Tile::BG_PLAIN_COLOR);
 			map->SetTile(tilepos.x, tilepos.y + y - 1, Tile::SOLID_DOOR_BOTTOM);
+			return true;
 		}
 	}
+	Debug::out << "EnemyDoor::OpenOneStep got to maxHeight";
+	return false;
 }
 
-void EnemyDoor::SpawnTiles() {
+void EnemyDoor::SpawnTiles()
+{
 	GaemTileMap* map = GaemTileMap::instance();
 	auto tilepos = Tile::ToTiles(pos);
 	for (int y = 0; y < maxHeight; y++) {
 		Tile t = map->GetTile(tilepos.x, tilepos.y + y);
 		if (t.isSolid() && t != Tile::SOLID_DOOR_BOTTOM && t != Tile::SOLID_DOOR) {
 			map->SetTile(tilepos.x, tilepos.y + y - 1, Tile::SOLID_DOOR_BOTTOM);
-			break;
+			return;
 		}
 		map->SetTile(tilepos.x, tilepos.y + y, Tile::SOLID_DOOR);
 	}
+	Debug::out << "EnemyDoor::SpawnTiles got to maxHeight";
 }
+
 void EnemyDoor::Update(float dt)
 {
 	switch (state) {
