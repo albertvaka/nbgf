@@ -155,8 +155,10 @@ namespace Window
 
     namespace DrawPrimitive {
 
-        void Pixel(float x, float y, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-            GPU_Pixel(Window::currentDrawTarget, x, y, { r,g,b,a });
+        void Point(float x, float y, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+            GPU_SetLineThickness(0);
+            float d = thickness / 2;
+            GPU_RectangleFilled(Window::currentDrawTarget, x - d, y - d, x + d, y + d, { r,g,b,a });
         }
 
         void Rectangle(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
