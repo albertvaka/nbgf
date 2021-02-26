@@ -361,6 +361,9 @@
     <ClInclude Include="src\explosive.h">
       <Filter>src\entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\rocketlauncher.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -568,6 +571,9 @@
       <Filter>generated</Filter>
     </ClCompile>
     <ClCompile Include="src\minotaur.cpp">
+      <Filter>src\entities\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rocketlauncher.cpp">
       <Filter>src\entities\enemies</Filter>
     </ClCompile>
   </ItemGroup>

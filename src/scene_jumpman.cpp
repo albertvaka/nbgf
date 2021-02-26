@@ -30,6 +30,7 @@
 #include "drawall.h"
 #include "savestate.h"
 #include "bigitem.h"
+#include "rocketlauncher.h"
 #include "health.h"
 #include "healthup.h"
 #include "tiled_objects_areas.h"
@@ -242,6 +243,10 @@ void JumpScene::EnterScene()
 		}
 	}
 
+	for (auto const& [id, pos] : Tiled::Entities::rocket_launcher) {
+		new RocketLauncher(pos);
+	}
+
 	for (auto const& [id, pos] : Tiled::Entities::goomba) {
 		auto b = new Goomba(pos, false);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
@@ -351,6 +356,7 @@ void JumpScene::ExitScene()
 	FireShot::DeleteAll();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
+	RocketLauncher::DeleteAll();
 	Minotaur::DeleteAll();
 	Mantis::DeleteAll();
 	FlyingAlien::DeleteAll();
@@ -405,6 +411,10 @@ void JumpScene::Update(float dt)
 	bool inScreenTransition = UpdateCamera(dt);
 	if (inScreenTransition) {
 		return;
+	}
+
+	for (RocketLauncher* e : RocketLauncher::GetAll()) {
+		e->Update(dt);
 	}
 
 	for (Bipedal* e : Bipedal::GetAll()) {
@@ -621,6 +631,7 @@ void JumpScene::Draw()
 		FireSlime::GetAll(),
 		Bat::GetAll(),
 		Bipedal::GetAll(),
+		RocketLauncher::GetAll(),
 		&Bullet::particles,
 		&Missile::particles,
 		Health::GetAll(),

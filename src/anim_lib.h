@@ -167,6 +167,9 @@ namespace AnimLib {
 
 	constexpr const GPU_Rect POLVITO_PARTICLE = { 50.f, 34.f, 2.f, 2.f };
 
+	constexpr const GPU_Rect ROCKET_LAUCNHER_BASE = { 128 + 17 * 16.f, 256.f, 16.f, 16.f };
+	constexpr const GPU_Rect ROCKET_LAUCNHER_TURRET = { 128 + 18 * 16.f, 256.f, 16.f, 16.f };
+
 	constexpr const AnimationFrame MINOTAUR_IDLE[] = {
 		{ { 0 * 96.0, 0 * 96.f, 96.f, 96.f }, .1f },
 		{ { 1 * 96.0, 0 * 96.f, 96.f, 96.f }, .1f },
