@@ -12,16 +12,16 @@ constexpr const vec kMinotaurSize = vec(25, 38) * kScale;
 constexpr const float kRunSpeed = 80;
 constexpr const int kMinotaurHealth = 9;
 constexpr const float kExitIdleDistance = 200.f;
-constexpr const float kDistanceAttack = 115.0f;
+constexpr const float kDistanceAttack = 125.0f;
 
-constexpr const vec kAttackHitbox(50, 130);
+constexpr const vec kAttackHitbox(80, 120);
 constexpr const int kAttackDamageFramesBegin = 1;
 constexpr const int kAttackDamageFramesEnd = 5;
-constexpr const float kAttackHitboxDistance = 60;
+constexpr const vec kAttackHitboxOffset = vec(35,15);
 
 constexpr const vec kFlipAttackHitbox(160, 30);
 constexpr const int kFlipDamageFramesBegin = 2;
-constexpr const int kFlipDamageFramesEnd = 4;
+constexpr const int kFlipDamageFramesEnd = 3;
 constexpr const float kFlipAttackHitboxHeight = kMinotaurSize.y/3;
 
 Minotaur::Minotaur(vec pos)
@@ -45,7 +45,7 @@ void Minotaur::Reset()
 }
 
 BoxBounds Minotaur::AttackBounds() const {
-	return BoxBounds(pos, kAttackHitbox, kAttackHitbox/2 - vec(goingRight? kAttackHitboxDistance : -kAttackHitboxDistance, 0));
+	return BoxBounds(pos, kAttackHitbox, kAttackHitbox/2 + kAttackHitboxOffset.Mirrored(goingRight, false));
 }
 
 BoxBounds Minotaur::FlipAttackBounds() const {
@@ -88,7 +88,7 @@ void Minotaur::Update(float dt)
 	case State::ATTACK_BIG:
 	{
 		int frame = anim.CurrentFrameNumber();
-		if (frame > kAttackDamageFramesBegin && frame < kAttackDamageFramesEnd) {
+		if (frame >= kAttackDamageFramesBegin && frame <= kAttackDamageFramesEnd) {
 			DamagePlayerOnCollision(AttackBounds());
 			AttackBounds().DebugDraw();
 		}
@@ -101,7 +101,7 @@ void Minotaur::Update(float dt)
 	case State::FLIP:
 	{
 		int frame = anim.CurrentFrameNumber();
-		if (frame > kFlipDamageFramesBegin && frame < kFlipDamageFramesEnd) {
+		if (frame >= kFlipDamageFramesBegin && frame <= kFlipDamageFramesEnd) {
 			DamagePlayerOnCollision(FlipAttackBounds());
 			FlipAttackBounds().DebugDraw();
 		}

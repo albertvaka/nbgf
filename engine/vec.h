@@ -72,6 +72,9 @@ struct vec
 		return stream.str();
 	}
 
+	[[nodiscard]] vec Mirrored(bool mirror_x, bool mirror_y) const {
+		return vec(mirror_x ? -x : x, mirror_y ? -y : y);
+	}
 
 	//returns positive if v2 is clockwise of this vector,
 	//negative if anticlockwise (assuming the Y axis is pointing down,
