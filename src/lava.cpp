@@ -132,7 +132,7 @@ void Lava::Draw() const {
 
 	const float heightTopLayer = 5.f;
 	const float heightMiddleLayer = 1.f;
-	const float heightBottomLayer = bounds.height;
+	const float heightBottomLayer = bounds.height - heightMiddleLayer - heightMiddleLayer - waveHeight;
 
 	const SDL_Color colorTopLayer = { 220, 10, 10, 255 };
 	const SDL_Color colorMiddleLayer = { 120, 0, 0, 255 };
@@ -147,7 +147,8 @@ void Lava::Draw() const {
 	Mates::Range chunks = GetChunksOnScreen();
 	for (float x = chunks.min; x < chunks.max; x += chunkSize)
 	{
-		float y = bounds.top - waveHeight * sin(x * waveAmplitude + time);
+		float heightDiff = waveHeight * sin(x * waveAmplitude + time);
+		float y = bounds.top - heightDiff;
 
 #ifdef USE_VAO
 		Window::DrawRaw::BatchRGBQuad(x, y,
@@ -157,7 +158,7 @@ void Lava::Draw() const {
 			chunkSize, heightMiddleLayer, 
 			colorMiddleLayer.r / 255.f, colorMiddleLayer.g / 255.f, colorMiddleLayer.b / 255.f);
 		Window::DrawRaw::BatchRGBQuad(x, y + heightTopLayer + heightMiddleLayer,
-			chunkSize, heightBottomLayer, 
+			chunkSize, heightBottomLayer + heightDiff,
 			colorBottomLayer.r / 255.f, colorBottomLayer.g / 255.f, colorBottomLayer.b / 255.f);
 #else
 		topLayer.SetTopLeft(vec(x, y));
