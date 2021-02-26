@@ -37,9 +37,14 @@ const vec vel[4] = {
 };
 
 void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn) {
-	GaemTileMap* map = GaemTileMap::instance();
 
+	GaemTileMap* map = GaemTileMap::instance();
 	Tile t = map->GetTile(x, y);
+
+	if (t == Tile::NONE) {
+		return;
+	}
+
 	map->SetTile(x, y, t == Tile::BREAKABLE_COVERING_ONEWAY ? Tile::ONEWAY_BEHIND_BREAKABLE : Tile::NONE);
 
 	if (animated) {
