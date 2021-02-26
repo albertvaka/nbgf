@@ -101,7 +101,7 @@ struct vec
 		return vec(x * cs - y * sn, x * sn + y * cs);
 	}
 
-	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees) 
+	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees)  const
 	{
 		return RotatedAroundOriginRads(Angles::DegsToRads(degrees));
 	}

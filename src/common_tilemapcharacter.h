@@ -43,9 +43,16 @@ inline bool IsMovingTowardsInY(vec pos, vec vel, vec target) {
 	return (vel.y < 0 && pos.y > target.y) || (vel.y > 0 && pos.y < target.y);
 }
 
-inline void AlignWithGround(Entity* e, vec size) {
+inline vec AlignWithGround(vec pos, vec size) {
 	const int marginPixels = 2; // If the entity is sunken into the ground by this much, we will push it up instead of down to the next tile
-	e->pos.y = Tile::Bottom(Tile::ToTiles(e->pos.y + size.y / 2 - marginPixels)) - size.y / 2;
+	pos.y = Tile::Bottom(Tile::ToTiles(pos.y + size.y / 2 - marginPixels)) - size.y / 2;
+	return pos;
+}
+
+inline vec AlignWithCeiling(vec pos, vec size) {
+	const int marginPixels = 2; // If the entity is sunken into the ceiling by this much, we will push it down instead of up to the next tile
+	pos.y = Tile::Top(Tile::ToTiles(pos.y + size.y / 2 + marginPixels)) - size.y / 2;
+	return pos;
 }
 
 inline bool IsGoingToRunOffPlatform(vec pos, vec size, vec vel, float dt) {

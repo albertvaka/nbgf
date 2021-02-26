@@ -1,24 +1,22 @@
 #include "rocketlauncher.h"
 
 #include "jumpman.h"
-#include "screen.h"
 #include "assets.h"
 #include "window.h"
-#include "rand.h"
-#include "debug.h"
 #include "tiled_objects_areas.h"
 #include "missile.h"
-#include "fx.h"
-#include "camera.h"
 #include "tile.h"
-#include "bullet.h"
-#include "common_enemy.h"
+#include "collide.h"
+#include "common_tilemapcharacter.h"
 
 const float kTimeBetweenMissiles = 3.f;
-const vec missilesOriginOffset = vec(0, 0);
+const vec kCanonOrigin = vec(0, -4);
+const vec kCanonLength = vec(10, 0);
+const vec kAwokenLedOffset = vec(-3, -7);
+
+extern float mainClock;
 
 RocketLauncher::RocketLauncher(vec pos)
-	: pos(pos)
 {
 	for (const BoxBounds& e : Tiled::Areas::rocket_launcher_awake) {
 		if (e.Contains(pos)) {
@@ -26,12 +24,15 @@ RocketLauncher::RocketLauncher(vec pos)
 		}
 	}
 
-	pos = Tile::AlignToTiles(pos);
+	this->pos = AlignWithCeiling(pos, Tile::Sizes);
 }
 
 void RocketLauncher::Update(float dt)
 {
-	bool awoken = false;
+	angle = pos.AngleDegs(JumpMan::instance()->pos);
+	Mates::Clamp(angle, 30, 150);
+
+	awoken = false;
 	for (const BoxBounds& e : awakeArea) {
 		if (Collide(e, JumpMan::instance()->Bounds())) {
 			awoken = true;
@@ -42,36 +43,36 @@ void RocketLauncher::Update(float dt)
 		return;
 	}
 
-	float oldTimer = timer;
-	float timeBetweenMissiles = 0.4f;
-	vec shotsOrigin = pos + missilesOriginOffset;
 	timer += dt;
-	if (oldTimer < kTimeBetweenMissiles && timer >= kTimeBetweenMissiles) {
-		new Missile(shotsOrigin, 180);
-		timer = 0;
+	if (timer >= kTimeBetweenMissiles) {
+		vec shotsOrigin = pos + kCanonOrigin + kCanonLength.RotatedAroundOriginDegs(angle);
+		new Missile(shotsOrigin, angle);
+		timer -= kTimeBetweenMissiles;
 	}
-	/*
-	else if (oldTimer < 2 * timeBetweenMissiles && timer >= 2 * timeBetweenMissiles) {
-		new Missile(shotsOrigin, -90);
-	}
-	else if (oldTimer < 3 * timeBetweenMissiles && timer >= 3 * timeBetweenMissiles) {
-		new Missile(shotsOrigin, -45);
-	}*/
 }
 
 void RocketLauncher::Draw() const
 {
-	
-	Window::Draw(Assets::scifiTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos)
+		.withOrigin(Tile::Sizes / 2)
 		.withRect(AnimLib::ROCKET_LAUCNHER_BASE);
 
-	Window::Draw(Assets::scifiTexture, pos)
+	Window::Draw(Assets::spritesheetTexture, pos+kCanonOrigin)
+		.withOrigin(Tile::Sizes / 2)
 		.withRotationDegs(angle)
 		.withRect(AnimLib::ROCKET_LAUCNHER_TURRET);
 
+	const SDL_Color on = { 255, 0, 0, 255 };
+	const SDL_Color off = { 255, 255, 128, 255 };
+	bool blink = awoken && (int(mainClock * 7) % 2);
+	Window::DrawPrimitive::Point(pos + kAwokenLedOffset, 2.f, blink? on : off);
 
+	// Debug-only
 	for (const BoxBounds& e : awakeArea) {
 		e.DebugDraw();
 	}
+	pos.DebugDraw();
+	vec shotsOrigin = pos + kCanonOrigin + kCanonLength.RotatedAroundOriginDegs(angle);
+	shotsOrigin.DebugDraw();
 }
 

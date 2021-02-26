@@ -30,7 +30,7 @@ Minotaur::Minotaur(vec pos)
 {
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 
-	AlignWithGround(this, size);
+	this->pos = AlignWithGround(this->pos, size);
 	initialPos = this->pos;
 
 	Reset();

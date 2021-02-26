@@ -26,7 +26,7 @@ Goomba::Goomba(vec pos, bool isCharger)
 	goingRight = Rand::OnceEvery(2);
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 	
-	AlignWithGround(this, size);
+	this->pos = AlignWithGround(this->pos, size);
 }
 
 BoxBounds Goomba::ChargeBounds() const

@@ -32,7 +32,7 @@ FireSlime::FireSlime(vec pos)
 	direction = Rand::OnceEvery(2) ? 1 : -1;
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 
-	AlignWithGround(this, kGroundCollision);
+	this->pos = AlignWithGround(this->pos, kGroundCollision);
 }
 
 BoxBounds FireSlime::AttackBounds() const
