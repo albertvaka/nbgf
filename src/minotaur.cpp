@@ -41,6 +41,7 @@ void Minotaur::Reset()
 	state = State::IDLE;
 	anim.Ensure(AnimLib::MINOTAUR_IDLE);
 	pos = initialPos;
+	damagedTimer = 0.f;
 	health = kMinotaurHealth;
 }
 
@@ -64,8 +65,12 @@ void Minotaur::Update(float dt)
 	anim.Update(dt);
 
 	bool wasAttacked = false;
-	if (ReceiveDamageFromBullets(Bounds())) {
+
+	if (damagedTimer > 0.f) {
+		damagedTimer -= dt;
+	} else if (ReceiveDamageFromBullets(Bounds())) {
 		wasAttacked = true;
+		damagedTimer = 0.3f;
 		health--;
 		if (health <= 0) {
 			DieWithSmallExplosion(this);
@@ -73,8 +78,7 @@ void Minotaur::Update(float dt)
 		}
 	}
 
-	switch (state)
-	{
+	switch (state) {
 	case State::IDLE:
 	{
 		goingRight = pos.x < JumpMan::instance()->pos.x; // face the player
@@ -123,13 +127,13 @@ void Minotaur::Update(float dt)
 			// Continue executing State::RUN
 		}
 		BoxBounds::FromCenter(pos, vec(kDistanceAttack)).DebugDraw(0, 255, 255);
-		if (goingRight != pos.x < JumpMan::instance()->pos.x)
+		if (damagedTimer <= 0.f && goingRight != pos.x < JumpMan::instance()->pos.x)
 		{
 			goingRight = !goingRight;
 			state = State::FLIP;
 			anim.Ensure(AnimLib::MINOTAUR_FLIP, false);
 		}
-		else if (Collide(JumpMan::instance()->Bounds(), BoxBounds::FromCenter(pos, vec(kDistanceAttack))))
+		else if (damagedTimer <= 0.f && Collide(JumpMan::instance()->Bounds(), BoxBounds::FromCenter(pos, vec(kDistanceAttack))))
 		{
 			state = State::ATTACK_BIG;
 			anim.Ensure(AnimLib::MINOTAUR_ATTACK_BIG, false);
@@ -158,11 +162,23 @@ void Minotaur::Update(float dt)
 
 void Minotaur::Draw() const
 {
+	// HACK
+	int frame = anim.CurrentFrameNumber();
+	bool animHasMotionTrail = (state == State::FLIP && frame >= kFlipDamageFramesBegin && frame <= kFlipDamageFramesEnd)
+		|| (state == State::ATTACK_BIG && frame >= kAttackDamageFramesBegin && frame <= kAttackDamageFramesEnd);
+
+	if (damagedTimer > 0.f && !animHasMotionTrail) {
+		Assets::tintShader.Activate();
+		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
+	}
+
 	GPU_Rect rect = anim.CurrentFrameRect();
 	Window::Draw(Assets::minotaurTexture, pos)
 		.withRect(rect)
 		.withOrigin(rect.w / 2, rect.h / 2)
 		.withScale(goingRight? kScale : -kScale, kScale);
+
+	Shader::Deactivate();
 
 	Bounds().DebugDraw();
 }

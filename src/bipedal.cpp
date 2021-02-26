@@ -61,7 +61,11 @@ void Bipedal::Update(float dt)
 
 	if (damagedTimer > 0.f) {
 		damagedTimer -= dt;
+	} else if (ReceiveDamageFromBullets(headHitBox)) { // Bullets don't hit the legs
+		TakeDamage();
+		if (alive == false) return;
 	}
+
 	switch (state) {
 	case State::DEACTIVATED:
 		return;
@@ -155,12 +159,6 @@ void Bipedal::Update(float dt)
 		}
 		break;
 	}
-
-	if (ReceiveDamageFromBullets(headHitBox)) { // Bullets don't hit the legs
-		TakeDamage();
-		if (alive == false) return;
-	}
-
 
 	DamagePlayerOnCollision(headHitBox);
 	DamagePlayerOnCollision(legsHitBox);
