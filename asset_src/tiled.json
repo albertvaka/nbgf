@@ -2415,14 +2415,14 @@
                  "y":-94.5
                 }, 
                 {
-                 "height":356.455,
+                 "height":356,
                  "id":106,
                  "name":"lava",
                  "rotation":0,
                  "type":"lava",
                  "visible":true,
-                 "width":375.667,
-                 "x":-164.5,
+                 "width":368,
+                 "x":-160,
                  "y":363.333
                 }, 
                 {
@@ -2762,9 +2762,9 @@
                  "rotation":0,
                  "type":"screen",
                  "visible":true,
-                 "width":591.6,
-                 "x":-1902.1,
-                 "y":-77
+                 "width":624.6,
+                 "x":-1934.6,
+                 "y":-81
                 }, 
                 {
                  "height":350.5,

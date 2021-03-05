@@ -38,7 +38,7 @@ const std::array<BoxBounds, 1> Areas::fog = {
 
 const std::array<BoxBounds, 3> Areas::lava = {
 	BoxBounds(3695.166666666667f,1070.478f,594.333333333334f,233.166666666667f),
-	BoxBounds(3163.5f,1387.333f,375.667f,356.455f),
+	BoxBounds(3168.0f,1387.333f,368.0f,356.0f),
 	BoxBounds(3885.500166666667f,1705.75f,644.499666666667f,39.5f),
 };
 
