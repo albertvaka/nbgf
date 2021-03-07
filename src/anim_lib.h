@@ -12,6 +12,12 @@ namespace AnimLib {
 		{ {448 + 0, 0, 8, 8}, 0.4f },
 	};
 
+	constexpr const AnimationFrame BUTTON_B_PRESS[] = {
+		{ {448 + 0, 8, 8, 8}, 0.1f },
+		{ {448 + 8, 8, 8, 8}, 0.25f },
+		{ {448 + 0, 8, 8, 8}, 0.4f },
+	};
+
 	constexpr const AnimationFrame MARIO_IDLE[] = {
 		{ {0,0,16,32}, 1.f },
 	};

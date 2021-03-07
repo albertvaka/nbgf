@@ -647,7 +647,7 @@ void JumpScene::Draw()
 
 	if (contextActionButton) {
 		Window::Draw(Assets::spritesheetTexture, player.Bounds().TopRight() + vec(2, -6))
-			.withRect(Animation::GetRectAtTime(AnimLib::BUTTON_A_PRESS, mainClock));
+			.withRect(Animation::GetRectAtTime(AnimLib::BUTTON_B_PRESS, mainClock));
 	}
 
 	rotoText.Draw(vec(0,-30));

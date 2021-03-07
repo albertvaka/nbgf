@@ -315,7 +315,7 @@ void JumpMan::Update(float dt)
 
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
 		bfgPos = pos + bfgOffset();
-		bfgAngle = bfgPos.AngleDegs(Mouse::GetPositionInWorld());
+		bfgAngle = bfgPos.AngleDegs(Input::GetAnalog(0, AnalogInput::AIM));
 		bfgAngle = (int(bfgAngle + 360 + (45.f / 2)) / 45) * 45.f;
 		if (bfgCooldownTimer > 0.f) {
 			bfgCooldownTimer -= dt;
@@ -323,7 +323,7 @@ void JumpMan::Update(float dt)
 				bfgCooldownTimer = 0.f;
 			}
 		}
-		else if (Mouse::IsPressed() && !(Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT))) {
+		else if (Input::IsPressed(0, GameKeys::SHOOT)) {
 			bfgCooldownTimer = bfgCooldown;
 			vec gunDirection = vec::FromAngleDegs(bfgAngle);
 			vec tipOfTheGun = bfgPos + gunDirection*16.f;
@@ -417,6 +417,7 @@ void JumpMan::Draw() const {
 
 	// Debug-only
 	Bounds().DebugDraw();
+	Input::GetAnalog(0, AnalogInput::AIM).DebugDraw();
 	//pos.DebugDraw();
 	//Bounds().Center().DebugDraw();
 }

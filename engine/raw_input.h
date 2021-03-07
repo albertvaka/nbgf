@@ -53,7 +53,7 @@ struct GamePad
 	{
 		const static AnalogStick Left;
 		const static AnalogStick Right;
-		vec get(int player, float dead_area = 0) const
+		vec get(int player, float dead_area = 30.f) const
 		{ //Pos between -100 and 100
 			//if (player > Input::kMaxPlayers) return vec();
 			SDL_GameController* joystick = joysticks[player];
