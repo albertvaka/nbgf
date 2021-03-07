@@ -11,7 +11,7 @@ namespace Tiled {
 struct Areas {
 
 	// Bounds
-	static const std::array<BoxBounds, 3> bat_bounds;
+	static const std::array<BoxBounds, 4> bat_bounds;
 	static const std::array<BoxBounds, 1> boss_bounds;
 	static const std::array<BoxBounds, 16> explosion;
 	static const std::array<BoxBounds, 1> fog;

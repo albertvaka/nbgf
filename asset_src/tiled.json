@@ -2710,6 +2710,17 @@
                  "width":58.7878,
                  "x":1052.6061,
                  "y":664.125
+                }, 
+                {
+                 "height":79.894,
+                 "id":466,
+                 "name":"bat_bounds",
+                 "rotation":0,
+                 "type":"bat_bounds",
+                 "visible":true,
+                 "width":235.47,
+                 "x":41.2649999999999,
+                 "y":279.053
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2933,12 +2944,12 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }],
  "nextlayerid":12,
- "nextobjectid":466,
+ "nextobjectid":467,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

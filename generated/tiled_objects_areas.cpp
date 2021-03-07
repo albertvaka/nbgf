@@ -3,10 +3,11 @@
 namespace Tiled {
 
 
-const std::array<BoxBounds, 3> Areas::bat_bounds = {
+const std::array<BoxBounds, 4> Areas::bat_bounds = {
 	BoxBounds(1430.43f,949.553f,273.47f,147.894f),
 	BoxBounds(2119.7799999999997f,951.4598f,842.45f,291.747f),
 	BoxBounds(1832.6f,1348.72f,1197.47f,343.894f),
+	BoxBounds(3369.265f,1303.0529999999999f,235.47f,79.894f),
 };
 
 const std::array<BoxBounds, 1> Areas::boss_bounds = {
