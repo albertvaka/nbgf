@@ -31,20 +31,14 @@ Bipedal::Bipedal(vec pos)
 	, headHitBox(pos + headHitBoxOffset, headHitBoxSize)
 	, legsHitBox(pos + legsHitBoxOffset, legsHitBoxSize)
 {
-	unsigned int i = 0;
-	for (const auto& bounds : Tiled::Areas::boss_bounds) {
-		if (bounds.Contains(pos)) {
-			break;
-		}
-		i++;
-	}
-	if (i >= Tiled::Areas::boss_bounds.size()) {
+	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::boss_bounds);
+	if (bounds_index >= Tiled::Areas::boss_bounds.size()) {
 		Debug::out << "Bipedal boss outside boss_bounds";
 		minX = pos.x;
 		maxX = pos.x;
 	} else {
-		minX = Tiled::Areas::boss_bounds[i].Left();
-		maxX = Tiled::Areas::boss_bounds[i].Right();
+		minX = Tiled::Areas::boss_bounds[bounds_index].Left();
+		maxX = Tiled::Areas::boss_bounds[bounds_index].Right();
 
 		float maxDistanceItCanWalkInOneLoop = anim.TotalDuration() * walking_speed;
 		minX += maxDistanceItCanWalkInOneLoop; // We do this since it never changes direction mid-animation

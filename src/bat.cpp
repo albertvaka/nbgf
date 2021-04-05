@@ -29,30 +29,16 @@ void Bat::AwakeNearbyBats(vec pos) {
 }
 
 void Bat::EnableBoundsAvoidance() {
-	int i = 0;
-	int smallest_i = -1;
-	float smallest_area = Mates::MaxFloat;
-	for (const auto& bounds : Tiled::Areas::bat_bounds) {
-		if (bounds.Contains(pos)) {
-			float area = bounds.width * bounds.height;
-			if (area < smallest_area) {
-				smallest_i = i;
-				smallest_area = area;
-			}
-		}
-		i++;
-	}
-
-	if (smallest_i > -1) {
-		steering.BoundsAvoidanceOn(Tiled::Areas::bat_bounds[smallest_i]);
+	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::bat_bounds);
+	if (bounds_index > -1) {
+		steering.BoundsAvoidanceOn(Tiled::Areas::bat_bounds[bounds_index]);
 	} else if (screen > -1) {
 		steering.BoundsAvoidanceOn(ScreenManager::instance()->ScreenBounds(screen));
-	}
-	else {
+	} else {
 		Debug::out << "Unbounded bat";
 	}
-
 }
+
 Bat::Bat(vec pos, bool aggresive, bool awake)
 	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, Rand::VecInRange(-10.f, 0.f, 10.f, 10.f))
 	, steering(this)

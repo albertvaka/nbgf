@@ -26,6 +26,7 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
 	float beginAttackX;
 
 	int screen;
+	BoxBounds bounds;
 
 	int health;
 	float hitTimer = 0.f;

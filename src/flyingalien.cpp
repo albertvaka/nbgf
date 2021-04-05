@@ -6,6 +6,7 @@
 #include "assets.h"
 #include "shader.h"
 #include "rand.h"
+#include "tiled_objects_areas.h"
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
 
@@ -36,6 +37,15 @@ FlyingAlien::FlyingAlien(vec pos)
 	initialPos = this->pos;
 	initialVelX = Rand::OnceEvery(2) ? -speedInitial : speedInitial;
 	Reset();
+
+	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::alien_bounds);
+	if (bounds_index > -1) {
+		bounds = Tiled::Areas::alien_bounds[bounds_index];
+	} else if (screen > -1) {
+		bounds = ScreenManager::instance()->ScreenBounds(screen);
+	} else {
+		Debug::out << "Unbounded FlyingAlien";
+	}
 }
 
 void FlyingAlien::Reset() {
@@ -119,7 +129,7 @@ void FlyingAlien::Update(float dt)
 		BoxBounds chargeBounds = ChargeBounds();
 
 		if (IsGoingToHitAWall(chargeBounds.Center(), chargeBounds.Size(), vel, dt)
-			|| IsGoingToLeaveTheScreen(chargeBounds.Center(), chargeBounds.Size(), vel, dt, screen)
+			|| IsGoingToLeaveBounds(chargeBounds.Center(), chargeBounds.Size(), vel, dt, bounds)
 		) {
 			vel.x = -vel.x;
 		}

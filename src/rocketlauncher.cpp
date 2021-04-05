@@ -23,6 +23,9 @@ RocketLauncher::RocketLauncher(vec pos)
 			awakeArea.push_back(e);
 		}
 	}
+	if (awakeArea.empty()) {
+		Debug::out << "RocketLauncher not in any rocket_launcher_awake area";
+	}
 
 	this->pos = AlignWithCeiling(pos, Tile::Sizes);
 }

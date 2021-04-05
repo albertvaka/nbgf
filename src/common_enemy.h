@@ -8,6 +8,7 @@
 #include "rand.h"
 #include "oneshotanim.h"
 #include "anim_lib.h"
+#include "bounds.h"
 #include "assets.h"
 
 inline bool InSameScreenAsPlayer(int myScreen) {
@@ -48,4 +49,22 @@ inline void DieWithSmallExplosion(Entity* e) {
 	e->alive = false;
 	new OneShotAnim(Assets::spritesheetTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	RandomlySpawnHealth(e->pos);
+}
+
+template<typename BoundsIterable>
+inline int FindIndexOfSmallestBoundsContaining(vec pos, const BoundsIterable& bounds_array) {
+	int smallest_i = -1;
+	float smallest_area = Mates::MaxFloat;
+	int i = 0;
+	for (const auto& bounds : bounds_array) {
+		if (bounds.Contains(pos)) {
+			float area = bounds.Area();
+			if (area < smallest_area) {
+				smallest_i = i;
+				smallest_area = area;
+			}
+		}
+		i++;
+	}
+	return smallest_i;
 }

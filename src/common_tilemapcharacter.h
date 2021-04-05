@@ -3,6 +3,7 @@
 #include "vec.h"
 #include "gaemtilemap.h"
 #include "screen.h"
+#include "bounds.h"
 
 // FIXME: Jumping against a slope that goes up in the same direction you are moving behaves weirdly.
 
@@ -94,12 +95,16 @@ inline bool IsGoingToHitAWall(vec pos, vec size, vec vel, float dt) {
 	}
 }
 
-inline bool IsGoingToLeaveTheScreen(vec pos, vec size, vec vel, float dt, int screen) {
-	if (screen < 0) return false;
+inline bool IsGoingToLeaveBounds(vec pos, vec size, vec vel, float dt, BoxBounds bounds) {
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
-	vec side = vec(newPos.x + toTheSideImMoving, newPos.y);
-	return !ScreenManager::instance()->ScreenBounds(screen).Contains(side);
+	vec sidePos = vec(newPos.x + toTheSideImMoving, newPos.y);
+	return !bounds.Contains(sidePos);
+}
+
+inline bool IsGoingToLeaveTheScreen(vec pos, vec size, vec vel, float dt, int screen) {
+	if (screen < 0) return false;
+	return IsGoingToLeaveBounds(pos, size, vel, dt, ScreenManager::instance()->ScreenBounds(screen));
 }
 
 struct MoveResult {
