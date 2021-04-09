@@ -17,12 +17,12 @@ struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 	float timer = 0.0f;
 	Animation anim;
 
-	bool willAttack = false; // will attack after landing
-	bool didJustAttack = false; // to force one move between attacks
-
 	float direction; // -1 or 1
 
 	int screen;
+
+	bool willAttack = false; // will attack after landing
+	bool didJustAttack = false; // to force one move between attacks
 
 	FireSlime(vec position);
 

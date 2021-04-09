@@ -30,6 +30,8 @@ public:
 
 //private:
 
+	float max_force;
+
 	Entity* pursuitTarget = nullptr;
 	Entity* seekTarget = nullptr;
 	Entity* fleeTarget = nullptr;
@@ -38,8 +40,6 @@ public:
 	BoxBounds m_bounds; //For bounds avoidance
 	
 	std::vector<CircleEntity*>* obstacles;
-
-	float max_force;
 
 	//what type of method is used to sum any active behavior
 	GaemTileMap* m_tilemap;

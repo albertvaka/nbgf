@@ -196,13 +196,12 @@ private:
 
 	TTF_Font* font;
 	TTF_Font* font_outline;
-	std::string str;
 	SDL_Color color = { 255,255,255,255 };
 	SDL_Color outline_color = { 0,0,0,255 };
 	int spacing = 0;
 	int empty_line_spacing = 12;
 	mutable GPU_Image* cached = nullptr;
 	MultilineAlignment multilineAlignment = MultilineAlignment::LEFT;
-
+	std::string str;
 };
 
