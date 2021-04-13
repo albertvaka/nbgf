@@ -11,8 +11,8 @@ const std::array<BoxBounds, 2> Areas::alien_bounds = {
 const std::array<BoxBounds, 5> Areas::bat_bounds = {
 	BoxBounds(3734.4300000000003f,949.553f,273.47f,147.894f),
 	BoxBounds(4423.78f,951.4598f,842.45f,291.747f),
-	BoxBounds(4136.6f,1348.72f,1197.47f,343.894f),
-	BoxBounds(5673.265f,1303.0529999999999f,235.47f,79.894f),
+	BoxBounds(4136.6f,1348.72f,1197.47f,331.894f),
+	BoxBounds(5673.265f,1303.0529999999999f,235.47f,66.894f),
 	BoxBounds(2458.48f,708.8865000000001f,196.95f,198.247f),
 };
 
@@ -45,13 +45,13 @@ const std::array<BoxBounds, 1> Areas::fog = {
 
 const std::array<BoxBounds, 4> Areas::lava = {
 	BoxBounds(5999.166666666667f,1070.478f,594.333333333334f,235.5f),
-	BoxBounds(5472.0f,1387.333f,368.0f,356.0f),
+	BoxBounds(5472.0f,1370.333f,368.0f,373.0f),
 	BoxBounds(6189.500166666667f,1705.75f,644.499666666667f,39.5f),
 	BoxBounds(832.0833333333303f,902.916666666667f,1840.83333333333f,57.8333333333333f),
 };
 
 const std::array<BoxBounds, 1> Areas::parallax_cave = {
-	BoxBounds(3910.83f,1311.25f,1543.67f,385.625f),
+	BoxBounds(3910.83f,1311.25f,1543.67f,381.625f),
 };
 
 const std::array<BoxBounds, 1> Areas::parallax_forest = {
