@@ -17,6 +17,7 @@ const vec kAwokenLedOffset = vec(-3, -7);
 extern float mainClock;
 
 RocketLauncher::RocketLauncher(vec pos)
+	: timer(kTimeBetweenMissiles/2.f)
 {
 	for (const BoxBounds& e : Tiled::Areas::rocket_launcher_awake) {
 		if (e.Contains(pos)) {

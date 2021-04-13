@@ -16,7 +16,7 @@ struct RocketLauncher : SelfRegister<RocketLauncher>
 	vec pos;
 	bool awoken = false;
 	float angle = 90.f;
-	float timer = 0.f;
+	float timer;
 	std::vector<BoxBounds> awakeArea;
 
 };
