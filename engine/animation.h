@@ -4,9 +4,42 @@
 
 #include "vec.h"
 #include "animation_frame.h"
+#include <array>
 
 struct Animation
 {
+	template<std::size_t size>
+	constexpr Animation(const std::array<AnimationFrame, size>& animation, bool is_loopable = true)
+		: anim(animation.data())
+		, anim_size(size)
+		, loopable(is_loopable)
+	{
+	}
+
+	template<std::size_t size>
+	constexpr void Set(const std::array<AnimationFrame, size>& animation, bool is_loopable = true) // Sets an animation and restarts it
+	{
+		anim = animation.data();
+		anim_size = size;
+		loopable = is_loopable;
+		Restart();
+	}
+
+	template<std::size_t size>
+	constexpr void Ensure(const std::array<AnimationFrame, size>& animation, bool is_loopable = true) // Sets an animation if not alreay set
+	{
+		if (!IsSet(animation))
+		{
+			Set(animation, is_loopable);
+		}
+	}
+
+	template<std::size_t size>
+	constexpr bool IsSet(const std::array<AnimationFrame, size>& animation)
+	{
+		return (animation.data() == anim);
+	}
+
 	template<uint8_t size>
 	constexpr Animation(const AnimationFrame(&animation)[size], bool is_loopable = true)
 		: anim(animation)
@@ -27,10 +60,16 @@ struct Animation
 	template<uint8_t size>
 	constexpr void Ensure(const AnimationFrame(&animation)[size], bool is_loopable = true) // Sets an animation if not alreay set
 	{
-		if (animation != anim)
+		if (!IsSet(animation))
 		{
 			Set(animation, is_loopable);
 		}
+	}
+
+	template<uint8_t size>
+	constexpr bool IsSet(const AnimationFrame(&animation)[size])
+	{
+		return (animation == anim);
 	}
 
 	bool IsComplete() const // Only for non-looping animations
