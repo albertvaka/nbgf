@@ -661,7 +661,8 @@ void JumpScene::Draw()
 			player.health = std::max(player.health, player.maxHealth);
 		}
 		ImGui::SliderInt("health", &player.health, 0, 10);
-		ImGui::SliderFloat2("player", (float*)&player.pos, 16.f, 4500.f);
+		ImGui::SliderFloat2("pos", (float*)&player.pos, 16.f, 4500.f);
+		ImGui::Text("vel %f,%f", player.vel.x, player.vel.y);
 		vec m = Mouse::GetPositionInWorld();
 		veci t = Tile::ToTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
