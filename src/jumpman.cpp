@@ -47,13 +47,12 @@ const vec vel_hit(180.f, -150.f);
 const float invencibleTimeAfterHit = 0.5f;
 
 // Sprite
-const vec standing_size = vec(16, 32);
+const vec standing_size = vec(14, 32);
 const vec crouched_size = vec(16, 22);
-const vec center = vec(8, 16);
 
 JumpMan::JumpMan()
 	: polvito(Assets::spritesheetTexture)
-	, animation(AnimLib::MARIO_IDLE)
+	, animation(AnimLib::WARRIOR_IDLE)
 	, size(standing_size)
 {
 	InitPolvito();
@@ -98,7 +97,8 @@ void JumpMan::Update(float dt)
 			DoPolvitoWallJump();
 		}
 		else {
-			bool ceiling = map->GetTile(Tile::ToTiles(pos.x - center.x + 1.f, pos.y - size.y - 1.f)).isSolid() || map->GetTile(Tile::ToTiles(pos.x + center.x - 1.f, pos.y - size.y - 1.f)).isSolid();
+			float halfWidth = standing_size.x/2;
+			bool ceiling = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f)).isSolid() || map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f)).isSolid();
 			if (!ceiling) {
 				DoPolvitoJump();
 				grounded = false;
@@ -268,7 +268,7 @@ void JumpMan::Update(float dt)
 	if (crouched)
 	{
 		size = crouched_size;
-		animation.Ensure(AnimLib::MARIO_CROUCH);
+		animation.Ensure(AnimLib::WARRIOR_CROUCH, false);
 	}
 	else
 	{
@@ -279,32 +279,48 @@ void JumpMan::Update(float dt)
 			if (Input::IsPressed(0,GameKeys::LEFT) && !Input::IsPressed(0,GameKeys::RIGHT))
 			{
 				isWalking = true;
-				if (vel.x > 0) {
-					animation.Ensure(AnimLib::MARIO_TURN);
+				if (vel.x > 0.f) {
+					animation.Ensure(AnimLib::WARRIOR_TURN);
 					isTurning = true;
 				}
 				else {
-					animation.Ensure(AnimLib::MARIO_WALK);
+					animation.Ensure(AnimLib::WARRIOR_RUN);
 				}
 			}
 			else if (Input::IsPressed(0,GameKeys::RIGHT) && !Input::IsPressed(0,GameKeys::LEFT))
 			{
 				isWalking = true;
-				if (vel.x < 0) {
-					animation.Ensure(AnimLib::MARIO_TURN);
+				if (vel.x < 0.f) {
+					animation.Ensure(AnimLib::WARRIOR_TURN);
 					isTurning = true;
 				}
-				else animation.Ensure(AnimLib::MARIO_WALK);
+				else animation.Ensure(AnimLib::WARRIOR_RUN);
 			}
 			else
 			{
-				animation.Ensure(AnimLib::MARIO_IDLE);
+				animation.Ensure(AnimLib::WARRIOR_IDLE);
 			}
 		}
 		else
 		{
-			if (onWall) animation.Ensure(AnimLib::MARIO_ONWALL);
-			else animation.Ensure(AnimLib::MARIO_JUMP);
+			if (onWall) {
+				animation.Ensure(AnimLib::WARRIOR_WALL_SLIDE);
+			}
+			else if (invencibleTimer > 0.f) {
+				animation.Ensure(AnimLib::WARRIOR_HURT, false);
+			}
+			else if (vel.y <= vel_jump) {
+				animation.Ensure(AnimLib::WARRIOR_JUMP, false);
+			}
+			else if (animation.IsSet(AnimLib::WARRIOR_FALL)) {
+				animation.Ensure(AnimLib::WARRIOR_FALL);
+			}
+			else {
+				animation.Ensure(AnimLib::WARRIOR_JUMP_TO_FALL, false);
+				if (animation.IsComplete()) {
+					animation.Ensure(AnimLib::WARRIOR_FALL);
+				}
+			}
 		}
 	}
 	if (isWalking) {
@@ -385,8 +401,8 @@ void JumpMan::Draw() const {
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
-	Window::Draw(Assets::spritesheetTexture, pos)
-		.withOrigin(center.x, size.y)
+	Window::Draw(Assets::warriorTexture, pos)
+		.withOrigin(AnimLib::warriorSheet.sprite_w/2, AnimLib::warriorSheet.sprite_h)
 		.withRect(animation.CurrentFrameRect())
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 

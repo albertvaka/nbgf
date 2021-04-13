@@ -265,5 +265,25 @@ namespace AnimLib {
 		{ { 5 * 96.0, 8 * 96.f, 96.f, 96.f }, .1f },
 	};
 
+	const constexpr SheetFrameCalculator warriorSheet(69.f, 44.f, 6, .1f);
+	constexpr const AnimationFrame WARRIOR_IDLE[] = { warriorSheet.Frame(5, 1.f) };
+	constexpr const std::array<AnimationFrame, 8> WARRIOR_RUN = warriorSheet.Frames<8>(6);
+	constexpr const std::array<AnimationFrame, 8> WARRIOR_ATTACK = warriorSheet.Frames<8>(14);
+	constexpr const std::array<AnimationFrame, 4> WARRIOR_COMBO = warriorSheet.Frames<4>(22);
+	constexpr const std::array<AnimationFrame, 11> WARRIOR_DEATH = warriorSheet.Frames<11>(26);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_HURT = warriorSheet.Frames<3>(38); //skip first 1
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_JUMP = warriorSheet.Frames<3>(42);
+	constexpr const std::array<AnimationFrame, 2> WARRIOR_JUMP_TO_FALL = warriorSheet.Frames<2>(44);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_FALL = warriorSheet.Frames<3>(46);
+	constexpr const std::array<AnimationFrame, 5> WARRIOR_EDGE_GRAB = warriorSheet.Frames<5>(49);
+	constexpr const std::array<AnimationFrame, 6> WARRIOR_EDGE_IDLE = warriorSheet.Frames<6>(54);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_WALL_SLIDE = warriorSheet.Frames<3>(60);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_CROUCH = warriorSheet.Frames<3>(63); //skip last 3
+	constexpr const std::array<AnimationFrame, 7> WARRIOR_DASH = warriorSheet.Frames<7>(68);
+	constexpr const std::array<AnimationFrame, 10> WARRIOR_DASH_ATTACK = warriorSheet.Frames<10>(76);
+	constexpr const std::array<AnimationFrame, 5> WARRIOR_SLIDE = warriorSheet.Frames<5>(86);
+	constexpr const std::array<AnimationFrame, 8> WARRIOR_LADDER = warriorSheet.Frames<8>(91);
+	constexpr const AnimationFrame WARRIOR_TURN[] = { warriorSheet.Frame(12*6+1, 1.f) };
+
 }
 
