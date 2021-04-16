@@ -2,7 +2,7 @@
 
 #include "entity.h"
 
-struct Player : Entity
+struct Player : CircleEntity
 {
 	float angle;
 	float distance;

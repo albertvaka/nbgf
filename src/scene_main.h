@@ -5,15 +5,15 @@
 #include "text.h"
 #include "player.h"
 
-struct SceneMain : Scene {
+struct MainScene : Scene {
 
 	Player player;
 	PartSys alienPartSys;
-	int currentLevel = 1;
-	int deadAliens = 0;
+	int currentLevel;
+	int deadAliens;
 	Text deadAliensText;
 
-	SceneMain();
+	MainScene();
 
 	void EnterScene() override;
 	void ExitScene() override;

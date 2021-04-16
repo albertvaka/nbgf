@@ -226,6 +226,9 @@
     <ClInclude Include="engine\fx.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\enemy_bullet.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

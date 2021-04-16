@@ -4,20 +4,22 @@
 #include "imgui.h"
 #endif
 #include "assets.h"
+#include "scene_manager.h"
 #include "bullet.h"
+#include "enemy_bullet.h"
+#include "fx.h"
 #include "alien.h"
 #include "collide.h"
 #include "debug.h"
 
-float kAlienMinDistance = 300;
-float kAlienMaxDistance = 400;
+float kAlienMinDistance = 280;
+float kAlienMaxDistance = 380;
 
-SceneMain::SceneMain()
-	: player(0, 200)
+MainScene::MainScene()
+	: player(0, 180)
 	, alienPartSys(Assets::invadersTexture)
 	, deadAliensText(Assets::font_30, Assets::font_30_outline)
 {
-	deadAliensText.SetString("Kill the invaders");
 	deadAliensText.SetFillColor(0, 0, 0);
 	deadAliensText.SetOutlineColor(255, 255, 0);
 
@@ -33,27 +35,31 @@ SceneMain::SceneMain()
 	alienPartSys.scale_vel = -0.2f;
 }
 
-void SceneMain::EnterScene() 
+void MainScene::EnterScene() 
 {
+	deadAliensText.SetString("Kill the invaders");
+	deadAliens = 0;
+	currentLevel = 1;
 	SpawnAliens();
 }
 
-void SceneMain::SpawnAliens() {
+void MainScene::SpawnAliens() {
+	float baseAngle = Rand::rollf(360);
 	for (int angle = 0; angle < 360; angle += 360/currentLevel) {
-		new Alien(angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
+		new Alien(baseAngle+angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
 	}
 }
 
-void SceneMain::ExitScene()
+void MainScene::ExitScene()
 {
 	alienPartSys.Clear();
 	Bullet::DeleteAll();
 	Alien::DeleteAll();
+	EnemyBullet::DeleteAll();
 }
 
-void SceneMain::Update(float dt)
+void MainScene::Update(float dt)
 {
-
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
@@ -87,26 +93,42 @@ void SceneMain::Update(float dt)
 		}
 	}
 
+	for (EnemyBullet* b : EnemyBullet::GetAll()) {
+		b->Update(dt);
+		if (Collide(player.Bounds(), b->Bounds())) {
+			Fx::FreezeImage::Freeze(0.3f);
+			Fx::FreezeImage::SetUnfreezeCallback([]() {
+				SceneManager::RestartScene();
+			});
+		}
+	}
+
 	if (Alien::GetAll().empty()) {
 		currentLevel++;
 		SpawnAliens();
 	}
 
-	Bullet::DeleteNotAlive();
 	Alien::DeleteNotAlive();
+	Bullet::DeleteNotAlive();
+	EnemyBullet::DeleteNotAlive();
 
 	alienPartSys.UpdateParticles(dt);
 
 }
 
-void SceneMain::Draw()
+void MainScene::Draw()
 {
 	Window::Clear(0, 0, 0);
 
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
 		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
 
+	if (Fx::FreezeImage::IsFrozen()) {
+		Assets::tintShader.Activate();
+		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
+	}
 	player.Draw();
+	Shader::Deactivate();
 
 	for (const Alien* a : Alien::GetAll()) {
 		a->Draw();
@@ -116,6 +138,10 @@ void SceneMain::Draw()
 	for (const Bullet* b : Bullet::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
+	}
+
+	for (const EnemyBullet* b : EnemyBullet::GetAll()) {
+		b->Draw();
 	}
 
 	alienPartSys.Draw();

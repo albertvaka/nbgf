@@ -2,4 +2,4 @@
 
 #include "scene_main.h"
 
-typedef SceneMain EntryPointScene;
+typedef MainScene EntryPointScene;
