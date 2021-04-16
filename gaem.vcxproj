@@ -27,6 +27,7 @@
     <ClInclude Include="engine\camera.h" />
     <ClInclude Include="engine\collide.h" />
     <ClInclude Include="engine\debug.h" />
+    <ClInclude Include="engine\drawall.h" />
     <ClInclude Include="engine\entity.h" />
     <ClInclude Include="engine\fx.h" />
     <ClInclude Include="engine\input.h" />
@@ -37,12 +38,14 @@
     <ClInclude Include="engine\rand.h" />
     <ClInclude Include="engine\raw_input.h" />
     <ClInclude Include="engine\savestate.h" />
+    <ClInclude Include="engine\scene.h" />
     <ClInclude Include="engine\scene_manager.h" />
     <ClInclude Include="engine\selfregister.h" />
     <ClInclude Include="engine\shader.h" />
     <ClInclude Include="engine\singleinstance.h" />
     <ClInclude Include="engine\sound.h" />
     <ClInclude Include="engine\text.h" />
+    <ClInclude Include="engine\tilemap.h" />
     <ClInclude Include="engine\vec.h" />
     <ClInclude Include="engine\window.h" />
     <ClInclude Include="engine\window_draw.h" />
@@ -88,6 +91,7 @@
     <ClCompile Include="engine\fx.cpp" />
     <ClCompile Include="engine\input.cpp" />
     <ClCompile Include="engine\main.cpp" />
+    <ClCompile Include="engine\mates.cpp" />
     <ClCompile Include="engine\musicplayer.cpp" />
     <ClCompile Include="engine\partsys.cpp" />
     <ClCompile Include="engine\raw_input.cpp" />

@@ -103,93 +103,6 @@
     <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
-    <ClInclude Include="engine\animation.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\bounds.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\debug.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\entity.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\input.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\mates.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\matrix2d.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\partsys.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\raw_input.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene_manager.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\selfregister.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\shader.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\singleinstance.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\sound.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\text.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\window.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\asset_load.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\camera.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\collide.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\vec.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\rand.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\angles.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\savestate.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\musicplayer.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\fx.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\window_draw.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\window_drawprimitive.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\window_drawraw.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\animation_frame.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\alien.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -216,6 +129,102 @@
     </ClInclude>
     <ClInclude Include="src\scene_entrypoint.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\input.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\mates.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\matrix2d.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\musicplayer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\partsys.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\rand.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\raw_input.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\savestate.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene_manager.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\selfregister.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\shader.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\singleinstance.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\sound.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\text.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\tilemap.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\vec.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\window.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\window_draw.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\window_drawprimitive.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\window_drawraw.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\angles.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\animation.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\animation_frame.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\asset_load.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\bounds.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\camera.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collide.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\debug.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\drawall.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\entity.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\fx.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -279,45 +288,6 @@
     <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
-    <ClCompile Include="engine\debug.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\input.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\main.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\partsys.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\raw_input.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\shader.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\sound.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\window.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\camera.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\savestate.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\vec.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\musicplayer.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\fx.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="src\assets.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -329,6 +299,48 @@
     </ClCompile>
     <ClCompile Include="src\input_conf.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\input.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\main.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\mates.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\musicplayer.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\partsys.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\raw_input.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\savestate.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\shader.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\sound.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\vec.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\window.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\camera.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\debug.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\fx.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

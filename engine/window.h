@@ -13,7 +13,6 @@ namespace Window {
 	extern SDL_Window* window;
 	extern GPU_Target* screenTarget;
 	extern GPU_Target* currentDrawTarget;
-	extern SDL_PixelFormatEnum nativePixelFormat;
 
 	int Init();
 	void ProcessEvents();
@@ -22,15 +21,13 @@ namespace Window {
 		return SDL_GetWindowFlags(Window::window) & SDL_WINDOW_FULLSCREEN;
 	}
 
-	inline void SetFullScreen(bool b) {
-		SDL_SetWindowFullscreen(Window::window, b ? SDL_WINDOW_FULLSCREEN : 0);
-	}
+	void SetFullScreen(bool b);
 
 	inline void SetShowCursor(bool b) {
 		SDL_ShowCursor(b);
 	}
 
-	inline void Clear(uint8_t r, uint8_t g, uint8_t b) {
+	inline void Clear(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0) {
 		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);
 	}
 
@@ -54,15 +51,6 @@ namespace Window {
 		Window::currentDrawTarget = Window::screenTarget;
 	}
 
-}
-
-inline void FixTextureBleeding(GPU_Rect& tr) {
-	// I made a similar fix in SDL_GPU's BlitTransformX, but when drawing raw vertices it's not used so we need it here as well
-	const float e = 0.1f;
-	tr.x += e;
-	tr.y += e;
-	tr.w -= 2*e;
-	tr.h -= 2*e;
 }
 
 inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {

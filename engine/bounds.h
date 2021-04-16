@@ -41,6 +41,15 @@ struct BoxBounds
         return ret;
     }
 
+    //Expands arround the center by a value
+    void Grow(float x, float y)
+	{
+        left -= x/2;
+        top -= y/2;
+        width += x/2;
+        height += y/2;
+    }
+
     [[nodiscard]] constexpr vec Center() const
 	{
 		return vec(left + width/2, top + height/2);

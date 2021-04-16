@@ -7,11 +7,11 @@
 #endif
 #include <math.h>
 #include <limits>
+#include <string>
 #include <cassert>
 
 namespace Mates
 {
-
 	//a few useful constants
 	const constexpr int     MaxInt = (std::numeric_limits<int>::max)();
 	const constexpr int     MinInt = (std::numeric_limits<int>::min)();
@@ -42,6 +42,15 @@ namespace Mates
 		}
 	}
 
+	[[nodiscard]] inline float map(float x, float in_min, float in_max, float out_min, float out_max)
+	{
+		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+	}
+
+	[[nodiscard]] std::string to_string_with_precision(const float a_value, const int n = 2);
+
+	[[nodiscard]] std::string to_hexa(int a_value);
+
 	//-----------------------------------------------------------------------
 	//
 	//  some handy little functions
@@ -59,7 +68,7 @@ namespace Mates
 	inline void Clamp(T& arg, const U& minVal, const V& maxVal)
 	{
 #if _DEBUG
-		assert(((double)minVal < (double)maxVal) && "<Clamp>MaxVal < MinVal!");
+		assert(((double)minVal <= (double)maxVal) && "<Clamp>MaxVal < MinVal!");
 #endif
 
 		if (arg < (T)minVal)
@@ -188,4 +197,18 @@ namespace Mates
 	}
 
 	[[nodiscard]] inline int fastfloor(const float x) { return x > 0 ? (int)x : (int)x - 1; }
+
+	struct Range {
+		float min;
+		float max;
+	};
+
+	[[nodiscard]] inline Range SortTwo(float a, float b) {
+		if (a > b) {
+			return Range{ b, a };
+		}
+		else {
+			return Range{ a, b };
+		}
+	}
 }

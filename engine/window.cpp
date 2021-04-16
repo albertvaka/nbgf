@@ -15,7 +15,6 @@ namespace Window
     SDL_Window* window;
     GPU_Target* screenTarget;
     GPU_Target* currentDrawTarget;
-    SDL_PixelFormatEnum nativePixelFormat;
 
     int Init() {
         GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
@@ -25,6 +24,7 @@ namespace Window
 #else
         SDL_DisplayMode dm;
         SDL_GetDesktopDisplayMode(0, &dm);
+        dm.h -= 64; // Account for some pixels used by the window decorations
         int scale = std::min(dm.w / GAME_WIDTH, dm.h / GAME_HEIGHT);
         Debug::out << "Scaling to x" << scale;
         //Debug::out << dm.w << " " << dm.h;
@@ -37,10 +37,6 @@ namespace Window
         }
         window = SDL_GetWindowFromID(screenTarget->context->windowID);
         SDL_SetWindowTitle(window, Window::WINDOW_TITLE);
-
-        // SDL_GetWindowPixelFormat() doesn't always do what we want (eg: on Windows it returns a format without alpha)
-        // We should probably use glGetInternalFormativ() instead, but for now I'm hardcoding it.
-        nativePixelFormat = SDL_PIXELFORMAT_ARGB8888;
 
         // SDL-gpu anchors images at the center by default, change it to the top-left corner
         GPU_SetDefaultAnchor(0.f, 0.f);
@@ -59,6 +55,24 @@ namespace Window
         GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
 
         return 0;
+    }
+
+    void SetFullScreen(bool b) {
+#ifdef __EMSCRIPTEN__
+        EM_ASM({
+            if ($0) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        },b);
+        if (!b) {
+            // Here to trigger a SDL_WINDOWEVENT
+            SDL_SetWindowFullscreen(Window::window, 0);
+        }
+#else
+        SDL_SetWindowFullscreen(Window::window, b ? SDL_WINDOW_FULLSCREEN : 0);
+#endif
     }
 
     void ProcessEvents()
@@ -80,9 +94,16 @@ namespace Window
             case SDL_CONTROLLERDEVICEREMOVED:
                 GamePad::_Removed(SDL_GameControllerFromInstanceID(event.jdevice.which));
                 break;
-            case SDL_MOUSEWHEEL:
-                Mouse::scrollWheel += event.wheel.y;
-                break;
+            case SDL_MOUSEWHEEL: {
+                float wheel = event.wheel.y;
+#ifdef __APPLE__
+                if (Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT) || Keyboard::IsKeyPressed(SDL_SCANCODE_RSHIFT)) {
+                    wheel = event.wheel.x; //shift makes the axis change on osx for some reason
+                }
+#endif
+                Mouse::scrollWheel += wheel;
+            }
+            break;
             case SDL_QUIT:
                 exit(0);
                 break;
@@ -134,8 +155,10 @@ namespace Window
 
     namespace DrawPrimitive {
 
-        void Pixel(float x, float y, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-            GPU_Pixel(Window::currentDrawTarget, x, y, { r,g,b,a });
+        void Point(float x, float y, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+            GPU_SetLineThickness(0);
+            float d = thickness / 2;
+            GPU_RectangleFilled(Window::currentDrawTarget, x - d, y - d, x + d, y + d, { r,g,b,a });
         }
 
         void Rectangle(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {

@@ -1,0 +1,31 @@
+#pragma once
+
+#include <array>
+#include <unordered_map>
+
+#include "vec.h"
+#include "bounds.h"
+
+namespace Tiled {
+
+struct {{name}} {
+{% if entities_by_type|length >= 1 %}
+	// Objects
+{%- endif %}
+{%- for type, positions in entities_by_type %}
+	static const std::unordered_map<int, vec> {{type}};
+	{%- if positions|length == 1 %}
+	static const vec single_{{type}};
+	{%- endif %}
+{%- endfor %}
+
+{%- if areas_by_type|length >= 1 %}
+	// Bounds
+{%- endif %}
+{%- for type, bounds_list in areas_by_type %}
+	static const std::array<BoxBounds, {{bounds_list|length}}> {{type}};
+{%- endfor %}
+
+};
+
+}

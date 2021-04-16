@@ -77,18 +77,18 @@ namespace Fx {
 
 	struct FreezeImage {
 
-		static void Freeze(int in_frames, float during_time) {
-			if (nextWorldStopIn < 0) {
-				nextWorldStopIn = in_frames;
-				nextWorldStopDuration = during_time;
-			}
+		static void Freeze(float during_time) {
+			worldStoppedTime = during_time;
+		}
+
+		static void SetAlternativeUpdateFnWhileFrozen(std::function<void(float dt)> update = nullptr) {
+			worldStoppedUpdate = update;
 		}
 
 		static bool IsFrozen() { return (worldStoppedTime > 0.f); }
 
+		static inline std::function<void(float dt)> worldStoppedUpdate = nullptr;
 		static inline float worldStoppedTime = -1.f;
-		static inline int nextWorldStopIn = -1.f;
-		static inline float nextWorldStopDuration;
 	};
 
 	struct FullscreenShader {

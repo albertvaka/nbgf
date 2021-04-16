@@ -4,6 +4,8 @@
 
 #include "vec.h"
 
+#include <array>
+
 struct AnimationFrame
 {
 	const GPU_Rect rect;

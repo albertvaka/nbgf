@@ -6,10 +6,11 @@ namespace Window {
 
 	namespace DrawPrimitive {
 
-		void Pixel(float x, float y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-		inline void Pixel(vec v, uint8_t r, uint8_t g, uint8_t b, uint8_t a) { Pixel(v.x, v.y, r, g, b, a); }
-		inline void Pixel(float x, float y, const SDL_Color& c) { Pixel(x, y, c.r, c.g, c.b, c.a); }
-		inline void Pixel(vec v, uint8_t r, const SDL_Color & c) { Pixel(v.x, v.y, c.r, c.g, c.b, c.a); }
+		// pass thickness = 1 to draw one pixel (virtual, after scaling)
+		void Point(float x, float y, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+		inline void Point(vec v, uint8_t r, float thickness, uint8_t g, uint8_t b, uint8_t a) { Point(v.x, v.y, thickness, r, g, b, a); }
+		inline void Point(float x, float y, float thickness, const SDL_Color& c) { Point(x, y, thickness, c.r, c.g, c.b, c.a); }
+		inline void Point(vec v, float thickness, const SDL_Color & c) { Point(v.x, v.y, thickness, c.r, c.g, c.b, c.a); }
 
 		// pass thickness < 0 to draw a filled shape
 		void Rectangle(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
@@ -38,6 +39,16 @@ namespace Window {
 		}
 		inline void Line(vec v1, vec v2, float thickness, const SDL_Color & c) {
 			Line(v1.x, v1.y, v2.x, v2.y, thickness, c.r, c.g, c.b, c.a);
+		}
+
+		inline void Arrow(vec from, vec to, float thickness, float head_lenght, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+			Window::DrawPrimitive::Line(from, to, thickness, r,g,b,a);
+			vec toTheSide = (to-from).Perp().Normalized() * head_lenght;
+			Window::DrawPrimitive::Line(to, to - toTheSide.RotatedAroundOriginDegs(-45), thickness, r, g, b, a);
+			Window::DrawPrimitive::Line(to, to + toTheSide.RotatedAroundOriginDegs(45), thickness, r, g, b, a);
+		}
+		inline void Arrow(vec from, vec to, float thickness, float head_lenght, const SDL_Color& c) {
+			Arrow(from, to, thickness, head_lenght, c.r, c.g, c.b, c.a);
 		}
 
 		// pass thickness < 0 to draw a filled shape
@@ -71,4 +82,13 @@ namespace Window {
 		}
 	}
 
+}
+
+inline void FixTextureBleeding(GPU_Rect& tr) {
+	// I made a similar fix in SDL_GPU's BlitTransformX, but when drawing raw vertices it's not used so we need it here as well
+	const float e = 0.1f;
+	tr.x += e;
+	tr.y += e;
+	tr.w -= 2*e;
+	tr.h -= 2*e;
 }

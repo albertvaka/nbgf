@@ -72,6 +72,9 @@ struct vec
 		return stream.str();
 	}
 
+	[[nodiscard]] vec Mirrored(bool mirror_x, bool mirror_y) const {
+		return vec(mirror_x ? -x : x, mirror_y ? -y : y);
+	}
 
 	//returns positive if v2 is clockwise of this vector,
 	//negative if anticlockwise (assuming the Y axis is pointing down,
@@ -101,7 +104,7 @@ struct vec
 		return vec(x * cs - y * sn, x * sn + y * cs);
 	}
 
-	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees) 
+	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees)  const
 	{
 		return RotatedAroundOriginRads(Angles::DegsToRads(degrees));
 	}
@@ -380,6 +383,26 @@ inline constexpr vec operator/(vec lhs, vec rhs)
 	result.y /= rhs.y;
 
 	return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline constexpr veci operator+(veci lhs, veci rhs)
+{
+    veci result(lhs);
+    result.x += rhs.x;
+    result.y += rhs.y;
+
+    return result;
+}
+
+inline constexpr veci operator-(veci lhs, veci rhs)
+{
+    veci result(lhs);
+    result.x -= rhs.x;
+    result.y -= rhs.y;
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

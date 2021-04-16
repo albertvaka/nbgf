@@ -9,6 +9,9 @@
 #include "collide.h"
 #include "debug.h"
 
+float kAlienMinDistance = 300;
+float kAlienMaxDistance = 400;
+
 SceneMain::SceneMain()
 	: player(0, 200)
 	, alienPartSys(Assets::invadersTexture)
@@ -37,7 +40,7 @@ void SceneMain::EnterScene()
 
 void SceneMain::SpawnAliens() {
 	for (int angle = 0; angle < 360; angle += 360/currentLevel) {
-		new Alien(angle, Rand::rollf(250,350));
+		new Alien(angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
 	}
 }
 
@@ -73,11 +76,7 @@ void SceneMain::Update(float dt)
 				Debug::out << "KABOOM " << a->pos;
 
 				deadAliens++;
-				if (deadAliens > 25 && Rand::OnceEvery(10)) {
-					deadAliensText.SetString("Not bored yet?");
-				} else {
-					deadAliensText.SetString("Kills: " + std::to_string(deadAliens));
-				}
+				deadAliensText.SetString("Kills: " + std::to_string(deadAliens));
 
 				alienPartSys.pos = a->pos;
 				alienPartSys.AddParticles(10);
@@ -125,7 +124,10 @@ void SceneMain::Draw()
 		.withOrigin(deadAliensText.Size()/2)
 		.withScale(0.666f);
 
-	//alienPartSys.DrawImGUI();
+	if (Debug::Draw) {
+		Window::DrawPrimitive::Circle(Camera::Center(), kAlienMinDistance, 1, 255, 255, 255);
+		Window::DrawPrimitive::Circle(Camera::Center(), kAlienMaxDistance, 1, 255, 255, 255);
+	}
 
 #ifdef _IMGUI
 	{
@@ -138,6 +140,8 @@ void SceneMain::Draw()
 		};
 		ImGui::End();
 	}
+
+	//alienPartSys.DrawImGUI();
 #endif
 
 }

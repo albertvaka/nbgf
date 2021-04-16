@@ -20,11 +20,11 @@ out_h = tm.render(
 )
 
 try:
-    current = Path('../src/texturepackerexport.h').read_text()
+    current = Path('../generated/texturepackerexport.h').read_text()
 except FileNotFoundError:
     current = ""
 if out_h == current:
     print("Skipping header generation, no changes detected")
 else:
-    Path('../src/texturepackerexport.h').write_text(out_h)
+    Path('../generated/texturepackerexport.h').write_text(out_h)
 

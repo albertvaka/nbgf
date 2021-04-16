@@ -7,6 +7,7 @@
 
 KeyStates Input::action_states[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { RELEASED } };
 float Input::action_times[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { 0 } };
+vec Input::analog_states[Input::kMaxPlayers][magic_enum::enum_count<AnalogInput>()];
 
 void Input::Update(float dt)
 {
@@ -33,6 +34,11 @@ void Input::Update(float dt)
 					action_states[player][k] = JUST_RELEASED;
 					action_times[player][k] = dt;
 				}
+			}
+		}
+		for (size_t k = 1; k < magic_enum::enum_count<AnalogInput>(); k++) {  //Skip AnalogInput::NONE
+			if (analog_mapping[k]) {
+				analog_states[player][k] = analog_mapping[k](gamepad_id);
 			}
 		}
 	}

@@ -103,6 +103,10 @@ struct Text
 		return cached;
 	};
 
+    bool HasChanges() {
+        return (cached == nullptr);
+    }
+
 private:
 	void Invalidate() {
 		if (cached) {
@@ -115,7 +119,7 @@ private:
 		SDL_Surface* fg_surface = TTF_RenderUTF8_Blended(font, str.c_str(), color);
 		if (!fg_surface) {
 			printf("Unable to create text surface. SDL Error: %s\n", TTF_GetError());
-			return nullptr;
+			return nullptr; // Note this will crash the program
 		}
 		if (!font_outline) {
 			return fg_surface;
@@ -160,7 +164,7 @@ private:
 			return surfaces[0];
 		}
 
-		SDL_Surface* final = SDL_CreateRGBSurfaceWithFormat(0, maxWidth, totalHeight, 32, Window::nativePixelFormat);
+		SDL_Surface* final = SDL_CreateRGBSurfaceWithFormat(0, maxWidth, totalHeight, 32, SDL_PIXELFORMAT_ARGB8888);
 		totalHeight = 0;
 		for (SDL_Surface* surface : surfaces) {
 			if (!surface) {
@@ -192,13 +196,12 @@ private:
 
 	TTF_Font* font;
 	TTF_Font* font_outline;
-	std::string str;
 	SDL_Color color = { 255,255,255,255 };
 	SDL_Color outline_color = { 0,0,0,255 };
 	int spacing = 0;
 	int empty_line_spacing = 12;
 	mutable GPU_Image* cached = nullptr;
 	MultilineAlignment multilineAlignment = MultilineAlignment::LEFT;
-
+	std::string str;
 };
 

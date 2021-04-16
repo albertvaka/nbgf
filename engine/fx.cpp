@@ -33,18 +33,13 @@ void Update(float dt)
 
 	if (FreezeImage::worldStoppedTime > 0) {
 		FreezeImage::worldStoppedTime -= dt;
+		if (FreezeImage::worldStoppedUpdate) {
+			FreezeImage::worldStoppedUpdate(dt);
+		}
 		if (FreezeImage::worldStoppedTime <= 0) {
 			FreezeImage::worldStoppedTime = -1.f;
 		}
 		return;
-	}
-
-	if (FreezeImage::nextWorldStopIn >= 0) {
-		FreezeImage::nextWorldStopIn -= 1;
-		if (FreezeImage::nextWorldStopIn < 0) {
-			FreezeImage::worldStoppedTime = FreezeImage::nextWorldStopDuration;
-			FreezeImage::nextWorldStopIn = -1;
-		}
 	}
 
 	if (Screenshake::screenshakeTime > 0) {
@@ -177,7 +172,7 @@ void BeforeEnterScene()
 	Camera::SetCenter(Camera::Center());
 
 	FreezeImage::worldStoppedTime = -1;
-
+	FreezeImage::worldStoppedUpdate = nullptr;
 }
 
 void AfterDraw()
