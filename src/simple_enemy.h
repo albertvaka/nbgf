@@ -53,7 +53,7 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 	void Draw() const
 	{
 		const GPU_Rect& animRect = anim.CurrentFrameRect();
-		Window::Draw(Assets::invadersTexture, pos)
+		Window::Draw(Assets::spritesTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)
 			.withScale(0.8f);

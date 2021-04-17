@@ -30,7 +30,7 @@ struct EnemyBullet : CircleEntity, SelfRegister<EnemyBullet>
 	void Draw() const
 	{
 		const GPU_Rect& rect = AnimLib::ENEMY_BULLET;
-		Window::Draw(Assets::invadersTexture, pos)
+		Window::Draw(Assets::spritesTexture, pos)
 			.withRect(rect)
 			.withOrigin(vec(rect.w, rect.h) / 2);
 

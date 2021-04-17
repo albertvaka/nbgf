@@ -30,7 +30,7 @@ void Player::Update(float dt)
 void Player::Draw() const
 {
 	const GPU_Rect& animRect = AnimLib::PLAYER;
-	Window::Draw(Assets::invadersTexture, pos)
+	Window::Draw(Assets::spritesTexture, pos)
 		.withRect(animRect)
 		.withOrigin(vec(animRect.w, animRect.h) / 2);
 

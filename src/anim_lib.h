@@ -2,11 +2,13 @@
 
 #include "animation_frame.h"
 
+static constexpr GPU_Rect GetRect(int col, int row) { return {col*16.0f, row*16.0f, 16.0f, 16.0f}; }
+
 namespace AnimLib {
 
 	constexpr const AnimationFrame ALIEN_1[] = {
-		{ {0,0,71,55}, 0.3f },
-		{ {71,0,71,55}, 0.3f },
+		{ GetRect(0,1), 0.3f },
+		{ GetRect(0,1), 0.3f },
 	};
 
 	constexpr const AnimationFrame ALIEN_2[] = {
@@ -14,10 +16,10 @@ namespace AnimLib {
 		{ {144 + 58,0,58,55}, 0.3f },
 	};
 
-	constexpr const GPU_Rect PLAYER = { 73,317,44,24 };
+	constexpr const GPU_Rect PLAYER = GetRect(1, 0);
 
-	constexpr const GPU_Rect BULLET = { 241,196,20,30 };
-	constexpr const GPU_Rect ENEMY_BULLET = { 213,141,10,10 };
+	constexpr const GPU_Rect BULLET = GetRect(0, 3);
+	constexpr const GPU_Rect ENEMY_BULLET = GetRect(1, 3);
 	
 
 }

@@ -13,6 +13,7 @@ struct Assets
 {
 	static void LoadAll();
 
+	static inline GPU_Image* spritesTexture;
 	static inline GPU_Image* invadersTexture;
 	
 	static inline GPU_Image* backgroundTexture;

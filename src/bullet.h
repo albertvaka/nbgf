@@ -32,7 +32,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 	void Draw() const
 	{
 		const GPU_Rect& rect = AnimLib::BULLET;
-		Window::Draw(Assets::invadersTexture, pos)
+		Window::Draw(Assets::spritesTexture, pos)
 			.withRect(rect)
 			.withOrigin(vec(rect.w,rect.h)/2)
 			.withRotationDegs(Camera::Center().AngleDegs(pos) + 90)

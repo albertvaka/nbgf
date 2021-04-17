@@ -4,6 +4,7 @@
 
 void Assets::LoadAll() {
 
+    spritesTexture = LoadImage("data/sprite.png");
     invadersTexture = LoadImage("data/invaders.png");
     backgroundTexture = LoadImage("data/bg.png");
 
