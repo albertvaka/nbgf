@@ -1,6 +1,7 @@
 #include "sound.h"
 
 #include <SDL_mixer.h>
+#include <cassert>
 
 #include "debug.h"
 
@@ -9,6 +10,7 @@ void Sound::Load(const char* path) {
 	sound = Mix_LoadWAV(path);
 	if (!sound) {
 		Debug::out << "Unable to load sound '" << path << "': " << Mix_GetError();
+		assert(false);
 	}
 }
 

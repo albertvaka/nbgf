@@ -6,6 +6,7 @@
 #include "window.h"
 
 #include <cerrno>
+#include <cassert>
 
 void Shader::loadAndAttach(GPU_ShaderEnum type, const char* path) {
 
@@ -47,6 +48,7 @@ precision mediump int;\n";
 	std::ifstream shaderfile(path);
 	if (shaderfile.fail()) {
 		Debug::out << "Could not read shader from '" << path << "': " << strerror(errno);
+		assert(false);
 		return;
 	}
 
