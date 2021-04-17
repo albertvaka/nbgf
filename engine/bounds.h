@@ -157,10 +157,6 @@ struct BoxBounds
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
     [[nodiscard]] float Distance(const BoxBounds& a) const;
     [[nodiscard]] float Distance(const CircleBounds& a) const;
-
-    //TODO
-    //void ExpandToInclude(vec point);
-
 };
 
 struct CircleBounds

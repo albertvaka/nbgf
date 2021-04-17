@@ -5,7 +5,6 @@
 #include "input.h"
 #include "mates.h"
 #include "debug.h"
-#include "text.h"
 #include "debug.h"
 #include "camera.h"
 #include "fx.h"
@@ -35,6 +34,7 @@ float mainClock;
 static int last_ticks;
 
 #ifdef _FPS_COUNTER
+#include "text.h"
 Text* txt_fps;
 int fps_counter = 0;
 float fpsClock = 0.f;
