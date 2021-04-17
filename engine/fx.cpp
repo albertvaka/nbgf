@@ -38,6 +38,9 @@ void Update(float dt)
 		}
 		if (FreezeImage::worldStoppedTime <= 0) {
 			FreezeImage::worldStoppedTime = -1.f;
+			if (FreezeImage::unfreezeCallback) {
+				FreezeImage::unfreezeCallback();
+			}
 		}
 		return;
 	}
@@ -173,6 +176,7 @@ void BeforeEnterScene()
 
 	FreezeImage::worldStoppedTime = -1;
 	FreezeImage::worldStoppedUpdate = nullptr;
+	FreezeImage::unfreezeCallback = nullptr;
 }
 
 void AfterDraw()

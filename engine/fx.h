@@ -85,9 +85,14 @@ namespace Fx {
 			worldStoppedUpdate = update;
 		}
 
+		static void SetUnfreezeCallback(std::function<void()> update = nullptr) {
+			unfreezeCallback = update;
+		}
+
 		static bool IsFrozen() { return (worldStoppedTime > 0.f); }
 
 		static inline std::function<void(float dt)> worldStoppedUpdate = nullptr;
+		static inline std::function<void()> unfreezeCallback = nullptr;
 		static inline float worldStoppedTime = -1.f;
 	};
 
