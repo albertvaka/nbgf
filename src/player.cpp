@@ -32,7 +32,8 @@ void Player::Draw() const
 	const GPU_Rect& animRect = AnimLib::PLAYER;
 	Window::Draw(Assets::spritesTexture, pos)
 		.withRect(animRect)
-		.withOrigin(vec(animRect.w, animRect.h) / 2);
+		.withScale(vec(2.0f))
+		.withOrigin(vec(animRect.w, animRect.h+4) / 2);
 
 	Bounds().DebugDraw();
 }

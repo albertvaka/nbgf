@@ -14,7 +14,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 	vec vel;
 
 	Bullet(const vec& position, const vec& velocity)
-		: CircleEntity(pos, 10)
+		: CircleEntity(pos, 5)
 	{
 		pos = position;
 		vel = velocity;

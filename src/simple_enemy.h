@@ -22,7 +22,7 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 	Animation anim;
 
 	SimpleEnemy(vec pos, float dirOffsetRadians = 0)
-		: CircleEntity(pos, 20.f)
+		: CircleEntity(pos, 15.f)
 		, initialPos(pos)
 		, dirOffsetRadians(dirOffsetRadians)
 		, anim(AnimLib::ALIEN_1)
@@ -56,6 +56,6 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 		Window::Draw(Assets::spritesTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)
-			.withScale(0.8f);
+			.withScale(2.0f);
 	}
 };
