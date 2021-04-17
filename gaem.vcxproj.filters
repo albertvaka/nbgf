@@ -235,6 +235,7 @@
     <ClInclude Include="src\enemy_bullet.h">
       <Filter>src\enemies</Filter>
     </ClInclude>
+    <ClInclude Include="src\strategy_enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

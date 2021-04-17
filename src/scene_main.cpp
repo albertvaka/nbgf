@@ -9,6 +9,7 @@
 #include "enemy_bullet.h"
 #include "fx.h"
 #include "simple_enemy.h"
+#include "strategy_enemy.h"
 #include "collide.h"
 #include "debug.h"
 
@@ -52,6 +53,18 @@ void MainScene::EnterScene()
 		new SimpleEnemy(vec(0.33f, 0.4f) * Camera::Size(), Angles::Pi / 2);
 		new SimpleEnemy(vec(0.67f, 0.4f) * Camera::Size(), Angles::Pi / 2);
 		break;
+	case 3:
+		new SimpleEnemy(vec(0.33f, 0.2f) * Camera::Size());
+		auto orient_strategy = [this](StrategyEnemy& self, float dt) { 
+			vec dir = player.pos - self.pos;
+			// Add 90 deg, since it's facing south (90 deg) by default.
+			self.rot_rads = -Angles::Pi/2.0f + std::atan2(dir.y, dir.x);
+		};
+		auto shoot_player_every_5sec_strategy = [this](StrategyEnemy& self, float dt, float total_time) {
+			if (ShouldShootWithPeriod(0.5f, total_time, dt)) { new EnemyBullet(self.pos, player.pos - self.pos); }
+		};
+		new StrategyEnemy(vec(0.1f, 0.1f) * Camera::Size(), shoot_player_every_5sec_strategy, orient_strategy);
+		break;
 	}
 }
 
@@ -60,6 +73,7 @@ void MainScene::ExitScene()
 	alienPartSys.Clear();
 	Bullet::DeleteAll();
 	SimpleEnemy::DeleteAll();
+	StrategyEnemy::DeleteAll();
 	EnemyBullet::DeleteAll();
 }
 
@@ -117,6 +131,9 @@ void MainScene::Update(float dt)
 	for (SimpleEnemy* a : SimpleEnemy::GetAll()) {
 		a->Update(dt);
 	}
+	for (StrategyEnemy* a : StrategyEnemy::GetAll()) {
+		a->Update(dt);
+	}
 
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
@@ -164,6 +181,10 @@ void MainScene::Draw()
 	Shader::Deactivate();
 
 	for (const SimpleEnemy* a : SimpleEnemy::GetAll()) {
+		a->Draw();
+		a->Bounds().DebugDraw(255,0,0);
+	}
+	for (const auto* a : StrategyEnemy::GetAll()) {
 		a->Draw();
 		a->Bounds().DebugDraw(255,0,0);
 	}

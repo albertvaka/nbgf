@@ -12,8 +12,8 @@ namespace AnimLib {
 	};
 
 	constexpr const AnimationFrame ALIEN_2[] = {
-		{ {144,0,58,55}, 0.3f },
-		{ {144 + 58,0,58,55}, 0.3f },
+		{ GetRect(0,2),  0.3f },
+		{ GetRect(0,2),  0.3f },
 	};
 
 	constexpr const GPU_Rect PLAYER = GetRect(1, 0);
