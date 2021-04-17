@@ -11,7 +11,7 @@ namespace Tiled {
 struct Screens {
 
 	// Bounds
-	static const std::array<BoxBounds, 22> screen;
+	static const std::array<BoxBounds, 23> screen;
 
 };
 

@@ -20,7 +20,7 @@ const std::array<BoxBounds, 12> Areas::bat_bounds = {
 	BoxBounds(6894.9415f,1114.21f,592.117f,320.58f),
 	BoxBounds(6896.9415f,837.71f,592.117f,268.58f),
 	BoxBounds(6292.4415f,852.71f,572.617f,233.58f),
-	BoxBounds(6096.6915f,691.21f,617.117f,106.08f),
+	BoxBounds(6096.6915f,671.21f,710.450333333333f,126.08f),
 };
 
 const std::array<BoxBounds, 1> Areas::boss_bounds = {

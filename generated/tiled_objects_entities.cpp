@@ -4,9 +4,9 @@ namespace Tiled {
 
 
 const std::unordered_map<int, vec> Entities::angrybat = {
-	{ 261, vec(5088.227272727273f, 1023.636363636364f) },
-	{ 262, vec(4960.363636363636f, 991.636363636364f) },
-	{ 265, vec(5056.25f, 960.0f) },
+	{ 261, vec(5024.227272727273f, 1023.636363636364f) },
+	{ 262, vec(4896.363636363636f, 991.636363636364f) },
+	{ 265, vec(4992.25f, 960.0f) },
 	{ 678, vec(7456.3785f, 654.818f) },
 	{ 679, vec(7328.5154999999995f, 622.818f) },
 	{ 680, vec(7424.4015f, 591.182f) },
@@ -45,6 +45,7 @@ const std::unordered_map<int, vec> Entities::bat = {
 	{ 750, vec(6609.25f, 880.771f) },
 	{ 753, vec(6371.0f, 879.25f) },
 	{ 782, vec(6433.5f, 716.5f) },
+	{ 791, vec(8192.0f, 1534.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::batawake = {
@@ -79,6 +80,7 @@ const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 129, vec(4002.55f, 1410.545f) },
 	{ 266, vec(3889.3333333333303f, 945.333333333333f) },
 	{ 359, vec(3328.25f, 1585.0f) },
+	{ 792, vec(8242.0f, 1442.181818181818f) },
 };
 
 const std::unordered_map<int, vec> Entities::explosive = {

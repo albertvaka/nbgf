@@ -191,6 +191,7 @@ struct Tile {
 		ONEWAY_15,
 		ONEWAY_16,
 		ONEWAY_17,
+		ONEWAY_18,
 		RSLOPE_1,
 		RSLOPE_2,
 		RSLOPE_3,
