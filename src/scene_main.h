@@ -10,10 +10,12 @@ struct MainScene : Scene {
 	Player player;
 	PartSys alienPartSys;
 	int currentLevel;
-	int deadAliens;
-	Text deadAliensText;
+	float timer;
+	Text timerText;
 
-	MainScene();
+	MainScene() : MainScene(1) { };
+
+	MainScene(int level);
 
 	void EnterScene() override;
 	void ExitScene() override;

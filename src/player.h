@@ -4,12 +4,10 @@
 
 struct Player : CircleEntity
 {
-	float angle;
-	float distance;
-
-	Player(float angle, float distance);
+	Player(vec pos);
 
 	void Update(float dt);
 	void Draw() const;
-	
+
+	int playerNum;
 };

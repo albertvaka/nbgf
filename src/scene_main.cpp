@@ -8,21 +8,23 @@
 #include "bullet.h"
 #include "enemy_bullet.h"
 #include "fx.h"
-#include "alien.h"
+#include "simple_enemy.h"
 #include "collide.h"
 #include "debug.h"
 
-float kAlienMinDistance = 280;
-float kAlienMaxDistance = 380;
+float kSimpleEnemyMinDistance = 280;
+float kSimpleEnemyMaxDistance = 380;
+float kLevelTime = 10.f;
+float kIntroTime = 0.8f;
 
-MainScene::MainScene()
-	: player(0, 180)
+MainScene::MainScene(int level)
+	: player(vec::Zero)
+	, currentLevel(level)
 	, alienPartSys(Assets::invadersTexture)
-	, deadAliensText(Assets::font_30, Assets::font_30_outline)
+	, timerText(Assets::font_30, Assets::font_30_outline)
 {
-	deadAliensText.SetFillColor(0, 0, 0);
-	deadAliensText.SetOutlineColor(255, 255, 0);
-
+	timerText.SetFillColor(0, 0, 0);
+	timerText.SetOutlineColor(255, 255, 0);
 	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
 	alienPartSys.AddSprite(AnimLib::ALIEN_2[0].rect);
 	alienPartSys.min_scale = 0.15f;
@@ -37,16 +39,19 @@ MainScene::MainScene()
 
 void MainScene::EnterScene() 
 {
-	deadAliensText.SetString("Kill the invaders");
-	deadAliens = 0;
-	currentLevel = 1;
-	SpawnAliens();
-}
-
-void MainScene::SpawnAliens() {
-	float baseAngle = Rand::rollf(360);
-	for (int angle = 0; angle < 360; angle += 360/currentLevel) {
-		new Alien(baseAngle+angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
+	player.pos = vec(0.5f, 0.9f) * Camera::Size();
+	timer = kLevelTime + kIntroTime;
+	switch (currentLevel) {
+	case 1:
+		new SimpleEnemy(vec(0.33f, 0.3f) * Camera::Size());
+		new SimpleEnemy(vec(0.67f, 0.3f) * Camera::Size());
+		break;
+	case 2:
+		new SimpleEnemy(vec(0.33f, 0.2f) * Camera::Size());
+		new SimpleEnemy(vec(0.67f, 0.2f) * Camera::Size());
+		new SimpleEnemy(vec(0.33f, 0.4f) * Camera::Size(), Angles::Pi / 2);
+		new SimpleEnemy(vec(0.67f, 0.4f) * Camera::Size(), Angles::Pi / 2);
+		break;
 	}
 }
 
@@ -54,12 +59,14 @@ void MainScene::ExitScene()
 {
 	alienPartSys.Clear();
 	Bullet::DeleteAll();
-	Alien::DeleteAll();
+	SimpleEnemy::DeleteAll();
 	EnemyBullet::DeleteAll();
 }
 
 void MainScene::Update(float dt)
 {
+	if (SceneManager::newScene != nullptr) return;
+
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
@@ -69,24 +76,54 @@ void MainScene::Update(float dt)
 	}
 #endif
 
+	timer -= dt;
+	if (timer > kLevelTime) {
+		if (timer > kLevelTime + kIntroTime / 2) {
+			timerText.SetString("Ready");
+		}
+		else {
+			timerText.SetString("Set");
+		}
+		if (timerText.HasChanges()) {
+			Assets::readySnd.Play();
+		}
+		return;
+	}
+
+	// Win
+	if (timer <= 0) {
+		timerText.SetString("Well done!");
+		currentLevel++;
+		Assets::winSnd.Play();
+		Fx::FreezeImage::Freeze(2.0f);
+		Fx::FreezeImage::SetUnfreezeCallback([]() {
+			SceneManager::RestartScene();
+			});
+		return;
+	}
+
+	if (timer > kLevelTime - kIntroTime) {
+		timerText.SetString("Go!");
+		if (timerText.HasChanges()) {
+			Assets::goSnd.Play();
+		}
+	} else {
+		timerText.SetString(Mates::to_string_with_precision(timer, 2));
+	}
+	
+
 	player.Update(dt);
 
-	for (Alien* a : Alien::GetAll()) {
+	for (SimpleEnemy* a : SimpleEnemy::GetAll()) {
 		a->Update(dt);
 	}
 
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
-		for (Alien* a  : Alien::GetAll()) {
+		for (SimpleEnemy* a  : SimpleEnemy::GetAll()) {
 			if (Collide(a,b)) {
-				Debug::out << "KABOOM " << a->pos;
-
-				deadAliens++;
-				deadAliensText.SetString("Kills: " + std::to_string(deadAliens));
-
 				alienPartSys.pos = a->pos;
 				alienPartSys.AddParticles(10);
-				
 				a->alive = false;
 				b->alive = false;
 			}
@@ -96,19 +133,15 @@ void MainScene::Update(float dt)
 	for (EnemyBullet* b : EnemyBullet::GetAll()) {
 		b->Update(dt);
 		if (Collide(player.Bounds(), b->Bounds())) {
-			Fx::FreezeImage::Freeze(0.3f);
+			Fx::FreezeImage::Freeze(0.5f);
+			Assets::dieSnd.Play();
 			Fx::FreezeImage::SetUnfreezeCallback([]() {
 				SceneManager::RestartScene();
 			});
 		}
 	}
 
-	if (Alien::GetAll().empty()) {
-		currentLevel++;
-		SpawnAliens();
-	}
-
-	Alien::DeleteNotAlive();
+	SimpleEnemy::DeleteNotAlive();
 	Bullet::DeleteNotAlive();
 	EnemyBullet::DeleteNotAlive();
 
@@ -123,14 +156,14 @@ void MainScene::Draw()
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
 		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
 
-	if (Fx::FreezeImage::IsFrozen()) {
+	if (Fx::FreezeImage::IsFrozen() && timer > 0.f) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 	player.Draw();
 	Shader::Deactivate();
 
-	for (const Alien* a : Alien::GetAll()) {
+	for (const SimpleEnemy* a : SimpleEnemy::GetAll()) {
 		a->Draw();
 		a->Bounds().DebugDraw(255,0,0);
 	}
@@ -146,13 +179,13 @@ void MainScene::Draw()
 
 	alienPartSys.Draw();
 
-	Window::Draw(deadAliensText, vec(Camera::Center().x, 30))
-		.withOrigin(deadAliensText.Size()/2)
+	Window::Draw(timerText, vec(Camera::Center().x, 30))
+		.withOrigin(timerText.Size()/2)
 		.withScale(0.666f);
 
 	if (Debug::Draw) {
-		Window::DrawPrimitive::Circle(Camera::Center(), kAlienMinDistance, 1, 255, 255, 255);
-		Window::DrawPrimitive::Circle(Camera::Center(), kAlienMaxDistance, 1, 255, 255, 255);
+		Window::DrawPrimitive::Circle(Camera::Center(), kSimpleEnemyMinDistance, 1, 255, 255, 255);
+		Window::DrawPrimitive::Circle(Camera::Center(), kSimpleEnemyMaxDistance, 1, 255, 255, 255);
 	}
 
 #ifdef _IMGUI
@@ -161,8 +194,7 @@ void MainScene::Draw()
 		vec m = Mouse::GetPositionInWorld();
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		if (ImGui::SliderInt("level", &currentLevel, 1, 20)) {
-			Alien::DeleteAll();
-			SpawnAliens();
+			SceneManager::RestartScene();
 		};
 		ImGui::End();
 	}

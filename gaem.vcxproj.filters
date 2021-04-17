@@ -29,6 +29,12 @@
     <Filter Include="src">
       <UniqueIdentifier>{4ac15e07-3b9f-47b2-ae09-134038d673c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\enemies">
+      <UniqueIdentifier>{2426e409-ca3c-4527-bcfb-7843d0bac7ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scenes">
+      <UniqueIdentifier>{33409753-0b53-4cfd-84c3-8318183122e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\glew\glew.h">
@@ -103,9 +109,6 @@
     <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
-    <ClInclude Include="src\alien.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\anim_lib.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -118,16 +121,10 @@
     <ClInclude Include="src\player.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_main.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\window_conf.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\input_conf.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene_entrypoint.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="engine\input.h">
@@ -226,8 +223,17 @@
     <ClInclude Include="engine\fx.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\simple_enemy.h">
+      <Filter>src\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene_entrypoint.h">
+      <Filter>src\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene_main.h">
+      <Filter>src\scenes</Filter>
+    </ClInclude>
     <ClInclude Include="src\enemy_bullet.h">
-      <Filter>src</Filter>
+      <Filter>src\enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -297,9 +303,6 @@
     <ClCompile Include="src\player.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\input_conf.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -344,6 +347,9 @@
     </ClCompile>
     <ClCompile Include="engine\fx.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_main.cpp">
+      <Filter>src\scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

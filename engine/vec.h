@@ -155,6 +155,15 @@ struct vec
 		return *this;
 	}
 
+	// Component-wise product (like in GLSL)
+	constexpr vec operator*=(const vec& rhs)
+	{
+		x *= rhs.x;
+		y *= rhs.y;
+
+		return *this;
+	}
+
 	constexpr vec operator/=(const float& rhs)
 	{
 		x /= rhs;
@@ -347,6 +356,12 @@ inline constexpr vec operator*(float lhs, vec rhs)
 	vec result(rhs);
 	result *= lhs;
 	return result;
+}
+
+// Component-wise product (like in GLSL)
+inline constexpr vec operator*(vec lhs, vec rhs)
+{
+	return vec(lhs.x * rhs.x, lhs.y * rhs.y);
 }
 
 inline constexpr vec operator-(vec lhs, vec rhs)

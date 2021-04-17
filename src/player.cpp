@@ -8,23 +8,23 @@
 #include "window.h"
 
 
-const float kBulletSpeed = 200.f;
+const float kBulletSpeed = 500.f;
+const float kSpeed = 350.f;
 
-Player::Player(float angle, float distance)
-	: CircleEntity(vec::Zero, 8)
-	, distance(distance)
+Player::Player(vec pos)
+	: CircleEntity(pos, 8)
+	, playerNum(0)
 {
 }
 
 void Player::Update(float dt)
 {
-	vec mouseFromCenter = Mouse::GetPositionInWorld() - Camera::Center();
-	pos = Camera::Center() + mouseFromCenter.Normalized() * distance;
+	vec dir = Input::GetAnalog(playerNum, AnalogInput::MOVE).Normalized();
+	pos += dir * kSpeed * dt;
 	
-	if (Mouse::IsJustPressed(Mouse::Button::Left)) {
-		new Bullet(pos, mouseFromCenter.Normalized() * kBulletSpeed);
+	if (Input::IsJustPressed(playerNum, GameKeys::SHOOT)){
+		new Bullet(pos, vec(0,-kBulletSpeed));
 	}
-	
 }
 
 void Player::Draw() const
@@ -32,8 +32,7 @@ void Player::Draw() const
 	const GPU_Rect& animRect = AnimLib::PLAYER;
 	Window::Draw(Assets::invadersTexture, pos)
 		.withRect(animRect)
-		.withOrigin(vec(animRect.w, animRect.h)/2)
-		.withRotationDegs(Camera::Center().AngleDegs(pos) + 90);
+		.withOrigin(vec(animRect.w, animRect.h) / 2);
 
 	Bounds().DebugDraw();
 }
