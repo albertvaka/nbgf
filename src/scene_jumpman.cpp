@@ -394,9 +394,6 @@ void JumpScene::Update(float dt)
 		return;
 	}
 
-	skillTree.Update(dt);
-	if (skillTree.open) return; // Pause menu
-
 	contextActionButton = false;
 
 	for (OneShotAnim* e : OneShotAnim::GetAll()) { // Update this first so one-frame anims aren't deleted before they are drawn once
@@ -608,11 +605,6 @@ void JumpScene::Update(float dt)
 
 void JumpScene::Draw()
 {
-	if (skillTree.open) {
-		skillTree.DrawMenu();
-		return;
-	}
-
 	Fx::FullscreenShader::Activate(); // Does nothing if no shader is set
 
 	Window::Clear(31, 36, 50);

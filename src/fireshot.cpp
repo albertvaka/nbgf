@@ -17,7 +17,7 @@ void FireShot::Update(float dt)
 		return;
 	}
 
-	if (SmallBulletTilemapCollision(this, false)) {
+	if (SmallBulletTilemapCollision(this, Tile::BreakPower::NONE)) {
 		alive = false;
 		return;
 	}

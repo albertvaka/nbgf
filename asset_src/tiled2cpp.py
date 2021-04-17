@@ -6,7 +6,7 @@ from collections import defaultdict, OrderedDict
 
 level = pytiled_parser.parse_map(Path("tiled.json"))
 
-known_tile_types = ['bg','oneway','rslope','lslope','solid','breakable']
+known_tile_types = ['bg','oneway','rslope','lslope','solid','breakable', 'breakable_hard', 'breakable_gnd']
 
 # Tilesets
 tilesets = list(level.tilesets.values())

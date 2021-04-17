@@ -203,6 +203,8 @@ const GPU_Rect Tile::TileToTextureRect[] = {
 	{ 24 * 16, 1 * 16, 16, 16 }, //=197, BREAKABLE_1, gid=53
 	{ 25 * 16, 1 * 16, 16, 16 }, //=198, BREAKABLE_2, gid=54
 	{ 4 * 16, 2 * 16, 16, 16 }, //=199, BREAKABLE_3, gid=62
+	{ 26 * 16, 1 * 16, 16, 16 }, //=200, BREAKABLE_HARD_1, gid=55
+	{ 27 * 16, 1 * 16, 16, 16 }, //=201, BREAKABLE_GND_1, gid=56
 	{},	//SOLID_TRANSPARENT
 };
 

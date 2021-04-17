@@ -36,8 +36,21 @@ struct Tile : Tiled::Tile
 		return value >= SOLID_1;
 	}
 
-	bool isBreakable() const {
-		return value >= BREAKABLE_1 && value < SOLID_TRANSPARENT;
+	enum class BreakPower {
+		NONE = 0,
+		SOFT,
+		HARD,
+		ANY = HARD,
+	};
+
+	bool isBreakable(BreakPower breakPower) const {
+		if (breakPower == BreakPower::NONE) return false;
+		if (breakPower == BreakPower::SOFT) return value >= BREAKABLE_1 && value < BREAKABLE_HARD_1; // Exclude hard breakable tiles
+		return value >= BREAKABLE_1 && value < BREAKABLE_GND_1; // Soft and hard breakable tiles
+	}
+
+	bool isBreakableGround() const {
+		return value >= BREAKABLE_GND_1 && value < SOLID_TRANSPARENT;
 	}
 
 	// Boilerplate

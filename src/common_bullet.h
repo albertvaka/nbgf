@@ -7,7 +7,7 @@
 // Takes the bullet radius into account to calculate collisions,
 // use SmallBulletTilemapCollision for single-pixel collisions
 template<class T>
-bool BigBulletTilemapCollision(T* bullet, bool breakTiles = false) {
+bool BigBulletTilemapCollision(T* bullet, Tile::BreakPower breakTilesPower = Tile::BreakPower::NONE) {
 	GaemTileMap* map = GaemTileMap::instance();
 	vec toTheOutside = bullet->vel.Perp().Normalized() * bullet->radius * 0.85f;
 	veci t = Tile::ToTiles(bullet->pos + toTheOutside);
@@ -17,7 +17,7 @@ bool BigBulletTilemapCollision(T* bullet, bool breakTiles = false) {
 		tile = map->GetTile(t);
 	}
 	if (tile.isFullSolid()) {
-		if (breakTiles && tile.isBreakable()) {
+		if (tile.isBreakable(breakTilesPower)) {
 			DestroyedTiles::instance()->Destroy(t.x, t.y);
 		}
 		return true;
@@ -28,12 +28,12 @@ bool BigBulletTilemapCollision(T* bullet, bool breakTiles = false) {
 // single-pixel collision, use BigBulletTilemapCollision if you want to 
 // take the radius of the bullet into account
 template<class T>
-bool SmallBulletTilemapCollision(T* bullet, bool breakTiles = false) {
+bool SmallBulletTilemapCollision(T* bullet, Tile::BreakPower breakTilesPower = Tile::BreakPower::NONE) {
 	GaemTileMap* map = GaemTileMap::instance();
 	veci t = Tile::ToTiles(bullet->pos);
 	Tile tile = map->GetTile(t);
 	if (tile.isFullSolid()) {
-		if (breakTiles && tile.isBreakable()) {
+		if (tile.isBreakable(breakTilesPower)) {
 			DestroyedTiles::instance()->Destroy(t.x, t.y);
 		}
 		return true;
