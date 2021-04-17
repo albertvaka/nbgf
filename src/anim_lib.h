@@ -284,6 +284,7 @@ namespace AnimLib {
 	constexpr const std::array<AnimationFrame, 5> WARRIOR_SLIDE = warriorSheet.Frames<5>(86);
 	constexpr const std::array<AnimationFrame, 8> WARRIOR_LADDER = warriorSheet.Frames<8>(91);
 	constexpr const AnimationFrame WARRIOR_TURN[] = { warriorSheet.Frame(12*6+1, 1.f) };
+	constexpr const AnimationFrame WARRIOR_DIVE[] = { warriorSheet.Frame(47, 1.f) };
 
 }
 

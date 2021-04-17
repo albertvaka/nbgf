@@ -229,6 +229,13 @@ void JumpScene::EnterScene()
 		}
 	}
 
+	for (auto const& [id, pos] : Tiled::Entities::angrybatawake) {
+		Bat* b = new Bat(pos, true, true);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
 	for (auto const& [id, pos] : Tiled::Entities::batawake) {
 		Bat* b =new Bat(pos, false, true);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
