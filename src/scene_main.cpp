@@ -61,7 +61,7 @@ void MainScene::EnterScene()
 			self.rot_rads = -Angles::Pi/2.0f + std::atan2(dir.y, dir.x);
 		};
 		auto shoot_player_every_5sec_strategy = [this](StrategyEnemy& self, float dt, float total_time) {
-			if (ShouldShootWithPeriod(0.5f, total_time, dt)) { new EnemyBullet(self.pos, player.pos - self.pos); }
+			if (ShouldShootWithPeriod(0.5f, total_time, dt)) { new EnemyBullet(self.pos, (player.pos - self.pos).Normalized() * 80.0f); }
 		};
 		new StrategyEnemy(vec(0.1f, 0.1f) * Camera::Size(), shoot_player_every_5sec_strategy, orient_strategy);
 		new StrategyEnemy(vec(0.9f, 0.1f) * Camera::Size(), shoot_player_every_5sec_strategy, orient_strategy);
