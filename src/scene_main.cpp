@@ -61,6 +61,22 @@ auto d_shot_every_sec_strategy = [](StrategyEnemy& self, float dt, float total_t
 		new EnemyBullet(self.pos + (playerDir * 25).RotatedAroundOriginDegs(-60), playerDir * 80.0f);
 	}
 };
+
+auto octopus_absorb = [](StrategyEnemy& self, float dt, float total_time) {
+	static const int kNumBullets = 11;
+	static const float period = 0.5f;
+	static const float rad_step = Angles::Pi / kNumBullets;
+	// TODO: Draw under the ships.
+	if (ShouldShootWithPeriod(period, total_time, dt)) {
+		for (int i = 2; i < kNumBullets-2; ++i) {
+			bool angle_parity = static_cast<int>(std::floor(total_time / period)) % 2 == 0;
+			float base_rad = angle_parity ? 0 : 0.5f * rad_step;
+			auto dir = vec::FromAngleRads(base_rad + i*rad_step);
+			(new EnemyBullet(self.pos + dir * Window::GAME_WIDTH*0.75f, -dir * 55))->can_survive_outbounds=true;
+		}
+	}
+};
+
 auto shot_in_circle = [](StrategyEnemy& self, float dt, float total_time) {
 	static const int kNumBullets = 30;
 	static const float rad_step = Angles::Tau / kNumBullets;
@@ -148,6 +164,11 @@ void MainScene::EnterScene()
 		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.8f, -0.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 	}
 	break;
+	case 8:
+	{
+		(new StrategyEnemy(AnimLib::ALIEN_KRAKEN, vec(0.5f, 0.05f) * Camera::Size(), octopus_absorb))->hp = 24;
+	}
+		break;
 	}
 }
 

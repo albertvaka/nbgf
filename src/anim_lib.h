@@ -17,6 +17,7 @@ namespace AnimLib {
 	constexpr const GPU_Rect ALIEN_OVAL = GetRect(3, 2);
 
 	constexpr const GPU_Rect ALIEN_CAR = GetRect(4, 2);
+	constexpr const GPU_Rect ALIEN_KRAKEN = GetRect(5, 2);
 	
 	constexpr const GPU_Rect PLAYER = GetRect(2, 0);
 

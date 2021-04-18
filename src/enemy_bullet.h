@@ -10,6 +10,7 @@
 struct EnemyBullet : CircleEntity, SelfRegister<EnemyBullet>
 {
 	vec vel;
+	bool can_survive_outbounds = false;
 
 	EnemyBullet(const vec& position, const vec& velocity)
 		: CircleEntity(pos, 3)
@@ -22,7 +23,7 @@ struct EnemyBullet : CircleEntity, SelfRegister<EnemyBullet>
 	{
 		pos += vel * dt;
 
-		if (!Camera::Bounds().Contains(pos)) {
+		if (!Camera::Bounds().Contains(pos) && !can_survive_outbounds) {
 			alive = false;
 		}
 	}
