@@ -22,7 +22,7 @@ void StaticMovingStrategy(StrategyEnemy& self, float dt) {}
 
 bool ShouldShootWithPeriod(float period_sec, float total_time, float dt) {
 	// TODO: This is not perfect, but quite simple. Fix if possible.
-	return std::floor(total_time/period_sec) != std::floor((total_time - dt)/period_sec);
+	return int((total_time+dt)/period_sec) != int((total_time)/period_sec);
 }
 
 // StrategyEnemy is an enemy that takes `ShootingStrategy` and `MovingStrategy` behaviors,
