@@ -19,8 +19,10 @@ float kSimpleEnemyMaxDistance = 380;
 float kLevelTime = 10.f;
 float kIntroTime = 0.8f;
 
+auto sidetoside_strategy = [](StrategyEnemy& self, float dt) {
+	self.pos.x = self.initialPos.x + sin(self.total_time * 2) * 80;
+};
 auto movedown_strategy = [](StrategyEnemy& self, float dt) {
-	vec dir = Player::instance()->pos - self.pos;
 	self.pos.y += 100 * dt;
 	self.pos.x = self.initialPos.x + sin(self.total_time*2) * 20;
 	//self.rot_rads = -Angles::Pi / 2.0f + std::atan2(dir.y, dir.x);
@@ -166,7 +168,9 @@ void MainScene::EnterScene()
 	break;
 	case 8:
 	{
-		(new StrategyEnemy(AnimLib::ALIEN_KRAKEN, vec(0.5f, 0.05f) * Camera::Size(), octopus_absorb))->hp = 24;
+		(new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.2f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy))->hp = 3;
+		(new StrategyEnemy(AnimLib::ALIEN_KRAKEN, vec(0.5f, 0.05f) * Camera::Size(), octopus_absorb))->hp = 15;
+		(new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.8f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy))->hp = 3;
 	}
 		break;
 	}
