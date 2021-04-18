@@ -29,6 +29,10 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 	{
 	}
 
+	void Hit() {
+		alive = false;
+	}
+
 	void Update(float dt)
 	{
 		anim.Update(dt);

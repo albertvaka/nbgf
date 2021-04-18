@@ -33,6 +33,8 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 	ShootingStrategy shootingStrategy;
 	float total_time = 0.0f;
 	float rot_rads = 0.0f;
+	int hp = 5;
+	float flashRedTimer = 0.f;
 
 	Animation anim;
 
@@ -44,6 +46,13 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 		, anim(AnimLib::ALIEN_2)
 	{
 	}
+	void Hit() {
+		hp--;
+		flashRedTimer = 0.3f;
+		if (hp <= 0) {
+			alive = false;
+		}
+	}
 
 	void Update(float dt)
 	{
@@ -51,16 +60,21 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 		movingStrategy(*this, dt);
 		shootingStrategy(*this, dt, total_time);
 		total_time += dt;
-
+		flashRedTimer -= dt;
 	}
 
 	void Draw() const
 	{
+		if (flashRedTimer > 0) {
+			Assets::tintShader.Activate();
+			Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
+		}
 		const GPU_Rect& animRect = anim.CurrentFrameRect();
 		Window::Draw(Assets::spritesTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)
 			.withRotationRads(rot_rads)
 			.withScale(2.0f);
+		Shader::Deactivate();
 	}
 };

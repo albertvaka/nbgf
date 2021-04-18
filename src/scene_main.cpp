@@ -156,23 +156,27 @@ void MainScene::Update(float dt)
 
 	player.Update(dt);
 
+	for (Bullet* b : Bullet::GetAll()) {
+		b->Update(dt);
+	}
+
 	for (SimpleEnemy* a : SimpleEnemy::GetAll()) {
+		for (Bullet* b : Bullet::GetAll()) {
+			if (Collide(a, b)) {
+				b->alive = false;
+				a->Hit();
+			}
+		}
 		a->Update(dt);
 	}
 	for (StrategyEnemy* a : StrategyEnemy::GetAll()) {
-		a->Update(dt);
-	}
-
-	for (Bullet* b : Bullet::GetAll()) {
-		b->Update(dt);
-		for (SimpleEnemy* a  : SimpleEnemy::GetAll()) {
-			if (Collide(a,b)) {
-				alienPartSys.pos = a->pos;
-				alienPartSys.AddParticles(10);
-				a->alive = false;
+		for (Bullet* b : Bullet::GetAll()) {
+			if (Collide(a, b)) {
 				b->alive = false;
+				a->Hit();
 			}
 		}
+		a->Update(dt);
 	}
 
 	for (EnemyBullet* b : EnemyBullet::GetAll()) {
@@ -187,6 +191,7 @@ void MainScene::Update(float dt)
 	}
 
 	SimpleEnemy::DeleteNotAlive();
+	StrategyEnemy::DeleteNotAlive();
 	Bullet::DeleteNotAlive();
 	EnemyBullet::DeleteNotAlive();
 
