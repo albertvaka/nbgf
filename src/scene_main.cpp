@@ -12,6 +12,7 @@
 #include "strategy_enemy.h"
 #include "collide.h"
 #include "particles.h"
+#include "backgroundelement.h"
 #include "debug.h"
 
 float kSimpleEnemyMinDistance = 280;
@@ -19,13 +20,18 @@ float kSimpleEnemyMaxDistance = 380;
 float kLevelTime = 10.f;
 float kIntroTime = 0.8f;
 
+auto octopus_wave = [](StrategyEnemy& self, float dt) {
+	self.pos.y = self.initialPos.y - sin(self.total_time*2) * 12;
+};
 auto sidetoside_strategy = [](StrategyEnemy& self, float dt) {
-	self.pos.x = self.initialPos.x + sin(self.total_time * 2) * 80;
+	self.pos.x = Mates::map(cos(self.total_time+Angles::Tau/2), -1, 1.4f, self.initialPos.x, Camera::Center().x);
+	self.pos.y = Mates::map(cos(self.total_time+Angles::Tau/2), -1, 1.6f, self.initialPos.y, Camera::Center().y- 20);
+	vec dir = Player::instance()->pos - self.pos;
+	self.rot_rads = -Angles::Pi / 2.0f + std::atan2(dir.y, dir.x);
 };
 auto movedown_strategy = [](StrategyEnemy& self, float dt) {
 	self.pos.y += 100 * dt;
 	self.pos.x = self.initialPos.x + sin(self.total_time*2) * 20;
-	//self.rot_rads = -Angles::Pi / 2.0f + std::atan2(dir.y, dir.x);
 };
 auto fastshoot_player_every_halfsec_strategy = [](StrategyEnemy& self, float dt, float total_time) {
 	if (ShouldShootWithPeriod(0.4f, total_time, dt)) { new EnemyBullet(self.pos, (Player::instance()->pos - self.pos).Normalized() * 160.0f); }
@@ -80,9 +86,9 @@ auto octopus_absorb = [](StrategyEnemy& self, float dt, float total_time) {
 };
 
 auto shot_in_circle = [](StrategyEnemy& self, float dt, float total_time) {
-	static const int kNumBullets = 30;
+	static const int kNumBullets = 28;
 	static const float rad_step = Angles::Tau / kNumBullets;
-	static const float period = 0.45f;
+	static const float period = 0.6f;
 	if (ShouldShootWithPeriod(period, total_time, dt)) {
 		bool angle_parity = static_cast<int>(std::floor(total_time / period)) % 2 == 0;
 		float base_rad = angle_parity ? 0 : 0.5f * rad_step;
@@ -107,6 +113,10 @@ void MainScene::EnterScene()
 	Fx::FreezeImage::SetUnfreezeCallback([]() {
 		SceneManager::RestartScene();
 	});
+	for (int i = 0; i < 100; i++) {
+		new BackgroundElement();
+	}
+	won = false;
 	player.Reset();
 	timer = kLevelTime + kIntroTime;
 	switch (currentLevel) {
@@ -122,36 +132,31 @@ void MainScene::EnterScene()
 		break;
 	case 3:
 	{
-		new StrategyEnemy(AnimLib::ALIEN_BIG, vec(0.1f, 0.1f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy);
-		new StrategyEnemy(AnimLib::ALIEN_BIG, vec(0.9f, 0.1f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_BIG, vec(0.2f, 0.2f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_BIG, vec(0.8f, 0.2f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy);
 	}
 		break;
 	case 4:
 	{
-		(new StrategyEnemy(AnimLib::ALIEN_DONUT, vec(0.5f, 0.1f) * Camera::Size(), shot_in_circle))->hp = 10;
-	}
-	break;
-	case 5:
-	{
-		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.2f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy);
-		(new StrategyEnemy(AnimLib::ALIEN_DONUT, vec(0.5f, 0.1f) * Camera::Size(), shot_in_circle))->hp = 10;
-		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.8f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.2f, 0.33f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy);
+		(new StrategyEnemy(AnimLib::ALIEN_DONUT, vec(0.5f, 0.2f) * Camera::Size(), shot_in_circle))->hp = 10;
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.8f, 0.33f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy);
 	}
 		break;
-	case 6:
+	case 5:
 	{
-		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.2f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
-		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.5f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
-		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.8f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.2f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.5f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.8f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
 	}
 	break;
-	case 7:
+	case 6:
 	{
 		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.4f, -1.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.6f, -1.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 
 		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.2f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
-		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.9f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.8f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 
 		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.4f, -0.7f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.6f, -0.7f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
@@ -166,13 +171,43 @@ void MainScene::EnterScene()
 		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.8f, -0.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 	}
 	break;
+	case 7:
+	{
+		(new StrategyEnemy(AnimLib::ALIEN_BIG, vec(0.2f, 0.2f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy))->hp = 3;
+		(new StrategyEnemy(AnimLib::ALIEN_KRAKEN, vec(0.5f, 0.3f) * Camera::Size(), octopus_absorb, octopus_wave))->hp = 15;
+		(new StrategyEnemy(AnimLib::ALIEN_BIG, vec(0.8f, 0.2f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy))->hp = 3;
+	}
+	break;
 	case 8:
 	{
-		(new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.2f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy))->hp = 3;
-		(new StrategyEnemy(AnimLib::ALIEN_KRAKEN, vec(0.5f, 0.05f) * Camera::Size(), octopus_absorb))->hp = 15;
-		(new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.8f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy))->hp = 3;
+		(new StrategyEnemy(AnimLib::ALIEN_DONUT, vec(0.5f, 0.2f) * Camera::Size(), shot_in_circle))->hp = 10;
+
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.25f, -1.0f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.75f, -1.0f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.25f, -0.5f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.75f, -0.5f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 	}
+	break;
+	case 9:
+	{
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.25f, 0.2f) * Camera::Size(), shoot_player_every_halfsec_strategy, sidetoside_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.75f, 0.2f) * Camera::Size(), shoot_player_every_halfsec_strategy, sidetoside_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(Camera::Center().x, Camera::Center().y - 20), d_shot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.25f, 0.6f) * Camera::Size(), shoot_player_every_halfsec_strategy, sidetoside_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.75f, 0.6f) * Camera::Size(), shoot_player_every_halfsec_strategy, sidetoside_strategy);
+	}
+	break;
 		break;
+	case 10:
+	{
+		//TODO: boss
+	}
+	break;
+	case 11: {
+		won = true;
+	}
+	break;
 	}
 }
 
@@ -183,11 +218,11 @@ void MainScene::ExitScene()
 	SimpleEnemy::DeleteAll();
 	StrategyEnemy::DeleteAll();
 	EnemyBullet::DeleteAll();
+	BackgroundElement::DeleteAll();
 }
 
 void MainScene::Update(float dt)
 {
-	if (SceneManager::newScene != nullptr) return;
 
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
@@ -197,7 +232,7 @@ void MainScene::Update(float dt)
 		return;
 	}
 	// Quick access to levels. Starts at SDL_SCANCODE_1.
-	for (int i = SDL_SCANCODE_1; i < SDL_SCANCODE_0; ++i) {
+	for (int i = SDL_SCANCODE_1; i <= SDL_SCANCODE_0; ++i) {
 		if (Keyboard::IsKeyJustPressed(static_cast<SDL_Scancode>(i))) {
 			currentLevel = 1 + i - SDL_SCANCODE_1;
 			SceneManager::RestartScene();
@@ -206,55 +241,67 @@ void MainScene::Update(float dt)
 	}
 #endif
 
-	timer -= dt;
-	if (timer > kLevelTime) {
-		if (timer > kLevelTime + kIntroTime / 2) {
-			timerText.SetString("Ready");
+	if (SceneManager::newScene != nullptr) return;
+
+	if (won) {
+		timerText.SetString("Thanks for playing :D");
+	} else {
+		timer -= dt;
+		if (timer > kLevelTime) {
+			if (timer > kLevelTime + kIntroTime / 2) {
+				timerText.SetString("Ready");
+			}
+			else {
+				timerText.SetString("Set");
+			}
+			if (timerText.HasChanges()) {
+				Assets::readySnd.Play();
+			}
+			return;
+		}
+		if (SimpleEnemy::GetAll().empty() && StrategyEnemy::GetAll().empty()) {
+			timerText.SetString("Well done!");
+			Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
+				Particles::explosion.UpdateParticles(dt);
+			});
+			currentLevel++;
+			Assets::winSnd.Play();
+			Fx::FreezeImage::Freeze(1.5f);
+			return;
+		}
+
+		if (timer <= 0) {
+			timerText.SetString("Time out!");
+			Fx::FreezeImage::Freeze(0.5f);
+			Assets::dieSnd.Play();
+			return;
+		}
+
+		if (timer > kLevelTime - kIntroTime) {
+			timerText.SetString("Go!");
+			if (timerText.HasChanges()) {
+				Assets::goSnd.Play();
+			}
 		}
 		else {
-			timerText.SetString("Set");
+			timerText.SetString(Mates::to_string_with_precision(timer, 2));
 		}
-		if (timerText.HasChanges()) {
-			Assets::readySnd.Play();
-		}
-		return;
 	}
 
-
-	if (SimpleEnemy::GetAll().empty() && StrategyEnemy::GetAll().empty()) {
-		timerText.SetString("Well done!");
-		Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
-			Particles::explosion.UpdateParticles(dt);
-		});
-		currentLevel++;
-		Assets::winSnd.Play();
-		Fx::FreezeImage::Freeze(2.0f);
-		return;
+	for (BackgroundElement* a : BackgroundElement::GetAll()) {
+		a->Update(dt);
 	}
-
-	//lose
-	if (timer <= 0) {
-		timerText.SetString("Time out!");
-		Fx::FreezeImage::Freeze(0.5f);
-		Assets::dieSnd.Play();
-		return;
-	}
-
-	if (timer > kLevelTime - kIntroTime) {
-		timerText.SetString("Go!");
-		if (timerText.HasChanges()) {
-			Assets::goSnd.Play();
-		}
-	} else {
-		timerText.SetString(Mates::to_string_with_precision(timer, 2));
-	}
-	
 
 	player.Update(dt);
 
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
 	}
+
+	if (won) {
+		return;
+	}
+
 
 	for (SimpleEnemy* a : SimpleEnemy::GetAll()) {
 		for (Bullet* b : Bullet::GetAll()) {
@@ -316,17 +363,13 @@ void MainScene::Update(float dt)
 
 void MainScene::Draw()
 {
-	Window::Clear(0, 0, 0);
+	Window::Clear(15, 15, 15);
 
-	Window::Draw(Assets::backgroundTexture, Camera::Center())
-		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
+	for (const BackgroundElement* a : BackgroundElement::GetAll()) {
+		a->Draw();
+	}
 
-	/*if (Fx::FreezeImage::IsFrozen()) {
-		Assets::tintShader.Activate();
-		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
-	}*/
 	player.Draw();
-	//Shader::Deactivate();
 
 	for (const SimpleEnemy* a : SimpleEnemy::GetAll()) {
 		a->Draw();

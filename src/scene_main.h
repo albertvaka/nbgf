@@ -10,6 +10,7 @@ struct MainScene : Scene {
 	Player player;
 	int currentLevel;
 	float timer;
+	bool won;
 	Text timerText;
 
 	MainScene() : MainScene(1) { };

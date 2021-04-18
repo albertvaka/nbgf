@@ -14,10 +14,7 @@ struct Assets
 	static void LoadAll();
 
 	static inline GPU_Image* spritesTexture;
-	static inline GPU_Image* invadersTexture;
 	
-	static inline GPU_Image* backgroundTexture;
-
 	static inline TTF_Font* font_30;
 	static inline TTF_Font* font_30_outline;
 

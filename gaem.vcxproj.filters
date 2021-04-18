@@ -237,6 +237,7 @@
     </ClInclude>
     <ClInclude Include="src\strategy_enemy.h" />
     <ClInclude Include="src\particles.h" />
+    <ClInclude Include="src\backgroundelement.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
