@@ -13,6 +13,6 @@ enum class GameKeys
 enum class AnalogInput
 {
 	NONE = 0,
-	MOVE, // between 0-1
+	MOVE, // normalized
 	AIM, // in world coordinates
 };

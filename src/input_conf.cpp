@@ -106,22 +106,22 @@ void Input::MapGameKeys()
         if (p == keyboard_player_id) {
             if (Keyboard::IsKeyPressed(SDL_SCANCODE_W) ||
                 Keyboard::IsKeyPressed(SDL_SCANCODE_UP)) {
-                   ret.y = -100;
+                   ret.y = -1;
             }
             if (Keyboard::IsKeyPressed(SDL_SCANCODE_S) ||
                 Keyboard::IsKeyPressed(SDL_SCANCODE_DOWN)) {
-                   ret.y = 100;
+                   ret.y = 1;
             }
             if (Keyboard::IsKeyPressed(SDL_SCANCODE_A) ||
                 Keyboard::IsKeyPressed(SDL_SCANCODE_LEFT)) {
-                   ret.x = -100;
+                   ret.x = -1;
             }
             if (Keyboard::IsKeyPressed(SDL_SCANCODE_D) ||
                 Keyboard::IsKeyPressed(SDL_SCANCODE_RIGHT)) {
-                   ret.x = 100;
+                   ret.x = 1;
             }
         }
-        return ret != vec::Zero? ret : GamePad::AnalogStick::Left.get(p);
+        return ret != vec::Zero ? ret : (GamePad::AnalogStick::Left.get(p)*(1.1f/100.f)).Truncated(1.f);
     };
 
     analog_mapping[(int)AnalogInput::AIM] = [](int p)
