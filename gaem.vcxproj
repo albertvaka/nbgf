@@ -53,6 +53,7 @@
     <ClInclude Include="engine\window_drawraw.h" />
     <ClInclude Include="src\backgroundelement.h" />
     <ClInclude Include="src\particles.h" />
+    <ClInclude Include="src\scene_menu.h" />
     <ClInclude Include="src\simple_enemy.h" />
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />

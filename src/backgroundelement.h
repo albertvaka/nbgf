@@ -12,6 +12,8 @@ extern float mainClock;
 
 struct BackgroundElement : SelfRegister<BackgroundElement>
 {
+	static inline constexpr const int kNumBackgroundElements = 100;
+
 	vec vel = vec::Zero;
 	vec pos;
 	GPU_Rect spriteRect;

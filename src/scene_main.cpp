@@ -113,7 +113,7 @@ void MainScene::EnterScene()
 	Fx::FreezeImage::SetUnfreezeCallback([]() {
 		SceneManager::RestartScene();
 	});
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < BackgroundElement::kNumBackgroundElements; i++) {
 		new BackgroundElement();
 	}
 	won = false;
