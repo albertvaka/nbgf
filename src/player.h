@@ -1,8 +1,9 @@
 #pragma once
 
 #include "entity.h"
+#include "singleinstance.h"
 
-struct Player : CircleEntity
+struct Player : CircleEntity, SingleInstance<Player>
 {
 	Player(vec pos);
 
