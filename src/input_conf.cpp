@@ -57,6 +57,10 @@ void Input::MapGameKeys()
                 (p == keyboard_player_id) && Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE)
                 );
     };
+    action_mapping[(int)GameKeys::SLOWDOWN] = [](int p) {
+        return GamePad::Trigger::Left.IsPressed(p) || 
+            (p == keyboard_player_id && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT));
+    };
     action_mapping[(int)GameKeys::START] = [](int p)
     {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) || (

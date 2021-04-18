@@ -20,7 +20,8 @@ Player::Player(vec pos)
 void Player::Update(float dt)
 {
 	vec dir = Input::GetAnalog(playerNum, AnalogInput::MOVE).Normalized();
-	pos += dir * kSpeed * dt;
+	float speed_mult = Input::IsPressed(playerNum, GameKeys::SLOWDOWN) ? 0.25f : 1.0f;
+	pos += dir * kSpeed * dt * speed_mult;;
 	
 	if (Input::IsJustPressed(playerNum, GameKeys::SHOOT)){
 		new Bullet(pos, vec(0,-kBulletSpeed));

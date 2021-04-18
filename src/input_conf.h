@@ -6,6 +6,7 @@ enum class GameKeys
 	UP, DOWN, LEFT, RIGHT,
 	START,
 	SHOOT,
+	SLOWDOWN,
 };
 
 enum class AnalogInput
