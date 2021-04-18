@@ -19,6 +19,15 @@ float kSimpleEnemyMaxDistance = 380;
 float kLevelTime = 10.f;
 float kIntroTime = 0.8f;
 
+auto movedown_strategy = [](StrategyEnemy& self, float dt) {
+	vec dir = Player::instance()->pos - self.pos;
+	self.pos.y += 100 * dt;
+	self.pos.x = self.initialPos.x + sin(self.total_time*2) * 20;
+	//self.rot_rads = -Angles::Pi / 2.0f + std::atan2(dir.y, dir.x);
+};
+auto fastshoot_player_every_halfsec_strategy = [](StrategyEnemy& self, float dt, float total_time) {
+	if (ShouldShootWithPeriod(0.4f, total_time, dt)) { new EnemyBullet(self.pos, (Player::instance()->pos - self.pos).Normalized() * 160.0f); }
+};
 auto orient_strategy = [](StrategyEnemy& self, float dt) {
 	vec dir = Player::instance()->pos - self.pos;
 	// Add 90 deg, since it's facing south (90 deg) by default.
@@ -118,6 +127,27 @@ void MainScene::EnterScene()
 		new StrategyEnemy(vec(0.5f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
 	}
 	break;
+	case 7:
+	{
+		(new StrategyEnemy(vec(0.4f, -1.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(vec(0.6f, -1.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+
+		(new StrategyEnemy(vec(0.2f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(vec(0.9f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+
+		(new StrategyEnemy(vec(0.4f, -0.7f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(vec(0.6f, -0.7f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+
+		(new StrategyEnemy(vec(0.2f, -0.5f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(vec(0.8f, -0.5f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+
+		(new StrategyEnemy(vec(0.4f, -0.3f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(vec(0.6f, -0.3f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+
+		(new StrategyEnemy(vec(0.2f, -0.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(vec(0.8f, -0.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+	}
+	break;
 	}
 }
 
@@ -209,6 +239,13 @@ void MainScene::Update(float dt)
 			}
 		}
 		a->Update(dt);
+		if (Collide(player.Bounds(), a->Bounds())) {
+			Fx::FreezeImage::Freeze(0.5f);
+			Assets::dieSnd.Play();
+		}
+		if (a->pos.y > 1.2f * Camera::Size().y) {
+			a->alive = false;
+		}
 	}
 	for (StrategyEnemy* a : StrategyEnemy::GetAll()) {
 		for (Bullet* b : Bullet::GetAll()) {
@@ -218,6 +255,13 @@ void MainScene::Update(float dt)
 			}
 		}
 		a->Update(dt);
+		if (Collide(player.Bounds(), a->Bounds())) {
+			Fx::FreezeImage::Freeze(0.5f);
+			Assets::dieSnd.Play();
+		}
+		if (a->pos.y > 1.2f * Camera::Size().y) {
+			a->alive = false;
+		}
 	}
 
 	for (EnemyBullet* b : EnemyBullet::GetAll()) {
