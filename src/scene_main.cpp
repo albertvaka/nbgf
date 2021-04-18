@@ -291,6 +291,14 @@ void MainScene::Update(float dt)
 			Fx::FreezeImage::Freeze(0.5f);
 			Assets::dieSnd.Play();
 		}
+		// Absorved bullets.
+		if (b->can_survive_outbounds) {
+			for (const auto *enemy : StrategyEnemy::GetAll()) {
+				if (Collide(b->Bounds(), enemy->Bounds())) {
+					b->alive = false;
+				}
+			}
+		}
 	}
 
 	SimpleEnemy::DeleteNotAlive();
