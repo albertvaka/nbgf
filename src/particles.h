@@ -14,10 +14,14 @@ struct Particles
 		if (explosion.texture != nullptr) {
 			return; // It's already been init
 		}
+		GPU_Rect alienSprite = AnimLib::ALIEN_1[0].rect;
 		explosion.SetTexture(Assets::spritesTexture);
-		explosion.AddSprite(AnimLib::BULLET);
-		explosion.min_scale = 0.3f;
-		explosion.max_scale = 0.8f;
+		explosion.AddSprite({ alienSprite.x, alienSprite.y, 8, 8 });
+		explosion.AddSprite({ alienSprite.x+8, alienSprite.y, 8, 8 });
+		explosion.AddSprite({ alienSprite.x, alienSprite.y+8, 8, 8 });
+		explosion.AddSprite({ alienSprite.x+8, alienSprite.y+8, 8, 8 });
+		explosion.min_scale = 0.5f;
+		explosion.max_scale = 0.9f;
 		explosion.max_vel = vec(50, 50);
 		explosion.min_vel = vec(-50, -50);
 		explosion.min_rotation = 0;

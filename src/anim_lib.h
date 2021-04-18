@@ -8,11 +8,9 @@ namespace AnimLib {
 
 	constexpr const AnimationFrame ALIEN_1[] = {
 		{ GetRect(0,1), 0.3f },
-		{ GetRect(0,1), 0.3f },
 	};
 
 	constexpr const AnimationFrame ALIEN_2[] = {
-		{ GetRect(0,2),  0.3f },
 		{ GetRect(0,2),  0.3f },
 	};
 
