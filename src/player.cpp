@@ -10,7 +10,7 @@
 
 const float kBulletPeriod = 0.18f;
 const float kBulletSpeed = 450.f;
-const float kFastSpeed = 250.f;
+const float kFastSpeed = 280.f;
 const float kSlowSpeed = 350.f/4;
 
 Player::Player()

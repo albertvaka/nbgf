@@ -21,7 +21,6 @@ void EmptyShootingStrategy(StrategyEnemy& self, float dt, float total_time) {}
 void StaticMovingStrategy(StrategyEnemy& self, float dt) {}
 
 bool ShouldShootWithPeriod(float period_sec, float total_time, float dt) {
-	// TODO: This is not perfect, but quite simple. Fix if possible.
 	return int((total_time+dt)/period_sec) != int((total_time)/period_sec);
 }
 
@@ -37,14 +36,14 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 	int hp = 5;
 	float flashRedTimer = 0.f;
 
-	Animation anim;
+	GPU_Rect animRect;
 
-	StrategyEnemy(vec pos, const ShootingStrategy& shooting_strategy = EmptyShootingStrategy, const MovingStrategy& moving_strategy = StaticMovingStrategy)
+	StrategyEnemy(const GPU_Rect& animRect, vec pos, const ShootingStrategy& shooting_strategy = EmptyShootingStrategy, const MovingStrategy& moving_strategy = StaticMovingStrategy)
 		: CircleEntity(pos, 15.f)
 		, initialPos(pos)
 		, movingStrategy(moving_strategy)
 		, shootingStrategy(shooting_strategy)
-		, anim(AnimLib::ALIEN_2)
+		, animRect(animRect)
 	{
 	}
 	void Hit() {
@@ -59,7 +58,6 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 
 	void Update(float dt)
 	{
-		anim.Update(dt);
 		movingStrategy(*this, dt);
 		shootingStrategy(*this, dt, total_time);
 		total_time += dt;
@@ -72,7 +70,6 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 			Assets::tintShader.Activate();
 			Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 		}
-		const GPU_Rect& animRect = anim.CurrentFrameRect();
 		Window::Draw(Assets::spritesTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)

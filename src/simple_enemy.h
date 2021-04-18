@@ -20,13 +20,10 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 	float dirOffsetRadians = 0;
 	float shootTimer = 0.f; // start shooting
 
-	Animation anim;
-
 	SimpleEnemy(vec pos, float dirOffsetRadians = 0)
 		: CircleEntity(pos, 15.f)
 		, initialPos(pos)
 		, dirOffsetRadians(dirOffsetRadians)
-		, anim(AnimLib::ALIEN_1)
 	{
 	}
 
@@ -38,8 +35,6 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 
 	void Update(float dt)
 	{
-		anim.Update(dt);
-
 		dirOffsetRadians += dt;
 		if (dirOffsetRadians > Angles::Tau) {
 			dirOffsetRadians -= Angles::Tau;
@@ -59,7 +54,7 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 
 	void Draw() const
 	{
-		const GPU_Rect& animRect = anim.CurrentFrameRect();
+		const GPU_Rect& animRect = AnimLib::ALIEN_SIMPLE;
 		Window::Draw(Assets::spritesTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)

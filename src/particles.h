@@ -10,11 +10,13 @@ struct Particles
 {
 	static inline PartSys explosion = PartSys(nullptr);
 
+
+
 	static void InitParticles() {
 		if (explosion.texture != nullptr) {
 			return; // It's already been init
 		}
-		GPU_Rect alienSprite = AnimLib::ALIEN_1[0].rect;
+		GPU_Rect alienSprite = AnimLib::ALIEN_BIG;
 		explosion.SetTexture(Assets::spritesTexture);
 		explosion.AddSprite({ alienSprite.x, alienSprite.y, 8, 8 });
 		explosion.AddSprite({ alienSprite.x+8, alienSprite.y, 8, 8 });

@@ -6,14 +6,18 @@ static constexpr GPU_Rect GetRect(int col, int row) { return {col*16.0f, row*16.
 
 namespace AnimLib {
 
-	constexpr const AnimationFrame ALIEN_1[] = {
-		{ GetRect(0,1), 0.3f },
-	};
+	constexpr const GPU_Rect ALIEN_SIMPLE = GetRect(0, 1);
 
-	constexpr const AnimationFrame ALIEN_2[] = {
-		{ GetRect(0,2),  0.3f },
-	};
+	constexpr const GPU_Rect ALIEN_BIG = GetRect(0, 2);
 
+	constexpr const GPU_Rect ALIEN_TRIANGLE = GetRect(1, 2);
+	
+	constexpr const GPU_Rect ALIEN_DONUT = GetRect(2, 2);
+	
+	constexpr const GPU_Rect ALIEN_OVAL = GetRect(3, 2);
+
+	constexpr const GPU_Rect ALIEN_CAR = GetRect(4, 2);
+	
 	constexpr const GPU_Rect PLAYER = GetRect(2, 0);
 
 	constexpr const GPU_Rect BULLET = GetRect(0, 3);

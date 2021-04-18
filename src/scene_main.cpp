@@ -104,48 +104,48 @@ void MainScene::EnterScene()
 		break;
 	case 3:
 	{
-		new StrategyEnemy(vec(0.1f, 0.1f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy);
-		new StrategyEnemy(vec(0.9f, 0.1f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_BIG, vec(0.1f, 0.1f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_BIG, vec(0.9f, 0.1f) * Camera::Size(), multi_shoot_every_sec_strategy, orient_strategy);
 	}
 		break;
 	case 4:
 	{
-		new StrategyEnemy(vec(0.1f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy);
-		new StrategyEnemy(vec(0.9f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy);
-		new StrategyEnemy(vec(0.5f, 0.1f) * Camera::Size(), shot_in_circle);
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.1f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.9f, 0.1f) * Camera::Size(), shoot_player_every_halfsec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.5f, 0.1f) * Camera::Size(), shot_in_circle);
 	}
 	break;
 	case 5:
 	{
-		new StrategyEnemy(vec(0.5f, 0.1f)*Camera::Size(), shot_in_circle);
+		new StrategyEnemy(AnimLib::ALIEN_DONUT, vec(0.5f, 0.1f)*Camera::Size(), shot_in_circle);
 	}
 		break;
 	case 6:
 	{
-		new StrategyEnemy(vec(0.1f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
-		new StrategyEnemy(vec(0.9f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
-		new StrategyEnemy(vec(0.5f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.1f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.9f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
+		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.5f, 0.1f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
 	}
 	break;
 	case 7:
 	{
-		(new StrategyEnemy(vec(0.4f, -1.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
-		(new StrategyEnemy(vec(0.6f, -1.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.4f, -1.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.6f, -1.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 
-		(new StrategyEnemy(vec(0.2f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
-		(new StrategyEnemy(vec(0.9f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.2f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.9f, -0.9f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 
-		(new StrategyEnemy(vec(0.4f, -0.7f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
-		(new StrategyEnemy(vec(0.6f, -0.7f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.4f, -0.7f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.6f, -0.7f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 
-		(new StrategyEnemy(vec(0.2f, -0.5f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
-		(new StrategyEnemy(vec(0.8f, -0.5f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.2f, -0.5f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.8f, -0.5f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 
-		(new StrategyEnemy(vec(0.4f, -0.3f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
-		(new StrategyEnemy(vec(0.6f, -0.3f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.4f, -0.3f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.6f, -0.3f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 
-		(new StrategyEnemy(vec(0.2f, -0.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
-		(new StrategyEnemy(vec(0.8f, -0.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.2f, -0.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
+		(new StrategyEnemy(AnimLib::ALIEN_CAR, vec(0.8f, -0.1f) * Camera::Size(), fastshoot_player_every_halfsec_strategy, movedown_strategy))->hp = 1;
 	}
 	break;
 	}
