@@ -26,6 +26,8 @@ void Player::Update(float dt)
 	if (Input::IsJustPressed(playerNum, GameKeys::SHOOT)){
 		new Bullet(pos, vec(0,-kBulletSpeed));
 	}
+
+	pos = Camera::Bounds().ClosestPointInBounds(pos);
 }
 
 void Player::Draw() const
