@@ -108,6 +108,14 @@ void MainScene::Update(float dt)
 		EnterScene();
 		return;
 	}
+	// Quick access to levels. Starts at SDL_SCANCODE_1.
+	for (int i = SDL_SCANCODE_1; i < SDL_SCANCODE_0; ++i) {
+		if (Keyboard::IsKeyJustPressed(static_cast<SDL_Scancode>(i))) {
+			currentLevel = 1 + i - SDL_SCANCODE_1;
+			SceneManager::RestartScene();
+			break;
+		}
+	}
 #endif
 
 	timer -= dt;
