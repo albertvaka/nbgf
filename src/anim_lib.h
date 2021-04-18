@@ -16,7 +16,7 @@ namespace AnimLib {
 		{ GetRect(0,2),  0.3f },
 	};
 
-	constexpr const GPU_Rect PLAYER = GetRect(1, 0);
+	constexpr const GPU_Rect PLAYER = GetRect(2, 0);
 
 	constexpr const GPU_Rect BULLET = GetRect(0, 3);
 	constexpr const GPU_Rect ENEMY_BULLET = GetRect(1, 3);
