@@ -77,6 +77,9 @@ MainScene::MainScene(int level)
 
 void MainScene::EnterScene() 
 {
+	Fx::FreezeImage::SetUnfreezeCallback([]() {
+		SceneManager::RestartScene();
+	});
 	player.Reset();
 	timer = kLevelTime + kIntroTime;
 	switch (currentLevel) {
@@ -162,15 +165,23 @@ void MainScene::Update(float dt)
 		return;
 	}
 
-	// Win
-	if (timer <= 0) {
+
+	if (SimpleEnemy::GetAll().empty() && StrategyEnemy::GetAll().empty()) {
 		timerText.SetString("Well done!");
+		Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
+			Particles::explosion.UpdateParticles(dt);
+		});
 		currentLevel++;
 		Assets::winSnd.Play();
 		Fx::FreezeImage::Freeze(2.0f);
-		Fx::FreezeImage::SetUnfreezeCallback([]() {
-			SceneManager::RestartScene();
-			});
+		return;
+	}
+
+	//lose
+	if (timer <= 0) {
+		timerText.SetString("Time out!");
+		Fx::FreezeImage::Freeze(0.5f);
+		Assets::dieSnd.Play();
 		return;
 	}
 
@@ -214,9 +225,6 @@ void MainScene::Update(float dt)
 		if (Collide(player.Bounds(), b->Bounds())) {
 			Fx::FreezeImage::Freeze(0.5f);
 			Assets::dieSnd.Play();
-			Fx::FreezeImage::SetUnfreezeCallback([]() {
-				SceneManager::RestartScene();
-			});
 		}
 	}
 
@@ -236,12 +244,12 @@ void MainScene::Draw()
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
 		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
 
-	if (Fx::FreezeImage::IsFrozen() && timer > 0.f) {
+	/*if (Fx::FreezeImage::IsFrozen()) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
-	}
+	}*/
 	player.Draw();
-	Shader::Deactivate();
+	//Shader::Deactivate();
 
 	for (const SimpleEnemy* a : SimpleEnemy::GetAll()) {
 		a->Draw();
