@@ -8,7 +8,6 @@
 struct MainScene : Scene {
 
 	Player player;
-	PartSys alienPartSys;
 	int currentLevel;
 	float timer;
 	Text timerText;
@@ -21,8 +20,5 @@ struct MainScene : Scene {
 	void ExitScene() override;
 	void Update(float dt) override;
 	void Draw() override;
-
-	void SpawnAliens();
-
 
 };

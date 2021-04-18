@@ -6,6 +6,7 @@
 #include "enemy_bullet.h"
 #include "rand.h"
 #include "assets.h"
+#include "particles.h"
 
 struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 {
@@ -31,6 +32,8 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 
 	void Hit() {
 		alive = false;
+		Particles::explosion.pos = pos;
+		Particles::explosion.AddParticles(10);
 	}
 
 	void Update(float dt)

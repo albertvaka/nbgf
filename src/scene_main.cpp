@@ -11,6 +11,7 @@
 #include "simple_enemy.h"
 #include "strategy_enemy.h"
 #include "collide.h"
+#include "particles.h"
 #include "debug.h"
 
 float kSimpleEnemyMinDistance = 280;
@@ -21,21 +22,11 @@ float kIntroTime = 0.8f;
 MainScene::MainScene(int level)
 	: player(vec::Zero)
 	, currentLevel(level)
-	, alienPartSys(Assets::invadersTexture)
 	, timerText(Assets::font_30, Assets::font_30_outline)
 {
 	timerText.SetFillColor(0, 0, 0);
 	timerText.SetOutlineColor(255, 255, 0);
-	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
-	alienPartSys.AddSprite(AnimLib::ALIEN_2[0].rect);
-	alienPartSys.min_scale = 0.15f;
-	alienPartSys.max_scale = 0.4f;
-	alienPartSys.max_vel = vec(50,50);
-	alienPartSys.min_vel = vec(-50,-50);
-	alienPartSys.min_rotation = 0;
-	alienPartSys.max_rotation = 360;
-	alienPartSys.rotation_vel = 100.f;
-	alienPartSys.scale_vel = -0.2f;
+	Particles::InitParticles();
 }
 
 void MainScene::EnterScene() 
@@ -90,7 +81,7 @@ void MainScene::EnterScene()
 
 void MainScene::ExitScene()
 {
-	alienPartSys.Clear();
+	Particles::explosion.Clear();
 	Bullet::DeleteAll();
 	SimpleEnemy::DeleteAll();
 	StrategyEnemy::DeleteAll();
@@ -195,7 +186,7 @@ void MainScene::Update(float dt)
 	Bullet::DeleteNotAlive();
 	EnemyBullet::DeleteNotAlive();
 
-	alienPartSys.UpdateParticles(dt);
+	Particles::explosion.UpdateParticles(dt);
 
 }
 
@@ -231,7 +222,7 @@ void MainScene::Draw()
 		b->Draw();
 	}
 
-	alienPartSys.Draw();
+	Particles::explosion.Draw();
 
 	Window::Draw(timerText, vec(Camera::Center().x, 30))
 		.withOrigin(timerText.Size()/2)
@@ -253,7 +244,7 @@ void MainScene::Draw()
 		ImGui::End();
 	}
 
-	//alienPartSys.DrawImGUI();
+	//Particles::explosion.DrawImGUI();
 #endif
 
 }

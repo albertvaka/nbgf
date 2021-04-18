@@ -5,6 +5,7 @@
 #include "animation.h"
 #include "enemy_bullet.h"
 #include "rand.h"
+#include "particles.h"
 #include "assets.h"
 
 struct StrategyEnemy;
@@ -51,6 +52,8 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 		flashRedTimer = 0.3f;
 		if (hp <= 0) {
 			alive = false;
+			Particles::explosion.pos = pos;
+			Particles::explosion.AddParticles(10);
 		}
 	}
 
