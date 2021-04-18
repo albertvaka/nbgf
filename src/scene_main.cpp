@@ -223,9 +223,9 @@ void MainScene::Draw()
 
 	Particles::explosion.Draw();
 
-	Window::Draw(timerText, vec(Camera::Center().x, 30))
+	Window::Draw(timerText, vec(Camera::Center().x, 12))
 		.withOrigin(timerText.Size()/2)
-		.withScale(0.666f);
+		.withScale(0.35f);
 
 	if (Debug::Draw) {
 		Window::DrawPrimitive::Circle(Camera::Center(), kSimpleEnemyMinDistance, 1, 255, 255, 255);
