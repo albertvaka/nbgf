@@ -20,8 +20,7 @@ float kLevelTime = 10.f;
 float kIntroTime = 0.8f;
 
 MainScene::MainScene(int level)
-	: player(vec::Zero)
-	, currentLevel(level)
+	: currentLevel(level)
 	, timerText(Assets::font_30, Assets::font_30_outline)
 {
 	timerText.SetFillColor(0, 0, 0);
@@ -31,7 +30,7 @@ MainScene::MainScene(int level)
 
 void MainScene::EnterScene() 
 {
-	player.pos = vec(0.5f, 0.9f) * Camera::Size();
+	player.Reset();
 	timer = kLevelTime + kIntroTime;
 	switch (currentLevel) {
 	case 1:

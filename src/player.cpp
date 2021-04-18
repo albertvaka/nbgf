@@ -8,22 +8,31 @@
 #include "window.h"
 
 
-const float kBulletSpeed = 500.f;
-const float kSpeed = 350.f;
+const float kBulletPeriod = 0.18f;
+const float kBulletSpeed = 450.f;
+const float kFastSpeed = 250.f;
+const float kSlowSpeed = 350.f/4;
 
-Player::Player(vec pos)
-	: CircleEntity(pos, 5)
+Player::Player()
+	: CircleEntity(5)
 	, playerNum(0)
 {
+}
+
+void Player::Reset() {
+	pos = vec(0.5f, 0.9f) * Camera::Size();
+	shotTimer = 0.f;
 }
 
 void Player::Update(float dt)
 {
 	vec dir = Input::GetAnalog(playerNum, AnalogInput::MOVE).Normalized();
-	float speed_mult = Input::IsPressed(playerNum, GameKeys::SLOWDOWN) ? 0.25f : 1.0f;
-	pos += dir * kSpeed * dt * speed_mult;;
+	float speed = Input::IsPressed(playerNum, GameKeys::SLOWDOWN) ? kSlowSpeed : kFastSpeed;
+	pos += dir * speed * dt;
 	
-	if (Input::IsJustPressed(playerNum, GameKeys::SHOOT)){
+	shotTimer -= dt;
+	if (Input::IsPressed(playerNum, GameKeys::SHOOT) && shotTimer <= 0.f){
+		shotTimer = kBulletPeriod;
 		new Bullet(pos, vec(0,-kBulletSpeed));
 	}
 

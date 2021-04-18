@@ -5,10 +5,13 @@
 
 struct Player : CircleEntity, SingleInstance<Player>
 {
-	Player(vec pos);
+	Player();
 
 	void Update(float dt);
 	void Draw() const;
 
+	void Reset();
+
 	int playerNum;
+	float shotTimer;
 };
