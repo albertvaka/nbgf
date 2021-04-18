@@ -54,7 +54,7 @@ void MainScene::EnterScene()
 		new SimpleEnemy(vec(0.67f, 0.4f) * Camera::Size(), Angles::Pi / 2);
 		break;
 	case 3:
-		new SimpleEnemy(vec(0.33f, 0.2f) * Camera::Size());
+	{
 		auto orient_strategy = [this](StrategyEnemy& self, float dt) { 
 			vec dir = player.pos - self.pos;
 			// Add 90 deg, since it's facing south (90 deg) by default.
@@ -64,6 +64,26 @@ void MainScene::EnterScene()
 			if (ShouldShootWithPeriod(0.5f, total_time, dt)) { new EnemyBullet(self.pos, player.pos - self.pos); }
 		};
 		new StrategyEnemy(vec(0.1f, 0.1f) * Camera::Size(), shoot_player_every_5sec_strategy, orient_strategy);
+		new StrategyEnemy(vec(0.9f, 0.1f) * Camera::Size(), shoot_player_every_5sec_strategy, orient_strategy);
+	}
+		break;
+	case 4:
+	{
+		auto shot_in_circle = [this](StrategyEnemy& self, float dt, float total_time) {
+			static const int kNumBullets = 30;
+			static const float rad_step = Angles::Tau / kNumBullets;
+			static const float period = 0.33f;
+			if (ShouldShootWithPeriod(period, total_time, dt)) {
+				bool angle_parity = static_cast<int>(std::floor(total_time/period))%2 == 0;
+				float base_rad = angle_parity ? 0 : 0.5f*rad_step;
+				angle_parity = !angle_parity;
+				for (int i = 0; i < kNumBullets; ++i) {
+					new EnemyBullet(self.pos, vec::FromAngleRads(base_rad + i*rad_step) * 60.0f);
+				}
+			}
+		};
+		new StrategyEnemy(vec(0.5f, 0.1f)*Camera::Size(), shot_in_circle);
+	}
 		break;
 	}
 }
