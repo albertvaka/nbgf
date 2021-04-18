@@ -66,6 +66,13 @@ struct vec
 		else if (y < minv.y) y = minv.y;
 	}
 
+	vec Clamped(vec minv, vec maxv)
+	{
+		vec ret = *this;
+		ret.Clamp(minv, maxv);
+		return ret;
+	}
+
 	[[nodiscard]] std::string ToString() const {
 		std::stringstream stream;
 		stream << std::fixed << std::setprecision(2) << x << "," << y;

@@ -26,7 +26,7 @@ void Player::Reset() {
 
 void Player::Update(float dt)
 {
-	vec dir = Input::GetAnalog(playerNum, AnalogInput::MOVE).Normalized();
+	vec dir = Input::GetAnalog(playerNum, AnalogInput::MOVE);
 	float speed = Input::IsPressed(playerNum, GameKeys::SLOWDOWN) ? kSlowSpeed : kFastSpeed;
 	pos += dir * speed * dt;
 	
