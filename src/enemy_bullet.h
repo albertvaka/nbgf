@@ -12,7 +12,7 @@ struct EnemyBullet : CircleEntity, SelfRegister<EnemyBullet>
 	vec vel;
 
 	EnemyBullet(const vec& position, const vec& velocity)
-		: CircleEntity(pos, 4)
+		: CircleEntity(pos, 3)
 	{
 		pos = position;
 		vel = velocity;

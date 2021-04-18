@@ -12,7 +12,7 @@ const float kBulletSpeed = 500.f;
 const float kSpeed = 350.f;
 
 Player::Player(vec pos)
-	: CircleEntity(pos, 7)
+	: CircleEntity(pos, 5)
 	, playerNum(0)
 {
 }

@@ -72,7 +72,7 @@ void MainScene::EnterScene()
 		auto shot_in_circle = [this](StrategyEnemy& self, float dt, float total_time) {
 			static const int kNumBullets = 30;
 			static const float rad_step = Angles::Tau / kNumBullets;
-			static const float period = 0.33f;
+			static const float period = 0.45f;
 			if (ShouldShootWithPeriod(period, total_time, dt)) {
 				bool angle_parity = static_cast<int>(std::floor(total_time/period))%2 == 0;
 				float base_rad = angle_parity ? 0 : 0.5f*rad_step;
