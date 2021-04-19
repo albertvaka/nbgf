@@ -13,7 +13,7 @@
 
 const float scale = 2.0f;
 const float turret_bullet_size = 2.0f;
-struct Turret : BoxEntity, SelfRegister<Turret>
+struct Turret : BoxEntity
 {
 	vec offset_pos;
 	float mirror = 1.0f;
@@ -23,6 +23,7 @@ struct Turret : BoxEntity, SelfRegister<Turret>
 		: BoxEntity(pos)  // BB doesn't matter really.
 		, offset_pos(offset_pos)
 	{
+		this->pos = pos + offset_pos;
 		mirror = mirrored ? -1.0f : 0.0f;
 	}
 
@@ -59,14 +60,19 @@ struct Boss : CircleEntity, SelfRegister<Boss>
 	float flashRedTimer = 0.f;
 
 	Boss(const vec& position, const Player& player)
-		: CircleEntity(position + vec(0, -10), 13*scale)
+		: CircleEntity(position, 13*scale)
 		, player(player)
-
 	{
 		pos = position;
 		bool mirrored = true;
 		turrets.push_back(new Turret(pos, vec(-8.0f, -5.0f)*scale, not mirrored));
 		turrets.push_back(new Turret(pos, vec(8.0f, -5.0f)*scale, mirrored));
+	}
+
+	~Boss() {
+		for (auto* t : turrets) {
+			delete t;
+		}
 	}
 
 	void Hit() {
@@ -76,6 +82,12 @@ struct Boss : CircleEntity, SelfRegister<Boss>
 			alive = false;
 			Particles::explosion.pos = pos;
 			Particles::explosion.AddParticles(10);
+		} else if ((hp == 50 || hp == 150) && !turrets.empty()) {
+			Turret* t = turrets.back();
+			Particles::explosion.pos = t->pos;
+			Particles::explosion.AddParticles(10);
+			turrets.pop_back();
+			delete t;
 		}
 	}
 

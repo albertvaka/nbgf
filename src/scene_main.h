@@ -12,6 +12,7 @@ struct MainScene : Scene {
 	float timer;
 	bool won;
 	Text timerText;
+	bool player_invincible = false;
 
 	MainScene() : MainScene(1) { };
 

@@ -321,8 +321,10 @@ void MainScene::Update(float dt)
 		}
 		a->Update(dt);
 		if (Collide(player.Bounds(), a->Bounds())) {
-			Fx::FreezeImage::Freeze(0.5f);
-			Assets::dieSnd.Play();
+			if (!player_invincible) {
+				Fx::FreezeImage::Freeze(0.5f);
+				Assets::dieSnd.Play();
+			}
 		}
 		if (a->pos.y > 1.2f * Camera::Size().y) {
 			a->alive = false;
@@ -337,8 +339,10 @@ void MainScene::Update(float dt)
 		}
 		a->Update(dt);
 		if (Collide(player.Bounds(), a->Bounds())) {
-			Fx::FreezeImage::Freeze(0.5f);
-			Assets::dieSnd.Play();
+			if (!player_invincible) {
+				Fx::FreezeImage::Freeze(0.5f);
+				Assets::dieSnd.Play();
+			}
 		}
 		if (a->pos.y > 1.2f * Camera::Size().y) {
 			a->alive = false;
@@ -348,8 +352,10 @@ void MainScene::Update(float dt)
 	for (EnemyBullet* b : EnemyBullet::GetAll()) {
 		b->Update(dt);
 		if (Collide(player.Bounds(), b->Bounds())) {
-			Fx::FreezeImage::Freeze(0.5f);
-			Assets::dieSnd.Play();
+			if (!player_invincible) {
+				Fx::FreezeImage::Freeze(0.5f);
+				Assets::dieSnd.Play();
+			}
 		}
 		// Absorved bullets.
 		if (b->can_survive_outbounds) {
@@ -431,6 +437,8 @@ void MainScene::Draw()
 		if (ImGui::SliderInt("level", &currentLevel, 1, 20)) {
 			SceneManager::RestartScene();
 		};
+		ImGui::Checkbox("invincible", &player_invincible);
+		
 		ImGui::End();
 	}
 
