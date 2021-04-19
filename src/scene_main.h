@@ -22,4 +22,6 @@ struct MainScene : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
+private:
+	float LevelDuration() const;
 };

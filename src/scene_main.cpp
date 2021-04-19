@@ -5,6 +5,7 @@
 #endif
 #include "assets.h"
 #include "scene_manager.h"
+#include "boss.h"
 #include "bullet.h"
 #include "enemy_bullet.h"
 #include "fx.h"
@@ -17,6 +18,7 @@
 
 float kSimpleEnemyMinDistance = 280;
 float kSimpleEnemyMaxDistance = 380;
+const float kBossLevelTime = 180.f;
 float kLevelTime = 10.f;
 float kIntroTime = 0.8f;
 
@@ -99,6 +101,11 @@ auto shot_in_circle = [](StrategyEnemy& self, float dt, float total_time) {
 	}
 };
 
+float MainScene::LevelDuration() const {
+	if (currentLevel == 10) return kBossLevelTime;
+	return kLevelTime;
+}
+
 MainScene::MainScene(int level)
 	: currentLevel(level)
 	, timerText(Assets::font_30, Assets::font_30_outline)
@@ -118,7 +125,7 @@ void MainScene::EnterScene()
 	}
 	won = false;
 	player.Reset();
-	timer = kLevelTime + kIntroTime;
+	timer = LevelDuration() + kIntroTime;
 	switch (currentLevel) {
 	case 1:
 		new SimpleEnemy(vec(0.33f, 0.3f) * Camera::Size());
@@ -202,6 +209,7 @@ void MainScene::EnterScene()
 	case 10:
 	{
 		//TODO: boss
+		new Boss(vec(0.5f, 0.1f) * Camera::Size(), player);
 	}
 	break;
 	case 11: {
@@ -219,6 +227,7 @@ void MainScene::ExitScene()
 	StrategyEnemy::DeleteAll();
 	EnemyBullet::DeleteAll();
 	BackgroundElement::DeleteAll();
+	Boss::DeleteAll();
 }
 
 void MainScene::Update(float dt)
@@ -247,8 +256,8 @@ void MainScene::Update(float dt)
 		timerText.SetString("Thanks for playing :D");
 	} else {
 		timer -= dt;
-		if (timer > kLevelTime) {
-			if (timer > kLevelTime + kIntroTime / 2) {
+		if (timer > LevelDuration()) {
+			if (timer > LevelDuration() + kIntroTime / 2) {
 				timerText.SetString("Ready");
 			}
 			else {
@@ -259,7 +268,7 @@ void MainScene::Update(float dt)
 			}
 			return;
 		}
-		if (SimpleEnemy::GetAll().empty() && StrategyEnemy::GetAll().empty()) {
+		if (SimpleEnemy::GetAll().empty() && StrategyEnemy::GetAll().empty() && Boss::GetAll().empty()) {
 			timerText.SetString("Well done!");
 			Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
 				Particles::explosion.UpdateParticles(dt);
@@ -277,7 +286,7 @@ void MainScene::Update(float dt)
 			return;
 		}
 
-		if (timer > kLevelTime - kIntroTime) {
+		if (timer > LevelDuration() - kIntroTime) {
 			timerText.SetString("Go!");
 			if (timerText.HasChanges()) {
 				Assets::goSnd.Play();
@@ -351,11 +360,21 @@ void MainScene::Update(float dt)
 			}
 		}
 	}
+	for (Boss* b : Boss::GetAll()) {
+		for (Bullet* bullet : Bullet::GetAll()) {
+			if (Collide(b, bullet)) {
+				bullet->alive = false;
+				b->Hit();
+			}
+		}
+		b->Update(dt);
+	}
 
 	SimpleEnemy::DeleteNotAlive();
 	StrategyEnemy::DeleteNotAlive();
 	Bullet::DeleteNotAlive();
 	EnemyBullet::DeleteNotAlive();
+	Boss::DeleteNotAlive();
 
 	Particles::explosion.UpdateParticles(dt);
 
@@ -378,6 +397,10 @@ void MainScene::Draw()
 	for (const auto* a : StrategyEnemy::GetAll()) {
 		a->Draw();
 		a->Bounds().DebugDraw(255,0,0);
+	}
+	for (const auto* b : Boss::GetAll()) {
+		b->Draw();
+		b->Bounds().DebugDraw(255, 0, 0);
 	}
 
 	for (const Bullet* b : Bullet::GetAll()) {

@@ -239,6 +239,9 @@
     <ClInclude Include="src\particles.h" />
     <ClInclude Include="src\backgroundelement.h" />
     <ClInclude Include="src\scene_menu.h" />
+    <ClInclude Include="src\boss.h">
+      <Filter>src\enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

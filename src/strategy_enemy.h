@@ -20,10 +20,6 @@ using MovingStrategy = std::function<void(StrategyEnemy& self, float dt)>;
 void EmptyShootingStrategy(StrategyEnemy& self, float dt, float total_time) {}
 void StaticMovingStrategy(StrategyEnemy& self, float dt) {}
 
-bool ShouldShootWithPeriod(float period_sec, float total_time, float dt) {
-	return int((total_time+dt)/period_sec) != int((total_time)/period_sec);
-}
-
 // StrategyEnemy is an enemy that takes `ShootingStrategy` and `MovingStrategy` behaviors,
 // allowing customization of its logic outside the class.
 struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>

@@ -7,13 +7,19 @@
 #include "window.h"
 #include "camera.h"
 
+bool ShouldShootWithPeriod(float period_sec, float total_time, float dt) {
+	return int((total_time+dt)/period_sec) != int((total_time)/period_sec);
+}
+
+
 struct EnemyBullet : CircleEntity, SelfRegister<EnemyBullet>
 {
 	vec vel;
 	bool can_survive_outbounds = false;
-
-	EnemyBullet(const vec& position, const vec& velocity)
-		: CircleEntity(pos, 3)
+	const GPU_Rect& frame;
+	
+	EnemyBullet(const vec& position, const vec& velocity, float size = 3, const GPU_Rect& frame = AnimLib::ENEMY_BULLET)
+		: CircleEntity(pos, size), frame(frame)
 	{
 		pos = position;
 		vel = velocity;
@@ -30,10 +36,9 @@ struct EnemyBullet : CircleEntity, SelfRegister<EnemyBullet>
 
 	void Draw() const
 	{
-		const GPU_Rect& rect = AnimLib::ENEMY_BULLET;
 		Window::Draw(Assets::spritesTexture, pos)
-			.withRect(rect)
-			.withOrigin(vec(rect.w, rect.h) / 2);
+			.withRect(frame)
+			.withOrigin(vec(frame.w, frame.h) / 2);
 
 		Bounds().DebugDraw();
 	}

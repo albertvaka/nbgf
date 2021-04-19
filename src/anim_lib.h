@@ -9,7 +9,9 @@ namespace AnimLib {
 
 	constexpr const GPU_Rect PLAYER = GetRect(2, 0);
 
-	constexpr const GPU_Rect BOSS = { 3 * 16.0f, 0, 32.f, 32.f };
+	constexpr const GPU_Rect BOSS = { 0, 5*16.0f, 32.f, 32.f };
+	constexpr const GPU_Rect BOSS_TURRET = {0, 7*16.0f, 19.f, 5.f};
+	constexpr const GPU_Rect TURRET_BULLET = GetRect(3, 3);
 
 	constexpr const GPU_Rect ALIEN_SIMPLE = GetRect(0, 1);
 
