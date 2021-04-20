@@ -71,6 +71,21 @@ struct Boss : SelfRegister<Boss>
 	// todo: add offset to this.
 	std::vector<BoxCollider> actual_colliders;
 
+	struct Interval {
+		float from;
+		float to;
+		Interval(float from, float to) : from(from), to(to) {}
+		bool IsActive(float total_time) const {
+			return total_time >= from && total_time <= to;
+		}
+	};
+	struct TimedAttack {
+		Interval interval;
+		void (Boss::* shoot_fn)(float);
+		TimedAttack(Interval interval, void(Boss::* shoot_fn)(float)) : interval(interval), shoot_fn(shoot_fn) {}
+	};
+	std::vector<TimedAttack> attacks;
+
 	Boss(const vec& position, const Player& player)
 		: player(player)
 		, pos(position)
@@ -84,6 +99,11 @@ struct Boss : SelfRegister<Boss>
 		bool mirrored = true;
 		turrets.push_back(new Turret(pos, vec(-8.0f, -5.0f)*scale, not mirrored));
 		turrets.push_back(new Turret(pos, vec(8.0f, -5.0f)*scale, mirrored));
+
+		attacks = {
+			TimedAttack({5, 60}, &Boss::ShootDown),
+			TimedAttack({10, 20}, &Boss::ShootPlayerWithTurrets),
+		};
 	}
 
 	~Boss() {
@@ -108,21 +128,35 @@ struct Boss : SelfRegister<Boss>
 		}
 	}
 
-	void Update(float dt)
-	{
-		total_time += dt;
-		flashRedTimer -= dt;
+	void ShootDown(float dt) {
 		if (ShouldShootWithPeriod(1.0f, total_time, dt)) {
 			new EnemyBullet(pos, vec(0, 50));
 		}
+	}
+
+	void ShootInAxis(float dt) {}
+
+	void ShootPlayerWithTurrets(float dt) {
 		vec dir_to_player = (player.pos - pos).Normalized();
 		float rad = Angles::Tau/4.0 + Angles::Tau/8.0f * std::sin(total_time);
 		for (auto* t : turrets) {
 			t->UpdateBasePos(pos);
 			t->rad = rad;
 			t->Update(dt, total_time);
-			if (total_time > 5.0f && total_time < 10.0f && ShouldShootWithPeriod(0.1f, total_time, dt)) {
+			if (ShouldShootWithPeriod(0.1f, total_time, dt)) {
 				new EnemyBullet(t->GetTipPos(), vec::FromAngleRads(rad) * 40.0f, turret_bullet_size, AnimLib::TURRET_BULLET);
+			}
+		}
+	}
+
+	void Update(float dt)
+	{
+		total_time += dt;
+		flashRedTimer -= dt;
+
+		for (const auto& timed_attack : attacks) {
+			if (timed_attack.interval.IsActive(total_time)) {
+				(this->*timed_attack.shoot_fn)(dt);
 			}
 		}
 	}
