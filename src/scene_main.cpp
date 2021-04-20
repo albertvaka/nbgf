@@ -368,10 +368,14 @@ void MainScene::Update(float dt)
 	}
 	for (Boss* b : Boss::GetAll()) {
 		for (Bullet* bullet : Bullet::GetAll()) {
-			if (Collide(b, bullet)) {
-				bullet->alive = false;
-				b->Hit();
+			for (const auto& box : b->actual_colliders) {
+				if (Collide(box.Bounds(), bullet->Bounds())) {
+					bullet->alive = false;
+					b->Hit();
+					break;
+				}
 			}
+
 		}
 		b->Update(dt);
 	}
