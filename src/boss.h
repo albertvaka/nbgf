@@ -57,10 +57,11 @@ struct BoxCollider : BoxEntity {
 	}
 };
 
-struct Boss : CircleEntity, SelfRegister<Boss>
+struct Boss : SelfRegister<Boss>
 {
-
 	const Player& player;
+	bool alive = true;
+	vec pos;
 	vec vel;
 	bool can_survive_outbounds = false;
 	float total_time = 0;
@@ -71,8 +72,8 @@ struct Boss : CircleEntity, SelfRegister<Boss>
 	std::vector<BoxCollider> actual_colliders;
 
 	Boss(const vec& position, const Player& player)
-		: CircleEntity(position, /*radius=*/0.0f)
-		, player(player)
+		: player(player)
+		, pos(position)
 	{
 		actual_colliders = {
 			BoxCollider(pos, vec(0, -8)*scale, vec(30, 8)*scale),
@@ -80,7 +81,6 @@ struct Boss : CircleEntity, SelfRegister<Boss>
 			BoxCollider(pos, vec(0, -2)*scale, vec(20, 5)*scale),
 			BoxCollider(pos, vec(0, 8)*scale, vec(8, 15)*scale),
 		};
-		pos = position;
 		bool mirrored = true;
 		turrets.push_back(new Turret(pos, vec(-8.0f, -5.0f)*scale, not mirrored));
 		turrets.push_back(new Turret(pos, vec(8.0f, -5.0f)*scale, mirrored));

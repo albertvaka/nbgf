@@ -410,7 +410,6 @@ void MainScene::Draw()
 	}
 	for (const auto* b : Boss::GetAll()) {
 		b->Draw();
-		b->Bounds().DebugDraw(255, 0, 0);
 	}
 
 	for (const Bullet* b : Bullet::GetAll()) {
