@@ -4,6 +4,7 @@
 
 #include "sound.h"
 #include "shader.h"
+#include "musicplayer.h"
 
 struct GPU_Image;
 typedef struct _TTF_Font TTF_Font;
@@ -23,6 +24,9 @@ struct Assets
 	static inline Sound dieSnd;
 	static inline Sound readySnd;
 	static inline Sound goSnd;
+	static inline Sound shootSound;
+	static inline Sound enemyExplosionSound;
 
+	static inline Mix_Music* menuMusic;
 };
 

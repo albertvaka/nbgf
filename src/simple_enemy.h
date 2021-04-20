@@ -29,6 +29,7 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 
 	void Hit() {
 		alive = false;
+		Assets::enemyExplosionSound.Play();
 		Particles::explosion.pos = pos;
 		Particles::explosion.AddParticles(10);
 	}

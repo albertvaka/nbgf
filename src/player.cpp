@@ -34,6 +34,7 @@ void Player::Update(float dt)
 	if (Input::IsPressed(playerNum, GameKeys::SHOOT) && shotTimer <= 0.f){
 		shotTimer = kBulletPeriod;
 		new Bullet(pos, vec(0,-kBulletSpeed));
+		Assets::shootSound.Play();
 	}
 
 	pos = Camera::Bounds().ClosestPointInBounds(pos);

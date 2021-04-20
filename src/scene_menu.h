@@ -39,10 +39,12 @@ struct MenuScene : Scene {
 		for (int i = 0; i < BackgroundElement::kNumBackgroundElements; i++) {
 			new BackgroundElement();
 		}
+		MusicPlayer::Play(Assets::menuMusic);
 	}
 	void ExitScene() override
 	{
 		BackgroundElement::DeleteAll();
+		MusicPlayer::Stop();
 	}
 
 	void Update(float dt) override 

@@ -47,6 +47,7 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 		flashRedTimer = 0.3f;
 		if (hp <= 0) {
 			alive = false;
+			Assets::enemyExplosionSound.Play();
 			Particles::explosion.pos = pos;
 			Particles::explosion.AddParticles(10);
 		}
