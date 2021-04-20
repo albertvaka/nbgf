@@ -208,8 +208,7 @@ void MainScene::EnterScene()
 		break;
 	case 10:
 	{
-		//TODO: boss
-		new Boss(vec(0.5f, 0.1f) * Camera::Size(), player);
+		new Boss(vec(0.5f, 0.2f) * Camera::Size(), player);
 	}
 	break;
 	case 11: {
