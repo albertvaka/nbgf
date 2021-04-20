@@ -280,7 +280,7 @@ void MainScene::Update(float dt)
 
 		if (timer <= 0) {
 			timerText.SetString("Time out!");
-			Fx::FreezeImage::Freeze(0.5f);
+			Fx::FreezeImage::Freeze(2.0f);
 			Assets::dieSnd.Play();
 			return;
 		}
@@ -366,17 +366,22 @@ void MainScene::Update(float dt)
 		}
 	}
 	for (Boss* b : Boss::GetAll()) {
-		for (Bullet* bullet : Bullet::GetAll()) {
-			for (const auto& box : b->actual_colliders) {
+		b->Update(dt);
+		for (const auto& box : b->actual_colliders) {
+			for (Bullet* bullet : Bullet::GetAll()) {
 				if (Collide(box.Bounds(), bullet->Bounds())) {
 					bullet->alive = false;
 					b->Hit();
 					break;
 				}
 			}
-
+			if (Collide(player.Bounds(), box.Bounds())) {
+				if (!player_invincible) {
+					Fx::FreezeImage::Freeze(0.5f);
+					Assets::dieSnd.Play();
+				}
+			}
 		}
-		b->Update(dt);
 	}
 
 	SimpleEnemy::DeleteNotAlive();
