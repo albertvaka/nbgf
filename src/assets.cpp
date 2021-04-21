@@ -18,4 +18,6 @@ void Assets::LoadAll() {
     dieSnd.Load("data/death.ogg");
 
     menuMusic = LoadMusic("data/menu.ogg");
+    bossMusic = LoadMusic("data/clubdiver.ogg");
+    gameMusic = LoadMusic("data/kickshock.ogg");
 }

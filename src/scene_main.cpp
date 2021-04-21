@@ -127,14 +127,18 @@ void MainScene::EnterScene()
 	Fx::FreezeImage::SetUnfreezeCallback([]() {
 		SceneManager::RestartScene();
 	});
-	for (int i = 0; i < BackgroundElement::kNumBackgroundElements; i++) {
-		new BackgroundElement();
-	}
 	Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
 		Particles::explosion.UpdateParticles(dt);
 		Particles::playerExplosion.UpdateParticles(dt);
-		});
-
+	});
+	for (int i = 0; i < BackgroundElement::kNumBackgroundElements; i++) {
+		new BackgroundElement();
+	}
+	if (currentLevel == 10) {
+		MusicPlayer::Ensure(Assets::bossMusic);
+	} else {
+		MusicPlayer::Ensure(Assets::gameMusic);
+	}
 	won = false;
 	player.Reset();
 	timer = LevelDuration() + kIntroTime;

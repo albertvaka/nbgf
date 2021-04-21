@@ -31,7 +31,7 @@ struct MenuScene : Scene {
 		startText.SetString("- Press Start -");
 
 		creditsText.SetFillColor(255, 255, 0);
-		creditsText.SetString("A game by:\n\nAlbert Martinez\nAlbert Vaca Cintora");
+		creditsText.SetString("A game by:\n\nAlbert Martinez\nAlbert Vaca Cintora\n\nGame music by:\n\nKevin MacLeod");
 	}
 
 	void EnterScene() override 
@@ -44,7 +44,6 @@ struct MenuScene : Scene {
 	void ExitScene() override
 	{
 		BackgroundElement::DeleteAll();
-		MusicPlayer::Stop();
 	}
 
 	void Update(float dt) override 
@@ -75,7 +74,7 @@ struct MenuScene : Scene {
 				.withScale(0.3f);
 		}
 
-		Window::Draw(creditsText, vec(20, 230))
+		Window::Draw(creditsText, vec(15, 205))
 			.withScale(0.3f);
 	}
 

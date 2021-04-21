@@ -28,5 +28,7 @@ struct Assets
 	static inline Sound enemyExplosionSound;
 
 	static inline Mix_Music* menuMusic;
+	static inline Mix_Music* gameMusic;
+	static inline Mix_Music* bossMusic;
 };
 
