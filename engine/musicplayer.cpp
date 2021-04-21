@@ -5,20 +5,27 @@
 namespace MusicPlayer
 {
 	Mix_Music* toPlayAfterIntro;
+	Mix_Music* current;
 	void introFinishedHook() { Mix_PlayMusic(toPlayAfterIntro, -1); }
 
 	void Play(Mix_Music* music) {
 		Mix_PlayMusic(music, -1);
+		current = music;
 	}
 	
 	void PlayWithIntro(Mix_Music* music, Mix_Music* intro) {
 		Mix_PlayMusic(intro, 1);
 		toPlayAfterIntro = music;
+		current = music;
 		Mix_HookMusicFinished(introFinishedHook);
 	}
 
 	bool IsPlaying() {
 		return Mix_PlayingMusic();
+	}
+
+	Mix_Music* GetPlaying() {
+		return current; 
 	}
 
 	void Pause() {
@@ -31,6 +38,7 @@ namespace MusicPlayer
 
 	void Stop() {
 		Mix_HaltMusic();
+		current = nullptr;
 	}
 
 	void SetVolume(float volume) {

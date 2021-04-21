@@ -8,6 +8,19 @@ namespace MusicPlayer
 	void PlayWithIntro(Mix_Music* music, Mix_Music* intro);
 
 	bool IsPlaying();
+	Mix_Music* GetPlaying();
+
+	inline void Ensure(Mix_Music* music) { // Play if not playing
+		if (GetPlaying() != music) {
+			Play(music);
+		}
+	}
+
+	inline void EnsureWithIntro(Mix_Music* music, Mix_Music* intro) {
+		if (GetPlaying() != music) {
+			PlayWithIntro(music, intro);
+		}
+	}
 
 	void Pause();
 	void Resume();
