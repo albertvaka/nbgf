@@ -101,6 +101,13 @@ auto shot_in_circle = [](StrategyEnemy& self, float dt, float total_time) {
 	}
 };
 
+void MainScene::PlayerDie() {
+	Particles::playerExplosion.pos = player.pos;
+	Particles::playerExplosion.AddParticles(8);
+	Assets::dieSnd.Play();
+	player.alive = false;
+}
+
 float MainScene::LevelDuration() const {
 	if (currentLevel == 10) return kBossLevelTime;
 	return kLevelTime;
@@ -123,6 +130,11 @@ void MainScene::EnterScene()
 	for (int i = 0; i < BackgroundElement::kNumBackgroundElements; i++) {
 		new BackgroundElement();
 	}
+	Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
+		Particles::explosion.UpdateParticles(dt);
+		Particles::playerExplosion.UpdateParticles(dt);
+		});
+
 	won = false;
 	player.Reset();
 	timer = LevelDuration() + kIntroTime;
@@ -152,9 +164,9 @@ void MainScene::EnterScene()
 		break;
 	case 5:
 	{
-		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.2f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
-		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.5f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
-		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.8f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy);
+		(new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.2f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy))->hp = 8;
+		(new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.5f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy))->hp = 8;
+		(new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(0.8f, 0.15f) * Camera::Size(), d_shot_every_sec_strategy, orient_strategy))->hp = 8;
 	}
 	break;
 	case 6:
@@ -200,7 +212,7 @@ void MainScene::EnterScene()
 	{
 		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.25f, 0.2f) * Camera::Size(), shoot_player_every_halfsec_strategy, sidetoside_strategy);
 		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.75f, 0.2f) * Camera::Size(), shoot_player_every_halfsec_strategy, sidetoside_strategy);
-		new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(Camera::Center().x, Camera::Center().y - 20), d_shot_every_sec_strategy, orient_strategy);
+		(new StrategyEnemy(AnimLib::ALIEN_TRIANGLE, vec(Camera::Center().x, Camera::Center().y - 20), d_shot_every_sec_strategy, orient_strategy))->hp = 7;
 		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.25f, 0.6f) * Camera::Size(), shoot_player_every_halfsec_strategy, sidetoside_strategy);
 		new StrategyEnemy(AnimLib::ALIEN_SIMPLE, vec(0.75f, 0.6f) * Camera::Size(), shoot_player_every_halfsec_strategy, sidetoside_strategy);
 	}
@@ -221,6 +233,7 @@ void MainScene::EnterScene()
 void MainScene::ExitScene()
 {
 	Particles::explosion.Clear();
+	Particles::playerExplosion.Clear();
 	Bullet::DeleteAll();
 	SimpleEnemy::DeleteAll();
 	StrategyEnemy::DeleteAll();
@@ -269,11 +282,7 @@ void MainScene::Update(float dt)
 		}
 		if (SimpleEnemy::GetAll().empty() && StrategyEnemy::GetAll().empty() && Boss::GetAll().empty()) {
 			timerText.SetString("Well done!");
-			Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
-				Particles::explosion.UpdateParticles(dt);
-			});
 			currentLevel++;
-			Assets::winSnd.Play();
 			Fx::FreezeImage::Freeze(1.5f);
 			return;
 		}
@@ -281,14 +290,14 @@ void MainScene::Update(float dt)
 		if (timer <= 0) {
 			timerText.SetString("Time out!");
 			Fx::FreezeImage::Freeze(2.0f);
-			Assets::dieSnd.Play();
+			PlayerDie();
 			return;
 		}
 
 		if (timer > LevelDuration() - kIntroTime) {
 			timerText.SetString("Go!");
 			if (timerText.HasChanges()) {
-				Assets::goSnd.Play();
+				Assets::readySnd.Play();
 			}
 		}
 		else {
@@ -322,7 +331,7 @@ void MainScene::Update(float dt)
 		if (Collide(player.Bounds(), a->Bounds())) {
 			if (!player_invincible) {
 				Fx::FreezeImage::Freeze(0.5f);
-				Assets::dieSnd.Play();
+				PlayerDie();
 			}
 		}
 		if (a->pos.y > 1.2f * Camera::Size().y) {
@@ -340,7 +349,7 @@ void MainScene::Update(float dt)
 		if (Collide(player.Bounds(), a->Bounds())) {
 			if (!player_invincible) {
 				Fx::FreezeImage::Freeze(0.5f);
-				Assets::dieSnd.Play();
+				PlayerDie();
 			}
 		}
 		if (a->pos.y > 1.2f * Camera::Size().y) {
@@ -353,7 +362,7 @@ void MainScene::Update(float dt)
 		if (Collide(player.Bounds(), b->Bounds())) {
 			if (!player_invincible) {
 				Fx::FreezeImage::Freeze(0.5f);
-				Assets::dieSnd.Play();
+				PlayerDie();
 			}
 		}
 		// Absorved bullets.
@@ -378,7 +387,7 @@ void MainScene::Update(float dt)
 			if (Collide(player.Bounds(), box.Bounds())) {
 				if (!player_invincible) {
 					Fx::FreezeImage::Freeze(0.5f);
-					Assets::dieSnd.Play();
+					PlayerDie();
 				}
 			}
 		}
@@ -391,6 +400,7 @@ void MainScene::Update(float dt)
 	Boss::DeleteNotAlive();
 
 	Particles::explosion.UpdateParticles(dt);
+	Particles::playerExplosion.UpdateParticles(dt);
 
 }
 
@@ -426,6 +436,7 @@ void MainScene::Draw()
 	}
 
 	Particles::explosion.Draw();
+	Particles::playerExplosion.Draw();
 
 	Window::Draw(timerText, vec(Camera::Center().x, 12))
 		.withOrigin(timerText.Size()/2)

@@ -20,10 +20,10 @@ struct Assets
 	static inline TTF_Font* font_30_outline;
 
 	static inline Shader tintShader;
-	static inline Sound winSnd;
+	
 	static inline Sound dieSnd;
 	static inline Sound readySnd;
-	static inline Sound goSnd;
+	static inline Sound shootSound2;
 	static inline Sound shootSound;
 	static inline Sound enemyExplosionSound;
 

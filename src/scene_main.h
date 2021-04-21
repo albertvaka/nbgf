@@ -25,4 +25,5 @@ struct MainScene : Scene {
 
 private:
 	float LevelDuration() const;
+	void PlayerDie();
 };

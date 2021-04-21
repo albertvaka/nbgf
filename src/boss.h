@@ -140,10 +140,13 @@ struct Boss : Entity, SelfRegister<Boss>
 	int shots = 0;
 	void ShootDown(float dt) {
 		float period = 1.0f;
+		float periodFollower = 1.0f;
 		if (hp < kHealthLosesFirstTurret) {
 			period /= 2;
+			periodFollower /= 2;
 			if (hp < kHealthLosesSecondTurret) {
-				period /= 2;
+				period /= 1.2f;
+				periodFollower /= 2;
 			}
 		}
 		if (ShouldShootWithPeriod(period, total_time, dt)) {
@@ -169,7 +172,7 @@ struct Boss : Entity, SelfRegister<Boss>
 			//	new EnemyBullet(pos + vec(5,0), vec(0, 80));
 			//}
 		}
-		if (ShouldShootWithPeriod(period, total_time+0.5f, dt)) {
+		if (ShouldShootWithPeriod(periodFollower, total_time+0.5f, dt)) {
 			new EnemyBullet(pos, (player.pos-pos).Normalized()*120);
 		}
 	}

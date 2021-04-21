@@ -5,6 +5,7 @@
 #include "assets.h"
 #include "anim_lib.h"
 #include "bullet.h"
+#include "rand.h"
 #include "window.h"
 
 
@@ -22,6 +23,7 @@ Player::Player()
 void Player::Reset() {
 	pos = vec(0.5f, 0.9f) * Camera::Size();
 	shotTimer = 0.f;
+	alive = true;
 }
 
 void Player::Update(float dt)
@@ -34,7 +36,12 @@ void Player::Update(float dt)
 	if (Input::IsPressed(playerNum, GameKeys::SHOOT) && shotTimer <= 0.f){
 		shotTimer = kBulletPeriod;
 		new Bullet(pos, vec(0,-kBulletSpeed));
-		Assets::shootSound.Play();
+		if (Rand::OnceEvery(2)) {
+			Assets::shootSound.Play();
+		} 
+		else {
+			Assets::shootSound2.Play();
+		}
 	}
 
 	pos = Camera::Bounds().ClosestPointInBounds(pos);
@@ -42,6 +49,8 @@ void Player::Update(float dt)
 
 void Player::Draw() const
 {
+	if (!alive) return;
+
 	const GPU_Rect& animRect = AnimLib::PLAYER;
 	Window::Draw(Assets::spritesTexture, pos)
 		.withRect(animRect)

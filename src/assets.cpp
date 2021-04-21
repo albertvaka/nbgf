@@ -11,14 +11,11 @@ void Assets::LoadAll() {
 
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
 
-    winSnd.Load("data/win.wav");
-    // dieSnd.Load("data/die.wav");
-	dieSnd.Load("data/death.ogg");
-    readySnd.Load("data/ready.wav");
-    goSnd.Load("data/go.wav");
-
-	shootSound.Load("data/piu.ogg");
-	enemyExplosionSound.Load("data/expl.ogg");
+    readySnd.Load("data/ready.ogg");
+    shootSound.Load("data/piu.wav");
+    shootSound2.Load("data/piu2.wav");
+    enemyExplosionSound.Load("data/expl.ogg");
+    dieSnd.Load("data/death.ogg");
 
     menuMusic = LoadMusic("data/menu.ogg");
 }
