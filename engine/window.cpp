@@ -2,6 +2,10 @@
 
 #include "SDL_gpu.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #ifdef _IMGUI
 #include "imgui_impl_sdl.h"
 #endif
