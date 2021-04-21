@@ -34,7 +34,7 @@ ifdef EMSCRIPTEN
 	else
 		WEBGL_CFLAGS=-s MIN_WEBGL_VERSION=1 -s MAX_WEBGL_VERSION=1 -DSDL_GPU_DISABLE_GLES_3 -DIMGUI_IMPL_OPENGL_ES2
 	endif
-	PLATFORM_CFLAGS=-s EXPORTED_FUNCTIONS='["_main", "_start_main_loop"]' -s EXPORTED_RUNTIME_METHODS='["ccall"]' -Oz -DSDL_GPU_DISABLE_OPENGL -DSDL_GPU_DISABLE_GLES_1 -s USE_SDL_TTF=2 -s USE_SDL_MIXER=2 -s USE_OGG -s USE_VORBIS -s ALLOW_MEMORY_GROWTH=1 --preload-file bin/data@/data --use-preload-plugins $(WEBGL_CFLAGS)
+	PLATFORM_CFLAGS=-s EXPORTED_FUNCTIONS='["_main", "_start_main_loop"]' -s EXPORTED_RUNTIME_METHODS='["ccall"]' -Oz -DSDL_GPU_DISABLE_OPENGL -DSDL_GPU_DISABLE_GLES_1 -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_MIXER=2 -s USE_OGG -s USE_VORBIS -s ALLOW_MEMORY_GROWTH=1 --preload-file bin/data@/data --use-preload-plugins $(WEBGL_CFLAGS)
 	PLATFORM_LDFLAGS=-lidbfs.js
 else
 	OUT_FILE=$(EXEC)
@@ -57,13 +57,13 @@ ifeq ($(strip $(DEBUG)),1)
 	DEBUGFLAGS=-D_DEBUG -g
 endif
 ifeq ($(strip $(IMGUI)),1)
-	IMGUIFLAGS=-D_IMGUI
+	IMGUIFLAGS=-D_IMGUI -DIMGUI_DISABLE_DEMO_WINDOWS
 endif
 
 $(EXEC): $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) Makefile
 	$(CXX) $(LDFLAGS) $(OBJ) $(ENGINE_OBJ) $(DEP_OBJ) -o $(OUT_FILE)
 
-obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h Makefile
+obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/scene_entrypoint.h src/window_conf.h Makefile
 	@mkdir -p obj/engine
 	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
