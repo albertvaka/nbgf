@@ -39,10 +39,12 @@ struct MenuScene : Scene {
 		for (int i = 0; i < BackgroundElement::kNumBackgroundElements; i++) {
 			new BackgroundElement();
 		}
+		MusicPlayer::SetVolume(90);
 		MusicPlayer::Play(Assets::menuMusic);
 	}
 	void ExitScene() override
 	{
+		MusicPlayer::SetVolume(30); // the rest of the game music is much louder
 		BackgroundElement::DeleteAll();
 	}
 
