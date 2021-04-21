@@ -6,6 +6,10 @@
 #include "imgui_impl_sdl.h"
 #endif
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #include "debug.h"
 #include "raw_input.h"
 #include "camera.h"
