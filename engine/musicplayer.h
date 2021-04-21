@@ -23,12 +23,15 @@ namespace MusicPlayer
 	}
 
 	void Pause();
+	bool IsPaused();
 	void Resume();
 
 	void Stop();
 
 	void SetVolume(float volume); // from 0 to 100
 	float Volume(); // from 0 to 100
+
+	void ToggleMusicWithM(bool keepPausedOnChange = true);
 
 	//TODO: Wrap Mix_FadeInMusic() and Mix_FadeOutMusic()
 }
