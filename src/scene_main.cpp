@@ -248,7 +248,7 @@ void MainScene::ExitScene()
 
 void MainScene::Update(float dt)
 {
-
+	MusicPlayer::ToggleMusicWithM();
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {

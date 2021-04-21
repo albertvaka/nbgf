@@ -48,6 +48,7 @@ struct MenuScene : Scene {
 
 	void Update(float dt) override 
 	{
+		MusicPlayer::ToggleMusicWithM();
 		if (Input::IsJustPressedAnyPlayer(GameKeys::START)) {
 			SceneManager::ChangeScene(new MainScene());
 		}
