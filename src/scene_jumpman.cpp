@@ -114,6 +114,7 @@ void JumpScene::SaveGame() const {
 	}
 
 	skillTree.SaveGame(saveState);
+	destroyedTiles.SaveGame(saveState);
 
 	saveState.StreamPut("bossdead_bipedal") << (boss_bipedal == nullptr);
 
@@ -139,7 +140,9 @@ void JumpScene::LoadGame() {
 		g->LoadGame(saveState);
 	}
 
+	destroyedTiles.LoadGame(saveState);
 	skillTree.LoadGame(saveState);
+
 	for (BigItem* g : BigItem::GetAll()) {
 		if (skillTree.IsEnabled(g->skill)) {
 			TriggerPickupItem(g, true);

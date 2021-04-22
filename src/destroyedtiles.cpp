@@ -45,7 +45,7 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn) {
 		return;
 	}
 
-	map->SetTile(x, y, t == Tile::BREAKABLE_COVERING_ONEWAY ? Tile::ONEWAY_BEHIND_BREAKABLE : Tile::NONE);
+	map->SetTile(x, y, t.GetTileBehind());
 
 	if (animated) {
 		destroyedParticles.pos = Tile::Bounds(x, y).Center();
@@ -59,6 +59,8 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn) {
 
 	if (respawn) {
 		toSpawn.emplace_back(x, y, t, timeToRespawn);
+	} else {
+		permanentlyDestroyed.emplace_back(x, y);
 	}
 }
 

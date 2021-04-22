@@ -30,7 +30,7 @@ struct Explosive : SelfRegister<Explosive>
 	bool CheckBulletCollision(const CircleBounds& bullet)
 	{
 		if (!HasExploded() && Collide(target, bullet)) {
-			DestroyTiles(true);
+			DestroyTiles();
 			return true;
 		}
 		return false;
@@ -46,9 +46,6 @@ struct Explosive : SelfRegister<Explosive>
 	{
 		bool exploded = false;
 		save.StreamGet("explosive_" + std::to_string(saveId)) >> exploded;
-		if (exploded) {
-			DestroyTiles(false);
-		}
 	}
 
 private:
@@ -56,7 +53,7 @@ private:
 		return GaemTileMap::instance()->GetTile(targetTile) == Tile::NONE;
 	}
 
-	void DestroyTiles(bool animated) {
+	void DestroyTiles() {
 		for (const BoxBounds& e : areaToDestroy) {
 			int xLeft = Tile::ToTiles(e.Left());
 			int xRight = Tile::ToTiles(e.Right());
@@ -66,7 +63,7 @@ private:
 			{
 				for (int y = yTop; y <= yBottom; y++)
 				{
-					DestroyedTiles::instance()->Destroy(x,y,animated,respawn_tiles);
+					DestroyedTiles::instance()->Destroy(x,y,true,respawn_tiles);
 				}
 			}
 		}

@@ -5,6 +5,7 @@
 #include "spawningtile.h"
 #include "partsys.h"
 #include "singleinstance.h"
+#include "savestate.h"
 
 struct DestroyedTiles : SingleInstance<DestroyedTiles>
 {
@@ -26,6 +27,24 @@ struct DestroyedTiles : SingleInstance<DestroyedTiles>
 		toSpawn.clear();
 	}
 
+	void SaveGame(SaveState& save) const
+	{
+		auto s = save.StreamPut("destroyed_tiles");
+		for (veci v : permanentlyDestroyed) {
+			s << v.x << v.y;
+		}
+	}
+
+	void LoadGame(const SaveState& save)
+	{
+		auto s = save.StreamGet("destroyed_tiles");
+		int x,y;
+		while (s >> x >> y) {
+			Destroy(x,y,false,false);
+		}
+	}
+
 	PartSys destroyedParticles;
 	std::vector<SpawningTile> toSpawn;
+	std::vector<veci> permanentlyDestroyed;
 };

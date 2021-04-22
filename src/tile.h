@@ -32,8 +32,16 @@ struct Tile : Tiled::Tile
 		return value >= RSLOPE_1;
 	}
 
-	bool isFullSolid() const { //Excludes slopes
+	bool isFullSolid() const { // Excludes slopes
 		return value >= SOLID_1;
+	}
+
+	Tile GetTileBehind() const { // What's "behind" of this tile when it breaks
+		if (value == Tile::BREAKABLE_COVERING_ONEWAY || isBreakableGround()) {
+			return Tile::ONEWAY_BEHIND_BREAKABLE;
+		} else {
+			return Tile::NONE;
+		}
 	}
 
 	enum class BreakPower {
