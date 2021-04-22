@@ -12,6 +12,7 @@ enum class Skill {
 	DAMAGE_UP,
 	DASH,
 	DIVE,
+	ATTACK,
 };
 
 struct SaveState;

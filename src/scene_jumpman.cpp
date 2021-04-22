@@ -491,9 +491,14 @@ void JumpScene::Update(float dt)
 		Camera::SetCenter(player.GetCameraTargetPos());
 	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
-		skillTree.Enable(Skill::GUN);
+		skillTree.Enable(Skill::ATTACK);
+		skillTree.Enable(Skill::DIVE);
+		skillTree.Enable(Skill::DASH);
 		skillTree.Enable(Skill::WALLJUMP);
 		skillTree.Enable(Skill::BREAK);
+		if (Keyboard::IsKeyPressed(shift)) {
+			skillTree.Enable(Skill::GUN);
+		}
 	}
 	if (Keyboard::IsKeyJustPressed(screen_left)) {
 		player.pos.x -= Window::GAME_WIDTH;

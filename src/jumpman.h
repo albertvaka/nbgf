@@ -31,8 +31,21 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         onWall = ONWALL_NO;
         frozen = false;
         alive = true;
+        canDash = true;
+        state = State::MOVING;
+        stateTime = 0.f;
         ScreenManager::instance()->UpdateCurrentScreen(pos);
     }
+
+    enum class State {
+        MOVING, //includes jumping, falling, crouching
+        ATTACKING,
+        DASHING,
+        DIVING,
+    };
+    
+    State state = State::MOVING;
+    float stateTime = 0.0f;
 
     BoxBounds Bounds() const {
         return BoxBounds(pos, size, vec(size.x/2, size.y));
@@ -80,8 +93,14 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     bool grounded = true;
     bool crouched = false;
     bool lookingLeft = false;
+    bool canDash = true;
 
     PartSys polvito;
+
+    void UpdateMoving(float dt);
+    void UpdateDashing(float dt);
+    void UpdateDiving(float dt);
+    void UpdateAttacking(float dt);
 
     void InitPolvito();
     inline void DoPolvitoJump();

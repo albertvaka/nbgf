@@ -3,6 +3,7 @@
 #include "input.h"
 #include "bullet.h"
 #include "mates.h"
+#include "destroyedtiles.h"
 #include "assets.h"
 #include "anim_lib.h"
 #include "fx.h"
@@ -33,6 +34,10 @@ const float vel_jump = -150;
 const float vel_walljump = 90;
 const float jump_time = 0.35f;
 const float timeCrouchedToJumpDownOneWayTile = 0.2f;
+
+const float vel_dash = 350;
+const float dash_time = 0.25f;
+const float vel_dive = 350;
 
 // limits
 const vec vel_max(220, 350);
@@ -67,15 +72,50 @@ void JumpMan::LoadGame(const SaveState& state) {
 	Reset(pos, maxHealth);
 }
 
-void JumpMan::Update(float dt)
-{
-	pos.DebugDraw();
+void JumpMan::UpdateAttacking(float dt) {
+	// TODO: Do damage
+	if (animation.IsComplete()) {
+		state = State::MOVING;
+	}
+	UpdateMoving(dt);
+}
+void JumpMan::UpdateDashing(float dt) {
+	if (stateTime >= dash_time) {
+		state = State::MOVING;
+	}
+}
 
-	if (frozen || !alive) return;
+void JumpMan::UpdateMoving(float dt) 
+{
+	if (SkillTree::instance()->IsEnabled(Skill::DASH) && canDash) {
+		if (Input::IsPressed(0, GameKeys::DASH_RIGHT)) {
+			state = State::DASHING;
+			vel = vec(vel_dash, 0);
+			stateTime = 0.f;
+			animation.Ensure(AnimLib::WARRIOR_DASH);
+			lookingLeft = false;
+			return;
+		} else if (Input::IsPressed(0, GameKeys::DASH_LEFT)) {
+			state = State::DASHING;
+			vel = vec(-vel_dash, 0);
+			stateTime = 0.f;
+			animation.Ensure(AnimLib::WARRIOR_DASH);
+			lookingLeft = true;
+			return;
+		}
+	}
+
+	if (SkillTree::instance()->IsEnabled(Skill::DIVE)) {
+		if (!grounded && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsPressed(0, GameKeys::ATTACK)) {
+			state = State::DIVING;
+			vel = vec(0, vel_dive);
+			animation.Ensure(AnimLib::WARRIOR_CROUCH);
+			stateTime = 0.f;
+			return;
+		}
+	}
 
 	GaemTileMap* map = GaemTileMap::instance();
-
-	grounded = IsGrounded(pos - vec(0,size.y/2), size);
 
 	crouched = ((crouched || grounded) && Input::IsPressed(0,GameKeys::CROUCH)) || (crouched && !grounded);
 	if (crouched) {
@@ -85,7 +125,7 @@ void JumpMan::Update(float dt)
 		crouchedTime = 0.f;
 	}
 
-	if (Input::IsJustPressed(0,GameKeys::JUMP, 0.15f) && (grounded || (onWall && !crouched)))
+	if (state != State::ATTACKING && Input::IsJustPressed(0,GameKeys::JUMP, 0.15f) && (grounded || (onWall && !crouched)))
 	{
 		//if (!Input::IsJustPressed(0,GameKeys::JUMP)) Debug::out << "cheats";
 		Input::ConsumeJustPressed(0, GameKeys::JUMP);
@@ -107,26 +147,28 @@ void JumpMan::Update(float dt)
 	}
 
 	vec acc = vec(0, 0);
-	if (Input::IsPressed(0,GameKeys::LEFT)) {
-		lookingLeft = true;
-		if (grounded) {
-			if (!crouched) acc.x -= run_acc;
+	if (state != State::ATTACKING) {
+		if (Input::IsPressed(0,GameKeys::LEFT)) {
+			lookingLeft = true;
+			if (grounded) {
+				if (!crouched) acc.x -= run_acc;
+			}
+			else {
+				acc.x -= run_acc_onair;
+			}
 		}
-		else {
-			acc.x -= run_acc_onair;
-		}
-	}
-	if (Input::IsPressed(0,GameKeys::RIGHT)) {
-		lookingLeft = false;
-		if (grounded) {
-			if (!crouched) acc.x += run_acc;
-		}
-		else {
-			acc.x += run_acc_onair;
+		if (Input::IsPressed(0,GameKeys::RIGHT)) {
+			lookingLeft = false;
+			if (grounded) {
+				if (!crouched) acc.x += run_acc;
+			}
+			else {
+				acc.x += run_acc_onair;
+			}
 		}
 	}
 
-	if (Input::IsPressed(0,GameKeys::JUMP) && jumpTimeLeft > 0)
+	if (state != State::ATTACKING && Input::IsPressed(0,GameKeys::JUMP) && jumpTimeLeft > 0)
 	{
 		vel.y = vel_jump;
 	}
@@ -207,6 +249,33 @@ void JumpMan::Update(float dt)
 	if (vel.y < -vel_max.y) vel.y = -vel_max.y;
 
 
+}
+
+void JumpMan::Update(float dt)
+{
+	if (frozen || !alive) return;
+
+	grounded = IsGrounded(pos - vec(0,size.y/2), size);
+
+	if (grounded) {
+		canDash = true;
+	}
+
+	animation.Update(dt);
+
+	if (state != State::MOVING) {
+		stateTime += dt;
+		if (state == State::DASHING) {
+			 UpdateDashing(dt);
+		}
+	}
+
+	if (state == State::MOVING) {
+		UpdateMoving(dt);
+	} else if (state == State::ATTACKING) {
+		UpdateAttacking(dt);
+	}
+
 	// Do move
 	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
 	pos = moved.pos + vec(0, size.y/2);
@@ -214,6 +283,7 @@ void JumpMan::Update(float dt)
 	if (moved.leftWallCollision != Tile::NONE) {
 		if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
 			onWall = ONWALL_LEFT;
+			state = State::MOVING;
 			vel.x = -500.f * dt; //stay against wall
 		}
 		else {
@@ -224,6 +294,7 @@ void JumpMan::Update(float dt)
 	else if (moved.rightWallCollision != Tile::NONE) {
 		if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
 			onWall = ONWALL_RIGHT;
+			state = State::MOVING;
 			vel.x = 500.f * dt; //stay against wall
 		}
 		else {
@@ -240,92 +311,99 @@ void JumpMan::Update(float dt)
 		jumpTimeLeft = 0;
 	}
 	if (moved.groundCollision != Tile::NONE) {
-		if (moved.groundCollision.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
-			pos.y += 3.f;
-			vel.y = 0;
-			crouched = false;
-			grounded = false;
-		}
-		else {
-			if (vel.y > 50) DoPolvitoLand();
-			if (moved.groundCollision.isSlope()) {
-				vel.y = 30.f; //this helps you get grounded as soon as the slope ends
+		if (state == State::DIVING && moved.groundCollision.isBreakableGround()) {
+			DestroyedTiles::instance()->Destroy(moved.groundCollisionPos.x, moved.groundCollisionPos.y, true, false);
+			// TODO: Destroy neighbouring tiles?
+		} else {
+			state = State::MOVING;
+			if (moved.groundCollision.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
+				pos.y += 3.f;
+				vel.y = 0;
+				crouched = false;
+				grounded = false;
 			}
 			else {
-				vel.y = 0;
+				if (vel.y > 50) DoPolvitoLand();
+				if (moved.groundCollision.isSlope()) {
+					vel.y = 30.f; //this helps you get grounded as soon as the slope ends
+				}
+				else {
+					vel.y = 0;
+				}
+				onWall = ONWALL_NO;
+				grounded = true;
 			}
-			onWall = ONWALL_NO;
-			grounded = true;
 		}
 	}
 
 
-
-	animation.Update(dt);
-
-	bool isWalking = false;
-	bool isTurning = false;
-	if (crouched)
-	{
-		size = crouched_size;
-		animation.Ensure(AnimLib::WARRIOR_CROUCH, false);
-	}
-	else
-	{
-
-		size = standing_size;
-		if (grounded)
+	if (state == State::MOVING) {
+		bool isWalking = false;
+		bool isTurning = false;
+		if (crouched)
 		{
-			if (Input::IsPressed(0,GameKeys::LEFT) && !Input::IsPressed(0,GameKeys::RIGHT))
-			{
-				isWalking = true;
-				if (vel.x > 0.f) {
-					animation.Ensure(AnimLib::WARRIOR_TURN);
-					isTurning = true;
-				}
-				else {
-					animation.Ensure(AnimLib::WARRIOR_RUN);
-				}
-			}
-			else if (Input::IsPressed(0,GameKeys::RIGHT) && !Input::IsPressed(0,GameKeys::LEFT))
-			{
-				isWalking = true;
-				if (vel.x < 0.f) {
-					animation.Ensure(AnimLib::WARRIOR_TURN);
-					isTurning = true;
-				}
-				else animation.Ensure(AnimLib::WARRIOR_RUN);
-			}
-			else
-			{
-				animation.Ensure(AnimLib::WARRIOR_IDLE);
-			}
+			size = crouched_size;
+			animation.Ensure(AnimLib::WARRIOR_CROUCH, false);
 		}
 		else
 		{
-			if (onWall) {
-				animation.Ensure(AnimLib::WARRIOR_WALL_SLIDE);
+
+			size = standing_size;
+			if (grounded)
+			{
+				if (Input::IsPressed(0,GameKeys::LEFT) && !Input::IsPressed(0,GameKeys::RIGHT))
+				{
+					isWalking = true;
+					if (vel.x > 0.f) {
+						animation.Ensure(AnimLib::WARRIOR_TURN);
+						isTurning = true;
+					}
+					else {
+						animation.Ensure(AnimLib::WARRIOR_RUN);
+					}
+				}
+				else if (Input::IsPressed(0,GameKeys::RIGHT) && !Input::IsPressed(0,GameKeys::LEFT))
+				{
+					isWalking = true;
+					if (vel.x < 0.f) {
+						animation.Ensure(AnimLib::WARRIOR_TURN);
+						isTurning = true;
+					}
+					else animation.Ensure(AnimLib::WARRIOR_RUN);
+				}
+				else
+				{
+					animation.Ensure(AnimLib::WARRIOR_IDLE);
+				}
 			}
-			else if (invencibleTimer > 0.f) {
-				animation.Ensure(AnimLib::WARRIOR_HURT, false);
-			}
-			else if (vel.y <= vel_jump) {
-				animation.Ensure(AnimLib::WARRIOR_JUMP, false);
-			}
-			else if (animation.IsSet(AnimLib::WARRIOR_FALL)) {
-				animation.Ensure(AnimLib::WARRIOR_FALL);
-			}
-			else {
-				animation.Ensure(AnimLib::WARRIOR_JUMP_TO_FALL, false);
-				if (animation.IsComplete()) {
+			else
+			{
+				if (onWall) {
+					animation.Ensure(AnimLib::WARRIOR_WALL_SLIDE);
+				}
+				else if (invencibleTimer > 0.f) {
+					animation.Ensure(AnimLib::WARRIOR_HURT, false);
+				}
+				else if (vel.y <= vel_jump) {
+					animation.Ensure(AnimLib::WARRIOR_JUMP, false);
+				}
+				else if (animation.IsSet(AnimLib::WARRIOR_FALL)) {
 					animation.Ensure(AnimLib::WARRIOR_FALL);
+				}
+				else {
+					animation.Ensure(AnimLib::WARRIOR_JUMP_TO_FALL, false);
+					if (animation.IsComplete()) {
+						animation.Ensure(AnimLib::WARRIOR_FALL);
+					}
 				}
 			}
 		}
+		if (isWalking) {
+			DoPolvitoRun(dt, Input::IsPressed(0,GameKeys::LEFT), isTurning);
+		}
 	}
-	if (isWalking) {
-		DoPolvitoRun(dt, (acc.x < 0), isTurning);
-	}
+
+	
 	polvito.UpdateParticles(dt);
 
 
@@ -364,6 +442,7 @@ void JumpMan::Update(float dt)
 	if (invencibleTimer > 0.f) {
 		invencibleTimer -= dt;
 	}
+	
 }
 
 void JumpMan::TakeDamage(vec src) {
@@ -433,8 +512,8 @@ void JumpMan::Draw() const {
 
 	// Debug-only
 	Bounds().DebugDraw();
-	Input::GetAnalog(0, AnalogInput::AIM).DebugDraw();
-	//pos.DebugDraw();
+	//Input::GetAnalog(0, AnalogInput::AIM).DebugDraw();
+	pos.DebugDraw();
 	//Bounds().Center().DebugDraw();
 }
 

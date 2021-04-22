@@ -112,7 +112,8 @@ struct MoveResult {
 	Tile rightWallCollision = Tile::NONE;
 	Tile ceilingCollision = Tile::NONE;
 	Tile groundCollision = Tile::NONE;
-	vec pos;
+	veci groundCollisionPos = veci(0,0);
+	vec pos = vec(0.f,0.f);
 };
 
 //Based on code by: Jordi Santiago
@@ -228,7 +229,8 @@ horz_exit:
 			float E = 0.0001f;
 			if (map->IsPosOnSlope(posf.x, y - E)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
 				posf.y = y;
-				ret.groundCollision = map->GetTile(posf.x, y - E);
+				ret.groundCollisionPos = veci(posf.x, y - E);
+				ret.groundCollision = map->GetTile(ret.groundCollisionPos);
 				goto vert_exit;
 			}
 		}
@@ -245,6 +247,7 @@ horz_exit:
 				if ((t.isFullSolid()) || (t.isOneWay() && pos.y - 1.f < (y * Tile::Size)))
 				{
 					posf.y = Tile::Top(y);
+					ret.groundCollisionPos = veci(x,y);
 					ret.groundCollision = t;
 					goto vert_exit;
 				}

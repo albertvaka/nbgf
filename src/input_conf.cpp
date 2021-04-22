@@ -80,15 +80,37 @@ void Input::MapGameKeys()
     action_mapping[(int)GameKeys::ACTION] = [](int p) {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) || (
                (p == keyboard_player_id) && (
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_E) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE)
                )
         );
     };
     action_mapping[(int)GameKeys::SHOOT] = [](int p) {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
-               GamePad::Trigger::Right.IsPressed(p) || (
+        return GamePad::Trigger::Right.IsPressed(p) || (
                (p == keyboard_player_id) && Mouse::IsPressed()
+        );
+    };
+    action_mapping[(int)GameKeys::ATTACK] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) || (
+               (p == keyboard_player_id) && (
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_O) ||
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_X)
+               )
+        );
+    };
+    action_mapping[(int)GameKeys::DASH_LEFT] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) || (
+               (p == keyboard_player_id) && (
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_1) ||
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_9)
+               )
+        );
+    };
+    action_mapping[(int)GameKeys::DASH_RIGHT] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) || (
+               (p == keyboard_player_id) && (
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_3) ||
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_9)
+               )
         );
     };
     action_mapping[(int)GameKeys::START] = [](int p)
