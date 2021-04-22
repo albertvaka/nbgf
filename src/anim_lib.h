@@ -266,7 +266,7 @@ namespace AnimLib {
 	};
 
 	const constexpr SheetFrameCalculator warriorSheet(69.f, 44.f, 6, .1f);
-	constexpr const AnimationFrame WARRIOR_IDLE[] = { warriorSheet.Frame(5, 1.f) };
+	constexpr const AnimationFrame WARRIOR_IDLE[] = { warriorSheet.Frame(5, 1.f), warriorSheet.Frame(0, 1.0f), };
 	constexpr const std::array<AnimationFrame, 8> WARRIOR_RUN = warriorSheet.Frames<8>(6);
 	constexpr const std::array<AnimationFrame, 8> WARRIOR_ATTACK = warriorSheet.Frames<8>(14);
 	constexpr const std::array<AnimationFrame, 4> WARRIOR_COMBO = warriorSheet.Frames<4>(22);
