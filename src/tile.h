@@ -48,6 +48,10 @@ struct Tile : Tiled::Tile
 		}
 	}
 
+	bool IsChainBreakable() const { // Breaking it breaks the neighbouring tiles of the same type
+		return isBreakableGround() || isBreakable(BreakPower::HARD);
+	}
+
 	enum class BreakPower {
 		NONE = 0,
 		SOFT,

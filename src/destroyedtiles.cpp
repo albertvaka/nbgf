@@ -62,6 +62,15 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn) {
 	} else {
 		permanentlyDestroyed.emplace_back(x, y);
 	}
+
+	if (t.IsChainBreakable()) {
+		veci neigbours[4] = { veci(x + 1, y), veci(x - 1, y), veci(x, y + 1), veci(x, y - 1) };
+		for (auto neighbour : neigbours) {
+			if (map->GetTile(neighbour) == t) {
+				Destroy(neighbour.x, neighbour.y, animated, respawn);
+			}
+		}
+	}
 }
 
 void DestroyedTiles::Update(float dt) {
