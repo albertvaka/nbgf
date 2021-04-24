@@ -7,7 +7,7 @@
 
 // FIXME: Jumping against a slope that goes up in the same direction you are moving behaves weirdly.
 
-inline bool IsGrounded(vec pos, vec size, vec marginPixels = vec(1, 1.5)) {
+inline bool IsGrounded(vec pos, vec size, veci* out_groundTile = nullptr, vec marginPixels = vec(1, 1.5)) {
 
 	float y_bottom = pos.y + (size.y / 2);
 	float x_left = pos.x - (size.x / 2);
@@ -21,15 +21,24 @@ inline bool IsGrounded(vec pos, vec size, vec marginPixels = vec(1, 1.5)) {
 	for (int tx = tx_left; tx <= tx_right; tx++) {
 		Tile t = tileMap->GetTile(tx, ty);
 		if (t.isFullSolid()) {
+			if (out_groundTile) {
+				*out_groundTile = veci(tx, ty);
+			}
 			return true;
 		}
 		if (t.isOneWay() && (ty * Tile::Size) + 1.f > y_bottom) {
+			if (out_groundTile) {
+				*out_groundTile = veci(tx, ty);
+			}
 			return true;
 		}
 	}
 
 	// Slopes
 	if (tileMap->IsPosOnSlope(pos)) {
+		if (out_groundTile) {
+			*out_groundTile = Tile::ToTiles(pos.x, pos.y);
+		}
 		return true;
 	}
 

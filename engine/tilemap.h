@@ -49,6 +49,9 @@ struct TileMap
 	void SetTile(const veci& pos, Tile tile) { return SetTile(pos.x, pos.y, tile); }
 	Tile GetTile(const veci& pos) const { return GetTile(pos.x, pos.y); }
 
+	Tile GetTileUnsafe(veci pos) const { return GetTileUnsafe(pos.x, pos.y); }
+	void SetTileUnsafe(veci pos, Tile col) { SetTileUnsafe(pos.x, pos.y, col); }
+
 	int Width() const { return sizes.x; }
 	int Height() const { return sizes.y; }
 	const veci& Size() const { return sizes; }

@@ -22,6 +22,7 @@ struct Tile {
 	static int ToTiles(float x) { return Mates::fastfloor(x / Tile::Size); } // floor could be just a cast to int if we know we will never get < 0
 
 	static vec FromTiles(int x, int y) { return vec(x * Tile::Size, y * Tile::Size); }
+	static vec FromTiles(veci pos) { return FromTiles(pos.x, pos.y);  }
 
 	static vec AlignToTiles(vec v) { return ToTiles(v) * Tile::Size; }
 	static vec AlignToTiles(float x, float y) { return ToTiles(x, y) * Tile::Size; }

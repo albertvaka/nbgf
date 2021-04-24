@@ -5,6 +5,7 @@
 #include "collide.h"
 #include "camera.h"
 #include "mates.h"
+#include "anim_lib.h"
 #include "jumpman.h"
 
 const float waveAmplitude = 1.f;
@@ -14,8 +15,6 @@ const float speed = 3.0f;
 const float distanceBetweenParticleSpawners = 15.f;
 
 const float raiseSpeed = 15.f;
-
-extern float mainClock;
 
 Lava::Lava(const BoxBounds& b)
 	: bounds(b)
@@ -50,6 +49,7 @@ Mates::Range Lava::GetChunksOnScreen() const {
 }
 
 void Lava::Update(float dt) {
+	timer += dt;
 	if (targetY > bounds.top) {
 		if (targetY - bounds.top < raiseSpeed * dt) {
 			bounds.height += bounds.top - targetY;
@@ -85,8 +85,14 @@ void Lava::Update(float dt) {
 
 	// Kill the player
 	JumpMan* player = JumpMan::instance();
-	if (IsInside(player->pos - vec(0, 7.f))) {
-		player->frozen = true; // disable movement
+	const float kLavaDamageAreaOffsetFromTop = 8.5f;
+	if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
+		if (!player->frozen) {
+			player->animation.Ensure(AnimLib::WARRIOR_HURT, false);
+			player->pos.y = CurrentLevel() + kLavaDamageAreaOffsetFromTop;
+			player->frozen = true; // disable movement
+			player->health -= 1;
+		}
 		player->invencibleTimer = 1;
 		player->pos.y += 6 * dt; //sink slowly in the lava
 		player->bfgPos.y = -1000;
@@ -97,8 +103,8 @@ void Lava::Update(float dt) {
 			targetY = CurrentLevel();
 		}
 	}
-	if (IsInside(player->pos - vec(0, 14.f))) {
-		player->health = 0;
+	if (IsInside(player->pos - vec(0, 13.f))) {
+		player->ToSafeGround();
 	}
 }
 
@@ -128,7 +134,7 @@ void Lava::Draw() const {
 	ImGui::End();
 	*/
 
-	float time = mainClock * speed;
+	float time = timer * speed;
 
 	const float heightTopLayer = 5.f;
 	const float heightMiddleLayer = 1.f;

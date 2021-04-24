@@ -11,6 +11,7 @@ struct Lava : SelfRegister<Lava>
 	BoxBounds bounds;
 	float targetY;
 
+	float timer = 0.f;
 	explicit Lava(const BoxBounds& bounds);
 	void Update(float dt);
 	void Draw() const;

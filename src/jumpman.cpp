@@ -59,6 +59,7 @@ JumpMan::JumpMan()
 	: polvito(Assets::spritesheetTexture)
 	, animation(AnimLib::WARRIOR_IDLE)
 	, size(standing_size)
+	, lastSafeTilePos(-1,-1)
 {
 	InitPolvito();
 }
@@ -255,7 +256,14 @@ void JumpMan::Update(float dt)
 {
 	if (frozen || !alive) return;
 
-	grounded = IsGrounded(pos - vec(0,size.y/2), size);
+	veci groundTilePos(-1, -1);
+	grounded = IsGrounded(pos - vec(0, size.y / 2), size, &groundTilePos);
+	if (grounded) {
+		Tile groundTile = GaemTileMap::instance()->GetTileUnsafe(groundTilePos);
+		if (groundTile.isSafeGround()) {
+			lastSafeTilePos = groundTilePos;
+		}
+	}
 
 	if (grounded) {
 		canDash = true;
@@ -443,6 +451,18 @@ void JumpMan::Update(float dt)
 		invencibleTimer -= dt;
 	}
 	
+}
+
+void JumpMan::ToSafeGround() {
+	invencibleTimer = invencibleTimeAfterHit;
+	jumpTimeLeft = 0;
+	onWall = ONWALL_NO;
+	crouched = false;
+	if (health > 0) {
+		pos = Tile::FromTiles(lastSafeTilePos)+vec(Tile::Size/2,0);
+		vel = vec::Zero;
+		frozen = false;
+	}
 }
 
 void JumpMan::TakeDamage(vec src) {

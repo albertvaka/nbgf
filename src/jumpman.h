@@ -7,6 +7,7 @@
 #include "animation.h"
 #include "screen.h"
 #include "debug.h"
+#include "tile.h"
 #include "singleinstance.h"
 #include "raw_input.h"
 
@@ -22,6 +23,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         pos = position;
         bfgPos = position + bfgOffset();
         vel = vec(0, 0);
+        lastSafeTilePos = Tile::ToTiles(position);
         polvito.Clear();
         invencibleTimer = -1.f;
         bfgCooldownTimer = 0;
@@ -53,6 +55,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     BoxBounds MaxBounds() const;
 
     void TakeDamage(vec src);
+    void ToSafeGround();
     bool isInvencible() const { return invencibleTimer > 0.f; }
     bool isHit() const { return invencibleTimer > 0.1f; }
 
@@ -74,6 +77,8 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     Animation animation;
 
     vec size;
+
+    veci lastSafeTilePos;
     
     enum : int8_t { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
 

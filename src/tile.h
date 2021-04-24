@@ -36,6 +36,10 @@ struct Tile : Tiled::Tile
 		return value >= SOLID_1;
 	}
 
+	bool isSafeGround() const {
+		return (isSolid() && !isBreakable(BreakPower::ANY) && !isBreakableGround()) || isOneWay(); // maybe oneway shouldn't count
+	}
+
 	Tile GetTileBehind() const { // What's "behind" of this tile when it breaks
 		if (value == Tile::BREAKABLE_COVERING_ONEWAY || isBreakableGround()) {
 			return Tile::ONEWAY_BEHIND_BREAKABLE;
