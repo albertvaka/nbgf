@@ -29,7 +29,7 @@ const std::unordered_map<int, vec> Entities::bat = {
 	{ 62, vec(6208.0f, 1312.0f) },
 	{ 63, vec(6335.0f, 1441.0f) },
 	{ 65, vec(6414.75f, 1312.5f) },
-	{ 117, vec(5830.0f, 1580.0f) },
+	{ 117, vec(5798.0f, 1580.0f) },
 	{ 127, vec(3772.0f, 1263.5f) },
 	{ 196, vec(4922.667f, 1653.667f) },
 	{ 197, vec(4957.667f, 1637.333f) },
@@ -151,6 +151,7 @@ const std::unordered_map<int, vec> Entities::healthup = {
 	{ 58, vec(5744.25f, 1022.25f) },
 	{ 60, vec(6464.083f, 1404.3333f) },
 	{ 661, vec(7570.66666666667f, 1535.682f) },
+	{ 808, vec(6163.666666666667f, 1732.333333333333f) },
 };
 
 const std::unordered_map<int, vec> Entities::initial_batawake = {
@@ -210,9 +211,9 @@ const vec Entities::single_skill_gun = vec(3832.37f, 1434.0f);
 
 
 const std::unordered_map<int, vec> Entities::skill_walljump = {
-	{ 496, vec(234.3333333333303f, 1179.333333333333f) },
+	{ 796, vec(5625.666666666667f, 1976.0f) },
 };
-const vec Entities::single_skill_walljump = vec(234.3333333333303f, 1179.333333333333f);
+const vec Entities::single_skill_walljump = vec(5625.666666666667f, 1976.0f);
 
 
 const std::unordered_map<int, vec> Entities::spawn = {
