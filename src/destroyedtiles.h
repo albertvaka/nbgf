@@ -25,6 +25,7 @@ struct DestroyedTiles : SingleInstance<DestroyedTiles>
 	void Clear() {
 		destroyedParticles.Clear();
 		toSpawn.clear();
+		permanentlyDestroyed.clear();
 	}
 
 	void SaveGame(SaveState& save) const
