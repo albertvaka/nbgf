@@ -37,6 +37,8 @@ struct Entities {
 	static const vec single_minotaur;
 	static const std::unordered_map<int, vec> rocket_launcher;
 	static const std::unordered_map<int, vec> save;
+	static const std::unordered_map<int, vec> skill_attack;
+	static const vec single_skill_attack;
 	static const std::unordered_map<int, vec> skill_breakblocks;
 	static const vec single_skill_breakblocks;
 	static const std::unordered_map<int, vec> skill_dive;

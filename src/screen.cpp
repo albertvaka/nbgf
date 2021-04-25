@@ -3,12 +3,17 @@
 #include "camera.h"
 #include "mates.h"
 #include "tiled_objects_screens.h"
+#include "common_enemy.h" //FindIndexOfSmallestBoundsContaining
 
 void ScreenManager::UpdateCurrentScreen(vec pos) {
 	if (currentScreen < 0 || !Tiled::Screens::screen[currentScreen].Contains(pos)) {
 		int screen = FindScreenContaining(pos);
 		if (screen >= 0) currentScreen = screen;
 	}
+}
+
+int ScreenManager::FindScreenContaining(vec pos) const {
+	return FindIndexOfSmallestBoundsContaining(pos, screens);
 }
 
 const void ScreenManager::ClampCameraToScreen(vec& camPos) const {

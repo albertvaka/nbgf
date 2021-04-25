@@ -4,9 +4,6 @@ namespace Tiled {
 
 
 const std::unordered_map<int, vec> Entities::angrybat = {
-	{ 261, vec(5024.227272727273f, 1023.636363636364f) },
-	{ 262, vec(4896.363636363636f, 991.636363636364f) },
-	{ 265, vec(4992.25f, 960.0f) },
 	{ 678, vec(7456.3785f, 654.818f) },
 	{ 679, vec(7328.5154999999995f, 622.818f) },
 	{ 680, vec(7424.4015f, 591.182f) },
@@ -69,18 +66,18 @@ const vec Entities::single_boss_bipedal = vec(3379.27f, 1888.754f);
 
 
 const std::unordered_map<int, vec> Entities::debug_teleport = {
-	{ 230, vec(2925.0f, 1253.3333f) },
+	{ 865, vec(8278.0f, 2074.666666666667f) },
 };
-const vec Entities::single_debug_teleport = vec(2925.0f, 1253.3333f);
+const vec Entities::single_debug_teleport = vec(8278.0f, 2074.666666666667f);
 
 
 const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 93, vec(5218.0f, 1234.0f) },
 	{ 118, vec(5473.667f, 1584.667f) },
 	{ 129, vec(4002.55f, 1410.545f) },
-	{ 266, vec(3889.3333333333303f, 945.333333333333f) },
-	{ 359, vec(3328.25f, 1585.0f) },
+	{ 359, vec(3291.25f, 1585.0f) },
 	{ 792, vec(8242.0f, 1442.181818181818f) },
+	{ 812, vec(8311.58166666667f, 2048.624833333333f) },
 };
 
 const std::unordered_map<int, vec> Entities::explosive = {
@@ -133,6 +130,16 @@ const std::unordered_map<int, vec> Entities::flyingalien = {
 	{ 225, vec(3073.67f, 1307.9393666666667f) },
 	{ 469, vec(1944.775f, 1057.264833333333f) },
 	{ 470, vec(2262.225f, 1054.3185f) },
+	{ 814, vec(6995.94666666667f, 2129.473f) },
+	{ 815, vec(7313.38666666667f, 2126.527f) },
+	{ 816, vec(7502.66666666667f, 2112.0f) },
+	{ 817, vec(7638.66666666667f, 2030.666666666667f) },
+	{ 818, vec(7918.66666666667f, 2132.0f) },
+	{ 819, vec(6825.33333333333f, 2030.666666666667f) },
+	{ 820, vec(7852.0f, 2204.0f) },
+	{ 821, vec(6808.0f, 2206.666666666667f) },
+	{ 822, vec(8016.0f, 2022.666666666667f) },
+	{ 823, vec(7181.33333333333f, 2210.666666666667f) },
 };
 
 const std::unordered_map<int, vec> Entities::goomba = {
@@ -167,9 +174,9 @@ const vec Entities::single_lava_initial_height = vec(447.5f, 740.0f);
 
 
 const std::unordered_map<int, vec> Entities::mantis = {
-	{ 245, vec(3525.49833333333f, 879.583483333333f) },
-	{ 246, vec(3581.91833333333f, 875.833183333333f) },
-	{ 248, vec(3633.5833333333303f, 872.75f) },
+	{ 809, vec(8366.75166666667f, 1854.208166666667f) },
+	{ 810, vec(8423.171666666669f, 1850.458166666667f) },
+	{ 813, vec(8858.0f, 1885.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::minotaur = {
@@ -183,14 +190,26 @@ const std::unordered_map<int, vec> Entities::rocket_launcher = {
 	{ 477, vec(1086.75f, 992.9995f) },
 	{ 659, vec(7682.79666666667f, 1440.318f) },
 	{ 660, vec(8036.66666666667f, 1441.182f) },
+	{ 836, vec(8417.385f, 1537.724f) },
+	{ 839, vec(8419.38016666667f, 1631.807333333333f) },
+	{ 841, vec(8800.0f, 1631.333333333333f) },
+	{ 862, vec(7578.58333333333f, 1984.583333333333f) },
+	{ 863, vec(7231.2133333333295f, 1985.4163333333331f) },
+	{ 864, vec(6938.08333333333f, 1986.083333333333f) },
 };
 
 const std::unordered_map<int, vec> Entities::save = {
 	{ 126, vec(5553.5336f, 1423.114f) },
 	{ 213, vec(3601.0f, 1753.0f) },
-	{ 510, vec(5293.333333333333f, 1007.666666666667f) },
 	{ 681, vec(7707.4845000000005f, 651.849f) },
+	{ 853, vec(8619.5f, 1990.0f) },
 };
+
+const std::unordered_map<int, vec> Entities::skill_attack = {
+	{ 92, vec(3832.37f, 1434.0f) },
+};
+const vec Entities::single_skill_attack = vec(3832.37f, 1434.0f);
+
 
 const std::unordered_map<int, vec> Entities::skill_breakblocks = {
 	{ 158, vec(5289.0f, 1278.0f) },
@@ -205,9 +224,9 @@ const vec Entities::single_skill_dive = vec(5481.5f, 838.25f);
 
 
 const std::unordered_map<int, vec> Entities::skill_gun = {
-	{ 92, vec(3832.37f, 1434.0f) },
+	{ 854, vec(3356.75f, 1451.25f) },
 };
-const vec Entities::single_skill_gun = vec(3832.37f, 1434.0f);
+const vec Entities::single_skill_gun = vec(3356.75f, 1451.25f);
 
 
 const std::unordered_map<int, vec> Entities::skill_walljump = {

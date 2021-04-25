@@ -17,12 +17,11 @@ EnemyDoor::EnemyDoor(int saveId, vec p)
 	, saveId(saveId)
 {
 	SpawnTiles();
-	int screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::instance()->FindScreenContaining(p);
 	EnemyDoor::ByScreen[screen].push_back(this);
 }
 
 EnemyDoor::~EnemyDoor() {
-	int screen = ScreenManager::instance()->FindScreenContaining(pos);
 	auto& list = EnemyDoor::ByScreen[screen];
 	list.erase(std::find(list.begin(), list.end(), this));
 }

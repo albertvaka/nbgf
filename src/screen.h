@@ -18,16 +18,7 @@ struct ScreenManager : SingleInstance<ScreenManager>
 		screens.clear();
 	}
 
-	int FindScreenContaining(vec pos) const {
-		int i = 0;
-		for (const auto& screen : screens) {
-			if (screen.Contains(pos)) {
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
+	int FindScreenContaining(vec pos) const;
 
 	int CurrentScreen() const {
 		return currentScreen;

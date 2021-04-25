@@ -20,6 +20,7 @@ struct EnemyDoor : Entity, SelfRegister<EnemyDoor>
 	State state = State::CLOSED;
 	std::vector<const Entity*> enemies;
 	float openingTimer;
+	int screen;
 
 	static std::unordered_map<int, std::vector<EnemyDoor*>> ByScreen;
 
