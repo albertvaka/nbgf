@@ -28,22 +28,8 @@ struct DestroyedTiles : SingleInstance<DestroyedTiles>
 		permanentlyDestroyed.clear();
 	}
 
-	void SaveGame(SaveState& save) const
-	{
-		auto s = save.StreamPut("destroyed_tiles");
-		for (veci v : permanentlyDestroyed) {
-			s << v.x << v.y;
-		}
-	}
-
-	void LoadGame(const SaveState& save)
-	{
-		auto s = save.StreamGet("destroyed_tiles");
-		int x,y;
-		while (s >> x >> y) {
-			Destroy(x,y,false,false);
-		}
-	}
+	void SaveGame(SaveState& save) const;
+	void LoadGame(const SaveState& save);
 
 	PartSys destroyedParticles;
 	std::vector<SpawningTile> toSpawn;

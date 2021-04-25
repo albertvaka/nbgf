@@ -36,7 +36,8 @@ const vec vel[4] = {
 	{-12,-20},
 };
 
-void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn) {
+void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn)
+{
 
 	GaemTileMap* map = GaemTileMap::instance();
 	Tile t = map->GetTile(x, y);
@@ -73,9 +74,29 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn) {
 	}
 }
 
-void DestroyedTiles::Update(float dt) {
+void DestroyedTiles::Update(float dt)
+{
 	destroyedParticles.UpdateParticles(dt);
 	toSpawn.erase(std::remove_if(toSpawn.begin(), toSpawn.end(), [dt](SpawningTile& t) {
 		return t.Update(dt);
 	}), toSpawn.end());
+}
+
+void DestroyedTiles::SaveGame(SaveState& save) const
+{
+	auto s = save.StreamPut("destroyed_tiles");
+	for (veci v : permanentlyDestroyed) {
+		s << v.x << v.y;
+	}
+}
+
+void DestroyedTiles::LoadGame(const SaveState& save)
+{
+	auto s = save.StreamGet("destroyed_tiles");
+	int x, y;
+	GaemTileMap* map = GaemTileMap::instance();
+	while (s >> x >> y) {
+		Tile t = map->GetTile(x, y);
+		map->SetTile(x, y, t.GetTileBehind());
+	}
 }
