@@ -40,8 +40,8 @@
 
 extern float mainClock;
 
-const float camSpeed = 2000.f;
-const float camZoomSpeed = 0.2f;
+const float kCamSpeed = 2000.f;
+const float kCamZoomSpeed = 0.2f;
 
 const char* kSaveStateGameName = "gaem2020";
 
@@ -337,13 +337,13 @@ bool JumpScene::UpdateCamera(float dt) {
 	float camZoom = Fx::FreezeImage::IsFrozen()? 1.5f : 1.f;
 	float oldZoom = Camera::Zoom();
 	float zoomChange = camZoom - oldZoom;
-	Mates::Clamp(zoomChange, -camZoomSpeed*dt, camZoomSpeed*dt);
+	Mates::Clamp(zoomChange, -kCamZoomSpeed *dt, kCamZoomSpeed *dt);
 	Camera::SetZoom(oldZoom + zoomChange);
 
 	vec camPos = player.GetCameraTargetPos();
 	vec oldPos = Camera::Center();
 	vec displacement = camPos - oldPos;
-	bool inScreenTransition = displacement.Truncate(camSpeed * dt);
+	bool inScreenTransition = displacement.Truncate(kCamSpeed * dt);
 	Camera::SetCenter(oldPos + displacement);
 	return inScreenTransition;
 }

@@ -8,13 +8,13 @@
 #include "anim_lib.h"
 #include "jumpman.h"
 
-const float waveAmplitude = 1.f;
-const float chunkSize = 5.4f;
-const float waveHeight = 2.8f;
-const float speed = 3.0f;
-const float distanceBetweenParticleSpawners = 15.f;
+constexpr const float kWaveAmplitude = 1.f;
+constexpr const float kChunkSize = 5.4f;
+constexpr const float kWaveHeight = 2.8f;
+constexpr const float kSpeed = 3.0f;
+constexpr const float kDistanceBetweenParticleSpawners = 15.f;
 
-const float raiseSpeed = 15.f;
+constexpr const float kRaiseSpeed = 15.f;
 
 Lava::Lava(const BoxBounds& b)
 	: bounds(b)
@@ -39,10 +39,10 @@ Lava::Lava(const BoxBounds& b)
 
 Mates::Range Lava::GetChunksOnScreen() const {
 	BoxBounds screen = Camera::Bounds();
-	float screenChunkLeft = (Mates::fastfloor(screen.Left() / chunkSize)) * chunkSize;
-	float screenChunkRight = (Mates::fastfloor(screen.Right() / chunkSize)) * chunkSize;
-	float boundsChunkLeft = (Mates::fastfloor(bounds.Left() / chunkSize)) * chunkSize;
-	float boundsChunkRight = (Mates::fastfloor(bounds.Right() / chunkSize)) * chunkSize;
+	float screenChunkLeft = (Mates::fastfloor(screen.Left() / kChunkSize)) * kChunkSize;
+	float screenChunkRight = (Mates::fastfloor(screen.Right() / kChunkSize)) * kChunkSize;
+	float boundsChunkLeft = (Mates::fastfloor(bounds.Left() / kChunkSize)) * kChunkSize;
+	float boundsChunkRight = (Mates::fastfloor(bounds.Right() / kChunkSize)) * kChunkSize;
 	float chunkLeft = std::max(screenChunkLeft, boundsChunkLeft);
 	float chunkRight = std::min(screenChunkRight, boundsChunkRight);
 	return Mates::Range{ chunkLeft,chunkRight };
@@ -51,23 +51,23 @@ Mates::Range Lava::GetChunksOnScreen() const {
 void Lava::Update(float dt) {
 	timer += dt;
 	if (targetY > bounds.top) {
-		if (targetY - bounds.top < raiseSpeed * dt) {
+		if (targetY - bounds.top < kRaiseSpeed * dt) {
 			bounds.height += bounds.top - targetY;
 			bounds.top = targetY;
 		}
 		else {
-			bounds.top += raiseSpeed * dt;
-			bounds.height -= raiseSpeed * dt;
+			bounds.top += kRaiseSpeed * dt;
+			bounds.height -= kRaiseSpeed * dt;
 		}
 	}
 	else if (targetY < bounds.top) {
-		if (bounds.top - targetY < raiseSpeed * dt) {
+		if (bounds.top - targetY < kRaiseSpeed * dt) {
 			bounds.height += bounds.top - targetY;
 			bounds.top = targetY;
 		}
 		else {
-			bounds.top -= raiseSpeed * dt;
-			bounds.height += raiseSpeed * dt;
+			bounds.top -= kRaiseSpeed * dt;
+			bounds.height += kRaiseSpeed * dt;
 		}
 	}
 
@@ -77,7 +77,7 @@ void Lava::Update(float dt) {
 
 	Mates::Range chunks = GetChunksOnScreen();
 	lavaPartSys.pos.y = bounds.Top() - 2;
-	for (float x = chunks.min; x < chunks.max; x += distanceBetweenParticleSpawners) {
+	for (float x = chunks.min; x < chunks.max; x += kDistanceBetweenParticleSpawners) {
 		lavaPartSys.pos.x = x;
 		lavaPartSys.Spawn(dt);
 	}
@@ -134,42 +134,42 @@ void Lava::Draw() const {
 	ImGui::SliderFloat("speed", &speed, 0.f, 10.f);
 	ImGui::SliderFloat("height", &height, 0.f, 40.f);
 	ImGui::SliderFloat("waveHeight", &waveHeight, 0.f, 10.f);
-	ImGui::SliderFloat("chunkSize", &chunkSize, 0.1f, 10.f);
+	ImGui::SliderFloat("kChunkSize", &kChunkSize, 0.1f, 10.f);
 	ImGui::SliderFloat("waveAmplitude", &waveAmplitude, 0.f, 5.f);
 	ImGui::End();
 	*/
 
-	float time = timer * speed;
+	float time = timer * kSpeed;
 
 	const float heightTopLayer = 5.f;
 	const float heightMiddleLayer = 1.f;
-	const float heightBottomLayer = bounds.height - heightMiddleLayer - heightMiddleLayer - waveHeight;
+	const float heightBottomLayer = bounds.height - heightMiddleLayer - heightMiddleLayer - kWaveHeight;
 
 	const SDL_Color colorTopLayer = { 220, 10, 10, 255 };
 	const SDL_Color colorMiddleLayer = { 120, 0, 0, 255 };
 	const SDL_Color colorBottomLayer = { 250, 140, 50, 255 };
 
 #ifndef USE_VAO
-	Bounds topLayer(vec(chunkSize, heightTopLayer));
-	Bounds middleLayer(vec(chunkSize, heightMiddleLayer));
-	Bounds bottomLayer(vec(chunkSize, heightBottomLayer));
+	Bounds topLayer(vec(kChunkSize, heightTopLayer));
+	Bounds middleLayer(vec(kChunkSize, heightMiddleLayer));
+	Bounds bottomLayer(vec(kChunkSize, heightBottomLayer));
 #endif
 
 	Mates::Range chunks = GetChunksOnScreen();
-	for (float x = chunks.min; x < chunks.max; x += chunkSize)
+	for (float x = chunks.min; x < chunks.max; x += kChunkSize)
 	{
-		float heightDiff = waveHeight * sin(x * waveAmplitude + time);
+		float heightDiff = kWaveHeight * sin(x * kWaveAmplitude + time);
 		float y = bounds.top - heightDiff;
 
 #ifdef USE_VAO
 		Window::DrawRaw::BatchRGBQuad(x, y,
-			chunkSize, heightTopLayer, 
+			kChunkSize, heightTopLayer, 
 			colorTopLayer.r / 255.f, colorTopLayer.g / 255.f, colorTopLayer.b / 255.f);
 		Window::DrawRaw::BatchRGBQuad(x, y + heightTopLayer,
-			chunkSize, heightMiddleLayer, 
+			kChunkSize, heightMiddleLayer, 
 			colorMiddleLayer.r / 255.f, colorMiddleLayer.g / 255.f, colorMiddleLayer.b / 255.f);
 		Window::DrawRaw::BatchRGBQuad(x, y + heightTopLayer + heightMiddleLayer,
-			chunkSize, heightBottomLayer + heightDiff,
+			kChunkSize, heightBottomLayer + heightDiff,
 			colorBottomLayer.r / 255.f, colorBottomLayer.g / 255.f, colorBottomLayer.b / 255.f);
 #else
 		topLayer.SetTopLeft(vec(x, y));

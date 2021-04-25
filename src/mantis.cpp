@@ -9,41 +9,41 @@
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
 
-constexpr const float gravity_acc = 660; // TODO: reuse from jumpman for consistency
+constexpr const float kGravityAcc = 660; // TODO: reuse from jumpman for consistency, keep in sync meanwhile
 
-constexpr const float speed = 60;
-constexpr const float jumpSpeedY = -350;
-constexpr const float maxJumpSpeedX = 300;
+constexpr const float kSpeed = 60;
+constexpr const float kJumpSpeedY = -350;
+constexpr const float kMaxJumpSpeedX = 300;
 
-constexpr const float attackRadius = 310;
+constexpr const float kAttackRadius = 310;
 
-constexpr const float scale = 1.5f;
-constexpr const float mantisHealth = 5;
+constexpr const float kScale = 1.5f;
+constexpr const float kMantisHealth = 5;
 
 // Square used to collide against the tilemap
-constexpr const vec spriteSize = vec(24* scale, 24* scale);
+constexpr const vec kSpriteSize = vec(24* kScale, 24* kScale);
 // Radius used to collide against the player (a bit smaller)
-constexpr const float spriteRadius = 10.f* scale;
+constexpr const float kSpriteRadius = 10.f* kScale;
 
 
-constexpr const vec vel_hit(180.f, -150.f);
-constexpr const float hitTime = 0.5f;
+constexpr const vec kKnockbackVel(180.f, -150.f);
+constexpr const float kHitTime = 0.5f;
 
-constexpr const float jumpCooldown = .2f;
+constexpr const float kJumpCooldown = .2f;
 
 Mantis::Mantis(vec pos)
-	: CircleEntity(pos - vec(0,8), spriteRadius)
+	: CircleEntity(pos - vec(0,8), kSpriteRadius)
 	, anim(AnimLib::MANTIS_WALK)
 {
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 	initialPos = this->pos;
-	initialVelX = Rand::OnceEvery(2) ? -speed : speed;
+	initialVelX = Rand::OnceEvery(2) ? -kSpeed : kSpeed;
 	Reset();
 }
 
 void Mantis::Reset() {
 	pos = initialPos;
-	health = mantisHealth;
+	health = kMantisHealth;
 	vel.y = 10;
 	vel.x = initialVelX;
 	state = State::JUMP;
@@ -52,9 +52,9 @@ void Mantis::Reset() {
 vec Mantis::GetJumpSpeedToTarget(vec target) {
 	// TODO: When pos and target are at different heights maybe the result isn't correct with this formula?
 	vec displacement = pos - target;
-	float speedX = (2*jumpSpeedY * displacement.x) / (gravity_acc + 2 * displacement.y);
-	Mates::Clamp(speedX, -maxJumpSpeedX, maxJumpSpeedX);
-	return vec(speedX, jumpSpeedY);
+	float speedX = (2* kJumpSpeedY * displacement.x) / (kGravityAcc + 2 * displacement.y);
+	Mates::Clamp(speedX, -kMaxJumpSpeedX, kMaxJumpSpeedX);
+	return vec(speedX, kJumpSpeedY);
 }
 
 bool Mantis::IsBouncingAgainstAnotherMantis() {
@@ -86,17 +86,17 @@ void Mantis::Update(float dt)
 	{
 		anim.Update(dt);
 
-		if (IsGoingToHitAWall(pos, spriteSize, vel, dt)
-			|| IsGoingToRunOffPlatform(pos, spriteSize, vel, dt)
-			|| IsGoingToLeaveTheScreen(pos, spriteSize, vel, dt, screen)
+		if (IsGoingToHitAWall(pos, kSpriteSize, vel, dt)
+			|| IsGoingToRunOffPlatform(pos, kSpriteSize, vel, dt)
+			|| IsGoingToLeaveTheScreen(pos, kSpriteSize, vel, dt, screen)
 			|| IsBouncingAgainstAnotherMantis())
 		{
 			vel.x = -vel.x;
 		}
-		auto ret = MoveAgainstTileMap(pos, spriteSize, vel, dt);
+		auto ret = MoveAgainstTileMap(pos, kSpriteSize, vel, dt);
 		pos = ret.pos;
 
-		if (jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, attackRadius), player->Bounds()))
+		if (jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, kAttackRadius), player->Bounds()))
 		{
 			//Debug::out << "preparing";
 			initialPlayerPosition = player->pos;
@@ -121,7 +121,7 @@ void Mantis::Update(float dt)
 	break;
 	case State::JUMP:
 	{
-		vel.y += gravity_acc * dt;
+		vel.y += kGravityAcc * dt;
 		
 		// Disabled temporarily since the screen where I'm testing the mantis has a screen bounds smaller than the actual 
 		// space in the tilemap and makes it go crazy when it reaches that area by jumping. This code is meant to prevent
@@ -133,18 +133,18 @@ void Mantis::Update(float dt)
 
 		// Bounce against other mantis
 		if (IsBouncingAgainstAnotherMantis()
-			|| IsGoingToLeaveTheScreen(pos, spriteSize, vel, dt, screen)) {
+			|| IsGoingToLeaveTheScreen(pos, kSpriteSize, vel, dt, screen)) {
 			vel.x = -vel.x * 0.5f;
 		}
 
-		auto ret = MoveAgainstTileMap(pos, spriteSize, vel, dt);
+		auto ret = MoveAgainstTileMap(pos, kSpriteSize, vel, dt);
 		pos = ret.pos;
 
 		if (ret.groundCollision != Tile::NONE) {
-			vel.x = player->pos.x > pos.x ? speed : -speed;
+			vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
 			vel.y = 0;
 			state = State::WALKING;
-			jumpCooldownTimer = jumpCooldown;
+			jumpCooldownTimer = kJumpCooldown;
 			anim.Set(AnimLib::MANTIS_WALK);
 		} else if (ret.ceilingCollision != Tile::NONE) {
 			vel.y = 0;
@@ -167,17 +167,17 @@ void Mantis::Update(float dt)
 
 void Mantis::TakeDamage(vec src)
 {
-	hitTimer = hitTime;
+	hitTimer = kHitTime;
 
 	if (pos.x > src.x) {
-		vel.x = vel_hit.x;
+		vel.x = kKnockbackVel.x;
 	}
 	else {
-		vel.x = -vel_hit.x;
+		vel.x = -kKnockbackVel.x;
 	}
 
 	if (state != State::JUMP) {
-		vel.y = vel_hit.y;
+		vel.y = kKnockbackVel.y;
 		state = State::JUMP;
 	}
 
@@ -197,13 +197,13 @@ void Mantis::Draw() const
 	GPU_Rect rect = (state == State::JUMP) ? AnimLib::MANTIS_AIR : anim.CurrentFrameRect();
 	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRect(rect)
-		.withScale(vel.x> 0? -scale : scale, scale)
+		.withScale(vel.x> 0? -kScale : kScale, kScale)
 		.withOrigin(rect.w / 2, rect.h / 2);
 
 	Shader::Deactivate();
 
 	// Debug-only
 	Bounds().DebugDraw();
-	BoxBounds::FromCenter(pos, spriteSize).DebugDraw();
-	CircleBounds(pos, attackRadius).DebugDraw();
+	BoxBounds::FromCenter(pos, kSpriteSize).DebugDraw();
+	CircleBounds(pos, kAttackRadius).DebugDraw();
 }
