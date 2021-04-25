@@ -291,7 +291,7 @@ void JumpMan::Update(float dt)
 		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			attacking = true;
-			animation.Ensure(AnimLib::WARRIOR_ATTACK, false);
+			animation.Ensure(AnimLib::WARRIOR_MOVING_ATTACK, false);
 		}
 	}
 
