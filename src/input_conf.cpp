@@ -38,12 +38,10 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::JUMP] = [](int p)
     {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
-               GamePad::AnalogStick::Left.get(p).y < -50.0f ||
-               GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_UP) || (
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) || (
                (p == keyboard_player_id) && (
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_W) ||
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_UP)
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_Z) ||
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_P)
                )
         );
     };
@@ -80,6 +78,7 @@ void Input::MapGameKeys()
     action_mapping[(int)GameKeys::ACTION] = [](int p) {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) || (
                (p == keyboard_player_id) && (
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_E) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE)
                )
         );
@@ -97,19 +96,11 @@ void Input::MapGameKeys()
                )
         );
     };
-    action_mapping[(int)GameKeys::DASH_LEFT] = [](int p) {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) || (
-               (p == keyboard_player_id) && (
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_1) ||
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_9)
-               )
-        );
-    };
-    action_mapping[(int)GameKeys::DASH_RIGHT] = [](int p) {
+    action_mapping[(int)GameKeys::DASH] = [](int p) {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) || (
                (p == keyboard_player_id) && (
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_3) ||
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_9)
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_C) ||
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_I)
                )
         );
     };

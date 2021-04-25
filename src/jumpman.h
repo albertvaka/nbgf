@@ -30,24 +30,17 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         health = maxHealth = maxHp;
         jumpTimeLeft = 0.0f;
         crouchedTime = 0.0f;
-        onWall = ONWALL_NO;
+        onWall = false;
         frozen = false;
         alive = true;
         canDash = true;
-        state = State::MOVING;
-        stateTime = 0.f;
+        dashTimer = 0.0f;
+        dashCooldown = 0.0f;
+        attackTimer = 0.0f;
+        divingRestTimer = 0.f;
+        attacking = false;
         ScreenManager::instance()->UpdateCurrentScreen(pos);
     }
-
-    enum class State {
-        MOVING, //includes jumping, falling, crouching
-        ATTACKING,
-        DASHING,
-        DIVING,
-    };
-    
-    State state = State::MOVING;
-    float stateTime = 0.0f;
 
     BoxBounds Bounds() const {
         return BoxBounds(pos, size, vec(size.x/2, size.y));
@@ -80,12 +73,10 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
 
     veci lastSafeTilePos;
     
-    enum : int8_t { ONWALL_LEFT = -1, ONWALL_NO = 0, ONWALL_RIGHT = 1 };
-
     int health;
     int maxHealth;
 
-    int8_t onWall = ONWALL_NO;
+    bool onWall = false;
     float jumpTimeLeft = 0.0f;
     float crouchedTime = 0.0f;
     bool frozen = false;
@@ -94,6 +85,16 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     vec bfgPos;
     float bfgCooldownTimer = 0.f;
     float invencibleTimer = -1.f;
+
+    float divingRestTimer = 0.f;
+    bool diving = false;
+
+    bool dashing = false;
+    float dashTimer = 0.0f;
+    float dashCooldown = 0.0f;
+    
+    bool attacking = false;
+    float attackTimer = 0.0f;
 
     bool grounded = true;
     bool crouched = false;
@@ -104,7 +105,6 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
 
     void UpdateMoving(float dt);
     void UpdateDashing(float dt);
-    void UpdateDiving(float dt);
     void UpdateAttacking(float dt);
 
     void InitPolvito();

@@ -6,7 +6,7 @@ enum class GameKeys
 	MENU_UP, MENU_DOWN,
 	JUMP, CROUCH, LEFT, RIGHT,
 	START,
-	SHOOT, ATTACK, DASH_LEFT, DASH_RIGHT, ACTION,
+	SHOOT, ATTACK, DASH, ACTION,
 };
 
 enum class AnalogInput

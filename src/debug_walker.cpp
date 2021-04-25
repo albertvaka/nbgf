@@ -8,15 +8,15 @@
 #include "debug.h"
 
 // accel
-const float gravity_acc = 600;
+const float kGravityAcc = 600;
 
 // friction Y
-const float fri_acc_wall_up = 1200;
-const float fri_acc_wall_down = 450;
+const float kFrictAccVert_WallUp = 1200;
+const float kFrictAccVert_WallDown = 450;
 
 // jump
-const float vel_jump = -150;
-const float jump_time = 0.35f;
+const float kVelJump = -150;
+const float kJumpTime = 0.35f;
 
 // Sprite
 const vec center = vec(8, 16);
@@ -30,7 +30,7 @@ DebugWalker::DebugWalker(vec position, float velX)
 
 void DebugWalker::Jump() {
 	if (jumpTimeLeft <= 0) {
-		jumpTimeLeft = jump_time;
+		jumpTimeLeft = kJumpTime;
 	}
 }
 
@@ -43,7 +43,7 @@ void DebugWalker::Update(float dt)
 
 	if (jumpTimeLeft > 0)
 	{
-		vel.y = vel_jump;
+		vel.y = kVelJump;
 	}
 	else
 	{
@@ -56,15 +56,15 @@ void DebugWalker::Update(float dt)
 	}
 
 	vec fri = vec(0, 0);
-	vel.y += gravity_acc * dt;
+	vel.y += kGravityAcc * dt;
 
 	if (onWall)
 	{
 		if (vel.y < 0) { // Moving up
-			fri.y = fri_acc_wall_up;
+			fri.y = kFrictAccVert_WallUp;
 		}
 		else {
-			fri.y = fri_acc_wall_down;
+			fri.y = kFrictAccVert_WallDown;
 		}
 	}
 

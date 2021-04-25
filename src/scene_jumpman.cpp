@@ -652,20 +652,11 @@ void JumpScene::Draw()
 
 #ifdef _IMGUI
 	{
-		ImGui::Begin("jumpman scene");
-		static bool invincible = false;
-		ImGui::Checkbox("invincible", &invincible);
-		if (invincible) {
-			player.health = std::max(player.health, player.maxHealth);
-		}
-		ImGui::SliderInt("health", &player.health, 0, 10);
-		ImGui::SliderFloat2("pos", (float*)&player.pos, 16.f, 4500.f);
-		ImGui::Text("vel %f,%f", player.vel.x, player.vel.y);
+		ImGui::Begin("scene");
 		vec m = Mouse::GetPositionInWorld();
 		veci t = Tile::ToTiles(m);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
-		ImGui::SliderFloat("lava", &(Lava::GetAll()[0]->targetY), (map.Size().y - 1) * 16, (map.Size().y - 1) * 16 - 1000);
 
 		if (ImGui::Button("Start waves")) {
 			Fx::FullscreenShader::SetShader([]() {

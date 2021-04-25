@@ -87,6 +87,7 @@ void Lava::Update(float dt) {
 	JumpMan* player = JumpMan::instance();
 	const float kLavaDamageAreaOffsetFromTop = 8.5f;
 	if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
+		// TODO: All this should be done by a method of player
 		if (!player->frozen) {
 			player->animation.Ensure(AnimLib::WARRIOR_HURT, false);
 			player->pos.y = CurrentLevel() + kLavaDamageAreaOffsetFromTop;
@@ -96,7 +97,11 @@ void Lava::Update(float dt) {
 		player->invencibleTimer = 1;
 		player->pos.y += 6 * dt; //sink slowly in the lava
 		player->bfgPos.y = -1000;
-		player->onWall = JumpMan::ONWALL_NO;
+		player->onWall = false;
+		player->crouched = false;
+		player->dashing = false;
+		player->diving = false;
+		player->attacking = false;
 
 		if (targetY > CurrentLevel()) {
 			// stop lava to prevent it lowering and suddently us not being inside

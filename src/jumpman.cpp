@@ -12,53 +12,61 @@
 #include "savestate.h"
 #include "common_tilemapcharacter.h"
 #include "skilltree.h"
+#ifdef _IMGUI
+#include "imgui.h"
+#endif
 
 extern float mainClock;
 
 // accel
-const float run_acc = 1400;
-const float run_acc_onair = 400;
-const float gravity_acc = 660;
+const float kRunAcc = 1400;
+const float kRunAcc_OnAir = 400;
+const float kGravityAcc = 660;
 
 // friction X
-const float fri_acc_floor = 1000;
-const float fri_acc_floor_crouched = 450;
-const float fri_acc_air = 145;
+const float kFrictAccFloor = 1000;
+const float kFrictAccFloor_Crouched = 450;
+const float kFrictAcc_OnAir = 145;
 
 // friction Y
-const float fri_acc_wall_up = 1200;
-const float fri_acc_wall_down = 450;
+const float kFrictAccVert_WallUp = 1200;
+const float kFrictAccVert_WallDown = 450;
 
 // jump
-const float vel_jump = -150;
-const float vel_walljump = 90;
-const float jump_time = 0.35f;
-const float timeCrouchedToJumpDownOneWayTile = 0.2f;
+const float kVelJump = -150;
+const float kVelWalljump = 90;
+const float kJumpTime = 0.35f;
+const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 
-const float vel_dash = 350;
-const float dash_time = 0.25f;
-const float vel_dive = 350;
+// dash
+const float kVelDash = 350;
+const float kDashCooldown = 0.6f;
+const float kDashDuration = 0.25f;
+
+// dive
+const float kVelDive = 450;
+const float kDiveRestTime = 0.4f; // time you can't move after touching ground
 
 // limits
-const vec vel_max(220, 350);
+const vec kVelMax(220, 350);
 
 // bfg
-const float bulletVel = 400.f;
-const float bfgCooldown = 0.6f;
-const float bfgPushBack = 150.f;
+const float kBulletVel = 400.f;
+const float kBfgCooldown = 0.6f;
+const float kBfgPushBack = 150.f;
 
 // damage
-const vec vel_hit(180.f, -150.f);
-const float invencibleTimeAfterHit = 0.5f;
+const vec kKnockbackVel(180.f, -150.f);
+const float kInvencibleTimeAfterHit = 0.5f;
 
 // Sprite
-const vec standing_size = vec(14, 32);
-const vec crouched_size = vec(16, 22);
+const vec kStandingSize = vec(14, 32);
+const vec kCrouchedSize = vec(16, 22);
 
 JumpMan::JumpMan()
 	: polvito(Assets::spritesheetTexture)
 	, animation(AnimLib::WARRIOR_IDLE)
-	, size(standing_size)
+	, size(kStandingSize)
 	, lastSafeTilePos(-1,-1)
 {
 	InitPolvito();
@@ -75,50 +83,46 @@ void JumpMan::LoadGame(const SaveState& state) {
 
 void JumpMan::UpdateAttacking(float dt) {
 	// TODO: Do damage
+	// TODO: When on wall, attack oposite side
 	if (animation.IsComplete()) {
-		state = State::MOVING;
-	}
-	UpdateMoving(dt);
-}
-void JumpMan::UpdateDashing(float dt) {
-	if (stateTime >= dash_time) {
-		state = State::MOVING;
+		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
+			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
+			animation.Ensure(AnimLib::WARRIOR_COMBO, false);
+		}
+		else {
+			attacking = false;
+		}
 	}
 }
 
 void JumpMan::UpdateMoving(float dt) 
 {
-	if (SkillTree::instance()->IsEnabled(Skill::DASH) && canDash) {
-		if (Input::IsPressed(0, GameKeys::DASH_RIGHT)) {
-			state = State::DASHING;
-			vel = vec(vel_dash, 0);
-			stateTime = 0.f;
-			animation.Ensure(AnimLib::WARRIOR_DASH);
-			lookingLeft = false;
-			return;
-		} else if (Input::IsPressed(0, GameKeys::DASH_LEFT)) {
-			state = State::DASHING;
-			vel = vec(-vel_dash, 0);
-			stateTime = 0.f;
-			animation.Ensure(AnimLib::WARRIOR_DASH);
-			lookingLeft = true;
-			return;
-		}
-	}
-
-	if (SkillTree::instance()->IsEnabled(Skill::DIVE)) {
-		if (!grounded && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsPressed(0, GameKeys::ATTACK)) {
-			state = State::DIVING;
-			vel = vec(0, vel_dive);
-			animation.Ensure(AnimLib::WARRIOR_CROUCH);
-			stateTime = 0.f;
-			return;
-		}
-	}
-
 	GaemTileMap* map = GaemTileMap::instance();
 
-	crouched = ((crouched || grounded) && Input::IsPressed(0,GameKeys::CROUCH)) || (crouched && !grounded);
+
+	// JUMPERINO
+	if (Input::IsJustPressed(0,GameKeys::JUMP, 0.15f) && (grounded || onWall)) {
+		Input::ConsumeJustPressed(0, GameKeys::JUMP);
+		
+		jumpTimeLeft = kJumpTime; // the jump upwards velocity can last up to this duration
+		if (onWall) {
+			onWall = false;
+			lookingLeft = !lookingLeft;
+			vel.x = lookingLeft? -kVelWalljump : kVelWalljump;
+			DoPolvitoWallJump();
+		}
+		float halfWidth = kStandingSize.x / 2;
+		Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
+		Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
+		bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
+		if (!hasBlockAbove) {
+			DoPolvitoJump();
+			grounded = false;
+		}
+		crouched = false;
+	}
+
+	crouched = (grounded && Input::IsPressed(0, GameKeys::CROUCH));
 	if (crouched) {
 		crouchedTime += dt;
 	}
@@ -126,52 +130,29 @@ void JumpMan::UpdateMoving(float dt)
 		crouchedTime = 0.f;
 	}
 
-	if (state != State::ATTACKING && Input::IsJustPressed(0,GameKeys::JUMP, 0.15f) && (grounded || (onWall && !crouched)))
-	{
-		//if (!Input::IsJustPressed(0,GameKeys::JUMP)) Debug::out << "cheats";
-		Input::ConsumeJustPressed(0, GameKeys::JUMP);
-
-		jumpTimeLeft = jump_time; // the jump upwards velocity can last up to this duration
-		if (onWall && !grounded && !crouched) {
-			vel.x = vel_walljump * -1.0f * float(onWall);
-			lookingLeft = !lookingLeft;
-			DoPolvitoWallJump();
+	vec acc = vec(0, 0);
+	if (Input::IsPressed(0,GameKeys::LEFT)) {
+		lookingLeft = true;
+		if (grounded) {
+			if (!crouched) acc.x -= kRunAcc;
 		}
 		else {
-			float halfWidth = standing_size.x/2;
-			bool ceiling = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f)).isSolid() || map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f)).isSolid();
-			if (!ceiling) {
-				DoPolvitoJump();
-				grounded = false;
-			}
+			acc.x -= kRunAcc_OnAir;
+		}
+	}
+	if (Input::IsPressed(0,GameKeys::RIGHT)) {
+		lookingLeft = false;
+		if (grounded) {
+			if (!crouched) acc.x += kRunAcc;
+		}
+		else {
+			acc.x += kRunAcc_OnAir;
 		}
 	}
 
-	vec acc = vec(0, 0);
-	if (state != State::ATTACKING) {
-		if (Input::IsPressed(0,GameKeys::LEFT)) {
-			lookingLeft = true;
-			if (grounded) {
-				if (!crouched) acc.x -= run_acc;
-			}
-			else {
-				acc.x -= run_acc_onair;
-			}
-		}
-		if (Input::IsPressed(0,GameKeys::RIGHT)) {
-			lookingLeft = false;
-			if (grounded) {
-				if (!crouched) acc.x += run_acc;
-			}
-			else {
-				acc.x += run_acc_onair;
-			}
-		}
-	}
-
-	if (state != State::ATTACKING && Input::IsPressed(0,GameKeys::JUMP) && jumpTimeLeft > 0)
+	if (Input::IsPressed(0,GameKeys::JUMP) && jumpTimeLeft > 0)
 	{
-		vel.y = vel_jump;
+		vel.y = kVelJump;
 	}
 	else
 	{
@@ -184,7 +165,7 @@ void JumpMan::UpdateMoving(float dt)
 	}
 	else
 	{
-		acc.y += gravity_acc;
+		acc.y += kGravityAcc;
 	}
 
 	// Calculate friction
@@ -193,25 +174,25 @@ void JumpMan::UpdateMoving(float dt)
 	{
 		if (crouched)
 		{
-			fri.x = fri_acc_floor_crouched;
+			fri.x = kFrictAccFloor_Crouched;
 		}
 		else
 		{
-			fri.x = fri_acc_floor;
+			fri.x = kFrictAccFloor;
 		}
 	}
 	else
 	{
-		fri.x = fri_acc_air;
+		fri.x = kFrictAcc_OnAir;
 	}
 
 	if (!crouched && onWall)
 	{
 		if (vel.y < 0) { // Moving up
-			fri.y = fri_acc_wall_up;
+			fri.y = kFrictAccVert_WallUp;
 		}
 		else {
-			fri.y = fri_acc_wall_down;
+			fri.y = kFrictAccVert_WallDown;
 		}
 	}
 
@@ -244,12 +225,10 @@ void JumpMan::UpdateMoving(float dt)
 	vel = vel + acc * dt;
 
 	// Clamp vel
-	if (vel.x > vel_max.x) vel.x = vel_max.x;
-	if (vel.x < -vel_max.x) vel.x = -vel_max.x;
-	if (vel.y > vel_max.y) vel.y = vel_max.y;
-	if (vel.y < -vel_max.y) vel.y = -vel_max.y;
-
-
+	if (vel.x > kVelMax.x) vel.x = kVelMax.x;
+	if (vel.x < -kVelMax.x) vel.x = -kVelMax.x;
+	if (vel.y > kVelMax.y) vel.y = kVelMax.y;
+	if (vel.y < -kVelMax.y) vel.y = -kVelMax.y;
 }
 
 void JumpMan::Update(float dt)
@@ -265,53 +244,101 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	if (grounded) {
+	if (grounded || onWall) {
 		canDash = true;
 	}
 
+	if (grounded) {
+		onWall = false;
+	}
+
+	if (divingRestTimer > 0.f) {
+		divingRestTimer -= dt;
+		if (divingRestTimer <= 0.f) {
+			diving = false;
+		}
+	}
 	animation.Update(dt);
 
-	if (state != State::MOVING) {
-		stateTime += dt;
-		if (state == State::DASHING) {
-			 UpdateDashing(dt);
+	dashCooldown -= dt;
+	if (!diving && SkillTree::instance()->IsEnabled(Skill::DASH) && canDash && dashCooldown <= 0.f) {
+		if (Input::IsJustPressed(0, GameKeys::DASH, 0.15f)) {
+			Input::ConsumeJustPressed(0, GameKeys::DASH);
+			dashCooldown = kDashCooldown;
+			dashTimer = 0.f;
+			dashing = true;
+			if (onWall) {
+				lookingLeft = !lookingLeft;
+			}
+			jumpTimeLeft = 0;
+			vel = vec(lookingLeft? -kVelDash : kVelDash, 0);
+			attacking = false;
+			animation.Ensure(AnimLib::WARRIOR_DASH);
 		}
 	}
 
-	if (state == State::MOVING) {
-		UpdateMoving(dt);
-	} else if (state == State::ATTACKING) {
+	if (!dashing && SkillTree::instance()->IsEnabled(Skill::DIVE)) {
+		if (!grounded && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
+			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
+			diving = true;
+			attacking = false;
+			vel = vec(0, kVelDive);
+			animation.Ensure(AnimLib::WARRIOR_CROUCH, false);
+		}
+	}
+
+	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::ATTACK)) {
+		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
+			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
+			attacking = true;
+			animation.Ensure(AnimLib::WARRIOR_ATTACK, false);
+		}
+	}
+
+	if (dashing) {
+		dashTimer += dt;
+		if (dashTimer >= kDashDuration) {
+			dashing = false;
+		}
+	}
+
+	if (attacking) {
+		attackTimer += dt;
 		UpdateAttacking(dt);
 	}
 
+	if (!dashing && !diving) {
+		UpdateMoving(dt);
+	}
+	
 	// Do move
 	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
 	pos = moved.pos + vec(0, size.y/2);
 
 	if (moved.leftWallCollision != Tile::NONE) {
-		if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
-			onWall = ONWALL_LEFT;
-			state = State::MOVING;
+		if (!attacking && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+			onWall = true;
 			vel.x = -500.f * dt; //stay against wall
 		}
 		else {
 			vel.x = 0;
 		}
+		dashing = false;
 		lookingLeft = true;
 	}
 	else if (moved.rightWallCollision != Tile::NONE) {
-		if (!isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
-			onWall = ONWALL_RIGHT;
-			state = State::MOVING;
+		if (!attacking && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+			onWall = true;
 			vel.x = 500.f * dt; //stay against wall
 		}
 		else {
 			vel.x = 0;
 		}
+		dashing = false;
 		lookingLeft = false;
 	}
 	else {
-		onWall = ONWALL_NO;
+		onWall = false;
 	}
 
 	if (moved.ceilingCollision != Tile::NONE) {
@@ -319,44 +346,53 @@ void JumpMan::Update(float dt)
 		jumpTimeLeft = 0;
 	}
 	if (moved.groundCollision != Tile::NONE) {
-		if (state == State::DIVING && moved.groundCollision.isBreakableGround()) {
-			DestroyedTiles::instance()->Destroy(moved.groundCollisionPos.x, moved.groundCollisionPos.y, true, false);
-			// TODO: Destroy neighbouring tiles?
-		} else {
-			state = State::MOVING;
-			if (moved.groundCollision.isOneWay() && crouchedTime > timeCrouchedToJumpDownOneWayTile) {
-				pos.y += 3.f;
-				vel.y = 0;
-				crouched = false;
-				grounded = false;
+		bool destroyingGround = false;
+		bool actuallyDiving = diving && divingRestTimer <= 0.f;
+		if (actuallyDiving) {
+			if (moved.groundCollision.isBreakableGround()) {
+				Fx::Screenshake::StartPreset(Fx::Screenshake::Preset::Stomp);
+				DestroyedTiles::instance()->Destroy(moved.groundCollisionPos.x, moved.groundCollisionPos.y, true, false);
+				pos.y += 1; // move past the floor we just destroyed
+				destroyingGround = true;
 			}
 			else {
-				if (vel.y > 50) DoPolvitoLand();
-				if (moved.groundCollision.isSlope()) {
-					vel.y = 30.f; //this helps you get grounded as soon as the slope ends
-				}
-				else {
-					vel.y = 0;
-				}
-				onWall = ONWALL_NO;
-				grounded = true;
+				// end dive
+				divingRestTimer = kDiveRestTime;
+				Fx::Screenshake::StartPreset(Fx::Screenshake::Preset::LittleStomp);
 			}
+		}
+		if (moved.groundCollision.isOneWay() && crouchedTime > kTimeCrouchedToJumpDownOneWayTile) {
+			pos.y += 3.f;
+			vel.y = 0;
+			crouched = false;
+			grounded = false;
+		}
+		else if (!destroyingGround) {
+			if (vel.y > 50) DoPolvitoLand();
+			if (moved.groundCollision.isSlope()) {
+				vel.y = 30.f; //this helps you get grounded as soon as the slope ends
+			}
+			else {
+				vel.y = 0;
+			}
+			onWall = false;
+			grounded = true;
 		}
 	}
 
 
-	if (state == State::MOVING) {
+	if (!diving && !dashing &&!attacking) {
 		bool isWalking = false;
 		bool isTurning = false;
 		if (crouched)
 		{
-			size = crouched_size;
+			size = kCrouchedSize;
 			animation.Ensure(AnimLib::WARRIOR_CROUCH, false);
 		}
 		else
 		{
 
-			size = standing_size;
+			size = kStandingSize;
 			if (grounded)
 			{
 				if (Input::IsPressed(0,GameKeys::LEFT) && !Input::IsPressed(0,GameKeys::RIGHT))
@@ -392,7 +428,7 @@ void JumpMan::Update(float dt)
 				else if (invencibleTimer > 0.f) {
 					animation.Ensure(AnimLib::WARRIOR_HURT, false);
 				}
-				else if (vel.y <= vel_jump) {
+				else if (vel.y <= kVelJump) {
 					animation.Ensure(AnimLib::WARRIOR_JUMP, false);
 				}
 				else if (animation.IsSet(AnimLib::WARRIOR_FALL)) {
@@ -426,11 +462,11 @@ void JumpMan::Update(float dt)
 			}
 		}
 		else if (Input::IsPressed(0, GameKeys::SHOOT)) {
-			bfgCooldownTimer = bfgCooldown;
+			bfgCooldownTimer = kBfgCooldown;
 			vec gunDirection = vec::FromAngleDegs(bfgAngle);
 			vec tipOfTheGun = bfgPos + gunDirection*16.f;
-			new Bullet(tipOfTheGun, gunDirection*bulletVel, 1.5f);
-			vel -= gunDirection*bfgPushBack;
+			new Bullet(tipOfTheGun, gunDirection*kBulletVel, 1.5f);
+			vel -= gunDirection*kBfgPushBack;
 			jumpTimeLeft = 0; // Overrides jump impulse
 			if (onWall) {
 				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
@@ -450,13 +486,13 @@ void JumpMan::Update(float dt)
 	if (invencibleTimer > 0.f) {
 		invencibleTimer -= dt;
 	}
-	
+
 }
 
 void JumpMan::ToSafeGround() {
-	invencibleTimer = invencibleTimeAfterHit;
+	invencibleTimer = kInvencibleTimeAfterHit;
 	jumpTimeLeft = 0;
-	onWall = ONWALL_NO;
+	onWall = false;
 	crouched = false;
 	if (health > 0) {
 		pos = Tile::FromTiles(lastSafeTilePos)+vec(Tile::Size/2,0);
@@ -466,19 +502,23 @@ void JumpMan::ToSafeGround() {
 }
 
 void JumpMan::TakeDamage(vec src) {
-	invencibleTimer = invencibleTimeAfterHit;
+	invencibleTimer = kInvencibleTimeAfterHit;
 	if (pos.x > src.x) {
-		vel.x = vel_hit.x;
+		vel.x = kKnockbackVel.x;
 	}
 	else {
-		vel.x = -vel_hit.x;
+		vel.x = -kKnockbackVel.x;
 	}
 	if (grounded) {
-		vel.y = vel_hit.y;
+		vel.y = kKnockbackVel.y;
 	}
 	jumpTimeLeft = 0;
-	onWall = ONWALL_NO;
+	onWall = false;
 	crouched = false;
+	dashing = false;
+	diving = false;
+	divingRestTimer = 0.f;
+	attacking = false;
 	Fx::FreezeImage::Freeze(0.25f);
 	vec playerCenter = Bounds().Center();
 	float direction = (playerCenter-src).AngleDegs();
@@ -488,11 +528,25 @@ void JumpMan::TakeDamage(vec src) {
 
 BoxBounds JumpMan::MaxBounds() const
 {
-	return BoxBounds(pos, standing_size, vec(standing_size.x / 2, standing_size.y));
+	return BoxBounds(pos, kStandingSize, vec(kStandingSize.x / 2, kStandingSize.y));
 }
 
 void JumpMan::Draw() const {
 
+#ifdef _IMGUI
+	{
+		ImGui::Begin("jumpman scene");
+		static bool invincible = false;
+		ImGui::Checkbox("invincible", &invincible);
+		if (invincible) {
+			*(const_cast<int*>(&health)) = std::max(health, maxHealth);
+		}
+		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
+		ImGui::Text("vel %f,%f", vel.x, vel.y);
+		ImGui::Text("jumpTimeLeft: %f attacking: %d diving: %d dashing: %d", jumpTimeLeft, attacking, diving, dashing);
+		ImGui::End();
+	}
+#endif
 	polvito.Draw();
 
 	if (isHit()) {
@@ -508,7 +562,7 @@ void JumpMan::Draw() const {
 	//BFG
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
 		GPU_Rect rect;
-		if (bfgCooldownTimer > (bfgCooldown - bfgCooldown / 4.f)) {
+		if (bfgCooldownTimer > (kBfgCooldown - kBfgCooldown / 4.f)) {
 			bool blink = (int(mainClock * 100) % 2);
 			rect = { blink ? 32 * 3.f : 32 * 2.f, 3 * 16.f, 2 * 16.f, 16.f };
 		}
@@ -516,7 +570,7 @@ void JumpMan::Draw() const {
 			bool shake = (int(mainClock * 6) % 10) > 8;
 			rect = { shake ? 32 : 0.f, 3 * 16.f, 2 * 16.f, 16.f };
 		}
-		float scale = (0.333f + (std::max(bfgCooldown / 1.5f, bfgCooldownTimer) / bfgCooldown));
+		float scale = (0.333f + (std::max(kBfgCooldown / 1.5f, bfgCooldownTimer) / kBfgCooldown));
 		vec vscale = vec(scale, scale);
 		if (bfgAngle < 270 || bfgAngle  > 450) {
 			vscale.y = -vscale.y;
