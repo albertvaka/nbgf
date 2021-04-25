@@ -78,6 +78,11 @@ void FlyingAlien::Update(float dt)
 	}
 
 	hitTimer -= dt;
+	const vec* damagePos = ReceiveDamageFromPlayer(Bounds());
+	if (damagePos && hitTimer <= 0.f) {
+		TakeDamage(*damagePos);
+		if (alive == false) return;
+	}
 
 	anim.Update(dt);
 
@@ -164,18 +169,14 @@ void FlyingAlien::Update(float dt)
 	break;
 	}
 
-	Bullet* b = ReceiveDamageFromBullets(Bounds());
-	if (b) {
-		TakeDamage(b->pos);
-		if (alive == false) return;
-	}
-
 	DamagePlayerOnCollision(Bounds());
 }
 
 void FlyingAlien::TakeDamage(vec src) {
 	hitTimer = hitTime;
-
+	
+	// TODO: Knockback
+	
 	if (state == State::FLYING) {
 		if (pos.x < JumpMan::instance()->pos.x) {
 			vel.x = speedAttack;

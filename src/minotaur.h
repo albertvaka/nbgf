@@ -20,7 +20,7 @@ struct Minotaur : BoxEntity, SelfRegister<Minotaur>
 	};
 
 	State state;
-	float damagedTimer = 0.f;
+	float hitTimer = 0.f;
 
 	Animation anim;
 
@@ -39,5 +39,6 @@ struct Minotaur : BoxEntity, SelfRegister<Minotaur>
 	void Update(float dt);
 	void Draw() const;
 
+	void TakeDamage();
 };
 

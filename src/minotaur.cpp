@@ -41,7 +41,7 @@ void Minotaur::Reset()
 	state = State::IDLE;
 	anim.Ensure(AnimLib::MINOTAUR_IDLE);
 	pos = initialPos;
-	damagedTimer = 0.f;
+	hitTimer = 0.f;
 	health = kMinotaurHealth;
 }
 
@@ -51,6 +51,14 @@ BoxBounds Minotaur::AttackBounds() const {
 
 BoxBounds Minotaur::FlipAttackBounds() const {
 	return BoxBounds(pos, kFlipAttackHitbox, kFlipAttackHitbox / 2 - vec(0, kFlipAttackHitboxHeight));
+}
+
+void Minotaur::TakeDamage() {
+	hitTimer = 0.3f;
+	health--;
+	if (health <= 0) {
+		DieWithSmallExplosion(this);
+	}
 }
 
 void Minotaur::Update(float dt)
@@ -66,16 +74,11 @@ void Minotaur::Update(float dt)
 
 	bool wasAttacked = false;
 
-	if (damagedTimer > 0.f) {
-		damagedTimer -= dt;
-	} else if (ReceiveDamageFromBullets(Bounds())) {
+	hitTimer  -= dt;
+	if (ReceiveDamageFromPlayer(Bounds()) && hitTimer <= 0.f) {
 		wasAttacked = true;
-		damagedTimer = 0.3f;
-		health--;
-		if (health <= 0) {
-			DieWithSmallExplosion(this);
-			return;
-		}
+		TakeDamage();
+		if (alive == false) return;
 	}
 
 	switch (state) {
@@ -127,13 +130,13 @@ void Minotaur::Update(float dt)
 			// Continue executing State::RUN
 		}
 		BoxBounds::FromCenter(pos, vec(kDistanceAttack)).DebugDraw(0, 255, 255);
-		if (damagedTimer <= 0.f && goingRight != pos.x < JumpMan::instance()->pos.x)
+		if (hitTimer <= 0.f && goingRight != pos.x < JumpMan::instance()->pos.x)
 		{
 			goingRight = !goingRight;
 			state = State::FLIP;
 			anim.Ensure(AnimLib::MINOTAUR_FLIP, false);
 		}
-		else if (damagedTimer <= 0.f && Collide(JumpMan::instance()->Bounds(), BoxBounds::FromCenter(pos, vec(kDistanceAttack))))
+		else if (hitTimer <= 0.f && Collide(JumpMan::instance()->Bounds(), BoxBounds::FromCenter(pos, vec(kDistanceAttack))))
 		{
 			state = State::ATTACK_BIG;
 			anim.Ensure(AnimLib::MINOTAUR_ATTACK_BIG, false);
@@ -167,7 +170,7 @@ void Minotaur::Draw() const
 	bool animHasMotionTrail = (state == State::FLIP && frame >= kFlipDamageFramesBegin && frame <= kFlipDamageFramesEnd)
 		|| (state == State::ATTACK_BIG && frame >= kAttackDamageFramesBegin && frame <= kAttackDamageFramesEnd);
 
-	if (damagedTimer > 0.f && !animHasMotionTrail) {
+	if (hitTimer > 0.f && !animHasMotionTrail) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}

@@ -75,8 +75,13 @@ void Mantis::Update(float dt)
 
 	//Debug::out << ENUM_NAME_OF(state);
 
-	hitTimer -= dt;
 	jumpCooldownTimer -= dt;
+	hitTimer -= dt;
+	const vec* damagePos = ReceiveDamageFromPlayer(Bounds());
+	if (damagePos && hitTimer <= 0.f) {
+		TakeDamage(*damagePos);
+		if (alive == false) return;
+	}
 
 	JumpMan* player = JumpMan::instance();
 
@@ -154,12 +159,6 @@ void Mantis::Update(float dt)
 
 	}
 	break;
-	}
-
-	Bullet* b = ReceiveDamageFromBullets(Bounds());
-	if (b) {
-		TakeDamage(b->pos);
-		if (alive == false) return;
 	}
 
 	DamagePlayerOnCollision(Bounds());

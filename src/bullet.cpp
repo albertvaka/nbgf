@@ -11,7 +11,7 @@
 #include "common_bullet.h"
 #include "bat.h"
 
-void Bullet::explode() {
+void Bullet::Explode() {
 	alive = false;
 	Bat::AwakeNearbyBats(pos);
 	Bullet::particles.pos = pos;
@@ -42,13 +42,13 @@ void Bullet::Update(float dt)
 
 	for (Explosive* e : Explosive::GetAll()) {
 		if (e->CheckBulletCollision(Bounds())) {
-			explode();
+			Explode();
 			return;
 		}
 	}
 
 	if (BigBulletTilemapCollision(this, SkillTree::instance()->GetBreakPower())) {
-		explode();
+		Explode();
 		return;
 	}
 
@@ -63,7 +63,7 @@ void Bullet::Draw() const
 	float rotation = Rand::roll(0, 360);
 	vec drawPos = pos + Rand::VecInRange(-1, -1, 1, 1);
 	Window::Draw(Assets::spritesheetTexture, drawPos)
-		.withScale(scale)
+		.withScale(kSpriteScale)
 		.withOrigin(8, 8)
 		.withRect(AnimLib::BULLET)
 		.withRotationDegs(rotation);

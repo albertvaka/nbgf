@@ -36,9 +36,9 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         canDash = true;
         dashTimer = 0.0f;
         dashCooldown = 0.0f;
-        attackTimer = 0.0f;
         divingRestTimer = 0.f;
         attacking = false;
+        playerAttack.alive = false;
         ScreenManager::instance()->UpdateCurrentScreen(pos);
     }
 
@@ -68,6 +68,8 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     }
 
     Animation animation;
+    
+    CircleEntity playerAttack;
 
     vec size;
 
@@ -94,7 +96,6 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     float dashCooldown = 0.0f;
     
     bool attacking = false;
-    float attackTimer = 0.0f;
 
     bool grounded = true;
     bool crouched = false;
@@ -104,7 +105,6 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     PartSys polvito;
 
     void UpdateMoving(float dt);
-    void UpdateDashing(float dt);
     void UpdateAttacking(float dt);
 
     void InitPolvito();

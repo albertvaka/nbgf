@@ -53,9 +53,8 @@ void Bipedal::Update(float dt)
 		return;
 	}
 
-	if (damagedTimer > 0.f) {
-		damagedTimer -= dt;
-	} else if (ReceiveDamageFromBullets(headHitBox)) { // Bullets don't hit the legs
+	hitTimer -= dt;
+	if (ReceiveDamageFromPlayer(headHitBox) && hitTimer <= 0.f) { // Bullets don't hit the legs
 		TakeDamage();
 		if (alive == false) return;
 	}
@@ -166,7 +165,7 @@ void Bipedal::Die() {
 }
 
 void Bipedal::TakeDamage() {
-	damagedTimer = 0.3f;
+	hitTimer = 0.3f;
 	health--;
 	if (health <= 0) {
 		Die();
@@ -176,7 +175,7 @@ void Bipedal::TakeDamage() {
 void Bipedal::Draw() const
 {
 
-	if (damagedTimer > 0.f) {
+	if (hitTimer > 0.f) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}

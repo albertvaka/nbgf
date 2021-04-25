@@ -59,12 +59,17 @@ const float kBfgPushBack = 150.f;
 const vec kKnockbackVel(180.f, -150.f);
 const float kInvencibleTimeAfterHit = 0.5f;
 
+// sword attack
+const float kSwordAttackRadius = 22.5f;
+const vec kSwordAttackOffset = vec(15.5f,-17.f);
+
 // Sprite
 const vec kStandingSize = vec(14, 32);
 const vec kCrouchedSize = vec(16, 22);
 
 JumpMan::JumpMan()
 	: polvito(Assets::spritesheetTexture)
+	, playerAttack(vec::Zero, kSwordAttackRadius)
 	, animation(AnimLib::WARRIOR_IDLE)
 	, size(kStandingSize)
 	, lastSafeTilePos(-1,-1)
@@ -82,14 +87,16 @@ void JumpMan::LoadGame(const SaveState& state) {
 }
 
 void JumpMan::UpdateAttacking(float dt) {
-	// TODO: Do damage
 	// TODO: When on wall, attack oposite side
+	playerAttack.alive = (animation.CurrentFrameNumber() == 1);
+	playerAttack.pos = pos + kSwordAttackOffset.Mirrored(lookingLeft, false);
 	if (animation.IsComplete()) {
-		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
+		/*if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			animation.Ensure(AnimLib::WARRIOR_COMBO, false);
 		}
-		else {
+		else */
+		{
 			attacking = false;
 		}
 	}
@@ -98,7 +105,6 @@ void JumpMan::UpdateAttacking(float dt) {
 void JumpMan::UpdateMoving(float dt) 
 {
 	GaemTileMap* map = GaemTileMap::instance();
-
 
 	// JUMPERINO
 	if (Input::IsJustPressed(0,GameKeys::JUMP, 0.15f) && (grounded || onWall)) {
@@ -132,7 +138,7 @@ void JumpMan::UpdateMoving(float dt)
 
 	vec acc = vec(0, 0);
 	if (Input::IsPressed(0,GameKeys::LEFT)) {
-		lookingLeft = true;
+		if (!attacking) lookingLeft = true;
 		if (grounded) {
 			if (!crouched) acc.x -= kRunAcc;
 		}
@@ -141,7 +147,7 @@ void JumpMan::UpdateMoving(float dt)
 		}
 	}
 	if (Input::IsPressed(0,GameKeys::RIGHT)) {
-		lookingLeft = false;
+		if (!attacking) lookingLeft = false;
 		if (grounded) {
 			if (!crouched) acc.x += kRunAcc;
 		}
@@ -303,8 +309,10 @@ void JumpMan::Update(float dt)
 	}
 
 	if (attacking) {
-		attackTimer += dt;
 		UpdateAttacking(dt);
+	}
+	else {
+		playerAttack.alive = false;
 	}
 
 	if (!dashing && !diving) {
@@ -380,8 +388,19 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-
-	if (!diving && !dashing &&!attacking) {
+	if (diving)
+	{
+		size = kCrouchedSize;
+	}
+	else if (dashing || attacking) 
+	{
+		size = kStandingSize;
+		if (dashing && grounded) {
+			DoPolvitoRun(dt, lookingLeft, true);
+		}
+	} 
+	else 
+	{
 		bool isWalking = false;
 		bool isTurning = false;
 		if (crouched)
@@ -395,7 +414,7 @@ void JumpMan::Update(float dt)
 			size = kStandingSize;
 			if (grounded)
 			{
-				if (Input::IsPressed(0,GameKeys::LEFT) && !Input::IsPressed(0,GameKeys::RIGHT))
+				if (Input::IsPressed(0, GameKeys::LEFT) && !Input::IsPressed(0, GameKeys::RIGHT))
 				{
 					isWalking = true;
 					if (vel.x > 0.f) {
@@ -406,7 +425,7 @@ void JumpMan::Update(float dt)
 						animation.Ensure(AnimLib::WARRIOR_RUN);
 					}
 				}
-				else if (Input::IsPressed(0,GameKeys::RIGHT) && !Input::IsPressed(0,GameKeys::LEFT))
+				else if (Input::IsPressed(0, GameKeys::RIGHT) && !Input::IsPressed(0, GameKeys::LEFT))
 				{
 					isWalking = true;
 					if (vel.x < 0.f) {
@@ -443,7 +462,7 @@ void JumpMan::Update(float dt)
 			}
 		}
 		if (isWalking) {
-			DoPolvitoRun(dt, Input::IsPressed(0,GameKeys::LEFT), isTurning);
+			DoPolvitoRun(dt, Input::IsPressed(0, GameKeys::LEFT), isTurning);
 		}
 	}
 
@@ -541,6 +560,7 @@ void JumpMan::Draw() const {
 		if (invincible) {
 			*(const_cast<int*>(&health)) = std::max(health, maxHealth);
 		}
+		ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10);
 		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
 		ImGui::Text("jumpTimeLeft: %f attacking: %d diving: %d dashing: %d", jumpTimeLeft, attacking, diving, dashing);
@@ -589,6 +609,9 @@ void JumpMan::Draw() const {
 	//Input::GetAnalog(0, AnalogInput::AIM).DebugDraw();
 	pos.DebugDraw();
 	//Bounds().Center().DebugDraw();
+	if (playerAttack.alive) {
+		playerAttack.Bounds().DebugDraw(0,255,0);
+	}
 }
 
 void JumpMan::DrawGUI() const {

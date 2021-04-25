@@ -21,7 +21,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 	float minX, maxX;
 	bool charging = false;
 	float timer = 0.f;
-	float damagedTimer = 0.f;
+	float hitTimer = 0.f;
 	int health = 18;
 	BoxBounds legsHitBox, headHitBox;
 

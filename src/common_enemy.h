@@ -16,12 +16,18 @@ inline bool InSameScreenAsPlayer(int myScreen) {
 }
 
 template<typename B>
-Bullet* ReceiveDamageFromBullets(const B& bounds) { // returns true if collided
+const vec* ReceiveDamageFromPlayer(const B& bounds) { // returns the position of the attack if damaged or null otherwise. don't store the returned pointer for longer than this frame
 	for (Bullet* b : Bullet::GetAll()) {
 		if (!b->alive) continue;
 		if (Collide(b->Bounds(), bounds)) {
-			b->explode();
-			return b;
+			b->Explode();
+			return &(b->pos);
+		}
+	}
+	const CircleEntity& attack = JumpMan::instance()->playerAttack;
+	if (attack.alive) {
+		if (Collide(attack.Bounds(), bounds)) {
+			return &(attack.pos);
 		}
 	}
 	return nullptr;
