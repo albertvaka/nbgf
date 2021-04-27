@@ -63,6 +63,9 @@ const float kInvencibleTimeAfterHit = 0.5f;
 const float kSwordAttackRadius = 22.5f;
 const vec kSwordAttackOffset = vec(15.5f,-17.f);
 
+const float kSwordAttackDownRadius = 10.f;
+const vec kSwordAttackDownOffset = vec(3.f,2.f);
+
 // Sprite
 const vec kStandingSize = vec(14, 32);
 const vec kCrouchedSize = vec(16, 22);
@@ -84,22 +87,6 @@ void JumpMan::SaveGame(SaveState& state) const {
 void JumpMan::LoadGame(const SaveState& state) {
 	state.StreamGet("player") >> pos.x >> pos.y >> maxHealth;
 	Reset(pos, maxHealth);
-}
-
-void JumpMan::UpdateAttacking(float dt) {
-	// TODO: When on wall, attack oposite side
-	playerAttack.alive = (animation.CurrentFrameNumber() == 1);
-	playerAttack.pos = pos + kSwordAttackOffset.Mirrored(lookingLeft, false);
-	if (animation.IsComplete()) {
-		/*if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
-			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
-			animation.Ensure(AnimLib::WARRIOR_COMBO, false);
-		}
-		else */
-		{
-			attacking = false;
-		}
-	}
 }
 
 void JumpMan::UpdateMoving(float dt) 
@@ -241,6 +228,8 @@ void JumpMan::Update(float dt)
 {
 	if (frozen || !alive) return;
 
+	animation.Update(dt);
+
 	veci groundTilePos(-1, -1);
 	grounded = IsGrounded(pos - vec(0, size.y / 2), size, &groundTilePos);
 	if (grounded) {
@@ -257,14 +246,6 @@ void JumpMan::Update(float dt)
 	if (grounded) {
 		onWall = false;
 	}
-
-	if (divingRestTimer > 0.f) {
-		divingRestTimer -= dt;
-		if (divingRestTimer <= 0.f) {
-			diving = false;
-		}
-	}
-	animation.Update(dt);
 
 	dashCooldown -= dt;
 	if (!diving && SkillTree::instance()->IsEnabled(Skill::DASH) && canDash && dashCooldown <= 0.f) {
@@ -288,8 +269,7 @@ void JumpMan::Update(float dt)
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			diving = true;
 			attacking = false;
-			vel = vec(0, kVelDive);
-			animation.Ensure(AnimLib::WARRIOR_CROUCH, false);
+			animation.Ensure(AnimLib::WARRIOR_ATTACK_DOWN_TRANSITION, false);
 		}
 	}
 
@@ -309,9 +289,39 @@ void JumpMan::Update(float dt)
 	}
 
 	if (attacking) {
-		UpdateAttacking(dt);
-	}
-	else {
+		// TODO: When on wall, attack oposite side
+		playerAttack.alive = (animation.CurrentFrameNumber() == 1);
+		playerAttack.radius = kSwordAttackRadius;
+		playerAttack.pos = pos + kSwordAttackOffset.Mirrored(lookingLeft, false);
+		if (animation.IsComplete()) {
+			/*if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
+				Input::ConsumeJustPressed(0, GameKeys::ATTACK);
+				animation.Ensure(AnimLib::WARRIOR_COMBO, false);
+			}
+			else */
+			{
+				attacking = false;
+			}
+		}
+	} else if (diving) {
+		if (divingRestTimer > 0.f) {
+			divingRestTimer -= dt;
+			playerAttack.alive = false;
+			if (divingRestTimer <= 0.f) {
+				diving = false;
+			}
+			if (animation.complete) { //standup anim done
+				animation.Ensure(AnimLib::WARRIOR_IDLE);
+			}
+		} else if (animation.complete) {
+			vel = vec(0, kVelDive);
+			animation.Ensure(AnimLib::WARRIOR_ATTACK_DOWN);
+			playerAttack.radius = kSwordAttackDownRadius;
+			playerAttack.alive = true;
+			//Debug::FrameByFrame = true;
+		}
+		playerAttack.pos = pos + kSwordAttackDownOffset.Mirrored(lookingLeft, false);
+	} else {
 		playerAttack.alive = false;
 	}
 
@@ -367,6 +377,7 @@ void JumpMan::Update(float dt)
 				// end dive
 				divingRestTimer = kDiveRestTime;
 				Fx::Screenshake::StartPreset(Fx::Screenshake::Preset::LittleStomp);
+				animation.Ensure(AnimLib::WARRIOR_STANDUP, false);
 			}
 		}
 		if (moved.groundCollision.isOneWay() && crouchedTime > kTimeCrouchedToJumpDownOneWayTile) {
@@ -484,7 +495,7 @@ void JumpMan::Update(float dt)
 			bfgCooldownTimer = kBfgCooldown;
 			vec gunDirection = vec::FromAngleDegs(bfgAngle);
 			vec tipOfTheGun = bfgPos + gunDirection*16.f;
-			new Bullet(tipOfTheGun, gunDirection*kBulletVel, 1.5f);
+			new Bullet(tipOfTheGun, gunDirection*kBulletVel);
 			vel -= gunDirection*kBfgPushBack;
 			jumpTimeLeft = 0; // Overrides jump impulse
 			if (onWall) {

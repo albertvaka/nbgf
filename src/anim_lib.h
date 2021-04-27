@@ -287,6 +287,7 @@ namespace AnimLib {
 	constexpr const std::array<AnimationFrame, 8> WARRIOR_LADDER = warriorSheet.Frames<8>(91);
 	constexpr const AnimationFrame WARRIOR_TURN[] = { warriorSheet.Frame(12*6+1, 1.f) };
 	constexpr const std::array<AnimationFrame, 3> WARRIOR_MOVING_ATTACK = warriorSheet.Frames<3>(78); // skip first 2 and last 5 of DASH_ATTACK
-
+	constexpr const std::array<AnimationFrame, 1> WARRIOR_ATTACK_DOWN_TRANSITION = warriorSheet.Frames<1>(17*6);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_ATTACK_DOWN = warriorSheet.Frames<3>(17*6+1);
 }
 

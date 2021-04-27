@@ -105,7 +105,6 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     PartSys polvito;
 
     void UpdateMoving(float dt);
-    void UpdateAttacking(float dt);
 
     void InitPolvito();
     inline void DoPolvitoJump();
