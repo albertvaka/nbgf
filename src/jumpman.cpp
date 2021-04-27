@@ -423,7 +423,7 @@ void JumpMan::Update(float dt)
 		{
 
 			size = kStandingSize;
-			if (grounded)
+			if (grounded && vel.y >= 0) // if vel.y < 0 we reached ground from below, we are jumping and not actually grounded
 			{
 				if (Input::IsPressed(0, GameKeys::LEFT) && !Input::IsPressed(0, GameKeys::RIGHT))
 				{
