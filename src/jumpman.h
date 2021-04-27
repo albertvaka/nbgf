@@ -67,7 +67,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         return camPos;
     }
 
-    Animation animation;
+    Animation anim;
     
     CircleEntity playerAttack;
 

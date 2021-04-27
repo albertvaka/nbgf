@@ -19,7 +19,7 @@ struct DebugWalker : Entity, SelfRegister<DebugWalker>
         return BoxBounds(pos, size, vec(size.x/2, size.y));
     }
 
-    Animation animation;
+    Animation anim;
 
     vec size = vec(16, 32);
 

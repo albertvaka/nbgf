@@ -73,7 +73,7 @@ const vec kCrouchedSize = vec(16, 22);
 JumpMan::JumpMan()
 	: polvito(Assets::spritesheetTexture)
 	, playerAttack(vec::Zero, kSwordAttackRadius)
-	, animation(AnimLib::WARRIOR_IDLE)
+	, anim(AnimLib::WARRIOR_IDLE)
 	, size(kStandingSize)
 	, lastSafeTilePos(-1,-1)
 {
@@ -228,7 +228,7 @@ void JumpMan::Update(float dt)
 {
 	if (frozen || !alive) return;
 
-	animation.Update(dt);
+	anim.Update(dt);
 
 	veci groundTilePos(-1, -1);
 	grounded = IsGrounded(pos - vec(0, size.y / 2), size, &groundTilePos);
@@ -260,7 +260,7 @@ void JumpMan::Update(float dt)
 			jumpTimeLeft = 0;
 			vel = vec(lookingLeft? -kVelDash : kVelDash, 0);
 			attacking = false;
-			animation.Ensure(AnimLib::WARRIOR_DASH);
+			anim.Ensure(AnimLib::WARRIOR_DASH);
 		}
 	}
 
@@ -269,7 +269,7 @@ void JumpMan::Update(float dt)
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			diving = true;
 			attacking = false;
-			animation.Ensure(AnimLib::WARRIOR_ATTACK_DOWN_TRANSITION, false);
+			anim.Ensure(AnimLib::WARRIOR_ATTACK_DOWN_TRANSITION, false);
 		}
 	}
 
@@ -277,7 +277,7 @@ void JumpMan::Update(float dt)
 		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			attacking = true;
-			animation.Ensure(AnimLib::WARRIOR_MOVING_ATTACK, false);
+			anim.Ensure(AnimLib::WARRIOR_MOVING_ATTACK, false);
 		}
 	}
 
@@ -290,13 +290,13 @@ void JumpMan::Update(float dt)
 
 	if (attacking) {
 		// TODO: When on wall, attack oposite side
-		playerAttack.alive = (animation.CurrentFrameNumber() == 1);
+		playerAttack.alive = (anim.CurrentFrameNumber() == 1);
 		playerAttack.radius = kSwordAttackRadius;
 		playerAttack.pos = pos + kSwordAttackOffset.Mirrored(lookingLeft, false);
-		if (animation.IsComplete()) {
+		if (anim.IsComplete()) {
 			/*if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 				Input::ConsumeJustPressed(0, GameKeys::ATTACK);
-				animation.Ensure(AnimLib::WARRIOR_COMBO, false);
+				anim.Ensure(AnimLib::WARRIOR_COMBO, false);
 			}
 			else */
 			{
@@ -310,12 +310,12 @@ void JumpMan::Update(float dt)
 			if (divingRestTimer <= 0.f) {
 				diving = false;
 			}
-			if (animation.complete) { //standup anim done
-				animation.Ensure(AnimLib::WARRIOR_IDLE);
+			if (anim.complete) { //standup anim done
+				anim.Ensure(AnimLib::WARRIOR_IDLE);
 			}
-		} else if (animation.complete) {
+		} else if (anim.complete) {
 			vel = vec(0, kVelDive);
-			animation.Ensure(AnimLib::WARRIOR_ATTACK_DOWN);
+			anim.Ensure(AnimLib::WARRIOR_ATTACK_DOWN);
 			playerAttack.radius = kSwordAttackDownRadius;
 			playerAttack.alive = true;
 			//Debug::FrameByFrame = true;
@@ -377,7 +377,7 @@ void JumpMan::Update(float dt)
 				// end dive
 				divingRestTimer = kDiveRestTime;
 				Fx::Screenshake::StartPreset(Fx::Screenshake::Preset::LittleStomp);
-				animation.Ensure(AnimLib::WARRIOR_STANDUP, false);
+				anim.Ensure(AnimLib::WARRIOR_STANDUP, false);
 			}
 		}
 		if (moved.groundCollision.isOneWay() && crouchedTime > kTimeCrouchedToJumpDownOneWayTile) {
@@ -417,7 +417,7 @@ void JumpMan::Update(float dt)
 		if (crouched)
 		{
 			size = kCrouchedSize;
-			animation.Ensure(AnimLib::WARRIOR_CROUCH, false);
+			anim.Ensure(AnimLib::WARRIOR_CROUCH, false);
 		}
 		else
 		{
@@ -429,45 +429,45 @@ void JumpMan::Update(float dt)
 				{
 					isWalking = true;
 					if (vel.x > 0.f) {
-						animation.Ensure(AnimLib::WARRIOR_TURN);
+						anim.Ensure(AnimLib::WARRIOR_TURN);
 						isTurning = true;
 					}
 					else {
-						animation.Ensure(AnimLib::WARRIOR_RUN);
+						anim.Ensure(AnimLib::WARRIOR_RUN);
 					}
 				}
 				else if (Input::IsPressed(0, GameKeys::RIGHT) && !Input::IsPressed(0, GameKeys::LEFT))
 				{
 					isWalking = true;
 					if (vel.x < 0.f) {
-						animation.Ensure(AnimLib::WARRIOR_TURN);
+						anim.Ensure(AnimLib::WARRIOR_TURN);
 						isTurning = true;
 					}
-					else animation.Ensure(AnimLib::WARRIOR_RUN);
+					else anim.Ensure(AnimLib::WARRIOR_RUN);
 				}
 				else
 				{
-					animation.Ensure(AnimLib::WARRIOR_IDLE);
+					anim.Ensure(AnimLib::WARRIOR_IDLE);
 				}
 			}
 			else
 			{
 				if (onWall) {
-					animation.Ensure(AnimLib::WARRIOR_WALL_SLIDE);
+					anim.Ensure(AnimLib::WARRIOR_WALL_SLIDE);
 				}
 				else if (invencibleTimer > 0.f) {
-					animation.Ensure(AnimLib::WARRIOR_HURT, false);
+					anim.Ensure(AnimLib::WARRIOR_HURT, false);
 				}
 				else if (vel.y <= kVelJump) {
-					animation.Ensure(AnimLib::WARRIOR_JUMP, false);
+					anim.Ensure(AnimLib::WARRIOR_JUMP, false);
 				}
-				else if (animation.IsSet(AnimLib::WARRIOR_FALL)) {
-					animation.Ensure(AnimLib::WARRIOR_FALL);
+				else if (anim.IsSet(AnimLib::WARRIOR_FALL)) {
+					anim.Ensure(AnimLib::WARRIOR_FALL);
 				}
 				else {
-					animation.Ensure(AnimLib::WARRIOR_JUMP_TO_FALL, false);
-					if (animation.IsComplete()) {
-						animation.Ensure(AnimLib::WARRIOR_FALL);
+					anim.Ensure(AnimLib::WARRIOR_JUMP_TO_FALL, false);
+					if (anim.IsComplete()) {
+						anim.Ensure(AnimLib::WARRIOR_FALL);
 					}
 				}
 			}
@@ -587,7 +587,7 @@ void JumpMan::Draw() const {
 
 	Window::Draw(Assets::warriorTexture, pos)
 		.withOrigin(AnimLib::warriorSheet.sprite_w/2, AnimLib::warriorSheet.sprite_h)
-		.withRect(animation.CurrentFrameRect())
+		.withRect(anim.CurrentFrameRect())
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 
 	//BFG

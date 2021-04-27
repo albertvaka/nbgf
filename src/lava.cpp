@@ -89,7 +89,7 @@ void Lava::Update(float dt) {
 	if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
 		// TODO: All this should be done by a method of player
 		if (!player->frozen) {
-			player->animation.Ensure(AnimLib::WARRIOR_HURT, false);
+			player->anim.Ensure(AnimLib::WARRIOR_HURT, false);
 			player->pos.y = CurrentLevel() + kLavaDamageAreaOffsetFromTop;
 			player->frozen = true; // disable movement
 			player->health -= 1;

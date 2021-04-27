@@ -22,7 +22,7 @@ const float kJumpTime = 0.35f;
 const vec center = vec(8, 16);
  
 DebugWalker::DebugWalker(vec position, float velX)
-	: animation(AnimLib::MARIO_IDLE)
+	: anim(AnimLib::MARIO_IDLE)
 {
 	pos = position;
 	vel.x = velX;
@@ -111,23 +111,23 @@ void DebugWalker::Update(float dt)
 		grounded = true;
 	}
 
-	animation.Update(dt);
+	anim.Update(dt);
 
 	if (grounded)
 	{
 		if (vel.x < 0 || vel.x > 0)
 		{
-			animation.Ensure(AnimLib::MARIO_WALK);
+			anim.Ensure(AnimLib::MARIO_WALK);
 		}
 		else
 		{
-			animation.Ensure(AnimLib::MARIO_IDLE);
+			anim.Ensure(AnimLib::MARIO_IDLE);
 		}
 	}
 	else
 	{
-		if (onWall) animation.Ensure(AnimLib::MARIO_ONWALL);
-		else animation.Ensure(AnimLib::MARIO_JUMP);
+		if (onWall) anim.Ensure(AnimLib::MARIO_ONWALL);
+		else anim.Ensure(AnimLib::MARIO_JUMP);
 	}
 }
 
@@ -135,7 +135,7 @@ void DebugWalker::Draw() const {
 
 	Window::Draw(Assets::spritesheetTexture, pos)
 		.withOrigin(center.x, center.y)
-		.withRect(animation.CurrentFrameRect())
+		.withRect(anim.CurrentFrameRect())
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 
 	// Debug-only
