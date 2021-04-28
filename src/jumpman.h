@@ -37,6 +37,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         dashTimer = 0.0f;
         dashCooldown = 0.0f;
         divingRestTimer = 0.f;
+        justHit = false;
         attacking = false;
         playerAttack.alive = false;
         ScreenManager::instance()->UpdateCurrentScreen(pos);
@@ -82,6 +83,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     float jumpTimeLeft = 0.0f;
     float crouchedTime = 0.0f;
     bool frozen = false;
+    bool justHit = false;
 
     float bfgAngle;
     vec bfgPos;

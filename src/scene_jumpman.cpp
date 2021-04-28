@@ -334,7 +334,7 @@ void JumpScene::EnterScene()
 }
 
 bool JumpScene::UpdateCamera(float dt) {
-	float camZoom = Fx::FreezeImage::IsFrozen()? 1.5f : 1.f;
+	float camZoom = Fx::FreezeImage::IsFrozen() && player.justHit ? 1.5f : 1.f;
 	float oldZoom = Camera::Zoom();
 	float zoomChange = camZoom - oldZoom;
 	Mates::Clamp(zoomChange, -kCamZoomSpeed *dt, kCamZoomSpeed *dt);

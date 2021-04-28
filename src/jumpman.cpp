@@ -228,6 +228,8 @@ void JumpMan::Update(float dt)
 {
 	if (frozen || !alive) return;
 
+	justHit = false;
+
 	anim.Update(dt);
 
 	veci groundTilePos(-1, -1);
@@ -550,6 +552,8 @@ void JumpMan::TakeDamage(vec src) {
 	divingRestTimer = 0.f;
 	attacking = false;
 	Fx::FreezeImage::Freeze(0.25f);
+	justHit = true;
+
 	vec playerCenter = Bounds().Center();
 	float direction = (playerCenter-src).AngleDegs();
 	new OneShotAnim(Assets::spritesheetTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);

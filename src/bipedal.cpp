@@ -159,6 +159,7 @@ void Bipedal::Update(float dt)
 
 void Bipedal::Die() {
 	alive = false;
+	DieScreenShake();
 	for (int i = 0; i < 6; i++) {
 		RandomlySpawnHealth(Rand::VecInRange(headHitBox), 100);
 	}

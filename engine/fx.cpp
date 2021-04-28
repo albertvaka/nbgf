@@ -42,7 +42,9 @@ void Update(float dt)
 				FreezeImage::unfreezeCallback();
 			}
 		}
-		return;
+		if (!FreezeImage::continueScreenShake) {
+			return;
+		}
 	}
 
 	if (Screenshake::screenshakeTime > 0) {
@@ -65,7 +67,11 @@ void Update(float dt)
 				Camera::screenshake_offset.x = 0;
 			}
 		}
-		Camera::SetCenter(Camera::Center()); // makes it pick up the offset
+		if (Screenshake::screenshakeDampening >= 0) {
+			Screenshake::screenshakeAmplitude.x *= Screenshake::screenshakeDampening;
+			Screenshake::screenshakeAmplitude.y *= Screenshake::screenshakeDampening;
+		}
+		Camera::SetCenter(Camera::Center()); // makes sdl_gpu pick up the offset
 	}
 
 }
@@ -75,13 +81,13 @@ void Screenshake::DrawImgui()
 #ifdef _IMGUI
 	ImGui::Begin("Screenshake");
 	static float shakeTime = 1.f;
-	static int shakeAmplitudeX = 0;
-	static int shakeAmplitudeY = 5;
+	static float shakeAmplitudeX = 0;
+	static float shakeAmplitudeY = 5;
 	static float shakeSpeedX = 10;
 	static float shakeSpeedY = 10;
 	ImGui::SliderFloat("shakeTime", &shakeTime, 0.1f, 2.f);
-	ImGui::SliderInt("shakeAmplitudeX", &shakeAmplitudeX, 0, 10);
-	ImGui::SliderInt("shakeAmplitudeY", &shakeAmplitudeY, 0, 10);
+	ImGui::SliderFloat("shakeAmplitudeX", &shakeAmplitudeX, 0.f, 10.f);
+	ImGui::SliderFloat("shakeAmplitudeY", &shakeAmplitudeY, 0.f, 10.f);
 	ImGui::SliderFloat("shakeSpeedX", &shakeSpeedX, 0, 100);
 	ImGui::SliderFloat("shakeSpeedY", &shakeSpeedY, 0, 100);
 	if (ImGui::Button("Shake")) {

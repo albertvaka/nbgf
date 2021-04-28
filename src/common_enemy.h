@@ -8,6 +8,7 @@
 #include "rand.h"
 #include "oneshotanim.h"
 #include "anim_lib.h"
+#include "fx.h"
 #include "bounds.h"
 #include "assets.h"
 
@@ -51,8 +52,14 @@ inline void RandomlySpawnHealth(vec pos, int percentChance = 10) {
 	}
 }
 
+inline void DieScreenShake() {
+	Fx::FreezeImage::Freeze(0.07f, true);
+	Fx::Screenshake::Start(0.4f, vec(4.f, 4.f), vec(18.f, 20.f), 0.85f);
+}
+
 inline void DieWithSmallExplosion(Entity* e) {
 	e->alive = false;
+	DieScreenShake();
 	new OneShotAnim(Assets::spritesheetTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	RandomlySpawnHealth(e->pos);
 }
