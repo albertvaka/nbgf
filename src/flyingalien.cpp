@@ -78,9 +78,9 @@ void FlyingAlien::Update(float dt)
 	}
 
 	hitTimer -= dt;
-	const vec* damagePos = ReceiveDamageFromPlayer(Bounds());
-	if (damagePos && hitTimer <= 0.f) {
-		TakeDamage(*damagePos);
+	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
+	if (damageFromPlayerPos) {
+		TakeDamage(*damageFromPlayerPos);
 		if (alive == false) return;
 	}
 
@@ -169,7 +169,9 @@ void FlyingAlien::Update(float dt)
 	break;
 	}
 
-	DamagePlayerOnCollision(Bounds());
+	if (!damageFromPlayerPos) {
+		DamagePlayerOnCollision(Bounds());
+	}
 }
 
 void FlyingAlien::TakeDamage(vec src) {

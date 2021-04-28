@@ -75,7 +75,8 @@ void Minotaur::Update(float dt)
 	bool wasAttacked = false;
 
 	hitTimer  -= dt;
-	if (ReceiveDamageFromPlayer(Bounds()) && hitTimer <= 0.f) {
+	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
+	if (damageFromPlayerPos) {
 		wasAttacked = true;
 		TakeDamage();
 		if (alive == false) return;
@@ -160,7 +161,9 @@ void Minotaur::Update(float dt)
 	}
 	}
 
-	DamagePlayerOnCollision(Bounds());
+	if (!damageFromPlayerPos) { //avoid hitting and being hit the same frame
+		DamagePlayerOnCollision(Bounds());
+	}
 }
 
 void Minotaur::Draw() const

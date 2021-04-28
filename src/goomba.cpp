@@ -105,7 +105,7 @@ void Goomba::Update(float dt)
 		break;
 	}
 
-	if (ReceiveDamageFromPlayer(Bounds())) {
+	if (ReceiveDamageFromPlayer(Bounds(), false)) {
 		DieWithSmallExplosion(this); //single hit
 		return;
 	}

@@ -54,7 +54,8 @@ void Bipedal::Update(float dt)
 	}
 
 	hitTimer -= dt;
-	if (ReceiveDamageFromPlayer(headHitBox) && hitTimer <= 0.f) { // Bullets don't hit the legs
+	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(headHitBox, hitTimer > 0.f); // Bullets don't hit the legs
+	if (damageFromPlayerPos) {
 		TakeDamage();
 		if (alive == false) return;
 	}
@@ -153,8 +154,10 @@ void Bipedal::Update(float dt)
 		break;
 	}
 
-	DamagePlayerOnCollision(headHitBox);
-	DamagePlayerOnCollision(legsHitBox);
+	if (!damageFromPlayerPos) { //avoid hitting and being hit the same frame
+		DamagePlayerOnCollision(headHitBox);
+		DamagePlayerOnCollision(legsHitBox);
+	}
 }
 
 void Bipedal::Die() {

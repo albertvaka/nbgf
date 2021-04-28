@@ -98,7 +98,7 @@ void FireSlime::Update(float dt)
 		anim.Set(AnimLib::FIRESLIME_WALK, false);
 	}
 
-	if (ReceiveDamageFromPlayer(Bounds())) {
+	if (ReceiveDamageFromPlayer(Bounds(), false)) {
 		DieWithSmallExplosion(this); //single hit
 		return;
 	}

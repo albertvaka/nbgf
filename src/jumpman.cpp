@@ -44,8 +44,9 @@ const float kDashCooldown = 0.6f;
 const float kDashDuration = 0.25f;
 
 // dive
-const float kVelDive = 450;
+const float kVelDive = 400;
 const float kDiveRestTime = 0.4f; // time you can't move after touching ground
+const float kDiveRestTimeAfterHitting = 0.3f;
 
 // limits
 const vec kVelMax(220, 350);
@@ -56,15 +57,22 @@ const float kBfgCooldown = 0.6f;
 const float kBfgPushBack = 150.f;
 
 // damage
-const vec kKnockbackVel(180.f, -150.f);
+const vec kTakeDamageKnockbackVel(180.f, -150.f);
+const float kDoDamageKnockbackVel = 120.f;
+const float kDoDamageKnockbackVelGrounded = 180.f;
+const float kDoDamageUpKnockbackVel = 200.f;
+const float kDoDamageDownKnockbackVel = -220.f;
 const float kInvencibleTimeAfterHit = 0.5f;
 
 // sword attack
 const float kSwordAttackRadius = 22.5f;
 const vec kSwordAttackOffset = vec(15.5f,-17.f);
 
-const float kSwordAttackDownRadius = 10.f;
-const vec kSwordAttackDownOffset = vec(3.f,2.f);
+const float kSwordAttackDownRadius = 13.f;
+const vec kSwordAttackDownOffset = vec(2.f,3.f);
+
+const float kSwordAttackUpRadius = 20.f;
+const vec kSwordAttackUpOffset = vec(0.f, -29.f);
 
 // Sprite
 const vec kStandingSize = vec(14, 32);
@@ -87,6 +95,31 @@ void JumpMan::SaveGame(SaveState& state) const {
 void JumpMan::LoadGame(const SaveState& state) {
 	state.StreamGet("player") >> pos.x >> pos.y >> maxHealth;
 	Reset(pos, maxHealth);
+}
+
+void JumpMan::DealDamage(vec target) {
+	if (diving) {
+		vel.y = kDoDamageDownKnockbackVel;
+		divingRestTimer = kDiveRestTimeAfterHitting;
+	}
+	else if (attackingUp) {
+		vel.y += kDoDamageUpKnockbackVel;
+	} else {
+		float knockback = grounded ? kDoDamageKnockbackVelGrounded : kDoDamageKnockbackVel;
+		if (pos.x > target.x) {
+			vel.x /= 2;
+			vel.x += knockback;
+		}
+		else {
+			vel.x /= 2;
+			vel.x += -knockback;
+		}
+	}
+	jumpTimeLeft = 0;
+	onWall = false;
+	crouched = false;
+	dashing = false;
+	diving = false;
 }
 
 void JumpMan::UpdateMoving(float dt) 
@@ -266,7 +299,7 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	if (!dashing && SkillTree::instance()->IsEnabled(Skill::DIVE)) {
+	if (!dashing && SkillTree::instance()->IsEnabled(Skill::DIVE) && divingRestTimer <= 0.f) {
 		if (!grounded && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			diving = true;
@@ -275,11 +308,17 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::ATTACK)) {
+	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::ATTACK) && !Input::IsPressed(0, GameKeys::CROUCH)) {
 		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			attacking = true;
-			anim.Ensure(AnimLib::WARRIOR_MOVING_ATTACK, false);
+			attackingUp = Input::IsPressed(0, GameKeys::MENU_UP);
+			if (attackingUp) {
+				anim.Ensure(AnimLib::WARRIOR_ATTACK_UP, false);
+			}
+			else {
+				anim.Ensure(AnimLib::WARRIOR_MOVING_ATTACK, false);
+			}
 		}
 	}
 
@@ -293,8 +332,15 @@ void JumpMan::Update(float dt)
 	if (attacking) {
 		// TODO: When on wall, attack oposite side
 		playerAttack.alive = (anim.CurrentFrameNumber() == 1);
-		playerAttack.radius = kSwordAttackRadius;
-		playerAttack.pos = pos + kSwordAttackOffset.Mirrored(lookingLeft, false);
+		if (attackingUp) {
+			playerAttack.radius = kSwordAttackUpRadius;
+			playerAttack.pos = pos + kSwordAttackUpOffset.Mirrored(lookingLeft, false);
+		}
+		else {
+			playerAttack.radius = kSwordAttackRadius;
+			playerAttack.pos = pos + kSwordAttackOffset.Mirrored(lookingLeft, false);
+		}
+
 		if (anim.IsComplete()) {
 			/*if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 				Input::ConsumeJustPressed(0, GameKeys::ATTACK);
@@ -324,6 +370,9 @@ void JumpMan::Update(float dt)
 		}
 		playerAttack.pos = pos + kSwordAttackDownOffset.Mirrored(lookingLeft, false);
 	} else {
+		if (divingRestTimer > 0.f) {
+			divingRestTimer -= dt;
+		}
 		playerAttack.alive = false;
 	}
 
@@ -536,13 +585,13 @@ void JumpMan::ToSafeGround() {
 void JumpMan::TakeDamage(vec src) {
 	invencibleTimer = kInvencibleTimeAfterHit;
 	if (pos.x > src.x) {
-		vel.x = kKnockbackVel.x;
+		vel.x = kTakeDamageKnockbackVel.x;
 	}
 	else {
-		vel.x = -kKnockbackVel.x;
+		vel.x = -kTakeDamageKnockbackVel.x;
 	}
 	if (grounded) {
-		vel.y = kKnockbackVel.y;
+		vel.y = kTakeDamageKnockbackVel.y;
 	}
 	jumpTimeLeft = 0;
 	onWall = false;
@@ -578,7 +627,8 @@ void JumpMan::Draw() const {
 		ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10);
 		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
-		ImGui::Text("jumpTimeLeft: %f attacking: %d diving: %d dashing: %d", jumpTimeLeft, attacking, diving, dashing);
+		ImGui::Text("jumpTimeLeft: %f divingRestTimer: %f", jumpTimeLeft, divingRestTimer);
+		ImGui::Text("grounded: %d attacking: %d diving: %d dashing: %d", grounded, attacking, diving, dashing);
 		ImGui::End();
 	}
 #endif

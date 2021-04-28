@@ -49,6 +49,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     BoxBounds MaxBounds() const;
 
     void TakeDamage(vec src);
+    void DealDamage(vec target);
     void ToSafeGround();
     bool isInvencible() const { return invencibleTimer > 0.f; }
     bool isHit() const { return invencibleTimer > 0.1f; }
@@ -98,6 +99,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     float dashCooldown = 0.0f;
     
     bool attacking = false;
+    bool attackingUp = false;
 
     bool grounded = true;
     bool crouched = false;

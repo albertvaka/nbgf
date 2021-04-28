@@ -77,9 +77,9 @@ void Mantis::Update(float dt)
 
 	jumpCooldownTimer -= dt;
 	hitTimer -= dt;
-	const vec* damagePos = ReceiveDamageFromPlayer(Bounds());
-	if (damagePos && hitTimer <= 0.f) {
-		TakeDamage(*damagePos);
+	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
+	if (damageFromPlayerPos) {
+		TakeDamage(*damageFromPlayerPos);
 		if (alive == false) return;
 	}
 
@@ -161,7 +161,9 @@ void Mantis::Update(float dt)
 	break;
 	}
 
-	DamagePlayerOnCollision(Bounds());
+	if (!damageFromPlayerPos) { //avoid hitting and being hit the same frame
+		DamagePlayerOnCollision(Bounds());
+	}
 }
 
 void Mantis::TakeDamage(vec src)
