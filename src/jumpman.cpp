@@ -11,6 +11,7 @@
 #include "debug.h"
 #include "savestate.h"
 #include "common_tilemapcharacter.h"
+#include "common_bullet.h"
 #include "skilltree.h"
 #ifdef _IMGUI
 #include "imgui.h"
@@ -77,6 +78,29 @@ const vec kSwordAttackUpOffset = vec(0.f, -29.f);
 // Sprite
 const vec kStandingSize = vec(14, 32);
 const vec kCrouchedSize = vec(16, 22);
+
+void DestroyTilesWithSword(const CircleBounds& e) {
+	GaemTileMap* map = GaemTileMap::instance();
+	DestroyedTiles* destroyedTiles = DestroyedTiles::instance();
+	auto breakPower = SkillTree::instance()->GetBreakPower();
+	int xLeft = e.pos.x - e.radius;
+	int xRight = e.pos.x + e.radius;
+	int yTop = e.pos.y - e.radius;
+	int yBottom = e.pos.y + e.radius;
+	for (int x = xLeft; x <= xRight; x+=Tile::Size)
+	{
+		for (int y = yTop; y <= yBottom; y+=Tile::Size) {
+			vec pos = Tile::AlignToTiles(vec(x, y)) + Tile::Sizes/2; // IMPROVE: here we only check the center of the tile
+			if (e.Contains(pos)) {
+				veci t = Tile::ToTiles(pos);
+				Tile tile = map->GetTile(t);
+				if (tile.isBreakable(breakPower)) {
+					DestroyedTiles::instance()->Destroy(t.x, t.y);
+				}
+			}
+		}
+	}
+}
 
 JumpMan::JumpMan()
 	: polvito(Assets::spritesheetTexture)
@@ -332,6 +356,9 @@ void JumpMan::Update(float dt)
 	if (attacking) {
 		// TODO: When on wall, attack oposite side
 		playerAttack.alive = (anim.CurrentFrameNumber() == 1);
+		if (playerAttack.alive) {
+			DestroyTilesWithSword(playerAttack.Bounds());
+		}
 		if (attackingUp) {
 			playerAttack.radius = kSwordAttackUpRadius;
 			playerAttack.pos = pos + kSwordAttackUpOffset.Mirrored(lookingLeft, false);
