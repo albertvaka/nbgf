@@ -94,7 +94,6 @@ namespace AnimLib {
 		{ { 128 + 13 * 16.f, 256.f, 16.f, 16.f }, .05f },
 		{ { 128 + 14 * 16.f, 256.f, 16.f, 16.f }, .05f },
 		{ { 128 + 15 * 16.f, 256.f, 16.f, 16.f }, .05f },
-		{ { 128 + 16 * 16.f, 256.f, 16.f, 16.f }, .05f },
 	};
 
 	constexpr const AnimationFrame MANTIS_PREPARE_JUMP[] = {
