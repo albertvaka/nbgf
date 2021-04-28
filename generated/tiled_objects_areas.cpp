@@ -74,7 +74,7 @@ const std::array<BoxBounds, 1> Areas::parallax_forest = {
 };
 
 const std::array<BoxBounds, 1> Areas::parallax_island = {
-	BoxBounds(5592.5815f,288.10416666666697f,848.837f,339.125f),
+	BoxBounds(5592.5815f,286.10416666666697f,848.837f,339.125f),
 };
 
 const std::array<BoxBounds, 9> Areas::rocket_launcher_awake = {

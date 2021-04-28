@@ -14,6 +14,9 @@ const std::unordered_map<int, vec> Entities::angrybat = {
 	{ 748, vec(6643.25f, 882.271f) },
 	{ 751, vec(6424.0f, 879.5f) },
 	{ 752, vec(6318.0f, 893.75f) },
+	{ 866, vec(6511.333333333333f, 1775.0f) },
+	{ 867, vec(6430.666666666667f, 1808.0f) },
+	{ 868, vec(6172.666666666667f, 1695.666666666667f) },
 };
 
 const std::unordered_map<int, vec> Entities::angrybatawake = {
@@ -196,6 +199,8 @@ const std::unordered_map<int, vec> Entities::rocket_launcher = {
 	{ 862, vec(7578.58333333333f, 1984.583333333333f) },
 	{ 863, vec(7231.2133333333295f, 1985.4163333333331f) },
 	{ 864, vec(6938.08333333333f, 1986.083333333333f) },
+	{ 869, vec(8782.0f, 1632.666666666667f) },
+	{ 870, vec(8434.66666666667f, 1631.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::save = {
