@@ -24,10 +24,10 @@ namespace Fx {
 				Start(0.1f, vec(2, 2), vec(35.f, 45.f));
 				break;
 			case Preset::LittleStomp:
-				Start(0.17f, vec(0, 2), vec(0.f, 47.f));
+				Start(0.3f, vec(0, 3), vec(0.f, 47.f));
 				break;
 			case Preset::Stomp:
-				Start(0.17f, vec(0, 3), vec(0.f, 47.f));
+				Start(0.3f, vec(0, 5), vec(0.f, 47.f));
 				break;
 			case Preset::ElectricShock:
 				Start(0.157f, vec(8, 2), vec(86.7f, 14.1f));
