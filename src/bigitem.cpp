@@ -44,6 +44,18 @@ void BigItem::Draw()
 			.withRect(0 * 16, 3 * 16, 2 * 16, 16);
 		DrawPedestal();
 		break;
+	case Skill::ATTACK:
+		Window::Draw(Assets::spritesheetTexture, pos.x, pos.y - y)
+			.withOrigin(16, 8)
+			.withRect(4 * 16, 8 * 16, 2 * 16, 16);
+		DrawPedestal();
+		break;
+	case Skill::DIVE:
+			Window::Draw(Assets::spritesheetTexture, pos.x, pos.y - y)
+				.withOrigin(16, 8)
+				.withRect(4 * 16, 8 * 16, 2 * 16, 16);
+			DrawPedestal();
+			break;
 	case Skill::WALLJUMP:
 		Window::Draw(Assets::spritesheetTexture, pos.x, pos.y - y)
 			.withOrigin(16, 8)

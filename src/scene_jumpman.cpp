@@ -117,6 +117,7 @@ void JumpScene::SaveGame() const {
 	destroyedTiles.SaveGame(saveState);
 
 	saveState.StreamPut("bossdead_bipedal") << (boss_bipedal == nullptr);
+	saveState.StreamPut("bossdead_mantis") << (Mantis::GetAll().empty());
 
 	saveState.Save();
 }
@@ -156,6 +157,15 @@ void JumpScene::LoadGame() {
 		boss_bipedal->alive = false;
 	}
 
+
+	bool bossdead_mantis = false;
+	saveState.StreamGet("bossdead_mantis") >> bossdead_mantis;
+	if (bossdead_mantis) {
+		for (auto m : Mantis::GetAll()) {
+			m->alive = false;
+		}
+	}
+	
 	player.LoadGame(saveState);
 
 	Update(0); //Hackish way to make sure the entities with alive=false trigger things on other components before being deleted
@@ -169,7 +179,7 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 		raising_lava->SetLevel(raising_lava_target_height);
 	}
 	break;
-	case Skill::GUN:
+	case Skill::ATTACK:
 	{
 		int screen_gun = screenManager.FindScreenContaining(g->pos);
 		for (Bat* e : Bat::GetAll()) {
@@ -203,6 +213,8 @@ void JumpScene::EnterScene()
 	new BigItem(Tiled::Entities::single_skill_walljump, Skill::WALLJUMP);
 	new BigItem(Tiled::Entities::single_skill_gun, Skill::GUN);
 	BigItem* break_skill = new BigItem(Tiled::Entities::single_skill_breakblocks, Skill::BREAK);
+	new BigItem(Tiled::Entities::single_skill_attack, Skill::ATTACK);
+	new BigItem(Tiled::Entities::single_skill_dive, Skill::DIVE);
 
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
@@ -282,6 +294,9 @@ void JumpScene::EnterScene()
 		auto b = new Mantis(pos);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
+		}
+		for (SaveStation* s : SaveStation::ByScreen[b->screen]) {
+			s->AddHiddenBy(b);
 		}
 	}
 
@@ -559,11 +574,17 @@ void JumpScene::Update(float dt)
 				case Skill::WALLJUMP:
 					rotoText.ShowMessage("WallJump");
 					break;
+				case Skill::ATTACK:
+					rotoText.ShowMessage("You remembered you\nhave a sword!");
+					break;
+				case Skill::DIVE:
+					rotoText.ShowMessage("Dive down");
+					break;
 				case Skill::GUN:
 					rotoText.ShowMessage("Big F. Gun");
 					break;
 				case Skill::BREAK:
-					rotoText.ShowMessage("Shots that\nbreak stuff");
+					rotoText.ShowMessage("You can now\nbreak stuff!");
 					break;
 				default:
 					break;
@@ -655,6 +676,7 @@ void JumpScene::Draw()
 		ImGui::Begin("scene");
 		vec m = Mouse::GetPositionInWorld();
 		veci t = Tile::ToTiles(m);
+		ImGui::Text("mainclock: %f", mainClock);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
 

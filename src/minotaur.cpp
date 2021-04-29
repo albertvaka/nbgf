@@ -67,7 +67,8 @@ void Minotaur::Update(float dt)
 		if (pos != initialPos) {
 			Reset();
 		}
-		return;
+		// Keep animating since it's seen from another screen
+		//return;
 	}
 
 	anim.Update(dt);

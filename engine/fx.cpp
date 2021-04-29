@@ -67,7 +67,7 @@ void Update(float dt)
 				Camera::screenshake_offset.x = 0;
 			}
 		}
-		if (Screenshake::screenshakeDampening >= 0) {
+		if (Screenshake::screenshakeDampening > 0) {
 			Screenshake::screenshakeAmplitude.x *= Screenshake::screenshakeDampening;
 			Screenshake::screenshakeAmplitude.y *= Screenshake::screenshakeDampening;
 		}

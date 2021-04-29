@@ -51,7 +51,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     void TakeDamage(vec src);
     void DealDamage(vec target);
     void ToSafeGround();
-    bool isInvencible() const { return invencibleTimer > 0.f; }
+    bool isInvencible() const { return invencibleTimer > 0.f || dashing; }
     bool isHit() const { return invencibleTimer > 0.1f; }
 
     vec bfgOffset() {

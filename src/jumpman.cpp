@@ -42,7 +42,7 @@ const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 // dash
 const float kVelDash = 350;
 const float kDashCooldown = 0.6f;
-const float kDashDuration = 0.25f;
+const float kDashDuration = 0.3f;
 
 // dive
 const float kVelDive = 400;
@@ -63,11 +63,11 @@ const float kDoDamageKnockbackVel = 120.f;
 const float kDoDamageKnockbackVelGrounded = 180.f;
 const float kDoDamageUpKnockbackVel = 200.f;
 const float kDoDamageDownKnockbackVel = -220.f;
-const float kInvencibleTimeAfterHit = 0.5f;
+const float kInvencibleTimeAfterHit = 1.0f;
 
 // sword attack
-const float kSwordAttackRadius = 22.5f;
-const vec kSwordAttackOffset = vec(15.5f,-17.f);
+const float kSwordAttackRadius = 23.f;
+const vec kSwordAttackOffset = vec(16.f,-17.f);
 
 const float kSwordAttackDownRadius = 13.f;
 const vec kSwordAttackDownOffset = vec(2.f,3.f);

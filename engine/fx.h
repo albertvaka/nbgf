@@ -21,7 +21,7 @@ namespace Fx {
 			switch (preset) {
 				break;
 			case Preset::Earthquake: // Make it long by calling this repeatedly
-				Start(0.1f, vec(2, 2), vec(35.f, 45.f));
+				Start(0.1f, vec(3.5f, 3.5f), vec(35.f, 45.f));
 				break;
 			case Preset::LittleStomp:
 				Start(0.3f, vec(0, 3), vec(0.f, 47.f));
@@ -35,7 +35,7 @@ namespace Fx {
 			}
 		}
 
-		static inline void Start(float time, vec amplitude, vec speed, float dampening = 0.f) {
+		static inline void Start(float time, vec amplitude, vec speed, float dampening = -1.f) {
 			if (time >= screenshakeTime) {
 				screenshakeTime = time;
 				screenshakeAmplitude = amplitude;

@@ -183,9 +183,9 @@ const std::unordered_map<int, vec> Entities::mantis = {
 };
 
 const std::unordered_map<int, vec> Entities::minotaur = {
-	{ 665, vec(5829.0f, 618.5f) },
+	{ 665, vec(5963.0f, 618.5f) },
 };
-const vec Entities::single_minotaur = vec(5829.0f, 618.5f);
+const vec Entities::single_minotaur = vec(5963.0f, 618.5f);
 
 
 const std::unordered_map<int, vec> Entities::rocket_launcher = {
@@ -223,9 +223,9 @@ const vec Entities::single_skill_breakblocks = vec(5289.0f, 1278.0f);
 
 
 const std::unordered_map<int, vec> Entities::skill_dive = {
-	{ 784, vec(5481.5f, 838.25f) },
+	{ 784, vec(5481.5f, 844.25f) },
 };
-const vec Entities::single_skill_dive = vec(5481.5f, 838.25f);
+const vec Entities::single_skill_dive = vec(5481.5f, 844.25f);
 
 
 const std::unordered_map<int, vec> Entities::skill_gun = {
