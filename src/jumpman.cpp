@@ -155,30 +155,6 @@ void JumpMan::DealDamage(vec target) {
 
 void JumpMan::UpdateMoving(float dt) 
 {
-	GaemTileMap* map = GaemTileMap::instance();
-
-	// JUMPERINO
-	if (Input::IsJustPressed(0,GameKeys::JUMP, 0.15f) && (grounded || onWall)) {
-		Input::ConsumeJustPressed(0, GameKeys::JUMP);
-		
-		jumpTimeLeft = kJumpTime; // the jump upwards velocity can last up to this duration
-		if (onWall) {
-			onWall = false;
-			lookingLeft = !lookingLeft;
-			vel.x = lookingLeft? -kVelWalljump : kVelWalljump;
-			DoPolvitoWallJump();
-		}
-		float halfWidth = kStandingSize.x / 2;
-		Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
-		Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
-		bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
-		if (!hasBlockAbove) {
-			DoPolvitoJump();
-			grounded = false;
-		}
-		crouched = false;
-	}
-
 	crouched = (grounded && Input::IsPressed(0, GameKeys::CROUCH));
 	if (crouched) {
 		crouchedTime += dt;
@@ -281,11 +257,6 @@ void JumpMan::UpdateMoving(float dt)
 
 	vel = vel + acc * dt;
 
-	// Clamp vel
-	if (vel.x > kVelMax.x) vel.x = kVelMax.x;
-	if (vel.x < -kVelMax.x) vel.x = -kVelMax.x;
-	if (vel.y > kVelMax.y) vel.y = kVelMax.y;
-	if (vel.y < -kVelMax.y) vel.y = -kVelMax.y;
 }
 
 void JumpMan::Update(float dt)
@@ -297,9 +268,10 @@ void JumpMan::Update(float dt)
 	anim.Update(dt);
 
 	veci groundTilePos(-1, -1);
-	grounded = IsGrounded(pos - vec(0, size.y / 2), size, &groundTilePos);
+	grounded = IsGrounded(Bounds(), &groundTilePos);
+	Tile groundTile = Tile::NONE;
 	if (grounded) {
-		Tile groundTile = GaemTileMap::instance()->GetTileUnsafe(groundTilePos);
+		groundTile = GaemTileMap::instance()->GetTileUnsafe(groundTilePos);
 		if (groundTile.isSafeGround()) {
 			lastSafeTilePos = groundTilePos;
 		}
@@ -420,9 +392,58 @@ void JumpMan::Update(float dt)
 	}
 
 	if (!dashing && !diving) {
+
+		GaemTileMap* map = GaemTileMap::instance();
+
+		// JUMPERINO
+		if (Input::IsJustPressed(0, GameKeys::JUMP, 0.15f) && (grounded || onWall)) {
+			Input::ConsumeJustPressed(0, GameKeys::JUMP);
+
+			jumpTimeLeft = kJumpTime; // the jump upwards velocity can last up to this duration
+			if (onWall) {
+				onWall = false;
+				lookingLeft = !lookingLeft;
+				vel.x = lookingLeft ? -kVelWalljump : kVelWalljump;
+				DoPolvitoWallJump();
+			}
+			/*else if (groundTile.isSlope()) {
+				if (groundTile.isLeftSlope()) {
+					vel.x += kVelWalljump;
+				}
+				else {
+					vel.x += -kVelWalljump;
+				}
+			}*/
+			float halfWidth = kStandingSize.x / 2;
+			Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
+			Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
+			bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
+			if (!hasBlockAbove) {
+				DoPolvitoJump();
+				grounded = false;
+			}
+			crouched = false;
+		}
+
 		UpdateMoving(dt);
 	}
-	
+	else if (diving && !grounded) {
+		if (Input::IsPressed(0, GameKeys::LEFT)) {
+			vel.x -= 10 * dt;
+		}
+		if (Input::IsPressed(0, GameKeys::RIGHT)) {
+			vel.x += 10 * dt;
+		}
+	}
+
+	// Clamp vel
+	if (vel.x < -kVelMax.x) vel.x = -kVelMax.x;
+	if (vel.x > kVelMax.x) vel.x = kVelMax.x;
+	if (vel.y < -kVelMax.y) vel.y = -kVelMax.y;
+	if (!diving) {
+		if (vel.y > kVelMax.y) vel.y = kVelMax.y;
+	}
+
 	// Do move
 	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
 	pos = moved.pos + vec(0, size.y/2);

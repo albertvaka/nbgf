@@ -7,17 +7,38 @@
 
 // FIXME: Jumping against a slope that goes up in the same direction you are moving won't let you jump and can get you through the ground at high dt
 
-inline bool IsGrounded(vec pos, vec size, veci* out_groundTile = nullptr, vec marginPixels = vec(1, 1.5)) {
+inline bool IsGrounded(const BoxBounds& bounds, veci* out_groundTile = nullptr, vec marginPixels = vec(1, 1.5)) {
 
-	float y_bottom = pos.y + (size.y / 2);
-	float x_left = pos.x - (size.x / 2);
-	float x_right = pos.x + (size.x / 2);
+	GaemTileMap* tileMap = GaemTileMap::instance();
+
+	float y_bottom = bounds.Bottom();
+	float x_left = bounds.Left();
+	float x_right = bounds.Right();
+	float posx = bounds.Center().x;
+
+	// check slopes first, since we could otherwise find the corner of the tile below a slope first
+	if (tileMap->IsPosOnSlope(posx, y_bottom + 2)) {
+		if (out_groundTile) {
+			*out_groundTile = Tile::ToTiles(posx, y_bottom + 2);
+		}
+		return true;
+	}
+	if (tileMap->IsPosOnSlope(posx + 2, y_bottom)) {
+		if (out_groundTile) {
+			*out_groundTile = Tile::ToTiles(posx + 2, y_bottom);
+		}
+		return true;
+	}
+	if (tileMap->IsPosOnSlope(posx - 2, y_bottom)) {
+		if (out_groundTile) {
+			*out_groundTile = Tile::ToTiles(posx - 2, y_bottom);
+		}
+		return true;
+	}
 
 	int ty = Tile::ToTiles(y_bottom + marginPixels.y);
 	int tx_left = Tile::ToTiles(x_left + marginPixels.x);
 	int tx_right = Tile::ToTiles(x_right - marginPixels.x);
-
-	GaemTileMap* tileMap = GaemTileMap::instance();
 	for (int tx = tx_left; tx <= tx_right; tx++) {
 		Tile t = tileMap->GetTile(tx, ty);
 		if (t.isFullSolid()) {
@@ -32,14 +53,6 @@ inline bool IsGrounded(vec pos, vec size, veci* out_groundTile = nullptr, vec ma
 			}
 			return true;
 		}
-	}
-
-	// Slopes
-	if (tileMap->IsPosOnSlope(pos)) {
-		if (out_groundTile) {
-			*out_groundTile = Tile::ToTiles(pos.x, pos.y);
-		}
-		return true;
 	}
 
 	return false;

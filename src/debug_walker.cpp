@@ -38,7 +38,7 @@ void DebugWalker::Update(float dt)
 {
 	if (!alive) return;
 
-	grounded = IsGrounded(pos, size);
+	grounded = IsGrounded(Bounds());
 
 
 	if (jumpTimeLeft > 0)
