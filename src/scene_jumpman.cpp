@@ -392,6 +392,12 @@ void JumpScene::ExitScene()
 
 void JumpScene::Update(float dt)
 {
+#ifdef _DEBUG
+	if (Debug::FrameByFrame && Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+		player.pos = Camera::Center()+vec(0,16);
+	}
+#endif
+
 	if (Fx::ScreenTransition::IsJustFinished()) {
 		if (Fx::ScreenTransition::Current() != &Assets::fadeInDiamondsShader) {
 			// This was a death or outro transition: restart scene
