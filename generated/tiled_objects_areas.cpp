@@ -61,13 +61,14 @@ const std::array<BoxBounds, 1> Areas::fog = {
 	BoxBounds(4464.5f,1391.5f,734.0f,85.5f),
 };
 
-const std::array<BoxBounds, 6> Areas::lava = {
+const std::array<BoxBounds, 7> Areas::lava = {
 	BoxBounds(5599.791666666667f,1626.333f,160.083333333333f,36.8333333333334f),
 	BoxBounds(832.0833333333303f,1160.916666666667f,1840.83333333333f,57.8333333333333f),
 	BoxBounds(155.25016666667034f,537.083333333333f,594.333f,235.5f),
 	BoxBounds(6000.0f,1527.272727272727f,592.0f,38.2272727272727f),
 	BoxBounds(7614.29f,1756.0415f,644.5f,39.5f),
 	BoxBounds(6542.666666666667f,2289.55301666667f,1761.33333333333f,38.2273f),
+	BoxBounds(7497.75f,1160.25f,644.5f,39.5f),
 };
 
 const std::array<BoxBounds, 1> Areas::parallax_cave = {

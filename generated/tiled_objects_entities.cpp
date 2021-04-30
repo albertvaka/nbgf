@@ -60,6 +60,7 @@ const std::unordered_map<int, vec> Entities::batawake = {
 	{ 766, vec(7370.66666666667f, 930.0f) },
 	{ 767, vec(7376.0f, 1023.333333333333f) },
 	{ 783, vec(6651.0f, 757.0f) },
+	{ 883, vec(8446.335f, 589.3335f) },
 };
 
 const std::unordered_map<int, vec> Entities::boss_bipedal = {
@@ -81,6 +82,8 @@ const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 359, vec(3291.25f, 1585.0f) },
 	{ 792, vec(8242.0f, 1442.181818181818f) },
 	{ 812, vec(8311.58166666667f, 2048.624833333333f) },
+	{ 885, vec(8464.0f, 479.0f) },
+	{ 886, vec(8593.0f, 481.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::explosive = {
