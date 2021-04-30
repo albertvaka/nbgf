@@ -203,7 +203,7 @@ namespace AnimLib {
 	};
 
 	constexpr const AnimationFrame MINOTAUR_ATTACK_BIG[] = {
-		{ { 0 * 96.0, 3 * 96.f, 96.f, 96.f }, .2f },
+		{ { 0 * 96.0, 3 * 96.f, 96.f, 96.f }, .8f },
 		{ { 1 * 96.0, 3 * 96.f, 96.f, 96.f }, .1f },
 		{ { 2 * 96.0, 3 * 96.f, 96.f, 96.f }, .1f },
 		{ { 3 * 96.0, 3 * 96.f, 96.f, 96.f }, .1f },
