@@ -75,6 +75,13 @@ const vec kSwordAttackDownOffset = vec(2.f,3.f);
 const float kSwordAttackUpRadius = 20.f;
 const vec kSwordAttackUpOffset = vec(0.f, -29.f);
 
+
+const float kSwordAttackWallSlideRadius = 23.f;
+const vec kSwordAttackWallSlideOffset = vec(-16.f, -15.5f);
+
+
+
+
 // Sprite
 const vec kStandingSize = vec(14, 32);
 const vec kCrouchedSize = vec(16, 22);
@@ -90,12 +97,12 @@ void DestroyTilesWithSword(const CircleBounds& e) {
 	for (int x = xLeft; x <= xRight; x+=Tile::Size)
 	{
 		for (int y = yTop; y <= yBottom; y+=Tile::Size) {
-			vec pos = Tile::AlignToTiles(vec(x, y)) + Tile::Sizes/2; // IMPROVE: here we only check the center of the tile
+			vec pos = Tile::AlignToTiles(vec(x, y)) + Tile::Sizes/2; // IMPROVE?: here we only check the center of the tile
 			if (e.Contains(pos)) {
 				veci t = Tile::ToTiles(pos);
 				Tile tile = map->GetTile(t);
 				if (tile.isBreakable(breakPower)) {
-					DestroyedTiles::instance()->Destroy(t.x, t.y);
+					destroyedTiles->Destroy(t.x, t.y);
 				}
 			}
 		}
@@ -336,12 +343,18 @@ void JumpMan::Update(float dt)
 		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			attacking = true;
-			attackingUp = Input::IsPressed(0, GameKeys::MENU_UP);
-			if (attackingUp) {
-				anim.Ensure(AnimLib::WARRIOR_ATTACK_UP, false);
+			if (onWall) {
+				attackingUp = false;
+				anim.Ensure(AnimLib::WARRIOR_WALL_SLIDE_ATTACK, false);
 			}
 			else {
-				anim.Ensure(AnimLib::WARRIOR_MOVING_ATTACK, false);
+				attackingUp = Input::IsPressed(0, GameKeys::MENU_UP);
+				if (attackingUp) {
+					anim.Ensure(AnimLib::WARRIOR_ATTACK_UP, false);
+				}
+				else {
+					anim.Ensure(AnimLib::WARRIOR_MOVING_ATTACK, false);
+				}
 			}
 		}
 	}
@@ -359,24 +372,24 @@ void JumpMan::Update(float dt)
 		if (playerAttack.alive) {
 			DestroyTilesWithSword(playerAttack.Bounds());
 		}
-		if (attackingUp) {
+		if (onWall) {
+			anim.anim = AnimLib::WARRIOR_WALL_SLIDE_ATTACK.data();
+			playerAttack.radius = kSwordAttackWallSlideRadius;
+			playerAttack.pos = pos + kSwordAttackWallSlideOffset.Mirrored(lookingLeft, false);
+		}
+		else if (attackingUp) {
+			anim.anim = AnimLib::WARRIOR_ATTACK_UP.data();
 			playerAttack.radius = kSwordAttackUpRadius;
 			playerAttack.pos = pos + kSwordAttackUpOffset.Mirrored(lookingLeft, false);
 		}
 		else {
+			anim.anim = AnimLib::WARRIOR_MOVING_ATTACK.data();
 			playerAttack.radius = kSwordAttackRadius;
 			playerAttack.pos = pos + kSwordAttackOffset.Mirrored(lookingLeft, false);
 		}
 
 		if (anim.IsComplete()) {
-			/*if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
-				Input::ConsumeJustPressed(0, GameKeys::ATTACK);
-				anim.Ensure(AnimLib::WARRIOR_COMBO, false);
-			}
-			else */
-			{
-				attacking = false;
-			}
+			attacking = false;
 		}
 	} else if (diving) {
 		if (divingRestTimer > 0.f) {
@@ -412,7 +425,10 @@ void JumpMan::Update(float dt)
 	pos = moved.pos + vec(0, size.y/2);
 
 	if (moved.leftWallCollision != Tile::NONE) {
-		if (!attacking && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+		if ((onWall || !grounded) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+			if (!onWall && attacking && anim.current_frame > 0) {
+				attacking = false;
+			}
 			onWall = true;
 			vel.x = -500.f * dt; //stay against wall
 		}
@@ -423,7 +439,10 @@ void JumpMan::Update(float dt)
 		lookingLeft = true;
 	}
 	else if (moved.rightWallCollision != Tile::NONE) {
-		if (!attacking && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+		if ((onWall || !grounded) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+			if (!onWall && attacking && anim.current_frame > 0) {
+				attacking = false;
+			}
 			onWall = true;
 			vel.x = 500.f * dt; //stay against wall
 		}
@@ -645,7 +664,7 @@ void JumpMan::Draw() const {
 
 #ifdef _IMGUI
 	{
-		ImGui::Begin("jumpman scene");
+		ImGui::Begin("jumpman");
 		static bool invincible = false;
 		ImGui::Checkbox("invincible", &invincible);
 		if (invincible) {
@@ -655,7 +674,7 @@ void JumpMan::Draw() const {
 		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
 		ImGui::Text("jumpTimeLeft: %f divingRestTimer: %f", jumpTimeLeft, divingRestTimer);
-		ImGui::Text("grounded: %d attacking: %d diving: %d dashing: %d", grounded, attacking, diving, dashing);
+		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d", grounded, onWall, attacking, diving, dashing);
 		ImGui::End();
 	}
 #endif
@@ -667,7 +686,7 @@ void JumpMan::Draw() const {
 	}
 
 	Window::Draw(Assets::warriorTexture, pos)
-		.withOrigin(AnimLib::warriorSheet.sprite_w/2, AnimLib::warriorSheet.sprite_h)
+		.withOrigin(AnimLib::warriorSheet.sprite_w/2, AnimLib::warriorSheet.sprite_h-4)
 		.withRect(anim.CurrentFrameRect())
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 
