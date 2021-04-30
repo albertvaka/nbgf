@@ -368,10 +368,12 @@ void JumpMan::Update(float dt)
 	}
 
 	if (attacking) {
-		// TODO: When on wall, attack oposite side
 		playerAttack.alive = (anim.CurrentFrameNumber() == 1);
 		if (playerAttack.alive) {
 			DestroyTilesWithSword(playerAttack.Bounds());
+		}
+		if (!attackingUp && anim.current_frame == 0 && Input::IsPressed(0, GameKeys::MENU_UP)) {
+			attackingUp = true;
 		}
 		if (onWall) {
 			anim.anim = AnimLib::WARRIOR_WALL_SLIDE_ATTACK.data();
