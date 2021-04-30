@@ -41,7 +41,7 @@ const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 
 // dash
 const float kVelDash = 350;
-const float kDashCooldown = 0.6f;
+const float kDashCooldown = 1.5f;
 const float kDashDuration = 0.3f;
 
 // dive
@@ -320,6 +320,7 @@ void JumpMan::Update(float dt)
 			dashCooldown = kDashCooldown;
 			dashTimer = 0.f;
 			dashing = true;
+			canDash = false;
 			if (onWall) {
 				lookingLeft = !lookingLeft;
 			}
