@@ -237,6 +237,12 @@ void main_loop() {
 		Debug::FrameByFrame = !Debug::FrameByFrame;
 	}
 
+	if (Keyboard::IsKeyJustPressed(DEBUG_FAST_FORWARD) && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+		Debug::FastForward = !Debug::FastForward;
+	} else if (Keyboard::IsKeyJustReleased(DEBUG_FAST_FORWARD) && !Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+		Debug::FastForward = false;
+	}
+
 	if (Keyboard::IsKeyJustPressed(DEBUG_RESTART_SCENE)) {
 		SceneManager::RestartScene();
 	}
@@ -247,7 +253,7 @@ void main_loop() {
 		Camera::RotateWithPagUpDown(dt);
 	}
 
-	if (Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
+	if (Debug::FastForward || Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
 		dt = kMinDt;
 	}
 

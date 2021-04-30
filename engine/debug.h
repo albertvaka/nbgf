@@ -7,6 +7,7 @@ namespace Debug {
 #ifdef _DEBUG
     inline bool Draw = false;
     inline bool FrameByFrame = false;
+    inline bool FastForward = false;
 #else 
     static const bool Draw = false;
     static const bool FrameByFrame = false;

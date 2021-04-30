@@ -487,10 +487,9 @@ void JumpScene::Update(float dt)
 	const SDL_Scancode screen_left = SDL_SCANCODE_F6;
 	const SDL_Scancode screen_right = SDL_SCANCODE_F7;
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	const SDL_Scancode shift = SDL_SCANCODE_LSHIFT;
 	if (Keyboard::IsKeyJustPressed(restart)) {
 		// actual restart is done in main.cpp, this is here only to clear the save
-		if (Keyboard::IsKeyPressed(shift)) {
+		if (Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 			SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
 			saveState.Clear();
 			saveState.Save();
@@ -508,7 +507,7 @@ void JumpScene::Update(float dt)
 		skillTree.Enable(Skill::DASH);
 		skillTree.Enable(Skill::WALLJUMP);
 		skillTree.Enable(Skill::BREAK);
-		if (Keyboard::IsKeyPressed(shift)) {
+		if (Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 			skillTree.Enable(Skill::GUN);
 		}
 	}
@@ -520,6 +519,11 @@ void JumpScene::Update(float dt)
 	}
 	if (Keyboard::IsKeyJustPressed(killall)) {
 		for (Bat* e : Bat::GetAll()) {
+			if (e->screen == screenManager.CurrentScreen()) {
+				DieWithSmallExplosion(e);
+			}
+		}
+		for (FireSlime* e : FireSlime::GetAll()) {
 			if (e->screen == screenManager.CurrentScreen()) {
 				DieWithSmallExplosion(e);
 			}

@@ -5,7 +5,7 @@
 #include "screen.h"
 #include "bounds.h"
 
-// FIXME: Jumping against a slope that goes up in the same direction you are moving behaves weirdly.
+// FIXME: Jumping against a slope that goes up in the same direction you are moving won't let you jump and can get you through the ground at high dt
 
 inline bool IsGrounded(vec pos, vec size, veci* out_groundTile = nullptr, vec marginPixels = vec(1, 1.5)) {
 
