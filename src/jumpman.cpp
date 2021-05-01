@@ -57,12 +57,12 @@ const float kBulletVel = 400.f;
 const float kBfgCooldown = 0.6f;
 const float kBfgPushBack = 150.f;
 
-// damage
-const vec kTakeDamageKnockbackVel(180.f, -150.f);
+// knockback
 const float kDoDamageKnockbackVel = 120.f;
 const float kDoDamageKnockbackVelGrounded = 180.f;
 const float kDoDamageUpKnockbackVel = 200.f;
 const float kDoDamageDownKnockbackVel = -220.f;
+const vec kTakeDamageKnockbackVel(180.f, -150.f);
 const float kInvencibleTimeAfterHit = 1.0f;
 
 // sword attack
@@ -72,15 +72,11 @@ const vec kSwordAttackOffset = vec(16.f,-17.f);
 const float kSwordAttackDownRadius = 13.f;
 const vec kSwordAttackDownOffset = vec(2.f,3.f);
 
-const float kSwordAttackUpRadius = 20.f;
-const vec kSwordAttackUpOffset = vec(0.f, -29.f);
-
+const float kSwordAttackUpRadius = 21.f;
+const vec kSwordAttackUpOffset = vec(0.f, -30.f);
 
 const float kSwordAttackWallSlideRadius = 23.f;
 const vec kSwordAttackWallSlideOffset = vec(-16.f, -15.5f);
-
-
-
 
 // Sprite
 const vec kStandingSize = vec(14, 32);
