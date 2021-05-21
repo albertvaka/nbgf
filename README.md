@@ -488,7 +488,7 @@ This does leak memory, but it is only used in debug, so who cares.
 
 ### Free camera movement
 
-When both debug draw mode and frame-by-frame mode are enabled, you can move your camera freely with the keyboard arrows, zoom in and out with numpad + and -, and even rotate it with Av Pag and Re Pag.
+When both debug draw mode and frame-by-frame mode are enabled, you can move your camera freely with the keyboard arrows <kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd><kbd>←</kbd>, zoom in and out with numpad <kbd>+</kbd> and <kbd>-</kbd>, and even rotate it with <kbd>PgUp</kbd> and <kbd>PgDn</kbd>.
 
 ### Fast forward
 
@@ -510,7 +510,7 @@ On Windows, the Debug build of the game will also open a terminal window so you 
 
 ## Importers
 
-Python scripts are provided to generate C++ code from Tiled and TexturePacker projects. By using code generation, you compiler can ensure that all the resources you reference exist (avoiding runtime-only errors), and your IDE con provide code completion for them.
+Python scripts are provided to generate C++ code from Tiled and TexturePacker projects. By using code generation, you compiler can ensure that all the resources you reference exist (avoiding runtime-only errors), and your IDE can provide code completion for them.
 
 ### Tiled importer
 
