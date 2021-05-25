@@ -42,7 +42,7 @@ const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 // dash
 const float kVelDash = 400;
 const float kDashCooldown = 1.5f;
-const float kDashDuration = 0.3f;
+const float kDashDuration = 0.22f;
 
 // dive
 const float kVelDive = 400;
@@ -424,12 +424,13 @@ void JumpMan::Update(float dt)
 	}
 
 	// Clamp vel
-	if (vel.x < -kVelMax.x) vel.x = -kVelMax.x;
-	if (vel.x > kVelMax.x) vel.x = kVelMax.x;
+
+	float maxVelX = dashing ? kVelDash : kVelMax.x;
+	if (vel.x < -maxVelX) vel.x = -maxVelX;
+	if (vel.x > maxVelX) vel.x = maxVelX;
 	if (vel.y < -kVelMax.y) vel.y = -kVelMax.y;
-	if (!diving) {
-		if (vel.y > kVelMax.y) vel.y = kVelMax.y;
-	}
+	float maxVelDown = diving ? kVelDive : kVelMax.y;
+	if (vel.y > maxVelDown) vel.y = kVelMax.y;
 
 	// Do move
 	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
