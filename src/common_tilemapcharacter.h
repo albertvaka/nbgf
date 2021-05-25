@@ -176,9 +176,10 @@ horz_exit:
 	{
 		float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
 		for (int y = floor(pos.y - max_movement_into_slope); y < ceil(pos.y + max_movement_into_slope); y++) {
-			float E = 0.0001f;
-			if (map->IsPosOnSlope(posf.x, y - E)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
-				posf.y = y;
+			float E = 0.0001f; // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
+			if ((isOnSlope && map->GetTile(Tile::ToTiles(posf.x, y - E)).isFullSolid()) ||  map->IsPosOnSlope(posf.x, y - E))
+			{
+				posf.y = y - E;
 				ret.groundCollisionPos = veci(posf.x, y - E);
 				ret.groundCollision = map->GetTile(ret.groundCollisionPos);
 				ret.leftWallCollision = Tile::NONE;
