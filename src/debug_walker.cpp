@@ -38,9 +38,6 @@ void DebugWalker::Update(float dt)
 {
 	if (!alive) return;
 
-	grounded = IsGrounded(Bounds());
-
-
 	if (jumpTimeLeft > 0)
 	{
 		vel.y = kVelJump;

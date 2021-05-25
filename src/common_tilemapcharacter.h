@@ -5,59 +5,6 @@
 #include "screen.h"
 #include "bounds.h"
 
-// FIXME: Jumping against a slope that goes up in the same direction you are moving won't let you jump and can get you through the ground at high dt
-
-inline bool IsGrounded(const BoxBounds& bounds, veci* out_groundTile = nullptr, vec marginPixels = vec(1, 1.5)) {
-
-	GaemTileMap* tileMap = GaemTileMap::instance();
-
-	float y_bottom = bounds.Bottom();
-	float x_left = bounds.Left();
-	float x_right = bounds.Right();
-	float posx = bounds.Center().x;
-
-	// check slopes first, since we could otherwise find the corner of the tile below a slope first
-	if (tileMap->IsPosOnSlope(posx, y_bottom + 2)) {
-		if (out_groundTile) {
-			*out_groundTile = Tile::ToTiles(posx, y_bottom + 2);
-		}
-		return true;
-	}
-	if (tileMap->IsPosOnSlope(posx + 2, y_bottom)) {
-		if (out_groundTile) {
-			*out_groundTile = Tile::ToTiles(posx + 2, y_bottom);
-		}
-		return true;
-	}
-	if (tileMap->IsPosOnSlope(posx - 2, y_bottom)) {
-		if (out_groundTile) {
-			*out_groundTile = Tile::ToTiles(posx - 2, y_bottom);
-		}
-		return true;
-	}
-
-	int ty = Tile::ToTiles(y_bottom + marginPixels.y);
-	int tx_left = Tile::ToTiles(x_left + marginPixels.x);
-	int tx_right = Tile::ToTiles(x_right - marginPixels.x);
-	for (int tx = tx_left; tx <= tx_right; tx++) {
-		Tile t = tileMap->GetTile(tx, ty);
-		if (t.isFullSolid()) {
-			if (out_groundTile) {
-				*out_groundTile = veci(tx, ty);
-			}
-			return true;
-		}
-		if (t.isOneWay() && (ty * Tile::Size) + 1.f > y_bottom) {
-			if (out_groundTile) {
-				*out_groundTile = veci(tx, ty);
-			}
-			return true;
-		}
-	}
-
-	return false;
-}
-
 inline bool IsMovingTowardsInX(vec pos, vec vel, vec target) {
 	return (vel.x < 0 && pos.x > target.x) || (vel.x > 0 && pos.x < target.x);
 }
@@ -139,6 +86,8 @@ struct MoveResult {
 };
 
 //Based on code by: Jordi Santiago
+// FIXME: Jumping against or falling onto a slope that goes up in the same X direction you are moving
+// sometimes causes you to hit an invisible wall and can get you through the ground at high dt
 inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) {
 	MoveResult ret;
 

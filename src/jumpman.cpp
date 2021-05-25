@@ -40,7 +40,7 @@ const float kJumpTime = 0.35f;
 const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 
 // dash
-const float kVelDash = 350;
+const float kVelDash = 400;
 const float kDashCooldown = 1.5f;
 const float kDashDuration = 0.3f;
 
@@ -263,15 +263,6 @@ void JumpMan::Update(float dt)
 
 	anim.Update(dt);
 
-	veci groundTilePos(-1, -1);
-	grounded = IsGrounded(Bounds(), &groundTilePos);
-	Tile groundTile = Tile::NONE;
-	if (grounded) {
-		groundTile = GaemTileMap::instance()->GetTileUnsafe(groundTilePos);
-		if (groundTile.isSafeGround()) {
-			lastSafeTilePos = groundTilePos;
-		}
-	}
 
 	if (grounded || onWall) {
 		canDash = true;
@@ -513,7 +504,20 @@ void JumpMan::Update(float dt)
 			}
 			onWall = false;
 			grounded = true;
+			if (moved.groundCollision.isSafeGround()) {
+				lastSafeTilePos = moved.groundCollisionPos;
+			}
 		}
+	}
+	else {
+		grounded = false;
+	}
+
+	veci groundTilePos(-1, -1);
+	Tile groundTile = Tile::NONE;
+	if (grounded) {
+		groundTile = GaemTileMap::instance()->GetTileUnsafe(groundTilePos);
+
 	}
 
 	if (diving)
