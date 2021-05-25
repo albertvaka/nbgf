@@ -86,7 +86,6 @@ struct MoveResult {
 };
 
 //Based on code by: Jordi Santiago
-// FIXME: Jumping against a slope that goes up in the same X direction you are moving sometimes causes you to hit the solid block behind it
 inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) {
 	MoveResult ret;
 
@@ -201,7 +200,7 @@ horz_exit:
 			for (int x = xl; x <= xr; x++)
 			{
 				Tile t = map->GetTile(x, y);
-				if (t.isSolid()) //slopes should be collisionable when going up
+				if (t.isFullSolid())
 				{
 					posf.y = Tile::Bottom(y) + size.y;
 					ret.ceilingCollision = t;
