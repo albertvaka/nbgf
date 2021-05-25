@@ -86,8 +86,7 @@ struct MoveResult {
 };
 
 //Based on code by: Jordi Santiago
-// FIXME: Jumping against or falling onto a slope that goes up in the same X direction you are moving
-// sometimes causes you to hit an invisible wall and can get you through the ground at high dt
+// FIXME: Jumping against a slope that goes up in the same X direction you are moving sometimes causes you to hit the solid block behind it
 inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) {
 	MoveResult ret;
 
@@ -97,8 +96,9 @@ inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) 
 	GaemTileMap* map = GaemTileMap::instance();
 
 	vec appliedVel = vel;
-	Tile tileAtMyFeet = map->GetTile(Tile::ToTiles(pos.x, pos.y - 0.1f));
-	if (tileAtMyFeet.isSlope()) {
+
+	bool isOnSlope = map->CollidesWithSlope(pos, appliedVel.y, dt);
+	if (isOnSlope) {
 		// On a slope, we will override the Y displacement with the X displacement, either upwards or downwards.
 		// Pythagoras wouldn't approve that we move at the same velocity on a flat X axis than when move on both X and Y.
 		// The mathematically accurate value would be /2 but we don't want to slow the player that much either.
@@ -109,20 +109,19 @@ inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) 
 
 	//Debug::out << "----------";
 	//Debug::out << abs(pos.x - posf.x) / dt;
-	//Debug::out << "slope=" << tileAtMyFeet.isSlope();
+	//Debug::out << "slope=" << isOnSlope;
 
 	vec direction = posf - pos;
 	const float E = 1;
 	float halfWidth = size.x / 2;
 
 	//Skip horizontal collisions when on a slope
-	if (tileAtMyFeet.isSlope()) {
+	if (isOnSlope) {
 		goto horz_exit;
 	}
 
 	if (direction.x < 0) //Moving left
 	{
-
 		int xo = Tile::ToTiles(pos.x - halfWidth);
 		int xn = Tile::ToTiles(posf.x - halfWidth);
 		int yTop = Tile::ToTiles(pos.y - size.y + E);
@@ -168,6 +167,28 @@ inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) 
 horz_exit:
 	pos.x = posf.x;
 
+	// Handle slopes
+	if (direction.y < 0)
+	{
+		// TODO: Handle going against a slope while moving up (if we go fast enough to the side we still might collide with the floor)
+	}
+	else
+	{
+		float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
+		for (int y = floor(pos.y - max_movement_into_slope); y < ceil(pos.y + max_movement_into_slope); y++) {
+			float E = 0.0001f;
+			if (map->IsPosOnSlope(posf.x, y - E)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
+				posf.y = y;
+				ret.groundCollisionPos = veci(posf.x, y - E);
+				ret.groundCollision = map->GetTile(ret.groundCollisionPos);
+				ret.leftWallCollision = Tile::NONE;
+				ret.rightWallCollision = Tile::NONE;
+				goto vert_exit;
+			}
+		}
+	}
+
+
 	if (direction.y < 0) //Moving up
 	{
 		int yo = Tile::ToTiles(pos.y - size.y); // top edge
@@ -191,21 +212,6 @@ horz_exit:
 	}
 	else if (direction.y > 0) //Moving down
 	{
-		float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
-
-		//Debug::out << "getTile from=" << TileMap::offsetInTile(posf.x, pos.y - max_movement_into_slope) << ": " << map->GetTile(Tile::ToTiles(vec(posf.x, pos.y - max_movement_into_slope)));
-		//Debug::out << "getTile to=" << TileMap::offsetInTile(posf.x, pos.y + max_movement_into_slope) << ": " << map->GetTile(Tile::ToTiles(vec(posf.x, pos.y + max_movement_into_slope)));
-
-		for (int y = floor(pos.y - max_movement_into_slope); y < ceil(pos.y + max_movement_into_slope); y++) {
-			float E = 0.0001f;
-			if (map->IsPosOnSlope(posf.x, y - E)) { // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
-				posf.y = y;
-				ret.groundCollisionPos = veci(posf.x, y - E);
-				ret.groundCollision = map->GetTile(ret.groundCollisionPos);
-				goto vert_exit;
-			}
-		}
-
 		int yo = Tile::ToTiles(pos.y); // bottom edge
 		int yn = Tile::ToTiles(posf.y);
 		int xl = Tile::ToTiles(pos.x - halfWidth + E);

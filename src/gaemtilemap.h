@@ -14,9 +14,29 @@ struct GaemTileMap : TileMap<Tile>, SingleInstance<GaemTileMap>
 		outOfBoundsTile = Tile::SOLID_OUT_OF_BOUNDS;
 	}
 
+	bool IsPosBelowSlope(veci tilePos) const {
+		veci aboveTilePos = veci(tilePos.x, tilePos.y - 1);
+		Tile aboveTile = GetTile(aboveTilePos);
+		if (aboveTile.isRightSlope()) {
+			veci rightTilePos = veci(tilePos.x - 1, tilePos.y);
+			Tile rightTile = GetTile(rightTilePos);
+			return rightTile.isRightSlope();
+		}
+		if (aboveTile.isLeftSlope()) {
+			veci leftTilePos = veci(tilePos.x + 1, tilePos.y);
+			Tile leftTile = GetTile(leftTilePos);
+			return leftTile.isLeftSlope();
+		}
+		return false;
+	}
+
 	bool IsPosOnSlope(vec v) const { return IsPosOnSlope(v.x, v.y); }
 	bool IsPosOnSlope(float x, float y) const {
-		Tile tile = GetTile(Tile::ToTiles(x, y));
+		veci tilePos = Tile::ToTiles(x, y);
+		if (IsPosBelowSlope(tilePos)) {
+			return true;
+		}
+		Tile tile = GetTile(tilePos);
 		if (tile.isRightSlope()) {
 			vec offset = Tile::OffsetInTile(x, y);
 			return offset.y >= (Tile::Size - offset.x);
@@ -24,6 +44,17 @@ struct GaemTileMap : TileMap<Tile>, SingleInstance<GaemTileMap>
 		if (tile.isLeftSlope()) {
 			vec offset = Tile::OffsetInTile(x, y);
 			return offset.y >= offset.x;
+		}
+		return false;
+	}
+
+	bool CollidesWithSlope(vec pos, float velY, float dt) {
+		float finalY = pos.y + velY * dt;
+		while (pos.y <= finalY) {
+			if (IsPosOnSlope(pos.x, pos.y)) {
+				return true;
+			}
+			pos.y += 1.f;
 		}
 		return false;
 	}
