@@ -299,7 +299,7 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::ATTACK) && !Input::IsPressed(0, GameKeys::CROUCH)) {
+	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::ATTACK) && (!Input::IsPressed(0, GameKeys::CROUCH) || !SkillTree::instance()->IsEnabled(Skill::DIVE))) {
 		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			attacking = true;
