@@ -36,6 +36,18 @@ struct Tile : Tiled::Tile
 		return value >= SOLID_1;
 	}
 
+	bool IsInSolidPartOfSlope(float x, float y) {
+		if (isRightSlope()) {
+			vec offset = Tile::OffsetInTile(x, y);
+			return offset.y >= (Tile::Size - offset.x);
+		}
+		if (isLeftSlope()) {
+			vec offset = Tile::OffsetInTile(x, y);
+			return offset.y >= offset.x;
+		}
+		return false;
+	}
+
 	bool isSafeGround() const {
 		return (isSolid() && !isBreakable(BreakPower::ANY) && !isBreakableGround()) || isOneWay(); // maybe oneway shouldn't count
 	}

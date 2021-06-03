@@ -36,16 +36,7 @@ struct GaemTileMap : TileMap<Tile>, SingleInstance<GaemTileMap>
 		if (IsPosBelowSlope(tilePos)) {
 			return true;
 		}
-		Tile tile = GetTile(tilePos);
-		if (tile.isRightSlope()) {
-			vec offset = Tile::OffsetInTile(x, y);
-			return offset.y >= (Tile::Size - offset.x);
-		}
-		if (tile.isLeftSlope()) {
-			vec offset = Tile::OffsetInTile(x, y);
-			return offset.y >= offset.x;
-		}
-		return false;
+		return GetTile(tilePos).IsInSolidPartOfSlope(x, y);
 	}
 
 	bool CollidesWithSlope(vec pos, float velY, float dt) {
