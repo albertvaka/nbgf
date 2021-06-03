@@ -132,7 +132,7 @@ void JumpMan::DealDamage(vec target) {
 	else if (attackingUp) {
 		vel.y += kDoDamageUpKnockbackVel;
 	} else {
-		float knockback = grounded ? kDoDamageKnockbackVelGrounded : kDoDamageKnockbackVel;
+		float knockback = groundTile != Tile::NONE ? kDoDamageKnockbackVelGrounded : kDoDamageKnockbackVel;
 		if (pos.x > target.x) {
 			vel.x /= 2;
 			vel.x += knockback;
@@ -151,7 +151,7 @@ void JumpMan::DealDamage(vec target) {
 
 void JumpMan::UpdateMoving(float dt) 
 {
-	crouched = (grounded && Input::IsPressed(0, GameKeys::CROUCH));
+	crouched = (groundTile != Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH));
 	if (crouched) {
 		crouchedTime += dt;
 	}
@@ -162,7 +162,7 @@ void JumpMan::UpdateMoving(float dt)
 	vec acc = vec(0, 0);
 	if (Input::IsPressed(0,GameKeys::LEFT)) {
 		if (!attacking) lookingLeft = true;
-		if (grounded) {
+		if (groundTile != Tile::NONE) {
 			if (!crouched) acc.x -= kRunAcc;
 		}
 		else {
@@ -171,7 +171,7 @@ void JumpMan::UpdateMoving(float dt)
 	}
 	if (Input::IsPressed(0,GameKeys::RIGHT)) {
 		if (!attacking) lookingLeft = false;
-		if (grounded) {
+		if (groundTile != Tile::NONE) {
 			if (!crouched) acc.x += kRunAcc;
 		}
 		else {
@@ -199,7 +199,7 @@ void JumpMan::UpdateMoving(float dt)
 
 	// Calculate friction
 	vec fri = vec(0, 0);
-	if (grounded)
+	if (groundTile != Tile::NONE)
 	{
 		if (crouched)
 		{
@@ -264,11 +264,11 @@ void JumpMan::Update(float dt)
 	anim.Update(dt);
 
 
-	if (grounded || onWall) {
+	if (groundTile != Tile::NONE || onWall) {
 		canDash = true;
 	}
 
-	if (grounded) {
+	if (groundTile != Tile::NONE) {
 		onWall = false;
 	}
 
@@ -291,7 +291,7 @@ void JumpMan::Update(float dt)
 	}
 
 	if (!dashing && SkillTree::instance()->IsEnabled(Skill::DIVE) && divingRestTimer <= 0.f) {
-		if (!grounded && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
+		if (groundTile == Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			diving = true;
 			attacking = false;
@@ -383,7 +383,7 @@ void JumpMan::Update(float dt)
 		GaemTileMap* map = GaemTileMap::instance();
 
 		// JUMPERINO
-		if (Input::IsJustPressed(0, GameKeys::JUMP, 0.15f) && (grounded || onWall)) {
+		if (Input::IsJustPressed(0, GameKeys::JUMP, 0.15f) && (groundTile != Tile::NONE || onWall)) {
 			Input::ConsumeJustPressed(0, GameKeys::JUMP);
 
 			jumpTimeLeft = kJumpTime; // the jump upwards velocity can last up to this duration
@@ -392,29 +392,34 @@ void JumpMan::Update(float dt)
 				lookingLeft = !lookingLeft;
 				vel.x = lookingLeft ? -kVelWalljump : kVelWalljump;
 				DoPolvitoWallJump();
-			}
-			/*else if (groundTile.isSlope()) {
-				if (groundTile.isLeftSlope()) {
-					vel.x += kVelWalljump;
+			} else if (groundTile.isSlope()) {
+				// Jump a bit sideways when on slope
+				if (groundTile.isRightSlope()) {
+					if (vel.x >= -kVelWalljump) {
+						vel.x = -kVelWalljump;
+					}
 				}
 				else {
-					vel.x += -kVelWalljump;
+					if (vel.x <= kVelWalljump) {
+						vel.x = kVelWalljump;
+					}
 				}
-			}*/
+			}
+
 			float halfWidth = kStandingSize.x / 2;
 			Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
 			Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
 			bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
 			if (!hasBlockAbove) {
 				DoPolvitoJump();
-				grounded = false;
+				groundTile = Tile::NONE;
 			}
 			crouched = false;
 		}
 
 		UpdateMoving(dt);
 	}
-	else if (diving && !grounded) {
+	else if (diving && groundTile == Tile::NONE) {
 		if (Input::IsPressed(0, GameKeys::LEFT)) {
 			vel.x -= 10 * dt;
 		}
@@ -437,7 +442,7 @@ void JumpMan::Update(float dt)
 	pos = moved.pos + vec(0, size.y/2);
 
 	if (moved.leftWallCollision != Tile::NONE) {
-		if ((onWall || !grounded) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
 			if (!onWall && attacking && anim.current_frame > 0) {
 				attacking = false;
 			}
@@ -451,7 +456,7 @@ void JumpMan::Update(float dt)
 		lookingLeft = true;
 	}
 	else if (moved.rightWallCollision != Tile::NONE) {
-		if ((onWall || !grounded) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
 			if (!onWall && attacking && anim.current_frame > 0) {
 				attacking = false;
 			}
@@ -493,32 +498,20 @@ void JumpMan::Update(float dt)
 			pos.y += 3.f;
 			vel.y = 0;
 			crouched = false;
-			grounded = false;
+			groundTile = Tile::NONE;
 		}
 		else if (!destroyingGround) {
 			if (vel.y > 50) DoPolvitoLand();
-			if (moved.groundCollision.isSlope()) {
-				vel.y = 30.f; //this helps you get grounded as soon as the slope ends
-			}
-			else {
-				vel.y = 0;
-			}
+			vel.y = 0;
 			onWall = false;
-			grounded = true;
+			groundTile = moved.groundCollision;
 			if (moved.groundCollision.isSafeGround()) {
 				lastSafeTilePos = moved.groundCollisionPos;
 			}
 		}
 	}
 	else {
-		grounded = false;
-	}
-
-	veci groundTilePos(-1, -1);
-	Tile groundTile = Tile::NONE;
-	if (grounded) {
-		groundTile = GaemTileMap::instance()->GetTileUnsafe(groundTilePos);
-
+		groundTile = Tile::NONE;
 	}
 
 	if (diving)
@@ -528,7 +521,7 @@ void JumpMan::Update(float dt)
 	else if (dashing || attacking) 
 	{
 		size = kStandingSize;
-		if (dashing && grounded) {
+		if (dashing && groundTile != Tile::NONE) {
 			DoPolvitoRun(dt, lookingLeft, true);
 		}
 	} 
@@ -545,7 +538,7 @@ void JumpMan::Update(float dt)
 		{
 
 			size = kStandingSize;
-			if (grounded && vel.y >= 0) // if vel.y < 0 we reached ground from below, we are jumping and not actually grounded
+			if (groundTile != Tile::NONE && vel.y >= 0) // if vel.y < 0 we reached ground from below, we are jumping and not actually grounded
 			{
 				if (Input::IsPressed(0, GameKeys::LEFT) && !Input::IsPressed(0, GameKeys::RIGHT))
 				{
@@ -623,7 +616,7 @@ void JumpMan::Update(float dt)
 			if (onWall) {
 				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
 			}
-			if (grounded) {
+			if (groundTile != Tile::NONE) {
 				if (abs(vel.x) < 0.1) {
 					DoPolvitoLand();
 				}
@@ -661,7 +654,7 @@ void JumpMan::TakeDamage(vec src) {
 	else {
 		vel.x = -kTakeDamageKnockbackVel.x;
 	}
-	if (grounded) {
+	if (groundTile != Tile::NONE) {
 		vel.y = kTakeDamageKnockbackVel.y;
 	}
 	jumpTimeLeft = 0;
@@ -699,7 +692,7 @@ void JumpMan::Draw() const {
 		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
 		ImGui::Text("jumpTimeLeft: %f divingRestTimer: %f", jumpTimeLeft, divingRestTimer);
-		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d", grounded, onWall, attacking, diving, dashing);
+		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing);
 		ImGui::End();
 	}
 #endif

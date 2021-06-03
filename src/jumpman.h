@@ -33,7 +33,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         onWall = false;
         frozen = false;
         alive = true;
-        grounded = false;
+        groundTile = Tile::NONE;
         canDash = true;
         dashTimer = 0.0f;
         dashCooldown = 0.0f;
@@ -102,7 +102,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     bool attacking = false;
     bool attackingUp = false;
 
-    bool grounded = false;
+    Tile groundTile = Tile::NONE;
     bool crouched = false;
     bool lookingLeft = false;
     bool canDash = true;
