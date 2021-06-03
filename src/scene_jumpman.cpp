@@ -168,6 +168,7 @@ void JumpScene::LoadGame() {
 	
 	player.LoadGame(saveState);
 
+	Camera::SetCenter(player.GetCameraTargetPos()); // Needed so Update doesn't return because we are on a "camera transition"
 	Update(0); //Hackish way to make sure the entities with alive=false trigger things on other components before being deleted
 }
 
@@ -337,9 +338,9 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	LoadGame();
-
 	Camera::SetCenter(player.GetCameraTargetPos());
+
+	LoadGame();
 
 	Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([this](float dt){
 		UpdateCamera(dt);
@@ -494,7 +495,6 @@ void JumpScene::Update(float dt)
 			saveState.Clear();
 			saveState.Save();
 		}
-		return;
 	}
 	if (Keyboard::IsKeyJustPressed(teleport)) {
 		player.pos = Tiled::Entities::single_debug_teleport;
