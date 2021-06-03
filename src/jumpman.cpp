@@ -386,7 +386,6 @@ void JumpMan::Update(float dt)
 		if (Input::IsJustPressed(0, GameKeys::JUMP, 0.15f) && (groundTile != Tile::NONE || onWall)) {
 			Input::ConsumeJustPressed(0, GameKeys::JUMP);
 
-			jumpTimeLeft = kJumpTime; // the jump upwards velocity can last up to this duration
 			if (onWall) {
 				onWall = false;
 				lookingLeft = !lookingLeft;
@@ -406,15 +405,22 @@ void JumpMan::Update(float dt)
 				}
 			}
 
-			float halfWidth = kStandingSize.x / 2;
-			Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
-			Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
-			bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
-			if (!hasBlockAbove) {
-				DoPolvitoJump();
-				groundTile = Tile::NONE;
+			if (Input::IsPressed(0, GameKeys::CROUCH)) {
+				// Allow jumping down one-way tiles faster if jump is pressed while crouching
+				crouchedTime = kTimeCrouchedToJumpDownOneWayTile;
 			}
-			crouched = false;
+			else {
+				jumpTimeLeft = kJumpTime; // the jump upwards velocity can last up to this duration
+				float halfWidth = kStandingSize.x / 2;
+				Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
+				Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
+				bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
+				if (!hasBlockAbove) {
+					DoPolvitoJump();
+					groundTile = Tile::NONE;
+				}
+				crouched = false;
+			}
 		}
 
 		UpdateMoving(dt);
@@ -494,7 +500,7 @@ void JumpMan::Update(float dt)
 				anim.Ensure(AnimLib::WARRIOR_STANDUP, false);
 			}
 		}
-		if (moved.groundCollision.isOneWay() && crouchedTime > kTimeCrouchedToJumpDownOneWayTile) {
+		if (moved.groundCollision.isOneWay() && crouchedTime >= kTimeCrouchedToJumpDownOneWayTile) {
 			pos.y += 3.f;
 			vel.y = 0;
 			crouched = false;
