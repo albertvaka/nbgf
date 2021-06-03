@@ -167,27 +167,21 @@ horz_exit:
 	pos.x = posf.x;
 
 	// Handle slopes
-	if (direction.y < 0)
-	{
-		// TODO: Handle going against a slope while moving up (if we go fast enough to the side we still might collide with the floor)
-	}
-	else
-	{
-		float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
-		for (int y = floor(pos.y - max_movement_into_slope); y < ceil(pos.y + max_movement_into_slope); y++) {
-			float E = 0.0001f; // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
-			if ((isOnSlope && map->GetTile(Tile::ToTiles(posf.x, y - E)).isFullSolid()) ||  map->IsPosOnSlope(posf.x, y - E))
-			{
-				posf.y = y - E;
-				ret.groundCollisionPos = veci(posf.x, y - E);
-				ret.groundCollision = map->GetTile(ret.groundCollisionPos);
-				ret.leftWallCollision = Tile::NONE;
-				ret.rightWallCollision = Tile::NONE;
-				goto vert_exit;
-			}
+	float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
+	int from_y = floor(pos.y - max_movement_into_slope);
+	int to_y = (direction.y < 0) ? ceil(pos.y) : ceil(pos.y + max_movement_into_slope);
+	for (int y = from_y; y < to_y; y++) {
+		float E = 0.0001f; // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
+		if ((isOnSlope && map->GetTile(Tile::ToTiles(posf.x, y - E)).isFullSolid()) ||  map->IsPosOnSlope(posf.x, y - E))
+		{
+			posf.y = y - E;
+			ret.groundCollisionPos = veci(posf.x, y - E);
+			ret.groundCollision = map->GetTile(ret.groundCollisionPos);
+			ret.leftWallCollision = Tile::NONE;
+			ret.rightWallCollision = Tile::NONE;
+			goto vert_exit;
 		}
 	}
-
 
 	if (direction.y < 0) //Moving up
 	{
