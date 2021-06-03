@@ -175,6 +175,9 @@ struct Tile {
 		BG_132,
 		BG_133,
 		BG_134,
+		BG_135,
+		BG_136,
+		BG_137,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -236,8 +239,6 @@ struct Tile {
 		SOLID_33,
 		SOLID_34,
 		SOLID_35,
-		SOLID_36,
-		SOLID_37,
 		BREAKABLE_1,
 		BREAKABLE_2,
 		BREAKABLE_3,
@@ -247,15 +248,15 @@ struct Tile {
 	};
 
 	// Aliases
-	static constexpr Value BG_PLAIN_COLOR = BG_34;
-	static constexpr Value BG_DOOR_OPENING = BG_50;
+	static constexpr Value BG_PLAIN_COLOR = BG_36;
+	static constexpr Value BG_DOOR_OPENING = BG_53;
 	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
 	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
-	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_3;
-	static constexpr Value SOLID_SIMPLE = SOLID_6;
-	static constexpr Value SOLID_PLAIN_COLOR = SOLID_19;
-	static constexpr Value SOLID_DOOR = SOLID_20;
-	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_24;
+	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_1;
+	static constexpr Value SOLID_SIMPLE = SOLID_4;
+	static constexpr Value SOLID_PLAIN_COLOR = SOLID_17;
+	static constexpr Value SOLID_DOOR = SOLID_18;
+	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_22;
 	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_1;
 	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_2;
 	static constexpr Value BREAKABLE_EXPLOSIVE_BLOCK = BREAKABLE_3;
