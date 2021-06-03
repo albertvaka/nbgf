@@ -169,14 +169,16 @@ horz_exit:
 	// Handle slopes
 	float max_movement_into_slope = abs(appliedVel.x * dt) + 1.f;
 	int from_y = floor(pos.y - max_movement_into_slope);
-	int to_y = (direction.y < 0) ? ceil(pos.y) : ceil(pos.y + max_movement_into_slope);
+	int to_y = (direction.y < 0) ? ceil(pos.y) : ceil(pos.y + max_movement_into_slope); // don't snap to the slope if you are going up so you can jump from the slope
 	for (int y = from_y; y < to_y; y++) {
-		float E = 0.0001f; // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
-		if ((isOnSlope && map->GetTile(Tile::ToTiles(posf.x, y - E)).isFullSolid()) ||  map->IsPosOnSlope(posf.x, y - E))
+		const float E = 0.0001f; // hack: we want to get to the edge of a tile before stepping onto the next one, hence the epsilon deduced from the integer value.
+		veci tilePos = Tile::ToTiles(posf.x, y - E);
+		Tile tile = map->GetTile(tilePos);
+		if ((isOnSlope && tile.isFullSolid()) || map->IsPosOnSlope(posf.x, y - E))
 		{
 			posf.y = y - E;
-			ret.groundCollisionPos = veci(posf.x, y - E);
-			ret.groundCollision = map->GetTile(ret.groundCollisionPos);
+			ret.groundCollisionPos = tilePos;
+			ret.groundCollision = tile;
 			ret.leftWallCollision = Tile::NONE;
 			ret.rightWallCollision = Tile::NONE;
 			goto vert_exit;
