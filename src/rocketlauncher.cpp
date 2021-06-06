@@ -9,7 +9,7 @@
 #include "collide.h"
 #include "common_tilemapcharacter.h"
 
-const float kTimeBetweenMissiles = 3.f;
+const float kTimeBetweenMissiles = 3.5f;
 const vec kCanonOrigin = vec(0, -4);
 const vec kCanonLength = vec(10, 0);
 const vec kAwokenLedOffset = vec(-3, -7);

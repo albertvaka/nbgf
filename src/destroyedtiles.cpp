@@ -5,7 +5,8 @@
 #include "gaemtilemap.h"
 #include "assets.h"
 
-const float timeToRespawn = 10.f;
+constexpr const float kTimeToRespawn = 10.f;
+constexpr const float kTimeToRespawnHard = 4.5f;
 
 DestroyedTiles::DestroyedTiles()
 	: destroyedParticles(Assets::spritesheetTexture)
@@ -59,7 +60,7 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn)
 	}
 
 	if (respawn) {
-		toSpawn.emplace_back(x, y, t, timeToRespawn);
+		toSpawn.emplace_back(x, y, t, t.isBreakable(Tile::BreakPower::HARD)? kTimeToRespawnHard : kTimeToRespawn);
 	} else {
 		permanentlyDestroyed.emplace_back(x, y);
 	}
