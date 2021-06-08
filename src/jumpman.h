@@ -39,6 +39,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         dashCooldown = 0.0f;
         divingRestTimer = 0.f;
         justHit = false;
+        jumpFromWallTimer = 0.f;
         attacking = false;
         playerAttack.alive = false;
         ScreenManager::instance()->UpdateCurrentScreen(pos);
@@ -83,6 +84,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
 
     bool onWall = false;
     float jumpTimeLeft = 0.0f;
+    float jumpFromWallTimer = 0.f;
     float crouchedTime = 0.0f;
     bool frozen = false;
     bool justHit = false;

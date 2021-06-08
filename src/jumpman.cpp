@@ -38,6 +38,7 @@ const float kVelJump = -150;
 const float kVelWalljump = 90;
 const float kJumpTime = 0.35f;
 const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
+const float kTimeToJumpFromWallAfterLettingGo = 0.15f;
 
 // dash
 const float kVelDash = 400;
@@ -378,17 +379,28 @@ void JumpMan::Update(float dt)
 		playerAttack.alive = false;
 	}
 
+	if (onWall) {
+		jumpFromWallTimer = kTimeToJumpFromWallAfterLettingGo;
+	} else {
+		jumpFromWallTimer -= dt;
+	}
+
 	if (!dashing && !diving) {
 
 		GaemTileMap* map = GaemTileMap::instance();
 
 		// JUMPERINO
-		if (Input::IsJustPressed(0, GameKeys::JUMP, 0.15f) && (groundTile != Tile::NONE || onWall)) {
+		if (Input::IsJustPressed(0, GameKeys::JUMP, 0.15f) && (groundTile != Tile::NONE || jumpFromWallTimer > 0.f)) {
 			Input::ConsumeJustPressed(0, GameKeys::JUMP);
 
-			if (onWall) {
-				onWall = false;
-				lookingLeft = !lookingLeft;
+			bool didJumpFromWall = false;
+			if (jumpFromWallTimer > 0.f) {
+				didJumpFromWall = true;
+				jumpFromWallTimer = 0.f;
+				if (onWall) {
+					onWall = false;
+					lookingLeft = !lookingLeft;
+				}
 				vel.x = lookingLeft ? -kVelWalljump : kVelWalljump;
 				DoPolvitoWallJump();
 			} else if (groundTile.isSlope()) {
@@ -414,10 +426,12 @@ void JumpMan::Update(float dt)
 				float halfWidth = kStandingSize.x / 2;
 				Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
 				Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
-				bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
-				if (!hasBlockAbove) {
-					DoPolvitoJump();
-					groundTile = Tile::NONE;
+				if (!didJumpFromWall) {
+					bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
+					if (!hasBlockAbove) {
+						DoPolvitoJump();
+						groundTile = Tile::NONE;
+					}
 				}
 				crouched = false;
 			}
