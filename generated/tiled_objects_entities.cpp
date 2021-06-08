@@ -9,7 +9,7 @@ const std::unordered_map<int, vec> Entities::angrybat = {
 	{ 680, vec(7424.4015f, 591.182f) },
 	{ 691, vec(6222.833333333333f, 1038.166666666667f) },
 	{ 697, vec(6176.5f, 803.25f) },
-	{ 724, vec(6408.404f, 715.7505f) },
+	{ 724, vec(6501.404f, 715.7505f) },
 	{ 747, vec(6678.5f, 963.0f) },
 	{ 751, vec(6482.0f, 846.0f) },
 	{ 866, vec(6511.333333333333f, 1775.0f) },
@@ -19,16 +19,17 @@ const std::unordered_map<int, vec> Entities::angrybat = {
 };
 
 const std::unordered_map<int, vec> Entities::angrybatawake = {
-	{ 780, vec(6063.0f, 751.5f) },
-	{ 781, vec(6567.5f, 756.0f) },
+	{ 893, vec(2985.33333333333f, 690.666666666667f) },
 };
+const vec Entities::single_angrybatawake = vec(2985.33333333333f, 690.666666666667f);
+
 
 const std::unordered_map<int, vec> Entities::bat = {
 	{ 50, vec(5232.0f, 1328.0f) },
 	{ 62, vec(6208.0f, 1312.0f) },
 	{ 63, vec(6335.0f, 1441.0f) },
 	{ 65, vec(6414.75f, 1312.5f) },
-	{ 117, vec(5798.0f, 1580.0f) },
+	{ 117, vec(5514.5f, 1687.0f) },
 	{ 127, vec(3772.0f, 1263.5f) },
 	{ 196, vec(4922.667f, 1653.667f) },
 	{ 197, vec(4957.667f, 1637.333f) },
@@ -40,9 +41,9 @@ const std::unordered_map<int, vec> Entities::bat = {
 	{ 247, vec(6223.333333333333f, 1406.666666666667f) },
 	{ 481, vec(2506.635f, 988.1466f) },
 	{ 746, vec(6366.0f, 947.0f) },
-	{ 782, vec(6433.5f, 716.5f) },
-	{ 791, vec(8192.0f, 1534.0f) },
+	{ 782, vec(6518.5f, 716.5f) },
 	{ 889, vec(7346.66666666667f, 996.666666666667f) },
+	{ 890, vec(6473.0f, 716.75f) },
 };
 
 const std::unordered_map<int, vec> Entities::batawake = {
@@ -51,7 +52,6 @@ const std::unordered_map<int, vec> Entities::batawake = {
 	{ 192, vec(4680.0f, 1816.667f) },
 	{ 744, vec(6059.5f, 894.0f) },
 	{ 745, vec(6137.5f, 967.0f) },
-	{ 783, vec(6651.0f, 757.0f) },
 	{ 883, vec(8446.335f, 589.3335f) },
 };
 
@@ -62,9 +62,9 @@ const vec Entities::single_boss_bipedal = vec(3379.27f, 1888.754f);
 
 
 const std::unordered_map<int, vec> Entities::debug_teleport = {
-	{ 865, vec(8278.0f, 2074.666666666667f) },
+	{ 907, vec(8368.5f, 1480.0f) },
 };
-const vec Entities::single_debug_teleport = vec(8278.0f, 2074.666666666667f);
+const vec Entities::single_debug_teleport = vec(8368.5f, 1480.0f);
 
 
 const std::unordered_map<int, vec> Entities::enemy_door = {
@@ -72,10 +72,10 @@ const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 118, vec(5473.667f, 1584.667f) },
 	{ 129, vec(4002.55f, 1410.545f) },
 	{ 359, vec(3291.25f, 1585.0f) },
-	{ 792, vec(8242.0f, 1442.181818181818f) },
-	{ 812, vec(8311.58166666667f, 2048.624833333333f) },
 	{ 885, vec(8464.0f, 479.0f) },
 	{ 886, vec(8593.0f, 481.0f) },
+	{ 906, vec(8920.5f, 2032.5f) },
+	{ 908, vec(5618.0f, 1586.5f) },
 };
 
 const std::unordered_map<int, vec> Entities::explosive = {
@@ -155,6 +155,8 @@ const std::unordered_map<int, vec> Entities::healthup = {
 	{ 60, vec(6464.083f, 1404.3333f) },
 	{ 661, vec(7570.66666666667f, 1535.682f) },
 	{ 808, vec(6163.666666666667f, 1732.333333333333f) },
+	{ 892, vec(8752.5f, 1728.0f) },
+	{ 896, vec(9472.0f, 1489.333333333333f) },
 };
 
 const std::unordered_map<int, vec> Entities::initial_batawake = {
@@ -170,9 +172,9 @@ const vec Entities::single_lava_initial_height = vec(447.5f, 740.0f);
 
 
 const std::unordered_map<int, vec> Entities::mantis = {
-	{ 809, vec(8366.75166666667f, 1854.208166666667f) },
-	{ 810, vec(8423.171666666669f, 1850.458166666667f) },
-	{ 813, vec(8858.0f, 1885.0f) },
+	{ 902, vec(8958.375f, 1843.479f) },
+	{ 903, vec(9014.795f, 1839.729f) },
+	{ 904, vec(9449.625f, 1874.271f) },
 };
 
 const std::unordered_map<int, vec> Entities::minotaur = {
@@ -184,23 +186,21 @@ const vec Entities::single_minotaur = vec(5963.0f, 618.5f);
 const std::unordered_map<int, vec> Entities::rocket_launcher = {
 	{ 474, vec(1568.25f, 992.499666666667f) },
 	{ 477, vec(1086.75f, 992.9995f) },
-	{ 659, vec(7682.79666666667f, 1440.318f) },
-	{ 660, vec(8036.66666666667f, 1441.182f) },
+	{ 659, vec(7682.79666666667f, 1456.318f) },
+	{ 660, vec(8036.66666666667f, 1457.182f) },
 	{ 836, vec(8417.385f, 1537.724f) },
 	{ 839, vec(8419.38016666667f, 1631.807333333333f) },
 	{ 841, vec(8800.0f, 1631.333333333333f) },
 	{ 862, vec(7578.58333333333f, 1984.583333333333f) },
 	{ 863, vec(7231.2133333333295f, 1985.4163333333331f) },
 	{ 864, vec(6938.08333333333f, 1986.083333333333f) },
-	{ 869, vec(8782.0f, 1632.666666666667f) },
-	{ 870, vec(8434.66666666667f, 1631.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::save = {
 	{ 126, vec(5553.5336f, 1423.114f) },
 	{ 213, vec(3601.0f, 1753.0f) },
 	{ 681, vec(7707.4845000000005f, 651.849f) },
-	{ 853, vec(8619.5f, 1990.0f) },
+	{ 895, vec(9225.0f, 1598.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::skill_attack = {
