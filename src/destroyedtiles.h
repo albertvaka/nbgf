@@ -11,7 +11,7 @@ struct DestroyedTiles : SingleInstance<DestroyedTiles>
 {
 	DestroyedTiles();
 
-	void Destroy(int x, int y, bool animated=true, bool respawn=true);
+	void Destroy(int x, int y, bool respawn=true);
 	void Update(float dt);
 
 	void Draw() const {

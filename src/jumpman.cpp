@@ -501,9 +501,10 @@ void JumpMan::Update(float dt)
 		bool destroyingGround = false;
 		bool actuallyDiving = diving && divingRestTimer <= 0.f;
 		if (actuallyDiving) {
-			if (moved.groundCollision.isBreakableGround()) {
+			if (moved.groundCollision.isBreakableGround() || moved.groundCollision.isBreakable(SkillTree::instance()->GetBreakPower())) {
 				Fx::Screenshake::StartPreset(Fx::Screenshake::Preset::Stomp);
-				DestroyedTiles::instance()->Destroy(moved.groundCollisionPos.x, moved.groundCollisionPos.y, true, false);
+				bool respawnTiles = !moved.groundCollision.isBreakableGround();
+				DestroyedTiles::instance()->Destroy(moved.groundCollisionPos.x, moved.groundCollisionPos.y, respawnTiles);
 				pos.y += 1; // move past the floor we just destroyed
 				destroyingGround = true;
 			}

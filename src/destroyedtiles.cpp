@@ -37,7 +37,7 @@ const vec vel[4] = {
 	{-12,-20},
 };
 
-void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn)
+void DestroyedTiles::Destroy(int x, int y, bool respawn)
 {
 
 	GaemTileMap* map = GaemTileMap::instance();
@@ -49,7 +49,7 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn)
 
 	map->SetTile(x, y, t.GetTileBehind());
 
-	if (animated) {
+	//if (animated) {
 		destroyedParticles.pos = Tile::Bounds(x, y).Center();
 		for (int i = 0; i < 4; i++) {
 			PartSys::Particle& p = destroyedParticles.AddParticle();
@@ -57,7 +57,7 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn)
 			p.vel = vel[i];
 			p.sprite = int(t);
 		}
-	}
+	//}
 
 	if (respawn) {
 		toSpawn.emplace_back(x, y, t, t.isBreakable(Tile::BreakResistance::HARD)? kTimeToRespawnHard : kTimeToRespawn);
@@ -69,7 +69,7 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn)
 		veci neigbours[4] = { veci(x + 1, y), veci(x - 1, y), veci(x, y + 1), veci(x, y - 1) };
 		for (auto neighbour : neigbours) {
 			if (map->GetTile(neighbour) == t) {
-				Destroy(neighbour.x, neighbour.y, animated, respawn);
+				Destroy(neighbour.x, neighbour.y, respawn);
 			}
 		}
 	}

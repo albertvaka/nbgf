@@ -63,7 +63,7 @@ private:
 			{
 				for (int y = yTop; y <= yBottom; y++)
 				{
-					DestroyedTiles::instance()->Destroy(x,y,true,respawn_tiles);
+					DestroyedTiles::instance()->Destroy(x,y,respawn_tiles);
 				}
 			}
 		}
