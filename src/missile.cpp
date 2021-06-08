@@ -75,7 +75,7 @@ void Missile::Update(float dt)
 		}
 	}
 
-	if (SmallBulletTilemapCollision(this, Tile::BreakPower::HARD)) {
+	if (SmallBulletTilemapCollision(this, Tile::BreakResistance::HARD_OR_LOWER)) {
 		Bat::AwakeNearbyBats(pos);
 		explode();
 		return;

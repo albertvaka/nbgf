@@ -49,7 +49,7 @@ struct Tile : Tiled::Tile
 	}
 
 	bool isSafeGround() const {
-		return (isSolid() && !isBreakable(BreakPower::ANY) && !isBreakableGround()) || isOneWay(); // maybe oneway shouldn't count
+		return (isSolid() && !isBreakable(BreakResistance::ANY) && !isBreakableGround()) || isOneWay(); // maybe oneway shouldn't count
 	}
 
 	Tile GetTileBehind() const { // What's "behind" of this tile when it breaks
@@ -61,19 +61,25 @@ struct Tile : Tiled::Tile
 	}
 
 	bool IsChainBreakable() const { // Breaking it breaks the neighbouring tiles of the same type
-		return isBreakableGround() || (isBreakable(BreakPower::HARD) && !isBreakable(BreakPower::SOFT));
+		return isBreakableGround() || (isBreakable(BreakResistance::HARD_OR_LOWER) && !isBreakable(BreakResistance::SOFT));
 	}
 
-	enum class BreakPower {
+	enum class BreakResistance {
 		NONE = 0,
 		SOFT,
 		HARD,
-		ANY = HARD,
+		HARD_OR_LOWER,
+		ANY = HARD_OR_LOWER,
 	};
 
-	bool isBreakable(BreakPower breakPower) const {
-		if (breakPower == BreakPower::NONE) return false;
-		if (breakPower == BreakPower::SOFT) return value >= BREAKABLE_1 && value < BREAKABLE_HARD_1; // Exclude hard breakable tiles
+	bool isHardBreakable() const {
+		return value >= BREAKABLE_HARD_1 && value < BREAKABLE_GND_1; // Exclude soft and ground breakable tiles
+	}
+
+	bool isBreakable(BreakResistance breakPower) const {
+		if (breakPower == BreakResistance::NONE) return false;
+		if (breakPower == BreakResistance::SOFT) return value >= BREAKABLE_1 && value < BREAKABLE_HARD_1; // Exclude hard breakable tiles
+		if (breakPower == BreakResistance::HARD) return value >= BREAKABLE_HARD_1 && value < BREAKABLE_GND_1; // Exclude hard breakable tiles
 		return value >= BREAKABLE_1 && value < BREAKABLE_GND_1; // Soft and hard breakable tiles
 	}
 

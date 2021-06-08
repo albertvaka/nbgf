@@ -7,7 +7,7 @@
 // Takes the bullet radius into account to calculate collisions,
 // use SmallBulletTilemapCollision for single-pixel collisions
 template<class T>
-bool BigBulletTilemapCollision(T* bullet, Tile::BreakPower breakTilesPower = Tile::BreakPower::NONE) {
+bool BigBulletTilemapCollision(T* bullet, Tile::BreakResistance breakTilesPower = Tile::BreakResistance::NONE) {
 	GaemTileMap* map = GaemTileMap::instance();
 	vec toTheOutside = bullet->vel.Perp().Normalized() * bullet->radius * 0.85f;
 	vec positionsToCheck[] = { bullet->pos + toTheOutside, bullet->pos - toTheOutside };
@@ -34,7 +34,7 @@ hit:
 // single-pixel collision, use BigBulletTilemapCollision if you want to 
 // take the radius of the bullet into account
 template<class T>
-bool SmallBulletTilemapCollision(T* bullet, Tile::BreakPower breakTilesPower = Tile::BreakPower::NONE) {
+bool SmallBulletTilemapCollision(T* bullet, Tile::BreakResistance breakTilesPower = Tile::BreakResistance::NONE) {
 	GaemTileMap* map = GaemTileMap::instance();
 	veci t = Tile::ToTiles(bullet->pos);
 	Tile tile = map->GetTile(t);

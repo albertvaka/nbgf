@@ -60,7 +60,7 @@ void DestroyedTiles::Destroy(int x, int y, bool animated, bool respawn)
 	}
 
 	if (respawn) {
-		toSpawn.emplace_back(x, y, t, t.isBreakable(Tile::BreakPower::HARD)? kTimeToRespawnHard : kTimeToRespawn);
+		toSpawn.emplace_back(x, y, t, t.isBreakable(Tile::BreakResistance::HARD)? kTimeToRespawnHard : kTimeToRespawn);
 	} else {
 		permanentlyDestroyed.emplace_back(x, y);
 	}

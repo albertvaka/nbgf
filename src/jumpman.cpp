@@ -462,7 +462,7 @@ void JumpMan::Update(float dt)
 	pos = moved.pos + vec(0, size.y/2);
 
 	if (moved.leftWallCollision != Tile::NONE) {
-		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.leftWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
 			if (!onWall && attacking && anim.current_frame > 0) {
 				attacking = false;
 			}
@@ -476,7 +476,7 @@ void JumpMan::Update(float dt)
 		lookingLeft = true;
 	}
 	else if (moved.rightWallCollision != Tile::NONE) {
-		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) {
+		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.rightWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
 			if (!onWall && attacking && anim.current_frame > 0) {
 				attacking = false;
 			}

@@ -29,7 +29,7 @@ void HealthUp::Draw() const
 		return;
 	}
 
-	if (GaemTileMap::instance()->GetTile(Tile::ToTiles(pos)).isBreakable(Tile::BreakPower::ANY)) {
+	if (GaemTileMap::instance()->GetTile(Tile::ToTiles(pos)).isBreakable(Tile::BreakResistance::ANY)) {
 		//Don't draw behind breakables
 		return;
 	}

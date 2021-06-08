@@ -21,10 +21,10 @@ struct SkillTree : SingleInstance<SkillTree>
 {
 	SkillTree();
 
-	Tile::BreakPower GetBreakPower() const {
-		if (IsEnabled(Skill::DAMAGE_UP)) return Tile::BreakPower::ANY;
-		if (IsEnabled(Skill::BREAK)) return Tile::BreakPower::SOFT;
-		return Tile::BreakPower::NONE;
+	Tile::BreakResistance GetBreakPower() const {
+		if (IsEnabled(Skill::DAMAGE_UP)) return Tile::BreakResistance::HARD_OR_LOWER;
+		if (IsEnabled(Skill::BREAK)) return Tile::BreakResistance::SOFT;
+		return Tile::BreakResistance::NONE;
 	}
 	
 	int GetDamage() const {
