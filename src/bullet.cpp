@@ -47,7 +47,7 @@ void Bullet::Update(float dt)
 		}
 	}
 
-	if (BigBulletTilemapCollision(this, SkillTree::instance()->GetBreakPower())) {
+	if (BigBulletTilemapCollision(this, Tile::BreakResistance::HARD_OR_LOWER)) {
 		Explode();
 		return;
 	}

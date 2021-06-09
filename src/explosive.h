@@ -23,7 +23,7 @@ struct Explosive : SelfRegister<Explosive>
 			}
 		}
 
-		GaemTileMap::instance()->SetTile(targetTile, Tile::BREAKABLE_EXPLOSIVE_BLOCK);
+		GaemTileMap::instance()->SetTile(targetTile, Tile::BREAKABLE_HARD_EXPLOSIVE_BLOCK);
 		target = Tile::Bounds(targetTile);
 	}
 

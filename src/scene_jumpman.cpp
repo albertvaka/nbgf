@@ -70,6 +70,10 @@ JumpScene::JumpScene(int saveSlot)
 	fogPartSys.min_interval = 4.5f;
 	fogPartSys.max_interval = 6.f;
 
+	for (const BoxBounds& b : Tiled::Areas::lava_bg) {
+		new Parallax(b, Assets::lavaParallaxTextures, 0.3f, 1.f, -410.f);
+	}
+
 	for (const BoxBounds& b : Tiled::Areas::parallax_forest) {
 		new Parallax(b, Assets::forestParallaxTextures, 0.25f, 1.f, 172.f);
 	}
@@ -177,7 +181,6 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 	switch (g->skill) {
 	case Skill::WALLJUMP:
 	{
-		raising_lava->SetLevel(raising_lava_target_height);
 	}
 	break;
 	case Skill::ATTACK:
@@ -216,6 +219,7 @@ void JumpScene::EnterScene()
 	BigItem* break_skill = new BigItem(Tiled::Entities::single_skill_breakblocks, Skill::BREAK);
 	new BigItem(Tiled::Entities::single_skill_attack, Skill::ATTACK);
 	new BigItem(Tiled::Entities::single_skill_dive, Skill::DIVE);
+	new BigItem(Tiled::Entities::single_skill_dash, Skill::DASH);
 
 	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
 
@@ -481,6 +485,18 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 	}
 
+	for (const BoxBounds& a : Tiled::Areas::trigger_lava) {
+		if (a.Contains(player.pos)) {
+			raising_lava->SetLevel(raising_lava_target_height);
+		}
+	}
+
+	for (const BoxBounds& a : Tiled::Areas::trigger_fast_lava) {
+		if (a.Contains(player.pos)) {
+			raising_lava->SetRaiseSpeed(Lava::kFastRaiseSpeed);
+		}
+	}
+
 #ifdef _DEBUG
 	const SDL_Scancode killall = SDL_SCANCODE_F11;
 	const SDL_Scancode unlockbasics = SDL_SCANCODE_F8;
@@ -582,19 +598,22 @@ void JumpScene::Update(float dt)
 			//TODO: Pickup animation or popup or something
 			switch(g->skill) {
 				case Skill::WALLJUMP:
-					rotoText.ShowMessage("WallJump");
+					rotoText.ShowMessage("You remembered\nhow to walljump");
 					break;
 				case Skill::ATTACK:
-					rotoText.ShowMessage("You remembered you\nhave a sword!");
+					rotoText.ShowMessage("You remembered\nhow to fight!");
 					break;
 				case Skill::DIVE:
-					rotoText.ShowMessage("Dive down");
+					rotoText.ShowMessage("You remembered\nhow to stab down");
+					break;
+				case Skill::DASH:
+					rotoText.ShowMessage("You remembered\nhow to dash");
 					break;
 				case Skill::GUN:
-					rotoText.ShowMessage("Big F. Gun");
+					rotoText.ShowMessage("You remembered\nyour Big F. Gun");
 					break;
 				case Skill::BREAK:
-					rotoText.ShowMessage("You can now\nbreak stuff!");
+					rotoText.ShowMessage("Your sword can\nnow break stuff!");
 					break;
 				default:
 					break;

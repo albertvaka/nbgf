@@ -18,8 +18,6 @@ namespace Assets
 	inline GPU_Image* scifiTexture;
 	inline GPU_Image* minotaurTexture;
 
-	inline GPU_Image* menuBgTexture;
-
 	inline GPU_Image* fogTexture;
 
 	inline TTF_Font* font_30;
@@ -34,6 +32,7 @@ namespace Assets
 
 	inline Sound soundDeath;
 
+	inline std::array<GPU_Image*, 1> lavaParallaxTextures;
 	inline std::array<GPU_Image*, 3> forestParallaxTextures;
 	inline std::array<GPU_Image*, 4> caveParallaxTextures;
 	inline std::array<GPU_Image*, 4> islandParallaxTextures;

@@ -13,7 +13,6 @@ struct Entities {
 	// Objects
 	static const std::unordered_map<int, vec> angrybat;
 	static const std::unordered_map<int, vec> angrybatawake;
-	static const vec single_angrybatawake;
 	static const std::unordered_map<int, vec> bat;
 	static const std::unordered_map<int, vec> batawake;
 	static const std::unordered_map<int, vec> boss_bipedal;
@@ -42,6 +41,8 @@ struct Entities {
 	static const vec single_skill_attack;
 	static const std::unordered_map<int, vec> skill_breakblocks;
 	static const vec single_skill_breakblocks;
+	static const std::unordered_map<int, vec> skill_dash;
+	static const vec single_skill_dash;
 	static const std::unordered_map<int, vec> skill_dive;
 	static const vec single_skill_dive;
 	static const std::unordered_map<int, vec> skill_gun;
