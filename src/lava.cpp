@@ -14,7 +14,6 @@ constexpr const float kWaveHeight = 2.8f;
 constexpr const float kSpeed = 3.0f;
 constexpr const float kDistanceBetweenParticleSpawners = 15.f;
 
-constexpr const float kRaiseSpeed = 15.f;
 
 Lava::Lava(const BoxBounds& b)
 	: bounds(b)
@@ -51,23 +50,23 @@ Mates::Range Lava::GetChunksOnScreen() const {
 void Lava::Update(float dt) {
 	timer += dt;
 	if (targetY > bounds.top) {
-		if (targetY - bounds.top < kRaiseSpeed * dt) {
+		if (targetY - bounds.top < raiseSpeed * dt) {
 			bounds.height += bounds.top - targetY;
 			bounds.top = targetY;
 		}
 		else {
-			bounds.top += kRaiseSpeed * dt;
-			bounds.height -= kRaiseSpeed * dt;
+			bounds.top += raiseSpeed * dt;
+			bounds.height -= raiseSpeed * dt;
 		}
 	}
 	else if (targetY < bounds.top) {
-		if (bounds.top - targetY < kRaiseSpeed * dt) {
+		if (bounds.top - targetY < raiseSpeed * dt) {
 			bounds.height += bounds.top - targetY;
 			bounds.top = targetY;
 		}
 		else {
-			bounds.top -= kRaiseSpeed * dt;
-			bounds.height += kRaiseSpeed * dt;
+			bounds.top -= raiseSpeed * dt;
+			bounds.height += raiseSpeed * dt;
 		}
 	}
 

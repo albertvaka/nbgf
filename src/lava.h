@@ -6,10 +6,15 @@
 
 struct Lava : SelfRegister<Lava>
 {
+	static constexpr const float kRaiseSpeed = 15.f;
+	static constexpr const float kFastRaiseSpeed = 30.f;
+
 	PartSys lavaPartSys;
 
 	BoxBounds bounds;
 	float targetY;
+
+	float raiseSpeed = kRaiseSpeed;
 
 	float timer = 0.f;
 	explicit Lava(const BoxBounds& bounds);
@@ -22,6 +27,10 @@ struct Lava : SelfRegister<Lava>
 			bounds.height += bounds.top - targetY;
 			bounds.top = targetY;
 		}
+	}
+
+	void SetRaiseSpeed(float speed) {
+		raiseSpeed = speed;
 	}
 
 	float CurrentLevel() {
