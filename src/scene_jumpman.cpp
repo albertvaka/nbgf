@@ -635,9 +635,9 @@ void JumpScene::Update(float dt)
 
 	destroyedTiles.Update(dt);
 
-	if (raising_lava->CurrentLevel() <= raising_lava_target_height+1.f) {
-		raising_lava->SetLevel(Tiled::Entities::single_lava_initial_height.y);
-	}
+//	if (raising_lava->CurrentLevel() <= raising_lava_target_height+1.f) {
+//		raising_lava->SetLevel(Tiled::Entities::single_lava_initial_height.y);
+//	}
 	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);
 	}
