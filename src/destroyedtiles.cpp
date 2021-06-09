@@ -97,6 +97,7 @@ void DestroyedTiles::LoadGame(const SaveState& save)
 	int x, y;
 	GaemTileMap* map = GaemTileMap::instance();
 	while (s >> x >> y) {
+		permanentlyDestroyed.emplace_back(x, y);
 		Tile t = map->GetTile(x, y);
 		map->SetTile(x, y, t.GetTileBehind());
 	}
