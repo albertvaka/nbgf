@@ -60,6 +60,11 @@ void Lava::Update(float dt) {
 		}
 	}
 	else if (targetY < bounds.top) {
+		float camBottom = Camera::Bounds().Bottom();
+		if (camBottom < bounds.top) {
+			bounds.top = camBottom - 1.f;
+		}
+
 		if (bounds.top - targetY < raiseSpeed * dt) {
 			bounds.height += bounds.top - targetY;
 			bounds.top = targetY;
