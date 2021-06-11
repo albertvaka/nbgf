@@ -4,7 +4,7 @@
 #include "input.h"
 #include "assets.h"
 #include "anim_lib.h"
-#include "bullet.h"
+#include "camera.h"
 #include "window.h"
 
 
@@ -19,10 +19,6 @@ void Player::Update(float dt)
 {
 	vec mouseFromCenter = Mouse::GetPositionInWorld() - Camera::Center();
 	pos = Camera::Center() + mouseFromCenter.Normalized() * distance;
-	
-	if (Mouse::IsJustPressed(Mouse::Button::Left)) {
-		new Bullet(pos, mouseFromCenter.Normalized() * bulletSpeed);
-	}
 	
 }
 
