@@ -7,11 +7,9 @@
 
 struct SceneMain : Scene {
 
-	Player player;
-	PartSys alienPartSys;
-	int currentLevel = 1;
-	int deadAliens = 0;
-	Text deadAliensText;
+	Player mPlayer;
+	int mScoreValue = 0;
+	Text mScoreText;
 
 	SceneMain();
 

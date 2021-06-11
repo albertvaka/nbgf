@@ -103,16 +103,10 @@
     <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
-    <ClInclude Include="src\alien.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\anim_lib.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\assets.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bullet.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\player.h">

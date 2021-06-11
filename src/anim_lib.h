@@ -7,6 +7,7 @@ namespace AnimLib {
 	constexpr const AnimationFrame ALIEN_1[] = {
 		{ {0,0,71,55}, 0.3f },
 		{ {71,0,71,55}, 0.3f },
+		{ {71,150,71,55}, 0.3f },
 	};
 
 	constexpr const AnimationFrame ALIEN_2[] = {
