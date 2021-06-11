@@ -109,7 +109,7 @@
     <ClInclude Include="src\assets.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\player.h">
+    <ClInclude Include="src\ChainNode.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_main.h">
@@ -220,6 +220,7 @@
     <ClInclude Include="engine\fx.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\Chain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -285,7 +286,7 @@
     <ClCompile Include="src\assets.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\player.cpp">
+    <ClCompile Include="src\ChainNode.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\scene_main.cpp">
@@ -336,6 +337,7 @@
     <ClCompile Include="engine\fx.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">

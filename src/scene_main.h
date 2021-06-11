@@ -3,11 +3,11 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
-#include "player.h"
+#include "Chain.h"
 
 struct SceneMain : Scene {
 
-	Player mPlayer;
+	Chain mChain;
 	int mScoreValue = 0;
 	Text mScoreText;
 

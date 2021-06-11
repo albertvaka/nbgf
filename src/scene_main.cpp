@@ -12,7 +12,7 @@ float kAlienMinDistance = 300;
 float kAlienMaxDistance = 400;
 
 SceneMain::SceneMain()
-	: mPlayer(0, 200)
+	: mChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 {
 
@@ -43,7 +43,7 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
-	mPlayer.Update(dt);
+	//mChain.Update(dt);
 
 }
 
@@ -54,7 +54,7 @@ void SceneMain::Draw()
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
 		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
 
-	mPlayer.Draw();
+	//mPlayer.Draw();
 
 
 #ifdef _IMGUI
