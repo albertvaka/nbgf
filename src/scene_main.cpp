@@ -17,14 +17,14 @@ SceneMain::SceneMain()
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
-	/*auto* Node = GenerateNode(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
+	auto* Node = GenerateNode(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
 	myChain.AddNode(Node, nullptr, nullptr);
 
 	auto* Node2 = GenerateNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.7));
-	mUnchainedNodes.emplace(Node2->myId, Node2);*/
+	mUnchainedNodes.emplace(Node2->myId, Node2);
 
 	//UNCOMMENT THIS DO HAVE AN INITIAL CHAIN
-	 size_t startingNodes = 15U;
+	/* size_t startingNodes = 15U;
 	 std::vector<ChainNode*> chainNodes;
 	for (size_t i = 0U; i < startingNodes; ++i) {
 		chainNodes.push_back(GenerateNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.5)));
@@ -44,11 +44,21 @@ SceneMain::SceneMain()
 		}
 		myChain.AddNode(currentNode, previousNode, nextNode);
 	}
-	myChain.myLeftNode = startingNodes -1U;
+	//myChain.myLeftNode = startingNodes -1U;
+	*/
 
 	mScoreText.SetString("Kill the invaders");
 	mScoreText.SetFillColor(0, 0, 0);
 	mScoreText.SetOutlineColor(255, 255, 0);
+}
+
+SceneMain::~SceneMain()
+{
+	for (auto it : mUnchainedNodes)
+	{
+		delete(it.second);
+	}
+	mUnchainedNodes.clear();
 }
 
 void SceneMain::EnterScene() 
@@ -72,23 +82,18 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
-	for (auto& unchainedIt : mUnchainedNodes)
+	for (auto it = mUnchainedNodes.begin(); it != mUnchainedNodes.end();) 
 	{
-		unchainedIt.second->UpdateUnchained(dt);
-	}
-
-	//Check if a node must be added to chain
-	for (auto& unchainedIt : mUnchainedNodes)
-	{
-		//TODO optimization. Do this check just on a chained nodes container
-				/*auto mustChainToNodeIt = std::find_if(mChainNodes.begin(), mChainNodes.end(), [dt, &anUnchainedNode](ChainNode* aNode) {
-					return aNode->IsChained() && Collide(anUnchainedNode, aNode);
-				});
-				if (mustChainToNodeIt != mChainNodes.end())
-				{
-					//ChainUtils::AddToChain(anUnchainedNode, aNode)
-				} */
-	}
+		if (myChain.TryToJoin(it->second)) 
+		{
+			it = mUnchainedNodes.erase(it);
+		}
+		else		
+		{
+			it->second->UpdateUnchained(dt);
+			++it;
+		}
+	}	
 
 	myChain.Update(dt);
 }

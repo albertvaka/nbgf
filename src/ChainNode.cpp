@@ -27,27 +27,8 @@ ChainNode::ChainNode(vec aPosition)
 
 void ChainNode::UpdateUnchained(float dt)
 {
-	//This will be call
-	/*if (IsChained())
-	{		
-		if (myRightNeighbor == nullptr)
-		{
-			UpdateRight(dt);
-		}
-		else
-		{
-			UpdatePuppet(dt, myRightNeighbor->pos);
-		}
+	//This will be call for AI nodes
 
-		if (myLeftNeighbor == nullptr)
-		{
-			UpdateLeft(dt);
-		}
-		else
-		{
-			UpdatePuppet(dt, myLeftNeighbor->pos);
-		}
-	} */
 }
 
 void ChainNode::UpdateRight(float aDt)
@@ -113,13 +94,18 @@ void ChainNode::SetRightNeighbor(ChainNode* aRightNeighbor)
 	myRightNeighbor = aRightNeighbor;
 }
 
+ChainNode* ChainNode::GetRightNeighbor() const
+{
+	return myRightNeighbor;
+}
+
 void ChainNode::SetLeftNeighbor(ChainNode* aLeftNeighbor)
 {
 	myLeftNeighbor = aLeftNeighbor;
 }
 
-bool ChainNode::IsChained() const
+ChainNode* ChainNode::GetLeftNeighbor() const
 {
-	return myLeftNeighbor != nullptr || myRightNeighbor != nullptr;
+	return myLeftNeighbor;
 }
 

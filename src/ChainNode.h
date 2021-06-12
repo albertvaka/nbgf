@@ -14,8 +14,10 @@ struct ChainNode : CircleEntity
 	void Draw() const;
 
 	void SetRightNeighbor(ChainNode* aRightNeighbor);
+	ChainNode* GetRightNeighbor() const;
+
 	void SetLeftNeighbor(ChainNode* aLeftNeighbor);
-	bool IsChained() const;
+	ChainNode* GetLeftNeighbor() const;
 
 	const uint16_t myId;
 private:
@@ -25,6 +27,5 @@ private:
 
 	ChainNode* myRightNeighbor;
 	ChainNode* myLeftNeighbor;
-
-	
+										
 };

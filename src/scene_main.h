@@ -18,6 +18,7 @@ struct SceneMain : Scene {
 	Text mScoreText;
 
 	SceneMain();
+	~SceneMain();
 
 	void EnterScene() override;
 	void ExitScene() override;

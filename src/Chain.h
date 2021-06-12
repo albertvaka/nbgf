@@ -7,15 +7,27 @@ struct ChainNode;
 struct Chain
 {
 	Chain();
+	~Chain();
 
 	void Update(float dt);
 	void Draw();
 
-	void AddNode(ChainNode* aNode, ChainNode* aLeftNeighbor, ChainNode* aRightNeighbor);
+	bool TryToJoin(ChainNode* anUnchainedNode);
 
-	size_t myRightNode;
-	size_t myLeftNode;
+	void AddNode(ChainNode* aNode, ChainNode* aLeftNeighbor, ChainNode* aRightNeighbor);
+	void AddNode(ChainNode* aCollidedNode, ChainNode* aUnchainedNode);
+
+	size_t myRightMaster;
+	size_t myLeftMaster;
 
 	ChainUtils::tNodesContainer myNodes;
+
+	enum class eChainType
+	{
+		Default,
+		Chaos
+	};
+	eChainType	myType;
+	//TODO add core chain
 };
 
