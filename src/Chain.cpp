@@ -36,7 +36,7 @@ void Chain::Update(float dt)
 		}
 
 		currentNode->UpdatePuppet(dt, lIsMaster);
-		it.second->UpdateVelAndPos(dt, lIsMaster);
+		currentNode->UpdateVelAndPos(dt, lIsMaster);
 	}
 }
 
