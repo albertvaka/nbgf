@@ -22,7 +22,9 @@ struct BaseEnemy : Entity
 	void SetSpawnPosition();
 	void SetSpawnSpeed();
 
-	float speed = 200;
+	float speed = 500;
 
 	SpawnSide spawnSide;
+
+	vec speedModifier;
 };
