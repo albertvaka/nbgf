@@ -46,7 +46,7 @@ void Chain::Update(float dt)
 		//Node to unchain by distance
 		float unchainDistance;
 		const bool lIsBrain = currentNode->myId == myBrain;
-		if (!lIsMaster && !lIsBrain && currentNode->MustBeUnchained(unchainDistance))
+		if (!lIsBrain && currentNode->MustBeUnchained(unchainDistance))
 		{
 			if (unchainDistance > nodeToUnchainDistance)
 			{
@@ -69,7 +69,6 @@ void Chain::Draw()
 		it.second->Draw();
 	}
 }
-
 
 bool Chain::TryToJoin(ChainNode* anUnchainedNode)
 {
@@ -173,7 +172,7 @@ void Chain::AddRightSubChainToUnchain(ChainNode* aSubChainStart)
 	auto* currentNode = aSubChainStart;
 	while (currentNode != nullptr)
 	{
-		auto* nextNode = aSubChainStart->GetRightNeighbor();
+		auto* nextNode = currentNode->GetRightNeighbor();
 		AddUnchainNode(currentNode);
 		currentNode = nextNode;
 	}	
@@ -189,7 +188,7 @@ void Chain::AddLeftSubChainToUnchain(ChainNode* aSubChainStart)
 	auto* currentNode = aSubChainStart;
 	while (currentNode != nullptr)
 	{
-		auto* nextNode = aSubChainStart->GetLeftNeighbor();
+		auto* nextNode = currentNode->GetLeftNeighbor();
 		AddUnchainNode(currentNode);
 		currentNode = nextNode;
 	}
