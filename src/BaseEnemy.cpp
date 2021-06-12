@@ -99,15 +99,3 @@ void BaseEnemy::SetSpawnSpeed()
 		break;
 	}
 }
-
-float BaseEnemy::Clamp(float value, float edge1, float edge2) {
-	if (value < edge1) {
-		return edge1;
-	}
-	else if (value > edge2) {
-		return edge2;
-	}
-	else {
-		return value;
-	}
-}
