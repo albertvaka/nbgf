@@ -24,21 +24,24 @@ uint16_t ChainNode::theLastId = 0U;
 constexpr float NodePuppetMass = 1.f;
 constexpr float NodeMasterMass = 5.f;
 
-constexpr float minDistanceToUnchain = 200.f;
-
+constexpr float minDistanceToUnchain = 240.f;
+								   
+constexpr float TimeToBeChained = 1.5f;
 
 ChainNode::ChainNode(vec aPosition)
 	: CircleEntity(aPosition, NodeRadius)
 	, myId(theLastId++)
 	, myRightNeighbor(nullptr)
 	, myLeftNeighbor(nullptr)
-	, acc(vec(0,0))
+	, acc(vec(0,0))			 
+	, myCooldownToBeChained(0.f)
 {
 }
 
 void ChainNode::UpdateUnchained(float dt)
 {
 	//This will be call for AI nodes
+	myCooldownToBeChained = std::max(0.f, myCooldownToBeChained - dt);
 
 }
 
@@ -147,6 +150,15 @@ void ChainNode::Draw() const
 	}
 }
 
+void ChainNode::ActivateChainCooldown()
+{
+	myCooldownToBeChained = TimeToBeChained;
+}
+
+bool ChainNode::CanBeChained() const
+{
+	return myCooldownToBeChained == 0.f;
+}
 
 bool ChainNode::MustBeUnchained(float& anOutDistance) const
 {

@@ -2,12 +2,15 @@
 #include "ChainNode.h"
 #include "collide.h"
 
+constexpr float TimeToBreakByDistance = 1.5f;
+
 Chain::Chain()
 	: myRightMaster(0U)
 	, myLeftMaster(0U)
 	, myBrain(0U)
 	, myType(eChainType::Default)
 	, myNodesToUnchain()
+	, myCooldownToBreakByDistance(0.f)
 {
 }
 
@@ -22,6 +25,7 @@ Chain::~Chain()
 
 void Chain::Update(float dt)
 {
+	myCooldownToBreakByDistance = std::max(0.f, myCooldownToBreakByDistance - dt);
 	ChainNode* nodeToUnchain(nullptr);
 	float nodeToUnchainDistance = 0.f;
 	for (auto& it : myNodes)
@@ -46,7 +50,7 @@ void Chain::Update(float dt)
 		//Node to unchain by distance
 		float unchainDistance;
 		const bool lIsBrain = currentNode->myId == myBrain;
-		if (!lIsBrain && currentNode->MustBeUnchained(unchainDistance))
+		if (myCooldownToBreakByDistance == 0.f && !lIsBrain && currentNode->MustBeUnchained(unchainDistance))
 		{
 			if (unchainDistance > nodeToUnchainDistance)
 			{
@@ -58,6 +62,7 @@ void Chain::Update(float dt)
 
 	if (nodeToUnchain != nullptr)
 	{
+		myCooldownToBreakByDistance = TimeToBreakByDistance;
 		PropagateUnchainNode(nodeToUnchain);
 	}
 }
@@ -72,6 +77,11 @@ void Chain::Draw()
 
 bool Chain::TryToJoin(ChainNode* anUnchainedNode)
 {
+	if (!anUnchainedNode->CanBeChained())
+	{
+		return false;
+
+	}
 	auto collidedIt = std::find_if(myNodes.begin(), myNodes.end(), [&anUnchainedNode](const ChainUtils::tNodesContainer::value_type& aCurrentNodeIt)
 		{
 			return Collide(anUnchainedNode, aCurrentNodeIt.second);

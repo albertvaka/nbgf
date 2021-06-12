@@ -98,7 +98,7 @@ void SceneMain::Update(float dt)
 
 	for (auto it = mUnchainedNodes.begin(); it != mUnchainedNodes.end();) 
 	{
-		if (mChain.TryToJoin(it->second)) 
+		if (mChain.TryToJoin(it->second))
 		{
 			it = mUnchainedNodes.erase(it);
 		}
@@ -118,6 +118,7 @@ void SceneMain::Update(float dt)
 	for (auto& nodeToUnchain : nodesToUnchain)
 	{
 		mUnchainedNodes.emplace(nodeToUnchain->myId, nodeToUnchain);
+		nodeToUnchain->ActivateChainCooldown();
 	}
 	mChain.ResetNodesToUnchain();
 }

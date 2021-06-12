@@ -14,6 +14,8 @@ struct ChainNode : CircleEntity
 	void UpdatePuppet(float aDt, bool isMaster);
 	void Draw() const;
 
+	void ActivateChainCooldown();
+	bool CanBeChained() const;
 	bool MustBeUnchained(float& anOutDistance) const;
 
 	bool IsNodeRightReachable(ChainNode* aNodeToReach) const;
@@ -35,4 +37,6 @@ private:
 	ChainNode* myRightNeighbor;
 	ChainNode* myLeftNeighbor;
 	vec acc;
+
+	float myCooldownToBeChained;
 };

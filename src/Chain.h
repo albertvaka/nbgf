@@ -43,5 +43,7 @@ private:
 	eChainType	myType;
 	
 	std::vector<ChainNode*> myNodesToUnchain;
+
+	float myCooldownToBreakByDistance;
 };
 
