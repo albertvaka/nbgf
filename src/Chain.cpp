@@ -110,7 +110,7 @@ void Chain::AddNode(ChainNode* aCollidedNode, ChainNode* aUnchainedNode)
 		aCollidedNode->SetLeftNeighbor(aUnchainedNode);
 		if (collidedLeft != nullptr)
 		{
-			collidedLeft->SetLeftNeighbor(aUnchainedNode);
+			collidedLeft->SetRightNeighbor(aUnchainedNode);
 		}
 		lUnchainedRightNeighbor = aCollidedNode;
 	}
