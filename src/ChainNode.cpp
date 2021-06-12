@@ -146,9 +146,6 @@ void ChainNode::Draw() const
 		.withRect(anim.CurrentFrameRect())
 		.withScale(NodeRadius*2 / personRect.w, NodeRadius*2 / personRect.h);
 
-
-
-
 	if(Debug::Draw) {
 		Bounds().DebugDraw(0,255,0);
 	}
@@ -213,7 +210,6 @@ ChainNode* ChainNode::GetLeftNeighbor() const
 {
 	return myLeftNeighbor;
 }
-
 
 bool ChainNode::CheckUnchainDistance(const ChainNode* const aNeighbor, float& anOutDistance) const
 {

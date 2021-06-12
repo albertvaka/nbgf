@@ -206,6 +206,11 @@ void Chain::AddLeftSubChainToUnchain(ChainNode* aSubChainStart)
 
 void Chain::AddUnchainNode(ChainNode* aNodeToUnchain)
 {
+	if (myNodes.find(aNodeToUnchain->myId) == myNodes.end())
+	{
+		return;
+	}
+
 	if (auto* rightNeighbor = aNodeToUnchain->GetRightNeighbor())
 	{
 		rightNeighbor->SetLeftNeighbor(nullptr);
@@ -217,7 +222,6 @@ void Chain::AddUnchainNode(ChainNode* aNodeToUnchain)
 		aNodeToUnchain->SetLeftNeighbor(nullptr);
 	}	
 
-	//TODO check that it exists on myNodes, could have already been marked as to unchain on this frame if there are more than one way to unchain 
 	myNodes.erase(aNodeToUnchain->myId);
 	myNodesToUnchain.emplace_back(aNodeToUnchain);
 }
