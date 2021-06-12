@@ -11,9 +11,9 @@
 constexpr uint8_t NodeSpeed = 500;
 constexpr uint8_t NodeRadius = 50;
 
-constexpr uint8_t NodeUnstretchedDistance = 30;
-constexpr float NodeSpringStrength = 30;
-constexpr float NodeFrictionStrength = 0.02;
+constexpr uint8_t NodeUnstretchedDistance = 20;
+constexpr float NodeSpringStrength = 40;
+constexpr float NodeFrictionStrength = 0.005;
 
 ChainNode::ChainNode(vec aPosition)
 	: CircleEntity(aPosition, NodeRadius)
