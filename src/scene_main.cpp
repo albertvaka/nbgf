@@ -52,7 +52,8 @@ void SceneMain::Draw()
 	Window::Clear(0, 0, 0);
 
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
-		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
+		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2)
+		.withScale(Window::MAP_SCALE);
 
 	mChain.Draw();
 
