@@ -2,10 +2,15 @@
 #include "ChainNode.h"
 #include "collide.h"
 
+constexpr float TimeToBreakByDistance = 1.5f;
+
 Chain::Chain()
 	: myRightMaster(0U)
 	, myLeftMaster(0U)
+	, myBrain(0U)
 	, myType(eChainType::Default)
+	, myNodesToUnchain()
+	, myCooldownToBreakByDistance(0.f)
 {
 }
 
@@ -20,9 +25,14 @@ Chain::~Chain()
 
 void Chain::Update(float dt)
 {
+	myCooldownToBreakByDistance = std::max(0.f, myCooldownToBreakByDistance - dt);
+	ChainNode* nodeToUnchain(nullptr);
+	float nodeToUnchainDistance = 0.f;
 	for (auto& it : myNodes)
 	{		
 		auto* currentNode = it.second;
+	
+		//Movement
 		bool lIsMaster = false;
 		if (currentNode->myId == myRightMaster)
 		{
@@ -34,9 +44,26 @@ void Chain::Update(float dt)
 			currentNode->UpdateLeft(dt);
 			lIsMaster = true;
 		}
-
 		currentNode->UpdatePuppet(dt, lIsMaster);
 		currentNode->UpdateVelAndPos(dt, lIsMaster);
+
+		//Node to unchain by distance
+		float unchainDistance;
+		const bool lIsBrain = currentNode->myId == myBrain;
+		if (myCooldownToBreakByDistance == 0.f && !lIsBrain && currentNode->MustBeUnchained(unchainDistance))
+		{
+			if (unchainDistance > nodeToUnchainDistance)
+			{
+				nodeToUnchainDistance = unchainDistance;
+				nodeToUnchain = currentNode;
+			}
+		}
+	}
+
+	if (nodeToUnchain != nullptr)
+	{
+		myCooldownToBreakByDistance = TimeToBreakByDistance;
+		PropagateUnchainNode(nodeToUnchain);
 	}
 }
 
@@ -48,9 +75,13 @@ void Chain::Draw()
 	}
 }
 
-
 bool Chain::TryToJoin(ChainNode* anUnchainedNode)
 {
+	if (!anUnchainedNode->CanBeChained())
+	{
+		return false;
+
+	}
 	auto collidedIt = std::find_if(myNodes.begin(), myNodes.end(), [&anUnchainedNode](const ChainUtils::tNodesContainer::value_type& aCurrentNodeIt)
 		{
 			return Collide(anUnchainedNode, aCurrentNodeIt.second);
@@ -115,6 +146,83 @@ void Chain::AddNode(ChainNode* aCollidedNode, ChainNode* aUnchainedNode)
 		lUnchainedRightNeighbor = aCollidedNode;
 	}
 
-	AddNode(aUnchainedNode, lUnchainedLeftNeighbor, lUnchainedRightNeighbor);
-	
+	AddNode(aUnchainedNode, lUnchainedLeftNeighbor, lUnchainedRightNeighbor);	
+}
+
+void Chain::PropagateUnchainNode(ChainNode* aNodeToUnchain)
+{
+	auto* brainNode = myNodes.at(myBrain);
+	if (aNodeToUnchain->IsNodeRightReachable(brainNode))
+	{
+		AddLeftSubChainToUnchain(aNodeToUnchain);
+	}
+	else
+	{
+		AddRightSubChainToUnchain(aNodeToUnchain);
+	}
+}
+
+const std::vector<ChainNode*>& Chain::GetNodesToUnchain() const
+{
+	return myNodesToUnchain;
+}
+
+const ChainUtils::tNodesContainer Chain::GetNodes() const
+{
+	return myNodes;
+}
+
+void Chain::ResetNodesToUnchain()
+{
+	myNodesToUnchain.clear();
+}
+
+void Chain::AddRightSubChainToUnchain(ChainNode* aSubChainStart)
+{
+	if (myType == eChainType::Default)
+	{
+		myRightMaster = aSubChainStart->GetLeftNeighbor()->myId;
+	}
+
+	auto* currentNode = aSubChainStart;
+	while (currentNode != nullptr)
+	{
+		auto* nextNode = currentNode->GetRightNeighbor();
+		AddUnchainNode(currentNode);
+		currentNode = nextNode;
+	}	
+}
+
+void Chain::AddLeftSubChainToUnchain(ChainNode* aSubChainStart)
+{
+	if (myType == eChainType::Default)
+	{
+		myLeftMaster = aSubChainStart->GetRightNeighbor()->myId;
+	}
+
+	auto* currentNode = aSubChainStart;
+	while (currentNode != nullptr)
+	{
+		auto* nextNode = currentNode->GetLeftNeighbor();
+		AddUnchainNode(currentNode);
+		currentNode = nextNode;
+	}
+}
+
+void Chain::AddUnchainNode(ChainNode* aNodeToUnchain)
+{
+	if (auto* rightNeighbor = aNodeToUnchain->GetRightNeighbor())
+	{
+		rightNeighbor->SetLeftNeighbor(nullptr);
+		aNodeToUnchain->SetRightNeighbor(nullptr);
+	}
+	if (auto* lefttNeighbor = aNodeToUnchain->GetLeftNeighbor())
+	{
+		lefttNeighbor->SetRightNeighbor(nullptr);
+		aNodeToUnchain->SetLeftNeighbor(nullptr);
+	}	
+
+	//TODO check that it exists on myNodes, could have already been marked as to unchain on this frame if there are more than one way to unchain 
+	myNodes.erase(aNodeToUnchain->myId);
+	myNodesToUnchain.emplace_back(aNodeToUnchain);
 }

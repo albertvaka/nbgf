@@ -14,8 +14,9 @@ BaseEnemy::BaseEnemy(float angle, float distance)
 
 void BaseEnemy::Update(float dt)
 {
-	pos += vel * speed * dt;
+	
 
+	pos += vel * speed * dt;
 
 	if (!Camera::Bounds().Contains(pos)) {
 		alive = false;

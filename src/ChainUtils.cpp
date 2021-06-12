@@ -12,7 +12,7 @@
 
 namespace ChainUtils
 {
-	ChainNode* findClosestNode(vec aPos, tNodesContainer &aNodes)
+	ChainNode* findClosestNode(vec aPos, tNodesContainer aNodes)
 	{
 		float currentClosestDistance = FLT_MAX;
 		ChainNode* currentClosestNode = nullptr;

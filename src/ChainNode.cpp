@@ -6,9 +6,9 @@
 
 #include "input.h"
 #include "assets.h"
-#include "anim_lib.h"
 #include "camera.h"
 #include "window.h"
+#include "anim_lib.h"
 
 // Collisions
 constexpr uint8_t NodeRadius = 50;
@@ -29,6 +29,9 @@ constexpr float NodeMasterMass = 5.f;
 constexpr float NodeUnstretchedDistance = 70.f;
 constexpr float NodeSpringStrength = 150.f;
 
+constexpr float minDistanceToUnchain = 240.f;
+constexpr float TimeToBeChained = 1.5f;
+
 // Unchained IA
 constexpr float RunAwayDistanceSq = 1000000.f;
 
@@ -40,12 +43,15 @@ ChainNode::ChainNode(vec aPosition)
 	, myRightNeighbor(nullptr)
 	, myLeftNeighbor(nullptr)
 	, acc(vec(0,0))
+	, anim(AnimLib::PERSON_WALKING)
+	, myCooldownToBeChained(0.f)
 {
 }
 
-void ChainNode::UpdateUnchained(float aDt, ChainUtils::tNodesContainer &aNodes)
+void ChainNode::UpdateUnchained(float aDt, ChainUtils::tNodesContainer aNodes)
 {
 	//This will be call for AI nodes
+	myCooldownToBeChained = std::max(0.f, myCooldownToBeChained - aDt);
 
 	// Ez starting stuff, run away from closest ChainedNode
 	ChainNode* closestNode = ChainUtils::findClosestNode(pos, aNodes);
@@ -142,6 +148,8 @@ void ChainNode::UpdateVelAndPos(float aDt, bool isMaster)
 
 	// reset acceleration
 	acc = vec(0,0);
+
+	anim.Update(aDt);
 }
 
 void ChainNode::Draw() const
@@ -171,6 +179,7 @@ void ChainNode::Draw() const
 	// Person
 	Window::Draw(Assets::personTexture, pos)
 		.withOrigin(vec(personRect.w, personRect.h) / 2)
+		.withRect(anim.CurrentFrameRect())
 		.withScale(NodeRadius*2 / personRect.w, NodeRadius*2 / personRect.h);
 
 
@@ -179,6 +188,46 @@ void ChainNode::Draw() const
 	if(Debug::Draw) {
 		Bounds().DebugDraw(0,255,0);
 	}
+}
+
+void ChainNode::ActivateChainCooldown()
+{
+	myCooldownToBeChained = TimeToBeChained;
+}
+
+bool ChainNode::CanBeChained() const
+{
+	return myCooldownToBeChained == 0.f;
+}
+
+bool ChainNode::MustBeUnchained(float& anOutDistance) const
+{
+	anOutDistance = 0.f;
+	const bool unchainFromRight = CheckUnchainDistance(myRightNeighbor, anOutDistance);
+	const bool unchainFromLeft = CheckUnchainDistance(myLeftNeighbor, anOutDistance);
+	return unchainFromLeft || unchainFromRight;
+}
+
+bool ChainNode::IsNodeRightReachable(ChainNode* aNodeToReach) const
+{
+	auto* currentNode = myRightNeighbor;
+	while (currentNode != nullptr && currentNode != aNodeToReach)
+	{
+		currentNode = currentNode->myRightNeighbor;
+	}
+
+	return currentNode == aNodeToReach;
+}
+
+bool ChainNode::IsNodeLeftReachable(ChainNode* aNodeToReach) const
+{
+	auto* currentNode = myLeftNeighbor;
+	while (currentNode != nullptr && currentNode != aNodeToReach)
+	{
+		currentNode = currentNode->myLeftNeighbor;
+	}
+
+	return currentNode == aNodeToReach;
 }
 
 void ChainNode::SetRightNeighbor(ChainNode* aRightNeighbor)
@@ -201,3 +250,20 @@ ChainNode* ChainNode::GetLeftNeighbor() const
 	return myLeftNeighbor;
 }
 
+
+bool ChainNode::CheckUnchainDistance(const ChainNode* const aNeighbor, float& anOutDistance) const
+{
+	bool returnValue = false;
+	
+	if (aNeighbor != nullptr)
+	{
+		float distance = aNeighbor->pos.Distance(pos);
+		if (distance > minDistanceToUnchain)
+		{
+			returnValue = true;
+			anOutDistance = std::max(anOutDistance, distance);
+		}
+	}
+
+	return returnValue;
+}

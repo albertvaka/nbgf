@@ -227,6 +227,7 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Chain.h" />
+    <ClInclude Include="src\EnemiesController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -350,6 +351,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Chain.cpp" />
+    <ClCompile Include="src\EnemiesController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">
