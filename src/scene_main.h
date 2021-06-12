@@ -18,7 +18,4 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
-	void SpawnAliens();
-
-
 };

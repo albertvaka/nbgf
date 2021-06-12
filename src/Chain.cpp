@@ -19,7 +19,7 @@ Chain::Chain()
 	}
 	
 	mRightNodeIndex = 0;
-	mLeftNodeIndex = -1;
+	mLeftNodeIndex = startingNodes - 1;
 }
 
 void Chain::Update(float dt)
@@ -31,8 +31,12 @@ void Chain::Update(float dt)
 			if (i == mRightNodeIndex) {
 				mNodes[i]->UpdateRight(dt);
 			}
+			else if (i == mLeftNodeIndex) {
+				mNodes[i]->UpdateLeft(dt);
+			}
 			else {
 				mNodes[i]->UpdatePuppet(dt, mNodes[i - 1]->pos);
+				mNodes[i]->UpdatePuppet(dt, mNodes[i + 1]->pos);
 			}
 		}
 	}
