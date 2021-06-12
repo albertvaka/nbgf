@@ -16,7 +16,7 @@ void Assets::LoadAll() {
 
     invadersTexture = LoadImage("data/invaders.png");
     backgroundTexture = LoadImage("data/citybg.png");
-    personTexture = LoadImage("data/complete_person.png");
+    personTexture = LoadImage("data/person_anim.png");
     personShadowTexture = LoadImage("data/shadowHard.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);

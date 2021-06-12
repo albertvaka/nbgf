@@ -4,9 +4,9 @@
 
 #include "input.h"
 #include "assets.h"
-#include "anim_lib.h"
 #include "camera.h"
 #include "window.h"
+#include "anim_lib.h"
 
 constexpr float NodeAcc = 3000.f;
 constexpr uint8_t NodeRadius = 50;
@@ -30,6 +30,7 @@ ChainNode::ChainNode(vec aPosition)
 	, myRightNeighbor(nullptr)
 	, myLeftNeighbor(nullptr)
 	, acc(vec(0,0))
+	, anim(AnimLib::PERSON_WALKING)
 {
 }
 
@@ -105,6 +106,8 @@ void ChainNode::UpdateVelAndPos(float aDt, bool isMaster)
 
 	// reset acceleration
 	acc = vec(0,0);
+
+	anim.Update(aDt);
 }
 
 void ChainNode::Draw() const
@@ -134,6 +137,7 @@ void ChainNode::Draw() const
 	// Person
 	Window::Draw(Assets::personTexture, pos)
 		.withOrigin(vec(personRect.w, personRect.h) / 2)
+		.withRect(anim.CurrentFrameRect())
 		.withScale(NodeRadius*2 / personRect.w, NodeRadius*2 / personRect.h);
 
 
