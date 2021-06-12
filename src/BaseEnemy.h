@@ -2,7 +2,12 @@
 
 #include "entity.h"
 
-
+enum class SpawnSide {
+	Top = 0,
+	Down,
+	Right,
+	Left
+};
 
 struct BaseEnemy : Entity
 {
@@ -12,5 +17,13 @@ struct BaseEnemy : Entity
 	void Update(float dt);
 	void Draw() const;
 
-	void SetRandomSpawnPosition();
+	void SetRandomSpawn();
+	void SetRandomSpawnSide();
+	void SetSpawnPosition();
+	void SetSpawnSpeed();
+	float Clamp(float value, float edge1, float edge2);
+
+	float speed = 200;
+
+	SpawnSide spawnSide;
 };
