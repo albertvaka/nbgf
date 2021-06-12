@@ -1,5 +1,7 @@
 #include "EnemiesController.h"
 
+#include "rand.h"
+
 void EnemiesController::UpdateEnemies(float dt)
 {
 	if (enemies.empty()) {
@@ -32,6 +34,12 @@ void EnemiesController::DestroyEnemies()
 		}), enemies.end());
 }
 
+void EnemiesController::Update(float dt)
+{
+	TrySpawnEnemy(dt);
+	UpdateEnemies(dt);
+}
+
 void EnemiesController::AddEnemies(int count)
 {
 	for (int i = 0; i < count; ++i) {
@@ -53,3 +61,17 @@ void EnemiesController::CleanUp()
 
 	enemies.clear();
 }
+
+void EnemiesController::TrySpawnEnemy(float dt)
+{
+	totalTime += dt;
+
+	spawnTimer += dt;
+
+	if (spawnTimer > currentSpawnDelay) {
+		AddEnemies(1);
+		spawnTimer -= currentSpawnDelay;
+		currentSpawnDelay = Rand::rollf(minSpawnTime, maxSpawnTime);
+	}
+}
+

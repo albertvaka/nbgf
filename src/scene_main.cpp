@@ -11,6 +11,7 @@
 
 #include "ChainNode.h"
 
+
 SceneMain::SceneMain()
 	: mUnchainedNodes()
 	, mChain()
@@ -110,9 +111,7 @@ void SceneMain::Update(float dt)
 
 	mChain.Update(dt);
 
-	
-
-	mEnemiesController->UpdateEnemies(dt);
+	mEnemiesController->Update(dt);
 }
 
 void SceneMain::Draw()
