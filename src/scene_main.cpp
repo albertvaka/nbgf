@@ -7,6 +7,7 @@
 #include "assets.h"
 #include "collide.h"
 #include "debug.h"
+#include "EnemiesController.h"
 
 #include "ChainNode.h"
 
@@ -28,6 +29,7 @@ SceneMain::SceneMain()
 		auto* newNode = GenerateNode(vec(randomX,  randomY));
 		mUnchainedNodes.emplace(newNode->myId, newNode);
 	}
+
 
 	//UNCOMMENT THIS DO HAVE AN INITIAL CHAIN
 	/*
@@ -52,6 +54,10 @@ SceneMain::SceneMain()
 		mChain.AddNode(currentNode, previousNode, nextNode);
 	}
 	*/
+
+	//Enemies----
+	mEnemiesController = new EnemiesController();
+	mEnemiesController->Awake();
 }
 
 SceneMain::~SceneMain()
@@ -60,7 +66,12 @@ SceneMain::~SceneMain()
 	{
 		delete(it.second);
 	}
+
 	mUnchainedNodes.clear();
+
+	mEnemiesController->CleanUp();
+
+	delete(mEnemiesController);
 }
 
 void SceneMain::EnterScene() 
@@ -97,7 +108,9 @@ void SceneMain::Update(float dt)
 		}
 	}	
 
-	mChain.Update(dt);
+	mChain.Update(dt);	
+
+	mEnemiesController->UpdateEnemies(dt);
 
 	//Retrieve nodes to unchain from chain
 	const auto& nodesToUnchain = mChain.GetNodesToUnchain();
@@ -123,6 +136,7 @@ void SceneMain::Draw()
 		
 	mChain.Draw();
 
+	mEnemiesController->DrawEnemies();
 
 #ifdef _IMGUI
 	{

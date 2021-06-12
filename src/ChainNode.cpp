@@ -8,16 +8,16 @@
 #include "camera.h"
 #include "window.h"
 
-constexpr float NodeAcc = 3000.f;
+constexpr float NodeAcc = 6000.f;
 constexpr uint8_t NodeRadius = 50;
 
-constexpr uint8_t NodeUnstretchedDistance = 20;
-constexpr float NodeSpringStrength = 70.f;
+constexpr float NodeUnstretchedDistance = 70.f;
+constexpr float NodeSpringStrength = 150.f;
 
-constexpr float NodePuppetFriction = 0.01f;
-constexpr float NodeMasterFriction = 0.05f;
+constexpr float NodePuppetFriction = 0.005f;
+constexpr float NodeMasterFriction = 0.03f;
 
-constexpr float NodeMinVelSq = 100.f;
+constexpr float NodeMinVelSq = 500.f;
 
 uint16_t ChainNode::theLastId = 0U;
 

@@ -21,9 +21,10 @@ struct BaseEnemy : Entity
 	void SetRandomSpawnSide();
 	void SetSpawnPosition();
 	void SetSpawnSpeed();
-	float Clamp(float value, float edge1, float edge2);
 
-	float speed = 200;
+	float speed = 500;
 
 	SpawnSide spawnSide;
+
+	vec speedModifier;
 };
