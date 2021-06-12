@@ -98,6 +98,14 @@ void SceneMain::Update(float dt)
 	}	
 
 	mChain.Update(dt);
+
+	//Retrieve nodes to unchain from chain
+	const auto& nodesToUnchain = mChain.GetNodesToUnchain();
+	for (auto& nodeToUnchain : nodesToUnchain)
+	{
+		mUnchainedNodes.emplace(nodeToUnchain->myId, nodeToUnchain);
+	}
+	mChain.ResetNodesToUnchain();
 }
 
 void SceneMain::Draw()

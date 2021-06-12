@@ -24,6 +24,9 @@ uint16_t ChainNode::theLastId = 0U;
 constexpr float NodePuppetMass = 1.f;
 constexpr float NodeMasterMass = 5.f;
 
+constexpr float minDistanceToUnchain = 120.f;
+
+
 ChainNode::ChainNode(vec aPosition)
 	: CircleEntity(aPosition, NodeRadius)
 	, myId(theLastId++)
@@ -144,6 +147,37 @@ void ChainNode::Draw() const
 	}
 }
 
+
+bool ChainNode::MustBeUnchained(float& anOutDistance) const
+{
+	anOutDistance = 0.f;
+	const bool unchainFromRight = CheckUnchainDistance(myRightNeighbor, anOutDistance);
+	const bool unchainFromLeft = CheckUnchainDistance(myLeftNeighbor, anOutDistance);
+	return unchainFromLeft || unchainFromRight;
+}
+
+bool ChainNode::IsNodeRightReachable(ChainNode* aNodeToReach) const
+{
+	auto* currentNode = myRightNeighbor;
+	while (currentNode != nullptr && currentNode != aNodeToReach)
+	{
+		currentNode = currentNode->myRightNeighbor;
+	}
+
+	return currentNode == aNodeToReach;
+}
+
+bool ChainNode::IsNodeLeftReachable(ChainNode* aNodeToReach) const
+{
+	auto* currentNode = myLeftNeighbor;
+	while (currentNode != nullptr && currentNode != aNodeToReach)
+	{
+		currentNode = currentNode->myLeftNeighbor;
+	}
+
+	return currentNode == aNodeToReach;
+}
+
 void ChainNode::SetRightNeighbor(ChainNode* aRightNeighbor)
 {
 	myRightNeighbor = aRightNeighbor;
@@ -164,3 +198,20 @@ ChainNode* ChainNode::GetLeftNeighbor() const
 	return myLeftNeighbor;
 }
 
+
+bool ChainNode::CheckUnchainDistance(const ChainNode* const aNeighbor, float& anOutDistance) const
+{
+	bool returnValue = false;
+	
+	if (aNeighbor != nullptr)
+	{
+		float distance = aNeighbor->pos.Distance(pos);
+		if (distance > minDistanceToUnchain)
+		{
+			returnValue = true;
+			anOutDistance = std::max(anOutDistance, distance);
+		}
+	}
+
+	return returnValue;
+}
