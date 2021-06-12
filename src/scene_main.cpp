@@ -15,10 +15,10 @@ SceneMain::SceneMain()
 	: mChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 {
-
+	/*
 	mScoreText.SetString("Kill the invaders");
 	mScoreText.SetFillColor(0, 0, 0);
-	mScoreText.SetOutlineColor(255, 255, 0);
+	mScoreText.SetOutlineColor(255, 255, 0);*/
 }
 
 void SceneMain::EnterScene() 
