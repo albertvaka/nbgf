@@ -15,6 +15,11 @@ struct ChainNode : CircleEntity
 	void UpdatePuppet(float aDt, bool isMaster);
 	void Draw() const;
 
+	bool MustBeUnchained(float& anOutDistance) const;
+
+	bool IsNodeRightReachable(ChainNode* aNodeToReach) const;
+	bool IsNodeLeftReachable(ChainNode* aNodeToReach) const;
+
 	void SetRightNeighbor(ChainNode* aRightNeighbor);
 	ChainNode* GetRightNeighbor() const;
 
@@ -24,6 +29,7 @@ struct ChainNode : CircleEntity
 	const uint16_t myId;
 private:
 	void UpdatePuppet(float aDt, vec aMasterPos, bool isMaster);
+	bool CheckUnchainDistance(const ChainNode* const aNeighbor, float& anOutDistance) const;
 
 	static uint16_t theLastId;
 

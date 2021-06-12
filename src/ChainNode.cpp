@@ -8,21 +8,24 @@
 #include "window.h"
 #include "anim_lib.h"
 
-constexpr float NodeAcc = 3000.f;
+constexpr float NodeAcc = 6000.f;
 constexpr uint8_t NodeRadius = 50;
 
-constexpr uint8_t NodeUnstretchedDistance = 20;
-constexpr float NodeSpringStrength = 70.f;
+constexpr float NodeUnstretchedDistance = 70.f;
+constexpr float NodeSpringStrength = 150.f;
 
-constexpr float NodePuppetFriction = 0.01f;
-constexpr float NodeMasterFriction = 0.05f;
+constexpr float NodePuppetFriction = 0.005f;
+constexpr float NodeMasterFriction = 0.03f;
 
-constexpr float NodeMinVelSq = 100.f;
+constexpr float NodeMinVelSq = 500.f;
 
 uint16_t ChainNode::theLastId = 0U;
 
 constexpr float NodePuppetMass = 1.f;
 constexpr float NodeMasterMass = 5.f;
+
+constexpr float minDistanceToUnchain = 200.f;
+
 
 ChainNode::ChainNode(vec aPosition)
 	: CircleEntity(aPosition, NodeRadius)
@@ -148,6 +151,37 @@ void ChainNode::Draw() const
 	}
 }
 
+
+bool ChainNode::MustBeUnchained(float& anOutDistance) const
+{
+	anOutDistance = 0.f;
+	const bool unchainFromRight = CheckUnchainDistance(myRightNeighbor, anOutDistance);
+	const bool unchainFromLeft = CheckUnchainDistance(myLeftNeighbor, anOutDistance);
+	return unchainFromLeft || unchainFromRight;
+}
+
+bool ChainNode::IsNodeRightReachable(ChainNode* aNodeToReach) const
+{
+	auto* currentNode = myRightNeighbor;
+	while (currentNode != nullptr && currentNode != aNodeToReach)
+	{
+		currentNode = currentNode->myRightNeighbor;
+	}
+
+	return currentNode == aNodeToReach;
+}
+
+bool ChainNode::IsNodeLeftReachable(ChainNode* aNodeToReach) const
+{
+	auto* currentNode = myLeftNeighbor;
+	while (currentNode != nullptr && currentNode != aNodeToReach)
+	{
+		currentNode = currentNode->myLeftNeighbor;
+	}
+
+	return currentNode == aNodeToReach;
+}
+
 void ChainNode::SetRightNeighbor(ChainNode* aRightNeighbor)
 {
 	myRightNeighbor = aRightNeighbor;
@@ -168,3 +202,20 @@ ChainNode* ChainNode::GetLeftNeighbor() const
 	return myLeftNeighbor;
 }
 
+
+bool ChainNode::CheckUnchainDistance(const ChainNode* const aNeighbor, float& anOutDistance) const
+{
+	bool returnValue = false;
+	
+	if (aNeighbor != nullptr)
+	{
+		float distance = aNeighbor->pos.Distance(pos);
+		if (distance > minDistanceToUnchain)
+		{
+			returnValue = true;
+			anOutDistance = std::max(anOutDistance, distance);
+		}
+	}
+
+	return returnValue;
+}

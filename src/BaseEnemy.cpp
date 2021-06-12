@@ -5,6 +5,7 @@
 #include "window.h"
 #include "camera.h"
 #include "rand.h"
+#include "bounds.h"
 
 BaseEnemy::BaseEnemy(float angle, float distance)
 {
@@ -13,7 +14,13 @@ BaseEnemy::BaseEnemy(float angle, float distance)
 
 void BaseEnemy::Update(float dt)
 {
+	
+
 	pos += vel * speed * dt;
+
+	if (!Camera::Bounds().Contains(pos)) {
+		alive = false;
+	}
 }
 
 void BaseEnemy::Draw() const
