@@ -24,7 +24,7 @@ uint16_t ChainNode::theLastId = 0U;
 constexpr float NodePuppetMass = 1.f;
 constexpr float NodeMasterMass = 5.f;
 
-constexpr float minDistanceToUnchain = 120.f;
+constexpr float minDistanceToUnchain = 1200.f;
 
 
 ChainNode::ChainNode(vec aPosition)
