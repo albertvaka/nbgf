@@ -58,7 +58,7 @@ SceneMain::SceneMain()
 	*/
 
 	//Enemies----
-	mEnemiesController = new EnemiesController();
+	mEnemiesController = new EnemiesController(&mChain);
 	mEnemiesController->Awake();
 }
 

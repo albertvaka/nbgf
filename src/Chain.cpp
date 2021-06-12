@@ -1,6 +1,7 @@
 #include "Chain.h"
 #include "ChainNode.h"
 #include "collide.h"
+#include "BaseEnemy.h"
 
 constexpr float TimeToBreakByDistance = 1.5f;
 
@@ -89,6 +90,22 @@ bool Chain::TryToJoin(ChainNode* anUnchainedNode)
 	if (collidedIt != myNodes.end())
 	{
 		AddNode(collidedIt->second, anUnchainedNode);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Chain::CheckCollisionWithEnemy(BaseEnemy* enemy) 
+{
+	auto collidedIt = std::find_if(myNodes.begin(), myNodes.end(), [&enemy](const ChainUtils::tNodesContainer::value_type& aCurrentNodeIt)
+		{
+			return Collide(enemy, aCurrentNodeIt.second);
+		});
+	if (collidedIt != myNodes.end())
+	{
 		return true;
 	}
 	else
@@ -211,6 +228,11 @@ void Chain::AddLeftSubChainToUnchain(ChainNode* aSubChainStart)
 
 void Chain::AddUnchainNode(ChainNode* aNodeToUnchain)
 {
+	if (myNodes.find(aNodeToUnchain->myId) == myNodes.end())
+	{
+		return;
+	}
+
 	if (auto* rightNeighbor = aNodeToUnchain->GetRightNeighbor())
 	{
 		rightNeighbor->SetLeftNeighbor(nullptr);
@@ -222,7 +244,6 @@ void Chain::AddUnchainNode(ChainNode* aNodeToUnchain)
 		aNodeToUnchain->SetLeftNeighbor(nullptr);
 	}	
 
-	//TODO check that it exists on myNodes, could have already been marked as to unchain on this frame if there are more than one way to unchain 
 	myNodes.erase(aNodeToUnchain->myId);
 	myNodesToUnchain.emplace_back(aNodeToUnchain);
 }
