@@ -8,12 +8,16 @@
 #include "camera.h"
 #include "window.h"
 
-constexpr float NodeAcc = 1000;
+constexpr float NodeAcc = 3000;
 constexpr uint8_t NodeRadius = 50;
 
 constexpr uint8_t NodeUnstretchedDistance = 20;
-constexpr float NodeSpringStrength = 40;
-constexpr float NodeFrictionStrength = 0.005;
+constexpr float NodeSpringStrength = 70;
+
+constexpr float NodePuppetFriction = 0.01;
+constexpr float NodeMasterFriction = 0.05;
+
+constexpr float NodeMinVelSq = 100;
 
 constexpr float NodePuppetMass = 1;
 constexpr float NodeMasterMass = 5;
@@ -58,14 +62,23 @@ void ChainNode::UpdatePuppet(float aDt, vec aPos, bool isMaster)
 	acc += NodeSpringStrength / mass * displacement;
 }
 
-void ChainNode::UpdateVelAndPos(float aDt)
+void ChainNode::UpdateVelAndPos(float aDt, bool isMaster)
 {
+	float frictionStrength = isMaster ? NodeMasterFriction : NodePuppetFriction;
 	// get deceleration from friction
-	acc -= vel.Normalized() * vel.LengthSq() * NodeFrictionStrength;
+	acc -= vel.Normalized() * vel.LengthSq() * frictionStrength;
 
-	// update velocity and position
+	// update velocity
 	vel += acc * aDt;
-	pos += vel * aDt + 0.5 * acc * aDt * aDt;
+
+	// implement static friction (only move above minimum velocity)
+	if (vel.LengthSq() > NodeMinVelSq) {
+		// update position
+		pos += vel * aDt + 0.5 * acc * aDt * aDt;
+	}
+	else {
+		vel = vec(0, 0);
+	}
 
 	// reset acceleration
 	acc = vec(0,0);

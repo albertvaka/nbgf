@@ -12,7 +12,7 @@ struct ChainNode : CircleEntity
 	void UpdateRight(float dt);
 	void UpdateLeft(float dt);
 	void UpdatePuppet(float dt, vec rightPos, bool isMaster);
-	void UpdateVelAndPos(float dt);
+	void UpdateVelAndPos(float dt, bool isMaster);
 	void Draw() const;
 
 	//uint8_t indexInChain;

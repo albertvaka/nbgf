@@ -31,17 +31,17 @@ void Chain::Update(float dt)
 			if (i == mRightNodeIndex) {
 				mNodes[i]->UpdateRight(dt);
 				mNodes[i]->UpdatePuppet(dt, mNodes[i + 1]->pos, true);
-				mNodes[i]->UpdateVelAndPos(dt);
+				mNodes[i]->UpdateVelAndPos(dt, true);
 			}
 			else if (i == mLeftNodeIndex) {
 				mNodes[i]->UpdateLeft(dt);
 				mNodes[i]->UpdatePuppet(dt, mNodes[i - 1]->pos, true);
-				mNodes[i]->UpdateVelAndPos(dt);
+				mNodes[i]->UpdateVelAndPos(dt, true);
 			}
 			else {
 				mNodes[i]->UpdatePuppet(dt, mNodes[i - 1]->pos, false);
 				mNodes[i]->UpdatePuppet(dt, mNodes[i + 1]->pos, false);
-				mNodes[i]->UpdateVelAndPos(dt);
+				mNodes[i]->UpdateVelAndPos(dt, false);
 			}
 		}
 	}
