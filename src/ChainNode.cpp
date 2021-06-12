@@ -73,11 +73,36 @@ void ChainNode::UpdateVelAndPos(float aDt)
 
 void ChainNode::Draw() const
 {
-	const GPU_Rect& animRect = AnimLib::PERSON;
-	Window::Draw(Assets::personTexture, pos)
-		.withOrigin(vec(animRect.w, animRect.h) / 2)
-		.withScale(NodeRadius*2 / animRect.w, NodeRadius*2 / animRect.h);
+	const GPU_Rect& personRect = AnimLib::PERSON;
+	const GPU_Rect& shadowRect = AnimLib::SHADOW;
+	/*
+	// Relative to character
+	const float shadowBaseSize = 0.9;
+	// Perspective
+	const float shadowTilt = 0.5;
 	
+	// Half the tilted size
+	const float shadowYOffset = -(shadowScale.y * shadowRect.h) / 2;
+	*/
+	const float shadowBaseSize = 0.6;
+	const vec shadowScale = vec(
+		(NodeRadius*2 / shadowRect.w) , 
+		(NodeRadius*2 / shadowRect.h)
+	)*shadowBaseSize;
+	// Shadow
+	Window::Draw(Assets::personShadowTexture, pos)
+		// I tried doing it parametric but didnt work, hardcoded values ahead
+		.withOrigin(vec(shadowRect.w / 2+7, -116 ) )
+		.withScale(shadowScale.x, shadowScale.y*0.5);
+
+	// Person
+	Window::Draw(Assets::personTexture, pos)
+		.withOrigin(vec(personRect.w, personRect.h) / 2)
+		.withScale(NodeRadius*2 / personRect.w, NodeRadius*2 / personRect.h);
+
+
+
+
 	if(Debug::Draw) {
 		Bounds().DebugDraw(0,255,0);
 	}
