@@ -8,12 +8,12 @@
 #include "camera.h"
 #include "window.h"
 
-constexpr float NodeAcc = 5000;
+constexpr float NodeAcc = 1000;
 constexpr uint8_t NodeRadius = 50;
 
 constexpr uint8_t NodeUnstretchedDistance = 20;
 constexpr float NodeSpringStrength = 40;
-constexpr float NodeFrictionStrength = 0.02;
+constexpr float NodeFrictionStrength = 0.005;
 
 constexpr float NodePuppetMass = 1;
 constexpr float NodeMasterMass = 5;
