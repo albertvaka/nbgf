@@ -13,7 +13,7 @@ Shader Assets::tintShader;
 void Assets::LoadAll() {
 
     invadersTexture = LoadImage("data/invaders.png");
-    backgroundTexture = LoadImage("data/bg.png");
+    backgroundTexture = LoadImage("data/citybg.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
