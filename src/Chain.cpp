@@ -5,6 +5,7 @@
 Chain::Chain()
 	: myRightMaster(0U)
 	, myLeftMaster(0U)
+	, myType(eChainType::Default)
 {
 }
 

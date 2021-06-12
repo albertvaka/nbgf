@@ -44,12 +44,6 @@ SceneMain::SceneMain()
 		}
 		mChain.AddNode(currentNode, previousNode, nextNode);
 	}
-	//myChain.myLeftNode = startingNodes -1U;
-	
-
-	mScoreText.SetString("Kill the invaders");
-	mScoreText.SetFillColor(0, 0, 0);
-	mScoreText.SetOutlineColor(255, 255, 0);
 }
 
 SceneMain::~SceneMain()
