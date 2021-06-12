@@ -13,6 +13,39 @@ constexpr uint8_t MaxNodes = 50;
 
 Chain::Chain()
 {
-	mNodes[0] = new ChainNode(vec(Window::GAME_WIDTH*0.1, Window::GAME_HEIGHT*0.5));
+	int startingNodes = 15;
+	for (int i = 0; i < startingNodes; ++i) {
+		mNodes[i] = new ChainNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.5));
+	}
+	
+	mRightNodeIndex = 0;
+	mLeftNodeIndex = -1;
+}
+
+void Chain::Update(float dt)
+{
+	// Call update on each node
+	for (int i = 0; i < mNodes.size(); ++i) {
+		if (mNodes[i] != nullptr) {
+			// check if node is controlled node
+			if (i == mRightNodeIndex) {
+				mNodes[i]->UpdateRight(dt);
+			}
+			else {
+				mNodes[i]->UpdatePuppet(dt, mNodes[i - 1]->pos);
+			}
+		}
+	}
+	
+}
+
+void Chain::Draw()
+{
+	//Call draw on each node
+	for (int i = 0; i < mNodes.size(); ++i) {
+		if (mNodes[i] != nullptr) {
+			mNodes[i]->Draw();
+		}
+	}
 }
 

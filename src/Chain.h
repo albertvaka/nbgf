@@ -8,6 +8,12 @@ struct Chain
 {
 	Chain();
 
-	//Update();
 	std::vector<ChainNode*> mNodes = std::vector<ChainNode*>(50, nullptr);
+	
+	// index for the controlled chainNodes
+	int mRightNodeIndex;
+	int mLeftNodeIndex;
+
+	void Update(float dt);
+	void Draw();
 };

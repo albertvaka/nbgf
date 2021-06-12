@@ -43,7 +43,7 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
-	//mChain.Update(dt);
+	mChain.Update(dt);
 
 }
 
@@ -54,7 +54,7 @@ void SceneMain::Draw()
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
 		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
 
-	//mPlayer.Draw();
+	mChain.Draw();
 
 
 #ifdef _IMGUI
