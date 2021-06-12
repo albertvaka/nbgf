@@ -6,9 +6,12 @@
 #include "Chain.h"
 #include "City.h"
 #include "ChainUtils.h"
+#include "BaseEnemy.h"
 
 
 struct ChainNode;
+struct EnemiesController;
+
 
 struct SceneMain : Scene {
 
@@ -27,6 +30,8 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
+
 private:
 	ChainNode* GenerateNode(vec&& aPosition);
+	EnemiesController* mEnemiesController;
 };
