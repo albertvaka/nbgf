@@ -8,13 +8,35 @@
 #include "collide.h"
 #include "debug.h"
 
-float kAlienMinDistance = 300;
-float kAlienMaxDistance = 400;
+#include "ChainNode.h"
+#include "ChainUtils.h"
 
 SceneMain::SceneMain()
-	: mChain()
+	: mChainNodes()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 {
+
+	mChainNodes.reserve(50U);
+	int startingNodes = 15;
+	for (size_t i = 0U; i < startingNodes; ++i) {
+		mChainNodes.push_back(new ChainNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.5)));
+	}
+
+	for (size_t i = 0U; i < startingNodes; ++i) 
+	{
+		ChainNode* previousNode(nullptr);
+		ChainNode* currentNode = mChainNodes[i];
+		ChainNode* nextNode(nullptr);
+		if (i != 0U)
+		{
+			previousNode = mChainNodes[i - 1U];
+		}
+		if (i != startingNodes - 1U)
+		{
+			nextNode = mChainNodes[i + 1U];
+		}
+		ChainUtils::AddToChain(currentNode, previousNode, nextNode);
+	}
 
 	mScoreText.SetString("Kill the invaders");
 	mScoreText.SetFillColor(0, 0, 0);
@@ -43,7 +65,9 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
-	mChain.Update(dt);
+	std::for_each(mChainNodes.begin(), mChainNodes.end(), [dt](ChainNode* aNode) {
+		aNode->Update(dt);
+	});
 
 }
 
@@ -54,7 +78,11 @@ void SceneMain::Draw()
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
 		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
 
-	mChain.Draw();
+	for (int i = 0; i < mChainNodes.size(); ++i) {
+		if (mChainNodes[i] != nullptr) {
+			mChainNodes[i]->Draw();
+		}
+	}
 
 
 #ifdef _IMGUI

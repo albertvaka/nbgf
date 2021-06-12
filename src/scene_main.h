@@ -3,11 +3,15 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
-#include "Chain.h"
+//#include "Chain.h"
+#include <vector>
+
+struct ChainNode;
 
 struct SceneMain : Scene {
 
-	Chain mChain;
+	std::vector<ChainNode*> mChainNodes; //All possible chain nodes available in game
+
 	int mScoreValue = 0;
 	Text mScoreText;
 

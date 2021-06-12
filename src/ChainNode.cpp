@@ -19,6 +19,26 @@ ChainNode::ChainNode(vec aPosition)
 	: CircleEntity(aPosition, NodeRadius)
 {
 }
+void ChainNode::Update(float dt)
+{
+	if (IsChained())
+	{
+		if (myRightNeighbor == nullptr)
+		{
+			UpdateRight(dt);
+		}
+		else if (myLeftNeighbor == nullptr)
+		{
+			UpdateLeft(dt);
+		}
+		else
+		{
+			UpdatePuppet(dt, myRightNeighbor->pos);
+			UpdatePuppet(dt, myLeftNeighbor->pos);
+		}
+	}
+
+}
 
 void ChainNode::UpdateRight(float aDt)
 {
@@ -65,3 +85,19 @@ void ChainNode::Draw() const
 		.withRect(animRect)
 		.withOrigin(vec(animRect.w, 0) / 2);
 }
+
+void ChainNode::SetRightNeighbor(ChainNode* aRightNeighbor)
+{
+	myRightNeighbor = aRightNeighbor;
+}
+
+void ChainNode::SetLeftNeighbor(ChainNode* aLeftNeighbor)
+{
+	myLeftNeighbor = aLeftNeighbor;
+}
+
+bool ChainNode::IsChained() const
+{
+	return myLeftNeighbor != nullptr || myRightNeighbor != nullptr;
+}
+

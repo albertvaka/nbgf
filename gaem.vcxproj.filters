@@ -220,7 +220,7 @@
     <ClInclude Include="engine\fx.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Chain.h">
+    <ClInclude Include="src\ChainUtils.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\BaseEnemy.h">
@@ -342,7 +342,7 @@
     <ClCompile Include="engine\fx.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Chain.cpp">
+    <ClCompile Include="src\ChainUtils.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseEnemy.cpp">
