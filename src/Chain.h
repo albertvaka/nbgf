@@ -33,9 +33,9 @@ private:
 	void AddLeftSubChainToUnchain(ChainNode* aSubChainStart);
 	void AddUnchainNode(ChainNode* aNodeToUnchain);
 
-	size_t myRightMaster;
-	size_t myLeftMaster;
-	size_t myBrain;
+	std::size_t myRightMaster;
+	std::size_t myLeftMaster;
+	std::size_t myBrain;
 
 	ChainUtils::tNodesContainer myNodes;
 

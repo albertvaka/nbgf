@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\City.h" />
     <ClInclude Include="src\EnemiesController.h" />
     <ClInclude Include="engine\angles.h" />
     <ClInclude Include="engine\animation.h" />
@@ -88,6 +89,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\City.cpp" />
     <ClCompile Include="src\EnemiesController.cpp" />
     <ClCompile Include="engine\camera.cpp" />
     <ClCompile Include="engine\debug.cpp" />
