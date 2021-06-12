@@ -2,6 +2,7 @@
 
 #include "entity.h"
 #include "vec.h"
+#include "animation.h"
 
 struct ChainNode : CircleEntity
 {
@@ -37,6 +38,6 @@ private:
 	ChainNode* myRightNeighbor;
 	ChainNode* myLeftNeighbor;
 	vec acc;
-
+	Animation anim;										
 	float myCooldownToBeChained;
 };
