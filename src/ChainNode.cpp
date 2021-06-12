@@ -60,8 +60,8 @@ void ChainNode::UpdatePuppet(float aDt, vec aPos)
 
 void ChainNode::Draw() const
 {
-	const GPU_Rect& animRect = AnimLib::PLAYER;
-	Window::Draw(Assets::invadersTexture, pos)
-		.withRect(animRect)
-		.withOrigin(vec(animRect.w, 0) / 2);
+	const GPU_Rect& animRect = AnimLib::PERSON;
+	Window::Draw(Assets::personTexture, pos)
+		.withOrigin(vec(animRect.w, 0) / 2)
+		.withScale(NodeRadius / animRect.w, NodeRadius / animRect.h);
 }
