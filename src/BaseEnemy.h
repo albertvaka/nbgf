@@ -9,7 +9,7 @@ enum class SpawnSide {
 	Left
 };
 
-struct BaseEnemy : Entity
+struct BaseEnemy : CircleEntity
 {
 
 	BaseEnemy(float angle, float distance);

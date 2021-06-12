@@ -1,6 +1,7 @@
 #include "EnemiesController.h"
 
 #include "rand.h"
+#include "Chain.h"
 
 void EnemiesController::UpdateEnemies(float dt)
 {
@@ -38,6 +39,7 @@ void EnemiesController::Update(float dt)
 {
 	TrySpawnEnemy(dt);
 	UpdateEnemies(dt);
+	CheckForCollisions();
 }
 
 void EnemiesController::AddEnemies(int count)
@@ -72,6 +74,17 @@ void EnemiesController::TrySpawnEnemy(float dt)
 		AddEnemies(1);
 		spawnTimer -= currentSpawnDelay;
 		currentSpawnDelay = Rand::rollf(minSpawnTime, maxSpawnTime);
+	}
+}
+
+void EnemiesController::CheckForCollisions()
+{
+	for (const auto& enemy : enemies) {
+		
+		if (mChain->CheckCollisionWithEnemy(enemy)) {
+			//NEEDS ANOTHER RESULT
+			enemy->alive = false;
+		}
 	}
 }
 
