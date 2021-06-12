@@ -1,5 +1,6 @@
 #include "scene_main.h"
 #include "raw_input.h"
+#include <iostream>
 #ifdef _IMGUI
 #include "imgui.h"
 #endif
@@ -103,13 +104,12 @@ void SceneMain::Update(float dt)
 		}
 		else		
 		{
-			it->second->UpdateUnchained(dt);
+			it->second->UpdateUnchained(dt, mChain.myNodes);
 			++it;
 		}
 	}	
 
 	mChain.Update(dt);
-
 
 	UpdateEnemies(dt);
 }

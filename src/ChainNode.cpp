@@ -1,5 +1,7 @@
+#pragma once
 
 #include "ChainNode.h"
+#include "ChainUtils.h"
 #include <iostream>
 
 #include "input.h"
@@ -8,21 +10,29 @@
 #include "camera.h"
 #include "window.h"
 
-constexpr float NodeAcc = 6000.f;
+// Collisions
 constexpr uint8_t NodeRadius = 50;
 
-constexpr float NodeUnstretchedDistance = 70.f;
-constexpr float NodeSpringStrength = 150.f;
+// Movement Physics
+constexpr float NodeAcc = 6000.f;
+constexpr float UnchainedNodeAcc = 500.f;
 
 constexpr float NodePuppetFriction = 0.005f;
 constexpr float NodeMasterFriction = 0.03f;
 
 constexpr float NodeMinVelSq = 500.f;
 
-uint16_t ChainNode::theLastId = 0U;
-
 constexpr float NodePuppetMass = 1.f;
 constexpr float NodeMasterMass = 5.f;
+
+// Chain Physics
+constexpr float NodeUnstretchedDistance = 70.f;
+constexpr float NodeSpringStrength = 150.f;
+
+// Unchained IA
+constexpr float RunAwayDistanceSq = 1000000.f;
+
+uint16_t ChainNode::theLastId = 0U;
 
 ChainNode::ChainNode(vec aPosition)
 	: CircleEntity(aPosition, NodeRadius)
@@ -33,10 +43,37 @@ ChainNode::ChainNode(vec aPosition)
 {
 }
 
-void ChainNode::UpdateUnchained(float dt)
+void ChainNode::UpdateUnchained(float aDt, ChainUtils::tNodesContainer &aNodes)
 {
 	//This will be call for AI nodes
 
+	// Ez starting stuff, run away from closest ChainedNode
+	ChainNode* closestNode = ChainUtils::findClosestNode(pos, aNodes);
+	
+	if (closestNode != nullptr) {
+		float distance = pos.DistanceSq(closestNode->pos);
+
+		if (distance < RunAwayDistanceSq) {
+			RunAwayFrom(closestNode->pos);
+		}
+		else {
+			Idle();
+		}
+	} else {
+		Idle();
+	}
+
+	// isMaster = true so that it uses the chonkier physics for master nodes
+	UpdateVelAndPos(aDt, true);
+}
+
+void ChainNode::RunAwayFrom(vec aPos) {
+
+	acc = (pos - aPos).Normalized() * UnchainedNodeAcc;
+}
+
+void ChainNode::Idle() {
+	
 }
 
 void ChainNode::UpdateRight(float aDt)
