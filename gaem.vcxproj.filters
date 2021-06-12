@@ -223,6 +223,9 @@
     <ClInclude Include="src\Chain.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\BaseEnemy.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -340,6 +343,9 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Chain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseEnemy.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

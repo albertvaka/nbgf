@@ -54,6 +54,7 @@
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\Chain.h" />
+    <ClInclude Include="src\BaseEnemy.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\ChainNode.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
@@ -101,6 +102,7 @@
     <ClCompile Include="engine\window.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\Chain.cpp" />
+    <ClCompile Include="src\BaseEnemy.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\ChainNode.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
