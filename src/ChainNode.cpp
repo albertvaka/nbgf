@@ -8,20 +8,31 @@
 #include "camera.h"
 #include "window.h"
 
-constexpr float NodeAcc = 1000;
+constexpr float NodeAcc = 1000.f;
 constexpr uint8_t NodeRadius = 50;
 
 constexpr uint8_t NodeUnstretchedDistance = 20;
-constexpr float NodeSpringStrength = 40;
-constexpr float NodeFrictionStrength = 0.005;
+constexpr float NodeSpringStrength = 40.f;
+constexpr float NodeFrictionStrength = 0.005f;
+
+uint16_t ChainNode::theLastId = 0U;
 
 constexpr float NodePuppetMass = 1;
 constexpr float NodeMasterMass = 5;
 
 ChainNode::ChainNode(vec aPosition)
-	: CircleEntity(aPosition, NodeRadius),
-	acc(vec(0,0))
+	: CircleEntity(aPosition, NodeRadius)
+	, myId(theLastId++)
+	, myRightNeighbor(nullptr)
+	, myLeftNeighbor(nullptr)
+	, acc(vec(0,0))
 {
+}
+
+void ChainNode::UpdateUnchained(float dt)
+{
+	//This will be call for AI nodes
+
 }
 
 void ChainNode::UpdateRight(float aDt)
@@ -40,10 +51,22 @@ void ChainNode::UpdateLeft(float aDt)
 	acc.y -= Input::IsPressed(0, GameKeys::UP2) * NodeAcc;
 }
 
-void ChainNode::UpdatePuppet(float aDt, vec aPos, bool isMaster)
+void ChainNode::UpdatePuppet(float aDt, bool isMaster)
+{
+	if (myLeftNeighbor != nullptr)
+	{
+		UpdatePuppet(aDt, myLeftNeighbor->pos, isMaster);
+	}
+	if (myRightNeighbor != nullptr)
+	{
+		UpdatePuppet(aDt, myRightNeighbor->pos, isMaster);
+	}
+}	   
+
+void ChainNode::UpdatePuppet(float aDt, vec aMasterPos, bool isMaster)
 {
 	// get vector to neighbor
-	vec neighbor = aPos - pos;
+	vec neighbor = aMasterPos - pos;
 
 	// get unstretched vector to neighbor
 	vec unstretched = neighbor.Normalized() * NodeUnstretchedDistance;
@@ -107,3 +130,24 @@ void ChainNode::Draw() const
 		Bounds().DebugDraw(0,255,0);
 	}
 }
+
+void ChainNode::SetRightNeighbor(ChainNode* aRightNeighbor)
+{
+	myRightNeighbor = aRightNeighbor;
+}
+
+ChainNode* ChainNode::GetRightNeighbor() const
+{
+	return myRightNeighbor;
+}
+
+void ChainNode::SetLeftNeighbor(ChainNode* aLeftNeighbor)
+{
+	myLeftNeighbor = aLeftNeighbor;
+}
+
+ChainNode* ChainNode::GetLeftNeighbor() const
+{
+	return myLeftNeighbor;
+}
+

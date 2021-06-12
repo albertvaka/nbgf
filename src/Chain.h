@@ -1,19 +1,33 @@
 #pragma once
 
-#include <vector>
+#include "ChainUtils.h"
 
 struct ChainNode;
 
 struct Chain
 {
 	Chain();
-
-	std::vector<ChainNode*> mNodes = std::vector<ChainNode*>(50, nullptr);
-	
-	// index for the controlled chainNodes
-	int mRightNodeIndex;
-	int mLeftNodeIndex;
+	~Chain();
 
 	void Update(float dt);
 	void Draw();
+
+	bool TryToJoin(ChainNode* anUnchainedNode);
+
+	void AddNode(ChainNode* aNode, ChainNode* aLeftNeighbor, ChainNode* aRightNeighbor);
+	void AddNode(ChainNode* aCollidedNode, ChainNode* aUnchainedNode);
+
+	size_t myRightMaster;
+	size_t myLeftMaster;
+
+	ChainUtils::tNodesContainer myNodes;
+
+	enum class eChainType
+	{
+		Default,
+		Chaos
+	};
+	eChainType	myType;
+	//TODO add core chain
 };
+

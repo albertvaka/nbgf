@@ -7,14 +7,28 @@ struct ChainNode : CircleEntity
 {
 	ChainNode(vec aPosition);
 
-	vec acc;
-
+	void UpdateUnchained(float dt);
 	void UpdateRight(float dt);
 	void UpdateLeft(float dt);
-	void UpdatePuppet(float dt, vec rightPos, bool isMaster);
-	void UpdateVelAndPos(float dt);
+	void UpdatePuppet(float aDt, bool isMaster);
 	void Draw() const;
 
-	//uint8_t indexInChain;
-	
+	void SetRightNeighbor(ChainNode* aRightNeighbor);
+	ChainNode* GetRightNeighbor() const;
+
+	void SetLeftNeighbor(ChainNode* aLeftNeighbor);
+	ChainNode* GetLeftNeighbor() const;
+
+	void UpdateVelAndPos(float aDt);
+
+	const uint16_t myId;
+private:
+	void UpdatePuppet(float aDt, vec aMasterPos, bool isMaster);
+
+	static uint16_t theLastId;
+
+	ChainNode* myRightNeighbor;
+	ChainNode* myLeftNeighbor;
+	vec acc;
+										
 };
