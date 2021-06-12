@@ -17,8 +17,8 @@ struct Chain
 	void AddNode(ChainNode* aNode, ChainNode* aLeftNeighbor, ChainNode* aRightNeighbor);
 	void AddNode(ChainNode* aCollidedNode, ChainNode* aUnchainedNode);
 
-	size_t myRightMaster;
-	size_t myLeftMaster;
+	std::size_t myRightMaster;
+	std::size_t myLeftMaster;
 
 	ChainUtils::tNodesContainer myNodes;
 

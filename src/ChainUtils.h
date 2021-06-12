@@ -7,7 +7,7 @@ struct ChainNode;
 
 namespace ChainUtils
 {	
-	typedef std::unordered_map<size_t, ChainNode*> tNodesContainer;
+	typedef std::unordered_map<std::size_t, ChainNode*> tNodesContainer;
 
 
 };

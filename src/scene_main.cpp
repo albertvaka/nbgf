@@ -1,3 +1,4 @@
+#include <vector>
 #include "scene_main.h"
 #include "raw_input.h"
 #ifdef _IMGUI
@@ -14,6 +15,7 @@ SceneMain::SceneMain()
 	: mUnchainedNodes()
 	, mChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
+	, mCity(citymap)
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
@@ -104,10 +106,12 @@ void SceneMain::Draw()
 {
 	Window::Clear(0, 0, 0);
 
+	/*
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
 		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2)
 		.withScale(Window::MAP_SCALE);
-
+	*/
+	mCity.Draw();
 	for (auto& unchainedIt : mUnchainedNodes)
 	{
 		unchainedIt.second->Draw();

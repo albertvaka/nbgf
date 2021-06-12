@@ -18,6 +18,8 @@ struct Assets
 	static GPU_Image* backgroundTexture;
 	static GPU_Image* personTexture;
 	static GPU_Image* personShadowTexture;
+	
+	static GPU_Image* terrainTexture;
 
 	static TTF_Font* font_30;
 	static TTF_Font* font_30_outline;

@@ -4,6 +4,7 @@
 #include "partsys.h"
 #include "text.h"
 #include "Chain.h"
+#include "City.h"
 #include "ChainUtils.h"
 
 
@@ -13,6 +14,7 @@ struct SceneMain : Scene {
 
 	ChainUtils::tNodesContainer mUnchainedNodes;
 	Chain mChain;
+	City mCity;
 
 	int mScoreValue = 0;
 	Text mScoreText;
