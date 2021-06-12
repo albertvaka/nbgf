@@ -30,13 +30,18 @@ void Chain::Update(float dt)
 			// check if node is controlled node
 			if (i == mRightNodeIndex) {
 				mNodes[i]->UpdateRight(dt);
+				mNodes[i]->UpdatePuppet(dt, mNodes[i + 1]->pos, true);
+				mNodes[i]->UpdateVelAndPos(dt);
 			}
 			else if (i == mLeftNodeIndex) {
 				mNodes[i]->UpdateLeft(dt);
+				mNodes[i]->UpdatePuppet(dt, mNodes[i - 1]->pos, true);
+				mNodes[i]->UpdateVelAndPos(dt);
 			}
 			else {
-				mNodes[i]->UpdatePuppet(dt, mNodes[i - 1]->pos);
-				mNodes[i]->UpdatePuppet(dt, mNodes[i + 1]->pos);
+				mNodes[i]->UpdatePuppet(dt, mNodes[i - 1]->pos, false);
+				mNodes[i]->UpdatePuppet(dt, mNodes[i + 1]->pos, false);
+				mNodes[i]->UpdateVelAndPos(dt);
 			}
 		}
 	}
