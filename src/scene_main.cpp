@@ -17,15 +17,22 @@ SceneMain::SceneMain()
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
-	/*auto* Node = GenerateNode(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
+	auto* Node = GenerateNode(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
 	mChain.AddNode(Node, nullptr, nullptr);
 
-	auto* Node2 = GenerateNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.7));
-	mUnchainedNodes.emplace(Node2->myId, Node2);*/
+	int startingUnchainedNodes = 15;
+
+	for (int i = 0; i < startingUnchainedNodes; ++i) {
+		int randomX = rand() % Window::GAME_WIDTH;
+		int randomY = rand() % Window::GAME_HEIGHT;
+		auto* newNode = GenerateNode(vec(randomX,  randomY));
+		mUnchainedNodes.emplace(newNode->myId, newNode);
+	}
 
 	//UNCOMMENT THIS DO HAVE AN INITIAL CHAIN
-	 size_t startingNodes = 15U;
-	 std::vector<ChainNode*> chainNodes;
+	/*
+	size_t startingNodes = 15U;
+	std::vector<ChainNode*> chainNodes;
 	for (size_t i = 0U; i < startingNodes; ++i) {
 		chainNodes.push_back(GenerateNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.5)));
 	}
@@ -44,6 +51,7 @@ SceneMain::SceneMain()
 		}
 		mChain.AddNode(currentNode, previousNode, nextNode);
 	}
+	*/
 }
 
 SceneMain::~SceneMain()
