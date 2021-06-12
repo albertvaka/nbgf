@@ -17,7 +17,14 @@ void AddToChain(ChainNode* aNode, ChainNode* aLeftNeighbor, ChainNode* aRightNei
 	//TODO update neighbors, for now just a set
 	aNode->SetLeftNeighbor(aLeftNeighbor);
 	aNode->SetRightNeighbor(aRightNeighbor);
-
 }
+
+/*
+void AddToChain(ChainNode* aUnchainedNode, ChainNode* aNode)
+{
+	
+	aNode->SetLeftNeighbor(aLeftNeighbor);
+	aNode->SetRightNeighbor(aRightNeighbor);
+} */
 
 }

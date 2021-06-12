@@ -9,34 +9,42 @@
 #include "debug.h"
 
 #include "ChainNode.h"
-#include "ChainUtils.h"
 
 SceneMain::SceneMain()
-	: mChainNodes()
+	: mUnchainedNodes()
+	, myChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 {
+	//COMMENT THIS DO HAVE AN INITIAL CHAIN
+	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
+	/*auto* Node = GenerateNode(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
+	myChain.AddNode(Node, nullptr, nullptr);
 
-	mChainNodes.reserve(50U);
-	int startingNodes = 15;
+	auto* Node2 = GenerateNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.7));
+	mUnchainedNodes.emplace(Node2->myId, Node2);*/
+
+	//UNCOMMENT THIS DO HAVE AN INITIAL CHAIN
+	 size_t startingNodes = 15U;
+	 std::vector<ChainNode*> chainNodes;
 	for (size_t i = 0U; i < startingNodes; ++i) {
-		mChainNodes.push_back(new ChainNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.5)));
+		chainNodes.push_back(GenerateNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.5)));
 	}
-
-	for (size_t i = 0U; i < startingNodes; ++i) 
+	for (size_t i = 0U; i < startingNodes; ++i)
 	{
 		ChainNode* previousNode(nullptr);
-		ChainNode* currentNode = mChainNodes[i];
+		ChainNode* currentNode = chainNodes[i];
 		ChainNode* nextNode(nullptr);
 		if (i != 0U)
 		{
-			previousNode = mChainNodes[i - 1U];
+			previousNode = chainNodes[i - 1U];
 		}
 		if (i != startingNodes - 1U)
 		{
-			nextNode = mChainNodes[i + 1U];
+			nextNode = chainNodes[i + 1U];
 		}
-		ChainUtils::AddToChain(currentNode, previousNode, nextNode);
+		myChain.AddNode(currentNode, previousNode, nextNode);
 	}
+	myChain.myLeftNode = startingNodes -1U;
 
 	mScoreText.SetString("Kill the invaders");
 	mScoreText.SetFillColor(0, 0, 0);
@@ -55,7 +63,6 @@ void SceneMain::ExitScene()
 
 void SceneMain::Update(float dt)
 {
-
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
 	if (Keyboard::IsKeyJustPressed(restart)) {
@@ -65,10 +72,25 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
-	std::for_each(mChainNodes.begin(), mChainNodes.end(), [dt](ChainNode* aNode) {
-		aNode->Update(dt);
-	});
+	for (auto& unchainedIt : mUnchainedNodes)
+	{
+		unchainedIt.second->UpdateUnchained(dt);
+	}
 
+	//Check if a node must be added to chain
+	for (auto& unchainedIt : mUnchainedNodes)
+	{
+		//TODO optimization. Do this check just on a chained nodes container
+				/*auto mustChainToNodeIt = std::find_if(mChainNodes.begin(), mChainNodes.end(), [dt, &anUnchainedNode](ChainNode* aNode) {
+					return aNode->IsChained() && Collide(anUnchainedNode, aNode);
+				});
+				if (mustChainToNodeIt != mChainNodes.end())
+				{
+					//ChainUtils::AddToChain(anUnchainedNode, aNode)
+				} */
+	}
+
+	myChain.Update(dt);
 }
 
 void SceneMain::Draw()
@@ -77,12 +99,14 @@ void SceneMain::Draw()
 
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
 		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
+				  //Check if a node must be added to chain
 
-	for (int i = 0; i < mChainNodes.size(); ++i) {
-		if (mChainNodes[i] != nullptr) {
-			mChainNodes[i]->Draw();
-		}
+	for (auto& unchainedIt : mUnchainedNodes)
+	{
+		unchainedIt.second->Draw();
 	}
+
+	myChain.Draw();
 
 
 #ifdef _IMGUI
@@ -95,4 +119,9 @@ void SceneMain::Draw()
 	}
 #endif
 
+}
+
+ChainNode* SceneMain::GenerateNode(vec&& aPosition)
+{
+	return new ChainNode(std::move(aPosition));
 }

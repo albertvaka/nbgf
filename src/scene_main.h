@@ -3,14 +3,16 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
-//#include "Chain.h"
-#include <vector>
+#include "Chain.h"
+#include "ChainUtils.h"
+
 
 struct ChainNode;
 
 struct SceneMain : Scene {
 
-	std::vector<ChainNode*> mChainNodes; //All possible chain nodes available in game
+	ChainUtils::tNodesContainer mUnchainedNodes;
+	Chain myChain;
 
 	int mScoreValue = 0;
 	Text mScoreText;
@@ -22,4 +24,6 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
+private:
+	ChainNode* GenerateNode(vec&& aPosition);
 };
