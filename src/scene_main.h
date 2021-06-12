@@ -9,6 +9,8 @@
 
 
 struct ChainNode;
+struct EnemiesController;
+
 
 struct SceneMain : Scene {
 
@@ -26,12 +28,8 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
-	void UpdateEnemies(float dt);
-	void DrawEnemies();
-	void DestroyEnemies();
-	void AddEnemies(int count);
 
 private:
 	ChainNode* GenerateNode(vec&& aPosition);
-	std::vector<BaseEnemy*> enemies;
+	EnemiesController* mEnemiesController;
 };

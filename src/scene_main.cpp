@@ -7,6 +7,7 @@
 #include "assets.h"
 #include "collide.h"
 #include "debug.h"
+#include "EnemiesController.h"
 
 #include "ChainNode.h"
 
@@ -55,8 +56,8 @@ SceneMain::SceneMain()
 	*/
 
 	//Enemies----
-
-	AddEnemies(20);
+	mEnemiesController = new EnemiesController();
+	mEnemiesController->Awake();
 }
 
 SceneMain::~SceneMain()
@@ -65,13 +66,12 @@ SceneMain::~SceneMain()
 	{
 		delete(it.second);
 	}
-	for (auto enemy : enemies)
-	{
-		delete(enemy);
-	}
 
-	enemies.clear();
 	mUnchainedNodes.clear();
+
+	mEnemiesController->CleanUp();
+
+	delete(mEnemiesController);
 }
 
 void SceneMain::EnterScene() 
@@ -110,8 +110,9 @@ void SceneMain::Update(float dt)
 
 	mChain.Update(dt);
 
+	
 
-	UpdateEnemies(dt);
+	mEnemiesController->UpdateEnemies(dt);
 }
 
 void SceneMain::Draw()
@@ -129,7 +130,7 @@ void SceneMain::Draw()
 		
 	mChain.Draw();
 
-	DrawEnemies();
+	mEnemiesController->DrawEnemies();
 
 #ifdef _IMGUI
 	{
@@ -141,45 +142,6 @@ void SceneMain::Draw()
 	}
 #endif
 
-}
-
-void SceneMain::UpdateEnemies(float dt)
-{
-	if (enemies.empty()) {
-		return;
-	}
-
-	for (const auto& enemy : enemies) {		
-		enemy->Update(dt);
-	}
-
-	DestroyEnemies();
-}
-
-void SceneMain::DrawEnemies()
-{
-	if (enemies.empty()) {
-		return;
-	}
-
-	for (const auto& enemy : enemies) {
-		enemy->Draw();
-	}
-}
-
-void SceneMain::DestroyEnemies()
-{
-	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const BaseEnemy* x)
-		{
-			return !x->alive;
-		}), enemies.end());
-}
-
-void SceneMain::AddEnemies(int count)
-{
-	for (int i = 0; i < count; ++i) {
-		enemies.push_back(new BaseEnemy(0, 200));
-	}
 }
 
 ChainNode* SceneMain::GenerateNode(vec&& aPosition)
