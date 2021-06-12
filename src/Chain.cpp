@@ -1,6 +1,7 @@
 #include "Chain.h"
 #include "ChainNode.h"
 #include "collide.h"
+#include "BaseEnemy.h"
 
 constexpr float TimeToBreakByDistance = 1.5f;
 
@@ -89,6 +90,22 @@ bool Chain::TryToJoin(ChainNode* anUnchainedNode)
 	if (collidedIt != myNodes.end())
 	{
 		AddNode(collidedIt->second, anUnchainedNode);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Chain::CheckCollisionWithEnemy(BaseEnemy* enemy) 
+{
+	auto collidedIt = std::find_if(myNodes.begin(), myNodes.end(), [&enemy](const ChainUtils::tNodesContainer::value_type& aCurrentNodeIt)
+		{
+			return Collide(enemy, aCurrentNodeIt.second);
+		});
+	if (collidedIt != myNodes.end())
+	{
 		return true;
 	}
 	else

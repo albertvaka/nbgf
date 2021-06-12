@@ -4,6 +4,7 @@
 #include <vector>
 
 struct ChainNode;
+struct BaseEnemy;
 
 struct Chain
 {
@@ -14,6 +15,7 @@ struct Chain
 	void Draw();
 
 	bool TryToJoin(ChainNode* anUnchainedNode);
+	bool CheckCollisionWithEnemy(BaseEnemy* enemy);
 
 	void AddNode(ChainNode* aNode, ChainNode* aLeftNeighbor, ChainNode* aRightNeighbor);
 	void AddNode(ChainNode* aCollidedNode, ChainNode* aUnchainedNode);
