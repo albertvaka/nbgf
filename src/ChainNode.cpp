@@ -62,6 +62,10 @@ void ChainNode::Draw() const
 {
 	const GPU_Rect& animRect = AnimLib::PERSON;
 	Window::Draw(Assets::personTexture, pos)
-		.withOrigin(vec(animRect.w, 0) / 2)
-		.withScale(NodeRadius / animRect.w, NodeRadius / animRect.h);
+		.withOrigin(vec(animRect.w, animRect.h) / 2)
+		.withScale(NodeRadius*2 / animRect.w, NodeRadius*2 / animRect.h);
+	
+	if(Debug::Draw) {
+		Bounds().DebugDraw(0,255,0);
+	}
 }
