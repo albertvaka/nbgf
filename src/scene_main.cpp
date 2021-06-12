@@ -11,6 +11,7 @@
 
 #include "ChainNode.h"
 
+
 SceneMain::SceneMain()
 	: mUnchainedNodes()
 	, mChain()
@@ -110,7 +111,7 @@ void SceneMain::Update(float dt)
 
 	mChain.Update(dt);	
 
-	mEnemiesController->UpdateEnemies(dt);
+	mEnemiesController->Update(dt);
 
 	//Retrieve nodes to unchain from chain
 	const auto& nodesToUnchain = mChain.GetNodesToUnchain();
