@@ -10,7 +10,7 @@ struct ChainNode : CircleEntity
 	void UpdateUnchained(float dt);
 	void UpdateRight(float dt);
 	void UpdateLeft(float dt);
-	void UpdatePuppet(float aDt);
+	void UpdatePuppet(float aDt, bool isMaster);
 	void Draw() const;
 
 	void SetRightNeighbor(ChainNode* aRightNeighbor);
@@ -19,13 +19,16 @@ struct ChainNode : CircleEntity
 	void SetLeftNeighbor(ChainNode* aLeftNeighbor);
 	ChainNode* GetLeftNeighbor() const;
 
+	void UpdateVelAndPos(float aDt);
+
 	const uint16_t myId;
 private:
-	void UpdatePuppet(float aDt, vec aMasterPos);
+	void UpdatePuppet(float aDt, vec aMasterPos, bool isMaster);
 
 	static uint16_t theLastId;
 
 	ChainNode* myRightNeighbor;
 	ChainNode* myLeftNeighbor;
+	vec acc;
 										
 };

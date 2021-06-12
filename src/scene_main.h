@@ -12,7 +12,7 @@ struct ChainNode;
 struct SceneMain : Scene {
 
 	ChainUtils::tNodesContainer mUnchainedNodes;
-	Chain myChain;
+	Chain mChain;
 
 	int mScoreValue = 0;
 	Text mScoreText;

@@ -22,16 +22,20 @@ void Chain::Update(float dt)
 	for (auto& it : myNodes)
 	{		
 		auto* currentNode = it.second;
+		bool lIsMaster = false;
 		if (currentNode->myId == myRightMaster)
 		{
 			currentNode->UpdateRight(dt);
+			lIsMaster = true;
 		}
 		if (currentNode->myId == myLeftMaster)
 		{
 			currentNode->UpdateLeft(dt);
+			lIsMaster = true;
 		}
 
-		currentNode->UpdatePuppet(dt);			
+		currentNode->UpdatePuppet(dt, lIsMaster);
+		it.second->UpdateVelAndPos(dt);
 	}
 }
 

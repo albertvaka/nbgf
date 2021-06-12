@@ -12,19 +12,19 @@
 
 SceneMain::SceneMain()
 	: mUnchainedNodes()
-	, myChain()
+	, mChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
-	auto* Node = GenerateNode(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
-	myChain.AddNode(Node, nullptr, nullptr);
+	/*auto* Node = GenerateNode(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
+	mChain.AddNode(Node, nullptr, nullptr);
 
 	auto* Node2 = GenerateNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.7));
-	mUnchainedNodes.emplace(Node2->myId, Node2);
+	mUnchainedNodes.emplace(Node2->myId, Node2);*/
 
 	//UNCOMMENT THIS DO HAVE AN INITIAL CHAIN
-	/* size_t startingNodes = 15U;
+	 size_t startingNodes = 15U;
 	 std::vector<ChainNode*> chainNodes;
 	for (size_t i = 0U; i < startingNodes; ++i) {
 		chainNodes.push_back(GenerateNode(vec(Window::GAME_WIDTH * 0.2, Window::GAME_HEIGHT * 0.5)));
@@ -42,10 +42,10 @@ SceneMain::SceneMain()
 		{
 			nextNode = chainNodes[i + 1U];
 		}
-		myChain.AddNode(currentNode, previousNode, nextNode);
+		mChain.AddNode(currentNode, previousNode, nextNode);
 	}
 	//myChain.myLeftNode = startingNodes -1U;
-	*/
+	
 
 	mScoreText.SetString("Kill the invaders");
 	mScoreText.SetFillColor(0, 0, 0);
@@ -84,7 +84,7 @@ void SceneMain::Update(float dt)
 
 	for (auto it = mUnchainedNodes.begin(); it != mUnchainedNodes.end();) 
 	{
-		if (myChain.TryToJoin(it->second)) 
+		if (mChain.TryToJoin(it->second)) 
 		{
 			it = mUnchainedNodes.erase(it);
 		}
@@ -95,7 +95,7 @@ void SceneMain::Update(float dt)
 		}
 	}	
 
-	myChain.Update(dt);
+	mChain.Update(dt);
 }
 
 void SceneMain::Draw()
@@ -103,15 +103,15 @@ void SceneMain::Draw()
 	Window::Clear(0, 0, 0);
 
 	Window::Draw(Assets::backgroundTexture, Camera::Center())
-		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
-				  //Check if a node must be added to chain
+		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2)
+		.withScale(Window::MAP_SCALE);
 
 	for (auto& unchainedIt : mUnchainedNodes)
 	{
 		unchainedIt.second->Draw();
 	}
-
-	myChain.Draw();
+		
+	mChain.Draw();
 
 
 #ifdef _IMGUI
