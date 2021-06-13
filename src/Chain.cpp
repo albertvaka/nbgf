@@ -166,6 +166,15 @@ bool Chain::CheckCollisionWithEnemy(BaseEnemy* enemy)
 		});
 	if (collidedIt != myNodes.end())
 	{
+		//we unchain the node:
+		if (collidedIt->first == myBrain)
+		{
+			//TODO(@RNogue): end game, the brain has died.
+		}
+		else
+		{
+			PropagateUnchainNode(collidedIt->second);
+		}
 		return true;
 	}
 	else

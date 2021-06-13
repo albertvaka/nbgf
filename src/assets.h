@@ -27,6 +27,14 @@ struct Assets
 	static GPU_Image* canisterTexture;
 	static GPU_Image* canisterShadowTexture;
 
+	static GPU_Image* bushTexture;
+	static GPU_Image* bushShadowTexture;
+
+	static GPU_Image* lightTexture;
+	static GPU_Image* lightShadowTexture;
+
+	static GPU_Image* charcoTexture;
+
 	static TTF_Font* font_30;
 	static TTF_Font* font_30_outline;
 

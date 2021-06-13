@@ -15,6 +15,14 @@ GPU_Image* Assets::treeShadowTexture;
 GPU_Image* Assets::canisterTexture;
 GPU_Image* Assets::canisterShadowTexture;
 
+GPU_Image* Assets::bushTexture;
+GPU_Image* Assets::bushShadowTexture;
+
+GPU_Image* Assets::lightTexture;
+GPU_Image* Assets::lightShadowTexture;
+
+GPU_Image* Assets::charcoTexture;
+
 TTF_Font* Assets::font_30;
 TTF_Font* Assets::font_30_outline;
 
@@ -33,6 +41,14 @@ void Assets::LoadAll() {
 
     canisterTexture = LoadImage("data/basic_canister_sprite.png");
     canisterShadowTexture = LoadImage("data/basic_canister_shadow.png");
+
+    bushTexture = LoadImage("data/basic_bush_sprite.png");
+    bushShadowTexture = LoadImage("data/basic_bush_shadow.png");
+
+    lightTexture = LoadImage("data/basic_light_sprite.png");
+    lightShadowTexture = LoadImage("data/basic_light_shadow.png");
+
+    charcoTexture = LoadImage("data/basic_charco.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);

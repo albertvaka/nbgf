@@ -5,12 +5,18 @@
 #include "window_draw.h"
 #include "Tree.h"
 #include "Canister.h"
+#include "Light.h"
+#include "Bush.h"
+#include "Charco.h"
 
 struct City {
 
 	//std::vector<Entity*> mEntities;
 	std::vector<Tree*> mTrees;
 	std::vector<Canister*> mCanisters;
+	std::vector<Light*> mLights;
+	std::vector<Bush*> mBushs;
+	std::vector<Charco*> mCharcos;
 
 	City();
 	~City();
