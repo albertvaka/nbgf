@@ -18,6 +18,7 @@ City::City(): mTrees() {
     mLights.push_back(new Light(vec(500,700)));
     mBushs.push_back(new Bush(vec(200,700)));
     mCharcos.push_back(new Charco(vec(100,400)));
+    mTiles.push_back(new Tile(vec(800,700)));
 }
 City::~City() {
     /*
@@ -38,6 +39,9 @@ City::~City() {
         delete t;
     }
     for(Charco* t : mCharcos) {
+        delete t;
+    }
+    for(Tile* t : mTiles) {
         delete t;
     }
 }
@@ -91,7 +95,11 @@ std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> Ci
         t->Bounds().DebugDraw(255,0,0);
     }
     for(Charco* t : mCharcos) {
-        sprites.push_back(t->PartialDraw());
+        shadows.push_back(t->PartialDraw());
+        t->Bounds().DebugDraw(255,0,0);
+    }
+    for(Tile* t : mTiles) {
+        shadows.push_back(t->PartialDraw());
         t->Bounds().DebugDraw(255,0,0);
     }
     p.first = shadows;
