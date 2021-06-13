@@ -34,6 +34,8 @@ struct Chain
 
 	const ChainUtils::tNodesContainer GetNodes() const;
 
+	void ResetChain(vec aPos);
+
 private:
 
 	void AddRightSubChainToUnchain(ChainNode* aSubChainStart);

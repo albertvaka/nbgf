@@ -12,6 +12,7 @@
 #include "EnemiesController.h"
 #include "window_draw.h"
 #include "musicplayer.h"
+#include "input.h"
 
 #include "ChainNode.h"
 
@@ -22,7 +23,6 @@ SceneMain::SceneMain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 	, mCity()
 	, timerText(Assets::font_30, Assets::font_30_outline)
-	, timer(5.f)
 	, gameOverText(Assets::font_30, Assets::font_30_outline)
 	, restartText(Assets::font_30, Assets::font_30_outline)
 {
@@ -78,6 +78,10 @@ SceneMain::SceneMain()
 	gameOverText.SetString("Game Over");
 
 	restartText.SetString("Press R to restart");
+
+	timer = 30.f;
+
+	gameOver = false;
 }
 
 SceneMain::~SceneMain()
@@ -99,6 +103,45 @@ void SceneMain::EnterScene()
 	
 }
 
+void SceneMain::StartScene()
+{
+	//COMMENT THIS DO HAVE AN INITIAL CHAIN
+	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
+	mChain.ResetChain(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
+
+	int startingUnchainedNodes = 15;
+
+	for (int i = 0; i < startingUnchainedNodes; ++i) {
+		int randomX = rand() % Window::GAME_WIDTH;
+		int randomY = rand() % Window::GAME_HEIGHT;
+		auto* newNode = GenerateNode(vec(randomX, randomY));
+		mUnchainedNodes.emplace(newNode->myId, newNode);
+	}
+
+
+	//Enemies----
+	mEnemiesController = new EnemiesController(&mChain);
+	mEnemiesController->Awake();
+
+	timer = 5.f;
+
+	gameOver = false;
+}
+
+void SceneMain::EndScene()
+{
+	for (auto it : mUnchainedNodes)
+	{
+		delete(it.second);
+	}
+
+	mUnchainedNodes.clear();
+
+	mEnemiesController->CleanUp();
+
+	delete(mEnemiesController);
+}
+
 void SceneMain::ExitScene()
 {
 	
@@ -117,6 +160,11 @@ void SceneMain::Update(float dt)
 
 	if (gameOver)
 	{
+		if (Input::IsPressed(0, GameKeys::RESTART))
+		{
+			EndScene();
+			StartScene();
+		}
 		return;
 	}
 
