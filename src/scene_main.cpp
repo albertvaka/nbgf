@@ -136,9 +136,10 @@ void SceneMain::Draw()
 		.withScale(Window::MAP_SCALE);
 	*/
 	mCity.Draw();
+	SDL_Color lDefaultNodeColor; lDefaultNodeColor.r = 255; lDefaultNodeColor.g = 255; lDefaultNodeColor.b = 255; lDefaultNodeColor.a = 255;
 	for (auto& unchainedIt : mUnchainedNodes)
 	{
-		unchainedIt.second->Draw();
+		unchainedIt.second->Draw(lDefaultNodeColor);
 	}
 		
 	mChain.Draw();

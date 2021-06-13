@@ -70,9 +70,30 @@ void Chain::Update(float dt)
 
 void Chain::Draw()
 {
+	SDL_Color lDefaultNodeColor; lDefaultNodeColor.r = 255; lDefaultNodeColor.g = 255; lDefaultNodeColor.b = 255;lDefaultNodeColor.a = 255;
+	SDL_Color lMasterNodeColor; lMasterNodeColor.r = 237; lMasterNodeColor.g = 207; lMasterNodeColor.b = 33; lMasterNodeColor.a = 255;
+	SDL_Color lRightMostNodeColor; lRightMostNodeColor.r = 255; lRightMostNodeColor.g = 100; lRightMostNodeColor.b = 100; lRightMostNodeColor.a = 255;
+	SDL_Color lLeftMostNodeColor; lLeftMostNodeColor.r = 100; lLeftMostNodeColor.g = 100; lLeftMostNodeColor.b = 255; lLeftMostNodeColor.a = 255;
+
 	for (auto& it : myNodes)
 	{
-		it.second->Draw();
+		if (it.first == myBrain)
+		{
+			it.second->Draw(lMasterNodeColor);
+		}
+		else if (it.first == myRightMaster)
+		{
+			it.second->Draw(lRightMostNodeColor);
+		}
+		else if (it.first == myLeftMaster)
+		{
+			it.second->Draw(lLeftMostNodeColor);
+		}
+		else
+		{
+			it.second->Draw(lDefaultNodeColor);
+		}
+		
 	}
 }
 
