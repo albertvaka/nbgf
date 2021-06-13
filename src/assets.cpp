@@ -26,6 +26,9 @@ GPU_Image* Assets::tileTexture;
 
 GPU_Image* Assets::birdTexture;
 
+GPU_Image* Assets::instructionsTexture;
+GPU_Image* Assets::arrowTexture;
+
 TTF_Font* Assets::font_30;
 TTF_Font* Assets::font_30_outline;
 
@@ -55,6 +58,9 @@ void Assets::LoadAll() {
     tileTexture = LoadImage("data/basic_tile.png");
     
     birdTexture = LoadImage("data/bird.png");
+    
+    instructionsTexture = LoadImage("data/instructions.png");
+    arrowTexture = LoadImage("data/arrow.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);

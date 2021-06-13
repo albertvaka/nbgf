@@ -21,6 +21,9 @@ struct SceneMain : Scene {
 
 	int mScoreValue = 0;
 	Text mScoreText;
+	bool showInstructions = true;
+
+	float arrowBounce;
 
 	SceneMain();
 	~SceneMain();
