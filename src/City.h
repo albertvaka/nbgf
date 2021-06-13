@@ -22,6 +22,8 @@ struct City {
 	// First is shadows, second sprites
 	std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> PartialDraws();
 
+	void CheckCollision(ChainNode* node);
+
 	std::vector<EnvironmentObject*> collisionObjects;
 	std::vector<EnvironmentObject*> noCollisionObjects;
 

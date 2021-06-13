@@ -55,7 +55,7 @@ void EnemiesController::AddEnemies(int count)
 
 void EnemiesController::Awake()
 {
-	AddEnemies(20);
+	AddEnemies(3);
 }
 
 void EnemiesController::CleanUp()

@@ -258,15 +258,11 @@ void SceneMain::Draw()
 	draws.insert(std::end(draws), std::begin(aPds.second), std::end(aPds.second));
 
 	SDL_Color lDefaultNodeColor; lDefaultNodeColor.r = 255; lDefaultNodeColor.g = 255; lDefaultNodeColor.b = 255; lDefaultNodeColor.a = 255;
-	/*
-	for (auto& unchainedIt : mUnchainedNodes)
-	{
-		unchainedIt.second->Draw(lDefaultNodeColor);
-	}
-	*/
+
 	for (auto& unchainedIt : mUnchainedNodes)
 	{
 		auto p = unchainedIt.second->PartialDraws(lDefaultNodeColor);
+		mCity.CheckCollision(unchainedIt.second);
 		shadows.push_back(p.first);
 		draws.push_back(p.second);
 	}

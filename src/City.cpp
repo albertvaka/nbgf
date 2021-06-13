@@ -8,6 +8,9 @@
 #include "Chain.h"
 #include "vec.h"
 #include "window_conf.h"
+#include "ChainNode.h"
+#include "EnvironmentObject.h"
+#include "collide.h"
 
 
 City::City(){
@@ -84,4 +87,17 @@ std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> Ci
     p.first = shadows;
     p.second = sprites;
     return p;
+}
+
+void City::CheckCollision(ChainNode* node)
+{
+    auto collidedIt = std::find_if(collisionObjects.begin(), collisionObjects.end(), [&node](EnvironmentObject* aCurrentNodeIt)
+        {
+            return Collide(node, aCurrentNodeIt);
+        });
+    if (collidedIt != collisionObjects.end())
+    {
+        
+        node->RegisterHit(1000, node->pos - (*collidedIt)->pos);
+    }
 }
