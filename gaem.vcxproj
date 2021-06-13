@@ -66,6 +66,7 @@
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
+    <ClInclude Include="src\Tile.h" />
     <ClInclude Include="src\TileUtils.h" />
     <ClInclude Include="src\Tree.h" />
     <ClInclude Include="src\window_conf.h" />
@@ -122,6 +123,7 @@
     <ClCompile Include="src\ChainNode.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
+    <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\Tree.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
