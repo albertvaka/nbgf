@@ -46,7 +46,7 @@ void Chain::Update(float dt)
 			lIsMaster = true;
 		}
 		currentNode->UpdatePuppet(dt, lIsMaster);
-		currentNode->UpdateVelAndPos(dt, lIsMaster);
+		currentNode->UpdateVelAndPos(dt, lIsMaster, false);
 
 		//Node to unchain by distance
 		float unchainDistance;

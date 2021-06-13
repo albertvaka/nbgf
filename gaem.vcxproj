@@ -62,6 +62,7 @@
     <ClInclude Include="src\ChainNode.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
+    <ClInclude Include="src\Tree.h" />
     <ClInclude Include="src\window_conf.h" />
     <ClInclude Include="vendor\glew\glew.h" />
     <ClInclude Include="vendor\glew\glxew.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\ChainNode.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
+    <ClCompile Include="src\Tree.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
