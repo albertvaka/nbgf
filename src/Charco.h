@@ -13,6 +13,7 @@ struct Charco: EnvironmentObject {
 	~Charco();
 
 	void Draw() override;
+
 	// First is the shadow, second the tree
 	Window::PartialDraw PartialDraw() override;
 };
