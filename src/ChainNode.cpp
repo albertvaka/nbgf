@@ -38,7 +38,7 @@ constexpr float RunAwayDistanceSq = 1000000.f;
 
 uint16_t ChainNode::theLastId = 0U;
 
-ChainNode::ChainNode(vec aPosition)
+ChainNode::ChainNode(vec aPosition, bool aIsMaster)
 	: CircleEntity(aPosition, NodeRadius)
 	, myId(theLastId++)
 	, myRightNeighbor(nullptr)
@@ -46,6 +46,7 @@ ChainNode::ChainNode(vec aPosition)
 	, acc(vec(0,0))
 	, anim(AnimLib::PERSON_WALKING)
 	, myCooldownToBeChained(0.f)
+	, mIsMaster(aIsMaster)
 {
 }
 
@@ -170,7 +171,7 @@ void ChainNode::UpdateUnchainedVelAndPos(float aDt)
 	anim.Update(aDt);
 }
 
-void ChainNode::Draw() const
+void ChainNode::Draw(SDL_Color aNodeColor) const
 {
 	const GPU_Rect& personRect = AnimLib::PERSON;
 	const GPU_Rect& shadowRect = AnimLib::SHADOW;
@@ -193,12 +194,14 @@ void ChainNode::Draw() const
 		// I tried doing it parametric but didnt work, hardcoded values ahead
 		.withOrigin(vec(shadowRect.w / 2+7, -116 ) )
 		.withScale(shadowScale.x, shadowScale.y*0.5);
-
+	
 	// Person
 	Window::Draw(Assets::personTexture, pos)
 		.withOrigin(vec(personRect.w, personRect.h) / 2)
 		.withRect(anim.CurrentFrameRect())
-		.withScale(NodeRadius*2 / personRect.w, NodeRadius*2 / personRect.h);
+		.withColor(aNodeColor)
+		.withScale(NodeRadius * 2 / personRect.w, NodeRadius * 2 / personRect.h);
+
 
 	if(Debug::Draw) {
 		Bounds().DebugDraw(0,255,0);

@@ -7,7 +7,7 @@
 
 struct ChainNode : CircleEntity
 {
-	ChainNode(vec aPosition);
+	ChainNode(vec aPosition, bool aIsMaster = false);
 
 	void UpdateUnchained(float dt, ChainUtils::tNodesContainer aNodes);
 	void UpdateRight(float dt);
@@ -15,7 +15,7 @@ struct ChainNode : CircleEntity
 	void UpdateVelAndPos(float dt, bool isMaster);
 	void UpdateUnchainedVelAndPos(float dt);
 	void UpdatePuppet(float aDt, bool isMaster);
-	void Draw() const;
+	void Draw(SDL_Color aNodeColor) const;
 
 	void ActivateChainCooldown();
 	bool CanBeChained() const;
@@ -44,4 +44,5 @@ private:
 	vec acc;
 	Animation anim;										
 	float myCooldownToBeChained;
+	bool mIsMaster;
 };
