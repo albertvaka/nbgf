@@ -18,6 +18,16 @@ struct Input {
 		return (action_states[player][int(k)] == PRESSED || action_states[player][int(k)] == JUST_PRESSED);
 	}
 
+	static bool IsAnyButtonPressed() {
+		for (int i = 0; i < kMaxPlayers; i++) {
+			for (auto k :action_states[i]) {
+				if(k == PRESSED || k == JUST_PRESSED)
+					return true;
+			}
+		}
+		return false;
+	}
+
 	static bool IsPressedAnyPlayer(GameKeys k) {
 		for (int i = 0; i < kMaxPlayers; i++) {
 			if (IsPressed(i, k)) return true;

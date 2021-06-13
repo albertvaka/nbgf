@@ -20,8 +20,14 @@ struct SceneMain : Scene {
 	Chain mChain;
 	City mCity;
 
+	Text mRemainingUnchained;
+	Text mLevelCounter;
+
 	int mScoreValue = 0;
 	Text mScoreText;
+	bool showInstructions = true;
+
+	float arrowBounce;
 
 	SceneMain();
 	~SceneMain();

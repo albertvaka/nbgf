@@ -35,6 +35,12 @@ struct ChainNode : CircleEntity
 	ChainNode* GetLeftNeighbor() const;
 
 	const uint16_t myId;
+
+	float displacementAcceleration = 0;
+	vec displacementDirection = vec(0, 0);
+
+	void RegisterHit(float displacementStrength, vec direction);
+
 private:
 	void UpdatePuppet(float aDt, vec aMasterPos, bool isMaster);
 	void RunAwayFrom(vec aPos);
@@ -49,4 +55,5 @@ private:
 	Animation anim;										
 	float myCooldownToBeChained;
 	bool mIsMaster;
+	vec GetBounceAcceleration();
 };

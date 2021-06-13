@@ -140,6 +140,14 @@ void ChainNode::UpdatePuppet(float aDt, bool isMaster)
 	}
 }	   
 
+void ChainNode::RegisterHit(float displacementStrength, vec direction)
+{
+	acc = vec(0,0);
+	vel = direction * 4;
+	displacementAcceleration = displacementStrength;
+	displacementDirection = direction.Normalized();
+}
+
 void ChainNode::UpdatePuppet(float aDt, vec aMasterPos, bool isMaster)
 {
 	// get vector to neighbor
@@ -156,7 +164,25 @@ void ChainNode::UpdatePuppet(float aDt, vec aMasterPos, bool isMaster)
 
 	// get acceleration from hooke's law
 	acc += NodeSpringStrength / mass * displacement;
+
+	acc += GetBounceAcceleration();
 }
+
+vec ChainNode::GetBounceAcceleration()
+{
+	displacementAcceleration *= 0.95f; //Atenuation
+
+	if (displacementAcceleration < 0.5f) {
+		displacementAcceleration = 0;
+		return vec(0,0);
+	}
+
+	displacementDirection.Normalize();
+
+	return displacementDirection * displacementAcceleration;
+}
+
+
 
 void ChainNode::UpdateVelAndPos(float aDt, bool isMaster, bool isUnchained)
 {
@@ -164,6 +190,8 @@ void ChainNode::UpdateVelAndPos(float aDt, bool isMaster, bool isUnchained)
 	if (isUnchained) { frictionStrength = UnchainedNodeFriction; }
 	// get deceleration from friction
 	acc -= vel.Normalized() * vel.LengthSq() * frictionStrength;
+
+	acc += GetBounceAcceleration();
 
 	// update velocity
 	vel += acc * aDt;

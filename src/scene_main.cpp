@@ -22,9 +22,12 @@ SceneMain::SceneMain()
 	, mChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 	, mCity()
+	, mRemainingUnchained(Assets::font_30, Assets::font_30_outline)
+	, mLevelCounter(Assets::font_30, Assets::font_30_outline)
 	, timerText(Assets::font_30, Assets::font_30_outline)
 	, gameOverText(Assets::font_30, Assets::font_30_outline)
 	, restartText(Assets::font_30, Assets::font_30_outline)
+
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
@@ -71,6 +74,14 @@ SceneMain::SceneMain()
 
 	MusicPlayer::SetVolume(50.f);
 	MusicPlayer::Play(Assets::gameMusic);
+
+	mRemainingUnchained.SetString("Remaining: ");
+	mRemainingUnchained.SetFillColor(255, 255, 255);
+	mRemainingUnchained.SetOutlineColor(0, 0, 0);
+
+	mLevelCounter.SetString("Stage 1");
+	mLevelCounter.SetFillColor(255, 255, 255);
+	mLevelCounter.SetOutlineColor(0, 0, 0);
 
 	timerText.SetFillColor(255, 255, 255);
 	timerText.SetOutlineColor(0, 0, 0);
@@ -168,6 +179,7 @@ void SceneMain::Update(float dt)
 		return;
 	}
 
+	uint8_t remainingUnchained = 0;
 	for (auto it = mUnchainedNodes.begin(); it != mUnchainedNodes.end();) 
 	{
 		if (mChain.TryToJoin(it->second))
@@ -179,6 +191,7 @@ void SceneMain::Update(float dt)
 			it->second->UpdateUnchained(dt, mChain.GetNodes());
 			++it;
 		}
+		++remainingUnchained;
 	}	
 
 	mChain.Update(dt);	
@@ -195,6 +208,9 @@ void SceneMain::Update(float dt)
 		nodeToUnchain->ActivateChainCooldown();
 	}
 	mChain.ResetNodesToUnchain();
+	arrowBounce += dt*10;
+
+	mRemainingUnchained.SetString("Remaining: " + std::to_string(remainingUnchained));
 
 	timer -= dt;
 	timerText.SetString("Time left: " + Mates::to_string_with_precision(timer, 2));
@@ -253,6 +269,21 @@ void SceneMain::Draw()
 		
 	mEnemiesController->DrawEnemies();
 
+	if (showInstructions) {
+		if(Input::IsAnyButtonPressed()) {
+			showInstructions = false;
+		}
+		Debug::out << arrowBounce;
+		Window::Draw(Assets::arrowTexture, vec(380, 1250))
+			.withOrigin(Assets::arrowTexture->w/2, Assets::arrowTexture->h/2+std::sin(arrowBounce)*30);
+		Window::Draw(Assets::instructionsTexture, vec(800, 1300))
+			.withOrigin(Assets::instructionsTexture->w/2, Assets::instructionsTexture->h/2);
+	}
+
+	Window::Draw(mRemainingUnchained, vec(Window::GAME_WIDTH - mRemainingUnchained.Size().x - 20, 30))
+		.withOrigin(timerText.Size() / 2)
+		.withScale(1.0f);
+
 	Window::Draw(timerText, vec(Camera::Center().x, 30))
 		.withOrigin(timerText.Size() / 2)
 		.withScale(1.0f);
@@ -267,6 +298,7 @@ void SceneMain::Draw()
 			.withOrigin(restartText.Size() / 2)
 			.withScale(1.0f);
 	}
+
 
 #ifdef _IMGUI
 	{

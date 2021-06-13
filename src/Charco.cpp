@@ -21,6 +21,6 @@ void Charco::Draw() {
 }
 
 Window::PartialDraw Charco::PartialDraw() {
-	return Window::PartialDraw(Assets::tileTexture, pos)
-		.withOrigin(Assets::tileTexture->w / 2, Assets::tileTexture->h);
+	return Window::PartialDraw(Assets::charcoTexture, pos)
+		.withOrigin(Assets::charcoTexture->w / 2, Assets::charcoTexture->h);
 }
