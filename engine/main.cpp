@@ -5,7 +5,6 @@
 #include "input.h"
 #include "mates.h"
 #include "debug.h"
-#include "text.h"
 #include "debug.h"
 #include "camera.h"
 #include "fx.h"
@@ -32,11 +31,12 @@
 #endif
 
 float mainClock;
-static int last_ticks;
+int lastTicks;
 
 #ifdef _FPS_COUNTER
-Text* txt_fps;
-int fps_counter = 0;
+#include "text.h"
+Text* fpsText;
+int fpsCounter = 0;
 float fpsClock = 0.f;
 #endif
 
@@ -140,8 +140,8 @@ void init() {
 	srand(time(NULL));
 
 #ifdef _FPS_COUNTER
-	txt_fps= new Text(Assets::font_30);
-	txt_fps->SetString("0");
+	fpsText = new Text(Assets::font_30);
+	fpsText->SetString("0");
 #endif
 
 	// Start with the both buffers fully black
@@ -151,7 +151,7 @@ void init() {
 
 	Fx::Init();
 
-	last_ticks = SDL_GetTicks();
+	lastTicks = SDL_GetTicks();
 }
 
 void main_loop() {
@@ -178,13 +178,13 @@ void main_loop() {
 #endif
 
 	int ticks = SDL_GetTicks();
-	float uncapped_dt = (ticks - last_ticks) / 1000.f;
-	last_ticks = ticks;
+	float uncappedDt = (ticks - lastTicks) / 1000.f;
+	lastTicks = ticks;
 
-	float dt = uncapped_dt;
+	float dt = uncappedDt;
 	bool slowDown = false;
 	constexpr float kMinDt = 0.06f; // less than 17 FPS
-	if (uncapped_dt > kMinDt)
+	if (uncappedDt > kMinDt)
 	{
 		//Slow game down instead of epic jumps
 		dt = kMinDt;
@@ -237,6 +237,12 @@ void main_loop() {
 		Debug::FrameByFrame = !Debug::FrameByFrame;
 	}
 
+	if (Keyboard::IsKeyJustPressed(DEBUG_FAST_FORWARD) && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+		Debug::FastForward = !Debug::FastForward;
+	} else if (Keyboard::IsKeyJustReleased(DEBUG_FAST_FORWARD) && !Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+		Debug::FastForward = false;
+	}
+
 	if (Keyboard::IsKeyJustPressed(DEBUG_RESTART_SCENE)) {
 		SceneManager::RestartScene();
 	}
@@ -247,7 +253,7 @@ void main_loop() {
 		Camera::RotateWithPagUpDown(dt);
 	}
 
-	if (Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
+	if (Debug::FastForward || Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
 		dt = kMinDt;
 	}
 
@@ -279,17 +285,17 @@ void main_loop() {
 	Camera::InScreenCoords::Begin();
 	
 #ifdef _FPS_COUNTER
-	fps_counter++;
-	fpsClock += uncapped_dt;
+	fpsCounter++;
+	fpsClock += uncappedDt;
 	if (fpsClock > 0.5f)
 	{
-		txt_fps->SetString(std::to_string(int(fps_counter / fpsClock)) + (slowDown ? "!" : ""));
+		fpsText->SetString(std::to_string(int(fpsCounter / fpsClock)) + (slowDown ? "!" : ""));
 		slowDown = false;
-		fps_counter = 0;
+		fpsCounter = 0;
 		fpsClock = 0;
 	}
-	Window::Draw(*txt_fps, Camera::InScreenCoords::Bounds().TopRight() + vec(-5, 5))
-		.withOrigin(txt_fps->Size().x, 0)
+	Window::Draw(*fpsText, Camera::InScreenCoords::Bounds().TopRight() + vec(-5, 5))
+		.withOrigin(fpsText->Size().x, 0)
 		.withScale(0.5f);
 #endif
 

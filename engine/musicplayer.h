@@ -8,14 +8,30 @@ namespace MusicPlayer
 	void PlayWithIntro(Mix_Music* music, Mix_Music* intro);
 
 	bool IsPlaying();
+	Mix_Music* GetPlaying();
 
-	void Pause();
+	inline void Ensure(Mix_Music* music) { // Play if not playing
+		if (GetPlaying() != music) {
+			Play(music);
+		}
+	}
+
+	inline void EnsureWithIntro(Mix_Music* music, Mix_Music* intro) {
+		if (GetPlaying() != music) {
+			PlayWithIntro(music, intro);
+		}
+	}
+
+	void Pause(bool keepPausedOnMusicChange = false);
+	bool IsPaused();
 	void Resume();
 
 	void Stop();
 
 	void SetVolume(float volume); // from 0 to 100
 	float Volume(); // from 0 to 100
+
+	void ToggleMusicWithM(bool keepPausedOnMusicChange = true);
 
 	//TODO: Wrap Mix_FadeInMusic() and Mix_FadeOutMusic()
 }

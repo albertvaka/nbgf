@@ -19,33 +19,37 @@ namespace Fx {
 
 		static inline void StartPreset(Preset preset) {
 			switch (preset) {
+				break;
 			case Preset::Earthquake: // Make it long by calling this repeatedly
-				Start(0.1f, veci(2, 2), vec(35.f, 45.f));
+				Start(0.1f, vec(3.5f, 3.5f), vec(35.f, 45.f));
 				break;
 			case Preset::LittleStomp:
-				Start(0.17f, veci(0, 2), vec(0.f, 47.f));
+				Start(0.3f, vec(0, 3), vec(0.f, 47.f));
 				break;
 			case Preset::Stomp:
-				Start(0.17f, veci(0, 3), vec(0.f, 47.f));
+				Start(0.3f, vec(0, 5), vec(0.f, 47.f));
 				break;
 			case Preset::ElectricShock:
-				Start(0.157f, veci(8, 2), vec(86.7f, 14.1f));
+				Start(0.157f, vec(8, 2), vec(86.7f, 14.1f));
 				break;
 			}
 		}
 
-		static inline void Start(float time, veci amplitude, vec speed) {
+		static inline void Start(float time, vec amplitude, vec speed, float dampening = -1.f) {
 			if (time >= screenshakeTime) {
 				screenshakeTime = time;
 				screenshakeAmplitude = amplitude;
 				screenshakeSpeed = speed;
+				screenshakeDampening = dampening;
+
 			}
 		}
 
 		static void DrawImgui();
 
 		static inline float screenshakeTime;
-		static inline veci screenshakeAmplitude = veci(0, 0);
+		static inline float screenshakeDampening;
+		static inline vec screenshakeAmplitude = veci(0, 0);
 		static inline vec screenshakeSpeed = veci(0, 0);
 	};
 
@@ -77,18 +81,25 @@ namespace Fx {
 
 	struct FreezeImage {
 
-		static void Freeze(float during_time) {
-			worldStoppedTime = during_time;
+		static void Freeze(float durationSeconds, bool continueScreenShakeWhileFrozen = false) {
+			worldStoppedTime = durationSeconds;
+			continueScreenShake = continueScreenShakeWhileFrozen;
 		}
 
 		static void SetAlternativeUpdateFnWhileFrozen(std::function<void(float dt)> update = nullptr) {
 			worldStoppedUpdate = update;
 		}
 
+		static void SetUnfreezeCallback(std::function<void()> update = nullptr) {
+			unfreezeCallback = update;
+		}
+
 		static bool IsFrozen() { return (worldStoppedTime > 0.f); }
 
 		static inline std::function<void(float dt)> worldStoppedUpdate = nullptr;
+		static inline std::function<void()> unfreezeCallback = nullptr;
 		static inline float worldStoppedTime = -1.f;
+		static inline bool continueScreenShake = false;
 	};
 
 	struct FullscreenShader {

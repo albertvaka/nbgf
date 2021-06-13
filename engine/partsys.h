@@ -83,7 +83,10 @@ struct PartSys {
 
 	float time = 0.f;
 
-	PartSys(GPU_Image* t) { SetTexture(t); }
+	PartSys(GPU_Image* t) {
+		SetTexture(t);
+		particles.reserve(80); //~3kb memory usage
+	}
 	void SetTexture(GPU_Image* t) { texture = t; }
 
 	void AddSprite(const GPU_Rect& rect) {
@@ -113,7 +116,6 @@ struct PartSys {
 	}
 
 private:
-	//TODO: Turn into static arrays
 	std::vector<Particle> particles;
 	mutable std::vector<GPU_Rect> sprites;
 };

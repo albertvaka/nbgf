@@ -8,8 +8,9 @@ const std::unordered_map<int, vec> {{name}}::{{type}} = {
 	{ {{pos[0]}}, vec({{pos[1]}}f, {{pos[2]}}f) },
 	{%- endfor %}
 };
-{%- if positions|length == 1 -%}
-	const vec {{name}}::single_{{type}} = vec({{positions[0][1]}}f, {{positions[0][2]}}f);
+
+{%- if positions|length == 1 %}
+const vec {{name}}::single_{{type}} = vec({{positions[0][1]}}f, {{positions[0][2]}}f);
 {% endif %}
 {% endfor %}
 

@@ -51,6 +51,10 @@ namespace Mates
 
 	[[nodiscard]] std::string to_hexa(int a_value);
 
+	[[nodiscard]] inline bool EachPeriod(float period_sec, float total_time_before_dt_increment, float dt) {
+		return int((total_time_before_dt_increment + dt) / period_sec) != int((total_time_before_dt_increment) / period_sec);
+	}
+
 	//-----------------------------------------------------------------------
 	//
 	//  some handy little functions

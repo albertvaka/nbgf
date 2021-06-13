@@ -66,6 +66,13 @@ struct vec
 		else if (y < minv.y) y = minv.y;
 	}
 
+	[[nodiscard]] vec Clamped(vec minv, vec maxv)
+	{
+		vec ret = *this;
+		ret.Clamp(minv, maxv);
+		return ret;
+	}
+
 	[[nodiscard]] std::string ToString() const {
 		std::stringstream stream;
 		stream << std::fixed << std::setprecision(2) << x << "," << y;
@@ -151,6 +158,15 @@ struct vec
 	{
 		x *= rhs;
 		y *= rhs;
+
+		return *this;
+	}
+
+	// Component-wise product (like in GLSL)
+	constexpr vec operator*=(const vec& rhs)
+	{
+		x *= rhs.x;
+		y *= rhs.y;
 
 		return *this;
 	}
@@ -347,6 +363,12 @@ inline constexpr vec operator*(float lhs, vec rhs)
 	vec result(rhs);
 	result *= lhs;
 	return result;
+}
+
+// Component-wise product (like in GLSL)
+inline constexpr vec operator*(vec lhs, vec rhs)
+{
+	return vec(lhs.x * rhs.x, lhs.y * rhs.y);
 }
 
 inline constexpr vec operator-(vec lhs, vec rhs)

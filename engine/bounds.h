@@ -157,10 +157,6 @@ struct BoxBounds
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
     [[nodiscard]] float Distance(const BoxBounds& a) const;
     [[nodiscard]] float Distance(const CircleBounds& a) const;
-
-    //TODO
-    //void ExpandToInclude(vec point);
-
 };
 
 struct CircleBounds
@@ -188,6 +184,9 @@ struct CircleBounds
     [[nodiscard]] float Distance(const CircleBounds& a) const { 
         return a.pos.Distance(this->pos) - (a.radius + this->radius);
     }
+
+    [[nodiscard]] bool Contains(float x, float y) const { return Contains(vec(x, y)); }
+    [[nodiscard]] bool Contains(vec v) const { return (pos.DistanceSq(v) < radius*radius); }
 };
 
 inline float BoxBounds::DistanceSq(const BoxBounds& a) const {

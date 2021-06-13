@@ -1,14 +1,16 @@
 #include "sound.h"
 
 #include <SDL_mixer.h>
+#include <cassert>
 
 #include "debug.h"
 
 void Sound::Load(const char* path) {
 	if (sound) Mix_FreeChunk(sound);
-	sound = Mix_LoadWAV(path);
+	sound = Mix_LoadWAV(path); // Can also load OGG despite the name
 	if (!sound) {
 		Debug::out << "Unable to load sound '" << path << "': " << Mix_GetError();
+		assert(false);
 	}
 }
 

@@ -370,9 +370,9 @@ The `Rand::OnceEvery(n)` and `Rand::PercentChance(percentage)` functions are ver
 
 ## Playing sounds and music
 
-To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-100>)` method you can use. See `engine/sound.h`.
+To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-100>)` method you can use. See [`engine/sound.h`](engine/sound.h).
 
-To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::IsPlaying()`, `MusicPlayer::Pause()`, `MusicPlayer::Resume()`, `MusicPlayer::Stop()` and `MusicPlayer::SetVolume(<0-100>)`. See `engine/musicplayer.h`.
+To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::Pause()`, `MusicPlayer::Resume()` and `MusicPlayer::Stop()` and the volume adjusted with `MusicPlayer::SetVolume(<0-100>)`. See [`engine/musicplayer.h`](engine/musicplayer.h).
 
 ## Drawing on screen: part two (the advanced stuff)
 
@@ -381,6 +381,17 @@ To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one m
 [`PartSys`](engine/partsys.h)
 
 TODO
+
+### `DeferredDraw`
+
+Use `Window::DeferredDraw` instead of `Windows::Draw` to get yourself an object you can draw at a later moment in time. This is useful, for example, to simulate perspective by sorting all your draw calls by their Y coordinate before actually drawing them, so things that are closer to the camera are drawn on top. `DeferredDraw` has the same interface as `Draw` but won't actually draw anything on screen until you manually call its `.Draw()` method.
+
+```
+auto a = Window::DeferredDraw(...);
+auto b = Window::DeferredDraw(...);
+b.Draw();
+a.Draw();
+```
 
 ### Tile maps
 
@@ -488,7 +499,7 @@ This does leak memory, but it is only used in debug, so who cares.
 
 ### Free camera movement
 
-When both debug draw mode and frame-by-frame mode are enabled, you can move your camera freely with the keyboard arrows, zoom in and out with numpad + and -, and even rotate it with Av Pag and Re Pag.
+When both debug draw mode and frame-by-frame mode are enabled, you can move your camera freely with the keyboard arrows <kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd><kbd>←</kbd>, zoom in and out with numpad <kbd>+</kbd> and <kbd>-</kbd>, and even rotate it with <kbd>PgUp</kbd> and <kbd>PgDn</kbd>.
 
 ### Fast forward
 
@@ -510,7 +521,7 @@ On Windows, the Debug build of the game will also open a terminal window so you 
 
 ## Importers
 
-Python scripts are provided to generate C++ code from Tiled and TexturePacker projects. By using code generation, you compiler can ensure that all the resources you reference exist (avoiding runtime-only errors), and your IDE con provide code completion for them.
+Python scripts are provided to generate C++ code from Tiled and TexturePacker projects. By using code generation, you compiler can ensure that all the resources you reference exist (avoiding runtime-only errors), and your IDE can provide code completion for them.
 
 ### Tiled importer
 
