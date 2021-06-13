@@ -33,3 +33,23 @@ void City::Draw() {
         t->Draw();
     }
 }
+
+std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> City::PartialDraws() {
+    std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> p;
+    std::vector<Window::PartialDraw> shadows;
+    std::vector<Window::PartialDraw> sprites;
+    /*
+    for(auto& e : mEntities) {
+        e->Draw();
+    }
+    */
+    for(Tree* t : mTrees) {
+        auto tpds = t->PartialDraws();
+        shadows.push_back(tpds.first);
+        sprites.push_back(tpds.second);
+        t->Bounds().DebugDraw(255,0,0);
+    }
+    p.first = shadows;
+    p.second = sprites;
+    return p;
+}

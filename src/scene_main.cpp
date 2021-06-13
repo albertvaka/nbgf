@@ -10,6 +10,7 @@
 #include "collide.h"
 #include "debug.h"
 #include "EnemiesController.h"
+#include "window_draw.h"
 
 #include "ChainNode.h"
 
@@ -126,16 +127,33 @@ void SceneMain::Update(float dt)
 	mChain.ResetNodesToUnchain();
 }
 
+std::vector<Window::PartialDraw> shadows;
+std::vector<Window::PartialDraw> draws;
+std::vector<Window::PartialDraw*> drawps;
 void SceneMain::Draw()
 {
 	Window::Clear(154, 196, 98);
+	// Get PartialDraws to be able to sort
+	auto pds = mCity.PartialDraws();
+	shadows.insert(std::end(shadows), std::begin(pds.first), std::end(pds.first));
+	draws.insert(std::end(draws), std::begin(pds.second), std::end(pds.second));
 
-	/*
-	Window::Draw(Assets::backgroundTexture, Camera::Center())
-		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2)
-		.withScale(Window::MAP_SCALE);
-	*/
-	mCity.Draw();
+	for(auto& pd : shadows) {
+		pd.DoDraw();
+	}
+
+	// Get pointers, sort and draw
+	drawps.clear();
+	for (Window::PartialDraw& pd : draws) {
+		drawps.push_back(&pd);
+	}
+	std::sort(drawps.begin(), drawps.end(), [](Window::PartialDraw* a, Window::PartialDraw* b) {
+		return (a->dest.y) < (b->dest.y);
+	});
+	for(auto& pd : drawps) {
+		pd->DoDraw();
+	}
+
 	SDL_Color lDefaultNodeColor; lDefaultNodeColor.r = 255; lDefaultNodeColor.g = 255; lDefaultNodeColor.b = 255; lDefaultNodeColor.a = 255;
 	for (auto& unchainedIt : mUnchainedNodes)
 	{
