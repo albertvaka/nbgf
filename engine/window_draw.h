@@ -129,6 +129,16 @@ namespace Window {
 			return withRect({ x, y, w, h });
 		}
 
+		constexpr PartialDraw& withColor(SDL_Color color) {
+			c = color;
+			hasColor = true;
+			return *this;
+		}
+
+		constexpr PartialDraw& withColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+			return withColor({r,g,b,a});
+		}
+
 		constexpr PartialDraw& withRect(const GPU_Rect& r) {
 			src = r;
 			return *this;
@@ -168,13 +178,21 @@ namespace Window {
 		}
 
 		void DoDraw() {
+			if (hasColor) {
+				t->color = c;
+			}
 			// We pass origin as rotation pivot. We could change that to a different variable.
 			GPU_BlitTransformX(t, &src, Window::currentDrawTarget, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
+			if (hasColor) {
+				t->color = { 255, 255, 255, 255 };
+			}
 		}
 
 		GPU_Image* t;
 		vec dest;
 		GPU_Rect src = {};
+		SDL_Color c = {};
+		bool hasColor = false;
 		float rotation = 0;
 		vec scale = vec(1.f, 1.f);
 		vec origin = vec(0.f, 0.f);

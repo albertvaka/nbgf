@@ -132,18 +132,35 @@ std::vector<Window::PartialDraw> draws;
 std::vector<Window::PartialDraw*> drawps;
 void SceneMain::Draw()
 {
+	draws.clear();
+	drawps.clear();
+	shadows.clear();
 	Window::Clear(154, 196, 98);
 	// Get PartialDraws to be able to sort
 	auto pds = mCity.PartialDraws();
 	shadows.insert(std::end(shadows), std::begin(pds.first), std::end(pds.first));
 	draws.insert(std::end(draws), std::begin(pds.second), std::end(pds.second));
 
+	SDL_Color lDefaultNodeColor; lDefaultNodeColor.r = 255; lDefaultNodeColor.g = 255; lDefaultNodeColor.b = 255; lDefaultNodeColor.a = 255;
+	/*
+	for (auto& unchainedIt : mUnchainedNodes)
+	{
+		unchainedIt.second->Draw(lDefaultNodeColor);
+	}
+	*/
+	for (auto& unchainedIt : mUnchainedNodes)
+	{
+		auto p = unchainedIt.second->PartialDraws(lDefaultNodeColor);
+		shadows.push_back(p.first);
+		draws.push_back(p.second);
+	}
+
+	mChain.Draw();
+
 	for(auto& pd : shadows) {
 		pd.DoDraw();
 	}
-
 	// Get pointers, sort and draw
-	drawps.clear();
 	for (Window::PartialDraw& pd : draws) {
 		drawps.push_back(&pd);
 	}
@@ -153,14 +170,8 @@ void SceneMain::Draw()
 	for(auto& pd : drawps) {
 		pd->DoDraw();
 	}
-
-	SDL_Color lDefaultNodeColor; lDefaultNodeColor.r = 255; lDefaultNodeColor.g = 255; lDefaultNodeColor.b = 255; lDefaultNodeColor.a = 255;
-	for (auto& unchainedIt : mUnchainedNodes)
-	{
-		unchainedIt.second->Draw(lDefaultNodeColor);
-	}
 		
-	mChain.Draw();
+	
 
 	mEnemiesController->DrawEnemies();
 
