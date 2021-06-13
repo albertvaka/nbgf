@@ -713,7 +713,7 @@ void JumpMan::Draw() const {
 		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
 		ImGui::Text("jumpTimeLeft: %f divingRestTimer: %f", jumpTimeLeft, divingRestTimer);
-		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing);
+		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing, groundTile.isSlope());
 		ImGui::End();
 	}
 #endif

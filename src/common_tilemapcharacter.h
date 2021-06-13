@@ -174,6 +174,18 @@ horz_exit:
 			posf.y = y - E;
 			ret.groundCollisionPos = tilePos;
 			ret.groundCollision = tile;
+			if (!tile.isSlope()) { // The tile we would return isn't a slope, let's try to fix that
+				Tile above = map->GetTile(tilePos.x, tilePos.y - 1);
+				if (above.isSlope()) {
+					ret.groundCollision = above;
+				}
+				else {
+					Tile below = map->GetTile(tilePos.x, tilePos.y + 1);
+					if (below.isSlope()) {
+						ret.groundCollision = below;
+					}
+				}
+			}
 			ret.leftWallCollision = Tile::NONE;
 			ret.rightWallCollision = Tile::NONE;
 			goto vert_exit;
