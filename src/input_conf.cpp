@@ -38,6 +38,10 @@ void Input::MapGameKeys()
                     )
                 );
     };
+    action_mapping[(int)GameKeys::RESTART] = [](int p)
+    {
+        return (p == keyboard_player_id) && (Keyboard::IsKeyPressed(SDL_SCANCODE_R));
+    };
     action_mapping[(int)GameKeys::RIGHT] = [](int p)
     {
         return GamePad::AnalogStick::Left.get(p).x > 0.0f ||

@@ -306,6 +306,21 @@ void Chain::AddRightSubChainToUnchain(ChainNode* aSubChainStart)
 	}	
 }
 
+void Chain::ResetChain( vec aPos )
+{
+	myNodes[myBrain]->pos = aPos;
+
+	if (myNodes[myBrain]->GetLeftNeighbor())
+	{
+		AddLeftSubChainToUnchain((myNodes[myBrain]->GetLeftNeighbor()));
+	}
+	if (myNodes[myBrain]->GetRightNeighbor())
+	{
+		AddRightSubChainToUnchain((myNodes[myBrain]->GetRightNeighbor()));
+	}
+
+}
+
 void Chain::AddLeftSubChainToUnchain(ChainNode* aSubChainStart)
 {
 	if (myType == eChainType::Default)

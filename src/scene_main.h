@@ -37,6 +37,9 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
+	void StartScene();
+	void EndScene();
+
 private:
 	ChainNode* GenerateNode(vec&& aPosition);
 	EnemiesController* mEnemiesController;
@@ -44,7 +47,7 @@ private:
 	Text timerText;
 	float timer;
 
-	bool gameOver = false;
+	bool gameOver;
 	Text gameOverText;
 	Text restartText;
 };
