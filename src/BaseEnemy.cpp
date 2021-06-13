@@ -24,10 +24,9 @@ void BaseEnemy::Update(float dt)
 void BaseEnemy::Draw() const
 {
 	const GPU_Rect& animRect = AnimLib::PLAYER;
-	Window::Draw(Assets::invadersTexture, pos)
-		.withRect(animRect)
-		.withOrigin(vec(animRect.w, 0) / 2)
-		.withRotationDegs(Camera::Center().AngleDegs(pos) + 90);
+	Window::Draw(Assets::birdTexture, pos)
+		.withOrigin(Assets::birdTexture->w/2, Assets::birdTexture->h/2)
+		.withRotationDegs((vel*speed).AngleDegs(pos.Normalized()));
 }
 
 void BaseEnemy::SetRandomSpawn()

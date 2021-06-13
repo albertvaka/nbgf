@@ -3,9 +3,10 @@
 #include "assets.h"
 #include "debug.h"
 #include "window_conf.h"
+#include "EnvironmentObject.h"
 
 
-Canister::Canister(vec aPos): BoxEntity(aPos, vec(100, 100)) {
+Canister::Canister(vec aPos): EnvironmentObject(aPos) {
 }
 Canister::~Canister() {
 }

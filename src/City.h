@@ -9,22 +9,20 @@
 #include "Bush.h"
 #include "Charco.h"
 #include "Tile.h"
+#include "Chain.h"
 
 struct City {
-
-	//std::vector<Entity*> mEntities;
-	std::vector<Tree*> mTrees;
-	std::vector<Canister*> mCanisters;
-	std::vector<Light*> mLights;
-	std::vector<Bush*> mBushs;
-	std::vector<Charco*> mCharcos;
-	std::vector<Tile*> mTiles;
 
 	City();
 	~City();
 
-	void Update(float dt);
+	void Update(float dt, Chain* chain);
+
 	void Draw();
 	// First is shadows, second sprites
 	std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> PartialDraws();
+
+	std::vector<EnvironmentObject*> collisionObjects;
+	std::vector<EnvironmentObject*> noCollisionObjects;
+
 };

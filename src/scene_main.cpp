@@ -11,6 +11,7 @@
 #include "debug.h"
 #include "EnemiesController.h"
 #include "window_draw.h"
+#include "musicplayer.h"
 
 #include "ChainNode.h"
 
@@ -63,6 +64,9 @@ SceneMain::SceneMain()
 	//Enemies----
 	mEnemiesController = new EnemiesController(&mChain);
 	mEnemiesController->Awake();
+
+	MusicPlayer::SetVolume(50.f);
+	MusicPlayer::Play(Assets::gameMusic);
 }
 
 SceneMain::~SceneMain()
@@ -116,6 +120,8 @@ void SceneMain::Update(float dt)
 	mChain.Update(dt);	
 
 	mEnemiesController->Update(dt);
+
+	mCity.Update(dt, &mChain);
 
 	//Retrieve nodes to unchain from chain
 	const auto& nodesToUnchain = mChain.GetNodesToUnchain();
