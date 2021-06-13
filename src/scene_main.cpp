@@ -289,7 +289,6 @@ void SceneMain::Draw()
 		if(Input::IsAnyButtonPressed()) {
 			showInstructions = false;
 		}
-		Debug::out << arrowBounce;
 		Window::Draw(Assets::arrowTexture, vec(380, 1250))
 			.withOrigin(Assets::arrowTexture->w/2, Assets::arrowTexture->h/2+std::sin(arrowBounce)*30);
 		Window::Draw(Assets::instructionsTexture, vec(800, 1300))
