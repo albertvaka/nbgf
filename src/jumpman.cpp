@@ -21,24 +21,26 @@ extern float mainClock;
 
 // accel
 const float kRunAcc = 1400;
-const float kRunAcc_OnAir = 400;
+const float kRunAcc_OnAir = 650;
 const float kGravityAcc = 660;
 
 // friction X
 const float kFrictAccFloor = 1000;
 const float kFrictAccFloor_Crouched = 450;
-const float kFrictAcc_OnAir = 145;
+const float kFrictAcc_OnAir = 460;
 
 // friction Y
 const float kFrictAccVert_WallUp = 1200;
 const float kFrictAccVert_WallDown = 450;
 
 // jump
-const float kVelJump = -150;
-const float kVelWalljump = 90;
+const float kVelJump = -150; // Y axis
+const float kVelWalljump = 140; // X axis
+const float kVelSlopejump = 140; // X axis
 const float kJumpTime = 0.35f;
+const float kJumpTimeFromWall = 0.3f;
 const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
-const float kTimeToJumpFromWallAfterLettingGo = 0.15f;
+const float kTimeToJumpFromWallAfterLettingGo = 0.2f;
 
 // dash
 const float kVelDash = 400;
@@ -406,13 +408,13 @@ void JumpMan::Update(float dt)
 			} else if (groundTile.isSlope()) {
 				// Jump a bit sideways when on slope
 				if (groundTile.isRightSlope()) {
-					if (vel.x >= -kVelWalljump) {
-						vel.x = -kVelWalljump;
+					if (vel.x >= -kVelSlopejump) {
+						vel.x = -kVelSlopejump;
 					}
 				}
 				else {
-					if (vel.x <= kVelWalljump) {
-						vel.x = kVelWalljump;
+					if (vel.x <= kVelSlopejump) {
+						vel.x = kVelSlopejump;
 					}
 				}
 			}
@@ -422,7 +424,7 @@ void JumpMan::Update(float dt)
 				crouchedTime = kTimeCrouchedToJumpDownOneWayTile;
 			}
 			else {
-				jumpTimeLeft = kJumpTime; // the jump upwards velocity can last up to this duration
+				jumpTimeLeft = didJumpFromWall? kJumpTimeFromWall : kJumpTime; // the jump upwards velocity can last up to this duration
 				float halfWidth = kStandingSize.x / 2;
 				Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
 				Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
@@ -467,7 +469,7 @@ void JumpMan::Update(float dt)
 				attacking = false;
 			}
 			onWall = true;
-			vel.x = -500.f * dt; //stay against wall
+			vel.x = -kFrictAcc_OnAir * 2 * dt; //stay against wall
 		}
 		else {
 			vel.x = 0;
