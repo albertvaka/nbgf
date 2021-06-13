@@ -30,6 +30,7 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
+	void EndGame();
 
 private:
 	ChainNode* GenerateNode(vec&& aPosition);
