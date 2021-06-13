@@ -36,6 +36,8 @@ constexpr float TimeToBeChained = 1.5f;
 
 // Unchained IA
 constexpr float RunAwayDistanceSq = 1000000.f;
+constexpr uint8_t borderMargin = 200;
+constexpr float MinBorderDirection = 0.5f;
 
 uint16_t ChainNode::theLastId = 0U;
 
@@ -77,9 +79,33 @@ void ChainNode::UpdateUnchained(float aDt, ChainUtils::tNodesContainer aNodes)
 	UpdateVelAndPos(aDt, false, true);
 }
 
-void ChainNode::RunAwayFrom(vec aPos) {
+void ChainNode::RunAwayFrom(vec aPos) 
+{
+	vec direction = (pos - aPos).Normalized();
 
-	acc = (pos - aPos).Normalized() * UnchainedNodeAcc;
+	// avoid borders
+	if (pos.x < borderMargin) {
+		float y = direction.y > 0 ? 1.f : -1.f;
+		float x = direction.x < -1 * MinBorderDirection ? 0 : -1 * direction.x + MinBorderDirection;
+		direction = vec(x, y).Normalized();
+	} 
+	else if (pos.x > Window::GAME_WIDTH - borderMargin) {
+		float y = direction.y > 0 ? 1.f : -1.f;
+		float x = direction.x > MinBorderDirection ? 0 : direction.x - MinBorderDirection;
+		direction = vec(x, y).Normalized();
+	} 
+	else if (pos.y < borderMargin) {
+		float y = direction.y < -1 * MinBorderDirection ? 0 : -1 * direction.y + MinBorderDirection;
+		float x = direction.x > 0 ? 1.f : -1.f;
+		direction = vec(x, y).Normalized();
+	}
+	else if (pos.y > Window::GAME_HEIGHT - borderMargin) {
+		float y = direction.y > MinBorderDirection ? 0 : direction.y - MinBorderDirection;
+		float x = direction.x > 0 ? 1.f : -1.f;
+		direction = vec(x, y).Normalized();
+	}
+
+	acc = direction * UnchainedNodeAcc;
 }
 
 void ChainNode::Idle() {
