@@ -67,13 +67,13 @@ const vec kTakeDamageKnockbackVel(180.f, -150.f);
 const float kInvencibleTimeAfterHit = 1.0f;
 
 // sword attack
-const float kSwordAttackRadius = 23.f;
+const float kSwordAttackRadius = 23.3f;
 const vec kSwordAttackOffset = vec(16.f,-17.f);
 
 const float kSwordAttackDownRadius = 13.f;
 const vec kSwordAttackDownOffset = vec(2.f,3.f);
 
-const float kSwordAttackUpRadius = 21.f;
+const float kSwordAttackUpRadius = 21.3f;
 const vec kSwordAttackUpOffset = vec(0.f, -30.f);
 
 const float kSwordAttackWallSlideRadius = 23.f;
@@ -328,7 +328,7 @@ void JumpMan::Update(float dt)
 	}
 
 	if (attacking) {
-		playerAttack.alive = (anim.CurrentFrameNumber() == 1);
+		playerAttack.alive = (anim.current_frame == 1 || anim.current_frame == 2);
 		if (playerAttack.alive) {
 			DestroyTilesWithSword(playerAttack.Bounds());
 		}
