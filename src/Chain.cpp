@@ -145,7 +145,7 @@ bool Chain::TryToJoin(ChainNode* anUnchainedNode)
 	}
 	auto collidedIt = std::find_if(myNodes.begin(), myNodes.end(), [&anUnchainedNode](const ChainUtils::tNodesContainer::value_type& aCurrentNodeIt)
 		{
-			return Collide(anUnchainedNode, aCurrentNodeIt.second);
+			return Collide(anUnchainedNode->grabCircle, aCurrentNodeIt.second->grabCircle);
 	});
 	if (collidedIt != myNodes.end())
 	{

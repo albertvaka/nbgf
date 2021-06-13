@@ -10,6 +10,8 @@ struct ChainNode : CircleEntity
 {
 	ChainNode(vec aPosition, bool aIsMaster = false);
 
+	CircleBounds grabCircle;
+
 	void UpdateUnchained(float dt, ChainUtils::tNodesContainer aNodes);
 	void UpdateRight(float dt);
 	void UpdateLeft(float dt);
