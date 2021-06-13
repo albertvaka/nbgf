@@ -15,10 +15,11 @@ constexpr uint8_t NodeRadius = 50;
 
 // Movement Physics
 constexpr float NodeAcc = 6000.f;
-constexpr float UnchainedNodeAcc = 500.f;
+constexpr float UnchainedNodeAcc = 1000.f;
 
 constexpr float NodePuppetFriction = 0.005f;
 constexpr float NodeMasterFriction = 0.03f;
+constexpr float UnchainedNodeFriction = 0.05f;
 
 constexpr float NodeMinVelSq = 500.f;
 
@@ -70,8 +71,8 @@ void ChainNode::UpdateUnchained(float aDt, ChainUtils::tNodesContainer aNodes)
 		Idle();
 	}
 
-	// isMaster = true so that it uses the chonkier physics for master nodes
-	UpdateVelAndPos(aDt, true);
+	// apply acceleration to velocity and position
+	UpdateUnchainedVelAndPos(aDt);
 }
 
 void ChainNode::RunAwayFrom(vec aPos) {
@@ -149,6 +150,23 @@ void ChainNode::UpdateVelAndPos(float aDt, bool isMaster)
 
 	// reset acceleration
 	acc = vec(0,0);
+
+	anim.Update(aDt);
+}
+
+void ChainNode::UpdateUnchainedVelAndPos(float aDt) 
+{
+	float frictionStrength = UnchainedNodeFriction;
+	// get deceleration from friction
+	acc -= vel.Normalized() * vel.LengthSq() * frictionStrength;
+
+	// update velocity
+	vel += acc * aDt;
+	// update position
+	pos += vel * aDt + 0.5 * acc * aDt * aDt;
+
+	// reset acceleration
+	acc = vec(0, 0);
 
 	anim.Update(aDt);
 }

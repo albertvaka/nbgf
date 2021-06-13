@@ -13,6 +13,7 @@ struct ChainNode : CircleEntity
 	void UpdateRight(float dt);
 	void UpdateLeft(float dt);
 	void UpdateVelAndPos(float dt, bool isMaster);
+	void UpdateUnchainedVelAndPos(float dt);
 	void UpdatePuppet(float aDt, bool isMaster);
 	void Draw(SDL_Color aNodeColor) const;
 
