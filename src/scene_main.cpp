@@ -21,6 +21,8 @@ SceneMain::SceneMain()
 	, mChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 	, mCity()
+	, mRemainingUnchained(Assets::font_30, Assets::font_30_outline)
+	, mLevelCounter(Assets::font_30, Assets::font_30_outline)
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
@@ -67,6 +69,14 @@ SceneMain::SceneMain()
 
 	MusicPlayer::SetVolume(50.f);
 	MusicPlayer::Play(Assets::gameMusic);
+
+	mRemainingUnchained.SetString("Remaining: " + startingUnchainedNodes);
+	mRemainingUnchained.SetFillColor(255, 255, 255);
+	mRemainingUnchained.SetOutlineColor(0, 0, 0);
+
+	mLevelCounter.SetString("Stage 1");
+	mLevelCounter.SetFillColor(255, 255, 255);
+	mLevelCounter.SetOutlineColor(0, 0, 0);
 }
 
 SceneMain::~SceneMain()
@@ -180,6 +190,10 @@ void SceneMain::Draw()
 	}
 		
 	mEnemiesController->DrawEnemies();
+
+	Window::Draw(mRemainingUnchained, vec(30, 30))
+		.withOrigin(mRemainingUnchained.Size() / 2)
+		.withScale(0.6f);
 
 #ifdef _IMGUI
 	{
