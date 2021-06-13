@@ -98,7 +98,7 @@ void Missile::Draw() const
 			.withOrigin(rect.w/2, rect.h/2);
 	} else {
 		const GPU_Rect& rect = anim.CurrentFrameRect();
-		Window::Draw(Assets::wheelerTexture, pos)
+		Window::Draw(Assets::spritesheetTexture, pos)
 			.withRect(rect)
 			.withOrigin(0.f, rect.h/2)
 			.withRotationDegs(vel.AngleDegs());
@@ -115,9 +115,9 @@ void Missile::InitParticles() {
 	if (particles.texture != nullptr) {
 		return; // It's already been init
 	}
-	particles.SetTexture(Assets::wheelerTexture);
-	particles.AddSprite(TexturePackerRects::BOSSWHEELERXMISSILESMOKE_DEFAULT_002);
-	particles.AddSprite(TexturePackerRects::BOSSWHEELERXMISSILESMOKE_DEFAULT_001);
+	particles.SetTexture(Assets::spritesheetTexture);
+	particles.AddSprite(AnimLib::MISSILE_SMOKE_1);
+	particles.AddSprite(AnimLib::MISSILE_SMOKE_2);
 
 	particles.max_vel = vec(10, 10);
 	particles.min_vel = vec(-10, -10);

@@ -136,9 +136,12 @@ namespace AnimLib {
 	};
 
 	constexpr const AnimationFrame MISSILE[] = {
-		{ TexturePackerRects::BOSSWHEELERXMISSILE_DEFAULT_000, 0.1f },
-		{ TexturePackerRects::BOSSWHEELERXMISSILE_DEFAULT_001, 0.1f },
+		{ { 17 * 16.f, 17 * 16.f, 16.f, 16.f }, 0.1f },
+		{ { 18 * 16.f, 17 * 16.f, 16.f, 16.f }, 0.1f },
 	};
+
+	constexpr const GPU_Rect MISSILE_SMOKE_1 = { 20 * 16.f, 17 * 16.f, 16.f, 16.f };
+	constexpr const GPU_Rect MISSILE_SMOKE_2 = { 21 * 16.f, 17 * 16.f, 16.f, 16.f };
 
 	constexpr const AnimationFrame EXPLOSION[] = {
 		{ TexturePackerRects::EXPLOSION_01, 0.05f },
