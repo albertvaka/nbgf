@@ -21,7 +21,7 @@ struct SceneMain : Scene {
 	City mCity;
 
 	Text mRemainingUnchained;
-	Text mLevelCounter;
+	Text mGameWinText;
 
 	int mScoreValue = 0;
 	Text mScoreText;
@@ -48,6 +48,7 @@ private:
 	float timer;
 
 	bool gameOver;
+	bool gameWin;
 	Text gameOverText;
 	Text restartText;
 };

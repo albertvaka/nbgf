@@ -18,8 +18,8 @@ constexpr uint8_t GrabRadius = 50;
 constexpr float NodeAcc = 6000.f;
 constexpr float UnchainedNodeAcc = 1000.f;
 
-constexpr float NodePuppetFriction = 0.001f;
-constexpr float NodeMasterFriction = 0.01f;
+constexpr float NodePuppetFriction = 0.005f;
+constexpr float NodeMasterFriction = 0.02f;
 constexpr float UnchainedNodeFriction = 0.05f;
 
 constexpr float NodeMinVelSq = 0.f;
@@ -37,7 +37,7 @@ constexpr float TimeToBeChained = 1.5f;
 // Unchained IA
 constexpr float RunAwayDistanceSq = 1000000.f;
 constexpr uint8_t borderMargin = 200;
-constexpr float MinBorderDirection = 0.5f;
+constexpr float MinBorderDirection = 0.f;
 
 uint16_t ChainNode::theLastId = 0U;
 

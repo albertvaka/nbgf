@@ -24,7 +24,7 @@ SceneMain::SceneMain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 	, mCity()
 	, mRemainingUnchained(Assets::font_30, Assets::font_30_outline)
-	, mLevelCounter(Assets::font_30, Assets::font_30_outline)
+	, mGameWinText(Assets::font_30, Assets::font_30_outline)
 	, timerText(Assets::font_30, Assets::font_30_outline)
 	, gameOverText(Assets::font_30, Assets::font_30_outline)
 	, restartText(Assets::font_30, Assets::font_30_outline)
@@ -36,11 +36,12 @@ SceneMain::SceneMain()
 	mChain.AddNode(Node, nullptr, nullptr);
 
 	int startingUnchainedNodes = 15;
+	int borderMargin = 100;
 
 	for (int i = 0; i < startingUnchainedNodes; ++i) {
-		int randomX = rand() % Window::GAME_WIDTH;
-		int randomY = rand() % Window::GAME_HEIGHT;
-		auto* newNode = GenerateNode(vec(randomX,  randomY));
+		int randomX = rand() % (Window::GAME_WIDTH - borderMargin);
+		int randomY = rand() % (Window::GAME_HEIGHT - borderMargin);
+		auto* newNode = GenerateNode(vec(randomX + borderMargin / 2,  randomY + borderMargin / 2));
 		mUnchainedNodes.emplace(newNode->myId, newNode);
 	}
 
@@ -80,20 +81,23 @@ SceneMain::SceneMain()
 	mRemainingUnchained.SetFillColor(255, 255, 255);
 	mRemainingUnchained.SetOutlineColor(0, 0, 0);
 
-	mLevelCounter.SetString("Stage 1");
-	mLevelCounter.SetFillColor(255, 255, 255);
-	mLevelCounter.SetOutlineColor(0, 0, 0);
+	mGameWinText.SetFillColor(255, 255, 255);
+	mGameWinText.SetOutlineColor(0, 0, 0);
 
 	timerText.SetFillColor(255, 255, 255);
 	timerText.SetOutlineColor(0, 0, 0);
 
 	gameOverText.SetString("Game Over");
+	mGameWinText.SetString("You Win");
 
 	restartText.SetString("Press R to restart");
 
 	timer = GameTime;
 
 	gameOver = false;
+	gameWin = false;
+
+	Window::SetFullScreen(true);
 }
 
 SceneMain::~SceneMain()
@@ -137,6 +141,7 @@ void SceneMain::StartScene()
 	timer = GameTime;
 
 	gameOver = false;
+	gameWin = false;
 }
 
 void SceneMain::EndScene()
@@ -179,7 +184,7 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
-	if (gameOver)
+	if (gameOver || gameWin)
 	{
 		if (Input::IsPressed(0, GameKeys::RESTART))
 		{
@@ -221,8 +226,11 @@ void SceneMain::Update(float dt)
 	arrowBounce += dt*10;
 
 	mRemainingUnchained.SetString("Remaining: " + std::to_string(remainingUnchained));
+	if (remainingUnchained == 0) {
+		gameWin = true;
+	}
 
-	if (!showInstructions)
+	if (!showInstructions && !gameWin)
 	{
 		timer -= dt;
 	}
@@ -231,7 +239,7 @@ void SceneMain::Update(float dt)
 	if (timer <= 0)
 	{
 		timer = 0;
-		gameOver = true;
+		gameWin = true;
 	}
 }
 
@@ -311,6 +319,21 @@ void SceneMain::Draw()
 		Window::Draw(restartText, vec(Camera::Center().x, Camera::Center().y+120))
 			.withOrigin(restartText.Size() / 2)
 			.withScale(1.0f);
+	}
+
+	if (gameWin)
+	{
+		Window::Draw(mGameWinText, vec(Camera::Center().x, Camera::Center().y))
+			.withOrigin(mGameWinText.Size() / 2)
+			.withScale(5.0f);
+
+		Window::Draw(restartText, vec(Camera::Center().x, Camera::Center().y + 120))
+			.withOrigin(restartText.Size() / 2)
+			.withScale(1.0f);
+
+		Window::Draw(timerText, vec(Camera::Center().x, Camera::Center().y + 240))
+			.withOrigin(timerText.Size() / 2)
+			.withScale(2.0f);
 	}
 
 
