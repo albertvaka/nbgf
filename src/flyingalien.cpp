@@ -17,7 +17,7 @@ constexpr const float speedAttack = 100;
 constexpr const float overshotEndCharge = 10;
 constexpr const float overshotReturnSpeed = 50;
 
-constexpr const float flyingAlienHealth = 4;
+constexpr const float flyingAlienHealth = 3;
 
 constexpr const float hitTime = 0.5f;
 constexpr const float prepareAttackTime = 0.5f;
