@@ -97,6 +97,45 @@ void Chain::Draw()
 	}
 }
 
+std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> Chain::PartialDraws() {
+	SDL_Color lDefaultNodeColor; lDefaultNodeColor.r = 255; lDefaultNodeColor.g = 255; lDefaultNodeColor.b = 255;lDefaultNodeColor.a = 255;
+	SDL_Color lMasterNodeColor; lMasterNodeColor.r = 237; lMasterNodeColor.g = 207; lMasterNodeColor.b = 33; lMasterNodeColor.a = 255;
+	SDL_Color lRightMostNodeColor; lRightMostNodeColor.r = 255; lRightMostNodeColor.g = 100; lRightMostNodeColor.b = 100; lRightMostNodeColor.a = 255;
+	SDL_Color lLeftMostNodeColor; lLeftMostNodeColor.r = 100; lLeftMostNodeColor.g = 100; lLeftMostNodeColor.b = 255; lLeftMostNodeColor.a = 255;
+
+    std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> p;
+    std::vector<Window::PartialDraw> shadows;
+    std::vector<Window::PartialDraw> sprites;
+    /*
+    for(auto& e : mEntities) {
+        e->Draw();
+    }
+    */
+	for (auto& it : myNodes)
+	{
+		SDL_Color lC = lDefaultNodeColor;
+		if (it.first == myBrain)
+		{
+			lC =lMasterNodeColor;
+		}
+		else if (it.first == myRightMaster)
+		{
+			lC =lRightMostNodeColor;
+		}
+		else if (it.first == myLeftMaster)
+		{
+			lC =lLeftMostNodeColor;
+		}
+		auto lNodePds = it.second->PartialDraws(lC);
+        shadows.push_back(lNodePds.first);
+        sprites.push_back(lNodePds.second);
+        it.second->Bounds().DebugDraw(255,0,0);
+	}
+    p.first = shadows;
+    p.second = sprites;
+    return p;
+}
+
 bool Chain::TryToJoin(ChainNode* anUnchainedNode)
 {
 	if (!anUnchainedNode->CanBeChained())

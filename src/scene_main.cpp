@@ -137,9 +137,9 @@ void SceneMain::Draw()
 	shadows.clear();
 	Window::Clear(154, 196, 98);
 	// Get PartialDraws to be able to sort
-	auto pds = mCity.PartialDraws();
-	shadows.insert(std::end(shadows), std::begin(pds.first), std::end(pds.first));
-	draws.insert(std::end(draws), std::begin(pds.second), std::end(pds.second));
+	auto aPds = mCity.PartialDraws();
+	shadows.insert(std::end(shadows), std::begin(aPds.first), std::end(aPds.first));
+	draws.insert(std::end(draws), std::begin(aPds.second), std::end(aPds.second));
 
 	SDL_Color lDefaultNodeColor; lDefaultNodeColor.r = 255; lDefaultNodeColor.g = 255; lDefaultNodeColor.b = 255; lDefaultNodeColor.a = 255;
 	/*
@@ -155,7 +155,9 @@ void SceneMain::Draw()
 		draws.push_back(p.second);
 	}
 
-	mChain.Draw();
+	auto aChainPds = mChain.PartialDraws();
+	shadows.insert(std::end(shadows), std::begin(aChainPds.first), std::end(aChainPds.first));
+	draws.insert(std::end(draws), std::begin(aChainPds.second), std::end(aChainPds.second));
 
 	for(auto& pd : shadows) {
 		pd.DoDraw();
@@ -171,8 +173,6 @@ void SceneMain::Draw()
 		pd->DoDraw();
 	}
 		
-	
-
 	mEnemiesController->DrawEnemies();
 
 #ifdef _IMGUI
