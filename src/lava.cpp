@@ -92,6 +92,7 @@ void Lava::Update(float dt) {
 	const float kLavaDamageAreaOffsetFromTop = 8.5f;
 	if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
 		// TODO: All this should be done by a method of player
+		// TODO: Animate player moving to the new position (and the lava level if it has to change?)
 		if (!player->frozen) {
 			player->anim.Ensure(AnimLib::WARRIOR_HURT, false);
 			player->pos.y = CurrentLevel() + kLavaDamageAreaOffsetFromTop;
@@ -107,13 +108,21 @@ void Lava::Update(float dt) {
 		player->diving = false;
 		player->attacking = false;
 
-		if (targetY > CurrentLevel()) {
-			// stop lava to prevent it lowering and suddently us not being inside
-			targetY = CurrentLevel();
-		}
+		// we don't need this because we never lower the lava level, but if we did we would have
+		// to do something like this to prevent it lowering after killing us and suddently us not being inside
+		//if (targetY > CurrentLevel()) {
+			//targetY = CurrentLevel();
+		//}
 	}
 	if (IsInside(player->pos - vec(0, 13.f))) {
 		player->ToSafeGround();
+		float heightBelowPlayerPos = player->pos.y + 4 * Tile::Size;
+		if (heightBelowPlayerPos > CurrentLevel()) {
+			float prev_target = targetY;
+			SetLevel(heightBelowPlayerPos, true);
+			SetLevel(prev_target, false);
+
+		}
 	}
 }
 
