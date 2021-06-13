@@ -4,11 +4,13 @@
 #include "entity.h"
 #include "window_draw.h"
 #include "Tree.h"
+#include "Canister.h"
 
 struct City {
 
 	//std::vector<Entity*> mEntities;
 	std::vector<Tree*> mTrees;
+	std::vector<Canister*> mCanisters;
 
 	City();
 	~City();
