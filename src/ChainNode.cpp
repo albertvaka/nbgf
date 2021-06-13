@@ -18,8 +18,8 @@ constexpr uint8_t GrabRadius = 50;
 constexpr float NodeAcc = 6000.f;
 constexpr float UnchainedNodeAcc = 1000.f;
 
-constexpr float NodePuppetFriction = 0.005f;
-constexpr float NodeMasterFriction = 0.02f;
+constexpr float NodePuppetFriction = 0.001f;
+constexpr float NodeMasterFriction = 0.01f;
 constexpr float UnchainedNodeFriction = 0.05f;
 
 constexpr float NodeMinVelSq = 0.f;
