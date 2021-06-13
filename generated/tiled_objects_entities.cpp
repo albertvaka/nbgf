@@ -102,7 +102,6 @@ const vec Entities::single_explosive = vec(394.4018030303f, 766.3235757575801f);
 
 
 const std::unordered_map<int, vec> Entities::fireslime = {
-	{ 176, vec(2676.25f, 2192.0f) },
 	{ 177, vec(2535.5f, 2272.0f) },
 	{ 178, vec(2605.25f, 2352.25f) },
 	{ 180, vec(2376.5f, 2448.5f) },
@@ -161,7 +160,7 @@ const vec Entities::single_goombacharger = vec(355.0518030303001f, 920.732575757
 const std::unordered_map<int, vec> Entities::healthup = {
 	{ 58, vec(3184.25f, 1534.25f) },
 	{ 60, vec(3904.083f, 1916.3333f) },
-	{ 661, vec(5010.66666666667f, 2047.682f) },
+	{ 661, vec(5010.66666666667f, 2111.682f) },
 	{ 808, vec(3512.666666666667f, 2242.333333333333f) },
 	{ 892, vec(6192.5f, 2240.0f) },
 	{ 896, vec(6912.0f, 2001.333333333333f) },
