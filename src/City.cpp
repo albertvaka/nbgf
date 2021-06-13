@@ -11,18 +11,6 @@
 
 
 City::City(){
-    //mEntities.push_back(new Tree(vec(100, 100)));
-    /*
-    mTrees.push_back(new Tree(vec(200,200)));
-    mTrees.push_back(new Tree(vec(500,400)));
-    mCanisters.push_back(new Canister(vec(600,200)));
-    mCanisters.push_back(new Canister(vec(400,600)));
-    
-    mLights.push_back(new Light(vec(500,700)));
-    mBushs.push_back(new Bush(vec(200,700)));
-    mCharcos.push_back(new Charco(vec(100,400)));
-    mTiles.push_back(new Tile(vec(800,700)));
-    */
     const int bushCount = Rand::roll(0, 70);
     for(int i = 0; i < bushCount; i++) {
         const float lSeparation = 1.4;
