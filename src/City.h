@@ -8,6 +8,7 @@
 #include "Light.h"
 #include "Bush.h"
 #include "Charco.h"
+#include "Tile.h"
 
 struct City {
 
@@ -17,6 +18,7 @@ struct City {
 	std::vector<Light*> mLights;
 	std::vector<Bush*> mBushs;
 	std::vector<Charco*> mCharcos;
+	std::vector<Tile*> mTiles;
 
 	City();
 	~City();
