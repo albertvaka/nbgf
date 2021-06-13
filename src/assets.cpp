@@ -24,6 +24,8 @@ GPU_Image* Assets::lightShadowTexture;
 GPU_Image* Assets::charcoTexture;
 GPU_Image* Assets::tileTexture;
 
+GPU_Image* Assets::birdTexture;
+
 TTF_Font* Assets::font_30;
 TTF_Font* Assets::font_30_outline;
 
@@ -51,6 +53,8 @@ void Assets::LoadAll() {
 
     charcoTexture = LoadImage("data/basic_charco.png");
     tileTexture = LoadImage("data/basic_tile.png");
+    
+    birdTexture = LoadImage("data/bird.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
