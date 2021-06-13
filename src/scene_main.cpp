@@ -24,7 +24,7 @@ SceneMain::SceneMain()
 	, mRemainingUnchained(Assets::font_30, Assets::font_30_outline)
 	, mLevelCounter(Assets::font_30, Assets::font_30_outline)
 	, timerText(Assets::font_30, Assets::font_30_outline)
-	, timer(5.f)
+	, timer(30.f)
 	, gameOverText(Assets::font_30, Assets::font_30_outline)
 	, restartText(Assets::font_30, Assets::font_30_outline)
 
