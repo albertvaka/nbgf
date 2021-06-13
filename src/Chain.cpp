@@ -201,7 +201,6 @@ void Chain::CheckCollisionWithEnvironment(EnvironmentObject* environmentObject)
 	if (collidedIt != myNodes.end())
 	{
 		collidedIt->second->RegisterHit(1000, collidedIt->second->pos - environmentObject->pos);
-		return true;
 	}
 }
 
