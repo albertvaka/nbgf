@@ -145,7 +145,7 @@ bool Chain::TryToJoin(ChainNode* anUnchainedNode)
 	}
 	auto collidedIt = std::find_if(myNodes.begin(), myNodes.end(), [&anUnchainedNode](const ChainUtils::tNodesContainer::value_type& aCurrentNodeIt)
 		{
-			return Collide(anUnchainedNode, aCurrentNodeIt.second);
+			return Collide(anUnchainedNode->grabCircle, aCurrentNodeIt.second->grabCircle);
 	});
 	if (collidedIt != myNodes.end())
 	{
@@ -169,7 +169,14 @@ bool Chain::CheckCollisionWithEnemy(BaseEnemy* enemy)
 		//we unchain the node:
 		if (collidedIt->first == myBrain)
 		{
-			//TODO(@RNogue): end game, the brain has died.
+			if (collidedIt->second->GetLeftNeighbor())
+			{
+				AddLeftSubChainToUnchain(collidedIt->second->GetLeftNeighbor());
+			}
+			if (collidedIt->second->GetRightNeighbor())
+			{
+				AddRightSubChainToUnchain(collidedIt->second->GetRightNeighbor());
+			}
 		}
 		else
 		{

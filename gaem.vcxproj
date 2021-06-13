@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Bush.h" />
     <ClInclude Include="src\Canister.h" />
+    <ClInclude Include="src\Charco.h" />
     <ClInclude Include="src\City.h" />
     <ClInclude Include="src\EnemiesController.h" />
     <ClInclude Include="engine\angles.h" />
@@ -61,8 +63,11 @@
     <ClInclude Include="src\BaseEnemy.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\ChainNode.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
+    <ClInclude Include="src\Tile.h" />
+    <ClInclude Include="src\TileUtils.h" />
     <ClInclude Include="src\Tree.h" />
     <ClInclude Include="src\window_conf.h" />
     <ClInclude Include="vendor\glew\glew.h" />
@@ -91,7 +96,9 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Bush.cpp" />
     <ClCompile Include="src\Canister.cpp" />
+    <ClCompile Include="src\Charco.cpp" />
     <ClCompile Include="src\City.cpp" />
     <ClCompile Include="src\EnemiesController.cpp" />
     <ClCompile Include="engine\camera.cpp" />
@@ -114,7 +121,9 @@
     <ClCompile Include="src\BaseEnemy.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\ChainNode.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
+    <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\Tree.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />

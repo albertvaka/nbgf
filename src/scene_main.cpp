@@ -187,11 +187,6 @@ void SceneMain::Draw()
 
 }
 
-void EndGame()
-{
-	
-}
-
 ChainNode* SceneMain::GenerateNode(vec&& aPosition)
 {
 	return new ChainNode(std::move(aPosition));

@@ -12,6 +12,7 @@
 
 // Collisions
 constexpr uint8_t NodeRadius = 25;
+constexpr uint8_t GrabRadius = 50;
 
 // Movement Physics
 constexpr float NodeAcc = 6000.f;
@@ -40,6 +41,7 @@ uint16_t ChainNode::theLastId = 0U;
 
 ChainNode::ChainNode(vec aPosition, bool aIsMaster)
 	: CircleEntity(aPosition, NodeRadius)
+	, grabCircle(aPosition, GrabRadius)
 	, myId(theLastId++)
 	, myRightNeighbor(nullptr)
 	, myLeftNeighbor(nullptr)
@@ -157,6 +159,9 @@ void ChainNode::UpdateVelAndPos(float aDt, bool isMaster, bool isUnchained)
 
 	// reset acceleration
 	acc = vec(0,0);
+
+	// update grabCircle position to match ChainNode's
+	grabCircle.pos = pos;
 
 	anim.Update(aDt);
 }
