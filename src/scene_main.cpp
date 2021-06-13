@@ -18,7 +18,7 @@ SceneMain::SceneMain()
 	: mUnchainedNodes()
 	, mChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
-	, mCity(citymap)
+	, mCity()
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
@@ -128,7 +128,7 @@ void SceneMain::Update(float dt)
 
 void SceneMain::Draw()
 {
-	Window::Clear(0, 0, 0);
+	Window::Clear(154, 196, 98);
 
 	/*
 	Window::Draw(Assets::backgroundTexture, Camera::Center())

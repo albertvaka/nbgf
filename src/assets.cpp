@@ -9,6 +9,8 @@ GPU_Image* Assets::personShadowTexture;
 
 GPU_Image* Assets::terrainTexture;
 
+GPU_Image* Assets::treeTexture;
+
 TTF_Font* Assets::font_30;
 TTF_Font* Assets::font_30_outline;
 
@@ -16,11 +18,13 @@ TTF_Font* Assets::font_30_outline;
 void Assets::LoadAll() {
 
     invadersTexture = LoadImage("data/invaders.png");
-    backgroundTexture = LoadImage("data/citybg.png");
+    backgroundTexture = LoadImage("data/parktest.png");
     personTexture = LoadImage("data/person_anim.png");
     personShadowTexture = LoadImage("data/shadowHard.png");
     
     terrainTexture = LoadImage("data/terrain.png");
+    
+    treeTexture = LoadImage("data/basic-tree.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);

@@ -1,14 +1,15 @@
 #pragma once
-
 #include <vector>
-#include "TileUtils.h"
+#include "entity.h"
+#include "Tree.h"
 
 struct City {
 
-	City(const std::vector< std::vector<CityTiles> > &tiles);
-	~City();
+	//std::vector<Entity*> mEntities;
+	std::vector<Tree*> mTrees;
 
-    std::vector< std::vector<CityTiles> > mTiles;
+	City();
+	~City();
 
 	void Update(float dt);
 	void Draw();

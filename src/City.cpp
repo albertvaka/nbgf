@@ -2,27 +2,34 @@
 #include "camera.h"
 #include "assets.h"
 #include "debug.h"
+#include "Tree.h"
+#include "vec.h"
 #include "window_conf.h"
 
 
-const int tileSize = 16;
-
-City::City(const std::vector< std::vector<CityTiles> > &tiles): mTiles(tiles) {
+City::City(): mTrees() {
+    //mEntities.push_back(new Tree(vec(100, 100)));
+    mTrees.push_back(new Tree(vec(200,200)));
+    mTrees.push_back(new Tree(vec(500,400)));
 }
 City::~City() {
+    /*
+    for(auto* e : mEntities) {
+        delete e;
+    }
+    */
+    for(Tree* t : mTrees) {
+        delete t;
+    }
 }
 
 void City::Draw() {
-    for (int r = 0; r < mTiles.size(); r++) {
-        const auto row = mTiles[r];
-        const int cellsPerRow = row.size();
-        for(int c = 0; c < row.size(); c++) {
-            const auto cell = row[c];
-            const int rowIndex = cell/cellsPerRow;
-            const int tileIndex = cell%cellsPerRow;
-            Window::Draw(Assets::terrainTexture, vec(c*16*Window::MAP_SCALE, r*16*Window::MAP_SCALE))
-                .withRect(16*rowIndex, 16*tileIndex, 16, 16)
-                .withScale(Window::MAP_SCALE);
-        }
+    /*
+    for(auto& e : mEntities) {
+        e->Draw();
+    }
+    */
+    for(Tree* t : mTrees) {
+        t->Draw();
     }
 }

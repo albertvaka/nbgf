@@ -105,7 +105,6 @@ void init() {
 #if _WIN32
 	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 #endif
-
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0) {
 		Debug::out << SDL_GetError();
 		exit(1);
