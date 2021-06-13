@@ -137,6 +137,8 @@ void SceneMain::Update(float dt)
 
 	mEnemiesController->Update(dt);
 
+	mCity.Update(dt, &mChain);
+
 	//Retrieve nodes to unchain from chain
 	const auto& nodesToUnchain = mChain.GetNodesToUnchain();
 	for (auto& nodeToUnchain : nodesToUnchain)

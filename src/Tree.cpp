@@ -3,9 +3,10 @@
 #include "assets.h"
 #include "debug.h"
 #include "window_conf.h"
+#include "EnvironmentObject.h"
 
 
-Tree::Tree(vec aPos): BoxEntity(aPos, vec(100, 100)) {
+Tree::Tree(vec aPos): EnvironmentObject(aPos) {
 }
 Tree::~Tree() {
 }
@@ -17,6 +18,11 @@ void Tree::Draw() {
     if(Debug::Draw) {
 		Bounds().DebugDraw(255,0,0);
 	}
+}
+
+void Tree::OnCollision()
+{
+
 }
 
 std::pair<Window::PartialDraw, Window::PartialDraw> Tree::PartialDraws() {

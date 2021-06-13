@@ -35,6 +35,8 @@ struct Assets
 
 	static GPU_Image* charcoTexture;
 	static GPU_Image* tileTexture;
+	
+	static GPU_Image* birdTexture;
 
 	static TTF_Font* font_30;
 	static TTF_Font* font_30_outline;

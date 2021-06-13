@@ -3,9 +3,10 @@
 #include "assets.h"
 #include "debug.h"
 #include "window_conf.h"
+#include "EnvironmentObject.h"
 
 
-Tile::Tile(vec aPos): BoxEntity(aPos, vec(200, 300)) {
+Tile::Tile(vec aPos): EnvironmentObject(aPos) {
 }
 Tile::~Tile() {
 }
