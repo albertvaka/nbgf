@@ -21,7 +21,7 @@ struct Chain
 	std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> PartialDraws();
 
 	bool TryToJoin(ChainNode* anUnchainedNode);
-	bool CheckCollisionWithEnvironment(EnvironmentObject* environmentObject);
+	void CheckCollisionWithEnvironment(EnvironmentObject* environmentObject);
 	bool CheckCollisionWithEnemy(BaseEnemy* enemy);
 
 	void AddNode(ChainNode* aNode, ChainNode* aLeftNeighbor, ChainNode* aRightNeighbor);
