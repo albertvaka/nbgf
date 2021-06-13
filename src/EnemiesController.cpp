@@ -29,10 +29,14 @@ void EnemiesController::DrawEnemies()
 
 void EnemiesController::DestroyEnemies()
 {
-	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const BaseEnemy* x)
+	for (int i = 0; i < enemies.size(); ++i)
+	{
+		if (!enemies[i]->alive)
 		{
-			return !x->alive;
-		}), enemies.end());
+			delete(enemies[i]);
+			enemies.erase(enemies.begin() + i);
+		}
+	}
 }
 
 void EnemiesController::Update(float dt)
