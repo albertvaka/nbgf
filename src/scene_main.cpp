@@ -16,6 +16,7 @@
 
 #include "ChainNode.h"
 
+constexpr float GameTime = 60.f;
 
 SceneMain::SceneMain()
 	: mUnchainedNodes()
@@ -90,7 +91,7 @@ SceneMain::SceneMain()
 
 	restartText.SetString("Press R to restart");
 
-	timer = 30.f;
+	timer = GameTime;
 
 	gameOver = false;
 }
@@ -118,7 +119,6 @@ void SceneMain::StartScene()
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
-	mChain.ResetChain(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
 
 	int startingUnchainedNodes = 15;
 
@@ -134,13 +134,23 @@ void SceneMain::StartScene()
 	mEnemiesController = new EnemiesController(&mChain);
 	mEnemiesController->Awake();
 
-	timer = 5.f;
+	timer = GameTime;
 
 	gameOver = false;
 }
 
 void SceneMain::EndScene()
 {
+	mChain.ResetChain(vec(Window::GAME_WIDTH * 0.1, Window::GAME_HEIGHT * 0.5));
+
+	const auto& nodesToUnchain = mChain.GetNodesToUnchain();
+	for (auto& nodeToUnchain : nodesToUnchain)
+	{
+		mUnchainedNodes.emplace(nodeToUnchain->myId, nodeToUnchain);
+		nodeToUnchain->ActivateChainCooldown();
+	}
+	mChain.ResetNodesToUnchain();
+
 	for (auto it : mUnchainedNodes)
 	{
 		delete(it.second);
@@ -212,11 +222,15 @@ void SceneMain::Update(float dt)
 
 	mRemainingUnchained.SetString("Remaining: " + std::to_string(remainingUnchained));
 
-	timer -= dt;
+	if (!showInstructions)
+	{
+		timer -= dt;
+	}
 	timerText.SetString("Time left: " + Mates::to_string_with_precision(timer, 2));
 
 	if (timer <= 0)
 	{
+		timer = 0;
 		gameOver = true;
 	}
 }
