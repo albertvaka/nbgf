@@ -233,9 +233,9 @@ void SceneMain::Draw()
 			.withOrigin(Assets::instructionsTexture->w/2, Assets::instructionsTexture->h/2);
 	}
 
-	Window::Draw(mRemainingUnchained, vec(Window::GAME_WIDTH - mRemainingUnchained.Size().x - 20, 30))
+	Window::Draw(mRemainingUnchained, vec(Window::GAME_WIDTH - mRemainingUnchained.Size().x - 20, 45))
 		.withOrigin(timerText.Size() / 2)
-		.withScale(1.0f);
+		.withScale(2.0f);
 
 	Window::Draw(timerText, vec(Camera::Center().x, 30))
 		.withOrigin(timerText.Size() / 2)
