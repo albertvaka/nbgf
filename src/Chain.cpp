@@ -164,7 +164,7 @@ bool Chain::CheckCollisionWithEnemy(BaseEnemy* enemy)
 {
 	auto collidedIt = std::find_if(myNodes.begin(), myNodes.end(), [&enemy](const ChainUtils::tNodesContainer::value_type& aCurrentNodeIt)
 		{
-			return Collide(enemy, aCurrentNodeIt.second);
+			return Collide(enemy->Bounds(), aCurrentNodeIt.second->grabCircle);
 		});
 	if (collidedIt != myNodes.end())
 	{

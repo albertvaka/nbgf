@@ -96,8 +96,6 @@ SceneMain::SceneMain()
 
 	gameOver = false;
 	gameWin = false;
-
-	Window::SetFullScreen(true);
 }
 
 SceneMain::~SceneMain()
@@ -331,17 +329,6 @@ void SceneMain::Draw()
 			.withOrigin(timerText.Size() / 2)
 			.withScale(2.0f);
 	}
-
-
-#ifdef _IMGUI
-	{
-		ImGui::Begin("scene");
-		vec m = Mouse::GetPositionInWorld();
-		ImGui::Text("Mouse: %f,%f", m.x, m.y);
-		
-		ImGui::End();
-	}
-#endif
 
 }
 
