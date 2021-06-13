@@ -17,20 +17,20 @@ constexpr uint8_t NodeRadius = 50;
 constexpr float NodeAcc = 6000.f;
 constexpr float UnchainedNodeAcc = 1000.f;
 
-constexpr float NodePuppetFriction = 0.005f;
-constexpr float NodeMasterFriction = 0.03f;
+constexpr float NodePuppetFriction = 0.001f;
+constexpr float NodeMasterFriction = 0.01f;
 constexpr float UnchainedNodeFriction = 0.05f;
 
-constexpr float NodeMinVelSq = 500.f;
+constexpr float NodeMinVelSq = 0.f;
 
 constexpr float NodePuppetMass = 1.f;
-constexpr float NodeMasterMass = 5.f;
+constexpr float NodeMasterMass = 2.f;
 
 // Chain Physics
-constexpr float NodeUnstretchedDistance = 70.f;
-constexpr float NodeSpringStrength = 150.f;
+constexpr float NodeUnstretchedDistance = 80.f;
+constexpr float NodeSpringStrength = 80.f;
 
-constexpr float minDistanceToUnchain = 240.f;
+constexpr float minDistanceToUnchain = 250.f;
 constexpr float TimeToBeChained = 1.5f;
 
 // Unchained IA
@@ -72,7 +72,7 @@ void ChainNode::UpdateUnchained(float aDt, ChainUtils::tNodesContainer aNodes)
 	}
 
 	// apply acceleration to velocity and position
-	UpdateUnchainedVelAndPos(aDt);
+	UpdateVelAndPos(aDt, false, true);
 }
 
 void ChainNode::RunAwayFrom(vec aPos) {
@@ -130,17 +130,18 @@ void ChainNode::UpdatePuppet(float aDt, vec aMasterPos, bool isMaster)
 	acc += NodeSpringStrength / mass * displacement;
 }
 
-void ChainNode::UpdateVelAndPos(float aDt, bool isMaster)
+void ChainNode::UpdateVelAndPos(float aDt, bool isMaster, bool isUnchained)
 {
 	float frictionStrength = isMaster ? NodeMasterFriction : NodePuppetFriction;
+	if (isUnchained) { frictionStrength = UnchainedNodeFriction; }
 	// get deceleration from friction
 	acc -= vel.Normalized() * vel.LengthSq() * frictionStrength;
 
 	// update velocity
 	vel += acc * aDt;
 
-	// implement static friction (only move above minimum velocity)
-	if (vel.LengthSq() > NodeMinVelSq) {
+	// implement static friction (only move above minimum velocity for chained dudes)
+	if (vel.LengthSq() > NodeMinVelSq || isUnchained) {
 		// update position
 		pos += vel * aDt + 0.5 * acc * aDt * aDt;
 	}
@@ -148,25 +149,14 @@ void ChainNode::UpdateVelAndPos(float aDt, bool isMaster)
 		vel = vec(0, 0);
 	}
 
+	// stay in bounds
+	if (pos.x > Window::GAME_WIDTH) { pos.x = Window::GAME_WIDTH; }
+	if (pos.y > Window::GAME_HEIGHT) { pos.y = Window::GAME_HEIGHT; }
+	if (pos.x < 0) { pos.x = 0; }
+	if (pos.y < 0) { pos.y = 0; }
+
 	// reset acceleration
 	acc = vec(0,0);
-
-	anim.Update(aDt);
-}
-
-void ChainNode::UpdateUnchainedVelAndPos(float aDt) 
-{
-	float frictionStrength = UnchainedNodeFriction;
-	// get deceleration from friction
-	acc -= vel.Normalized() * vel.LengthSq() * frictionStrength;
-
-	// update velocity
-	vel += acc * aDt;
-	// update position
-	pos += vel * aDt + 0.5 * acc * aDt * aDt;
-
-	// reset acceleration
-	acc = vec(0, 0);
 
 	anim.Update(aDt);
 }

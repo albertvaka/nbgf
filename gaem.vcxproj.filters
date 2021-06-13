@@ -229,6 +229,8 @@
     <ClInclude Include="src\Chain.h" />
     <ClInclude Include="src\EnemiesController.h" />
     <ClInclude Include="src\City.h" />
+    <ClInclude Include="src\Tree.h" />
+    <ClInclude Include="src\Canister.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -354,6 +356,8 @@
     <ClCompile Include="src\Chain.cpp" />
     <ClCompile Include="src\EnemiesController.cpp" />
     <ClCompile Include="src\City.cpp" />
+    <ClCompile Include="src\Tree.cpp" />
+    <ClCompile Include="src\Canister.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">

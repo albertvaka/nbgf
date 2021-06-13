@@ -46,7 +46,7 @@ void Chain::Update(float dt)
 			lIsMaster = true;
 		}
 		currentNode->UpdatePuppet(dt, lIsMaster);
-		currentNode->UpdateVelAndPos(dt, lIsMaster);
+		currentNode->UpdateVelAndPos(dt, lIsMaster, false);
 
 		//Node to unchain by distance
 		float unchainDistance;
@@ -166,6 +166,15 @@ bool Chain::CheckCollisionWithEnemy(BaseEnemy* enemy)
 		});
 	if (collidedIt != myNodes.end())
 	{
+		//we unchain the node:
+		if (collidedIt->first == myBrain)
+		{
+			//TODO(@RNogue): end game, the brain has died.
+		}
+		else
+		{
+			PropagateUnchainNode(collidedIt->second);
+		}
 		return true;
 	}
 	else
