@@ -237,7 +237,7 @@ void SceneMain::Update(float dt)
 	if (timer <= 0)
 	{
 		timer = 0;
-		gameWin = false;
+		gameOver = true;
 	}
 }
 
