@@ -7,6 +7,7 @@
 #include "City.h"
 #include "ChainUtils.h"
 #include "BaseEnemy.h"
+#include "text.h"
 
 
 struct ChainNode;
@@ -18,6 +19,9 @@ struct SceneMain : Scene {
 	ChainUtils::tNodesContainer mUnchainedNodes;
 	Chain mChain;
 	City mCity;
+
+	Text mRemainingUnchained;
+	Text mLevelCounter;
 
 	int mScoreValue = 0;
 	Text mScoreText;
@@ -36,4 +40,11 @@ struct SceneMain : Scene {
 private:
 	ChainNode* GenerateNode(vec&& aPosition);
 	EnemiesController* mEnemiesController;
+
+	Text timerText;
+	float timer;
+
+	bool gameOver = false;
+	Text gameOverText;
+	Text restartText;
 };

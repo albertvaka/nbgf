@@ -4,14 +4,16 @@
 #include "entity.h"
 #include "vec.h"
 #include "window_draw.h"
+#include "EnvironmentObject.h"
 
-struct Charco: BoxEntity {
+struct Charco: EnvironmentObject {
 
 
 	Charco(vec pos);
 	~Charco();
 
-	void Draw();
+	void Draw() override;
+
 	// First is the shadow, second the tree
-	Window::PartialDraw PartialDraw();
+	Window::PartialDraw PartialDraw() override;
 };

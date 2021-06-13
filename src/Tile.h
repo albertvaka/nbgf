@@ -4,8 +4,9 @@
 #include "entity.h"
 #include "vec.h"
 #include "window_draw.h"
+#include "EnvironmentObject.h"
 
-struct Tile: BoxEntity {
+struct Tile: public EnvironmentObject {
 
 
 	Tile(vec pos);
@@ -13,5 +14,5 @@ struct Tile: BoxEntity {
 
 	void Draw();
 	// First is the shadow, second the tree
-	Window::PartialDraw PartialDraw();
+	Window::PartialDraw PartialDraw() override;
 };

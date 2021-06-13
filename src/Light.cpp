@@ -3,9 +3,10 @@
 #include "assets.h"
 #include "debug.h"
 #include "window_conf.h"
+#include "EnvironmentObject.h"
 
 
-Light::Light(vec aPos): BoxEntity(aPos, vec(100, 100)) {
+Light::Light(vec aPos): EnvironmentObject(aPos) {
 }
 Light::~Light() {
 }

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Bush.h" />
+    <ClInclude Include="src\EnvironmentObject.h" />
     <ClInclude Include="src\Canister.h" />
     <ClInclude Include="src\Charco.h" />
     <ClInclude Include="src\City.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\EnvironmentObject.cpp" />
     <ClCompile Include="src\Bush.cpp" />
     <ClCompile Include="src\Canister.cpp" />
     <ClCompile Include="src\Charco.cpp" />

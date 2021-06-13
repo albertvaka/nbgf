@@ -2,6 +2,7 @@
 #include "ChainNode.h"
 #include "collide.h"
 #include "BaseEnemy.h"
+#include "EnvironmentObject.h"
 
 constexpr float TimeToBreakByDistance = 1.5f;
 
@@ -189,6 +190,25 @@ bool Chain::CheckCollisionWithEnemy(BaseEnemy* enemy)
 		return false;
 	}
 }
+
+bool Chain::CheckCollisionWithEnvironment(EnvironmentObject* environmentObject)
+{
+	auto collidedIt = std::find_if(myNodes.begin(), myNodes.end(), [&environmentObject](const ChainUtils::tNodesContainer::value_type& aCurrentNodeIt)
+		{
+			return Collide(aCurrentNodeIt.second, environmentObject);
+		});
+	if (collidedIt != myNodes.end())
+	{
+		collidedIt->second->RegisterHit(10000, collidedIt->second->pos - environmentObject->pos);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
 
 void Chain::AddNode(ChainNode* aNode, ChainNode* aLeftNeighbor, ChainNode* aRightNeighbor)
 {

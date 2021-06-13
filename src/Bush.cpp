@@ -3,9 +3,10 @@
 #include "assets.h"
 #include "debug.h"
 #include "window_conf.h"
+#include "EnvironmentObject.h"
 
 
-Bush::Bush(vec aPos): BoxEntity(aPos, vec(100, 100)) {
+Bush::Bush(vec aPos): EnvironmentObject(aPos) {
 }
 Bush::~Bush() {
 }

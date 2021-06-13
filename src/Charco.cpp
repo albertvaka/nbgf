@@ -3,9 +3,10 @@
 #include "assets.h"
 #include "debug.h"
 #include "window_conf.h"
+#include "EnvironmentObject.h"
 
 
-Charco::Charco(vec aPos): BoxEntity(aPos, vec(200, 300)) {
+Charco::Charco(vec aPos): EnvironmentObject(aPos) {
 }
 Charco::~Charco() {
 }
@@ -20,6 +21,6 @@ void Charco::Draw() {
 }
 
 Window::PartialDraw Charco::PartialDraw() {
-    return Window::PartialDraw(Assets::charcoTexture, pos)
-			.withOrigin(Assets::charcoTexture->w/2, Assets::charcoTexture->h);
+	return Window::PartialDraw(Assets::tileTexture, pos)
+		.withOrigin(Assets::tileTexture->w / 2, Assets::tileTexture->h);
 }
