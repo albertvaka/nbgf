@@ -21,6 +21,10 @@ SceneMain::SceneMain()
 	, mChain()
 	, mScoreText(Assets::font_30, Assets::font_30_outline)
 	, mCity()
+	, timerText(Assets::font_30, Assets::font_30_outline)
+	, timer(5.f)
+	, gameOverText(Assets::font_30, Assets::font_30_outline)
+	, restartText(Assets::font_30, Assets::font_30_outline)
 {
 	//COMMENT THIS DO HAVE AN INITIAL CHAIN
 	//TODO Would be cool to have this in a factory/chainNodesSpawner class and set from there the ids as well
@@ -67,6 +71,13 @@ SceneMain::SceneMain()
 
 	MusicPlayer::SetVolume(50.f);
 	MusicPlayer::Play(Assets::gameMusic);
+
+	timerText.SetFillColor(255, 255, 255);
+	timerText.SetOutlineColor(0, 0, 0);
+
+	gameOverText.SetString("Game Over");
+
+	restartText.SetString("Press R to restart");
 }
 
 SceneMain::~SceneMain()
@@ -104,6 +115,11 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
+	if (gameOver)
+	{
+		return;
+	}
+
 	for (auto it = mUnchainedNodes.begin(); it != mUnchainedNodes.end();) 
 	{
 		if (mChain.TryToJoin(it->second))
@@ -129,6 +145,14 @@ void SceneMain::Update(float dt)
 		nodeToUnchain->ActivateChainCooldown();
 	}
 	mChain.ResetNodesToUnchain();
+
+	timer -= dt;
+	timerText.SetString("Time left: " + Mates::to_string_with_precision(timer, 2));
+
+	if (timer <= 0)
+	{
+		gameOver = true;
+	}
 }
 
 std::vector<Window::PartialDraw> shadows;
@@ -178,6 +202,21 @@ void SceneMain::Draw()
 	}
 		
 	mEnemiesController->DrawEnemies();
+
+	Window::Draw(timerText, vec(Camera::Center().x, 30))
+		.withOrigin(timerText.Size() / 2)
+		.withScale(1.0f);
+
+	if (gameOver)
+	{
+		Window::Draw(gameOverText, vec(Camera::Center().x, Camera::Center().y))
+			.withOrigin(gameOverText.Size() / 2)
+			.withScale(5.0f);
+
+		Window::Draw(restartText, vec(Camera::Center().x, Camera::Center().y+120))
+			.withOrigin(restartText.Size() / 2)
+			.withScale(1.0f);
+	}
 
 #ifdef _IMGUI
 	{
