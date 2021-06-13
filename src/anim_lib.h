@@ -104,6 +104,12 @@ namespace AnimLib {
 
 	constexpr const GPU_Rect MANTIS_AIR = { 1 * 32, 8 * 32, 32, 32 };
 
+	constexpr const AnimationFrame MANTIS_ATTACK[] = {
+		{ {3 * 32, 9 * 32, 32, 32}, .1f },
+		{ {4 * 32, 9 * 32, 32, 32}, .1f },
+		{ {5 * 32, 9 * 32, 32, 32}, .1f },
+	};
+
 	constexpr const AnimationFrame MANTIS_WALK[] = {
 		{ {0 * 32, 10 * 32, 32, 32}, .1f },
 		{ {1 * 32, 10 * 32, 32, 32}, .1f },

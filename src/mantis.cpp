@@ -29,7 +29,8 @@ constexpr const float kSpriteRadius = 10.f* kScale;
 constexpr const vec kKnockbackVel(180.f, -150.f);
 constexpr const float kHitTime = 0.5f;
 
-constexpr const float kJumpCooldown = .2f;
+constexpr const float kJumpCooldown = .25f;
+constexpr const float kJumpCooldownRand = .65f;
 
 Mantis::Mantis(vec pos)
 	: CircleEntity(pos - vec(0,8), kSpriteRadius)
@@ -61,6 +62,9 @@ bool Mantis::IsBouncingAgainstAnotherMantis() {
 	if (!collidingWith) {
 		return false;
 	}
+	if (hitTimer > 0.f || collidingWith->hitTimer > 0.f) {
+		return false; // Do not bounce against hit mantis
+	}
 	return IsMovingTowardsInX(pos, vel, collidingWith->pos);
 }
 
@@ -87,17 +91,31 @@ void Mantis::Update(float dt)
 
 	switch (state)
 	{
+	case State::ATTACKING:
+	{
+		anim.Update(dt);
+		if (anim.IsComplete()) {
+			state = State::WALKING;
+			anim.Set(AnimLib::MANTIS_WALK);
+		}
+	}
+	break;
 	case State::WALKING: 
 	{
 		anim.Update(dt);
 
 		if (IsGoingToHitAWall(pos, kSpriteSize, vel, dt)
-			|| IsGoingToRunOffPlatform(pos, kSpriteSize, vel, dt)
 			|| IsGoingToLeaveTheScreen(pos, kSpriteSize, vel, dt, screen)
 			|| IsBouncingAgainstAnotherMantis())
 		{
 			vel.x = -vel.x;
+		} else if (IsGoingToRunOffPlatform(pos, vec(0.f, kSpriteSize.y), vel, dt)) {
+			state = State::JUMP;
+			pos.y += 1.f;
+			vel.y += kGravityAcc * dt;
+
 		}
+
 		auto ret = MoveAgainstTileMap(pos, kSpriteSize, vel, dt);
 		pos = ret.pos;
 
@@ -147,14 +165,22 @@ void Mantis::Update(float dt)
 
 		if (ret.groundCollision != Tile::NONE) {
 			vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
+			if (hitTimer > kHitTime/2) {
+				vel.x = -vel.x; // If just hit move away instead of towards the player
+			}
 			vel.y = 0;
 			state = State::WALKING;
-			jumpCooldownTimer = kJumpCooldown;
+			jumpCooldownTimer = kJumpCooldown + Rand::rollf(kJumpCooldownRand);
 			anim.Set(AnimLib::MANTIS_WALK);
 		} else if (ret.ceilingCollision != Tile::NONE) {
 			vel.y = 0;
 		} else if (ret.leftWallCollision != Tile::NONE || ret.rightWallCollision != Tile::NONE) {
-			vel.x = -vel.x;
+			if (hitTimer > 0.f) {
+				vel.x = 0.f; // Do not bounce back if you hit it away
+			}
+			else {
+				vel.x = -vel.x;
+			}
 		}
 
 	}
@@ -162,7 +188,12 @@ void Mantis::Update(float dt)
 	}
 
 	if (!damageFromPlayerPos) { //avoid hitting and being hit the same frame
-		DamagePlayerOnCollision(Bounds());
+		bool hit = DamagePlayerOnCollision(Bounds());
+		if (hit && state == State::WALKING) {
+			vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
+			state = State::ATTACKING;
+			anim.Set(AnimLib::MANTIS_ATTACK, false);
+		}
 	}
 }
 

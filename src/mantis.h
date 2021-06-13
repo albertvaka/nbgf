@@ -11,6 +11,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	enum class State
 	{
 		WALKING,
+		ATTACKING,
 		PREPARE_JUMP,
 		JUMP,
 	};

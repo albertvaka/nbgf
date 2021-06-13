@@ -29,16 +29,11 @@ inline bool IsGoingToRunOffPlatform(vec pos, vec size, vec vel, float dt) {
 	vec newPos = pos + vel * dt;
 	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
 	vec bottomCorner = vec(newPos.x + toTheSideImMoving, newPos.y + size.y / 2);
+	bottomCorner.DebugDraw();
 	//bottomCorner.DebugDraw();
 	veci tilePosBottom = Tile::ToTiles(bottomCorner);
 	const Tile tileBottom = GaemTileMap::instance()->GetTile(tilePosBottom);
-	if (tileBottom.isFullSolid()) {
-		return false;
-	}
-	if (tileBottom.isOneWay()) {
-		return false;
-	}
-	return true;
+	return !(tileBottom.isFullSolid() || tileBottom.isOneWay());
 }
 
 inline bool IsGoingToHitAWall(vec pos, vec size, vec vel, float dt) {
