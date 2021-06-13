@@ -18,3 +18,12 @@ void Tree::Draw() {
 		Bounds().DebugDraw(255,0,0);
 	}
 }
+
+std::pair<Window::PartialDraw, Window::PartialDraw> Tree::PartialDraws() {
+    Window::PartialDraw shadow = Window::PartialDraw(Assets::treeShadowTexture, pos)
+			.withOrigin(Assets::treeShadowTexture->w, Assets::treeShadowTexture->h);
+    Window::PartialDraw sprite = Window::PartialDraw(Assets::treeTexture, pos)
+			.withOrigin(Assets::treeTexture->w/2, Assets::treeTexture->h);
+	std::pair<Window::PartialDraw, Window::PartialDraw> p(shadow, sprite);
+    return p;
+}

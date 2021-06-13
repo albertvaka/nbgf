@@ -198,6 +198,45 @@ void ChainNode::Draw(SDL_Color aNodeColor) const
 	}
 }
 
+std::pair<Window::PartialDraw, Window::PartialDraw> ChainNode::PartialDraws(SDL_Color aNodeColor) const
+{
+	const GPU_Rect& personRect = AnimLib::PERSON;
+	const GPU_Rect& shadowRect = AnimLib::SHADOW;
+	/*
+	// Relative to character
+	const float shadowBaseSize = 0.9;
+	// Perspective
+	const float shadowTilt = 0.5;
+	
+	// Half the tilted size
+	const float shadowYOffset = -(shadowScale.y * shadowRect.h) / 2;
+	*/
+	const float shadowBaseSize = 0.6;
+	const vec shadowScale = vec(
+		(NodeRadius*2 / shadowRect.w) , 
+		(NodeRadius*2 / shadowRect.h)
+	)*shadowBaseSize;
+	const Window::PartialDraw shadow = Window::PartialDraw(Assets::personShadowTexture, pos)
+		// I tried doing it parametric but didnt work, hardcoded values ahead
+		.withOrigin(vec(shadowRect.w / 2+7, -116 ) )
+		.withScale(shadowScale.x, shadowScale.y*0.5);
+	
+	const Window::PartialDraw sprite = Window::PartialDraw(Assets::personTexture, pos)
+		.withOrigin(vec(personRect.w, personRect.h) / 2)
+		.withRect(anim.CurrentFrameRect())
+		.withColor(aNodeColor)
+		.withScale(NodeRadius * 2 / personRect.w, NodeRadius * 2 / personRect.h);
+
+
+	if(Debug::Draw) {
+		Bounds().DebugDraw(0,255,0);
+	}
+
+	std::pair<Window::PartialDraw, Window::PartialDraw> p(shadow, sprite);
+	return p;
+}
+
+
 void ChainNode::ActivateChainCooldown()
 {
 	myCooldownToBeChained = TimeToBeChained;

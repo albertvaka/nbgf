@@ -1,9 +1,10 @@
 #pragma once
-
+#include <utility>
 #include "entity.h"
 #include "ChainUtils.h"
 #include "vec.h"
 #include "animation.h"
+#include "window_draw.h"
 
 struct ChainNode : CircleEntity
 {
@@ -15,6 +16,8 @@ struct ChainNode : CircleEntity
 	void UpdateVelAndPos(float dt, bool isMaster, bool isUnchained);
 	void UpdatePuppet(float aDt, bool isMaster);
 	void Draw(SDL_Color aNodeColor) const;
+
+	std::pair<Window::PartialDraw, Window::PartialDraw> PartialDraws(SDL_Color aNodeColor) const;
 
 	void ActivateChainCooldown();
 	bool CanBeChained() const;

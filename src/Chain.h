@@ -1,7 +1,9 @@
 #pragma once
 
-#include "ChainUtils.h"
 #include <vector>
+#include <utility>
+#include "ChainUtils.h"
+#include "window_draw.h"
 
 struct ChainNode;
 struct BaseEnemy;
@@ -13,6 +15,9 @@ struct Chain
 
 	void Update(float dt);
 	void Draw();
+
+	// First is shadows, second sprites
+	std::pair<std::vector<Window::PartialDraw>, std::vector<Window::PartialDraw>> PartialDraws();
 
 	bool TryToJoin(ChainNode* anUnchainedNode);
 	bool CheckCollisionWithEnemy(BaseEnemy* enemy);

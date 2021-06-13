@@ -5,11 +5,11 @@
 #include "vec.h"
 #include "window_draw.h"
 
-struct Tree: BoxEntity {
+struct Canister: BoxEntity {
 
 
-	Tree(vec pos);
-	~Tree();
+	Canister(vec pos);
+	~Canister();
 
 	void Draw();
 	// First is the shadow, second the tree
