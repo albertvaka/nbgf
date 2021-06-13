@@ -43,5 +43,7 @@ struct Assets
 
 	static Shader tintShader;
 
+	static inline Mix_Music* gameMusic;
+
 };
 

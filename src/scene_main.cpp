@@ -11,6 +11,7 @@
 #include "debug.h"
 #include "EnemiesController.h"
 #include "window_draw.h"
+#include "musicplayer.h"
 
 #include "ChainNode.h"
 
@@ -63,6 +64,9 @@ SceneMain::SceneMain()
 	//Enemies----
 	mEnemiesController = new EnemiesController(&mChain);
 	mEnemiesController->Awake();
+
+	MusicPlayer::SetVolume(50.f);
+	MusicPlayer::Play(Assets::gameMusic);
 }
 
 SceneMain::~SceneMain()
