@@ -382,6 +382,17 @@ To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one m
 
 TODO
 
+### `DeferredDraw`
+
+Use `Window::DeferredDraw` instead of `Windows::Draw` to get yourself an object you can draw at a later moment in time. This is useful, for example, to simulate perspective by sorting all your draw calls by their Y coordinate before actually drawing them, so things that are closer to the camera are drawn on top. `DeferredDraw` has the same interface as `Draw` but won't actually draw anything on screen until you manually call its `.Draw()` method.
+
+```
+auto a = Window::DeferredDraw(...);
+auto b = Window::DeferredDraw(...);
+b.Draw();
+a.Draw();
+```
+
 ### Tile maps
 
 TODO
