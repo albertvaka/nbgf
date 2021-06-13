@@ -169,7 +169,14 @@ bool Chain::CheckCollisionWithEnemy(BaseEnemy* enemy)
 		//we unchain the node:
 		if (collidedIt->first == myBrain)
 		{
-			//TODO(@RNogue): end game, the brain has died.
+			if (collidedIt->second->GetLeftNeighbor())
+			{
+				AddLeftSubChainToUnchain(collidedIt->second->GetLeftNeighbor());
+			}
+			if (collidedIt->second->GetRightNeighbor())
+			{
+				AddRightSubChainToUnchain(collidedIt->second->GetRightNeighbor());
+			}
 		}
 		else
 		{
