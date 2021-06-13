@@ -11,7 +11,7 @@
 #include "anim_lib.h"
 
 // Collisions
-constexpr uint8_t NodeRadius = 50;
+constexpr uint8_t NodeRadius = 25;
 
 // Movement Physics
 constexpr float NodeAcc = 6000.f;
@@ -179,6 +179,7 @@ void ChainNode::Draw(SDL_Color aNodeColor) const
 		(NodeRadius*2 / shadowRect.w) , 
 		(NodeRadius*2 / shadowRect.h)
 	)*shadowBaseSize;
+	/*
 	// Shadow
 	Window::Draw(Assets::personShadowTexture, pos)
 		// I tried doing it parametric but didnt work, hardcoded values ahead
@@ -196,6 +197,7 @@ void ChainNode::Draw(SDL_Color aNodeColor) const
 	if(Debug::Draw) {
 		Bounds().DebugDraw(0,255,0);
 	}
+	*/
 }
 
 std::pair<Window::PartialDraw, Window::PartialDraw> ChainNode::PartialDraws(SDL_Color aNodeColor) const
@@ -213,19 +215,19 @@ std::pair<Window::PartialDraw, Window::PartialDraw> ChainNode::PartialDraws(SDL_
 	*/
 	const float shadowBaseSize = 0.6;
 	const vec shadowScale = vec(
-		(NodeRadius*2 / shadowRect.w) , 
-		(NodeRadius*2 / shadowRect.h)
+		(NodeRadius*4 / shadowRect.w) , 
+		(NodeRadius*4 / shadowRect.h)
 	)*shadowBaseSize;
 	const Window::PartialDraw shadow = Window::PartialDraw(Assets::personShadowTexture, pos)
 		// I tried doing it parametric but didnt work, hardcoded values ahead
-		.withOrigin(vec(shadowRect.w / 2+7, -116 ) )
+		.withOrigin(vec(shadowRect.w / 2+7, 60 ) )
 		.withScale(shadowScale.x, shadowScale.y*0.5);
 	
 	const Window::PartialDraw sprite = Window::PartialDraw(Assets::personTexture, pos)
-		.withOrigin(vec(personRect.w, personRect.h) / 2)
+		.withOrigin(vec(personRect.w / 2, personRect.h))
 		.withRect(anim.CurrentFrameRect())
 		.withColor(aNodeColor)
-		.withScale(NodeRadius * 2 / personRect.w, NodeRadius * 2 / personRect.h);
+		.withScale(NodeRadius * 4 / personRect.w, NodeRadius * 4 / personRect.h);
 
 
 	if(Debug::Draw) {
