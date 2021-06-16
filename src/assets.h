@@ -13,14 +13,13 @@ struct Assets
 {
 	static void LoadAll();
 
-	static GPU_Image* invadersTexture;
+	static inline GPU_Image* invadersTexture;
 	
-	static GPU_Image* backgroundTexture;
+	static inline GPU_Image* backgroundTexture;
 
-	static TTF_Font* font_30;
-	static TTF_Font* font_30_outline;
+	static inline TTF_Font* font_30;
+	static inline TTF_Font* font_30_outline;
 
-	static Shader tintShader;
+	static inline Shader tintShader;
 
 };
-
