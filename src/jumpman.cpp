@@ -258,6 +258,11 @@ void JumpMan::UpdateMoving(float dt)
 
 }
 
+#ifdef _IMGUI
+float initialJumpY = 0;
+float maxJumpY = 0;
+#endif
+
 void JumpMan::Update(float dt)
 {
 	if (frozen || !alive) return;
@@ -394,6 +399,11 @@ void JumpMan::Update(float dt)
 		// JUMPERINO
 		if (Input::IsJustPressed(0, GameKeys::JUMP, 0.15f) && (groundTile != Tile::NONE || jumpFromWallTimer > 0.f)) {
 			Input::ConsumeJustPressed(0, GameKeys::JUMP);
+
+#ifdef _IMGUI
+			initialJumpY = pos.y;
+			maxJumpY = 0;
+#endif
 
 			bool didJumpFromWall = false;
 			if (jumpFromWallTimer > 0.f) {
@@ -615,7 +625,6 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	
 	polvito.UpdateParticles(dt);
 
 
@@ -713,6 +722,8 @@ void JumpMan::Draw() const {
 		}
 		ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10);
 		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
+		maxJumpY = std::max(maxJumpY, -(pos.y - initialJumpY));
+		ImGui::Text("jump height %f", maxJumpY);
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
 		ImGui::Text("jumpTimeLeft: %f divingRestTimer: %f", jumpTimeLeft, divingRestTimer);
 		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing, groundTile.isSlope());
