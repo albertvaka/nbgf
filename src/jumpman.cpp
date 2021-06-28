@@ -82,8 +82,8 @@ const float kSwordAttackWallSlideRadius = 23.f;
 const vec kSwordAttackWallSlideOffset = vec(-16.f, -15.5f);
 
 // Sprite
-const vec kStandingSize = vec(14, 32);
-const vec kCrouchedSize = vec(16, 22);
+const vec kStandingSize = vec(13, 32);
+const vec kCrouchedSize = vec(13, 22);
 
 void DestroyTilesWithSword(const CircleBounds& e) {
 	GaemTileMap* map = GaemTileMap::instance();
