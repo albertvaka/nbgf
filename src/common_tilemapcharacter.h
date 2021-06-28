@@ -221,17 +221,27 @@ horz_exit:
 		int xr = Tile::ToTiles(pos.x + halfWidth - E);
 		for (int y = yo; y <= yn; y++)
 		{
+			bool found = false;
 			for (int x = xl; x <= xr; x++)
 			{
 				Tile t = map->GetTile(x, y);
-				if ((t.isFullSolid()) || (t.isOneWay() && pos.y - 1.f < (y * Tile::Size)))
+				bool oneWayCollision = (t.isOneWay() && pos.y - 1.f < (y * Tile::Size));
+				if ((t.isFullSolid()) || oneWayCollision)
 				{
 					posf.y = Tile::Top(y);
 					ret.groundCollisionPos = veci(x,y);
 					ret.groundCollision = t;
-					goto vert_exit;
+					found = true;
+					if (!oneWayCollision) {
+						goto vert_exit;
+						// Otherwise continue checking blocks in the X axis: if we find a full solid block anywhere below the player we prefer returning that one than the one-way
+					}
 				}
 			}
+			if (found) {
+				goto vert_exit;
+			}
+
 		}
 		//No collision down
 	}
