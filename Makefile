@@ -72,13 +72,13 @@ obj/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/scene_entrypoint.h 
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 	$(call time_end,$@)
 
-obj/generated/%.cpp.o: generated/%.cpp engine/*.h Makefile
+obj/generated/%.cpp.o: generated/%.cpp generated/%.h engine/*.h Makefile
 	@mkdir -p obj/generated
 	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 	$(call time_end,$@)
 
-obj/%.cpp.o: src/%.cpp engine/*.h generated/*.h src/*.h Makefile
+obj/%.cpp.o: src/%.cpp engine/*.h $(wildcard generated/*.h) src/*.h Makefile
 	@mkdir -p obj
 	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
