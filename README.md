@@ -20,8 +20,8 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 - Build with `make`
 
 ### HTML
-- You will need a working emscripten setup
-- Build with `emmake make`
+- You will need a working [Emscripten SDK](https://github.com/emscripten-core/emsdk) setup
+- Build with `emmake make`, it will fetch all the dependencies for you
 
 # Developer's reference
 
