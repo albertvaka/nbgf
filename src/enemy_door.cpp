@@ -40,7 +40,7 @@ void EnemyDoor::Open(bool skipAnim)
 		while (OpenOneStep());
 	} else {
 		state = State::OPENING;
-		Fx::Screenshake::Start(3.f, veci(2, 2), vec(35.f, 45.f));
+		Fx::Screenshake::Start(3.f, vec(1.5f, 1.5f), vec(30.f, 39.f));
 		openingTimer = 0.f;
 	}
 	enemies.clear(); // we will stop checking for !alive enemies, so the pointers might be freed
