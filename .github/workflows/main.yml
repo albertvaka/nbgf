@@ -9,13 +9,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.1
 
-      - name: Build
-        uses: docker://emscripten/emsdk
-        with:
-          args: emmake make -j2
-
       - name: Find and define GITHUB_REF_SLUG
         uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          # use branch name for cache invalidation (Linux-build-name-of-branch)
+          key: ${{ runner.os }}-build-${{ env.GITHUB_REF_SLUG }}
+          path: |
+            ~/.cache/emsdk
+
+      - name: Build
+        run: |
+          docker run --rm \
+                     -v /home/runner/work/nbgf/nbgf:/github/workspace \
+                     --workdir /github/workspace \
+                     -v ~/.cache/emsdk:/emsdk/upstream/emscripten/cache/ \
+                     emscripten/emsdk emmake make -j2
 
       - name: FrontPage 2000
         run: |
