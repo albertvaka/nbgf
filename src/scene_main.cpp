@@ -63,6 +63,11 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
+	if (Alien::GetAll().empty()) {
+		currentLevel++;
+		SpawnAliens();
+	}
+
 	player.Update(dt);
 
 	for (Alien* a : Alien::GetAll()) {
@@ -85,11 +90,6 @@ void SceneMain::Update(float dt)
 				b->alive = false;
 			}
 		}
-	}
-
-	if (Alien::GetAll().empty()) {
-		currentLevel++;
-		SpawnAliens();
 	}
 
 	Bullet::DeleteNotAlive();
