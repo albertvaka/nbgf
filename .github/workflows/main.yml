@@ -32,6 +32,7 @@ jobs:
         run: |
           mkdir -p www
           cp bin/{gaem.data,gaem.wasm,gaem.js,index.html} www
+          echo "https://albertvaka.github.io/nbgf/${{ env.GITHUB_REF_SLUG }}" >> www/README.md
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
