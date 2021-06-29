@@ -25,8 +25,8 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          repository-name: albertvaka/nbgf.github.io
+          repository-name: albertvaka/albertvaka.github.io
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           branch: main
           folder: www
-          target-folder: ${{ env.GITHUB_REF_SLUG }}
+          target-folder: nbgf/${{ env.GITHUB_REF_SLUG }}
