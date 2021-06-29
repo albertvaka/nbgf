@@ -16,11 +16,11 @@ DEP_SRC = $(shell find vendor -type f -name '*.cpp' -o -name '*.c' ! -path 'vend
 DEP_OBJ = $(patsubst vendor/%, obj/vendor/%.o, $(DEP_SRC))
 DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include ! -path vendor/SDL2/include) $(shell find vendor -mindepth 1 -maxdepth 1 ! -path vendor/glew -type d '!' -exec test -e "{}/include" ';' -print ))
 
-OPTIM     = 0
-DEBUG     = 1
-PROFILE   = 0
-IMGUI     = $(DEBUG)
-WEBGL_VER = 2
+OPTIM     ?= 0
+DEBUG     ?= 1
+PROFILE   ?= 0
+IMGUI     ?= $(DEBUG)
+WEBGL_VER ?= 2
 
 # Bash so we can use curly braces expansion
 SHELL = bash
