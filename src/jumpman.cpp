@@ -779,8 +779,13 @@ void JumpMan::Draw() const {
 
 void JumpMan::DrawGUI() const {
 	for (int i = 0; i < maxHealth; i++) {
-		Window::Draw(Assets::spritesheetTexture, 10 + 16 * i, 10)
-			.withRect(i < health ? AnimLib::HEALTH_FULL : AnimLib::HEALTH_EMPTY);
+		float scale = 1.5f;
+		if (health == 1) {
+			scale += std::abs(Mates::Clamped(sin(mainClock * 6), -0.6f, 9.f))/3;
+		}
+		Window::Draw(Assets::spritesheetTexture, 18 + 24 * i, 18)
+			.withRectWithOriginCentered(i < health ? AnimLib::HEALTH_FULL : AnimLib::HEALTH_EMPTY)
+			.withScale(scale);
 	}
 }
 

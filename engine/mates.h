@@ -72,7 +72,7 @@ namespace Mates
 	inline void Clamp(T& arg, const U& minVal, const V& maxVal)
 	{
 #if _DEBUG
-		assert(((double)minVal <= (double)maxVal) && "<Clamp>MaxVal < MinVal!");
+		assert(((float)minVal <= (float)maxVal) && "<Clamp>MaxVal < MinVal!");
 #endif
 
 		if (arg < (T)minVal)
@@ -84,6 +84,13 @@ namespace Mates
 		{
 			arg = (T)maxVal;
 		}
+	}
+
+	template <class T, class U, class V>
+	T Clamped(T arg, const U& minVal, const V& maxVal)
+	{
+		Clamp(arg, minVal, maxVal);
+		return arg;
 	}
 
 	template <class T, class V>
