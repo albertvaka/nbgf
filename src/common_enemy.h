@@ -51,7 +51,7 @@ bool DamagePlayerOnCollision(const B& bounds) { // returns true if collided
 	return false;
 }
 
-inline void RandomlySpawnHealth(vec pos, int percentChance = 10) {
+inline void RandomlySpawnHealth(vec pos, int percentChance = 16) {
 	if (Rand::PercentChance(percentChance)) {
 		new Health(pos + Rand::VecInRange(-6, -6, 6, 6));
 	}
