@@ -34,10 +34,10 @@ const float kFrictAccVert_WallUp = 1200;
 const float kFrictAccVert_WallDown = 450;
 
 // jump
-const float kVelJump = -165; // Y axis
+const float kVelJump = -170; // Y axis
 const float kVelWalljump = 140; // X axis
 const float kVelSlopejump = 140; // X axis
-const float kJumpTime = 0.3f; // FIXME: Since we use a timer and not a max height, depending on the framerate we jump a height between 68 and 75 units
+const float kJumpTime = 0.3f; // FIXME: Since we use a timer and not a max height, depending on the framerate we jump a height between 71 and 78 units
 const float kJumpTimeFromWall = 0.3f;
 const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 const float kTimeToJumpFromWallAfterLettingGo = 0.2f;
