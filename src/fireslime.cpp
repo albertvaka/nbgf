@@ -11,7 +11,6 @@
 #include "common_tilemapcharacter.h"
 
 constexpr const float kSpeed = 25;
-constexpr const float kShotsPerAttack = 5;
 
 constexpr const vec kShotSpeed(70, -90);
 constexpr const vec kShotAccel(0, 150);
@@ -23,7 +22,11 @@ constexpr const int kFirstFrameOnAir = 2;
 constexpr const int kFirstFrameOnGround = 7;
 constexpr const int kFrameShooting = 2;
 
-constexpr const vec kGroundCollision = vec(10,10) * kSpriteScale;
+constexpr const float kShotsPerAttack = 4;
+constexpr const float kAttackFrameDuration = AnimLib::FIRESLIME_ATTACK[kFrameShooting].duration;
+constexpr const float kTimeBetweenShots = kAttackFrameDuration / kShotsPerAttack;
+
+constexpr const vec kGroundCollision = vec(10, 10) * kSpriteScale;
 
 FireSlime::FireSlime(vec pos)
 	: CircleEntity(pos - vec(0, kSpriteOffsetY), 5*kSpriteScale)
@@ -65,10 +68,10 @@ void FireSlime::Update(float dt)
 	case State::ATTACKING:
 		if (anim.CurrentFrameNumber() == kFrameShooting) {
 			timer -= dt;
-			constexpr const float anim_duration = AnimLib::FIRESLIME_ATTACK[kFrameShooting].duration;
-			constexpr const float time_between_shots = anim_duration / (kShotsPerAttack-1);
-			if (timer <= 0) {
-				timer += time_between_shots;
+			if (timer <= 0.f) {
+				if (anim.CurrentFrameNumber() == kFrameShooting) {
+					timer += kTimeBetweenShots;
+				}
 				new FireShot(pos, vec(direction * kShotSpeed.x, kShotSpeed.y), kShotAccel);
 			}
 		}
@@ -81,7 +84,7 @@ void FireSlime::Update(float dt)
 			didJustAttack = false;
 		} else if (willAttack) {
 			state = State::ATTACKING;
-			timer = 0.0f;
+			timer = kTimeBetweenShots/2;
 			anim.Set(AnimLib::FIRESLIME_ATTACK, false);
 			willAttack = false;
 		}
