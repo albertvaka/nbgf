@@ -6,8 +6,9 @@
 
 struct ScreenManager : SingleInstance<ScreenManager>
 {
-	void AddScreen(const BoxBounds& b) {
+	int AddScreen(const BoxBounds& b) {
 		screens.push_back(b);
+		return screens.size()-1;
 	}
 
 	int ScreenCount() {

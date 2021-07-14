@@ -32,6 +32,8 @@ struct JumpScene : Scene {
 	Lava* raising_lava;
 	float raising_lava_target_height;
 
+	std::vector<int> waveShaderScreens;
+	bool shaderLavaActive = false;
 	bool contextActionButton = false;
 
 	void SaveGame() const;

@@ -87,7 +87,16 @@ JumpScene::JumpScene(int saveSlot)
 	}
 
 	for (const auto& screen : Tiled::Screens::screen) {
-		screenManager.AddScreen(screen);
+		int id = screenManager.AddScreen(screen);
+		for (const BoxBounds& b : Tiled::Areas::lava_bg) {
+			if (Collide(screen, b)) {
+				waveShaderScreens.push_back(id);
+			}
+		}
+	}
+
+	for (const BoxBounds& b : Tiled::Areas::lava_bg) {
+		new Parallax(b, Assets::lavaParallaxTextures, 0.3f, 1.f, -410.f);
 	}
 }
 
@@ -657,6 +666,26 @@ void JumpScene::Update(float dt)
 
 	rotoText.Update(dt);
 
+	// Enable waves shader in lava cave
+	bool inLavaCave = false;
+	for (int screen : waveShaderScreens) {
+		if (screen == screenManager.CurrentScreen()) {
+			inLavaCave = true;
+			break;
+		}
+	}
+	if (inLavaCave && !shaderLavaActive) {
+		shaderLavaActive = true;
+		Fx::FullscreenShader::SetShader([]() {
+			Assets::waveShader.Activate();
+			Assets::waveShader.SetUniform("camera", Camera::Center() * Window::GetViewportScale());
+			Assets::waveShader.SetUniform("time", mainClock * 10);
+		});
+	}
+	else if (!inLavaCave && shaderLavaActive) {
+		shaderLavaActive = false;
+		Fx::FullscreenShader::SetShader(nullptr);
+	}
 }
 
 void JumpScene::Draw()
@@ -708,18 +737,6 @@ void JumpScene::Draw()
 		ImGui::Text("mainclock: %f", mainClock);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
-
-		if (ImGui::Button("Start waves")) {
-			Fx::FullscreenShader::SetShader([]() {
-				Assets::waveShader.Activate();
-				Assets::waveShader.SetUniform("camera", Camera::Center()*Window::GetViewportScale()); 
-				Assets::waveShader.SetUniform("time", mainClock * 10);
-			});
-
-		}
-		if (ImGui::Button("Stop waves")) {
-			Fx::FullscreenShader::SetShader(nullptr);
-		}
 
 		if (ImGui::Button("Save")) {
 			SaveGame();
