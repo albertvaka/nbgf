@@ -8,7 +8,7 @@ const std::array<BoxBounds, 1> Areas::alien_bounds = {
 };
 
 const std::array<BoxBounds, 13> Areas::bat_bounds = {
-	BoxBounds(1174.43f,1732.5529999999999f,253.803333333333f,237.227333333334f),
+	BoxBounds(1174.43f,1760.053f,253.803333333333f,209.727333333334f),
 	BoxBounds(1863.78f,1719.4598f,842.45f,291.747f),
 	BoxBounds(1576.6f,2116.7200000000003f,1197.47f,331.894f),
 	BoxBounds(3075.265f,2080.553f,269.97f,138.394f),
@@ -46,8 +46,8 @@ const std::array<BoxBounds, 7> Areas::lava = {
 };
 
 const std::array<BoxBounds, 3> Areas::lava_bg = {
-	BoxBounds(3360.0f,2478.4375f,880.0f,339.125f),
-	BoxBounds(4880.0f,2480.0f,864.0f,407.791666666667f),
+	BoxBounds(3358.4872834500547f,2478.239914772727f,881.02543309989f,339.520170454546f),
+	BoxBounds(4878.0f,2479.056037808642f,871.643813221621f,411.399402006173f),
 	BoxBounds(3359.914833333333f,2478.437333333333f,879.337f,413.672459648123f),
 };
 

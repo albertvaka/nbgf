@@ -189,8 +189,6 @@ struct Tile {
 		BG_146,
 		BG_147,
 		BG_148,
-		BG_149,
-		BG_150,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
