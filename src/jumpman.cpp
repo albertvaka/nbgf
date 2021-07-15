@@ -543,7 +543,13 @@ void JumpMan::Update(float dt)
 		}
 	}
 	else {
-		groundTile = Tile::NONE;
+		if (dashing) {
+			// When dashing we aren't pushed down by gravity, so we will not collide with the ground and get to this else even when there is ground
+			groundTile = GaemTileMap::instance()->GetTile(Tile::ToTiles(pos.x, pos.y + 2.f));
+		}
+		else {
+			groundTile = Tile::NONE;
+		}
 	}
 
 	if (diving)
