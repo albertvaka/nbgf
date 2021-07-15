@@ -213,7 +213,7 @@ void DebugScene::Draw()
 		OneShotAnim::GetAll(),
 		&Particles::bullet,
 		Bullet::GetAll(),
-		&Particles::polvito,
+		&Particles::dust,
 		DebugWalker::GetAll(),
 		&player
 	);
@@ -242,7 +242,7 @@ void DebugScene::Draw()
 	
 	map.BoundsInWorld().DebugDraw(0,255,0);
 
-	//player.polvito.DrawImGUI("Polvito");
+	//player.dust.DrawImGUI("Dust");
 }
 
 

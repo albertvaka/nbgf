@@ -619,7 +619,7 @@ void JumpScene::Update(float dt)
 
 	BigItem::DeleteNotAlive();
 
-	Particles::polvito.UpdateParticles(dt);
+	Particles::dust.UpdateParticles(dt);
 	Particles::bullet.UpdateParticles(dt);
 	Particles::missile.UpdateParticles(dt);
 	Particles::health.UpdateParticles(dt);
@@ -679,7 +679,7 @@ void JumpScene::Draw()
 		FireSlime::GetAll(),
 		Bat::GetAll(),
 		Bipedal::GetAll(),
-		&Particles::polvito,
+		&Particles::dust,
 		Mantis::GetAll(),
 		RocketLauncher::GetAll(),
 		&Particles::bullet,
@@ -755,5 +755,5 @@ void JumpScene::Draw()
 	player.DrawGUI();
 	Camera::InScreenCoords::End();
 
-	//player.polvito.DrawImGUI("Polvito");
+	//player.dust.DrawImGUI("Dust");
 }

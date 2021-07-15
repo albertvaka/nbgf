@@ -109,11 +109,6 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
 
     void UpdateMoving(float dt);
 
-    inline void DoPolvitoJump();
-    inline void DoPolvitoWallJump();
-    inline void DoPolvitoLand();
-    inline void DoPolvitoRun(float dt, bool toTheLeft, bool doTheExtraPolvitoLikeYouKnowItsDone);
-
     void SaveGame(SaveState& state) const;
     void LoadGame(const SaveState& state);
 };

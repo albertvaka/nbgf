@@ -199,7 +199,7 @@ void HellCrossScene::Draw()
 		OneShotAnim::GetAll(),
 		&Particles::bullet,
 		Bullet::GetAll(),
-		&Particles::polvito,
+		&Particles::dust,
 		&player,
 		Lava::GetAll()
 	);
@@ -226,7 +226,7 @@ void HellCrossScene::Draw()
 	}
 #endif
 
-	//player.polvito.DrawImGUI("Polvito");
+	//player.dust.DrawImGUI("Dust");
 }
 
 

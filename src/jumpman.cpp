@@ -413,7 +413,7 @@ void JumpMan::Update(float dt)
 					lookingLeft = !lookingLeft;
 				}
 				vel.x = lookingLeft ? -kVelWalljump : kVelWalljump;
-				DoPolvitoWallJump();
+				Particles::DoDustWallJump(pos, vel.x < 0);
 			} else if (groundTile.isSlope()) {
 				// Jump a bit sideways when on slope
 				if (groundTile.isRightSlope()) {
@@ -440,7 +440,7 @@ void JumpMan::Update(float dt)
 				if (!didJumpFromWall) {
 					bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
 					if (!hasBlockAbove) {
-						DoPolvitoJump();
+						Particles::DoDustJump(pos);
 						groundTile = Tile::NONE;
 					}
 				}
@@ -533,7 +533,7 @@ void JumpMan::Update(float dt)
 			groundTile = Tile::NONE;
 		}
 		else if (!destroyingGround) {
-			if (vel.y > 50) DoPolvitoLand();
+			if (vel.y > 50) Particles::DoDustLand(pos);
 			vel.y = 0;
 			onWall = false;
 			groundTile = moved.groundCollision;
@@ -554,7 +554,7 @@ void JumpMan::Update(float dt)
 	{
 		size = kStandingSize;
 		if (dashing && groundTile != Tile::NONE) {
-			DoPolvitoRun(dt, lookingLeft, true);
+			Particles::DoDustRun(pos, dt, lookingLeft, true);
 		}
 	} 
 	else 
@@ -620,7 +620,7 @@ void JumpMan::Update(float dt)
 			}
 		}
 		if (isWalking) {
-			DoPolvitoRun(dt, Input::IsPressed(0, GameKeys::LEFT), isTurning);
+			Particles::DoDustRun(pos, dt, Input::IsPressed(0, GameKeys::LEFT), isTurning);
 		}
 	}
 
@@ -646,11 +646,11 @@ void JumpMan::Update(float dt)
 			}
 			if (groundTile != Tile::NONE) {
 				if (abs(vel.x) < 0.1) {
-					DoPolvitoLand();
+					Particles::DoDustLand(pos);
 				}
 				else {
-					DoPolvitoRun(dt, vel.x < 0, true);
-					DoPolvitoRun(dt, vel.x < 0, true);
+					Particles::DoDustRun(pos, dt, vel.x < 0, true);
+					Particles::DoDustRun(pos, dt, vel.x < 0, true);
 				}
 			}
 		}
@@ -782,63 +782,4 @@ void JumpMan::DrawGUI() const {
 			.withRectWithOriginCentered(i < health ? AnimLib::HEALTH_FULL : AnimLib::HEALTH_EMPTY)
 			.withScale(scale);
 	}
-}
-
-// BRILLI-BRILLI
-
-inline void JumpMan::DoPolvitoJump() {
-	// Pluf cap als dos costats
-	Particles::polvito.pos = pos + vec(-1.5f, -1.5f);
-	if (Particles::polvito.min_vel.x > 0) {
-		Particles::polvito.FlipX();
-	}
-	Particles::polvito.AddParticles(2);
-	Particles::polvito.pos = pos + vec(1.5f, -1.5f);
-	Particles::polvito.FlipX();
-	Particles::polvito.AddParticles(2);
-}
-
-inline void JumpMan::DoPolvitoWallJump() {
-	if (vel.x > 0) {
-		Particles::polvito.pos = pos + vec(-7.f, -16.f);
-	}
-	else {
-		Particles::polvito.pos = pos + vec(7.f, -16.f);
-	}
-
-	if ((vel.x < 0 && Particles::polvito.min_vel.x > 0) || (vel.x > 0 && Particles::polvito.min_vel.x < 0)) {
-		Particles::polvito.FlipX();
-	}
-	Particles::polvito.AddParticles(5);
-}
-
-inline void JumpMan::DoPolvitoLand() {
-	// Pluf cap als dos costats
-	Particles::polvito.pos = pos + vec(-8.f, -0.3f);
-	if (Particles::polvito.min_vel.x > 0) {
-		Particles::polvito.FlipX();
-	}
-	Particles::polvito.AddParticles(3);
-	Particles::polvito.pos = pos + vec(8.f, -0.3f);
-	Particles::polvito.FlipX();
-	Particles::polvito.AddParticles(3);
-}
-
-inline void JumpMan::DoPolvitoRun(float dt, bool toTheLeft, bool doTheExtraPolvitoLikeYouKnowItsDone) {
-	if (toTheLeft) {
-		Particles::polvito.pos = pos + vec(4.f, -0.5f);
-		if (Particles::polvito.min_vel.x < 0) {
-			Particles::polvito.FlipX();
-		}
-	}
-	else {
-		Particles::polvito.pos = pos + vec(-4.f, -0.5f);
-		if (Particles::polvito.min_vel.x > 0) {
-			Particles::polvito.FlipX();
-		}
-	}
-	if (doTheExtraPolvitoLikeYouKnowItsDone) {
-		Particles::polvito.AddParticles(2);
-	}
-	Particles::polvito.Spawn(dt);
 }
