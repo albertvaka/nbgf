@@ -6,6 +6,7 @@
 #include "assets.h"
 #include "shader.h"
 #include "rand.h"
+#include "particles.h"
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
 
@@ -116,6 +117,8 @@ void Mantis::Update(float dt)
 
 		}
 
+		Particles::DoDustRun(vec(pos.x, pos.y + kSpriteSize.y / 2), dt/2.f, vel.y < 0, false); // Half the dt so we do less dust
+
 		auto ret = MoveAgainstTileMap(pos, kSpriteSize, vel, dt);
 		pos = ret.pos;
 
@@ -139,6 +142,7 @@ void Mantis::Update(float dt)
 			//Debug::FrameByFrame = true;
 			vel = GetJumpSpeedToTarget(predictedPlayerPos);
 			state = State::JUMP;
+			Particles::DoDustJump(vec(pos.x, pos.y + kSpriteSize.y/2));
 		}
 	}
 	break;
@@ -170,6 +174,7 @@ void Mantis::Update(float dt)
 			}
 			vel.y = 0;
 			state = State::WALKING;
+			Particles::DoDustLand(vec(pos.x, pos.y + kSpriteSize.y/2));
 			jumpCooldownTimer = kJumpCooldown + Rand::rollf(kJumpCooldownRand);
 			anim.Set(AnimLib::MANTIS_WALK);
 		} else if (ret.ceilingCollision != Tile::NONE) {
