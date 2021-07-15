@@ -364,6 +364,9 @@
     <ClInclude Include="src\rocketlauncher.h">
       <Filter>src\entities\enemies</Filter>
     </ClInclude>
+    <ClInclude Include="src\particles.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -575,6 +578,9 @@
     </ClCompile>
     <ClCompile Include="src\rocketlauncher.cpp">
       <Filter>src\entities\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particles.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

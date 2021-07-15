@@ -6,6 +6,7 @@
 #include "jumpman.h"
 #include "collide.h"
 #include "rand.h"
+#include "particles.h"
 
 extern float mainClock;
 
@@ -25,8 +26,8 @@ void Health::Update(float dt)
 	}
 
 
-	Health::particles.pos = pos - drawOffset() + Rand::VecInRange(vec(-4, -1), vec(4, 3));
-	Health::particles.SpawnWithExternalTimer(particlesTimer, dt);
+	Particles::health.pos = pos - drawOffset() + Rand::VecInRange(vec(-4, -1), vec(4, 3));
+	Particles::health.SpawnWithExternalTimer(particlesTimer, dt);
 }
 
 void Health::Draw() const
@@ -39,27 +40,4 @@ void Health::Draw() const
 
 	// Debug-only
 	Bounds().DebugDraw();
-}
-
-void Health::InitParticles() {
-	if (particles.texture != nullptr) {
-		return; // It's already been init
-	}
-	particles.SetTexture(Assets::spritesheetTexture);
-	particles.AddSprite({ 353, 18, 4, 4 });
-
-	particles.max_vel = vec(12, -13);
-	particles.min_vel = vec(-12, -16);
-	particles.min_ttl = 0.5f;
-	particles.max_ttl = 0.6f;
-	particles.min_interval = 0.1f;
-	particles.max_interval = 0.1f;
-	particles.min_scale = 0.5f;
-	particles.max_scale = 0.7f;
-	particles.scale_vel = -0.5f;
-	particles.min_rotation = 0.f;
-	particles.max_rotation = 360.f;
-	particles.rotation_vel = 180.f;
-	particles.rotation_vel = 180.f;
-	particles.alpha = 0.7f;
 }

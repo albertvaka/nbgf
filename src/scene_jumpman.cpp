@@ -33,6 +33,7 @@
 #include "rocketlauncher.h"
 #include "health.h"
 #include "healthup.h"
+#include "particles.h"
 #include "tiled_objects_areas.h"
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
@@ -48,27 +49,9 @@ const char* kSaveStateGameName = "gaem2020";
 JumpScene::JumpScene(int saveSlot)
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
-	, fogPartSys(Assets::fogTexture)
 	, saveSlot(saveSlot)
 {
-	Bullet::InitParticles();
-	Missile::InitParticles();
-	Health::InitParticles();
-
-	fogPartSys.AddSprite({ 0, 0, 140, 61 });
-	fogPartSys.AddSprite({140, 0, 140, 61 });
-	fogPartSys.AddSprite({140*2, 0, 140, 61 });
-	fogPartSys.AddSprite({140 * 3, 0, 140, 61 });
-	fogPartSys.alpha = 0.f;
-	fogPartSys.alpha_vel = 0.1f;
-	fogPartSys.bounce_alpha = 0.5f;
-	fogPartSys.min_scale = 2.f;
-	fogPartSys.max_scale = 3.f;
-	fogPartSys.min_vel.x = 17.f;
-	fogPartSys.max_vel.x = 20.f;
-	fogPartSys.min_ttl = fogPartSys.max_ttl = 10.f;
-	fogPartSys.min_interval = 4.5f;
-	fogPartSys.max_interval = 6.f;
+	Particles::Init();
 
 	for (const BoxBounds& b : Tiled::Areas::lava_bg) {
 		new Parallax(b, Assets::lavaParallaxTextures, 0.3f, 1.f, -410.f);
@@ -379,10 +362,9 @@ bool JumpScene::UpdateCamera(float dt) {
 
 void JumpScene::ExitScene()
 {
+	Particles::ClearAll();
 	Bullet::DeleteAll();
-	Bullet::particles.Clear();
 	Missile::DeleteAll();
-	Missile::particles.Clear();
 	FireShot::DeleteAll();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
@@ -400,7 +382,6 @@ void JumpScene::ExitScene()
 	HealthUp::DeleteAll();
 	Explosive::DeleteAll();
 	Health::DeleteAll();
-	Health::particles.Clear();
 	SaveStation::DeleteAll();
 }
 
@@ -638,15 +619,13 @@ void JumpScene::Update(float dt)
 
 	BigItem::DeleteNotAlive();
 
-	Bullet::particles.UpdateParticles(dt);
-	Missile::particles.UpdateParticles(dt);
-	Health::particles.UpdateParticles(dt);
+	Particles::polvito.UpdateParticles(dt);
+	Particles::bullet.UpdateParticles(dt);
+	Particles::missile.UpdateParticles(dt);
+	Particles::health.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
 
-//	if (raising_lava->CurrentLevel() <= raising_lava_target_height+1.f) {
-//		raising_lava->SetLevel(Tiled::Entities::single_lava_initial_height.y);
-//	}
 	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);
 	}
@@ -655,13 +634,6 @@ void JumpScene::Update(float dt)
 		if (!Collide(Camera::Bounds(),(a*2.f))) {
 			continue;
 		}
-		for (int x = 50; x < a.width - 180; x += 50) {
-			for (int y = 0; y < a.height; y += 50) {
-				fogPartSys.pos = vec(a.left + x, a.top + y);
-				fogPartSys.Spawn(dt);
-			}
-		}
-		fogPartSys.UpdateParticles(dt);
 	}
 
 	rotoText.Update(dt);
@@ -703,16 +675,17 @@ void JumpScene::Draw()
 		OneShotAnim::GetAll(),
 		Goomba::GetAll(),
 		Minotaur::GetAll(),
-		Mantis::GetAll(),
 		FlyingAlien::GetAll(),
 		FireSlime::GetAll(),
 		Bat::GetAll(),
 		Bipedal::GetAll(),
+		&Particles::polvito,
+		Mantis::GetAll(),
 		RocketLauncher::GetAll(),
-		&Bullet::particles,
-		&Missile::particles,
+		&Particles::bullet,
+		&Particles::missile,
 		Health::GetAll(),
-		&Health::particles,
+		&Particles::health,
 		Bullet::GetAll(),
 		FireShot::GetAll(),
 		Missile::GetAll(),
@@ -757,10 +730,6 @@ void JumpScene::Draw()
 	}
 #endif
 
-	//Health::particles.DrawImGUI("health");
-	//Bullet::particles.DrawImGUI("BulletTrail");
-	//Missile::particles.DrawImGUI("MissileSmoke");
-
 	//for (const BoxBounds& a : Tiled::Areas::parallax_forest) {
 		//Assets::fogShader.Activate();
 		//Assets::fogShader.SetUniform("offset", vec(mainClock*0.2f, 0.f));
@@ -769,9 +738,6 @@ void JumpScene::Draw()
 		//Window::Draw(Assets::spritesheetTexture, a);
 		//Shader::Deactivate();
 	//}
-
-	//fogPartSys.Draw();
-	//fogPartSys.DrawImGUI();
 
 	//for (int i = 0; i < Parallax::GetAll().size(); i++) {
 	//	Parallax::GetAll()[i]->DrawImGUI(("parallax_" + std::to_string(i)).c_str());

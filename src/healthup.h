@@ -4,7 +4,6 @@
 #include "entity.h"
 #include "savestate.h"
 #include "selfregister.h"
-#include "partsys.h"
 
 struct HealthUp : BoxEntity, SelfRegister<HealthUp>
 {

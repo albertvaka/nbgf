@@ -1,7 +1,7 @@
 #include "bullet.h"
 
 #include "rand.h"
-#include "partsys.h"
+#include "particles.h"
 #include "camera.h"
 #include "assets.h"
 #include "anim_lib.h"
@@ -14,9 +14,9 @@
 void Bullet::Explode() {
 	alive = false;
 	Bat::AwakeNearbyBats(pos);
-	Bullet::particles.pos = pos;
+	Particles::bullet.pos = pos;
 	for (int i = 0; i < 5; i++) {
-		auto& p = Bullet::particles.AddParticle();
+		auto& p = Particles::bullet.AddParticle();
 		p.scale = 1.7f;
 		p.vel *= 1.5f;
 	}
@@ -54,8 +54,8 @@ void Bullet::Update(float dt)
 
 	pos += vel * dt;
 
-	Bullet::particles.pos = pos + Rand::VecInRange(-4, -4, 4, 4);
-	Bullet::particles.Spawn(dt);
+	Particles::bullet.pos = pos + Rand::VecInRange(-4, -4, 4, 4);
+	Particles::bullet.Spawn(dt);
 }
 
 void Bullet::Draw() const
@@ -70,27 +70,4 @@ void Bullet::Draw() const
 
 	// Debug-only
 	Bounds().DebugDraw();
-}
-
-void Bullet::InitParticles() {
-	if (particles.texture != nullptr) {
-		return; // It's already been init
-	}
-	particles.SetTexture(Assets::spritesheetTexture);
-	particles.AddSprite({ 5, 37, 6, 6 });
-
-	float vel = 15;
-	particles.max_vel = vec(vel, vel);
-	particles.min_vel = vec(-vel, -vel);
-	particles.min_ttl = 0.5f;
-	particles.max_ttl = 1.f;
-	particles.min_interval = 0.03f;
-	particles.max_interval = 0.06f;
-	particles.min_scale = 0.5f;
-	particles.max_scale = 0.9f;
-	particles.scale_vel = -2.5f;
-	particles.min_rotation = 0.f;
-	particles.max_rotation = 360.f;
-	particles.rotation_vel = 180.f;
-	particles.alpha = 0.75f;
 }

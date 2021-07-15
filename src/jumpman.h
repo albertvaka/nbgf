@@ -3,7 +3,6 @@
 #include "entity.h"
 #include "vec.h"
 #include "bounds.h"
-#include "partsys.h"
 #include "animation.h"
 #include "screen.h"
 #include "debug.h"
@@ -24,7 +23,6 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         bfgPos = position + bfgOffset();
         vel = vec(0, 0);
         lastSafeTilePos = Tile::ToTiles(position);
-        polvito.Clear();
         invencibleTimer = -1.f;
         bfgCooldownTimer = 0;
         health = maxHealth = maxHp;
@@ -109,11 +107,8 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     bool lookingLeft = false;
     bool canDash = true;
 
-    PartSys polvito;
-
     void UpdateMoving(float dt);
 
-    void InitPolvito();
     inline void DoPolvitoJump();
     inline void DoPolvitoWallJump();
     inline void DoPolvitoLand();

@@ -17,6 +17,7 @@
 #include "rand.h"
 #include "oneshotanim.h"
 #include "drawall.h"
+#include "particles.h"
 
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
@@ -30,7 +31,7 @@ static vec map_size = vec(100, Window::GAME_HEIGHT/Tile::Size);
 DebugScene::DebugScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
 {
-	Bullet::InitParticles();
+	Particles::Init();
 
 	skillTree.Enable(Skill::GUN);
 	skillTree.Enable(Skill::WALLJUMP);
@@ -149,7 +150,7 @@ void DebugScene::EnterScene()
 
 void DebugScene::ExitScene()
 {
-	Bullet::particles.Clear();
+	Particles::ClearAll();
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
 	OneShotAnim::DeleteAll();
@@ -195,7 +196,7 @@ void DebugScene::Update(float dt)
 
 	Bat::DeleteNotAlive();
 
-	Bullet::particles.UpdateParticles(dt);
+	Particles::bullet.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
 
@@ -210,8 +211,9 @@ void DebugScene::Draw()
 		&destroyedTiles,
 		Bat::GetAll(),
 		OneShotAnim::GetAll(),
-		&Bullet::particles,
+		&Particles::bullet,
 		Bullet::GetAll(),
+		&Particles::polvito,
 		DebugWalker::GetAll(),
 		&player
 	);

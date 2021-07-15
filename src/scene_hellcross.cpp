@@ -17,6 +17,7 @@
 #include "fx.h"
 #include "oneshotanim.h"
 #include "drawall.h"
+#include "particles.h"
 
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
@@ -30,7 +31,7 @@ HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
 	, lava(BoxBounds(0, map_size.y*16 - 20, map_size.x*16, 200))
 {
-	Bullet::InitParticles();
+	Particles::Init();
 
 	skillTree.Enable(Skill::GUN);
 	skillTree.Enable(Skill::WALLJUMP);
@@ -113,7 +114,7 @@ void HellCrossScene::EnterScene()
 
 void HellCrossScene::ExitScene()
 {
-	Bullet::particles.Clear();
+	Particles::ClearAll();
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
 	OneShotAnim::DeleteAll();
@@ -172,7 +173,7 @@ void HellCrossScene::Update(float dt)
 
 	Bat::DeleteNotAlive();
 
-	Bullet::particles.UpdateParticles(dt);
+	Particles::bullet.UpdateParticles(dt);
 
 	destroyedTiles.Update(dt);
 
@@ -196,13 +197,12 @@ void HellCrossScene::Draw()
 		&destroyedTiles,
 		Bat::GetAll(),
 		OneShotAnim::GetAll(),
-		&Bullet::particles,
+		&Particles::bullet,
 		Bullet::GetAll(),
+		&Particles::polvito,
 		&player,
 		Lava::GetAll()
 	);
-
-	//Bullet::particles.DrawImGUI("BulletTrail");
 
 #ifdef _DEBUG
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {

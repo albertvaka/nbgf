@@ -3,8 +3,6 @@
 #include "scene.h"
 #include "gaemtilemap.h"
 #include "jumpman.h"
-#include "lava.h"
-#include "partsys.h"
 #include "destroyedtiles.h"
 #include "skilltree.h"
 #include "screen.h"

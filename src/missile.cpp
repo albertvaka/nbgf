@@ -2,7 +2,6 @@
 
 #include "anim_lib.h"
 #include "rand.h"
-#include "partsys.h"
 #include "camera.h"
 #include "jumpman.h"
 #include "explosive.h"
@@ -11,6 +10,7 @@
 #include "assets.h"
 #include "common_bullet.h"
 #include "common_enemy.h"
+#include "particles.h"
 
 const float kRadius = 2.f;
 const float kSpeed = 120.f;
@@ -64,8 +64,8 @@ void Missile::Update(float dt)
 		const GPU_Rect& sprite = anim.CurrentFrameRect();
 		vec rear = pos-(vel.Normalized()*sprite.w);
 		rear.DebugDraw(0,255,0);
-		particles.pos = rear;
-		particles.AddParticle();
+		Particles::missile.pos = rear;
+		Particles::missile.AddParticle();
 	}
 
 	for (Explosive* e : Explosive::GetAll()) {
@@ -108,23 +108,4 @@ void Missile::Draw() const
 	pos.DebugDraw();
 	CircleBounds(pos, kFlockAvoidanceDistance).DebugDraw(255,0,0);
 	Bounds().DebugDraw();
-}
-
-
-void Missile::InitParticles() {
-	if (particles.texture != nullptr) {
-		return; // It's already been init
-	}
-	particles.SetTexture(Assets::spritesheetTexture);
-	particles.AddSprite(AnimLib::MISSILE_SMOKE_1);
-	particles.AddSprite(AnimLib::MISSILE_SMOKE_2);
-
-	particles.max_vel = vec(10, 10);
-	particles.min_vel = vec(-10, -10);
-	particles.min_ttl = 0.6f;
-	particles.max_ttl = 1.f;
-	particles.min_scale = 0.3f;
-	particles.max_scale = 0.6f;
-	particles.alpha = 0.5f;
-	particles.alpha_vel = -1.0f;
 }

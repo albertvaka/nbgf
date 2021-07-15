@@ -21,7 +21,6 @@ struct JumpScene : Scene {
 	GaemTileMap map;
 	JumpMan player;
 	SkillTree skillTree;
-	PartSys fogPartSys;
 	DestroyedTiles destroyedTiles;
 	RotoText rotoText;
 	Entity* boss_bipedal;

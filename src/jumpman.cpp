@@ -10,6 +10,7 @@
 #include "oneshotanim.h"
 #include "debug.h"
 #include "savestate.h"
+#include "particles.h"
 #include "common_tilemapcharacter.h"
 #include "common_bullet.h"
 #include "skilltree.h"
@@ -109,13 +110,11 @@ void DestroyTilesWithSword(const CircleBounds& e) {
 }
 
 JumpMan::JumpMan()
-	: polvito(Assets::spritesheetTexture)
+	: anim(AnimLib::WARRIOR_IDLE)
 	, playerAttack(vec::Zero, kSwordAttackRadius)
-	, anim(AnimLib::WARRIOR_IDLE)
 	, size(kStandingSize)
 	, lastSafeTilePos(-1,-1)
 {
-	InitPolvito();
 }
 
 void JumpMan::SaveGame(SaveState& state) const {
@@ -625,9 +624,6 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	polvito.UpdateParticles(dt);
-
-
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
 		bfgPos = pos + bfgOffset();
 		bfgAngle = bfgPos.AngleDegs(Input::GetAnalog(0, AnalogInput::AIM));
@@ -730,7 +726,6 @@ void JumpMan::Draw() const {
 		ImGui::End();
 	}
 #endif
-	polvito.Draw();
 
 	if (isHit()) {
 		Assets::tintShader.Activate();
@@ -791,87 +786,59 @@ void JumpMan::DrawGUI() const {
 
 // BRILLI-BRILLI
 
-void JumpMan::InitPolvito() {
-	polvito.AddSprite(AnimLib::POLVITO_PARTICLE);
-
-	polvito.min_interval = 0.01f;
-	polvito.max_interval = 0.05f;
-
-	polvito.min_ttl = 0.1f;
-	polvito.max_ttl = 0.3f;
-
-	polvito.min_vel.x = 3;
-	polvito.max_vel.x = 18;
-
-	polvito.min_vel.y = -50.f;
-	polvito.max_vel.y = -20.f;
-
-	polvito.acc.y = 120.f;
-
-	polvito.min_scale = 1.0f;
-	polvito.max_scale = 1.8f;
-	polvito.scale_vel = -3.5f;
-
-	polvito.min_rotation = 0.f;
-	polvito.max_rotation = 360.f;
-	polvito.rotation_vel = 160.f;
-
-	polvito.alpha_vel = -1.8f;
-}
-
 inline void JumpMan::DoPolvitoJump() {
 	// Pluf cap als dos costats
-	polvito.pos = pos + vec(-1.5f, -1.5f);
-	if (polvito.min_vel.x > 0) {
-		polvito.FlipX();
+	Particles::polvito.pos = pos + vec(-1.5f, -1.5f);
+	if (Particles::polvito.min_vel.x > 0) {
+		Particles::polvito.FlipX();
 	}
-	polvito.AddParticles(2);
-	polvito.pos = pos + vec(1.5f, -1.5f);
-	polvito.FlipX();
-	polvito.AddParticles(2);
+	Particles::polvito.AddParticles(2);
+	Particles::polvito.pos = pos + vec(1.5f, -1.5f);
+	Particles::polvito.FlipX();
+	Particles::polvito.AddParticles(2);
 }
 
 inline void JumpMan::DoPolvitoWallJump() {
 	if (vel.x > 0) {
-		polvito.pos = pos + vec(-7.f, -16.f);
+		Particles::polvito.pos = pos + vec(-7.f, -16.f);
 	}
 	else {
-		polvito.pos = pos + vec(7.f, -16.f);
+		Particles::polvito.pos = pos + vec(7.f, -16.f);
 	}
 
-	if ((vel.x < 0 && polvito.min_vel.x > 0) || (vel.x > 0 && polvito.min_vel.x < 0)) {
-		polvito.FlipX();
+	if ((vel.x < 0 && Particles::polvito.min_vel.x > 0) || (vel.x > 0 && Particles::polvito.min_vel.x < 0)) {
+		Particles::polvito.FlipX();
 	}
-	polvito.AddParticles(5);
+	Particles::polvito.AddParticles(5);
 }
 
 inline void JumpMan::DoPolvitoLand() {
 	// Pluf cap als dos costats
-	polvito.pos = pos + vec(-8.f, -0.3f);
-	if (polvito.min_vel.x > 0) {
-		polvito.FlipX();
+	Particles::polvito.pos = pos + vec(-8.f, -0.3f);
+	if (Particles::polvito.min_vel.x > 0) {
+		Particles::polvito.FlipX();
 	}
-	polvito.AddParticles(3);
-	polvito.pos = pos + vec(8.f, -0.3f);
-	polvito.FlipX();
-	polvito.AddParticles(3);
+	Particles::polvito.AddParticles(3);
+	Particles::polvito.pos = pos + vec(8.f, -0.3f);
+	Particles::polvito.FlipX();
+	Particles::polvito.AddParticles(3);
 }
 
 inline void JumpMan::DoPolvitoRun(float dt, bool toTheLeft, bool doTheExtraPolvitoLikeYouKnowItsDone) {
 	if (toTheLeft) {
-		polvito.pos = pos + vec(4.f, -0.5f);
-		if (polvito.min_vel.x < 0) {
-			polvito.FlipX();
+		Particles::polvito.pos = pos + vec(4.f, -0.5f);
+		if (Particles::polvito.min_vel.x < 0) {
+			Particles::polvito.FlipX();
 		}
 	}
 	else {
-		polvito.pos = pos + vec(-4.f, -0.5f);
-		if (polvito.min_vel.x > 0) {
-			polvito.FlipX();
+		Particles::polvito.pos = pos + vec(-4.f, -0.5f);
+		if (Particles::polvito.min_vel.x > 0) {
+			Particles::polvito.FlipX();
 		}
 	}
 	if (doTheExtraPolvitoLikeYouKnowItsDone) {
-		polvito.AddParticles(2);
+		Particles::polvito.AddParticles(2);
 	}
-	polvito.Spawn(dt);
+	Particles::polvito.Spawn(dt);
 }
