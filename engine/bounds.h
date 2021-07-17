@@ -46,8 +46,15 @@ struct BoxBounds
 	{
         left -= x/2;
         top -= y/2;
-        width += x/2;
-        height += y/2;
+        width += x;
+        height += y;
+    }
+
+    [[nodiscard]] BoxBounds Grown(float x, float y) const
+    {
+        BoxBounds ret = *this;
+        ret.Grow(x, y);
+        return ret;
     }
 
     [[nodiscard]] constexpr vec Center() const
