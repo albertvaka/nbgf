@@ -22,6 +22,7 @@ const vec legsHitBoxOffset = vec(-20, -64);
 const vec legsHitBoxSize = vec(40, 60);
 const vec textureOffset = vec(-10, -88); 
 const vec missilesOriginOffset = vec(-10, -110);
+const float legsReceiveHitWidthIncrease = 20.f;
 
 Bipedal::Bipedal(vec pos)
 	: Entity(pos)
@@ -54,10 +55,14 @@ void Bipedal::Update(float dt)
 	}
 
 	hitTimer -= dt;
-	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(headHitBox, hitTimer > 0.f); // Bullets don't hit the legs
+
+	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(headHitBox, hitTimer > 0.f);
 	if (damageFromPlayerPos) {
 		TakeDamage();
 		if (alive == false) return;
+	} else if (ReceiveDamageFromPlayer(legsHitBox.Grown(legsReceiveHitWidthIncrease,0), hitTimer > 0.f)) {
+		// Ignore attacks to the legs. We still call ReceiveDamageFromPlayer so the player gets the knockback. On an else to not knock back twice
+		// TODO: We could play a sfx here.
 	}
 
 	switch (state) {
@@ -194,6 +199,7 @@ void Bipedal::Draw() const
 	// Debug-only
 	legsHitBox.DebugDraw();
 	headHitBox.DebugDraw();
+	legsHitBox.Grown(legsReceiveHitWidthIncrease, 0).DebugDraw(0, 255, 0);
 	BoxBounds(Tiled::Areas::boss_bounds[0].Left(), pos.y, Tiled::Areas::boss_bounds[0].width, 2).DebugDraw(255, 255, 0);
 	BoxBounds(minX, pos.y, maxX - minX, 2).DebugDraw(0, 255, 0);
 	pos.DebugDraw();
