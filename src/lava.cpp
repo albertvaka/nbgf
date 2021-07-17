@@ -49,31 +49,25 @@ Mates::Range Lava::GetChunksOnScreen() const {
 
 void Lava::Update(float dt) {
 	timer += dt;
-	if (targetY > bounds.top) {
-		if (targetY - bounds.top < raiseSpeed * dt) {
-			bounds.height += bounds.top - targetY;
-			bounds.top = targetY;
-		}
-		else {
-			bounds.top += raiseSpeed * dt;
-			bounds.height -= raiseSpeed * dt;
-		}
-	}
-	else if (targetY < bounds.top) {
-		float camBottom = Camera::Bounds().Bottom();
-		if (camBottom < bounds.top) {
-			bounds.top = camBottom - 1.f;
-		}
 
-		if (bounds.top - targetY < raiseSpeed * dt) {
-			bounds.height += bounds.top - targetY;
-			bounds.top = targetY;
+	const float bottom = bounds.Bottom();
+	float top = bounds.Top();
+	if (top < targetY) {
+		top += raiseSpeed * dt;
+		if (top > targetY) {
+			top = targetY;
 		}
-		else {
-			bounds.top -= raiseSpeed * dt;
-			bounds.height += raiseSpeed * dt;
+	} else if (top > targetY) {
+		float camBottom = Camera::Bounds().Bottom() - 1.f;
+		if (top > camBottom) {
+			top = camBottom;
+		}
+		top -= raiseSpeed * dt;
+		if (top < targetY) {
+			top = targetY;
 		}
 	}
+	bounds.SetTopAndBottom(top, bottom);
 
 	if (!Collide(Camera::Bounds(),bounds)) {
 		return;
@@ -124,6 +118,17 @@ void Lava::Update(float dt) {
 				SetLevel(prev_target, false);
 			}
 		}
+	}
+}
+
+void Lava::SetLevel(float newY, bool immediate) {
+	const float bottom = bounds.Bottom();
+	if (newY > bottom) {
+		newY = bottom;
+	}
+	targetY = newY;
+	if (immediate) {
+		bounds.SetTopAndBottom(newY, bottom);
 	}
 }
 

@@ -21,13 +21,7 @@ struct Lava : SelfRegister<Lava>
 	void Update(float dt);
 	void Draw() const;
 
-	void SetLevel(float newY, bool immediate = false) {
-		targetY = newY;
-		if (immediate) {
-			bounds.height += bounds.top - targetY;
-			bounds.top = targetY;
-		}
-	}
+	void SetLevel(float newY, bool immediate = false);
 
 	void SetRaiseSpeed(float speed) {
 		raiseSpeed = speed;

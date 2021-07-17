@@ -73,6 +73,12 @@ struct BoxBounds
         top = y - height/2;
     }
 
+    void SetTopAndBottom(float newTop, float newBottom)
+    {
+        top = newTop;
+        height = newBottom - newTop;
+    }
+
     void SetCenter(vec center)
 	{
         SetCenter(center.x, center.y);
