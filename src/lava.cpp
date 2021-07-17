@@ -111,7 +111,7 @@ void Lava::Update(float dt) {
 	if (IsInside(player->pos - vec(0, 13.f))) {
 		player->ToSafeGround();
 		if (targetY != bounds.top) { // moving lava
-			float heightBelowPlayerPos = player->pos.y + 4 * Tile::Size;
+			float heightBelowPlayerPos = player->SafeGroundPos().y + 4 * Tile::Size;
 			if (heightBelowPlayerPos > CurrentLevel()) {
 				float prev_target = targetY;
 				SetLevel(heightBelowPlayerPos, true);

@@ -668,13 +668,27 @@ void JumpMan::Update(float dt)
 
 }
 
+static float toSafeGroundLambdaTimer;
 void JumpMan::ToSafeGround() {
 	invencibleTimer = kInvencibleTimeAfterHit;
 	jumpTimeLeft = 0;
 	onWall = false;
 	crouched = false;
 	if (health > 0) {
-		pos = Tile::FromTiles(lastSafeTilePos)+vec(Tile::Size/2,0);
+		vec newPos = SafeGroundPos();
+		toSafeGroundLambdaTimer = 0.f;
+		auto previousUpdateWhileFrozen = Fx::FreezeImage::GetAlternativeUpdateFnWhileFrozen();
+		Fx::FreezeImage::Freeze(0.8f);
+		Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([this, newPos, previousUpdateWhileFrozen](float dt) {
+			toSafeGroundLambdaTimer += dt;
+			pos = Mates::Lerp(pos, newPos, toSafeGroundLambdaTimer);
+			if (previousUpdateWhileFrozen) {
+				previousUpdateWhileFrozen(dt);
+			}
+		});
+		Fx::FreezeImage::SetUnfreezeCallback([previousUpdateWhileFrozen]() {
+			Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen(previousUpdateWhileFrozen);
+		});
 		vel = vec::Zero;
 		frozen = false;
 	}

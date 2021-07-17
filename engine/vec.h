@@ -489,6 +489,15 @@ inline bool LineIntersection2D(vec A, vec B, vec C, vec D, float& dist, vec& poi
 	}
 }
 
+// Lerp for vecs
+
+namespace Mates {
+	[[nodiscard]] inline vec Lerp(vec from, vec to, float t)
+	{
+		return vec(Lerp(from.x, to.x, t), Lerp(from.y, to.y, t));
+	}
+}
+
 //-----------------------------------------------------------------------------
 //  printing
 //-----------------------------------------------------------------------------

@@ -86,6 +86,10 @@ namespace Fx {
 			continueScreenShake = continueScreenShakeWhileFrozen;
 		}
 
+		static std::function<void(float dt)> GetAlternativeUpdateFnWhileFrozen() {
+			return worldStoppedUpdate;
+		}
+
 		static void SetAlternativeUpdateFnWhileFrozen(std::function<void(float dt)> update = nullptr) {
 			worldStoppedUpdate = update;
 		}
