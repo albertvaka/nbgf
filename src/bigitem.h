@@ -4,16 +4,23 @@
 #include "entity.h"
 #include "selfregister.h"
 #include "skilltree.h"
-#include "partsys.h"
 
 struct BigItem : BoxEntity, SelfRegister<BigItem>
 {
-	BigItem(vec p, Skill s);
-	void Draw();
-	void DrawPedestal();
+
+	BigItem(vec pos, Skill s)
+		: BoxEntity(pos + vec(8, -8), vec(32, 16))
+		, skill(s)
+	{
+	}
+
+	void Update(float dt);
+	void Draw() const;
+	void DrawPedestal() const;
+	bool HasPedestal() const;
 
 	Skill skill;
-	PartSys particles;
+	float particleTimer = 0;
 };
 
 

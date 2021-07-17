@@ -92,6 +92,22 @@ void InitMissile()
 	missile.alpha_vel = -1.0f;
 }
 
+void InitItemSparks()
+{
+	itemSparks.SetTexture(Assets::spritesheetTexture);
+	itemSparks.AddSprite({ 5, 37, 6, 6 });
+	itemSparks.max_vel = vec(0, -12);
+	itemSparks.min_vel = vec(0, -35);
+	itemSparks.min_ttl = 1.f;
+	itemSparks.max_ttl = 1.f;
+	itemSparks.min_interval = 0.15f;
+	itemSparks.max_interval = 0.25f;
+	itemSparks.min_scale = 0.6f;
+	itemSparks.max_scale = 0.4f;
+	itemSparks.alpha = 0.7f;
+	itemSparks.alpha_vel = -0.8f;
+}
+
 void Init()
 {
 	if (missile.texture == nullptr)
@@ -100,7 +116,17 @@ void Init()
 		InitBullet();
 		InitHealth();
 		InitMissile();
+		InitItemSparks();
 	}
+}
+
+void UpdateAll(float dt)
+{
+	dust.UpdateParticles(dt);
+	bullet.UpdateParticles(dt);
+	health.UpdateParticles(dt);
+	missile.UpdateParticles(dt);
+	itemSparks.UpdateParticles(dt);
 }
 
 void ClearAll()
@@ -109,6 +135,7 @@ void ClearAll()
 	bullet.Clear();
 	health.Clear();
 	missile.Clear();
+	itemSparks.Clear();
 }
 
 void DoDustJump(vec pos)

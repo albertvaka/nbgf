@@ -582,6 +582,7 @@ void JumpScene::Update(float dt)
 	Health::DeleteNotAlive();
 
 	for (BigItem* g : BigItem::GetAll()) {
+		g->Update(dt);
 		if (Collide(g->Bounds(), player.Bounds())) {
 			skillTree.Enable(g->skill);
 			
@@ -616,13 +617,9 @@ void JumpScene::Update(float dt)
 			SaveGame(); // silently save
 		}
 	}
-
 	BigItem::DeleteNotAlive();
 
-	Particles::dust.UpdateParticles(dt);
-	Particles::bullet.UpdateParticles(dt);
-	Particles::missile.UpdateParticles(dt);
-	Particles::health.UpdateParticles(dt);
+	Particles::UpdateAll(dt);
 
 	destroyedTiles.Update(dt);
 
@@ -666,10 +663,19 @@ void JumpScene::Draw()
 
 	Window::Clear(31, 36, 50);
 
+	for (const Parallax* g : Parallax::GetAll()) {
+		g->Draw();
+	}
+
+	map.Draw();
+
+	for (const BigItem* g : BigItem::GetAll()) {
+		g->DrawPedestal();
+	}
+
+	destroyedTiles.Draw();
+
 	DrawAllInOrder(
-		Parallax::GetAll(),
-		&map,
-		&destroyedTiles,
 		SaveStation::GetAll(),
 		EnemyDoor::GetAll(),
 		OneShotAnim::GetAll(),
@@ -691,6 +697,7 @@ void JumpScene::Draw()
 		Missile::GetAll(),
 		HealthUp::GetAll(),
 		BigItem::GetAll(),
+		&Particles::itemSparks,
 		&player,
 		Lava::GetAll()
 	);

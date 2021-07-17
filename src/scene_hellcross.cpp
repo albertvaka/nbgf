@@ -173,7 +173,7 @@ void HellCrossScene::Update(float dt)
 
 	Bat::DeleteNotAlive();
 
-	Particles::bullet.UpdateParticles(dt);
+	Particles::UpdateAll(dt);
 
 	destroyedTiles.Update(dt);
 
