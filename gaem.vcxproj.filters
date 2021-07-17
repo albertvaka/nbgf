@@ -232,9 +232,6 @@
     <ClInclude Include="src\mantis.h">
       <Filter>src\entities\enemies</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_debug.h">
-      <Filter>src\scenes</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene_entrypoint.h">
       <Filter>src\scenes</Filter>
     </ClInclude>
@@ -251,9 +248,6 @@
       <Filter>src\entities</Filter>
     </ClInclude>
     <ClInclude Include="src\common_tilemapcharacter.h">
-      <Filter>src\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\debug_walker.h">
       <Filter>src\entities</Filter>
     </ClInclude>
     <ClInclude Include="src\lava.h">
@@ -486,9 +480,6 @@
     <ClCompile Include="src\mantis.cpp">
       <Filter>src\entities\enemies</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_debug.cpp">
-      <Filter>src\scenes</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene_hellcross.cpp">
       <Filter>src\scenes</Filter>
     </ClCompile>
@@ -499,9 +490,6 @@
       <Filter>src\entities\enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\enemy_door.cpp">
-      <Filter>src\entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\debug_walker.cpp">
       <Filter>src\entities</Filter>
     </ClCompile>
     <ClCompile Include="src\lava.cpp">
