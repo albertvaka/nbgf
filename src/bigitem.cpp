@@ -3,7 +3,6 @@
 #include "mates.h"
 #include "assets.h"
 #include "window.h"
-#include "jumpman.h"
 #include "collide.h"
 #include "tile.h"
 #include "rand.h"

@@ -5,7 +5,6 @@
 #include "window.h"
 #include "assets.h"
 #include "rand.h"
-#include "collide.h"
 #include "fireshot.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"

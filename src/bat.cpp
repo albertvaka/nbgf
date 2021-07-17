@@ -7,9 +7,7 @@
 #include "assets.h"
 #include "window.h"
 #include "rand.h"
-#include "bullet.h"
 #include "debug.h"
-#include "camera.h"
 #include "collide.h"
 #include "common_enemy.h"
 

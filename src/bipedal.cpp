@@ -1,16 +1,15 @@
 #include "bipedal.h"
 
-#include "jumpman.h"
 #include "screen.h"
 #include "assets.h"
 #include "window.h"
 #include "rand.h"
 #include "debug.h"
+#include "shader.h"
 #include "tiled_objects_areas.h"
 #include "missile.h"
 #include "fx.h"
 #include "camera.h"
-#include "bullet.h"
 #include "common_enemy.h"
 
 const float walking_speed = 30.f; //per second
