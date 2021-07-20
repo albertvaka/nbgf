@@ -20,21 +20,22 @@ jobs:
           path: |
             ~/.cache/emsdk
 
-      - name: Build
+      - name: Build release
         run: |
           docker run --rm \
-                     -v /home/runner/work/nbgf/nbgf:/github/workspace \
-                     --workdir /github/workspace \
+                     -v $GITHUB_WORKSPACE:/workspace \
+                     --workdir /workspace \
                      -v ~/.cache/emsdk:/emsdk/upstream/emscripten/cache/ \
+                     --user $(id -u):$(id -g) \
                      emscripten/emsdk emmake make -j2 OPTIM=2 DEBUG=0
 
-      - name: FrontPage 2000
+      - name: FrontPage 2000 release
         run: |
           mkdir -p www
           cp bin/{gaem.data,gaem.wasm,gaem.js,index.html} www
           echo "https://albertvaka.github.io/nbgf/${{ env.GITHUB_REF_SLUG }}" >> www/README.md
 
-      - name: Deploy
+      - name: Deploy release
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           repository-name: albertvaka/albertvaka.github.io
@@ -42,3 +43,30 @@ jobs:
           branch: main
           folder: www
           target-folder: nbgf/${{ env.GITHUB_REF_SLUG }}
+
+      - name: Clean workspace
+        run: |
+          git clean -dfx
+
+      - name: Build debug
+        run: |
+          docker run --rm \
+                     -v $GITHUB_WORKSPACE:/workspace \
+                     --workdir /workspace \
+                     -v ~/.cache/emsdk:/emsdk/upstream/emscripten/cache/ \
+                     --user $(id -u):$(id -g) \
+                     emscripten/emsdk emmake make -j2 OPTIM=1 DEBUG=1
+
+      - name: FrontPage 2000 debug
+        run: |
+          mkdir -p www-debug
+          cp bin/{gaem.data,gaem.wasm,gaem.js,index.html} www-debug
+
+      - name: Deploy debug
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          repository-name: albertvaka/albertvaka.github.io
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          branch: main
+          folder: www-debug
+          target-folder: nbgf/${{ env.GITHUB_REF_SLUG }}/debug
