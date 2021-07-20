@@ -12,7 +12,8 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 		WALKING,
 		ENTER_CHARGE,
 		EXIT_CHARGE,
-		CHARGING
+		CHARGING,
+		TEST_DUMMY
 	};
 
 	State state = State::WALKING;

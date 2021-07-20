@@ -104,6 +104,9 @@ void Goomba::Update(float dt)
 		Walk(dt);
 		anim.Update(dt*2);
 		break;
+	case State::TEST_DUMMY:
+		anim.Update(dt);
+		break;
 	}
 
 	if (ReceiveDamageFromPlayer(Bounds(), false)) {

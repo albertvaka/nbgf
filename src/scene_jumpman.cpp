@@ -717,7 +717,20 @@ void JumpScene::Draw()
 		ImGui::Text("mainclock: %f", mainClock);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
-
+		static bool placingDummy = false;
+		if (ImGui::Button("Place dummy enemy")) {
+			placingDummy = true;
+		}
+		if (placingDummy) {
+			Window::Draw(Assets::spritesheetTexture, Mouse::GetPositionInWorld())
+				.withRectWithOriginCentered(AnimLib::GOOMBA[0].rect);
+			if (Mouse::IsJustPressed()) {
+				(new Goomba(Mouse::GetPositionInWorld(), false))->state = Goomba::State::TEST_DUMMY;
+				if (!Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+					placingDummy = false;
+				}
+			}
+		}
 		if (ImGui::Button("Save")) {
 			SaveGame();
 		}
