@@ -730,6 +730,9 @@ void JumpScene::Draw()
 					placingDummy = false;
 				}
 			}
+			if (Mouse::IsJustPressed(Mouse::Button::Right)) {
+				placingDummy = false;
+			}
 		}
 		if (ImGui::Button("Save")) {
 			SaveGame();
