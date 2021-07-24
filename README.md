@@ -17,6 +17,7 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 - SDL_ttf 2.0.15+
 - SDL_mixer 2.0.4+
 - SDL_image 2.0.5+
+- glew
 - Build with `make`
 
 ### HTML
