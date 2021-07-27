@@ -608,19 +608,19 @@ void JumpMan::Update(float dt)
 				if (onWall) {
 					anim.Ensure(AnimLib::WARRIOR_WALL_SLIDE);
 				}
-				else if (invencibleTimer > 0.f) {
-					anim.Ensure(AnimLib::WARRIOR_HURT, false);
-				}
-				else if (vel.y <= kVelJump) {
-					anim.Ensure(AnimLib::WARRIOR_JUMP, false);
-				}
-				else if (anim.IsSet(AnimLib::WARRIOR_FALL)) {
-					anim.Ensure(AnimLib::WARRIOR_FALL);
-				}
-				else {
-					anim.Ensure(AnimLib::WARRIOR_JUMP_TO_FALL, false);
-					if (anim.IsComplete()) {
+				else if (!anim.IsSet(AnimLib::WARRIOR_HURT) || invencibleTimer <= 0.f) {
+					if (vel.y <= kVelJump) {
+						anim.Ensure(AnimLib::WARRIOR_JUMP, false);
+					}
+					else if (anim.IsSet(AnimLib::WARRIOR_FALL)) {
 						anim.Ensure(AnimLib::WARRIOR_FALL);
+					}
+					else
+					{
+						anim.Ensure(AnimLib::WARRIOR_JUMP_TO_FALL, false);
+						if (anim.IsComplete()) {
+							anim.Ensure(AnimLib::WARRIOR_FALL);
+						}
 					}
 				}
 			}
@@ -714,6 +714,7 @@ void JumpMan::TakeDamage(vec src) {
 	attacking = false;
 	Fx::FreezeImage::Freeze(0.25f);
 	justHit = true;
+	anim.Ensure(AnimLib::WARRIOR_HURT, false);
 
 	vec playerCenter = Bounds().Center();
 	float direction = (playerCenter-src).AngleDegs();
