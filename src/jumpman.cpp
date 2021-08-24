@@ -22,6 +22,7 @@ extern float mainClock;
 
 // input
 const float kIsJustPressedIntervalTime = 0.15f;
+const float kJumpTimeAfterBeingGrounded = 0.07f; //~4 frames
 
 // accel
 const float kRunAcc = 1400;
@@ -395,12 +396,19 @@ void JumpMan::Update(float dt)
 		jumpFromWallTimer -= dt;
 	}
 
+	if (groundTile != Tile::NONE) {
+		timeAfterBeingGrounded = 0.f;
+	}
+	else {
+		timeAfterBeingGrounded += dt;
+	}
+
 	if (!dashing && !diving) {
 
 		GaemTileMap* map = GaemTileMap::instance();
 
 		// JUMPERINO
-		if (Input::IsJustPressed(0, GameKeys::JUMP, kIsJustPressedIntervalTime) && (groundTile != Tile::NONE || jumpFromWallTimer > 0.f)) {
+		if (Input::IsJustPressed(0, GameKeys::JUMP, kIsJustPressedIntervalTime) && (timeAfterBeingGrounded < kJumpTimeAfterBeingGrounded || jumpFromWallTimer > 0.f)) {
 			Input::ConsumeJustPressed(0, GameKeys::JUMP);
 
 #ifdef _IMGUI

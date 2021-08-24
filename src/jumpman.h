@@ -28,6 +28,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
         health = maxHealth = maxHp;
         jumpTimeLeft = 0.0f;
         crouchedTime = 0.0f;
+        timeAfterBeingGrounded = 9999.f;
         onWall = false;
         frozen = false;
         alive = true;
@@ -86,6 +87,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     bool onWall = false;
     float jumpTimeLeft = 0.0f;
     float jumpFromWallTimer = 0.f;
+    float timeAfterBeingGrounded = 9999.f;
     float crouchedTime = 0.0f;
     bool frozen = false;
     bool justHit = false;
