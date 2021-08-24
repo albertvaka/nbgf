@@ -43,6 +43,12 @@ namespace Window
             Debug::out << "GPU_Init failed";
             return 1;
         }
+
+        // Start with both buffers fully black
+        Clear(0, 0, 0);
+        GPU_Flip(screenTarget);
+        Clear(0, 0, 0);
+
         window = SDL_GetWindowFromID(screenTarget->context->windowID);
         SDL_SetWindowTitle(window, Window::WINDOW_TITLE);
 

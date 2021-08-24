@@ -144,11 +144,6 @@ void init() {
 	fpsText->SetString("0");
 #endif
 
-	// Start with the both buffers fully black
-	Window::Clear(0, 0, 0);
-	GPU_Flip(Window::screenTarget);
-	Window::Clear(0, 0, 0);
-
 	Fx::Init();
 
 	lastTicks = SDL_GetTicks();
