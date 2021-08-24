@@ -10,7 +10,24 @@
 
 extern float mainClock;
 
-void HealthUp::Update(float dt) {
+HealthUp::HealthUp(int id, vec p)
+	: id(id)
+	, pickedUp(false)
+	, BoxEntity(Tile::AlignToTiles(p) + vec(Tile::Size/2, Tile::Size/2), vec(Tile::Size-1.f, Tile::Size -1.f))
+{
+}
+
+bool HealthUp::IsBehindBreakable() const
+{
+	return (GaemTileMap::instance()->GetTile(Tile::ToTiles(pos)).isBreakable(Tile::BreakResistance::ANY));
+}
+
+void HealthUp::Update(float dt)
+{
+	if (IsBehindBreakable()) {
+		return;
+	}
+
 	JumpMan* player = JumpMan::instance();
 	if (!pickedUp && Collide(Bounds(), player->Bounds())) {
 
@@ -29,10 +46,10 @@ void HealthUp::Draw() const
 		return;
 	}
 
-	pos.DebugDraw();
+	// Debug-only
+	Bounds().DebugDraw();
 	
-	if (GaemTileMap::instance()->GetTile(Tile::ToTiles(pos)).isBreakable(Tile::BreakResistance::ANY)) {
-		//Don't draw behind breakables
+	if (IsBehindBreakable()) {
 		return;
 	}
 
@@ -42,6 +59,4 @@ void HealthUp::Draw() const
 		.withOrigin(8, 8)
 		.withRect(6 * 16, 11 * 16, 16, 16);
 
-	// Debug-only
-	Bounds().DebugDraw();
 }

@@ -7,7 +7,7 @@
 
 struct HealthUp : BoxEntity, SelfRegister<HealthUp>
 {
-	HealthUp(int id, vec p) : id(id), pickedUp(false), BoxEntity(p+vec(8,-8), vec(16, 16)) { }
+	HealthUp(int id, vec p);
 	void Update(float dt);
 	void Draw() const;
 
@@ -22,4 +22,7 @@ struct HealthUp : BoxEntity, SelfRegister<HealthUp>
 
 	int id;
 	bool pickedUp;
+
+private:
+	bool IsBehindBreakable() const;
 };
