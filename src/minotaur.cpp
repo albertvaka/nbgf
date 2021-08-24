@@ -70,7 +70,8 @@ void Minotaur::Update(float dt)
 			Reset();
 		}
 		// Keep animating since it's seen from another screen
-		//return;
+		anim.Update(dt);
+		return;
 	}
 
 	anim.Update(dt);
