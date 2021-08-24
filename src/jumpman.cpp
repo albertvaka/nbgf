@@ -20,10 +20,14 @@
 
 extern float mainClock;
 
+// input
+const float kIsJustPressedIntervalTime = 0.15f;
+
 // accel
 const float kRunAcc = 1400;
 const float kRunAcc_OnAir = 650;
 const float kGravityAcc = 660;
+const float kDiveHorizontalAcc = 10;
 
 // friction X
 const float kFrictAccFloor = 1000;
@@ -281,7 +285,7 @@ void JumpMan::Update(float dt)
 
 	dashCooldown -= dt;
 	if (!diving && SkillTree::instance()->IsEnabled(Skill::DASH) && canDash && dashCooldown <= 0.f) {
-		if (Input::IsJustPressed(0, GameKeys::DASH, 0.15f)) {
+		if (Input::IsJustPressed(0, GameKeys::DASH, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::DASH);
 			dashCooldown = kDashCooldown;
 			dashTimer = 0.f;
@@ -298,7 +302,7 @@ void JumpMan::Update(float dt)
 	}
 
 	if (!dashing && SkillTree::instance()->IsEnabled(Skill::DIVE) && divingRestTimer <= 0.f) {
-		if (groundTile == Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
+		if (groundTile == Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			diving = true;
 			attacking = false;
@@ -307,7 +311,7 @@ void JumpMan::Update(float dt)
 	}
 
 	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::ATTACK) && (!Input::IsPressed(0, GameKeys::CROUCH) || !SkillTree::instance()->IsEnabled(Skill::DIVE))) {
-		if (Input::IsJustPressed(0, GameKeys::ATTACK, 0.15f)) {
+		if (Input::IsJustPressed(0, GameKeys::ATTACK, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			attacking = true;
 			if (onWall) {
@@ -396,7 +400,7 @@ void JumpMan::Update(float dt)
 		GaemTileMap* map = GaemTileMap::instance();
 
 		// JUMPERINO
-		if (Input::IsJustPressed(0, GameKeys::JUMP, 0.15f) && (groundTile != Tile::NONE || jumpFromWallTimer > 0.f)) {
+		if (Input::IsJustPressed(0, GameKeys::JUMP, kIsJustPressedIntervalTime) && (groundTile != Tile::NONE || jumpFromWallTimer > 0.f)) {
 			Input::ConsumeJustPressed(0, GameKeys::JUMP);
 
 #ifdef _IMGUI
@@ -452,10 +456,10 @@ void JumpMan::Update(float dt)
 	}
 	else if (diving && groundTile == Tile::NONE) {
 		if (Input::IsPressed(0, GameKeys::LEFT)) {
-			vel.x -= 10 * dt;
+			vel.x -= kDiveHorizontalAcc * dt;
 		}
 		if (Input::IsPressed(0, GameKeys::RIGHT)) {
-			vel.x += 10 * dt;
+			vel.x += kDiveHorizontalAcc * dt;
 		}
 	}
 
