@@ -127,6 +127,10 @@ void init() {
 		exit(1);
 	}
 
+	srand(time(NULL));
+
+	Assets::LoadAll();
+
 	Input::Init();
 
 #ifdef _IMGUI
@@ -134,10 +138,6 @@ void init() {
 	ImGui_ImplSDL2_InitForOpenGL(Window::window, nullptr);
 	ImGui_ImplOpenGL3_Init(nullptr);
 #endif
-
-	Assets::LoadAll();
-
-	srand(time(NULL));
 
 #ifdef _FPS_COUNTER
 	fpsText = new Text(Assets::font_30);
