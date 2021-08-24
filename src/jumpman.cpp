@@ -545,7 +545,13 @@ void JumpMan::Update(float dt)
 	else {
 		if (dashing) {
 			// When dashing we aren't pushed down by gravity, so we will not collide with the ground and get to this else even when there is ground
-			groundTile = GaemTileMap::instance()->GetTile(Tile::ToTiles(pos.x, pos.y + 2.f));
+			// Logic to detect if we are on a ground tile is copied from MoveAgainstTileMap()
+			veci tilePos = Tile::ToTiles(pos.x, pos.y + 2.f);
+			Tile tile = GaemTileMap::instance()->GetTile(tilePos);
+			bool oneWayCollision = (tile.isOneWay() && pos.y - 1.f < (tilePos.y * Tile::Size));
+			if (tile.isSolid() || oneWayCollision) {
+				groundTile = tile;
+			}
 		}
 		else {
 			groundTile = Tile::NONE;
