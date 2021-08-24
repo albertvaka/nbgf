@@ -3392,15 +3392,15 @@
                  "y":336.158196562386
                 }, 
                 {
-                 "height":242.08,
+                 "height":396.58,
                  "id":871,
                  "name":"bat_bounds",
                  "rotation":0,
                  "type":"bat_bounds",
                  "visible":true,
-                 "width":545.867,
+                 "width":861.367,
                  "x":367.108166666667,
-                 "y":-419.123333333333
+                 "y":-573.623333333333
                 }, 
                 {
                  "height":274.913333333333,
@@ -3412,28 +3412,6 @@
                  "width":549.450666666666,
                  "x":1585.77466666667,
                  "y":-844.623333333333
-                }, 
-                {
-                 "height":99.08,
-                 "id":875,
-                 "name":"bat_bounds",
-                 "rotation":0,
-                 "type":"bat_bounds",
-                 "visible":true,
-                 "width":789.617,
-                 "x":366.3165,
-                 "y":-577.29
-                }, 
-                {
-                 "height":242.08,
-                 "id":876,
-                 "name":"bat_bounds",
-                 "rotation":0,
-                 "type":"bat_bounds",
-                 "visible":true,
-                 "width":268.367,
-                 "x":958.8165,
-                 "y":-416.54
                 }, 
                 {
                  "height":39.5,
@@ -3602,7 +3580,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 

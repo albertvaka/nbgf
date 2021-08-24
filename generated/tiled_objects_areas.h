@@ -12,7 +12,7 @@ struct Areas {
 
 	// Bounds
 	static const std::array<BoxBounds, 1> alien_bounds;
-	static const std::array<BoxBounds, 13> bat_bounds;
+	static const std::array<BoxBounds, 11> bat_bounds;
 	static const std::array<BoxBounds, 1> boss_bounds;
 	static const std::array<BoxBounds, 1> explosion;
 	static const std::array<BoxBounds, 1> fog;
