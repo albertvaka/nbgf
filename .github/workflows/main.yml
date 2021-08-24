@@ -2,9 +2,9 @@ name: Build and deploy
 on: [push]
 
 jobs:
-  build-deploy:
+  deploy-release:
     runs-on: ubuntu-latest
-    name: Publish emscripten build
+    name: Publish emscripten release build
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
@@ -16,7 +16,7 @@ jobs:
         uses: actions/cache@v2
         with:
           # use branch name for cache invalidation (Linux-build-name-of-branch)
-          key: ${{ runner.os }}-build-${{ env.GITHUB_REF_SLUG }}
+          key: ${{ runner.os }}-build-release-${{ env.GITHUB_REF_SLUG }}
           path: |
             ~/.cache/emsdk
 
@@ -26,7 +26,6 @@ jobs:
                      -v $GITHUB_WORKSPACE:/workspace \
                      --workdir /workspace \
                      -v ~/.cache/emsdk:/emsdk/upstream/emscripten/cache/ \
-                     --user $(id -u):$(id -g) \
                      emscripten/emsdk emmake make -j2 OPTIM=2 DEBUG=0
 
       - name: FrontPage 2000 release
@@ -44,9 +43,23 @@ jobs:
           folder: www
           target-folder: nbgf/${{ env.GITHUB_REF_SLUG }}
 
-      - name: Clean workspace
-        run: |
-          git clean -dfx
+  deploy-debug:
+    runs-on: ubuntu-latest
+    name: Publish emscripten debug build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      - name: Find and define GITHUB_REF_SLUG
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          # use branch name for cache invalidation (Linux-build-name-of-branch)
+          key: ${{ runner.os }}-build-debug-${{ env.GITHUB_REF_SLUG }}
+          path: |
+            ~/.cache/emsdk
 
       - name: Build debug
         run: |
@@ -54,7 +67,6 @@ jobs:
                      -v $GITHUB_WORKSPACE:/workspace \
                      --workdir /workspace \
                      -v ~/.cache/emsdk:/emsdk/upstream/emscripten/cache/ \
-                     --user $(id -u):$(id -g) \
                      emscripten/emsdk emmake make -j2 OPTIM=1 DEBUG=1
 
       - name: FrontPage 2000 debug
