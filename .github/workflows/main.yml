@@ -71,8 +71,9 @@ jobs:
 
       - name: FrontPage 2000 debug
         run: |
-          mkdir -p www-debug
-          cp bin/{gaem.data,gaem.wasm,gaem.js,index.html} www-debug
+          mkdir -p www
+          cp bin/{gaem.data,gaem.wasm,gaem.js,index.html} www
+          echo "https://albertvaka.github.io/nbgf/${{ env.GITHUB_REF_SLUG }}-debug" >> www/README.md
 
       - name: Deploy debug
         uses: JamesIves/github-pages-deploy-action@4.1.4
@@ -80,5 +81,5 @@ jobs:
           repository-name: albertvaka/albertvaka.github.io
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           branch: main
-          folder: www-debug
-          target-folder: nbgf/${{ env.GITHUB_REF_SLUG }}/debug
+          folder: www
+          target-folder: nbgf/${{ env.GITHUB_REF_SLUG }}-debug
