@@ -79,7 +79,7 @@ void EnemyDoor::SpawnTiles()
 	auto tilepos = Tile::ToTiles(pos);
 	for (int y = 0; y < maxHeight; y++) {
 		Tile t = map->GetTile(tilepos.x, tilepos.y + y);
-		if (t.isSolid() && t != Tile::SOLID_DOOR_BOTTOM && t != Tile::SOLID_DOOR) {
+		if ((t.isOneWay() || t.isSolid()) && t != Tile::SOLID_DOOR_BOTTOM && t != Tile::SOLID_DOOR) {
 			map->SetTile(tilepos.x, tilepos.y + y - 1, Tile::SOLID_DOOR_BOTTOM);
 			return;
 		}
