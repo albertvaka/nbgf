@@ -16,7 +16,7 @@ struct Areas {
 	static const std::array<BoxBounds, 1> boss_bounds;
 	static const std::array<BoxBounds, 1> explosion;
 	static const std::array<BoxBounds, 1> fog;
-	static const std::array<BoxBounds, 7> lava;
+	static const std::array<BoxBounds, 6> lava;
 	static const std::array<BoxBounds, 3> lava_bg;
 	static const std::array<BoxBounds, 1> parallax_cave;
 	static const std::array<BoxBounds, 1> parallax_forest;

@@ -33,11 +33,10 @@ const std::array<BoxBounds, 1> Areas::fog = {
 	BoxBounds(1904.5f,1903.5f,734.0f,85.5f),
 };
 
-const std::array<BoxBounds, 7> Areas::lava = {
+const std::array<BoxBounds, 6> Areas::lava = {
 	BoxBounds(3440.0f,2039.272727272727f,592.0f,27.7059659090909f),
 	BoxBounds(5054.29f,2268.0415f,644.5f,39.5f),
 	BoxBounds(4881.33333333333f,2784.219683333337f,862.666666666664f,150.893966666667f),
-	BoxBounds(4944.41666666667f,1672.25f,637.833333333333f,39.5f),
 	BoxBounds(3360.6665f,2782.8863499999998f,877.333666666666f,158.893966666667f),
 	BoxBounds(3568.0f,2353.719683333333f,544.0f,77.7273f),
 	BoxBounds(736.25774242424f,608.0681818181799f,1997.65118181818f,1014.40909090909f),
@@ -58,7 +57,7 @@ const std::array<BoxBounds, 1> Areas::parallax_forest = {
 };
 
 const std::array<BoxBounds, 1> Areas::parallax_island = {
-	BoxBounds(3032.5815000000002f,798.104166666667f,848.837f,339.125f),
+	BoxBounds(3120.899681818182f,798.104166666667f,760.518818181818f,339.125f),
 };
 
 const std::array<BoxBounds, 5> Areas::rocket_launcher_awake = {

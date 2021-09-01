@@ -93,6 +93,7 @@ const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 359, vec(731.25f, 2097.0f) },
 	{ 906, vec(6360.5f, 2544.5f) },
 	{ 908, vec(3058.0f, 2098.5f) },
+	{ 1003, vec(3105.6666666666665f, 1057.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::explosive = {
@@ -156,11 +157,11 @@ const vec Entities::single_goombacharger = vec(355.0518030303001f, 920.732575757
 
 
 const std::unordered_map<int, vec> Entities::healthup = {
-	{ 58, vec(3184.25f, 1534.25f) },
+	{ 58, vec(3216.5f, 1516.5f) },
 	{ 60, vec(3904.083f, 1916.3333f) },
 	{ 661, vec(5010.66666666667f, 2111.682f) },
 	{ 808, vec(3528.666666666667f, 2242.333333333333f) },
-	{ 892, vec(6192.5f, 2240.0f) },
+	{ 892, vec(6192.5f, 2239.0f) },
 	{ 896, vec(6912.0f, 2001.333333333333f) },
 };
 
@@ -242,9 +243,9 @@ const vec Entities::single_skill_walljump = vec(4552.0f, 2697.0f);
 
 
 const std::unordered_map<int, vec> Entities::spawn = {
-	{ 73, vec(3122.333f, 1900.0f) },
+	{ 73, vec(3096.666333333333f, 1844.6666666666667f) },
 };
-const vec Entities::single_spawn = vec(3122.333f, 1900.0f);
+const vec Entities::single_spawn = vec(3096.666333333333f, 1844.6666666666667f);
 
 
 const std::unordered_map<int, vec> Entities::temp_explosive = {
