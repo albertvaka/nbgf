@@ -67,9 +67,9 @@ const float kBfgCooldown = 0.6f;
 const float kBfgPushBack = 150.f;
 
 // knockback
-const float kDoDamageKnockbackVel = 120.f;
-const float kDoDamageKnockbackVelGrounded = 180.f;
-const float kDoDamageUpKnockbackVel = 200.f;
+const float kDoDamageKnockbackVel = 100.f;
+const float kDoDamageKnockbackVelGrounded = 140.f;
+const float kDoDamageUpKnockbackVel = 180.f;
 const float kDoDamageDownKnockbackVel = -220.f;
 const vec kTakeDamageKnockbackVel(180.f, -150.f);
 const float kInvencibleTimeAfterHit = 1.0f;
@@ -140,14 +140,12 @@ void JumpMan::DealDamage(vec target) {
 		vel.y += kDoDamageUpKnockbackVel;
 	} else {
 		float knockback = groundTile != Tile::NONE ? kDoDamageKnockbackVelGrounded : kDoDamageKnockbackVel;
-		if (pos.x > target.x) {
-			vel.x /= 2;
-			vel.x += knockback;
+		if (pos.x < target.x) {
+			knockback = -knockback;
 		}
-		else {
-			vel.x /= 2;
-			vel.x += -knockback;
-		}
+		float newVelX = vel.x / 2 + knockback;
+		//if (groundTile == Tile::NONE || !IsGoingToRunOffPlatform(Bounds().Center(), size, vec(newVelX, vel.y), 1 / 60.f))
+		vel.x = newVelX;
 	}
 	jumpTimeLeft = 0;
 	onWall = false;
