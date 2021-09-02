@@ -2131,7 +2131,7 @@
                  "id":665,
                  "name":"",
                  "rotation":0,
-                 "type":"",
+                 "type":"boss_minotaur",
                  "visible":true,
                  "width":16,
                  "x":331,
@@ -3581,7 +3581,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 

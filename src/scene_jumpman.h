@@ -24,6 +24,7 @@ struct JumpScene : Scene {
 	DestroyedTiles destroyedTiles;
 	RotoText rotoText;
 	Entity* boss_bipedal;
+	Entity* boss_minotaur;
 	int saveSlot;
 
 	EnemyDoor* door_to_close_when_break_skill;

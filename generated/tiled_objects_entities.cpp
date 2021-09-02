@@ -80,6 +80,12 @@ const std::unordered_map<int, vec> Entities::boss_bipedal = {
 const vec Entities::single_boss_bipedal = vec(819.27f, 2400.754f);
 
 
+const std::unordered_map<int, vec> Entities::boss_minotaur = {
+	{ 665, vec(3403.0f, 1130.5f) },
+};
+const vec Entities::single_boss_minotaur = vec(3403.0f, 1130.5f);
+
+
 const std::unordered_map<int, vec> Entities::debug_teleport = {
 	{ 907, vec(5808.5f, 1992.0f) },
 };
@@ -181,12 +187,6 @@ const std::unordered_map<int, vec> Entities::mantis = {
 	{ 903, vec(6454.795f, 2351.7290000000003f) },
 	{ 904, vec(6889.625f, 2386.2709999999997f) },
 };
-
-const std::unordered_map<int, vec> Entities::minotaur = {
-	{ 665, vec(3403.0f, 1130.5f) },
-};
-const vec Entities::single_minotaur = vec(3403.0f, 1130.5f);
-
 
 const std::unordered_map<int, vec> Entities::rocket_launcher = {
 	{ 659, vec(5122.79666666667f, 1968.318f) },

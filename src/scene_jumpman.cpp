@@ -113,6 +113,7 @@ void JumpScene::SaveGame() const {
 	destroyedTiles.SaveGame(saveState);
 
 	saveState.StreamPut("bossdead_bipedal") << (boss_bipedal == nullptr);
+	saveState.StreamPut("bossdead_minotaur") << (boss_minotaur == nullptr);
 	saveState.StreamPut("bossdead_mantis") << (Mantis::GetAll().empty());
 
 	saveState.Save();
@@ -153,6 +154,11 @@ void JumpScene::LoadGame() {
 		boss_bipedal->alive = false;
 	}
 
+	bool bossdead_minotaur = false;
+	saveState.StreamGet("bossdead_minotaur") >> bossdead_minotaur;
+	if (bossdead_minotaur && boss_minotaur) {
+		boss_minotaur->alive = false;
+	}
 
 	bool bossdead_mantis = false;
 	saveState.StreamGet("bossdead_mantis") >> bossdead_mantis;
@@ -161,7 +167,7 @@ void JumpScene::LoadGame() {
 			m->alive = false;
 		}
 	}
-	
+
 	player.LoadGame(saveState);
 
 	Camera::SetCenter(player.GetCameraTargetPos()); // Needed so Update doesn't return because we are on a "camera transition"
@@ -280,13 +286,6 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	for (auto const& [id, pos] : Tiled::Entities::minotaur) {
-		auto b = new Minotaur(pos);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
-	}
-
 	for (auto const& [id, pos] : Tiled::Entities::mantis) {
 		auto b = new Mantis(pos);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
@@ -309,6 +308,22 @@ void JumpScene::EnterScene()
 		s->AddEnemy(bipedal);
 	}
 	boss_bipedal = bipedal;
+
+	Minotaur* minotaur = new Minotaur(Tiled::Entities::single_boss_minotaur);
+	for (EnemyDoor* s : EnemyDoor::ByScreen[minotaur->screen]) {
+		s->AddEnemy(minotaur);
+	}
+	boss_minotaur = minotaur;
+
+	/*
+	for (auto const& [id, pos] : Tiled::Entities::minotaur) {
+		auto b = new Minotaur(pos);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+	*/
+
 	for (SaveStation* s : SaveStation::ByScreen[screenManager.FindScreenContaining(boss_bipedal->pos)]) {
 		s->AddHiddenBy(boss_bipedal);
 	}
@@ -561,6 +576,9 @@ void JumpScene::Update(float dt)
 
 	if (boss_bipedal && !boss_bipedal->alive) {
 		boss_bipedal = nullptr;
+	}
+	if (boss_minotaur && !boss_minotaur->alive) {
+		boss_minotaur = nullptr;
 	}
 
 	// Delete enemies after updating doors and savestations that might check for them
