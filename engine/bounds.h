@@ -200,6 +200,8 @@ struct CircleBounds
 
     [[nodiscard]] bool Contains(float x, float y) const { return Contains(vec(x, y)); }
     [[nodiscard]] bool Contains(vec v) const { return (pos.DistanceSq(v) < radius*radius); }
+
+    [[nodiscard]] BoxBounds EnclosingBoxBounds() const { return BoxBounds::FromCenter(Center(), vec(radius*2)); }
 };
 
 inline float BoxBounds::DistanceSq(const BoxBounds& a) const {

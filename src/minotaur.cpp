@@ -60,6 +60,9 @@ void Minotaur::TakeDamage() {
 	health--;
 	if (health <= 0) {
 		DieWithSmallExplosion(this);
+		for (int i = 0; i < 6; i++) {
+			RandomlySpawnHealth(Rand::VecInRange(Bounds()), 100);
+		}
 	}
 }
 

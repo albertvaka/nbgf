@@ -221,6 +221,18 @@ void Mantis::TakeDamage(vec src)
 	health--;
 	if (health <= 0) {
 		DieWithSmallExplosion(this);
+		bool lastMantis = true;
+		for (Mantis* e : Mantis::GetAll()) {
+			if (e->alive) {
+				lastMantis = false;
+				break;
+			}
+		}
+		if (lastMantis) {
+			for (int i = 0; i < 5; i++) {
+				RandomlySpawnHealth(Rand::VecInRange(Bounds().EnclosingBoxBounds()), 100);
+			}
+		}
 	}
 }
 
