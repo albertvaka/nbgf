@@ -1,6 +1,6 @@
 #pragma once
 
-#include "window.h"
+#include "window_draw.h"
 #include "camera.h"
 #include "singleinstance.h"
 #include "text.h"

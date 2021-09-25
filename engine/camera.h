@@ -1,6 +1,6 @@
 #pragma once
 
-#include "window.h"
+#include "window_conf.h"
 #include "bounds.h"
 
 namespace Camera

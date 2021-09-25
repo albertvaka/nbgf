@@ -2,7 +2,7 @@
 
 #include "magic_enum.h"
 
-#include "window.h"
+#include "vec.h"
 
 #include <SDL.h>
 

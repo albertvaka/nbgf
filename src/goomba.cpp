@@ -2,7 +2,7 @@
 
 #include "jumpman.h"
 #include "collide.h"
-#include "window.h"
+#include "window_draw.h"
 #include "assets.h"
 #include "rand.h"
 #include "common_enemy.h"

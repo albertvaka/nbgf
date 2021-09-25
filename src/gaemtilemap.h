@@ -3,6 +3,8 @@
 #include "singleinstance.h"
 #include "tilemap.h"
 #include "tile.h"
+#include "camera.h"
+#include "window_draw.h"
 
 #ifdef _DEBUG
 #include "input.h"

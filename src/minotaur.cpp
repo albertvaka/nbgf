@@ -1,7 +1,7 @@
 #include "minotaur.h"
 
 #include "jumpman.h"
-#include "window.h"
+#include "window_draw.h"
 #include "assets.h"
 #include "shader.h"
 #include "rand.h"

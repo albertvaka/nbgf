@@ -4,8 +4,16 @@
 #include "imgui.h"
 #endif
 
+//Rotation is not supported when USE_VAO is set
+//#define USE_VAO
+
 #include "rand.h"
-#include "window.h"
+
+#ifdef USE_VAO
+#include "window_drawprimitive.h"
+#else
+#include "window_draw.h"
+#endif
 
 void PartSys::SpawnWithExternalTimer(float& timer, float dt) {
 	timer += dt;
@@ -21,10 +29,6 @@ void PartSys::UpdateParticles(float dt) {
 		return p.Update(dt, *this);
 	}), particles.end());
 }
-
-
-//Rotation is not supported when USE_VAO is set
-//#define USE_VAO
 
 void PartSys::Draw() const {
 	for (const Particle& p : particles) {

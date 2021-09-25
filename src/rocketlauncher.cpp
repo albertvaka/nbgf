@@ -2,7 +2,8 @@
 
 #include "jumpman.h"
 #include "assets.h"
-#include "window.h"
+#include "window_draw.h"
+#include "window_drawprimitive.h"
 #include "tiled_objects_areas.h"
 #include "missile.h"
 #include "tile.h"

@@ -4,6 +4,8 @@
 #include "imgui.h"
 #endif
 
+#include "camera.h"
+#include "window.h"
 #include "scene_manager.h"
 #include "input.h"
 #include "bullet.h"
@@ -11,7 +13,6 @@
 #include "simplexnoise.h"
 #include "bat.h"
 #include "debug.h"
-#include "camera.h"
 #include "collide.h"
 #include "rand.h"
 #include "fx.h"

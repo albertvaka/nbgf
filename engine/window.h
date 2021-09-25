@@ -6,7 +6,7 @@
 #include "window_draw.h"
 #include "window_drawprimitive.h"
 #include "window_drawraw.h"
-#include "../src/window_conf.h"
+#include "window_conf.h"
 
 namespace Window {
 
@@ -51,14 +51,6 @@ namespace Window {
 		Window::currentDrawTarget = Window::screenTarget;
 	}
 
-}
-
-inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {
-	FixTextureBleeding(tr);
-	tr.x /= i->texture_w;
-	tr.y /= i->texture_h;
-	tr.w /= i->texture_w;
-	tr.h /= i->texture_h;
 }
 
 inline std::ostream& operator<<(std::ostream& os, const SDL_Point& rhs)

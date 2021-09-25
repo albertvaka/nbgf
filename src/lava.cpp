@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "mates.h"
 #include "anim_lib.h"
+#include "window_drawraw.h"
 #include "jumpman.h"
 
 constexpr const float kWaveAmplitude = 1.f;

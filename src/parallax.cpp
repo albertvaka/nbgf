@@ -1,15 +1,14 @@
 #include "parallax.h"
 
 #include "camera.h"
-
+#include "window_draw.h"
+#include "collide.h"
 #include "debug.h"
 #include "mates.h"
 
 #ifdef _IMGUI
 #include "imgui.h"
 #endif
-
-#include "collide.h"
 
 void Parallax::Draw() const
 {

@@ -5,7 +5,7 @@
 #include "collide.h"
 #include "bat.h"
 #include "gaemtilemap.h"
-#include "window.h"
+#include "window_draw.h"
 #include "debug.h"
 
 const float respawnAnimTime = 0.2f;

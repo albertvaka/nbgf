@@ -26,6 +26,8 @@
 
 #include "simplexnoise.h"
 
+#include "window_drawprimitive.h"
+
 #include <cstdint>  // int32_t/uint8_t
 
  /**

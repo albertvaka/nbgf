@@ -2,7 +2,7 @@
 
 #include "vec.h"
 #include "selfregister.h"
-#include "window.h"
+#include "window_draw.h"
 #include "animation.h"
 #include "entity.h"
 

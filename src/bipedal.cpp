@@ -2,7 +2,7 @@
 
 #include "screen.h"
 #include "assets.h"
-#include "window.h"
+#include "window_draw.h"
 #include "rand.h"
 #include "debug.h"
 #include "shader.h"

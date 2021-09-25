@@ -7,6 +7,7 @@
 #include "debug.h"
 #include "debug.h"
 #include "camera.h"
+#include "window.h"
 #include "fx.h"
 
 #include "../src/assets.h"

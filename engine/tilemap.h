@@ -5,6 +5,7 @@
 #include "vec.h"
 #include "bounds.h"
 #include "camera.h"
+#include "window_drawraw.h"
 
 template<class Tile> // A TileSet as exported from Tiled (or a class that inherits from it)
 struct TileMap

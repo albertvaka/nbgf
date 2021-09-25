@@ -6,9 +6,11 @@
 #ifdef _IMGUI
 #include "imgui.h"
 #endif
+#include "camera.h"
+#include "window.h"
+#include "assets.h"
 #include "bullet.h"
 #include "enemy_door.h"
-#include "assets.h"
 #include "parallax.h"
 #include "bat.h"
 #include "missile.h"

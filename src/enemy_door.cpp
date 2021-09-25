@@ -2,7 +2,7 @@
 
 #include "gaemtilemap.h"
 #include "assets.h"
-#include "window.h"
+#include "window_draw.h"
 #include "screen.h"
 #include "debug.h"
 #include "fx.h"

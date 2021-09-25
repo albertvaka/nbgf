@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include "vec.h"
-#include "window.h"
 
 struct Text
 {

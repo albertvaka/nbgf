@@ -1,8 +1,7 @@
 #include "savestation.h"
 
-#include "mates.h"
 #include "assets.h"
-#include "camera.h"
+#include "window_draw.h"
 #include "screen.h"
 #include "collide.h"
 #include "jumpman.h"

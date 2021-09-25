@@ -2,7 +2,7 @@
 
 #include "mates.h"
 #include "assets.h"
-#include "window.h"
+#include "window_draw.h"
 #include "jumpman.h"
 #include "collide.h"
 #include "rand.h"
