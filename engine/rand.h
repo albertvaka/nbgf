@@ -23,18 +23,22 @@ namespace Rand
 	// Unit vector in a random direction
 	[[nodiscard]] inline vec DirInCircle()
 	{
-		float ang = rollf(0.0f, 360.0f);
-
-		float rads = ang * float(M_PI) / 180.0f;
-
+		float rads = rollf(0.0f, 2.f*M_PI);
 		return vec(std::cos(rads), std::sin(rads));
 	}
 
 	// Randoms-sized vector in a random direction
 	[[nodiscard]] inline vec PosInsideCircle(float radius)
 	{
-		float r = rollf(0.0f, radius);
-		return DirInCircle()*r;
+		// Rejection sampling is the fastest way I found to implement this
+		// Doing DirInCircle()*radius is wrong because the point distribution is more dense in the center
+		while (true) {
+			float x = rollf(-1.f, 1.f);
+			float y = rollf(-1.f, 1.f);
+			if ((x * x + y * y) <= 1.f) {
+				return vec(x,y)*radius;
+			}
+		}
 	}
 
 	[[nodiscard]] inline vec VecInRange(float minX, float minY, float maxX, float maxY) {
