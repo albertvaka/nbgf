@@ -30,6 +30,10 @@ struct Text
 		return *this;
 	}
 
+	std::string GetString() {
+		return str;
+	}
+
 	Text& SetFont(TTF_Font* newfont, TTF_Font* newfont_outline = nullptr) {
 		if (newfont != font || font_outline != newfont_outline) {
 			font_outline = newfont_outline;
@@ -159,10 +163,18 @@ private:
 			surfaces.push_back(s);
 		}
 
-		if (surfaces.size() == 1) {
+		if (surfaces.size() == 1 && surfaces[0]) {
 			return surfaces[0];
 		}
-
+		if (totalHeight == 0 || maxWidth == 0) {
+			Debug::out << "warning: trying to render an empty string";
+			if (totalHeight == 0) {
+				totalHeight = 1;
+			}
+			if (maxWidth == 0) {
+				maxWidth = 1;
+			}
+		}
 		SDL_Surface* final = SDL_CreateRGBSurfaceWithFormat(0, maxWidth, totalHeight, 32, SDL_PIXELFORMAT_ARGB8888);
 		totalHeight = 0;
 		for (SDL_Surface* surface : surfaces) {
