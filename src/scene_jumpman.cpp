@@ -48,9 +48,12 @@ const float kCamZoomSpeed = 0.2f;
 
 const char* kSaveStateGameName = "gaem2020";
 
+const float kAppearingTextMargin = 50;
+
 JumpScene::JumpScene(int saveSlot)
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
+	, appearingText(Window::GAME_WIDTH-2*kAppearingTextMargin, Assets::font_30, Assets::font_30_outline)
 	, saveSlot(saveSlot)
 {
 	Particles::Init();
@@ -436,6 +439,7 @@ void JumpScene::Update(float dt)
 	OneShotAnim::DeleteNotAlive();
 
 	player.Update(dt);
+	appearingText.Update(dt);
 
 	screenManager.UpdateCurrentScreen(player.pos);
 
@@ -727,7 +731,7 @@ void JumpScene::Draw()
 			.withRect(Animation::GetRectAtTime(AnimLib::BUTTON_B_PRESS, mainClock));
 	}
 
-	rotoText.Draw(vec(0,-30));
+	rotoText.Draw(vec(0, -30));
 
 #ifdef _IMGUI
 	{
@@ -737,6 +741,11 @@ void JumpScene::Draw()
 		ImGui::Text("mainclock: %f", mainClock);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
+		static char appearingString[128];
+		if (ImGui::InputText("AppearingText", appearingString, 128)) {
+			appearingText.ShowMessage(appearingString);
+		}
+
 		static bool placingDummy = false;
 		if (ImGui::Button("Place dummy enemy")) {
 			placingDummy = true;
@@ -796,6 +805,7 @@ void JumpScene::Draw()
 
 	Camera::InScreenCoords::Begin();
 	player.DrawGUI();
+	Window::Draw(appearingText, kAppearingTextMargin, 50);
 	Camera::InScreenCoords::End();
 
 	//player.dust.DrawImGUI("Dust");

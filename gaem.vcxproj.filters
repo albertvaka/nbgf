@@ -364,6 +364,9 @@
     <ClInclude Include="engine\window_conf.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\appearingtext.h">
+      <Filter>src\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

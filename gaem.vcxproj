@@ -57,6 +57,7 @@
     <ClInclude Include="generated\tiled_tilemap.h" />
     <ClInclude Include="generated\tiled_tile.h" />
     <ClInclude Include="src\anim_lib.h" />
+    <ClInclude Include="src\appearingtext.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bat.h" />
     <ClInclude Include="src\bigitem.h" />
