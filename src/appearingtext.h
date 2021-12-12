@@ -16,9 +16,6 @@ struct AppearingText : Text
 		: Text(font, font_outline)
 		, maxLineWidth(maxLineWidth)
 	{
-		SetFillColor(255,255,255);
-		SetOutlineColor(0,0,0);
-		SetMultilineAlignment(MultilineAlignment::LEFT);
 	}
 	
 	std::string AddLineBreaksToFitWidth(const std::string& msg) {

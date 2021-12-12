@@ -8,7 +8,7 @@
 #include "screen.h"
 #include "input.h"
 #include "rototext.h"
-#include "appearingtext.h"
+#include "dialogbox.h"
 
 struct Lava;
 struct GunUp;
@@ -23,7 +23,7 @@ struct JumpScene : Scene {
 	JumpMan player;
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;
-	AppearingText appearingText;
+	DialogBox dialogBox;
 	RotoText rotoText;
 	Entity* boss_bipedal;
 	Entity* boss_minotaur;

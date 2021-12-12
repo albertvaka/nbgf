@@ -19,6 +19,9 @@ namespace Assets
 	inline GPU_Image* minotaurTexture;
 
 	inline GPU_Image* fogTexture;
+	inline GPU_Image* dialogFrameTexture;
+
+	inline TTF_Font* font_18;
 
 	inline TTF_Font* font_30;
 	inline TTF_Font* font_30_outline;

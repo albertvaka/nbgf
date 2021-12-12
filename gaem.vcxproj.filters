@@ -367,6 +367,9 @@
     <ClInclude Include="src\appearingtext.h">
       <Filter>src\gui</Filter>
     </ClInclude>
+    <ClInclude Include="src\dialogbox.h">
+      <Filter>src\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

@@ -67,6 +67,7 @@
     <ClInclude Include="src\common_enemy.h" />
     <ClInclude Include="src\common_tilemapcharacter.h" />
     <ClInclude Include="src\destroyedtiles.h" />
+    <ClInclude Include="src\dialogbox.h" />
     <ClInclude Include="src\enemy_door.h" />
     <ClInclude Include="src\explosive.h" />
     <ClInclude Include="src\fireshot.h" />

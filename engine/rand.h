@@ -23,7 +23,7 @@ namespace Rand
 	// Unit vector in a random direction
 	[[nodiscard]] inline vec DirInCircle()
 	{
-		float rads = rollf(0.0f, 2.f*M_PI);
+		float rads = rollf(0.0f, Angles::Tau);
 		return vec(std::cos(rads), std::sin(rads));
 	}
 

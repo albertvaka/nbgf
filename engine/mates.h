@@ -55,6 +55,12 @@ namespace Mates
 		return int((total_time_before_dt_increment + dt) / period_sec) != int((total_time_before_dt_increment) / period_sec);
 	}
 
+	[[nodiscard]] inline int RoundUpToMultipleOf(int value, int multiple)
+	{
+		// Rounds away from zero for negative numbers
+		return ((value + multiple - 1) / multiple) * multiple;
+	}
+
 	//-----------------------------------------------------------------------
 	//
 	//  some handy little functions
