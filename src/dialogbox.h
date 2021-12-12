@@ -92,6 +92,11 @@ struct DialogBox
 		if (openCloseTimer < kTimeToOpenClose) {
 			openCloseTimer += dt;
 		}
+		if (!body.IsFullyShown()) {
+			if (Input::IsJustPressed(0, GameKeys::START)) {
+				body.SkipAnimation();
+			}
+		}
 		body.Update(dt);
 	}
 

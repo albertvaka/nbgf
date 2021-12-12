@@ -60,6 +60,15 @@ struct AppearingText : Text
 		timer = 0;
 	}
 
+	bool IsFullyShown() const {
+		return (index >= targetString.size());
+	}
+
+	void SkipAnimation() {
+		index = targetString.size();
+		SetString(targetString.substr(0,index));
+	}
+
 	void Update(float dt) {
 		if (index < targetString.size()) {
 			timer += dt;
