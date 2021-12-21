@@ -21,7 +21,8 @@ namespace Assets
 	inline GPU_Image* fogTexture;
 	inline GPU_Image* dialogFrameTexture;
 
-	inline TTF_Font* font_18;
+	inline TTF_Font* font_dialog_body;
+	inline TTF_Font* font_dialog_title;
 
 	inline TTF_Font* font_30;
 	inline TTF_Font* font_30_outline;

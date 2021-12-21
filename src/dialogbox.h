@@ -4,25 +4,33 @@
 #include "text.h"
 #include "assets.h"
 #include "appearingtext.h"
+#include "anim_lib.h"
 
 struct DialogBox
 {
+	const float kPadding = 12;
+	const float kSpaceBetweenTitleAndBody = 6;
+	const float kFontScale = 0.5f;
+	const float kPortraitScale = 2;
+	const float kMargin = 32;
+	const float kPortraitWidth = AnimLib::PORTRAIT_WARRIOR.w*kPortraitScale;
+	const float kPortraitHeight = AnimLib::PORTRAIT_WARRIOR.h*kPortraitScale;
+	const float kWidth = Window::GAME_WIDTH - 2 * kMargin; // Must be multiple of 8
+	const float kHeight = kPortraitHeight + 2 * kPadding; // Must be multiple of 8
+	const float kPosY = Window::GAME_HEIGHT - kHeight - kMargin + 10;
+	const float kMaxLineWidth = kWidth - 3 * kPadding - kPortraitWidth;
+
 	Text title;
 	AppearingText body;
+	GPU_Rect currentPortrait;
 
 	int index = 0;
 	float timer = 0;
 	bool isOpen = false;
 
-	const float kPadding = 20;
-	const float kMargin = 30;
-	const float kWidth = Mates::RoundUpToMultipleOf(Window::GAME_WIDTH - 2 * kMargin, 8);
-	const float kHeight = Mates::RoundUpToMultipleOf(180 - 2 * kMargin, 8);
-	const float kMaxLineWidth = kWidth  - 2 * kPadding;
-
 	DialogBox()
-		: title(Assets::font_30)
-		, body(kMaxLineWidth, Assets::font_18)
+		: title(Assets::font_dialog_title)
+		, body(kMaxLineWidth*2, Assets::font_dialog_body)
 	{
 		title.SetFillColor(255, 255, 255);
 		title.SetOutlineColor(0, 0, 0);
@@ -31,8 +39,9 @@ struct DialogBox
 		body.SetOutlineColor(0, 0, 0);
 	}
 
-	void ShowMessage(const std::string& charname, const std::string& msg)
+	void ShowMessage(const GPU_Rect& portrait, const std::string& charname, const std::string& msg)
 	{
+		currentPortrait = portrait;
 		title.SetString(charname);
 		body.ShowMessage(msg);
 		isOpen = true;
@@ -40,9 +49,21 @@ struct DialogBox
 
 	void Draw() const {
 		if (isOpen) {
-			Render9Slice(Assets::dialogFrameTexture, kMargin, kMargin, 8, 8, 8, 8, kWidth, kHeight, true);
-			Window::Draw(title, kPadding + kMargin, kPadding + kMargin);
-			Window::Draw(body, kPadding + kMargin, kPadding + kMargin + 50);
+
+			(Camera::TopLeft()+vec(kMargin, kPosY)).DebugDraw();
+			(Camera::TopLeft()+vec(kMargin+kWidth, kPosY+kHeight)).DebugDraw();
+
+			Render9Slice(Assets::dialogFrameTexture, kMargin, kPosY, kWidth, kHeight, 8, 8, 8, 8, true);
+
+			Window::Draw(Assets::warriorTexture, kMargin + kPadding, kPosY + kPadding)
+				.withRect(currentPortrait)
+				.withScale(kPortraitScale);
+
+			vec textPos(kPadding * 2 + kMargin + kPortraitWidth, kPosY + kPadding);
+			Window::Draw(title, textPos)
+				.withScale(kFontScale);
+			Window::Draw(body, textPos+vec(0,title.Size().y*kFontScale + kSpaceBetweenTitleAndBody))
+				.withScale(kFontScale);
 		}
 	}
 
@@ -53,9 +74,13 @@ struct DialogBox
 
 	// Code adapted from https://github.com/cxong/sdl2-9-slice (MIT license)
 	void static Render9Slice(GPU_Image* s,
-		int x, int y, int top, int bottom, int left, int right, int w, int h,
+		int x, int y, int w, int h, int top, int bottom, int left, int right,
 		bool repeat)
 	{
+		x += left / 2;
+		y += top / 2;
+		w += right / 2 + left / 2;
+		h += top / 2 + bottom / 2;
 		const int srcX[] = { 0, left, s->w - right };
 		const int srcY[] = { 0, top, s->h - bottom };
 		const int srcW[] = { left, s->w - right - left, right };

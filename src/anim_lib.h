@@ -313,5 +313,6 @@ namespace AnimLib {
 		warriorSheet.Frame(80, .1f),
 	};
 
+	constexpr const GPU_Rect PORTRAIT_WARRIOR = { 291, 821, 34, 36 };
 }
 

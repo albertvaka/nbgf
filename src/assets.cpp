@@ -13,7 +13,8 @@ void Assets::LoadAll() {
     fogTexture = LoadImage("data/fog.png");
     dialogFrameTexture = LoadImage("data/dialog_frame.png");
 
-    font_18 = LoadFont("data/PressStart2P.ttf", 18);
+    font_dialog_body = LoadFont("data/PressStart2P.ttf", 24);
+    font_dialog_title = LoadFont("data/PressStart2P.ttf", 28);
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 

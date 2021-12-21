@@ -738,9 +738,9 @@ void JumpScene::Draw()
 		ImGui::Text("mainclock: %f", mainClock);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
-		static char appearingString[128];
-		if (ImGui::InputText("AppearingText", appearingString, 128)) {
-			dialogBox.ShowMessage("Someone", appearingString);
+		static char appearingString[256];
+		if (ImGui::InputText("AppearingText", appearingString, 256)) {
+			dialogBox.ShowMessage(AnimLib::PORTRAIT_WARRIOR, "Warrior", appearingString);
 		}
 
 		static bool placingDummy = false;
