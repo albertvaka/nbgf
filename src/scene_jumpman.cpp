@@ -435,8 +435,12 @@ void JumpScene::Update(float dt)
 	}
 	OneShotAnim::DeleteNotAlive();
 
-	player.Update(dt);
 	dialogBox.Update(dt);
+	if (dialogBox.IsOpen()) {
+		return;
+	}
+
+	player.Update(dt);
 
 	screenManager.UpdateCurrentScreen(player.pos);
 
@@ -740,7 +744,11 @@ void JumpScene::Draw()
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
 		static char appearingString[256];
 		if (ImGui::InputText("AppearingText", appearingString, 256)) {
-			dialogBox.ShowMessage(AnimLib::PORTRAIT_WARRIOR, "Warrior", appearingString);
+			if (std::string(appearingString).empty()) {
+				dialogBox.Close();
+			} else {
+				dialogBox.ShowMessage(AnimLib::PORTRAIT_WARRIOR, "Warrior", appearingString);
+			}
 		}
 
 		static bool placingDummy = false;

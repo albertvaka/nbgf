@@ -3,6 +3,7 @@
 #include "window.h"
 #include "text.h"
 #include "assets.h"
+#include "input.h"
 #include "appearingtext.h"
 #include "anim_lib.h"
 
@@ -12,20 +13,22 @@ struct DialogBox
 	const float kSpaceBetweenTitleAndBody = 6;
 	const float kFontScale = 0.5f;
 	const float kPortraitScale = 2;
-	const float kMargin = 32;
+	const float kMarginSides = 32;
+	const float kMarginBottom = 22;
 	const float kPortraitWidth = AnimLib::PORTRAIT_WARRIOR.w*kPortraitScale;
 	const float kPortraitHeight = AnimLib::PORTRAIT_WARRIOR.h*kPortraitScale;
-	const float kWidth = Window::GAME_WIDTH - 2 * kMargin; // Must be multiple of 8
-	const float kHeight = kPortraitHeight + 2 * kPadding; // Must be multiple of 8
-	const float kPosY = Window::GAME_HEIGHT - kHeight - kMargin + 10;
+	const float kWidth = Window::GAME_WIDTH - 2 * kMarginSides;
+	const float kHeight = kPortraitHeight + 2 * kPadding;
+	const float kPosY = Window::GAME_HEIGHT - kHeight - kMarginBottom;
 	const float kMaxLineWidth = kWidth - 3 * kPadding - kPortraitWidth;
+	const float kTimeToOpenClose = 0.2f;
 
 	Text title;
 	AppearingText body;
 	GPU_Rect currentPortrait;
 
 	int index = 0;
-	float timer = 0;
+	float openCloseTimer = kTimeToOpenClose;
 	bool isOpen = false;
 
 	DialogBox()
@@ -44,22 +47,40 @@ struct DialogBox
 		currentPortrait = portrait;
 		title.SetString(charname);
 		body.ShowMessage(msg);
-		isOpen = true;
+		if (!isOpen) {
+			isOpen = true;
+			openCloseTimer = 0;
+		}
+	}
+
+	void Close()
+	{
+		isOpen = false;
+		openCloseTimer = 0;
+	}
+
+	bool IsOpen() const
+	{
+		return isOpen || openCloseTimer < kTimeToOpenClose;
 	}
 
 	void Draw() const {
-		if (isOpen) {
+		if (openCloseTimer < kTimeToOpenClose) {
+			float from = isOpen? kWidth/2.f : 0;
+			float to = isOpen? 0 : kWidth/2.f;
+			float diff = Mates::Lerp(from, to, openCloseTimer/kTimeToOpenClose);
+			Render9Slice(Assets::dialogFrameTexture, kMarginSides + diff, kPosY, kWidth-2*diff, kHeight, 8, 8, 8, 8);
+		} else if (isOpen) {
+			(Camera::TopLeft()+vec(kMarginSides, kPosY)).DebugDraw();
+			(Camera::TopLeft()+vec(kMarginSides+kWidth, kPosY+kHeight)).DebugDraw();
 
-			(Camera::TopLeft()+vec(kMargin, kPosY)).DebugDraw();
-			(Camera::TopLeft()+vec(kMargin+kWidth, kPosY+kHeight)).DebugDraw();
+			Render9Slice(Assets::dialogFrameTexture, kMarginSides, kPosY, kWidth, kHeight, 8, 8, 8, 8);
 
-			Render9Slice(Assets::dialogFrameTexture, kMargin, kPosY, kWidth, kHeight, 8, 8, 8, 8, true);
-
-			Window::Draw(Assets::warriorTexture, kMargin + kPadding, kPosY + kPadding)
+			Window::Draw(Assets::warriorTexture, kMarginSides + kPadding, kPosY + kPadding)
 				.withRect(currentPortrait)
 				.withScale(kPortraitScale);
 
-			vec textPos(kPadding * 2 + kMargin + kPortraitWidth, kPosY + kPadding);
+			vec textPos(kPadding * 2 + kMarginSides + kPortraitWidth, kPosY + kPadding);
 			Window::Draw(title, textPos)
 				.withScale(kFontScale);
 			Window::Draw(body, textPos+vec(0,title.Size().y*kFontScale + kSpaceBetweenTitleAndBody))
@@ -68,27 +89,26 @@ struct DialogBox
 	}
 
 	void Update(float dt) {
+		if (openCloseTimer < kTimeToOpenClose) {
+			openCloseTimer += dt;
+		}
 		body.Update(dt);
 	}
 
 
 	// Code adapted from https://github.com/cxong/sdl2-9-slice (MIT license)
 	void static Render9Slice(GPU_Image* s,
-		int x, int y, int w, int h, int top, int bottom, int left, int right,
-		bool repeat)
+		float x, float y, float w, float h, float top, float bottom, float left, float right,
+		bool repeat=false) // whether to tile or stretch
 	{
-		x += left / 2;
-		y += top / 2;
-		w += right / 2 + left / 2;
-		h += top / 2 + bottom / 2;
-		const int srcX[] = { 0, left, s->w - right };
-		const int srcY[] = { 0, top, s->h - bottom };
-		const int srcW[] = { left, s->w - right - left, right };
-		const int srcH[] = { top, s->h - bottom - top, bottom };
-		const int dstX[] = { x, x + left, x + w - right, x + w };
-		const int dstY[] = { y, y + top, y + h - bottom, y + h };
-		const int dstW[] = { left, w - right - left, right };
-		const int dstH[] = { top, h - bottom - top, bottom };
+		const float srcX[] = { 0, left, s->w - right };
+		const float srcY[] = { 0, top, s->h - bottom };
+		const float srcW[] = { left, s->w - right - left, right };
+		const float srcH[] = { top, s->h - bottom - top, bottom };
+		const float dstX[] = { x, x + left, x + w - right, x + w };
+		const float dstY[] = { y, y + top, y + h - bottom, y + h };
+		const float dstW[] = { left, w - right - left, right };
+		const float dstH[] = { top, h - bottom - top, bottom };
 		GPU_Rect src;
 		GPU_Rect dst;
 		for (int i = 0; i < 3; i++)
@@ -114,7 +134,7 @@ struct DialogBox
 							src.h = dst.h = dstY[j + 1] - dst.y;
 						}
 						//TODO: I think that magic 3 actually depends on the scale
-						Window::Draw(s, BoxBounds(dst)*3).withRect(src);
+						Window::Draw(s, BoxBounds(dst.x, dst.y, dst.w*3, dst.h*3)).withRect(src);
 					}
 				}
 			}
