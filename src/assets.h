@@ -8,6 +8,11 @@
 #include "shader.h"
 typedef struct _TTF_Font TTF_Font;
 
+struct Voice {
+	Sound speak;
+	Sound end;
+};
+
 namespace Assets
 {
 	extern void LoadAll();
@@ -35,6 +40,12 @@ namespace Assets
 	inline Shader fadeOutCircleShader;
 
 	inline Sound soundDeath;
+
+	inline Voice aiVoice;
+	inline Voice growlyVoice;
+	inline Voice sinecrushVoice;
+	inline Voice yeah1Voice;
+	inline Voice yeah2Voice;
 
 	inline std::array<GPU_Image*, 1> lavaParallaxTextures;
 	inline std::array<GPU_Image*, 3> forestParallaxTextures;

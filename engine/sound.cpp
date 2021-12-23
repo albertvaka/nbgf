@@ -26,7 +26,7 @@ float Sound::Volume() {
 	return Mix_VolumeChunk(sound, -1) * (100 / 128.f);
 }
 
-int Sound::Play() {
+int Sound::Play() const {
 	if (Mix_VolumeChunk(sound, -1) == 0) return -1;
 	return Mix_PlayChannel(-1, sound, 0);
 }

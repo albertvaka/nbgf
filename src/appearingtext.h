@@ -69,15 +69,17 @@ struct AppearingText : Text
 		SetString(targetString.substr(0,index));
 	}
 
-	void Update(float dt) {
+	bool Update(float dt) { //returns true the frame it ends
 		if (index < targetString.size()) {
 			timer += dt;
 			if (timer > SPEED) {
 				timer -= SPEED;
 				index++;
 				SetString(targetString.substr(0,index));
+				return index >= targetString.size();
 			}
 		}
+		return false;
 	}
 
 	operator GPU_Image* () const {

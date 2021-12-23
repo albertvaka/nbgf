@@ -47,4 +47,14 @@ void Assets::LoadAll() {
         GPU_SetWrapMode(islandParallaxTextures[i], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
     }
 
+    aiVoice.speak.Load("data/ai_1b.wav");
+    aiVoice.end.Load("data/ai_6a.wav");
+    growlyVoice.speak.Load("data/growly_2c.wav");
+    growlyVoice.end.Load("data/ai_6c.wav");
+    sinecrushVoice.speak.Load("data/sinecrush_2b.wav");
+    sinecrushVoice.end.Load("data/sinecrush_6c.wav");
+    yeah1Voice.speak.Load("data/yeah_3a.wav");
+    yeah1Voice.end.Load("data/yeah_6b.wav");
+    yeah2Voice.speak.Load("data/yeah_3b.wav");
+    yeah2Voice.end.Load("data/yeah_6c.wav");
 }

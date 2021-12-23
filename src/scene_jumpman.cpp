@@ -747,7 +747,7 @@ void JumpScene::Draw()
 			if (std::string(appearingString).empty()) {
 				dialogBox.Close();
 			} else {
-				dialogBox.ShowMessage(AnimLib::PORTRAIT_WARRIOR, "Warrior", appearingString);
+				dialogBox.ShowMessage(AnimLib::PORTRAIT_WARRIOR, Assets::growlyVoice, "Warrior", appearingString, true);
 			}
 		}
 

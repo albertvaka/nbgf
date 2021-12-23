@@ -7,6 +7,8 @@
 #include "appearingtext.h"
 #include "anim_lib.h"
 
+extern float mainClock;
+
 struct DialogBox
 {
 	const float kPadding = 12;
@@ -15,6 +17,7 @@ struct DialogBox
 	const float kPortraitScale = 2;
 	const float kMarginSides = 32;
 	const float kMarginBottom = 22;
+	const float kBottomRightIconMargin = 20;
 	const float kPortraitWidth = AnimLib::PORTRAIT_WARRIOR.w*kPortraitScale;
 	const float kPortraitHeight = AnimLib::PORTRAIT_WARRIOR.h*kPortraitScale;
 	const float kWidth = Window::GAME_WIDTH - 2 * kMarginSides;
@@ -26,6 +29,9 @@ struct DialogBox
 	Text title;
 	AppearingText body;
 	GPU_Rect currentPortrait;
+	const Voice* currentVoice;
+	int voiceChannel = -1;
+	bool isLast;
 
 	int index = 0;
 	float openCloseTimer = kTimeToOpenClose;
@@ -42,15 +48,21 @@ struct DialogBox
 		body.SetOutlineColor(0, 0, 0);
 	}
 
-	void ShowMessage(const GPU_Rect& portrait, const std::string& charname, const std::string& msg)
+	void ShowMessage(const GPU_Rect& portrait, const Voice& voice, const std::string& charname, const std::string& msg, bool isLast)
 	{
+		currentVoice = &voice;
 		currentPortrait = portrait;
+		this->isLast = isLast;
 		title.SetString(charname);
 		body.ShowMessage(msg);
 		if (!isOpen) {
 			isOpen = true;
 			openCloseTimer = 0;
 		}
+		if (voiceChannel >= 0) {
+			Sound::Stop(voiceChannel);
+		}
+		voiceChannel = currentVoice->speak.Play();
 	}
 
 	void Close()
@@ -85,19 +97,40 @@ struct DialogBox
 				.withScale(kFontScale);
 			Window::Draw(body, textPos+vec(0,title.Size().y*kFontScale + kSpaceBetweenTitleAndBody))
 				.withScale(kFontScale);
+
+			if (body.IsFullyShown()) {
+				GPU_Rect icon = isLast ? AnimLib::UI_ICON_CLOSE : AnimLib::UI_ICON_NEXT;
+				Window::Draw(Assets::spritesheetTexture, kMarginSides + kWidth - kBottomRightIconMargin, kPosY + kHeight - kBottomRightIconMargin)
+					.withRectWithOriginCentered(icon)
+					.withScale(1+abs(std::sin(mainClock*4.f))/4.f);
+			}
 		}
 	}
 
-	void Update(float dt) {
+	bool Update(float dt) { // returns true when the text is fully displayed and the user presses action to close it
 		if (openCloseTimer < kTimeToOpenClose) {
 			openCloseTimer += dt;
 		}
+		bool justFinishedTyping = body.Update(dt);
 		if (!body.IsFullyShown()) {
 			if (Input::IsJustPressed(0, GameKeys::START)) {
 				body.SkipAnimation();
+				justFinishedTyping = true;
 			}
 		}
-		body.Update(dt);
+		else {
+			if (Input::IsJustPressed(0, GameKeys::ACTION)) {
+				return true;
+			}
+		}
+		if (justFinishedTyping) {
+			if (voiceChannel >= 0) {
+				Sound::Stop(voiceChannel);
+				voiceChannel = -1;
+			}
+			currentVoice->end.Play();
+		}
+		return false;
 	}
 
 
