@@ -273,6 +273,17 @@ namespace AnimLib {
 		{ { 5 * 96.0, 8 * 96.f, 96.f, 96.f }, .1f },
 	};
 
+	constexpr const AnimationFrame NPC_IDLE[] = {
+	{ { 467, 617 + 0 * 45, 30, 45 }, .1f },
+	{ { 497, 617 + 0 * 45, 30, 45}, .1f },
+	{ { 467, 617 + 1 * 45, 30, 45}, .1f },
+	{ { 497, 617 + 1 * 45, 30, 45}, .1f },
+	{ { 467, 617 + 2 * 45, 30, 45}, .1f },
+	{ { 497, 617 + 2 * 45, 30, 45}, .1f },
+	{ { 467, 617 + 3 * 45, 30, 45}, .1f },
+	{ { 497, 617 + 3 * 45, 30, 45}, .1f },
+	};
+
 	const constexpr SheetFrameCalculator warriorSheet(70.f, 48.f, 6, .1f);
 	constexpr const AnimationFrame WARRIOR_IDLE[] = { warriorSheet.Frame(5, 1.f), warriorSheet.Frame(0, 1.0f), };
 	constexpr const std::array<AnimationFrame, 8> WARRIOR_RUN = warriorSheet.Frames<8>(6);

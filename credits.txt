@@ -13,3 +13,6 @@ Fire slime sprite by Henry Software https://henrysoftware.itch.io/
 Outside background by saurabhkgp https://saurabhkgp.itch.io/
 Cave background by Pukahuna https://www.deviantart.com/pukahuna [TODO: Ask about license]
 Fire background by Ironthunder https://opengameart.org/users/ironthunder
+Dialog sounds by Chris Logsdon https://chrislsound.itch.io/text-dialogue-sfx-pack
+Portraits by Kiddolink https://kiddolink.itch.io/fantasy-npc-non-playable-characters-pack
+Knight NPC by Szadi Art https://szadiart.itch.io/2d-soulslike-character
