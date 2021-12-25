@@ -40,6 +40,7 @@
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
 #include "tiled_objects_screens.h"
+#include "dialogs.h"
 
 extern float mainClock;
 
@@ -435,8 +436,8 @@ void JumpScene::Update(float dt)
 	}
 	OneShotAnim::DeleteNotAlive();
 
-	dialogBox.Update(dt);
-	if (dialogBox.IsOpen()) {
+	dialogDriver.Update(dt);
+	if (dialogDriver.IsOpen()) {
 		return;
 	}
 
@@ -742,13 +743,16 @@ void JumpScene::Draw()
 		ImGui::Text("mainclock: %f", mainClock);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
-		static char appearingString[256];
+		/*static char appearingString[256];
 		if (ImGui::InputText("AppearingText", appearingString, 256)) {
 			if (std::string(appearingString).empty()) {
 				dialogBox.Close();
 			} else {
 				dialogBox.ShowMessage(AnimLib::PORTRAIT_WARRIOR, Assets::growlyVoice, "Warrior", appearingString, true);
 			}
+		}*/
+		if (ImGui::Button("Start NPC dialog")) {
+			dialogDriver.StartDialog(dialogWithRandomNpc);
 		}
 
 		static bool placingDummy = false;
@@ -810,7 +814,7 @@ void JumpScene::Draw()
 
 	Camera::InScreenCoords::Begin();
 	player.DrawGUI();
-	dialogBox.Draw();
+	dialogDriver.Draw();
 	Camera::InScreenCoords::End();
 
 	//player.dust.DrawImGUI("Dust");

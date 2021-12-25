@@ -9,6 +9,12 @@
 
 extern float mainClock;
 
+struct DialogCharacter {
+	std::string name;
+	GPU_Rect portrait;
+	const Voice& voice;
+};
+
 struct DialogBox
 {
 	const float kPadding = 12;
@@ -48,21 +54,39 @@ struct DialogBox
 		body.SetOutlineColor(0, 0, 0);
 	}
 
-	void ShowMessage(const GPU_Rect& portrait, const Voice& voice, const std::string& charname, const std::string& msg, bool isLast)
+	void ShowMessage(const DialogCharacter& character, const std::string& msg, bool isLast)
 	{
-		currentVoice = &voice;
-		currentPortrait = portrait;
+		currentVoice = &character.voice;
+		currentPortrait = character.portrait;
 		this->isLast = isLast;
-		title.SetString(charname);
+		title.SetString(character.name);
 		body.ShowMessage(msg);
+		if (voiceChannel >= 0)
+		{
+			Sound::Stop(voiceChannel);
+			voiceChannel = -1;
+		}
 		if (!isOpen) {
 			isOpen = true;
 			openCloseTimer = 0;
 		}
-		if (voiceChannel >= 0) {
-			Sound::Stop(voiceChannel);
+		else
+		{
+			voiceChannel = currentVoice->speak.Play();
 		}
-		voiceChannel = currentVoice->speak.Play();
+	}
+
+	int selectedChoice;
+	std::vector<std::string> choices;
+
+	void AddChoices(const std::vector<std::string>& choices)
+	{
+		selectedChoice = 0;
+		this->choices = choices;
+	}
+
+	int GetSelectedChoice() {
+		return selectedChoice;
 	}
 
 	void Close()
@@ -110,6 +134,9 @@ struct DialogBox
 	bool Update(float dt) { // returns true when the text is fully displayed and the user presses action to close it
 		if (openCloseTimer < kTimeToOpenClose) {
 			openCloseTimer += dt;
+			if (isOpen && openCloseTimer >= kTimeToOpenClose) {
+				voiceChannel = currentVoice->speak.Play();
+			}
 		}
 		bool justFinishedTyping = body.Update(dt);
 		if (!body.IsFullyShown()) {
