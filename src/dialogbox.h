@@ -77,15 +77,19 @@ struct DialogBox
 	}
 
 	int selectedChoice;
-	std::vector<std::string> choices;
+	std::vector<Text> choices;
 
 	void AddChoices(const std::vector<std::string>& choices)
 	{
 		selectedChoice = 0;
-		this->choices = choices;
+		for (const std::string& text : choices) {
+			Text choice(Assets::font_dialog_body);
+			choice.SetString(text);
+			this->choices.push_back(choice);
+		}
 	}
 
-	int GetSelectedChoice() {
+	int GetSelectedChoice() const {
 		return selectedChoice;
 	}
 
@@ -100,10 +104,48 @@ struct DialogBox
 		return isOpen || openCloseTimer < kTimeToOpenClose;
 	}
 
+	bool Update(float dt) { // returns true when the text is fully displayed and the user presses action to close it
+		if (openCloseTimer < kTimeToOpenClose) {
+			openCloseTimer += dt;
+			if (Input::IsJustPressed(0, GameKeys::START)) {
+				body.SkipAnimation();
+			}
+			if (isOpen && openCloseTimer >= kTimeToOpenClose) {
+				if (body.IsFullyShown()) {
+					voiceChannel = currentVoice->end.Play();
+				}
+				else {
+					voiceChannel = currentVoice->speak.Play();
+				}
+			}
+		} else if (isOpen) {
+			bool justFinishedTyping = body.Update(dt);
+			if (!body.IsFullyShown()) {
+				if (Input::IsJustPressed(0, GameKeys::START)) {
+					body.SkipAnimation();
+					justFinishedTyping = true;
+				}
+			}
+			else {
+				if (Input::IsJustPressed(0, GameKeys::ACTION)) {
+					return true;
+				}
+			}
+			if (justFinishedTyping) {
+				if (voiceChannel >= 0) {
+					Sound::Stop(voiceChannel);
+					voiceChannel = -1;
+				}
+				voiceChannel = currentVoice->end.Play();
+			}
+		}
+		return false;
+	}
+
 	void Draw() const {
 		if (openCloseTimer < kTimeToOpenClose) {
-			float from = isOpen? kWidth/2.f : 0;
-			float to = isOpen? 0 : kWidth/2.f;
+			float from = isOpen? kWidth/2.f - 8 : 8;
+			float to = isOpen? 8 : kWidth/2.f - 8;
 			float diff = Mates::Lerp(from, to, openCloseTimer/kTimeToOpenClose);
 			Render9Slice(Assets::dialogFrameTexture, kMarginSides + diff, kPosY, kWidth-2*diff, kHeight, 8, 8, 8, 8);
 		} else if (isOpen) {
@@ -116,10 +158,11 @@ struct DialogBox
 				.withRect(currentPortrait)
 				.withScale(kPortraitScale);
 
-			vec textPos(kPadding * 2 + kMarginSides + kPortraitWidth, kPosY + kPadding);
-			Window::Draw(title, textPos)
+			vec titlePos = vec(kPadding * 2 + kMarginSides + kPortraitWidth, kPosY + kPadding);
+			Window::Draw(title, titlePos)
 				.withScale(kFontScale);
-			Window::Draw(body, textPos+vec(0,title.Size().y*kFontScale + kSpaceBetweenTitleAndBody))
+			vec bodyPos = titlePos+vec(0, title.Size().y * kFontScale + kSpaceBetweenTitleAndBody);
+			Window::Draw(body, bodyPos)
 				.withScale(kFontScale);
 
 			if (body.IsFullyShown()) {
@@ -129,35 +172,6 @@ struct DialogBox
 					.withScale(1+abs(std::sin(mainClock*4.f))/4.f);
 			}
 		}
-	}
-
-	bool Update(float dt) { // returns true when the text is fully displayed and the user presses action to close it
-		if (openCloseTimer < kTimeToOpenClose) {
-			openCloseTimer += dt;
-			if (isOpen && openCloseTimer >= kTimeToOpenClose) {
-				voiceChannel = currentVoice->speak.Play();
-			}
-		}
-		bool justFinishedTyping = body.Update(dt);
-		if (!body.IsFullyShown()) {
-			if (Input::IsJustPressed(0, GameKeys::START)) {
-				body.SkipAnimation();
-				justFinishedTyping = true;
-			}
-		}
-		else {
-			if (Input::IsJustPressed(0, GameKeys::ACTION)) {
-				return true;
-			}
-		}
-		if (justFinishedTyping) {
-			if (voiceChannel >= 0) {
-				Sound::Stop(voiceChannel);
-				voiceChannel = -1;
-			}
-			currentVoice->end.Play();
-		}
-		return false;
 	}
 
 

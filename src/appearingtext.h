@@ -55,6 +55,7 @@ struct AppearingText : Text
 
 	void ShowMessage(const std::string& msg)
 	{
+		SetString("");
 		targetString = AddLineBreaksToFitWidth(msg);
 		index = 0;
 		timer = 0;
