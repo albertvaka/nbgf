@@ -728,6 +728,10 @@ void JumpScene::Draw()
 		Lava::GetAll()
 	);
 
+	Window::Draw(Assets::warriorTexture, Tile::AlignToTiles(Tiled::Entities::single_npc)+vec(0,-6))
+		.withRect(Animation::GetRectAtTime(AnimLib::NPC_IDLE, mainClock))
+		.withScale(-1.2, 1.2);
+
 	if (contextActionButton) {
 		Window::Draw(Assets::spritesheetTexture, player.Bounds().TopRight() + vec(2, -6))
 			.withRect(Animation::GetRectAtTime(AnimLib::BUTTON_B_PRESS, mainClock));
