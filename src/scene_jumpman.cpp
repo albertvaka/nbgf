@@ -193,14 +193,8 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 			}
 		}
 		for (auto const& [id, pos] : Tiled::Entities::initial_batawake) {
-			Bat* b = new Bat(pos, false, true);
-			door_to_close_when_break_skill->AddEnemy(b);
+			new Bat(pos, false, true);
 		}
-	}
-	break;
-	case Skill::BREAK:
-	{
-		door_to_close_when_break_skill->Lock();
 	}
 	break;
 	default:
@@ -222,18 +216,13 @@ void JumpScene::EnterScene()
 	new BigItem(Tiled::Entities::single_skill_dive, Skill::DIVE);
 	new BigItem(Tiled::Entities::single_skill_dash, Skill::DASH);
 
-	int screen_break_skill = screenManager.FindScreenContaining(break_skill->pos);
-
 	for (auto const& [id, pos] : Tiled::Entities::save) {
 		new SaveStation(id, pos);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::enemy_door) {
 		EnemyDoor* d = new EnemyDoor(id, pos);
-		int door_screen = screenManager.FindScreenContaining(d->pos);
-		if (door_screen == screen_break_skill) {
-			door_to_close_when_break_skill = d;
-		}
+		screenManager.FindScreenContaining(d->pos);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::bat) {
