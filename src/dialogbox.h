@@ -166,10 +166,24 @@ struct DialogBox
 				.withScale(kFontScale);
 
 			if (body.IsFullyShown()) {
-				GPU_Rect icon = isLast ? AnimLib::UI_ICON_CLOSE : AnimLib::UI_ICON_NEXT;
-				Window::Draw(Assets::spritesheetTexture, kMarginSides + kWidth - kBottomRightIconMargin, kPosY + kHeight - kBottomRightIconMargin)
-					.withRectWithOriginCentered(icon)
-					.withScale(1+abs(std::sin(mainClock*4.f))/4.f);
+				if (choices.empty()) {
+					GPU_Rect icon = isLast ? AnimLib::UI_ICON_CLOSE : AnimLib::UI_ICON_NEXT;
+					Window::Draw(Assets::spritesheetTexture, kMarginSides + kWidth - kBottomRightIconMargin, kPosY + kHeight - kBottomRightIconMargin)
+						.withRectWithOriginCentered(icon)
+						.withScale(1 + abs(std::sin(mainClock * 4.f)) / 4.f);
+				}
+				else {
+					float xIncrease = kWidth / (choices.size()+2);
+					vec choicesPos(bodyPos.x + xIncrease, bodyPos.y + body.Size().y * kFontScale);
+					float alignVertically = (kHeight - (choicesPos.y - kPosY)) / 2.f;
+					choicesPos.y += alignVertically;
+					for (const Text& text : choices) {
+						Window::Draw(text, choicesPos)
+							.withScale(kFontScale)
+							.withOrigin(text.Size()/2);
+						choicesPos.x += xIncrease;
+					}
+				}
 			}
 		}
 	}

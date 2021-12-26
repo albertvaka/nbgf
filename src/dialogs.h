@@ -7,8 +7,8 @@ const inline DialogCharacter randomNpcChar = { "Random NPC", AnimLib::PORTRAIT_R
 
 inline Dialog dialogWithRandomNpcWithChoices = {{
 	{"0", {randomNpcChar, "What's up?", {
-		{"Are you a sweet potato in disguise?", "answer"},
-		{"Nothing much, bye!", "bye"},
+		{"Wasup?", "answer"},
+		{"Nothing, bye!", "bye"},
 	}}},
 	{"answer", {randomNpcChar, "I'm not madafaca, I'm actually a doggo in disguise"}},
 	{"a", {protaChar, "I'm looking for a sweet potato"}},
