@@ -8,7 +8,7 @@
 
 inline std::vector<std::string> keysFromMap(const std::unordered_map<std::string, std::string>& maperino) {
 	std::vector<std::string> keys;
-	for (const std::pair<std::string, std::string>& item : maperino) {
+	for (const auto& item : maperino) {
 		keys.push_back(item.first);
 	}
 	return keys;
