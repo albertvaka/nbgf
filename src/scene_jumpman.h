@@ -27,6 +27,7 @@ struct JumpScene : Scene {
 	RotoText rotoText;
 	Entity* boss_bipedal;
 	Entity* boss_minotaur;
+	float test_anim_scale;
 	int saveSlot;
 
 	EnemyDoor* door_to_close_when_break_skill;

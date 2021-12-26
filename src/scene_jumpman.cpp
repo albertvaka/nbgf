@@ -40,6 +40,9 @@
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
 #include "tiled_objects_screens.h"
+#include "tiled_objects_triggers.h"
+#include "trigger.h"
+#include "cutscene.h"
 #include "dialogs.h"
 
 extern float mainClock;
@@ -341,6 +344,21 @@ void JumpScene::EnterScene()
 		}
 	}
 
+	test_anim_scale = 1.f;
+	/*
+	new Trigger("my_test_trigger", Tiled::Triggers::trigger_test[0], [this](Trigger* t) {
+		CutSceneBuilder(true).Play(1.0f, [this](float progress) {
+			this->test_anim_scale = 1.f+(progress*progress);
+		}).PlayOneFrame([this]() {
+			Assets::soundDeath.Play();
+		}).WaitAndThen().Play(1.0f, [this](float progress) {
+			this->test_anim_scale = 2.f - (progress * progress);
+		}).WaitAndThen().PlayOneFrame([t]() {
+			Debug::out << "cutscene done";
+		}).Start();
+	}, true);
+	*/
+
 	Camera::SetCenter(player.GetCameraTargetPos());
 
 	LoadGame();
@@ -369,6 +387,8 @@ bool JumpScene::UpdateCamera(float dt) {
 
 void JumpScene::ExitScene()
 {
+	Trigger::DeleteAll();
+	CutScene::DeleteAll();
 	Particles::ClearAll();
 	Bullet::DeleteAll();
 	Missile::DeleteAll();
@@ -430,7 +450,21 @@ void JumpScene::Update(float dt)
 		return;
 	}
 
+	bool cutScenePausingGame = false;
+	for (CutScene* e : CutScene::GetAll()) {
+		e->Update(dt);
+		cutScenePausingGame = cutScenePausingGame || e->pauseGame;
+	}
+	CutScene::DeleteNotAlive();
+	if (cutScenePausingGame) {
+		return;
+	}
+
 	player.Update(dt);
+
+	for (Trigger* e : Trigger::GetAll()) {
+		e->Update(dt);
+	}
 
 	screenManager.UpdateCurrentScreen(player.pos);
 
@@ -714,12 +748,13 @@ void JumpScene::Draw()
 		BigItem::GetAll(),
 		&Particles::itemSparks,
 		&player,
-		Lava::GetAll()
+		Lava::GetAll(),
+		Trigger::GetAll()
 	);
 
 	Window::Draw(Assets::warriorTexture, Tile::AlignToTiles(Tiled::Entities::single_npc)+vec(0,-6))
 		.withRect(Animation::GetRectAtTime(AnimLib::NPC_IDLE, mainClock))
-		.withScale(-1.2, 1.2);
+		.withScale(-1.2*test_anim_scale, 1.2);
 
 	if (contextActionButton) {
 		Window::Draw(Assets::spritesheetTexture, player.Bounds().TopRight() + vec(2, -6))

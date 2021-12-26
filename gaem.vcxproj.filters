@@ -376,6 +376,15 @@
     <ClInclude Include="src\dialogs.h">
       <Filter>src\gui</Filter>
     </ClInclude>
+    <ClInclude Include="src\trigger.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\tiled_objects_triggers.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cutscene.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -584,6 +593,12 @@
     </ClCompile>
     <ClCompile Include="src\particles.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigger.cpp">
+      <Filter>src\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\tiled_objects_triggers.cpp">
+      <Filter>generated</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
