@@ -27,6 +27,8 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	vec initialPos;
 	float initialVelX;
 	int screen;
+	bool walkingBackwards;
+	bool collideInnerRadius;
 
 	Mantis(vec position);
 
@@ -39,6 +41,8 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 
 	void TakeDamage(vec src);
 	void Reset();
+private:
+	void EnterWalkingState();
 
 };
 

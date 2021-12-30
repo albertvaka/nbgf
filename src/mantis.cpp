@@ -16,7 +16,8 @@ constexpr const float kSpeed = 60;
 constexpr const float kJumpSpeedY = -350;
 constexpr const float kMaxJumpSpeedX = 300;
 
-constexpr const float kAttackRadius = 310;
+constexpr const float kJumpRadius = 280;
+constexpr const float kMeleeRadius = 80;
 
 constexpr const float kScale = 1.5f;
 constexpr const float kMantisHealth = 5;
@@ -30,12 +31,13 @@ constexpr const float kSpriteRadius = 10.f* kScale;
 constexpr const vec kKnockbackVel(180.f, -150.f);
 constexpr const float kHitTime = 0.5f;
 
-constexpr const float kJumpCooldown = .25f;
-constexpr const float kJumpCooldownRand = .65f;
+constexpr const float kJumpCooldown = .3f;
+constexpr const float kJumpCooldownRand = 1.6f;
 
 Mantis::Mantis(vec pos)
-	: CircleEntity(pos - vec(0,8), kSpriteRadius)
+	: CircleEntity(pos - vec(0, 8), kSpriteRadius)
 	, anim(AnimLib::MANTIS_WALK)
+	, walkingBackwards(false)
 {
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
 	initialPos = this->pos;
@@ -89,28 +91,41 @@ void Mantis::Update(float dt)
 	}
 
 	JumpMan* player = JumpMan::instance();
-
+	collideInnerRadius = false;
 	switch (state)
 	{
 	case State::ATTACKING:
 	{
 		anim.Update(dt);
 		if (anim.IsComplete()) {
-			state = State::WALKING;
-			anim.Set(AnimLib::MANTIS_WALK);
+			EnterWalkingState();
 		}
 	}
 	break;
 	case State::WALKING: 
 	{
-		anim.Update(dt);
+		collideInnerRadius = Collide(CircleBounds(pos, kMeleeRadius), player->Bounds());
+
+		if (walkingBackwards && (collideInnerRadius || jumpCooldownTimer <= 0.f)) {
+			walkingBackwards = false;
+			vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
+		}
+
+		if (walkingBackwards) {
+			anim.UpdateReverse(dt);
+		}
+		else {
+			anim.Update(dt);
+		}
 
 		if (IsGoingToHitAWall(pos, kSpriteSize, vel, dt)
 			|| IsGoingToLeaveTheScreen(pos, kSpriteSize, vel, dt, screen)
 			|| IsBouncingAgainstAnotherMantis())
 		{
+			walkingBackwards = false;
 			vel.x = -vel.x;
 		} else if (IsGoingToRunOffPlatform(pos, vec(0.f, kSpriteSize.y), vel, dt)) {
+			walkingBackwards = false;
 			state = State::JUMP;
 			pos.y += 1.f;
 			vel.y += kGravityAcc * dt;
@@ -119,10 +134,14 @@ void Mantis::Update(float dt)
 
 		Particles::DoDustRun(vec(pos.x, pos.y + kSpriteSize.y / 2), dt/2.f, vel.y < 0, false); // Half the dt so we do less dust
 
-		auto ret = MoveAgainstTileMap(pos, kSpriteSize, vel, dt);
+		vec finalVel = vel;
+		if (collideInnerRadius) {
+			finalVel.x *= 1.5f;
+		}
+		auto ret = MoveAgainstTileMap(pos, kSpriteSize, finalVel, dt);
 		pos = ret.pos;
 
-		if (jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, kAttackRadius), player->Bounds()))
+		if (!collideInnerRadius && jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, kJumpRadius), player->Bounds()))
 		{
 			//Debug::out << "preparing";
 			initialPlayerPosition = player->pos;
@@ -168,15 +187,9 @@ void Mantis::Update(float dt)
 		pos = ret.pos;
 
 		if (ret.groundCollision != Tile::NONE) {
-			vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
-			if (hitTimer > kHitTime/2) {
-				vel.x = -vel.x; // If just hit move away instead of towards the player
-			}
-			vel.y = 0;
-			state = State::WALKING;
+			EnterWalkingState();
 			Particles::DoDustLand(vec(pos.x, pos.y + kSpriteSize.y/2));
 			jumpCooldownTimer = kJumpCooldown + Rand::rollf(kJumpCooldownRand);
-			anim.Set(AnimLib::MANTIS_WALK);
 		} else if (ret.ceilingCollision != Tile::NONE) {
 			vel.y = 0;
 		} else if (ret.leftWallCollision != Tile::NONE || ret.rightWallCollision != Tile::NONE) {
@@ -198,6 +211,7 @@ void Mantis::Update(float dt)
 			vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
 			state = State::ATTACKING;
 			anim.Set(AnimLib::MANTIS_ATTACK, false);
+			walkingBackwards = false;
 		}
 	}
 }
@@ -243,10 +257,18 @@ void Mantis::Draw() const
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
+	bool flip = vel.x > 0;
+	if (walkingBackwards) {
+		flip = !flip;
+	}
+
 	GPU_Rect rect = (state == State::JUMP) ? AnimLib::MANTIS_AIR : anim.CurrentFrameRect();
+	if (collideInnerRadius) {
+		rect.y += AnimLib::MANTIS_WALK->rect.h;
+	}
 	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRect(rect)
-		.withScale(vel.x> 0? -kScale : kScale, kScale)
+		.withScale(flip? -kScale : kScale, kScale)
 		.withOrigin(rect.w / 2, rect.h / 2);
 
 	Shader::Deactivate();
@@ -254,5 +276,20 @@ void Mantis::Draw() const
 	// Debug-only
 	Bounds().DebugDraw();
 	BoxBounds::FromCenter(pos, kSpriteSize).DebugDraw();
-	CircleBounds(pos, kAttackRadius).DebugDraw();
+	CircleBounds(pos, kJumpRadius).DebugDraw(COLOR_UINT8_RGB_YELLOW);
+	CircleBounds(pos, kMeleeRadius).DebugDraw(COLOR_UINT8_RGB_RED);
+}
+
+
+void Mantis::EnterWalkingState() {
+	JumpMan* player = JumpMan::instance();
+	vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
+	walkingBackwards = false;
+	if (hitTimer > kHitTime / 2 || Rand::OnceEvery(4)) {
+		walkingBackwards = true;
+		vel.x = -vel.x; // If just hit move away instead of towards the player
+	}
+	vel.y = 0;
+	state = State::WALKING;
+	anim.Set(AnimLib::MANTIS_WALK);
 }
