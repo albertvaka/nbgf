@@ -144,6 +144,7 @@
     <ClCompile Include="engine\savestate.cpp" />
     <ClCompile Include="engine\shader.cpp" />
     <ClCompile Include="engine\sound.cpp" />
+    <ClCompile Include="engine\text.cpp" />
     <ClCompile Include="engine\vec.cpp" />
     <ClCompile Include="engine\window.cpp" />
     <ClCompile Include="generated\tiled_objects_areas.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="src\bipedal.cpp" />
     <ClCompile Include="src\bullet.cpp" />
     <ClCompile Include="src\destroyedtiles.cpp" />
+    <ClCompile Include="src\dialogbox.cpp" />
     <ClCompile Include="src\enemy_door.cpp" />
     <ClCompile Include="src\fireshot.cpp" />
     <ClCompile Include="src\fireslime.cpp" />

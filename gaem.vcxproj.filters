@@ -600,6 +600,12 @@
     <ClCompile Include="generated\tiled_objects_triggers.cpp">
       <Filter>generated</Filter>
     </ClCompile>
+    <ClCompile Include="engine\text.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialogbox.cpp">
+      <Filter>src\gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">

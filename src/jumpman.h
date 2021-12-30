@@ -5,10 +5,8 @@
 #include "bounds.h"
 #include "animation.h"
 #include "screen.h"
-#include "debug.h"
 #include "tile.h"
 #include "singleinstance.h"
-#include "raw_input.h"
 
 struct SaveState;
 

@@ -41,3 +41,11 @@ struct DebugStream {
 namespace Debug {
     extern DebugStream out;
 };
+
+#define COLOR_UINT8_RGB_RED 255,0,0
+#define COLOR_UINT8_RGB_GREEN 0,255,0
+#define COLOR_UINT8_RGB_BLUE 0,0,255
+#define COLOR_UINT8_RGB_CYAN 0,255,255
+#define COLOR_UINT8_RGB_MAGENTA 255,0,255
+#define COLOR_UINT8_RGB_YELLOW 255,255,0
+
