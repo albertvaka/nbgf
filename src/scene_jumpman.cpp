@@ -214,7 +214,7 @@ void JumpScene::EnterScene()
 
 	new BigItem(Tiled::Entities::single_skill_walljump, Skill::WALLJUMP);
 	new BigItem(Tiled::Entities::single_skill_gun, Skill::GUN);
-	BigItem* break_skill = new BigItem(Tiled::Entities::single_skill_breakblocks, Skill::BREAK);
+	new BigItem(Tiled::Entities::single_skill_breakblocks, Skill::BREAK);
 	new BigItem(Tiled::Entities::single_skill_attack, Skill::ATTACK);
 	new BigItem(Tiled::Entities::single_skill_dive, Skill::DIVE);
 	new BigItem(Tiled::Entities::single_skill_dash, Skill::DASH);

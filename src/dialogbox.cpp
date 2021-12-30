@@ -1,5 +1,3 @@
-#pragma once
-
 #include "dialogbox.h"
 
 #include "anim_lib.h"
