@@ -13,12 +13,12 @@
 namespace Mates
 {
 	//a few useful constants
-	const constexpr int     MaxInt = (std::numeric_limits<int>::max)();
-	const constexpr int     MinInt = (std::numeric_limits<int>::min)();
-	const constexpr double  MaxDouble = (std::numeric_limits<double>::max)();
-	const constexpr double  MinDouble = (std::numeric_limits<double>::min)();
-	const constexpr float   MaxFloat = (std::numeric_limits<float>::max)();
-	const constexpr float   MinFloat = (std::numeric_limits<float>::min)();
+	constinit const int     MaxInt = (std::numeric_limits<int>::max)();
+	constinit const int     MinInt = (std::numeric_limits<int>::min)();
+	constinit const double  MaxDouble = (std::numeric_limits<double>::max)();
+	constinit const double  MinDouble = (std::numeric_limits<double>::min)();
+	constinit const float   MaxFloat = (std::numeric_limits<float>::max)();
+	constinit const float   MinFloat = (std::numeric_limits<float>::min)();
 
 	//returns true if the parameter is equal to zero
 	[[nodiscard]] inline bool IsZero(float val)

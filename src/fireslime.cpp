@@ -9,23 +9,25 @@
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
 
-constexpr const float kSpeed = 25;
+constinit const float kSpeed = 25;
 
-constexpr const vec kShotSpeed(70, -90);
-constexpr const vec kShotAccel(0, 150);
+constinit const vec kShotSpeed(70, -90);
+constinit const vec kShotAccel(0, 150);
 
-constexpr const float kSpriteScale = 1.3f;
-constexpr const float kSpriteOffsetY = 7.f;
+constinit const float kSpriteScale = 1.3f;
+constinit const float kSpriteOffsetY = 7.f;
 
-constexpr const int kFirstFrameOnAir = 2;
-constexpr const int kFirstFrameOnGround = 7;
-constexpr const int kFrameShooting = 2;
+constinit const int kFirstFrameOnAir = 2;
+constinit const int kFirstFrameOnGround = 7;
+constinit const int kFrameShooting = 2;
 
-constexpr const float kShotsPerAttack = 4;
-constexpr const float kAttackFrameDuration = AnimLib::FIRESLIME_ATTACK[kFrameShooting].duration;
-constexpr const float kTimeBetweenShots = kAttackFrameDuration / kShotsPerAttack;
+constinit const float kShotsPerAttack = 4;
+constinit const float kAttackFrameDuration = AnimLib::FIRESLIME_ATTACK[kFrameShooting].duration;
+constinit const float kTimeBetweenShots = kAttackFrameDuration / kShotsPerAttack;
+constinit const int framesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
+constinit const float bigDt = Animation::TotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, framesOnAir);
 
-constexpr const vec kGroundCollision = vec(10, 10) * kSpriteScale;
+constinit const vec kGroundCollision = vec(10, 10) * kSpriteScale;
 
 FireSlime::FireSlime(vec pos)
 	: CircleEntity(pos - vec(0, kSpriteOffsetY), 5*kSpriteScale)
@@ -47,8 +49,6 @@ BoxBounds FireSlime::AttackBounds() const
 
 bool FireSlime::CanMoveForward() const
 {
-	constexpr int framesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
-	constexpr const float bigDt = Animation::TotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, framesOnAir);
 	vec vel = vec(kSpeed * direction, 0);
 
 	return !IsGoingToHitAWall(pos, kGroundCollision, vel, bigDt) && !IsGoingToRunOffPlatform(pos, kGroundCollision, vel, bigDt);

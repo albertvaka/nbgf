@@ -8,16 +8,16 @@
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
 
-constexpr const float speed = 25;
-constexpr const float chargeSpeed = 100;
+constinit const float speed = 25;
+constinit const float chargeSpeed = 100;
 
-constexpr const float enterChargeTime = 0.35f;
-constexpr const float exitChargeTime = 0.2f;
+constinit const float enterChargeTime = 0.35f;
+constinit const float exitChargeTime = 0.2f;
 
 // Area in front of it that if intersects with the player will trigger a charge towards them
-constexpr const vec playerNearbyArea = vec(Tile::Size * 11, Tile::Size * 2);
+constinit const vec playerNearbyArea = vec(Tile::Size * 11, Tile::Size * 2);
 
-constexpr const vec size = AnimLib::GOOMBA[0].GetSize();
+constinit const vec size = AnimLib::GOOMBA[0].GetSize();
 
 Goomba::Goomba(vec pos, bool isCharger)
 	: CircleEntity(pos - vec(0,8), 6)

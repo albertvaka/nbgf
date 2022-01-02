@@ -219,17 +219,18 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -277,11 +278,12 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <PreprocessorDefinitions>_IMGUI;SDL_MAIN_HANDLED;GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)\vendor\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -295,12 +297,14 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <PreprocessorDefinitions>_IMGUI;SDL_MAIN_HANDLED;GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SupportJustMyCode>true</SupportJustMyCode>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TranslateIncludes />
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)\vendor\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -316,9 +320,10 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -337,9 +342,10 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -7,21 +7,21 @@
 #include "input.h"
 #include "camera.h"
 
-constexpr const static float kPadding = 12;
-constexpr const static float kSpaceBetweenTitleAndBody = 6;
-constexpr const static float kFontScale = 0.5f;
-constexpr const static float kPortraitScale = 2;
-constexpr const static float kMarginSides = 32;
-constexpr const static float kMarginBottom = 22;
-constexpr const static float kBottomRightIconMargin = 20;
-constexpr const static float kPortraitWidth = AnimLib::PORTRAIT_WARRIOR.w * kPortraitScale;
-constexpr const static float kPortraitHeight = AnimLib::PORTRAIT_WARRIOR.h * kPortraitScale;
-constexpr const static float kWidth = Window::GAME_WIDTH - 2 * kMarginSides;
-constexpr const static float kHeight = kPortraitHeight + 2 * kPadding;
-constexpr const static float kPosY = Window::GAME_HEIGHT - kHeight - kMarginBottom;
-constexpr const static float kMaxLineWidth = kWidth - 3 * kPadding - kPortraitWidth;
-constexpr const static float kTimeToOpenClose = 0.2f;
 
+constinit const static float kPadding = 12;
+constinit const static float kSpaceBetweenTitleAndBody = 6;
+constinit const static float kFontScale = 0.5f;
+constinit const static float kPortraitScale = 2;
+constinit const static float kMarginSides = 32;
+constinit const static float kMarginBottom = 22;
+constinit const static float kBottomRightIconMargin = 20;
+constinit const static float kPortraitWidth = AnimLib::PORTRAIT_WARRIOR.w * kPortraitScale;
+constinit const static float kPortraitHeight = AnimLib::PORTRAIT_WARRIOR.h * kPortraitScale;
+constinit const static float kWidth = Window::GAME_WIDTH - 2 * kMarginSides;
+constinit const static float kHeight = kPortraitHeight + 2 * kPadding;
+constinit const static float kPosY = Window::GAME_HEIGHT - kHeight - kMarginBottom;
+constinit const static float kMaxLineWidth = kWidth - 3 * kPadding - kPortraitWidth;
+constinit const static float kTimeToOpenClose = 0.2f;
 void Render9Slice(GPU_Image* s,	float x, float y, float w, float h, float top, float bottom, float left, float right, bool repeat = false);
 
 DialogBox::DialogBox()

@@ -3,7 +3,7 @@
 #include "entity.h"
 #include "selfregister.h"
 
-constexpr const float kFireShotRadius = 2.f;
+constinit const float kFireShotRadius = 2.f;
 
 struct FireShot : CircleEntity, SelfRegister<FireShot>
 {
