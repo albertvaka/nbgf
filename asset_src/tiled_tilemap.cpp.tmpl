@@ -4,7 +4,7 @@ namespace Tiled {
 
 const vec TileMap::Size = vec({{ width }}, {{ height }});
 
-const uint8_t TileMap::Map[] = {
+const uint16_t TileMap::Map[] = {
     {% for t in map -%}
 		{%- if debug -%}
 			{%- if t == 0 -%}{{ ' ' }}{%- else -%}{{ 'x' }}{% endif %} 

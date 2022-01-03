@@ -38,7 +38,7 @@ struct Tile {
 	static BoxBounds Bounds(int x, int y) { return BoxBounds(x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size); }
 	static BoxBounds Bounds(veci pos) { return Bounds(pos.x, pos.y); }
 
-	enum Value : uint8_t
+	enum Value : uint16_t
 	{
 		NONE = 0,
 		BG_1,
@@ -190,6 +190,46 @@ struct Tile {
 		BG_147,
 		BG_148,
 		BG_149,
+		BG_150,
+		BG_151,
+		BG_152,
+		BG_153,
+		BG_154,
+		BG_155,
+		BG_156,
+		BG_157,
+		BG_158,
+		BG_159,
+		BG_160,
+		BG_161,
+		BG_162,
+		BG_163,
+		BG_164,
+		BG_165,
+		BG_166,
+		BG_167,
+		BG_168,
+		BG_169,
+		BG_170,
+		BG_171,
+		BG_172,
+		BG_173,
+		BG_174,
+		BG_175,
+		BG_176,
+		BG_177,
+		BG_178,
+		BG_179,
+		BG_180,
+		BG_181,
+		BG_182,
+		BG_183,
+		BG_184,
+		BG_185,
+		BG_186,
+		BG_187,
+		BG_188,
+		BG_189,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -237,8 +277,36 @@ struct Tile {
 		SOLID_24,
 		SOLID_25,
 		SOLID_26,
+		SOLID_27,
+		SOLID_28,
+		SOLID_29,
+		SOLID_30,
+		SOLID_31,
+		SOLID_32,
+		SOLID_33,
+		SOLID_34,
+		SOLID_35,
+		SOLID_36,
+		SOLID_37,
+		SOLID_38,
+		SOLID_39,
+		SOLID_40,
+		SOLID_41,
+		SOLID_42,
+		SOLID_43,
+		SOLID_44,
+		SOLID_45,
+		SOLID_46,
+		SOLID_47,
+		SOLID_48,
+		SOLID_49,
+		SOLID_50,
+		SOLID_51,
+		SOLID_52,
 		BREAKABLE_1,
 		BREAKABLE_2,
+		BREAKABLE_3,
+		BREAKABLE_4,
 		BREAKABLE_HARD_1,
 		BREAKABLE_HARD_2,
 		BREAKABLE_GND_1,
@@ -246,18 +314,20 @@ struct Tile {
 	};
 
 	// Aliases
-	static constexpr Value BG_PLAIN_COLOR = BG_35;
-	static constexpr Value BG_DOOR_OPENING = BG_52;
+	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_17;
+	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_60;
+	static constexpr Value BG_DOOR_OPENING = BG_81;
 	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
 	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
-	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_1;
-	static constexpr Value SOLID_SIMPLE = SOLID_4;
-	static constexpr Value SOLID_PLAIN_COLOR = SOLID_17;
-	static constexpr Value SOLID_DOOR = SOLID_18;
-	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_19;
-	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_1;
-	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_2;
-	static constexpr Value BREAKABLE_HARD_EXPLOSIVE_BLOCK = BREAKABLE_HARD_2;
+	static constexpr Value SOLID_SIMPLE = SOLID_12;
+	static constexpr Value SOLID_DOOR = SOLID_33;
+	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_40;
+	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_46;
+	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_1;
+	static constexpr Value BREAKABLE_COVERING_CAVE_FLOOR = BREAKABLE_2;
+	static constexpr Value BREAKABLE_COVERING_CAVE_CEILING = BREAKABLE_3;
+	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_4;
+	static constexpr Value BREAKABLE_HARD_EXPLOSIVE_BLOCK = BREAKABLE_HARD_1;
 
 	constexpr operator Value() const { return value; }  // Allow switch and comparisons.
 	explicit constexpr operator bool() = delete;        // Prevent if(tile)

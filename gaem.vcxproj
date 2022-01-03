@@ -55,6 +55,7 @@
     <ClInclude Include="generated\tiled_objects_entities.h" />
     <ClInclude Include="generated\tiled_objects_screens.h" />
     <ClInclude Include="generated\tiled_objects_triggers.h" />
+    <ClInclude Include="generated\tiled_objects_zones.h" />
     <ClInclude Include="generated\tiled_tilemap.h" />
     <ClInclude Include="generated\tiled_tile.h" />
     <ClInclude Include="src\cutscene.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="src\steering_entity.h" />
     <ClInclude Include="src\trigger.h" />
     <ClInclude Include="src\window_conf.h" />
+    <ClInclude Include="src\zonemanager.h" />
     <ClInclude Include="vendor\glew\glew.h" />
     <ClInclude Include="vendor\glew\glxew.h" />
     <ClInclude Include="vendor\glew\wglew.h" />
@@ -151,6 +153,7 @@
     <ClCompile Include="generated\tiled_objects_entities.cpp" />
     <ClCompile Include="generated\tiled_objects_screens.cpp" />
     <ClCompile Include="generated\tiled_objects_triggers.cpp" />
+    <ClCompile Include="generated\tiled_objects_zones.cpp" />
     <ClCompile Include="generated\tiled_tile.cpp" />
     <ClCompile Include="generated\tiled_tilemap.cpp" />
     <ClCompile Include="src\assets.cpp" />

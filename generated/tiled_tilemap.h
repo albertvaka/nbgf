@@ -5,7 +5,7 @@
 namespace Tiled {
 
 struct TileMap {
-	static const uint8_t Map[];
+	static const uint16_t Map[];
 	static const vec Size;
 };
 

@@ -228,8 +228,9 @@ for objects in object_layers:
 
 
 print("Total different tiles used:", len(gids_used))
-if len(gids_used) > 255:
-    print("Warning: There are more than 255 tiles used, but we try to represent them as a uint8!")
+# We use uint16 now
+#if len(gids_used) > 255:
+#    print("Warning: There are more than 255 tiles used, but we try to represent them as a uint8!")
 
 # Tileset
 tm = Template(Path('tiled_tile.h.tmpl').read_text())

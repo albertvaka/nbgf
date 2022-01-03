@@ -4,9 +4,6 @@ namespace Tiled {
 
 
 const std::unordered_map<int, vec> Entities::angrybat = {
-	{ 678, vec(4896.3785f, 1166.818f) },
-	{ 679, vec(4768.5154999999995f, 1134.818f) },
-	{ 680, vec(4864.4015f, 1103.182f) },
 	{ 691, vec(3662.833333333333f, 1550.166666666667f) },
 	{ 697, vec(3616.5f, 1315.25f) },
 	{ 724, vec(3941.404f, 1227.7505f) },
@@ -19,6 +16,9 @@ const std::unordered_map<int, vec> Entities::angrybat = {
 	{ 922, vec(4048.5f, 2288.5f) },
 	{ 924, vec(3663.333333333333f, 2256.666666666667f) },
 	{ 1022, vec(5414.66666666667f, 1443.666666666667f) },
+	{ 1027, vec(5328.04666666667f, 476.4846666666699f) },
+	{ 1028, vec(5200.18666666667f, 444.4846666666699f) },
+	{ 1029, vec(5296.066666666669f, 412.84866666666994f) },
 };
 
 const std::unordered_map<int, vec> Entities::angrybatawake = {
@@ -100,9 +100,9 @@ const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 906, vec(6360.5f, 2544.5f) },
 	{ 908, vec(3058.0f, 2098.5f) },
 	{ 1003, vec(3105.6666666666665f, 1057.0f) },
-	{ 1014, vec(5537.81818181818f, 1569.181818181818f) },
 	{ 1019, vec(2802.363636363637f, 1920.909090909091f) },
 	{ 1020, vec(378.0f, 833.666666666667f) },
+	{ 1025, vec(6001.5f, 1200.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::explosive = {
@@ -172,7 +172,7 @@ const std::unordered_map<int, vec> Entities::healthup = {
 	{ 808, vec(3528.666666666667f, 2242.333333333333f) },
 	{ 892, vec(6192.5f, 2239.0f) },
 	{ 896, vec(6912.0f, 2001.333333333333f) },
-	{ 1018, vec(6074.0f, 1592.0f) },
+	{ 1033, vec(6052.66666666667f, 1229.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::initial_batawake = {
@@ -211,9 +211,9 @@ const std::unordered_map<int, vec> Entities::rocket_launcher = {
 const std::unordered_map<int, vec> Entities::save = {
 	{ 126, vec(2993.5336f, 1935.114f) },
 	{ 213, vec(1041.0f, 2265.0f) },
-	{ 681, vec(5147.4845000000005f, 1163.8490000000002f) },
 	{ 895, vec(6665.0f, 2110.0f) },
 	{ 1002, vec(6071.75f, 2493.5f) },
+	{ 1031, vec(4407.0f, 1130.25f) },
 };
 
 const std::unordered_map<int, vec> Entities::skill_attack = {
@@ -223,9 +223,9 @@ const vec Entities::single_skill_attack = vec(1272.37f, 1946.0f);
 
 
 const std::unordered_map<int, vec> Entities::skill_breakblocks = {
-	{ 1013, vec(5856.91666666667f, 1593.666666666667f) },
+	{ 1013, vec(6127.91666666667f, 1593.666666666667f) },
 };
-const vec Entities::single_skill_breakblocks = vec(5856.91666666667f, 1593.666666666667f);
+const vec Entities::single_skill_breakblocks = vec(6127.91666666667f, 1593.666666666667f);
 
 
 const std::unordered_map<int, vec> Entities::skill_dash = {

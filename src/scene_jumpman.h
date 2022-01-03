@@ -8,6 +8,7 @@
 #include "screen.h"
 #include "input.h"
 #include "rototext.h"
+#include "zonemanager.h"
 #include "dialogdriver.h"
 
 struct Lava;
@@ -27,6 +28,7 @@ struct JumpScene : Scene {
 	RotoText rotoText;
 	Entity* boss_bipedal;
 	Entity* boss_minotaur;
+	ZoneManager zoneManager;
 	float test_anim_scale;
 	int saveSlot;
 

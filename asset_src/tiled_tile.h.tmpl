@@ -38,7 +38,7 @@ struct Tile {
 	static BoxBounds Bounds(int x, int y) { return BoxBounds(x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size); }
 	static BoxBounds Bounds(veci pos) { return Bounds(pos.x, pos.y); }
 
-	enum Value : uint8_t
+	enum Value : uint16_t
 	{
 		NONE = 0,
 		{% for t in gids -%}

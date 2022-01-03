@@ -385,6 +385,12 @@
     <ClInclude Include="src\cutscene.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="generated\tiled_objects_zones.h">
+      <Filter>generated</Filter>
+    </ClInclude>
+    <ClInclude Include="src\zonemanager.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -605,6 +611,9 @@
     </ClCompile>
     <ClCompile Include="src\dialogbox.cpp">
       <Filter>src\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\tiled_objects_zones.cpp">
+      <Filter>generated</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,10 +8,10 @@
 
 namespace Tiled {
 
-struct Screens {
+struct Zones {
 
 	// Bounds
-	static const std::array<BoxBounds, 30> screen;
+	static const std::array<BoxBounds, 1> cave;
 
 };
 

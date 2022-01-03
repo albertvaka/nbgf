@@ -12,7 +12,7 @@ extern float mainClock;
 
 bool BigItem::HasPedestal() const
 {
-	return skill != Skill::BREAK;
+	return true;
 }
 
 void BigItem::Draw() const
@@ -47,10 +47,15 @@ void BigItem::Update(float dt)
 	if (!HasPedestal()) {
 		return;
 	}
-	vec tilePos = Tile::AlignToTiles(pos);
-	Particles::itemSparks.pos.y = tilePos.y + 16;
-	Particles::itemSparks.pos.x = Rand::roll(tilePos.x - 13, tilePos.x + 13);
-	Particles::itemSparks.SpawnWithExternalTimer(particleTimer, dt);
+	if (skill == Skill::BREAK) {
+		// Cave pedestal
+	}
+	else {
+		vec tilePos = Tile::AlignToTiles(pos);
+		Particles::itemSparks.pos.y = tilePos.y + 16;
+		Particles::itemSparks.pos.x = Rand::roll(tilePos.x - 13, tilePos.x + 13);
+		Particles::itemSparks.SpawnWithExternalTimer(particleTimer, dt);
+	}
 }
 
 void BigItem::DrawPedestal() const

@@ -363,6 +363,8 @@ void JumpScene::EnterScene()
 
 	LoadGame();
 
+	zoneManager.Reset();
+
 	Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([this](float dt){
 		UpdateCamera(dt);
 	});
@@ -371,6 +373,8 @@ void JumpScene::EnterScene()
 }
 
 bool JumpScene::UpdateCamera(float dt) {
+	zoneManager.Update(dt);
+
 	float camZoom = Fx::FreezeImage::IsFrozen() && player.justHit ? 1.5f : 1.f;
 	float oldZoom = Camera::Zoom();
 	float zoomChange = camZoom - oldZoom;
@@ -710,7 +714,7 @@ void JumpScene::Draw()
 {
 	Fx::FullscreenShader::Activate(); // Does nothing if no shader is set
 
-	Window::Clear(31, 36, 50);
+	Window::Clear(zoneManager.GetBgColor());
 
 	for (const Parallax* g : Parallax::GetAll()) {
 		g->Draw();

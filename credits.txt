@@ -1,13 +1,14 @@
 Code
-Tile collision algorithm by Jordi Santiago
-Steering behaviours based on work from Mat Buckland
+Tile collision algorithm based on work by Jordi Santiago
+Steering behaviours based on work by Mat Buckland
 
 Art
 Main character sprite by Clembod https://clembod.itch.io
 Forest background by David Marah https://itch.io/profile/aethrall
 Tileset by Robert Norenberg https://0x72.itch.io/
 Bat sprite by Avery https://forums.rpgmakerweb.com/index.php?members/avery.5315/
-Flying Alien and Bipedal sprites by Luis Zuno https://ansimuz.itch.io/
+Flying Alien and Bipedal sprites by Luis Zuno (@ansimuz) https://ansimuz.itch.io/
+Rock cave tiles by Luis Zuno (@ansimuz) https://ansimuz.itch.io/
 Minotaur sprite by Elthen's Pixel Art Shophttps://elthen.itch.io/
 Fire slime sprite by Henry Software https://henrysoftware.itch.io/
 Outside background by saurabhkgp https://saurabhkgp.itch.io/
@@ -16,3 +17,4 @@ Fire background by Ironthunder https://opengameart.org/users/ironthunder
 Dialog sounds by Chris Logsdon https://chrislsound.itch.io/text-dialogue-sfx-pack
 Portraits by Kiddolink https://kiddolink.itch.io/fantasy-npc-non-playable-characters-pack
 Knight NPC by Szadi Art https://szadiart.itch.io/2d-soulslike-character
+Jar sprites by Startled Pixels https://startledpixels.itch.io/2d-pixel-item-asset-pack

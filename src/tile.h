@@ -55,6 +55,10 @@ struct Tile : Tiled::Tile
 	Tile GetTileBehind() const { // What's "behind" of this tile when it breaks
 		if (value == Tile::BREAKABLE_COVERING_ONEWAY || isBreakableGround()) {
 			return Tile::ONEWAY_BEHIND_BREAKABLE;
+		} else if (value == Tile::BREAKABLE_COVERING_CAVE_CEILING) {
+			return Tile::BG_CAVE_CEILING_BEHIND_BREAKABLE;
+		} else if (value == Tile::BREAKABLE_COVERING_CAVE_FLOOR) {
+			return Tile::BG_CAVE_FLOOR_BEHIND_BREAKABLE;
 		} else {
 			return Tile::NONE;
 		}

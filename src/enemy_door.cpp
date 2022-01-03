@@ -64,7 +64,7 @@ bool EnemyDoor::OpenOneStep() // returns true if there are more steps remaining
 			return true;
 		}
 		else if (t == Tile::BG_DOOR_OPENING) {
-			map->SetTile(tilepos.x, tilepos.y + y, Tile::BG_PLAIN_COLOR);
+			map->SetTile(tilepos.x, tilepos.y + y, Tile::NONE);
 			map->SetTile(tilepos.x, tilepos.y + y - 1, Tile::SOLID_DOOR_BOTTOM);
 			return true;
 		}
