@@ -26,6 +26,9 @@ constexpr const float kAttackFrameDuration = AnimLib::FIRESLIME_ATTACK[kFrameSho
 constexpr const float kTimeBetweenShots = kAttackFrameDuration / kShotsPerAttack;
 
 constexpr const vec kGroundCollision = vec(10, 10) * kSpriteScale;
+constexpr const int kFramesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
+constexpr const float kBigDt = Animation::TotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, kFramesOnAir);
+
 
 FireSlime::FireSlime(vec pos)
 	: CircleEntity(pos - vec(0, kSpriteOffsetY), 5*kSpriteScale)
@@ -47,11 +50,8 @@ BoxBounds FireSlime::AttackBounds() const
 
 bool FireSlime::CanMoveForward() const
 {
-	constexpr int framesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
-	constexpr const float bigDt = Animation::TotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, framesOnAir);
 	vec vel = vec(kSpeed * direction, 0);
-
-	return !IsGoingToHitAWall(pos, kGroundCollision, vel, bigDt) && !IsGoingToRunOffPlatform(pos, kGroundCollision, vel, bigDt);
+	return !IsGoingToHitAWall(pos, kGroundCollision, vel, kBigDt) && !IsGoingToRunOffPlatform(pos, kGroundCollision, vel, kBigDt);
 }
 
 void FireSlime::Update(float dt)
