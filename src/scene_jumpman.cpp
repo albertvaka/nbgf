@@ -27,6 +27,7 @@
 #include "minotaur.h"
 #include "collide.h"
 #include "rototext.h"
+#include "ooy.h"
 #include "goomba.h"
 #include "flyingalien.h"
 #include "drawall.h"
@@ -274,6 +275,13 @@ void JumpScene::EnterScene()
 		}
 	}
 
+	for (auto const& [id, pos] : Tiled::Entities::ooy) {
+		auto b = new Ooy(pos);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
 	for (auto const& [id, pos] : Tiled::Entities::goombacharger) {
 		auto b = new Goomba(pos,true);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
@@ -399,6 +407,7 @@ void JumpScene::ExitScene()
 	FireShot::DeleteAll();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
+	Ooy::DeleteAll();
 	RocketLauncher::DeleteAll();
 	Minotaur::DeleteAll();
 	Mantis::DeleteAll();
@@ -505,6 +514,10 @@ void JumpScene::Update(float dt)
 	}
 
 	for (Goomba* e : Goomba::GetAll()) {
+		e->Update(dt);
+	}
+
+	for (Ooy* e : Ooy::GetAll()) {
 		e->Update(dt);
 	}
 
@@ -620,6 +633,7 @@ void JumpScene::Update(float dt)
 	Bat::DeleteNotAlive();
 	Minotaur::DeleteNotAlive();
 	Goomba::DeleteNotAlive();
+	Ooy::DeleteNotAlive();
 	FlyingAlien::DeleteNotAlive();
 	Mantis::DeleteNotAlive();
 	FireSlime::DeleteNotAlive();
@@ -733,6 +747,7 @@ void JumpScene::Draw()
 		EnemyDoor::GetAll(),
 		OneShotAnim::GetAll(),
 		Goomba::GetAll(),
+		Ooy::GetAll(),
 		Minotaur::GetAll(),
 		FlyingAlien::GetAll(),
 		FireSlime::GetAll(),

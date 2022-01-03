@@ -284,39 +284,50 @@ namespace AnimLib {
 	{ { 497, 617 + 3 * 45, 30, 45}, .1f },
 	};
 
-	const constexpr SheetFrameCalculator warriorSheet(70.f, 48.f, 6, .1f);
+	const constexpr SheetFrameCalculator ooySheet({ 30.f, 30.f }, 15, { 0.f, 390.f });
+	constexpr const GPU_Rect OOY_IDLE = ooySheet.Rect(0);
+	constexpr const AnimationFrame OOY_CHANGE_STATE[] = {
+		ooySheet.Frame(4, .1f),
+		ooySheet.Frame(5, .1f),
+	};
+	constexpr const GPU_Rect OOY_CHASE_NE = ooySheet.Rect(5);
+	constexpr const GPU_Rect OOY_CHASE_NW = ooySheet.Rect(6);
+	constexpr const GPU_Rect OOY_CHASE_SW = ooySheet.Rect(7);
+	constexpr const GPU_Rect OOY_CHASE_SE = ooySheet.Rect(8);
+
+	const constexpr SheetFrameCalculator warriorSheet({ 70.f, 48.f }, 6);
 	constexpr const AnimationFrame WARRIOR_IDLE[] = { warriorSheet.Frame(5, 1.f), warriorSheet.Frame(0, 1.0f), };
-	constexpr const std::array<AnimationFrame, 8> WARRIOR_RUN = warriorSheet.Frames<8>(6);
-	constexpr const std::array<AnimationFrame, 2> WARRIOR_PULL_SWORD_OUT = warriorSheet.Frames<2>(14);
+	constexpr const std::array<AnimationFrame, 8> WARRIOR_RUN = warriorSheet.Frames<8>(6, .1f);
+	constexpr const std::array<AnimationFrame, 2> WARRIOR_PULL_SWORD_OUT = warriorSheet.Frames<2>(14, .1f);
 	constexpr const std::array<AnimationFrame, 3> WARRIOR_ATTACK_UP = {
 		warriorSheet.Frame(22, .035f),
 		warriorSheet.Frame(23, .1f),
 		warriorSheet.Frame(24, .1f),
 	};
-	//constexpr const std::array<AnimationFrame, 4> WARRIOR_ATTACK = warriorSheet.Frames<4>(18);
-	//constexpr const std::array<AnimationFrame, 4> WARRIOR_COMBO = warriorSheet.Frames<4>(22);
-	constexpr const std::array<AnimationFrame, 11> WARRIOR_DEATH = warriorSheet.Frames<11>(26);
-	constexpr const std::array<AnimationFrame, 3> WARRIOR_HURT = warriorSheet.Frames<3>(38); //skip first 1
-	constexpr const std::array<AnimationFrame, 3> WARRIOR_JUMP = warriorSheet.Frames<3>(42);
-	constexpr const std::array<AnimationFrame, 2> WARRIOR_JUMP_TO_FALL = warriorSheet.Frames<2>(44);
-	constexpr const std::array<AnimationFrame, 3> WARRIOR_FALL = warriorSheet.Frames<3>(46);
-	constexpr const std::array<AnimationFrame, 5> WARRIOR_EDGE_GRAB = warriorSheet.Frames<5>(49);
-	constexpr const std::array<AnimationFrame, 6> WARRIOR_EDGE_IDLE = warriorSheet.Frames<6>(54);
-	constexpr const std::array<AnimationFrame, 3> WARRIOR_WALL_SLIDE = warriorSheet.Frames<3>(60);
-	constexpr const std::array<AnimationFrame, 3> WARRIOR_CROUCH = warriorSheet.Frames<3>(63);
-	constexpr const std::array<AnimationFrame, 2> WARRIOR_STANDUP = warriorSheet.Frames<2>(67); //skip first 1
-	constexpr const std::array<AnimationFrame, 4> WARRIOR_DASH = warriorSheet.Frames<4>(69);
-	constexpr const std::array<AnimationFrame, 4> WARRIOR_DASH_STOP = warriorSheet.Frames<4>(73);
-	constexpr const std::array<AnimationFrame, 9> WARRIOR_DASH_ATTACK = warriorSheet.Frames<9>(77);
-	constexpr const std::array<AnimationFrame, 5> WARRIOR_SLIDE = warriorSheet.Frames<5>(86);
-	constexpr const std::array<AnimationFrame, 8> WARRIOR_CLIMB = warriorSheet.Frames<8>(91);
+	//constexpr const std::array<AnimationFrame, 4> WARRIOR_ATTACK = warriorSheet.Frames<4>(18, .1f);
+	//constexpr const std::array<AnimationFrame, 4> WARRIOR_COMBO = warriorSheet.Frames<4>(22, .1f);
+	constexpr const std::array<AnimationFrame, 11> WARRIOR_DEATH = warriorSheet.Frames<11>(26, .1f);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_HURT = warriorSheet.Frames<3>(38, .1f); //skip first 1
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_JUMP = warriorSheet.Frames<3>(42, .1f);
+	constexpr const std::array<AnimationFrame, 2> WARRIOR_JUMP_TO_FALL = warriorSheet.Frames<2>(44, .1f);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_FALL = warriorSheet.Frames<3>(46, .1f);
+	constexpr const std::array<AnimationFrame, 5> WARRIOR_EDGE_GRAB = warriorSheet.Frames<5>(49, .1f);
+	constexpr const std::array<AnimationFrame, 6> WARRIOR_EDGE_IDLE = warriorSheet.Frames<6>(54, .1f);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_WALL_SLIDE = warriorSheet.Frames<3>(60, .1f);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_CROUCH = warriorSheet.Frames<3>(63, .1f);
+	constexpr const std::array<AnimationFrame, 2> WARRIOR_STANDUP = warriorSheet.Frames<2>(67, .1f); //skip first 1
+	constexpr const std::array<AnimationFrame, 4> WARRIOR_DASH = warriorSheet.Frames<4>(69, .1f);
+	constexpr const std::array<AnimationFrame, 4> WARRIOR_DASH_STOP = warriorSheet.Frames<4>(73, .1f);
+	constexpr const std::array<AnimationFrame, 9> WARRIOR_DASH_ATTACK = warriorSheet.Frames<9>(77, .1f);
+	constexpr const std::array<AnimationFrame, 5> WARRIOR_SLIDE = warriorSheet.Frames<5>(86, .1f);
+	constexpr const std::array<AnimationFrame, 8> WARRIOR_CLIMB = warriorSheet.Frames<8>(91, .1f);
 	constexpr const std::array<AnimationFrame, 3> WARRIOR_WALL_SLIDE_ATTACK = {
 		warriorSheet.Frame(99, .035f),
 		warriorSheet.Frame(100, .1f),
 		warriorSheet.Frame(101, .1f),
 	};
-	constexpr const std::array<AnimationFrame, 1> WARRIOR_ATTACK_DOWN_TRANSITION = warriorSheet.Frames<1>(102);
-	constexpr const std::array<AnimationFrame, 3> WARRIOR_ATTACK_DOWN = warriorSheet.Frames<3>(103);
+	constexpr const std::array<AnimationFrame, 1> WARRIOR_ATTACK_DOWN_TRANSITION = warriorSheet.Frames<1>(102, .1f);
+	constexpr const std::array<AnimationFrame, 3> WARRIOR_ATTACK_DOWN = warriorSheet.Frames<3>(103, .1f);
 	constexpr const AnimationFrame WARRIOR_TURN[] = { warriorSheet.Frame(12*6+1, 1.f) };
 	constexpr const std::array<AnimationFrame, 3> WARRIOR_MOVING_ATTACK = { // skip first 2 and last 5 of DASH_ATTACK
 		warriorSheet.Frame(78, .035f),

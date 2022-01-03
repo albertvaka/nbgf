@@ -385,6 +385,9 @@
     <ClInclude Include="src\cutscene.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\ooy.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
     <ClInclude Include="generated\tiled_objects_zones.h">
       <Filter>generated</Filter>
     </ClInclude>
@@ -611,6 +614,9 @@
     </ClCompile>
     <ClCompile Include="src\dialogbox.cpp">
       <Filter>src\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ooy.cpp">
+      <Filter>src\entities\enemies</Filter>
     </ClCompile>
     <ClCompile Include="generated\tiled_objects_zones.cpp">
       <Filter>generated</Filter>

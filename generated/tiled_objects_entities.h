@@ -37,6 +37,8 @@ struct Entities {
 	static const std::unordered_map<int, vec> mantis;
 	static const std::unordered_map<int, vec> npc;
 	static const vec single_npc;
+	static const std::unordered_map<int, vec> ooy;
+	static const vec single_ooy;
 	static const std::unordered_map<int, vec> rocket_launcher;
 	static const std::unordered_map<int, vec> save;
 	static const std::unordered_map<int, vec> skill_attack;

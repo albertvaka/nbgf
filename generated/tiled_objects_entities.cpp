@@ -198,6 +198,12 @@ const std::unordered_map<int, vec> Entities::npc = {
 const vec Entities::single_npc = vec(2581.0f, 1900.333333333333f);
 
 
+const std::unordered_map<int, vec> Entities::ooy = {
+	{ 1024, vec(5718.0f, 1288.5f) },
+};
+const vec Entities::single_ooy = vec(5718.0f, 1288.5f);
+
+
 const std::unordered_map<int, vec> Entities::rocket_launcher = {
 	{ 659, vec(5122.79666666667f, 1968.318f) },
 	{ 660, vec(5476.66666666667f, 1969.182f) },

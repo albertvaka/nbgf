@@ -17,25 +17,30 @@ struct SheetFrameCalculator {
 	const float sprite_w;
 	const float sprite_h;
 	const int columns;
-	const float time;
-	constexpr SheetFrameCalculator(float sprite_w, float sprite_h, int columns, float time)
-		: sprite_w(sprite_w)
-		, sprite_h(sprite_h)
+	const float offset_x;
+	const float offset_y;
+	constexpr SheetFrameCalculator(vec size, int columns, vec offset = vec::Zero)
+		: sprite_w(size.x)
+		, sprite_h(size.y)
 		, columns(columns)
-		, time(time)
+		, offset_x(offset.x)
+		, offset_y(offset.y)
 	{}
 	template<int N>
-	constexpr const std::array<AnimationFrame, N> Frames(int begin) const
+	constexpr const std::array<AnimationFrame, N> Frames(int begin, float duration) const
 	{
-		return make_array(begin, std::make_index_sequence<N>{});
+		return make_array(begin, duration, std::make_index_sequence<N>{});
 	}
-	const constexpr AnimationFrame Frame(int index, float t = -1.f) const {
-		return AnimationFrame { { sprite_w * (index%columns), sprite_h * (index/columns), sprite_w, sprite_h }, t >= 0.f? t : time };
+	constexpr const GPU_Rect Rect(int index) const {
+		return GPU_Rect { offset_x + sprite_w * (index % columns), offset_y + sprite_h * (index / columns), sprite_w, sprite_h };
+	}
+	constexpr const AnimationFrame Frame(int index, float duration) const {
+		return AnimationFrame { Rect(index), duration};
 	}
 private:
 	template<std::size_t... indices>
-	constexpr const std::array<AnimationFrame, sizeof...(indices)> make_array(int begin, std::index_sequence<indices...>) const
+	constexpr const std::array<AnimationFrame, sizeof...(indices)> make_array(int begin, float duration, std::index_sequence<indices...>) const
 	{
-		return {{ Frame(begin+indices)... }};
+		return {{ Frame(begin+indices, duration)... }};
 	}
 };
