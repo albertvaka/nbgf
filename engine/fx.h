@@ -20,8 +20,8 @@ namespace Fx {
 		static inline void StartPreset(Preset preset) {
 			switch (preset) {
 				break;
-			case Preset::Earthquake: // Make it long by calling this repeatedly
-				Start(0.1f, vec(3.5f, 3.5f), vec(35.f, 45.f));
+			case Preset::Earthquake:
+				Start(0.2f, vec(2.5f, 2.5f), vec(35.f, 45.f));
 				break;
 			case Preset::LittleStomp:
 				Start(0.3f, vec(0, 3), vec(0.f, 47.f));
@@ -37,16 +37,21 @@ namespace Fx {
 
 		static inline void Start(float time, vec amplitude, vec speed, float dampening = -1.f) {
 			if (time >= screenshakeTime) {
+				shaking = true;
 				screenshakeTime = time;
 				screenshakeAmplitude = amplitude;
 				screenshakeSpeed = speed;
 				screenshakeDampening = dampening;
-
 			}
+		}
+
+		static inline void Stop() {
+			screenshakeTime = -1.f;
 		}
 
 		static void DrawImgui();
 
+		static inline bool shaking = false;
 		static inline float screenshakeTime;
 		static inline float screenshakeDampening;
 		static inline vec screenshakeAmplitude = veci(0, 0);

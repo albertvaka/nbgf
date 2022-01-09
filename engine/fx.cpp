@@ -47,12 +47,13 @@ void Update(float dt)
 		}
 	}
 
-	if (Screenshake::screenshakeTime > 0) {
-		Screenshake::screenshakeTime -= dt;
+	if (Screenshake::shaking) {
 		if (Screenshake::screenshakeTime <= 0) {
 			Camera::screenshake_offset = vec::Zero;
+			Screenshake::shaking = false;
 		}
 		else {
+			Screenshake::screenshakeTime -= dt;
 			const int discreteSteps = 4; // There will be N fixed position up and N down the screen can be at.
 			if (Screenshake::screenshakeAmplitude.y > 0) {
 				Camera::screenshake_offset.y = (int(cos(Screenshake::screenshakeTime * Screenshake::screenshakeSpeed.y) * discreteSteps) * Screenshake::screenshakeAmplitude.y) / discreteSteps;
@@ -66,14 +67,13 @@ void Update(float dt)
 			else {
 				Camera::screenshake_offset.x = 0;
 			}
-		}
-		if (Screenshake::screenshakeDampening > 0) {
-			Screenshake::screenshakeAmplitude.x *= Screenshake::screenshakeDampening;
-			Screenshake::screenshakeAmplitude.y *= Screenshake::screenshakeDampening;
+			if (Screenshake::screenshakeDampening > 0) {
+				Screenshake::screenshakeAmplitude.x *= Screenshake::screenshakeDampening;
+				Screenshake::screenshakeAmplitude.y *= Screenshake::screenshakeDampening;
+			}
 		}
 		Camera::SetCenter(Camera::Center()); // makes sdl_gpu pick up the offset
 	}
-
 }
 
 void Screenshake::DrawImgui()
@@ -169,13 +169,13 @@ void Init()
 
 void BeforeEnterScene()
 {
-
 	//Stop everything
 
 	FullscreenShader::shaderActivation = nullptr;
 
 	ScreenTransition::transitionJustFinished = false;
 
+	Screenshake::shaking = false;
 	Screenshake::screenshakeTime = -1;
 	Camera::screenshake_offset = vec::Zero;
 	Camera::SetCenter(Camera::Center());
