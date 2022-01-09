@@ -133,6 +133,7 @@
     <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_RendererImpl.h" />
     <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_version.h" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
+    <ClInclude Include="vendor\tweeny\tweeny.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\camera.cpp" />
@@ -281,7 +282,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <PreprocessorDefinitions>_IMGUI;SDL_MAIN_HANDLED;GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -299,7 +300,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <PreprocessorDefinitions>_IMGUI;SDL_MAIN_HANDLED;GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -320,7 +321,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -341,7 +342,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>

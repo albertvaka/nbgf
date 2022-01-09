@@ -394,6 +394,9 @@
     <ClInclude Include="src\zonemanager.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\tweeny\tweeny.h">
+      <Filter>Bundled Dependencies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
