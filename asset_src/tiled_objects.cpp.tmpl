@@ -14,6 +14,18 @@ const vec {{name}}::single_{{type}} = vec({{positions[0][1]}}f, {{positions[0][2
 {% endif %}
 {% endfor %}
 
+{%- for type, positions in transforms_by_type %}
+const std::unordered_map<int, Transform> {{name}}::{{type}} = {
+	{%- for pos in positions %}
+	{ {{pos[0]}}, { vec({{pos[1]}}f, {{pos[2]}}f), {{pos[3]}}f } },
+	{%- endfor %}
+};
+
+{%- if positions|length == 1 %}
+const Transform {{name}}::single_{{type}} = { vec({{positions[0][1]}}f, {{positions[0][2]}}f), {{positions[0][3]}}f };
+{% endif %}
+{% endfor %}
+
 {%- for type, bounds_list in areas_by_type %}
 const std::array<BoxBounds, {{bounds_list|length}}> {{name}}::{{type}} = {
 	{%- for b in bounds_list %}

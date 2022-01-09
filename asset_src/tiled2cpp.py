@@ -173,12 +173,15 @@ for objects in object_layers:
 
     entities_by_type = defaultdict(list)
     areas_by_type = defaultdict(list)
+    types_with_rotation = set()
 
     for e in objects.tiled_objects:
         if isinstance(e,  pytiled_parser.tiled_object.Tile):
             type_ = e.type if e.type else tileset[e.gid-1].type
             if type_:
-                entities_by_type[type_].append((e.id, float(e.coordinates.x)-min_x*tilesize, float(e.coordinates.y)-min_y*tilesize))
+                entities_by_type[type_].append((e.id, float(e.coordinates.x)-min_x*tilesize, float(e.coordinates.y)-min_y*tilesize, e.rotation))
+                if e.rotation != 0:
+                    types_with_rotation.add(type_)
             else:
                 print("Warning: ignoring object without type nor tile type")
         elif isinstance(e, pytiled_parser.tiled_object.Rectangle):
@@ -187,10 +190,15 @@ for objects in object_layers:
             else:
                 print("Warning: ignoring rectangle without type")
 
+    transforms_by_type = defaultdict(list)
+    for t in types_with_rotation:
+        transforms_by_type[t] = entities_by_type.pop(t)
+
     tm = Template(Path('tiled_objects.h.tmpl').read_text())
     out_content = tm.render(
         name=objects.name,
         entities_by_type=sorted(entities_by_type.items()),
+        transforms_by_type=sorted(transforms_by_type.items()),
         areas_by_type=sorted(areas_by_type.items()),
     )
 
@@ -210,6 +218,7 @@ for objects in object_layers:
     out_content = tm.render(
         name=objects.name,
         entities_by_type=sorted(entities_by_type.items()),
+        transforms_by_type=sorted(transforms_by_type.items()),
         areas_by_type=sorted(areas_by_type.items()),
         debug = False,
     )

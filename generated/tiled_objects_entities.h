@@ -10,7 +10,7 @@ namespace Tiled {
 
 struct Entities {
 
-	// Objects
+	// Positions
 	static const std::unordered_map<int, vec> angrybat;
 	static const std::unordered_map<int, vec> angrybatawake;
 	static const std::unordered_map<int, vec> bat;
@@ -57,6 +57,10 @@ struct Entities {
 	static const vec single_spawn;
 	static const std::unordered_map<int, vec> temp_explosive;
 	static const vec single_temp_explosive;
+	// Transforms
+	static const std::unordered_map<int, Transform> rocks_middle;
+	static const std::unordered_map<int, Transform> rocks_origin;
+	static const std::unordered_map<int, Transform> rocks_target;
 
 };
 

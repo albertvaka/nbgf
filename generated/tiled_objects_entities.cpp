@@ -269,5 +269,23 @@ const std::unordered_map<int, vec> Entities::temp_explosive = {
 const vec Entities::single_temp_explosive = vec(306.9000000000001f, 771.32f);
 
 
+const std::unordered_map<int, Transform> Entities::rocks_middle = {
+	{ 1040, { vec(5052.17f, 1523.159f), 329.016f } },
+	{ 1041, { vec(5105.26f, 1531.442f), 33.9436f } },
+	{ 1042, { vec(5059.67f, 1547.849f), 28.981f } },
+};
+
+const std::unordered_map<int, Transform> Entities::rocks_origin = {
+	{ 1035, { vec(5094.1900000000005f, 1500.7730000000001f), 13.0f } },
+	{ 1038, { vec(5097.68f, 1458.038f), 40.6624f } },
+	{ 1039, { vec(5057.87f, 1483.467f), 333.69f } },
+};
+
+const std::unordered_map<int, Transform> Entities::rocks_target = {
+	{ 1036, { vec(5090.72f, 1604.488f), 29.688f } },
+	{ 1045, { vec(5070.48f, 1605.493f), 316.25f } },
+	{ 1046, { vec(5081.38f, 1575.117f), 35.6202f } },
+};
+
 
 }

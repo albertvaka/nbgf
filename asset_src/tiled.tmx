@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#321f2432" nextlayerid="14" nextobjectid="1048">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#321f2432" nextlayerid="14" nextobjectid="1049">
  <editorsettings>
   <export format="json"/>
  </editorsettings>
@@ -4311,6 +4311,15 @@
   <object id="1029" type="angrybat" gid="117" x="2224.07" y="-1379.15" width="16" height="16"/>
   <object id="1031" gid="354" x="1335" y="-661.75" width="16" height="16"/>
   <object id="1033" gid="326" x="2980.67" y="-563" width="16" height="16"/>
+  <object id="1035" type="rocks_origin" gid="822" x="2022.19" y="-291.227" width="16" height="16" rotation="13"/>
+  <object id="1036" type="rocks_target" gid="822" x="2018.72" y="-187.512" width="16" height="16" rotation="29.688"/>
+  <object id="1038" type="rocks_origin" gid="822" x="2025.68" y="-333.962" width="16" height="16" rotation="40.6624"/>
+  <object id="1039" type="rocks_origin" gid="822" x="1985.87" y="-308.533" width="16" height="16" rotation="333.69"/>
+  <object id="1040" type="rocks_middle" gid="822" x="1980.17" y="-268.841" width="16" height="16" rotation="329.016"/>
+  <object id="1041" type="rocks_middle" gid="822" x="2033.26" y="-260.558" width="16" height="16" rotation="33.9436"/>
+  <object id="1042" type="rocks_middle" gid="822" x="1987.67" y="-244.151" width="16" height="16" rotation="28.981"/>
+  <object id="1045" type="rocks_target" gid="822" x="1998.48" y="-186.507" width="16" height="16" rotation="316.25"/>
+  <object id="1046" type="rocks_target" gid="822" x="2009.38" y="-216.883" width="16" height="16" rotation="35.6202"/>
  </objectgroup>
  <objectgroup id="9" name="Notes">
   <properties>
@@ -4329,7 +4338,7 @@
    <text wrap="1">Pedres que cauen i bloquejen el passadís</text>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Areas">
+ <objectgroup id="8" name="Areas" visible="0">
   <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
   <object id="131" name="bat_bounds" type="bat_bounds" x="-1897.57" y="-31.947" width="253.803" height="209.727"/>
   <object id="132" name="bat_bounds" type="bat_bounds" x="-1208.22" y="-72.5402" width="842.45" height="291.747"/>
@@ -4349,7 +4358,7 @@
   <object id="843" name="rocket_launcher_awake" type="rocket_launcher_awake" x="2768.68" y="241.529" width="430.568" height="81.3127"/>
   <object id="844" name="rocket_launcher_awake" type="rocket_launcher_awake" x="2767.75" y="336.158" width="432.902" height="129.313"/>
   <object id="871" name="bat_bounds" type="bat_bounds" x="367.108" y="-578.714" width="861.367" height="401.671"/>
-  <object id="872" name="bat_bounds" type="bat_bounds" x="1585.77" y="-844.623" width="549.451" height="274.913"/>
+  <object id="872" name="bat_bounds" type="bat_bounds" x="2013.77" y="-1534.62" width="549.451" height="274.913"/>
   <object id="921" name="lava" type="lava" x="288.666" y="990.886" width="877.334" height="158.894"/>
   <object id="923" name="lava" type="lava" x="496" y="561.72" width="544" height="77.7273"/>
   <object id="925" name="lava_bg" type="lava_bg" x="286.487" y="686.24" width="881.025" height="339.52"/>

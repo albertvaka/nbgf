@@ -137,7 +137,6 @@ struct vec
 	//squared version of above.
 	[[nodiscard]] inline float    DistanceSq(vec v2) const;
 
-	//we need some overloaded operators
 	constexpr vec operator+=(vec rhs)
 	{
 		x += rhs.x;
@@ -374,36 +373,28 @@ inline constexpr vec operator*(vec lhs, vec rhs)
 inline constexpr vec operator-(vec lhs, vec rhs)
 {
 	vec result(lhs);
-	result.x -= rhs.x;
-	result.y -= rhs.y;
-
+	result -= rhs;
 	return result;
 }
 
 inline constexpr vec operator+(vec lhs, vec rhs)
 {
 	vec result(lhs);
-	result.x += rhs.x;
-	result.y += rhs.y;
-
+	result += rhs;
 	return result;
 }
 
-inline constexpr vec operator/(vec lhs, float val)
+inline constexpr vec operator/(vec lhs, float rhs)
 {
 	vec result(lhs);
-	result.x /= val;
-	result.y /= val;
-
+	result /= rhs;
 	return result;
 }
 
 inline constexpr vec operator/(vec lhs, vec rhs)
 {
 	vec result(lhs);
-	result.x /= rhs.x;
-	result.y /= rhs.y;
-
+	result /= rhs;
 	return result;
 }
 
@@ -508,3 +499,111 @@ inline std::ostream& operator<<(std::ostream& os, vec rhs)
 	return os;
 }
 
+struct Transform : public vec {
+	constexpr Transform(vec pos, float rotation) : vec(pos), rotation(rotation) {}
+	constexpr Transform(float x, float y, float rotation) : vec(x, y), rotation(rotation) {}
+	float rotation;
+
+	constexpr Transform operator+=(Transform rhs)
+	{
+		x += rhs.x;
+		y += rhs.y;
+		rotation += rhs.rotation;
+
+		return *this;
+	}
+
+	constexpr Transform operator+=(vec rhs)
+	{
+		x += rhs.x;
+		y += rhs.y;
+
+		return *this;
+	}
+
+	constexpr Transform operator-=(Transform rhs)
+	{
+		x -= rhs.x;
+		y -= rhs.y;
+		rotation += rhs.rotation;
+
+		return *this;
+	}
+
+	constexpr Transform operator*=(const float& rhs)
+	{
+		x *= rhs;
+		y *= rhs;
+		rotation *= rhs;
+
+		return *this;
+	}
+
+	constexpr Transform operator/=(const float& rhs)
+	{
+		x /= rhs;
+		y /= rhs;
+		rotation /= rhs;
+
+		return *this;
+	}
+
+	constexpr bool operator==(Transform rhs) const
+	{
+		return (x == rhs.x) && (y == rhs.y) && (rotation == rhs.rotation);
+	}
+
+	constexpr bool operator!=(Transform rhs) const
+	{
+		return (x != rhs.x) || (y != rhs.y) || (rotation == rhs.rotation);
+	}
+
+};
+
+//------------------------------------------------------------------------operator overloads
+inline constexpr Transform operator*(Transform lhs, float rhs)
+{
+	Transform result(lhs);
+	result *= rhs;
+	return result;
+}
+
+inline constexpr Transform operator*(float lhs, Transform rhs)
+{
+	Transform result(rhs);
+	result *= lhs;
+	return result;
+}
+
+inline constexpr Transform operator-(Transform lhs, Transform rhs)
+{
+	Transform result(lhs);
+	result -= rhs;
+
+	return result;
+}
+
+inline constexpr Transform operator+(Transform lhs, Transform rhs)
+{
+	Transform result(lhs);
+	result += rhs;
+
+	return result;
+}
+
+inline constexpr Transform operator+(Transform lhs, vec rhs)
+{
+	Transform result(lhs);
+	result += rhs;
+
+	return result;
+}
+
+inline constexpr Transform operator/(Transform lhs, float rhs)
+{
+	Transform result(lhs);
+	result /= rhs;
+	return result;
+
+	return result;
+}

@@ -10,12 +10,22 @@ namespace Tiled {
 
 struct {{name}} {
 {% if entities_by_type|length >= 1 %}
-	// Objects
+	// Positions
 {%- endif %}
 {%- for type, positions in entities_by_type %}
 	static const std::unordered_map<int, vec> {{type}};
 	{%- if positions|length == 1 %}
 	static const vec single_{{type}};
+	{%- endif %}
+{%- endfor %}
+
+{%- if transforms_by_type|length >= 1 %}
+	// Transforms
+{%- endif %}
+{%- for type, positions in transforms_by_type %}
+	static const std::unordered_map<int, Transform> {{type}};
+	{%- if positions|length == 1 %}
+	static const Transform single_{{type}};
 	{%- endif %}
 {%- endfor %}
 
