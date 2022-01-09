@@ -1,8 +1,8 @@
 #include "musicplayer.h"
 
-#include <SDL_mixer.h>
-
 #include "raw_input.h"
+
+#include <SDL_mixer.h>
 
 namespace MusicPlayer
 {
