@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 from collections import defaultdict, OrderedDict
 
-level = pytiled_parser.parse_map(Path("tiled.json"))
+level = pytiled_parser.parse_map(Path("tiled.tmx"))
 
 known_tile_types = ['bg','oneway','rslope','lslope','solid','breakable', 'breakable_hard', 'breakable_gnd']
 

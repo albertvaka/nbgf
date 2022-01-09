@@ -4,21 +4,21 @@ namespace Tiled {
 
 
 const std::array<BoxBounds, 1> Triggers::trigger_fast_lava = {
-	BoxBounds(2128.1476666666667f,1244.0001666666672f,577.704666666667f,155.999666666667f),
+	BoxBounds(2128.148f,1244.0f,577.705f,156.0f),
 };
-const BoxBounds Triggers::single_trigger_fast_lava = BoxBounds(2128.1476666666667f,1244.0001666666672f,577.704666666667f,155.999666666667f);
+const BoxBounds Triggers::single_trigger_fast_lava = BoxBounds(2128.148f,1244.0f,577.705f,156.0f);
 
 
 const std::array<BoxBounds, 1> Triggers::trigger_lava = {
-	BoxBounds(1600.61736363636f,1150.909257575757f,158.704666666667f,269.333f),
+	BoxBounds(1600.62f,1150.909f,158.705f,269.333f),
 };
-const BoxBounds Triggers::single_trigger_lava = BoxBounds(1600.61736363636f,1150.909257575757f,158.704666666667f,269.333f);
+const BoxBounds Triggers::single_trigger_lava = BoxBounds(1600.62f,1150.909f,158.705f,269.333f);
 
 
 const std::array<BoxBounds, 1> Triggers::trigger_rockfall = {
-	BoxBounds(5207.33333333333f,1537.583333333333f,33.5f,100.0f),
+	BoxBounds(5207.33f,1537.583f,33.5f,100.0f),
 };
-const BoxBounds Triggers::single_trigger_rockfall = BoxBounds(5207.33333333333f,1537.583333333333f,33.5f,100.0f);
+const BoxBounds Triggers::single_trigger_rockfall = BoxBounds(5207.33f,1537.583f,33.5f,100.0f);
 
 
 const std::array<BoxBounds, 1> Triggers::trigger_test = {
