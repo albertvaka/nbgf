@@ -113,6 +113,13 @@ struct CutSceneBuilder
 		return *this;
 	}
 
+	CutSceneBuilder& DoNothingFor(float t)
+	{
+		cutScene->queue.emplace_back(CutScene::Animation(t, [](float) { }));
+		cutScene->queue.back().blocking = true;
+		return *this;
+	}
+
 	CutSceneBuilder& WaitAndThen()
 	{
 		cutScene->queue.back().blocking = true;
