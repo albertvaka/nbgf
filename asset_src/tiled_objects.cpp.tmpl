@@ -20,6 +20,10 @@ const std::array<BoxBounds, {{bounds_list|length}}> {{name}}::{{type}} = {
 	BoxBounds({{b[0]}}f,{{b[1]}}f,{{b[2]}}f,{{b[3]}}f),
 	{%- endfor %}
 };
+
+{%- if bounds_list|length == 1 %}
+const BoxBounds {{name}}::single_{{type}} = BoxBounds({{bounds_list[0][0]}}f,{{bounds_list[0][1]}}f,{{bounds_list[0][2]}}f,{{bounds_list[0][3]}}f);
+{% endif %}
 {% endfor %}
 
 }

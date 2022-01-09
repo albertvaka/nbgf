@@ -24,6 +24,9 @@ struct {{name}} {
 {%- endif %}
 {%- for type, bounds_list in areas_by_type %}
 	static const std::array<BoxBounds, {{bounds_list|length}}> {{type}};
+	{%- if bounds_list|length == 1 %}
+	static const BoxBounds single_{{type}};
+	{%- endif %}
 {%- endfor %}
 
 };

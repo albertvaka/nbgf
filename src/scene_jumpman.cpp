@@ -352,9 +352,17 @@ void JumpScene::EnterScene()
 		}
 	}
 
+	new Trigger("lava_raise", Tiled::Triggers::single_trigger_lava, [this](Trigger* t) {
+		raising_lava->SetLevel(raising_lava_target_height);
+	}, true);
+
+	new Trigger("lava_raise", Tiled::Triggers::single_trigger_fast_lava, [this](Trigger* t) {
+		raising_lava->SetRaiseSpeed(Lava::kFastRaiseSpeed);
+	}, true);
+
 	test_anim_scale = 1.f;
 	/*
-	new Trigger("my_test_trigger", Tiled::Triggers::trigger_test[0], [this](Trigger* t) {
+	new Trigger("my_test_trigger", Tiled::Triggers::single_trigger_test, [this](Trigger* t) {
 		CutSceneBuilder(true).Play(1.0f, [this](float progress) {
 			this->test_anim_scale = 1.f+(progress*progress);
 		}).PlayOneFrame([this]() {
@@ -538,18 +546,6 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 	}
 
-	for (const BoxBounds& a : Tiled::Areas::trigger_lava) {
-		if (a.Contains(player.pos)) {
-			raising_lava->SetLevel(raising_lava_target_height);
-		}
-	}
-
-	for (const BoxBounds& a : Tiled::Areas::trigger_fast_lava) {
-		if (a.Contains(player.pos)) {
-			raising_lava->SetRaiseSpeed(Lava::kFastRaiseSpeed);
-		}
-	}
-
 #ifdef _DEBUG
 	const SDL_Scancode killall = SDL_SCANCODE_F11;
 	const SDL_Scancode unlockbasics = SDL_SCANCODE_F8;
@@ -694,12 +690,6 @@ void JumpScene::Update(float dt)
 		l->Update(dt);
 	}
 
-	for (const BoxBounds& a : Tiled::Areas::fog) {
-		if (!Collide(Camera::Bounds(),(a*2.f))) {
-			continue;
-		}
-	}
-
 	rotoText.Update(dt);
 
 	// Enable waves shader in lava cave
@@ -837,15 +827,6 @@ void JumpScene::Draw()
 		ImGui::End();
 	}
 #endif
-
-	//for (const BoxBounds& a : Tiled::Areas::parallax_forest) {
-		//Assets::fogShader.Activate();
-		//Assets::fogShader.SetUniform("offset", vec(mainClock*0.2f, 0.f));
-		//Assets::fogShader.SetUniform("time", mainClock);
-		// The texture is not used by the shader at all
-		//Window::Draw(Assets::spritesheetTexture, a);
-		//Shader::Deactivate();
-	//}
 
 	//for (int i = 0; i < Parallax::GetAll().size(); i++) {
 	//	Parallax::GetAll()[i]->DrawImGUI(("parallax_" + std::to_string(i)).c_str());

@@ -6,6 +6,8 @@ namespace Tiled {
 const std::array<BoxBounds, 1> Areas::alien_bounds = {
 	BoxBounds(336.73486363635993f,952.901651515151f,253.803f,237.227f),
 };
+const BoxBounds Areas::single_alien_bounds = BoxBounds(336.73486363635993f,952.901651515151f,253.803f,237.227f);
+
 
 const std::array<BoxBounds, 11> Areas::bat_bounds = {
 	BoxBounds(1174.43f,1760.053f,253.803333333333f,209.727333333334f),
@@ -24,14 +26,20 @@ const std::array<BoxBounds, 11> Areas::bat_bounds = {
 const std::array<BoxBounds, 1> Areas::boss_bounds = {
 	BoxBounds(793.5f,2369.5f,476.333f,39.0f),
 };
+const BoxBounds Areas::single_boss_bounds = BoxBounds(793.5f,2369.5f,476.333f,39.0f);
+
 
 const std::array<BoxBounds, 1> Areas::explosion = {
 	BoxBounds(298.11180303030005f,742.7253787878799f,153.837f,56.125f),
 };
+const BoxBounds Areas::single_explosion = BoxBounds(298.11180303030005f,742.7253787878799f,153.837f,56.125f);
+
 
 const std::array<BoxBounds, 1> Areas::fog = {
 	BoxBounds(1904.5f,1903.5f,734.0f,85.5f),
 };
+const BoxBounds Areas::single_fog = BoxBounds(1904.5f,1903.5f,734.0f,85.5f);
+
 
 const std::array<BoxBounds, 6> Areas::lava = {
 	BoxBounds(3440.0f,2039.272727272727f,592.0f,27.7059659090909f),
@@ -51,14 +59,20 @@ const std::array<BoxBounds, 3> Areas::lava_bg = {
 const std::array<BoxBounds, 1> Areas::parallax_cave = {
 	BoxBounds(1350.83f,2079.25f,1543.67f,381.625f),
 };
+const BoxBounds Areas::single_parallax_cave = BoxBounds(1350.83f,2079.25f,1543.67f,381.625f);
+
 
 const std::array<BoxBounds, 1> Areas::parallax_forest = {
 	BoxBounds(1862.5f,1697.5f,824.0f,289.5f),
 };
+const BoxBounds Areas::single_parallax_forest = BoxBounds(1862.5f,1697.5f,824.0f,289.5f);
+
 
 const std::array<BoxBounds, 1> Areas::parallax_island = {
 	BoxBounds(3120.899681818182f,798.104166666667f,760.518818181818f,339.125f),
 };
+const BoxBounds Areas::single_parallax_island = BoxBounds(3120.899681818182f,798.104166666667f,760.518818181818f,339.125f);
+
 
 const std::array<BoxBounds, 5> Areas::rocket_launcher_awake = {
 	BoxBounds(4962.71f,1932.2915f,446.25f,351.0f),
@@ -66,14 +80,6 @@ const std::array<BoxBounds, 5> Areas::rocket_launcher_awake = {
 	BoxBounds(5840.68490843115f,2033.52911866156f,430.568258235512f,81.3126847760547f),
 	BoxBounds(5839.74683333333f,2128.158196562386f,432.901591568846f,129.312684776055f),
 	BoxBounds(2126.716f,608.34365f,577.568f,244.8127f),
-};
-
-const std::array<BoxBounds, 1> Areas::trigger_fast_lava = {
-	BoxBounds(2128.1476666666667f,1244.0001666666672f,577.704666666667f,155.999666666667f),
-};
-
-const std::array<BoxBounds, 1> Areas::trigger_lava = {
-	BoxBounds(1600.61736363636f,1150.909257575757f,158.704666666667f,269.333f),
 };
 
 
