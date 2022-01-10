@@ -72,6 +72,8 @@ struct Input {
 	static void Update(float dt);
 	static void Init();
 
+	static void IgnoreInput(bool enable);
+
 private:
 	static void MapGameKeys();
 	static std::function<bool(int)> action_mapping[magic_enum::enum_count<GameKeys>()];
