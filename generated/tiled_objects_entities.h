@@ -58,9 +58,26 @@ struct Entities {
 	static const std::unordered_map<int, vec> temp_explosive;
 	static const vec single_temp_explosive;
 	// Transforms
-	static const std::unordered_map<int, Transform> rocks_middle;
-	static const std::unordered_map<int, Transform> rocks_origin;
-	static const std::unordered_map<int, Transform> rocks_target;
+	static const std::unordered_map<int, Transform> rocks_middle_1;
+	static const Transform single_rocks_middle_1;
+	static const std::unordered_map<int, Transform> rocks_middle_2;
+	static const Transform single_rocks_middle_2;
+	static const std::unordered_map<int, Transform> rocks_middle_3;
+	static const Transform single_rocks_middle_3;
+	static const std::unordered_map<int, Transform> rocks_middle_bounce_3;
+	static const Transform single_rocks_middle_bounce_3;
+	static const std::unordered_map<int, Transform> rocks_origin_1;
+	static const Transform single_rocks_origin_1;
+	static const std::unordered_map<int, Transform> rocks_origin_2;
+	static const Transform single_rocks_origin_2;
+	static const std::unordered_map<int, Transform> rocks_origin_3;
+	static const Transform single_rocks_origin_3;
+	static const std::unordered_map<int, Transform> rocks_target_1;
+	static const Transform single_rocks_target_1;
+	static const std::unordered_map<int, Transform> rocks_target_2;
+	static const Transform single_rocks_target_2;
+	static const std::unordered_map<int, Transform> rocks_target_3;
+	static const Transform single_rocks_target_3;
 
 };
 

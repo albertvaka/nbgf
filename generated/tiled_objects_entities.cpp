@@ -269,23 +269,65 @@ const std::unordered_map<int, vec> Entities::temp_explosive = {
 const vec Entities::single_temp_explosive = vec(306.9000000000001f, 771.32f);
 
 
-const std::unordered_map<int, Transform> Entities::rocks_middle = {
-	{ 1040, { vec(5052.17f, 1523.159f), 329.016f } },
-	{ 1041, { vec(5105.26f, 1531.442f), 33.9436f } },
-	{ 1042, { vec(5059.67f, 1547.849f), 28.981f } },
+const std::unordered_map<int, Transform> Entities::rocks_middle_1 = {
+	{ 1040, { vec(5073.17f, 1547.826f), 150.0f } },
 };
+const Transform Entities::single_rocks_middle_1 = { vec(5073.17f, 1547.826f), 150.0f };
 
-const std::unordered_map<int, Transform> Entities::rocks_origin = {
+
+const std::unordered_map<int, Transform> Entities::rocks_middle_2 = {
+	{ 1041, { vec(5105.26f, 1531.442f), 203.94f } },
+};
+const Transform Entities::single_rocks_middle_2 = { vec(5105.26f, 1531.442f), 203.94f };
+
+
+const std::unordered_map<int, Transform> Entities::rocks_middle_3 = {
+	{ 1042, { vec(5053.83f, 1488.825f), 0.1f } },
+};
+const Transform Entities::single_rocks_middle_3 = { vec(5053.83f, 1488.825f), 0.1f };
+
+
+const std::unordered_map<int, Transform> Entities::rocks_middle_bounce_3 = {
+	{ 1049, { vec(5104.0f, 1513.333f), 100.0f } },
+};
+const Transform Entities::single_rocks_middle_bounce_3 = { vec(5104.0f, 1513.333f), 100.0f };
+
+
+const std::unordered_map<int, Transform> Entities::rocks_origin_1 = {
 	{ 1035, { vec(5094.1900000000005f, 1500.7730000000001f), 13.0f } },
-	{ 1038, { vec(5097.68f, 1458.038f), 40.6624f } },
+};
+const Transform Entities::single_rocks_origin_1 = { vec(5094.1900000000005f, 1500.7730000000001f), 13.0f };
+
+
+const std::unordered_map<int, Transform> Entities::rocks_origin_2 = {
 	{ 1039, { vec(5057.87f, 1483.467f), 333.69f } },
 };
+const Transform Entities::single_rocks_origin_2 = { vec(5057.87f, 1483.467f), 333.69f };
 
-const std::unordered_map<int, Transform> Entities::rocks_target = {
+
+const std::unordered_map<int, Transform> Entities::rocks_origin_3 = {
+	{ 1038, { vec(5097.68f, 1458.038f), 40.6624f } },
+};
+const Transform Entities::single_rocks_origin_3 = { vec(5097.68f, 1458.038f), 40.6624f };
+
+
+const std::unordered_map<int, Transform> Entities::rocks_target_1 = {
 	{ 1036, { vec(5090.72f, 1604.488f), 29.688f } },
+};
+const Transform Entities::single_rocks_target_1 = { vec(5090.72f, 1604.488f), 29.688f };
+
+
+const std::unordered_map<int, Transform> Entities::rocks_target_2 = {
 	{ 1045, { vec(5070.48f, 1605.493f), 316.25f } },
+};
+const Transform Entities::single_rocks_target_2 = { vec(5070.48f, 1605.493f), 316.25f };
+
+
+const std::unordered_map<int, Transform> Entities::rocks_target_3 = {
 	{ 1046, { vec(5081.38f, 1575.117f), 35.6202f } },
 };
+const Transform Entities::single_rocks_target_3 = { vec(5081.38f, 1575.117f), 35.6202f };
+
 
 
 }

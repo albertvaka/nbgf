@@ -46,6 +46,7 @@
 #include "trigger.h"
 #include "cutscene.h"
 #include "dialogs.h"
+#include "tweeny.h"
 
 extern float mainClock;
 
@@ -359,6 +360,84 @@ void JumpScene::EnterScene()
 
 	new Trigger("lava_raise", Tiled::Triggers::single_trigger_fast_lava, [this](Trigger* t) {
 		raising_lava->SetRaiseSpeed(Lava::kFastRaiseSpeed);
+	}, true);
+
+	DummyEntity* fallingRock1 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_1);
+	DummyEntity* fallingRock2 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_2);
+	DummyEntity* fallingRock3 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_3);
+
+	new Trigger("rockfall", Tiled::Triggers::single_trigger_rockfall, [this, fallingRock1, fallingRock2, fallingRock3](Trigger* t) {
+
+		CutSceneBuilder()
+		.PlayOneFrame([]() {
+			//FIXME: Replace by calling a special "ragdoll update" function on the player during the cutscene
+			//that ignores input but keeps the player's current momentum until it stops naturally
+			Input::IgnoreInput(true);
+		})
+		.WaitAndThen()
+		.PlayOneFrame([this]() {
+			Fx::Screenshake::Start(4.0f, vec(0.6f, 0.6f), vec(35.f, 45.f));
+			Fx::Screenshake::screenshakeDampening = 1.03f;
+		})
+		.DoNothingFor(0.35f)
+		.WaitAndThen()
+		.PlayOneFrame([this]() {
+			player.lookingLeft = true;
+		})
+		.DoNothingFor(0.4f)
+		.WaitAndThen()
+		.PlayOneFrame([]() {
+			Fx::Screenshake::screenshakeDampening = -1.f;
+		})
+		.DoNothingFor(2.8f)
+		.WaitAndThen()
+		.PlayOneFrame([]() {
+			Fx::Screenshake::screenshakeDampening = 0.9f;
+		})
+		.DoNothingFor(1.1f)
+		.WaitAndThen()
+		.PlayOneFrame([this]() {
+			player.lookingLeft = false;
+			Input::IgnoreInput(false);
+		});
+
+		CutSceneBuilder()
+		.DoNothingFor(0.9f)
+		.WaitAndThen()
+		.Play(0.8f, [fallingRock1](float progress) {
+			fallingRock1->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_origin_1, Tiled::Entities::single_rocks_middle_1));
+		})
+		.WaitAndThen()
+		.Play(1.1f, [fallingRock1](float progress) {
+			fallingRock1->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_1, Tiled::Entities::single_rocks_target_1));
+		});
+
+		CutSceneBuilder()
+		.DoNothingFor(1.1f)
+		.WaitAndThen()
+		.Play(1.2f, [fallingRock2](float progress) {
+			fallingRock2->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_origin_2, Tiled::Entities::single_rocks_middle_2));
+		})
+		.WaitAndThen()
+		.Play(0.7f, [fallingRock2](float progress) {
+			fallingRock2->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_2, Tiled::Entities::single_rocks_target_2));
+		});
+
+		CutSceneBuilder()
+		.DoNothingFor(1.5f)
+		.WaitAndThen()
+		.Play(0.7f, [fallingRock3](float progress) {
+			fallingRock3->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_origin_3, Tiled::Entities::single_rocks_middle_3));
+		})
+		.WaitAndThen()
+		.Play(0.7f, [fallingRock3](float progress) {
+			fallingRock3->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_3, Tiled::Entities::single_rocks_middle_bounce_3));
+		})
+		.WaitAndThen()
+		.Play(0.7f, [fallingRock3](float progress) {
+			fallingRock3->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_bounce_3, Tiled::Entities::single_rocks_target_3));
+		});
+
 	}, true);
 
 	test_anim_scale = 1.f;
