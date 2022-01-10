@@ -34,6 +34,7 @@
 #include "savestate.h"
 #include "bigitem.h"
 #include "rocketlauncher.h"
+#include "dummyentity.h"
 #include "health.h"
 #include "healthup.h"
 #include "particles.h"
@@ -416,6 +417,7 @@ void JumpScene::ExitScene()
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
 	Ooy::DeleteAll();
+	DummyEntity::DeleteAll();
 	RocketLauncher::DeleteAll();
 	Minotaur::DeleteAll();
 	Mantis::DeleteAll();
@@ -630,6 +632,7 @@ void JumpScene::Update(float dt)
 	Minotaur::DeleteNotAlive();
 	Goomba::DeleteNotAlive();
 	Ooy::DeleteNotAlive();
+	DummyEntity::DeleteNotAlive();
 	FlyingAlien::DeleteNotAlive();
 	Mantis::DeleteNotAlive();
 	FireSlime::DeleteNotAlive();
@@ -736,6 +739,7 @@ void JumpScene::Draw()
 		SaveStation::GetAll(),
 		EnemyDoor::GetAll(),
 		OneShotAnim::GetAll(),
+		DummyEntity::GetAll(),
 		Goomba::GetAll(),
 		Ooy::GetAll(),
 		Minotaur::GetAll(),

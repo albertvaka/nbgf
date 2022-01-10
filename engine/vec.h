@@ -525,7 +525,7 @@ struct Transform : public vec {
 	{
 		x -= rhs.x;
 		y -= rhs.y;
-		rotation += rhs.rotation;
+		rotation -= rhs.rotation;
 
 		return *this;
 	}
