@@ -85,19 +85,14 @@ struct CutSceneBuilder
 
 	CutSceneBuilder(bool pauseGame = false)
 	{
+		// FIXME: Maybe we should reuse Fx::FreezeImage to pause?
 		cutScene = new CutScene();
 		cutScene->pauseGame = pauseGame;
 	}
 
 	~CutSceneBuilder()
 	{
-		if (cutScene->playing.empty())
-		{
-			Debug::out << "Warning: Destroying CutScene builder but the built CutScene isn't playing anything";
-		}
-	}
-
-	void Start() {
+		// If this isn't called, the cutscene still plays but it is delayed one frame
 		cutScene->PlayFromQueue();
 	}
 

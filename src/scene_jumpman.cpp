@@ -372,7 +372,7 @@ void JumpScene::EnterScene()
 			this->test_anim_scale = 2.f - (progress * progress);
 		}).WaitAndThen().PlayOneFrame([t]() {
 			Debug::out << "cutscene done";
-		}).Start();
+		});
 	}, true);
 	*/
 
