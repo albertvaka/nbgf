@@ -41,14 +41,14 @@
     <Filter Include="src\entities\bullets">
       <UniqueIdentifier>{21828536-1fef-417a-9d2c-f0d0cfe4187e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\environment">
-      <UniqueIdentifier>{15866b45-8d39-495f-92cb-7109ecdda311}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\gui">
       <UniqueIdentifier>{81a97000-3367-451e-965f-6a12233598f1}</UniqueIdentifier>
     </Filter>
     <Filter Include="generated">
       <UniqueIdentifier>{8c51efac-7be1-4746-af80-1e0855902e22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world">
+      <UniqueIdentifier>{15866b45-8d39-495f-92cb-7109ecdda311}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -244,26 +244,23 @@
     <ClInclude Include="src\bat.h">
       <Filter>src\entities\enemies</Filter>
     </ClInclude>
-    <ClInclude Include="src\enemy_door.h">
-      <Filter>src\entities</Filter>
-    </ClInclude>
     <ClInclude Include="src\common_tilemapcharacter.h">
       <Filter>src\entities</Filter>
     </ClInclude>
     <ClInclude Include="src\lava.h">
-      <Filter>src\environment</Filter>
+      <Filter>src\world</Filter>
     </ClInclude>
     <ClInclude Include="src\parallax.h">
-      <Filter>src\environment</Filter>
+      <Filter>src\world</Filter>
     </ClInclude>
     <ClInclude Include="src\destroyedtiles.h">
-      <Filter>src\environment</Filter>
+      <Filter>src\world</Filter>
     </ClInclude>
     <ClInclude Include="src\savestation.h">
       <Filter>src\entities</Filter>
     </ClInclude>
     <ClInclude Include="src\spawningtile.h">
-      <Filter>src\environment</Filter>
+      <Filter>src\world</Filter>
     </ClInclude>
     <ClInclude Include="src\jumpman.h">
       <Filter>src\entities</Filter>
@@ -328,12 +325,6 @@
     <ClInclude Include="generated\texturepackerexport.h">
       <Filter>generated</Filter>
     </ClInclude>
-    <ClInclude Include="src\gaemtilemap.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tile.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="generated\tiled_objects_areas.h">
       <Filter>generated</Filter>
     </ClInclude>
@@ -351,9 +342,6 @@
     </ClInclude>
     <ClInclude Include="src\minotaur.h">
       <Filter>src\entities\enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="src\explosive.h">
-      <Filter>src\entities</Filter>
     </ClInclude>
     <ClInclude Include="src\rocketlauncher.h">
       <Filter>src\entities\enemies</Filter>
@@ -376,9 +364,6 @@
     <ClInclude Include="src\dialogs.h">
       <Filter>src\gui</Filter>
     </ClInclude>
-    <ClInclude Include="src\trigger.h">
-      <Filter>src\entities</Filter>
-    </ClInclude>
     <ClInclude Include="generated\tiled_objects_triggers.h">
       <Filter>generated</Filter>
     </ClInclude>
@@ -391,11 +376,29 @@
     <ClInclude Include="generated\tiled_objects_zones.h">
       <Filter>generated</Filter>
     </ClInclude>
-    <ClInclude Include="src\zonemanager.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\tweeny\tweeny.h">
       <Filter>Bundled Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gaemtilemap.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\zonemanager.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tile.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trigger.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\explosive.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy_door.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dummyentity.h">
+      <Filter>src\entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -525,23 +528,20 @@
     <ClCompile Include="src\bat.cpp">
       <Filter>src\entities\enemies</Filter>
     </ClCompile>
-    <ClCompile Include="src\enemy_door.cpp">
-      <Filter>src\entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\lava.cpp">
-      <Filter>src\environment</Filter>
+      <Filter>src\world</Filter>
     </ClCompile>
     <ClCompile Include="src\parallax.cpp">
-      <Filter>src\environment</Filter>
+      <Filter>src\world</Filter>
     </ClCompile>
     <ClCompile Include="src\destroyedtiles.cpp">
-      <Filter>src\environment</Filter>
+      <Filter>src\world</Filter>
     </ClCompile>
     <ClCompile Include="src\savestation.cpp">
       <Filter>src\entities</Filter>
     </ClCompile>
     <ClCompile Include="src\spawningtile.cpp">
-      <Filter>src\environment</Filter>
+      <Filter>src\world</Filter>
     </ClCompile>
     <ClCompile Include="src\jumpman.cpp">
       <Filter>src\entities</Filter>
@@ -606,9 +606,6 @@
     <ClCompile Include="src\particles.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\trigger.cpp">
-      <Filter>src\entities</Filter>
-    </ClCompile>
     <ClCompile Include="generated\tiled_objects_triggers.cpp">
       <Filter>generated</Filter>
     </ClCompile>
@@ -623,6 +620,12 @@
     </ClCompile>
     <ClCompile Include="generated\tiled_objects_zones.cpp">
       <Filter>generated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trigger.cpp">
+      <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy_door.cpp">
+      <Filter>src\world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

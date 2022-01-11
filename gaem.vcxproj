@@ -73,6 +73,7 @@
     <ClInclude Include="src\dialogbox.h" />
     <ClInclude Include="src\dialogdriver.h" />
     <ClInclude Include="src\dialogs.h" />
+    <ClInclude Include="src\dummyentity.h" />
     <ClInclude Include="src\enemy_door.h" />
     <ClInclude Include="src\explosive.h" />
     <ClInclude Include="src\fireshot.h" />
