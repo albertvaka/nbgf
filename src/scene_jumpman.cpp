@@ -118,6 +118,10 @@ void JumpScene::SaveGame() const {
 		g->SaveGame(saveState);
 	}
 
+	for (Trigger* g : Trigger::GetAll()) {
+		g->SaveGame(saveState);
+	}
+
 	skillTree.SaveGame(saveState);
 	destroyedTiles.SaveGame(saveState);
 
@@ -144,6 +148,10 @@ void JumpScene::LoadGame() {
 	}
 
 	for (Explosive* g : Explosive::GetAll()) {
+		g->LoadGame(saveState);
+	}
+
+	for (Trigger* g : Trigger::GetAll()) {
 		g->LoadGame(saveState);
 	}
 
@@ -354,19 +362,29 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	new Trigger("lava_raise", Tiled::Triggers::single_trigger_lava, [this](Trigger* t) {
-		raising_lava->SetLevel(raising_lava_target_height);
-	}, true);
+	new Trigger("lava_raise", Tiled::Triggers::single_trigger_lava, [this](Trigger* t, bool isLoadingSave) {
+		raising_lava->SetLevel(raising_lava_target_height, isLoadingSave);
+	});
 
-	new Trigger("lava_raise", Tiled::Triggers::single_trigger_fast_lava, [this](Trigger* t) {
+	new Trigger("lava_raise", Tiled::Triggers::single_trigger_fast_lava, [this](Trigger* t, bool isLoadingSave) {
 		raising_lava->SetRaiseSpeed(Lava::kFastRaiseSpeed);
-	}, true);
+	});
 
 	DummyEntity* fallingRock1 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_1);
 	DummyEntity* fallingRock2 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_2);
 	DummyEntity* fallingRock3 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_3);
 
-	new Trigger("rockfall", Tiled::Triggers::single_trigger_rockfall, [this, fallingRock1, fallingRock2, fallingRock3](Trigger* t) {
+	new Trigger("rockfall", Tiled::Triggers::single_trigger_rockfall, [this, fallingRock1, fallingRock2, fallingRock3](Trigger* t, bool isLoadingSave) {
+
+		if (isLoadingSave) {
+			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_1), Tile::SOLID_TRANSPARENT);
+			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_2), Tile::SOLID_TRANSPARENT);
+			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_3), Tile::SOLID_TRANSPARENT);
+			fallingRock1->SetTransform(Tiled::Entities::single_rocks_target_1);
+			fallingRock2->SetTransform(Tiled::Entities::single_rocks_target_2);
+			fallingRock3->SetTransform(Tiled::Entities::single_rocks_target_3);
+			return;
+		}
 
 		CutSceneBuilder()
 		.PlayOneFrame([]() {
@@ -376,7 +394,7 @@ void JumpScene::EnterScene()
 		})
 		.WaitAndThen()
 		.PlayOneFrame([this]() {
-			Fx::Screenshake::Start(4.0f, vec(0.6f, 0.6f), vec(35.f, 45.f));
+			Fx::Screenshake::Start(3.3f, vec(0.6f, 0.6f), vec(35.f, 45.f));
 			Fx::Screenshake::screenshakeDampening = 1.03f;
 		})
 		.DoNothingFor(0.35f)
@@ -436,13 +454,19 @@ void JumpScene::EnterScene()
 		.WaitAndThen()
 		.Play(0.7f, [fallingRock3](float progress) {
 			fallingRock3->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_bounce_3, Tiled::Entities::single_rocks_target_3));
+		})
+		.WaitAndThen()
+		.PlayOneFrame([this]() {
+			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_1), Tile::SOLID_TRANSPARENT);
+			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_2), Tile::SOLID_TRANSPARENT);
+			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_3), Tile::SOLID_TRANSPARENT);
 		});
 
-	}, true);
+	});
 
 	test_anim_scale = 1.f;
 	/*
-	new Trigger("my_test_trigger", Tiled::Triggers::single_trigger_test, [this](Trigger* t) {
+	new Trigger("my_test_trigger", Tiled::Triggers::single_trigger_test, [this](Trigger* t, bool isLoadingSave) {
 		CutSceneBuilder(true).Play(1.0f, [this](float progress) {
 			this->test_anim_scale = 1.f+(progress*progress);
 		}).PlayOneFrame([this]() {
@@ -452,7 +476,7 @@ void JumpScene::EnterScene()
 		}).WaitAndThen().PlayOneFrame([t]() {
 			Debug::out << "cutscene done";
 		});
-	}, true);
+	});
 	*/
 
 	Camera::SetCenter(player.GetCameraTargetPos());
