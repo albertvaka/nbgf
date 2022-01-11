@@ -23,7 +23,7 @@ struct DummyEntity : Entity, SelfRegister<DummyEntity>
 	DummyEntity(GPU_Rect rect, const Transform& transform, vec scale = vec(1.f, 1.f))
 		: Entity(transform)
 		, rect(rect)
-		, rotationDegs(transform.rotation)
+		, rotationDegs(transform.rotationDegs)
 		, scale(scale)
 	{ }
 
@@ -31,7 +31,7 @@ struct DummyEntity : Entity, SelfRegister<DummyEntity>
 	{
 		pos.x = transform.x;
 		pos.y = transform.y;
-		rotationDegs = transform.rotation;
+		rotationDegs = transform.rotationDegs;
 	}
 
 	void Draw() const

@@ -500,16 +500,21 @@ inline std::ostream& operator<<(std::ostream& os, vec rhs)
 }
 
 struct Transform : public vec {
-	constexpr Transform(vec pos, float rotation) : vec(pos), rotation(rotation) {}
-	constexpr Transform(float x, float y, float rotation) : vec(x, y), rotation(rotation) {}
-	float rotation;
+	constexpr Transform(vec pos, float rotationDegs) : vec(pos), rotationDegs(rotationDegs) { Angles::KeepDegsBetween0and360(rotationDegs); }
+	constexpr Transform(float x, float y, float rotationDegs) : Transform(vec(x, y), rotationDegs) { }
+	float rotationDegs;
+
+	constexpr const Transform operator-() const
+	{
+		return Transform(-x, -y, 360-rotationDegs);
+	}
 
 	constexpr Transform operator+=(Transform rhs)
 	{
 		x += rhs.x;
 		y += rhs.y;
-		rotation += rhs.rotation;
-
+		rotationDegs += rhs.rotationDegs;
+		Angles::KeepDegsBetween0and360(rotationDegs);
 		return *this;
 	}
 
@@ -517,7 +522,6 @@ struct Transform : public vec {
 	{
 		x += rhs.x;
 		y += rhs.y;
-
 		return *this;
 	}
 
@@ -525,8 +529,8 @@ struct Transform : public vec {
 	{
 		x -= rhs.x;
 		y -= rhs.y;
-		rotation -= rhs.rotation;
-
+		rotationDegs -= rhs.rotationDegs;
+		Angles::KeepDegsBetween0and360(rotationDegs);
 		return *this;
 	}
 
@@ -534,8 +538,8 @@ struct Transform : public vec {
 	{
 		x *= rhs;
 		y *= rhs;
-		rotation *= rhs;
-
+		rotationDegs *= rhs;
+		Angles::KeepDegsBetween0and360(rotationDegs);
 		return *this;
 	}
 
@@ -543,19 +547,19 @@ struct Transform : public vec {
 	{
 		x /= rhs;
 		y /= rhs;
-		rotation /= rhs;
-
+		rotationDegs /= rhs;
+		Angles::KeepDegsBetween0and360(rotationDegs);
 		return *this;
 	}
 
 	constexpr bool operator==(Transform rhs) const
 	{
-		return (x == rhs.x) && (y == rhs.y) && (rotation == rhs.rotation);
+		return (x == rhs.x) && (y == rhs.y) && (rotationDegs == rhs.rotationDegs);
 	}
 
 	constexpr bool operator!=(Transform rhs) const
 	{
-		return (x != rhs.x) || (y != rhs.y) || (rotation == rhs.rotation);
+		return (x != rhs.x) || (y != rhs.y) || (rotationDegs == rhs.rotationDegs);
 	}
 
 };
@@ -579,7 +583,6 @@ inline constexpr Transform operator-(Transform lhs, Transform rhs)
 {
 	Transform result(lhs);
 	result -= rhs;
-
 	return result;
 }
 
@@ -587,7 +590,6 @@ inline constexpr Transform operator+(Transform lhs, Transform rhs)
 {
 	Transform result(lhs);
 	result += rhs;
-
 	return result;
 }
 
@@ -595,7 +597,6 @@ inline constexpr Transform operator+(Transform lhs, vec rhs)
 {
 	Transform result(lhs);
 	result += rhs;
-
 	return result;
 }
 
@@ -603,7 +604,5 @@ inline constexpr Transform operator/(Transform lhs, float rhs)
 {
 	Transform result(lhs);
 	result /= rhs;
-	return result;
-
 	return result;
 }
