@@ -285,4 +285,7 @@ else:
     print("UPDATING: {}".format(os.path.basename(fname)))
     Path(fname).write_text(out_content)
 
-
+# VS compares the dates from this and tiled.tmx to know if it needs to re-trigger this script.
+# We can't use the dates from the generated files themselves because we don't change the files
+# if there are no changes to not trigger a rebuild.
+Path("../obj/last_tiled_generation").touch()

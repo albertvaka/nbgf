@@ -633,4 +633,9 @@
       <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="asset_src\tiled.tmx">
+      <Filter>generated</Filter>
+    </CustomBuild>
+  </ItemGroup>
 </Project>

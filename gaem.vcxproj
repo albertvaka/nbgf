@@ -213,6 +213,69 @@
     <ClCompile Include="vendor\stb_image\stb_image.c" />
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="asset_src\tiled.tmx">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WHERE python &gt;nul 2&gt;&amp;1 || GOTO :NO_PYTHON
+cd asset_src
+call python .\tiled2cpp.py || GOTO :PYTHON_ERROR
+exit /b 0
+:NO_PYTHON
+ECHO Warning: python not found
+ECHO Warning: Continuing the build without generating code from tiled
+exit /b 0
+:PYTHON_ERROR
+ECHO Warning: tiled2cpp.py failed. Make sure you installed requirements.txt
+ECHO Warning: Continuing the build without generating code from tiled
+exit /b 0</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WHERE python &gt;nul 2&gt;&amp;1 || GOTO :NO_PYTHON
+cd asset_src
+call python .\tiled2cpp.py || GOTO :PYTHON_ERROR
+exit /b 0
+:NO_PYTHON
+ECHO Warning: python not found
+ECHO Warning: Continuing the build without generating code from tiled
+exit /b 0
+:PYTHON_ERROR
+ECHO Warning: tiled2cpp.py failed. Make sure you installed requirements.txt
+ECHO Warning: Continuing the build without generating code from tiled
+exit /b 0</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">WHERE python &gt;nul 2&gt;&amp;1 || GOTO :NO_PYTHON
+cd asset_src
+call python .\tiled2cpp.py || GOTO :PYTHON_ERROR
+exit /b 0
+:NO_PYTHON
+ECHO Warning: python not found
+ECHO Warning: Continuing the build without generating code from tiled
+exit /b 0
+:PYTHON_ERROR
+ECHO Warning: tiled2cpp.py failed. Make sure you installed requirements.txt
+ECHO Warning: Continuing the build without generating code from tiled
+exit /b 0</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">WHERE python &gt;nul 2&gt;&amp;1 || GOTO :NO_PYTHON
+cd asset_src
+call python .\tiled2cpp.py || GOTO :PYTHON_ERROR
+exit /b 0
+:NO_PYTHON
+ECHO Warning: python not found
+ECHO Warning: Continuing the build without generating code from tiled
+exit /b 0
+:PYTHON_ERROR
+ECHO Warning: tiled2cpp.py failed. Make sure you installed requirements.txt
+ECHO Warning: Continuing the build without generating code from tiled
+exit /b 0</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)/obj/last_tiled_generation</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)/obj/last_tiled_generation</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)/obj/last_tiled_generation</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)/obj/last_tiled_generation</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating code from Tiled map</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating code from Tiled map</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating code from Tiled map</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating code from Tiled map</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)/asset_src/tiled2cpp.py</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)/asset_src/tiled2cpp.py</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)/asset_src/tiled2cpp.py</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)/asset_src/tiled2cpp.py</AdditionalInputs>
+    </CustomBuild>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl" />
     <None Include="vendor\SDL_gpu\src\renderer_shapes_GL_common.inl" />
   </ItemGroup>
