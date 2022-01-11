@@ -394,7 +394,7 @@ void JumpScene::EnterScene()
 		})
 		.WaitAndThen()
 		.PlayOneFrame([this]() {
-			Fx::Screenshake::Start(3.3f, vec(0.6f, 0.6f), vec(35.f, 45.f));
+			Fx::Screenshake::Start(3.5f, vec(0.6f, 0.6f), vec(35.f, 45.f));
 			Fx::Screenshake::screenshakeDampening = 1.03f;
 		})
 		.DoNothingFor(0.35f)
@@ -407,12 +407,12 @@ void JumpScene::EnterScene()
 		.PlayOneFrame([]() {
 			Fx::Screenshake::screenshakeDampening = -1.f;
 		})
-		.DoNothingFor(2.8f)
+		.DoNothingFor(2.5f)
 		.WaitAndThen()
 		.PlayOneFrame([]() {
 			Fx::Screenshake::screenshakeDampening = 0.9f;
 		})
-		.DoNothingFor(1.1f)
+		.DoNothingFor(1.0f)
 		.WaitAndThen()
 		.PlayOneFrame([this]() {
 			player.lookingLeft = false;
@@ -422,38 +422,38 @@ void JumpScene::EnterScene()
 		CutSceneBuilder()
 		.DoNothingFor(0.9f)
 		.WaitAndThen()
-		.Play(0.8f, [fallingRock1](float progress) {
-			fallingRock1->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_origin_1, Tiled::Entities::single_rocks_middle_1));
+		.Play(0.7f, [fallingRock1](float progress) {
+			fallingRock1->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_origin_1, Tiled::Entities::single_rocks_middle_1));
 		})
 		.WaitAndThen()
-		.Play(1.1f, [fallingRock1](float progress) {
-			fallingRock1->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_1, Tiled::Entities::single_rocks_target_1));
+		.Play(1.0f, [fallingRock1](float progress) {
+			fallingRock1->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_1, Tiled::Entities::single_rocks_target_1));
 		});
 
 		CutSceneBuilder()
 		.DoNothingFor(1.1f)
 		.WaitAndThen()
-		.Play(1.2f, [fallingRock2](float progress) {
-			fallingRock2->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_origin_2, Tiled::Entities::single_rocks_middle_2));
+		.Play(1.0f, [fallingRock2](float progress) {
+			fallingRock2->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_origin_2, Tiled::Entities::single_rocks_middle_2));
 		})
 		.WaitAndThen()
-		.Play(0.7f, [fallingRock2](float progress) {
-			fallingRock2->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_2, Tiled::Entities::single_rocks_target_2));
+		.Play(0.6f, [fallingRock2](float progress) {
+			fallingRock2->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_2, Tiled::Entities::single_rocks_target_2));
 		});
 
 		CutSceneBuilder()
-		.DoNothingFor(1.5f)
+		.DoNothingFor(1.4f)
 		.WaitAndThen()
-		.Play(0.7f, [fallingRock3](float progress) {
+		.Play(0.6f, [fallingRock3](float progress) {
 			fallingRock3->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_origin_3, Tiled::Entities::single_rocks_middle_3));
 		})
 		.WaitAndThen()
-		.Play(0.7f, [fallingRock3](float progress) {
-			fallingRock3->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_3, Tiled::Entities::single_rocks_middle_bounce_3));
+		.Play(0.5f, [fallingRock3](float progress) {
+			fallingRock3->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_3, Tiled::Entities::single_rocks_middle_bounce_3));
 		})
 		.WaitAndThen()
-		.Play(0.7f, [fallingRock3](float progress) {
-			fallingRock3->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_middle_bounce_3, Tiled::Entities::single_rocks_target_3));
+		.Play(0.5f, [fallingRock3](float progress) {
+			fallingRock3->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_bounce_3, Tiled::Entities::single_rocks_target_3));
 		})
 		.WaitAndThen()
 		.PlayOneFrame([this]() {
