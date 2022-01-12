@@ -105,7 +105,7 @@ void DialogBox::Draw() const {
 				GPU_Rect icon = isLast ? AnimLib::UI_ICON_CLOSE : AnimLib::UI_ICON_NEXT;
 				Window::Draw(Assets::spritesheetTexture, kMarginSides + kWidth - kBottomRightIconMargin, kPosY + kHeight - kBottomRightIconMargin)
 					.withRectWithOriginCentered(icon)
-					.withScale(1 + abs(std::sin(mainClock * 4.f)) / 4.f);
+					.withScale(1 + abs(sin(mainClock * 4.f)) / 4.f);
 			}
 			else {
 				float xIncrease = kWidth / (choices.size()+2);

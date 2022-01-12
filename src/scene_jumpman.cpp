@@ -393,7 +393,7 @@ void JumpScene::EnterScene()
 			Input::IgnoreInput(true);
 		})
 		.WaitAndThen()
-		.PlayOneFrame([this]() {
+		.PlayOneFrame([]() {
 			Fx::Screenshake::Start(3.5f, vec(0.6f, 0.6f), vec(35.f, 45.f));
 			Fx::Screenshake::screenshakeDampening = 1.03f;
 		})
