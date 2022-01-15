@@ -128,6 +128,7 @@ void JumpScene::SaveGame() const {
 
 	saveState.StreamPut("bossdead_bipedal") << (boss_bipedal == nullptr);
 	saveState.StreamPut("bossdead_minotaur") << (boss_minotaur == nullptr);
+	saveState.StreamPut("bossdead_ooy") << (boss_ooy == nullptr);
 	saveState.StreamPut("bossdead_mantis") << (Mantis::GetAll().empty());
 
 	saveState.Save();
@@ -176,6 +177,12 @@ void JumpScene::LoadGame() {
 	saveState.StreamGet("bossdead_minotaur") >> bossdead_minotaur;
 	if (bossdead_minotaur && boss_minotaur) {
 		boss_minotaur->alive = false;
+	}
+
+	bool bossdead_ooy = false;
+	saveState.StreamGet("bossdead_ooy") >> bossdead_ooy;
+	if (bossdead_ooy) {
+		boss_ooy->alive = false;
 	}
 
 	bool bossdead_mantis = false;
@@ -286,13 +293,6 @@ void JumpScene::EnterScene()
 		}
 	}
 
-	for (auto const& [id, pos] : Tiled::Entities::ooy) {
-		auto b = new Ooy(pos);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
-	}
-
 	for (auto const& [id, pos] : Tiled::Entities::goombacharger) {
 		auto b = new Goomba(pos,true);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
@@ -323,11 +323,18 @@ void JumpScene::EnterScene()
 	}
 	boss_bipedal = bipedal;
 
+
 	Minotaur* minotaur = new Minotaur(Tiled::Entities::single_boss_minotaur);
 	for (EnemyDoor* s : EnemyDoor::ByScreen[minotaur->screen]) {
 		s->AddEnemy(minotaur);
 	}
 	boss_minotaur = minotaur;
+
+	Ooy* ooy = new Ooy(Tiled::Entities::single_ooy);
+	for (EnemyDoor* s : EnemyDoor::ByScreen[ooy->screen]) {
+		s->AddEnemy(ooy);
+	}
+	boss_ooy = ooy;
 
 	/*
 	for (auto const& [id, pos] : Tiled::Entities::minotaur) {
@@ -737,6 +744,9 @@ void JumpScene::Update(float dt)
 	}
 	if (boss_minotaur && !boss_minotaur->alive) {
 		boss_minotaur = nullptr;
+	}
+	if (boss_ooy && !boss_ooy->alive) {
+		boss_ooy = nullptr;
 	}
 
 	// Delete enemies after updating doors and savestations that might check for them

@@ -28,6 +28,7 @@ struct JumpScene : Scene {
 	RotoText rotoText;
 	Entity* boss_bipedal;
 	Entity* boss_minotaur;
+	Entity* boss_ooy;
 	ZoneManager zoneManager;
 	float test_anim_scale;
 	int saveSlot;
