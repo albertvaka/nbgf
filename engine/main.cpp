@@ -42,6 +42,9 @@ float fpsClock = 0.f;
 #endif
 
 #ifdef _DEBUG
+vec fixedCamera;
+float fixedZoom;
+float fixedRotationDegs;
 void BeforeSceneUpdate();
 void BeforeSceneDraw();
 void AfterSceneDraw();
@@ -216,6 +219,7 @@ void main_loop() {
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME = SDL_SCANCODE_F1;
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME_NEXT = SDL_SCANCODE_E;
 	const SDL_Scancode DEBUG_MODE = SDL_SCANCODE_F2;
+	const SDL_Scancode FIXED_CAMERA = SDL_SCANCODE_F3;
 	const SDL_Scancode DEBUG_RELOAD_ASSETS = SDL_SCANCODE_F4;
 	const SDL_Scancode DEBUG_RESTART_SCENE = SDL_SCANCODE_F5;
 	const SDL_Scancode DEBUG_FAST_FORWARD = SDL_SCANCODE_F10;
@@ -224,6 +228,13 @@ void main_loop() {
 		// Leaks all already loaded assets, but we don't care since this is just for testing
 		Assets::LoadAll();
 		Debug::out << "Assets reloaded";
+	}
+
+	if (Keyboard::IsKeyJustPressed(FIXED_CAMERA)) {
+		Debug::CameraFixed = !Debug::CameraFixed;
+		fixedCamera = Camera::Center();
+		fixedZoom = Camera::Zoom();
+		fixedRotationDegs = Camera::GetRotationDegs();
 	}
 
 	if (Keyboard::IsKeyJustPressed(DEBUG_MODE)) {
@@ -244,12 +255,21 @@ void main_loop() {
 		SceneManager::RestartScene();
 	}
 
-	if (Debug::FrameByFrame && Debug::Draw) {
-		Camera::MoveCameraWithArrows(dt);
-		Camera::ChangeZoomWithPlusAndMinus(dt);
-		Camera::RotateWithPagUpDown(dt);
+	if (Debug::CameraFixed) {
+		 Camera::SetCenter(fixedCamera);
+		 Camera::SetZoom(fixedZoom);
+		 Camera::SetRotationDegs(fixedRotationDegs);
 	}
 
+	if (Debug::FrameByFrame && Debug::Draw) {
+		float vel = Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT) ? 2.f : 1.f;
+		Camera::MoveCameraWithArrows(vel*dt);
+		Camera::ChangeZoomWithPlusAndMinus(vel* dt);
+		Camera::RotateWithPagUpDown(vel* dt);
+		fixedCamera = Camera::Center();
+		fixedZoom = Camera::Zoom();
+		fixedRotationDegs = Camera::GetRotationDegs();
+	}
 	if (Debug::FastForward || Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
 		dt = kMinDt;
 	}
@@ -266,6 +286,12 @@ void main_loop() {
 			}
 		}
 #ifdef _DEBUG
+	}
+
+	if (Debug::CameraFixed) {
+		Camera::SetCenter(fixedCamera);
+		Camera::SetZoom(fixedZoom);
+		Camera::SetRotationDegs(fixedRotationDegs);
 	}
 
 	BeforeSceneDraw();

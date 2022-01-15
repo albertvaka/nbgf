@@ -8,9 +8,12 @@ namespace Debug {
     inline bool Draw = false;
     inline bool FrameByFrame = false;
     inline bool FastForward = false;
+    inline bool CameraFixed = false;
 #else 
     static const bool Draw = false;
     static const bool FrameByFrame = false;
+    static const bool FastForward = false;
+    static const bool CameraFixed = false;
 #endif
     extern std::ostream& _forwarded_out;
 };

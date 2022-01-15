@@ -495,6 +495,8 @@ void JumpScene::EnterScene()
 bool JumpScene::UpdateCamera(float dt) {
 	zoneManager.Update(dt);
 
+	if (Debug::CameraFixed) return false;
+
 	float camZoom = Fx::FreezeImage::IsFrozen() && player.justHit ? 1.5f : 1.f;
 	float oldZoom = Camera::Zoom();
 	float zoomChange = camZoom - oldZoom;
