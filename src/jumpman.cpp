@@ -139,6 +139,7 @@ void JumpMan::DealDamage(vec target) {
 	else if (attackingUp) {
 		vel.y += kDoDamageUpKnockbackVel;
 	} else {
+		// Note: This gets called multiple times when the enemy doesn't die on a single frame, so you get a bigger knockback
 		float knockback = groundTile != Tile::NONE ? kDoDamageKnockbackVelGrounded : kDoDamageKnockbackVel;
 		if (pos.x < target.x) {
 			knockback = -knockback;

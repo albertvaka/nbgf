@@ -27,13 +27,13 @@ const vec* ReceiveDamageFromPlayer(const B& bounds, bool enemyInvulnerable) {
 			return &(b->pos);
 		}
 	}
-	if (!enemyInvulnerable) {
-		JumpMan* player = JumpMan::instance();
-		if (player->playerAttack.alive) {
-			if (Collide(player->playerAttack.Bounds(), bounds)) {
-				player->DealDamage(bounds.Center());
-				return &(player->playerAttack.pos);
-			}
+
+	JumpMan* player = JumpMan::instance();
+	if (player->playerAttack.alive) {
+		if (Collide(player->playerAttack.Bounds(), bounds)) {
+			player->DealDamage(bounds.Center());
+			if (enemyInvulnerable) return nullptr;
+			return &(player->playerAttack.pos);
 		}
 	}
 	return nullptr;
