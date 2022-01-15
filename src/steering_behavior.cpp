@@ -7,17 +7,12 @@
 #include "steering_entity.h"
 #include "gaemtilemap.h"
 
-// TODO: pass these as params to Wander
-// Valors putamare pel ratpenat
-const float WanderRad    = 0.37f; //Ganes que te de posar-se a fer cercles (the radius of the constraining circle for the wander behavior)
-const float WanderDist   = 8.2f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
-const float WanderJitterPerSec = 45.f; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
 
 SteeringBehavior::SteeringBehavior(SteeringEntity* agent) : steeringEntity(agent)
 {
 	//create a vector to a target position on the wander circle
 	float theta = Rand::rollf() * Angles::Tau;
-	m_vWanderTarget = vec(WanderRad * cos(theta), WanderRad * sin(theta));
+	m_vWanderTarget = vec(0.37f * cos(theta), 0.37f * sin(theta));
 }
 
 
@@ -133,8 +128,11 @@ vec SteeringBehavior::Pursuit(const Entity* evader)
 //--------------------------- Wander -------------------------------------
 //
 //  This behavior makes the agent wander about randomly
+//  @WanderRad: Ganes que te de posar-se a fer cercles (the radius of the constraining circle for the wander behavior)
+//  @WanderDist: Velocitat a la que va (distance the wander circle is projected in front of the agent)
+//  @WanderJitterPerSec: Trompicones que dona (the maximum amount of displacement along the circle each frame)
 //------------------------------------------------------------------------
-vec SteeringBehavior::Wander(float dt)
+vec SteeringBehavior::Wander(float WanderRad, float WanderDist, float WanderJitterPerSec, float dt)
 { 
 	//this behavior is dependent on the update rate, so this line must
 	//be included when using time independent framerate.

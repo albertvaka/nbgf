@@ -42,7 +42,7 @@ struct SteeringBehavior
     vec OffsetPursuit(const Entity* leader, const float offset);
 
     //this behavior makes the agent wander about randomly
-    vec Wander(float dt);
+	vec Wander(float WanderRad, float WanderDist, float WanderJitterPerSec, float dt);
 
     //this returns a steering force which will attempt to keep the agent 
     //away from any obstacles it may encounter
