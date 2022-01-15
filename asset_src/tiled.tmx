@@ -4303,7 +4303,7 @@
   <object id="1002" gid="354" x="2999.75" y="701.5" width="16" height="16"/>
   <object id="1003" gid="182" x="33.6667" y="-735" width="16" height="16"/>
   <object id="1006" type="npc" gid="1" x="-491" y="108.333" width="16" height="16"/>
-  <object id="1013" name="skill_breakblocks" type="skill_breakblocks" gid="328" x="3055.92" y="-198.333" width="16" height="16"/>
+  <object id="1013" name="skill_breakblocks" type="skill_breakblocks" gid="328" x="3063.92" y="-198.333" width="16" height="16"/>
   <object id="1019" gid="182" x="-269.636" y="128.909" width="16" height="16"/>
   <object id="1020" gid="182" x="-2694" y="-958.333" width="16" height="16"/>
   <object id="1024" type="ooy" gid="736" x="2646" y="-503.5" width="16" height="16"/>

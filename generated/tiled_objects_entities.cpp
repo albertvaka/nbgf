@@ -228,9 +228,9 @@ const vec Entities::single_skill_attack = vec(1272.37f, 1946.0f);
 
 
 const std::unordered_map<int, vec> Entities::skill_breakblocks = {
-	{ 1013, vec(6127.92f, 1593.667f) },
+	{ 1013, vec(6135.92f, 1593.667f) },
 };
-const vec Entities::single_skill_breakblocks = vec(6127.92f, 1593.667f);
+const vec Entities::single_skill_breakblocks = vec(6135.92f, 1593.667f);
 
 
 const std::unordered_map<int, vec> Entities::skill_dash = {
