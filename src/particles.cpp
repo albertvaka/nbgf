@@ -4,119 +4,138 @@
 
 namespace Particles {
 
-void InitDust()
+void InitDust(PartSys& ps)
 {
-	dust.SetTexture(Assets::spritesheetTexture);
-	dust.AddSprite(AnimLib::POLVITO_PARTICLE);
+	ps.SetTexture(Assets::spritesheetTexture);
+	ps.AddSprite(AnimLib::POLVITO_PARTICLE);
 
-	dust.min_interval = 0.01f;
-	dust.max_interval = 0.05f;
+	ps.min_interval = 0.01f;
+	ps.max_interval = 0.05f;
 
-	dust.min_ttl = 0.1f;
-	dust.max_ttl = 0.3f;
+	ps.min_ttl = 0.1f;
+	ps.max_ttl = 0.3f;
 
-	dust.min_vel.x = 3;
-	dust.max_vel.x = 18;
+	ps.min_vel.x = 3;
+	ps.max_vel.x = 18;
 
-	dust.min_vel.y = -50.f;
-	dust.max_vel.y = -20.f;
+	ps.min_vel.y = -50.f;
+	ps.max_vel.y = -20.f;
 
-	dust.acc.y = 120.f;
+	ps.acc.y = 120.f;
 
-	dust.min_scale = 1.0f;
-	dust.max_scale = 1.8f;
-	dust.scale_vel = -3.5f;
+	ps.min_scale = 1.0f;
+	ps.max_scale = 1.8f;
+	ps.scale_vel = -3.5f;
 
-	dust.min_rotation = 0.f;
-	dust.max_rotation = 360.f;
-	dust.rotation_vel = 160.f;
+	ps.min_rotation = 0.f;
+	ps.max_rotation = 360.f;
+	ps.rotation_vel = 160.f;
 
-	dust.alpha_vel = -1.8f;
+	ps.alpha_vel = -1.8f;
 }
 
-void InitBullet()
+void InitBullet(PartSys& ps)
 {
-	bullet.SetTexture(Assets::spritesheetTexture);
-	bullet.AddSprite({ 5, 37, 6, 6 });
+	ps.SetTexture(Assets::spritesheetTexture);
+	ps.AddSprite({ 5, 37, 6, 6 });
 
 	float vel = 15;
-	bullet.max_vel = vec(vel, vel);
-	bullet.min_vel = vec(-vel, -vel);
-	bullet.min_ttl = 0.5f;
-	bullet.max_ttl = 1.f;
-	bullet.min_interval = 0.03f;
-	bullet.max_interval = 0.06f;
-	bullet.min_scale = 0.5f;
-	bullet.max_scale = 0.9f;
-	bullet.scale_vel = -2.5f;
-	bullet.min_rotation = 0.f;
-	bullet.max_rotation = 360.f;
-	bullet.rotation_vel = 180.f;
-	bullet.alpha = 0.75f;
+	ps.max_vel = vec(vel, vel);
+	ps.min_vel = vec(-vel, -vel);
+	ps.min_ttl = 0.5f;
+	ps.max_ttl = 1.f;
+	ps.min_interval = 0.03f;
+	ps.max_interval = 0.06f;
+	ps.min_scale = 0.5f;
+	ps.max_scale = 0.9f;
+	ps.scale_vel = -2.5f;
+	ps.min_rotation = 0.f;
+	ps.max_rotation = 360.f;
+	ps.rotation_vel = 180.f;
+	ps.alpha = 0.75f;
 }
 
-void InitHealth()
+void InitHealth(PartSys& ps)
 {
-	health.SetTexture(Assets::spritesheetTexture);
-	health.AddSprite({ 353, 18, 4, 4 });
+	ps.SetTexture(Assets::spritesheetTexture);
+	ps.AddSprite({ 353, 18, 4, 4 });
 
-	health.max_vel = vec(12, -13);
-	health.min_vel = vec(-12, -16);
-	health.min_ttl = 0.5f;
-	health.max_ttl = 0.6f;
-	health.min_interval = 0.1f;
-	health.max_interval = 0.1f;
-	health.min_scale = 0.5f;
-	health.max_scale = 0.7f;
-	health.scale_vel = -0.5f;
-	health.min_rotation = 0.f;
-	health.max_rotation = 360.f;
-	health.rotation_vel = 180.f;
-	health.rotation_vel = 180.f;
-	health.alpha = 0.7f;
+	ps.max_vel = vec(12, -13);
+	ps.min_vel = vec(-12, -16);
+	ps.min_ttl = 0.5f;
+	ps.max_ttl = 0.6f;
+	ps.min_interval = 0.1f;
+	ps.max_interval = 0.1f;
+	ps.min_scale = 0.5f;
+	ps.max_scale = 0.7f;
+	ps.scale_vel = -0.5f;
+	ps.min_rotation = 0.f;
+	ps.max_rotation = 360.f;
+	ps.rotation_vel = 180.f;
+	ps.rotation_vel = 180.f;
+	ps.alpha = 0.7f;
 }
 
-void InitMissile()
+void InitMissile(PartSys& ps)
 {
-	missile.SetTexture(Assets::spritesheetTexture);
-	missile.AddSprite(AnimLib::MISSILE_SMOKE_1);
-	missile.AddSprite(AnimLib::MISSILE_SMOKE_2);
+	ps.SetTexture(Assets::spritesheetTexture);
+	ps.AddSprite(AnimLib::MISSILE_SMOKE_1);
+	ps.AddSprite(AnimLib::MISSILE_SMOKE_2);
 
-	missile.max_vel = vec(10, 10);
-	missile.min_vel = vec(-10, -10);
-	missile.min_ttl = 0.6f;
-	missile.max_ttl = 1.f;
-	missile.min_scale = 0.3f;
-	missile.max_scale = 0.6f;
-	missile.alpha = 0.5f;
-	missile.alpha_vel = -1.0f;
+	ps.max_vel = vec(10, 10);
+	ps.min_vel = vec(-10, -10);
+	ps.min_ttl = 0.6f;
+	ps.max_ttl = 1.f;
+	ps.min_scale = 0.3f;
+	ps.max_scale = 0.6f;
+	ps.alpha = 0.5f;
+	ps.alpha_vel = -1.0f;
 }
 
-void InitItemSparks()
+void InitItemSparks(PartSys& ps)
 {
-	itemSparks.SetTexture(Assets::spritesheetTexture);
-	itemSparks.AddSprite({ 5, 37, 6, 6 });
-	itemSparks.max_vel = vec(0, -12);
-	itemSparks.min_vel = vec(0, -35);
-	itemSparks.min_ttl = 1.f;
-	itemSparks.max_ttl = 1.f;
-	itemSparks.min_interval = 0.15f;
-	itemSparks.max_interval = 0.25f;
-	itemSparks.min_scale = 0.6f;
-	itemSparks.max_scale = 0.4f;
-	itemSparks.alpha = 0.7f;
-	itemSparks.alpha_vel = -0.8f;
+	ps.SetTexture(Assets::spritesheetTexture);
+	ps.AddSprite({ 5, 37, 6, 6 });
+	ps.max_vel = vec(0, -12);
+	ps.min_vel = vec(0, -35);
+	ps.min_ttl = 1.f;
+	ps.max_ttl = 1.f;
+	ps.min_interval = 0.15f;
+	ps.max_interval = 0.25f;
+	ps.min_scale = 0.6f;
+	ps.max_scale = 0.4f;
+	ps.alpha = 0.7f;
+	ps.alpha_vel = -0.8f;
+}
+
+void InitOoyTearTrails(PartSys& ps)
+{
+	ps.SetTexture(Assets::spritesheetTexture);
+	for (int i = 0; i < AnimLib::OOY_TEAR.size(); i++) {
+		ps.AddSprite(AnimLib::OOY_TEAR[i].rect);
+	}
+	ps.min_interval = 0.15f;
+	ps.max_interval = 0.25f;
+	ps.max_vel = vec(10, 10);
+	ps.min_vel = vec(-10, -10);
+	ps.min_ttl = 0.6f;
+	ps.max_ttl = 1.f;
+	ps.min_scale = 0.4f;
+	ps.max_scale = 0.65f;
+	ps.alpha = 0.5f;
+	ps.alpha_vel = -1.0f;
 }
 
 void Init()
 {
 	if (missile.texture == nullptr)
 	{
-		InitDust();
-		InitBullet();
-		InitHealth();
-		InitMissile();
-		InitItemSparks();
+		InitDust(dust);
+		InitBullet(bullet);
+		InitHealth(health);
+		InitMissile(missile);
+		InitItemSparks(itemSparks);
+		InitOoyTearTrails(ooyTearTrail);
 	}
 }
 
@@ -127,6 +146,7 @@ void UpdateAll(float dt)
 	health.UpdateParticles(dt);
 	missile.UpdateParticles(dt);
 	itemSparks.UpdateParticles(dt);
+	ooyTearTrail.UpdateParticles(dt);
 }
 
 void ClearAll()
@@ -136,6 +156,7 @@ void ClearAll()
 	health.Clear();
 	missile.Clear();
 	itemSparks.Clear();
+	ooyTearTrail.Clear();
 }
 
 void DoDustJump(vec pos)

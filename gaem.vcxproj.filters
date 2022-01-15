@@ -400,6 +400,9 @@
     <ClInclude Include="src\dummyentity.h">
       <Filter>src\entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\ooytear.h">
+      <Filter>src\entities\bullets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -626,6 +629,9 @@
     </ClCompile>
     <ClCompile Include="src\enemy_door.cpp">
       <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ooytear.cpp">
+      <Filter>src\entities\bullets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,7 @@
 #include "fx.h"
 #include "fireslime.h"
 #include "fireshot.h"
+#include "ooytear.h"
 #include "explosive.h"
 #include "lava.h"
 #include "savestation.h"
@@ -519,6 +520,7 @@ void JumpScene::ExitScene()
 	Bullet::DeleteAll();
 	Missile::DeleteAll();
 	FireShot::DeleteAll();
+	OoyTear::DeleteAll();
 	Bat::DeleteAll();
 	Goomba::DeleteAll();
 	Ooy::DeleteAll();
@@ -618,7 +620,12 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 	}
 	FireShot::DeleteNotAlive();
-	
+
+	for (OoyTear* e : OoyTear::GetAll()) {
+		e->Update(dt);
+	}
+	OoyTear::DeleteNotAlive();
+
 	for (Missile* e  : Missile::GetAll()) {
 		e->Update(dt);
 	}
@@ -840,12 +847,15 @@ void JumpScene::Draw()
 
 	destroyedTiles.Draw();
 
+	Particles::ooyTearTrail.DrawImGUI("Tears");
+
 	DrawAllInOrder(
 		SaveStation::GetAll(),
 		EnemyDoor::GetAll(),
 		OneShotAnim::GetAll(),
 		DummyEntity::GetAll(),
 		Goomba::GetAll(),
+		&Particles::ooyTearTrail,
 		Ooy::GetAll(),
 		Minotaur::GetAll(),
 		FlyingAlien::GetAll(),
@@ -861,6 +871,7 @@ void JumpScene::Draw()
 		&Particles::health,
 		Bullet::GetAll(),
 		FireShot::GetAll(),
+		OoyTear::GetAll(),
 		Missile::GetAll(),
 		HealthUp::GetAll(),
 		BigItem::GetAll(),

@@ -286,14 +286,12 @@ namespace AnimLib {
 
 	const constexpr SheetFrameCalculator ooySheet({ 30.f, 30.f }, 15, { 0.f, 390.f });
 	constexpr const GPU_Rect OOY_IDLE = ooySheet.Rect(0);
-	constexpr const AnimationFrame OOY_CHANGE_STATE[] = {
-		ooySheet.Frame(4, .1f),
-		ooySheet.Frame(5, .1f),
-	};
-	constexpr const GPU_Rect OOY_CHASE_NE = ooySheet.Rect(5);
-	constexpr const GPU_Rect OOY_CHASE_NW = ooySheet.Rect(6);
-	constexpr const GPU_Rect OOY_CHASE_SW = ooySheet.Rect(7);
-	constexpr const GPU_Rect OOY_CHASE_SE = ooySheet.Rect(8);
+	constexpr const GPU_Rect OOY_CHANGE_STATE_1 = ooySheet.Rect(4);
+	constexpr const GPU_Rect OOY_CHANGE_STATE_2 = ooySheet.Rect(5);
+	constexpr const GPU_Rect OOY_CHASE_NE = ooySheet.Rect(6);
+	constexpr const GPU_Rect OOY_CHASE_NW = ooySheet.Rect(7);
+	constexpr const GPU_Rect OOY_CHASE_SW = ooySheet.Rect(8);
+	constexpr const GPU_Rect OOY_CHASE_SE = ooySheet.Rect(9);
 
 	const constexpr SheetFrameCalculator warriorSheet({ 70.f, 48.f }, 6);
 	constexpr const AnimationFrame WARRIOR_IDLE[] = { warriorSheet.Frame(5, 1.f), warriorSheet.Frame(0, 1.0f), };
@@ -342,5 +340,9 @@ namespace AnimLib {
 	constexpr const GPU_Rect UI_ICON_CLOSE = { 440, 267, 11, 10 };
 
 	constexpr const GPU_Rect BIG_ROCK = { 134, 427, 42, 37 };
+
+
+	const constexpr SheetFrameCalculator ooyTearSheet({ 24.f, 24.f }, 21, vec(0,20*24));
+	constexpr const std::array<AnimationFrame, 21> OOY_TEAR = ooyTearSheet.Frames<21>(0, .1f);
 }
 
