@@ -311,20 +311,20 @@ struct Tile {
 	};
 
 	// Aliases
-	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_17;
-	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_58;
-	static constexpr Value BG_DOOR_OPENING = BG_79;
-	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
-	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
-	static constexpr Value SOLID_SIMPLE = SOLID_12;
-	static constexpr Value SOLID_DOOR = SOLID_32;
-	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_39;
-	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_47;
-	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_1;
-	static constexpr Value BREAKABLE_COVERING_CAVE_FLOOR = BREAKABLE_2;
-	static constexpr Value BREAKABLE_COVERING_CAVE_CEILING = BREAKABLE_3;
-	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_4;
-	static constexpr Value BREAKABLE_HARD_EXPLOSIVE_BLOCK = BREAKABLE_HARD_1;
+	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_31;
+	static constexpr Value BG_DOOR_OPENING = BG_68;
+	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_78;
+	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_8;
+	static constexpr Value ONEWAY_SIMPLE = ONEWAY_8;
+	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_1;
+	static constexpr Value SOLID_SIMPLE = SOLID_4;
+	static constexpr Value SOLID_DOOR = SOLID_27;
+	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_34;
+	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_1;
+	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_2;
+	static constexpr Value BREAKABLE_COVERING_CAVE_FLOOR = BREAKABLE_3;
+	static constexpr Value BREAKABLE_COVERING_CAVE_CEILING = BREAKABLE_4;
+	static constexpr Value BREAKABLE_HARD_EXPLOSIVE_BLOCK = BREAKABLE_HARD_2;
 
 	constexpr operator Value() const { return value; }  // Allow switch and comparisons.
 	explicit constexpr operator bool() = delete;        // Prevent if(tile)
