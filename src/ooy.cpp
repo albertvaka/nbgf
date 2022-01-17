@@ -42,7 +42,7 @@ extern float mainClock;
 constexpr const GPU_Rect directions[] = { AnimLib::OOY_CHASE_SE, AnimLib::OOY_CHASE_SW, AnimLib::OOY_CHASE_NW, AnimLib::OOY_CHASE_NE };
 
 Ooy::Ooy(vec pos)
-	: SteeringEntity(pos, kRadius, kMaxSpeed, Rand::VecInRange(-kMaxSpeed, -kMaxSpeed, kMaxSpeed, kMaxSpeed))
+	: SteeringEntity(pos, kRadius, kMaxSpeed, vec(0,0))
 	, steering(this)
 	, health(kHealth)
 {
@@ -139,6 +139,11 @@ void Ooy::Update(float dt)
 	if (ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f)) {
 		TakeDamage();
 		if (alive == false) return;
+		if (state == State::STILL) {
+			// Should not happen
+			state = State::CHASING;
+			timer = 0.f;
+		}
 	}
 
 	DamagePlayerOnCollision(Bounds());
@@ -148,6 +153,7 @@ void Ooy::Draw() const
 {
 	GPU_Rect rect;
 	switch (state) {
+	case State::STILL:
 	case State::IDLE:
 		rect = AnimLib::OOY_IDLE;
 		CircleBounds(pos, kStartChasingRadius).DebugDraw(255, 0, 255);

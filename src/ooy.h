@@ -10,6 +10,7 @@ struct Ooy : SteeringEntity, SelfRegister<Ooy>
 {
 	enum class State
 	{
+		STILL,
 		IDLE,
 		ENTER_CHASE,
 		EXIT_CHASE,

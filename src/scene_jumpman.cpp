@@ -381,7 +381,9 @@ void JumpScene::EnterScene()
 	DummyEntity* fallingRock1 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_1);
 	DummyEntity* fallingRock2 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_2);
 	DummyEntity* fallingRock3 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_3);
-
+	if (boss_ooy) {
+		boss_ooy->state = Ooy::State::STILL;
+	}
 	new Trigger("rockfall", Tiled::Triggers::single_trigger_rockfall, [this, fallingRock1, fallingRock2, fallingRock3](Trigger* t, bool isLoadingSave) {
 
 		if (isLoadingSave) {
@@ -395,7 +397,7 @@ void JumpScene::EnterScene()
 		}
 
 		CutSceneBuilder()
-		.PlayOneFrame([]() {
+		.PlayOneFrame([this]() {
 			//FIXME: Replace by calling a special "ragdoll update" function on the player during the cutscene
 			//that ignores input but keeps the player's current momentum until it stops naturally
 			Input::IgnoreInput(true);
@@ -425,6 +427,7 @@ void JumpScene::EnterScene()
 		.PlayOneFrame([this]() {
 			player.lookingLeft = false;
 			Input::IgnoreInput(false);
+			if (boss_ooy) boss_ooy->state = Ooy::State::EXIT_CHASE;
 		});
 
 		CutSceneBuilder()
