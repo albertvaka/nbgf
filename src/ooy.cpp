@@ -12,9 +12,6 @@
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
 
-constexpr const float idleSpeed = 25;
-constexpr const float chaseSpeed = 50;
-
 constexpr const float kIntervalShoot = 0.07f;
 constexpr const float kStartChasingRadius = 200.f;
 constexpr const float kStopChasingRadius = 300.f;
@@ -25,7 +22,6 @@ constexpr const float kTimeToChangeState = 1.2f;
 constexpr const float kScale = 2.f;
 constexpr const float kRadius = 12.f*kScale;
 constexpr const float kMaxSpeed = 110.f;
-constexpr const vec size = { AnimLib::OOY_IDLE.w, AnimLib::OOY_IDLE.h };
 
 constexpr const float kTearVel = 120;
 constexpr const float kRandomTearVel = 10;
@@ -128,6 +124,8 @@ void Ooy::Update(float dt)
 					
 				}
 			}
+			break;
+		case State::STILL:
 			break;
 	}
 

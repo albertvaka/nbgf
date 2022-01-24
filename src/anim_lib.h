@@ -341,7 +341,6 @@ namespace AnimLib {
 
 	constexpr const GPU_Rect BIG_ROCK = { 134, 427, 42, 37 };
 
-
 	const constexpr SheetFrameCalculator ooyTearSheet({ 24.f, 24.f }, 21, vec(0,20*24));
 	constexpr const std::array<AnimationFrame, 21> OOY_TEAR = ooyTearSheet.Frames<21>(0, .1f);
 }

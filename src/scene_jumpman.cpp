@@ -397,7 +397,7 @@ void JumpScene::EnterScene()
 		}
 
 		CutSceneBuilder()
-		.PlayOneFrame([this]() {
+		.PlayOneFrame([]() {
 			//FIXME: Replace by calling a special "ragdoll update" function on the player during the cutscene
 			//that ignores input but keeps the player's current momentum until it stops naturally
 			Input::IgnoreInput(true);

@@ -7,8 +7,6 @@
 #include "common_enemy.h"
 #include "particles.h"
 
-constexpr const GPU_Rect TEAR_BLOB = { 19 * 16.f, 17 * 16.f, 16.f, 16.f };
-
 void OoyTear::Update(float dt)
 {
 	pos += vel * dt;
