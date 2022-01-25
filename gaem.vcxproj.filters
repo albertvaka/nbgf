@@ -633,6 +633,9 @@
     <ClCompile Include="src\ooytear.cpp">
       <Filter>src\entities\bullets</Filter>
     </ClCompile>
+    <ClCompile Include="engine\enable_discrete_gpu.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">
