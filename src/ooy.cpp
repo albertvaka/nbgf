@@ -95,16 +95,19 @@ void Ooy::Update(float dt)
 
 	switch (state) {
 		case State::IDLE:
+		{
 			vel += steering.Wander(WanderRad, WanderDist, WanderJitterPerSec, dt).Normalized() * 150 * dt;
 			vel += steering.Seek(bounds.Center()).Normalized() * 150 * dt;
 			if (state == State::IDLE && player->pos.Distance(pos) < kStartChasingRadius) {
 				state = State::ENTER_CHASE;
 				timer = 0;
 			}
+		}
 			break;
 		case State::CHASING:
 		case State::ENTER_CHASE:
 		case State::EXIT_CHASE:
+		{
 			vec seekForce = steering.Seek(player->pos - vec(0, kTargetVerticalDistance)).Truncated(300 * dt);
 			vel += seekForce;
 			if (state == State::CHASING) {
@@ -124,6 +127,7 @@ void Ooy::Update(float dt)
 					
 				}
 			}
+		}
 			break;
 		case State::STILL:
 			break;
