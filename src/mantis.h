@@ -42,7 +42,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	void TakeDamage(vec src);
 	void Reset();
 private:
-	void EnterWalkingState();
+	void EnterWalkingState(float dt);
 
 };
 

@@ -13,8 +13,8 @@
 constexpr const float kGravityAcc = 660; // TODO: reuse from jumpman for consistency, keep in sync meanwhile
 
 constexpr const float kSpeed = 60;
-constexpr const float kJumpSpeedY = -350;
-constexpr const float kMaxJumpSpeedX = 300;
+constexpr const float kJumpSpeedY = -370;
+constexpr const float kMaxJumpSpeedX = 270;
 
 constexpr const float kJumpRadius = 280;
 constexpr const float kMeleeRadius = 80;
@@ -23,7 +23,7 @@ constexpr const float kScale = 1.5f;
 constexpr const float kMantisHealth = 5;
 
 // Square used to collide against the tilemap
-constexpr const vec kSpriteSize = vec(24* kScale, 24* kScale);
+constexpr const vec kSpriteSize = vec(16 * kScale, 24* kScale);
 // Radius used to collide against the player (a bit smaller)
 constexpr const float kSpriteRadius = 10.f* kScale;
 
@@ -98,7 +98,7 @@ void Mantis::Update(float dt)
 	{
 		anim.Update(dt);
 		if (anim.IsComplete()) {
-			EnterWalkingState();
+			EnterWalkingState(dt);
 		}
 	}
 	break;
@@ -118,18 +118,11 @@ void Mantis::Update(float dt)
 			anim.Update(dt);
 		}
 
-		if (IsGoingToHitAWall(pos, kSpriteSize, vel, dt)
-			|| IsGoingToLeaveTheScreen(pos, kSpriteSize, vel, dt, screen)
+		if (IsGoingToLeaveTheScreen(pos, kSpriteSize, vel, dt, screen)
 			|| IsBouncingAgainstAnotherMantis())
 		{
 			walkingBackwards = false;
 			vel.x = -vel.x;
-		} else if (IsGoingToRunOffPlatform(pos, vec(0.f, kSpriteSize.y), vel, dt)) {
-			walkingBackwards = false;
-			state = State::JUMP;
-			pos.y += 1.f;
-			vel.y += kGravityAcc * dt;
-
 		}
 
 		Particles::DoDustRun(vec(pos.x, pos.y + kSpriteSize.y / 2), dt/2.f, vel.y < 0, false); // Half the dt so we do less dust
@@ -140,8 +133,18 @@ void Mantis::Update(float dt)
 		}
 		auto ret = MoveAgainstTileMap(pos, kSpriteSize, finalVel, dt);
 		pos = ret.pos;
+		if (!ret.leftWallCollision.isEmpty() || !ret.rightWallCollision.isEmpty()) {
+			walkingBackwards = false;
+			vel.x = -vel.x;
+		}
+		if (ret.groundCollision == Tile::NONE) {
+			walkingBackwards = false;
+			state = State::JUMP;
+			pos.y += 1.f;
+			vel.y += kGravityAcc * dt;
+		}
 
-		if (!collideInnerRadius && jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, kJumpRadius), player->Bounds()))
+		if (!ret.groundCollision.isSlope() && !collideInnerRadius && jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, kJumpRadius), player->Bounds()))
 		{
 			//Debug::out << "preparing";
 			initialPlayerPosition = player->pos;
@@ -168,14 +171,6 @@ void Mantis::Update(float dt)
 	case State::JUMP:
 	{
 		vel.y += kGravityAcc * dt;
-		
-		// Disabled temporarily since the screen where I'm testing the mantis has a screen bounds smaller than the actual 
-		// space in the tilemap and makes it go crazy when it reaches that area by jumping. This code is meant to prevent
-		// the mantis from leaving to the sides of the sceen, but not through the top/bottom.
-		//if (IsGoingToLeaveTheScreen(pos, spriteSize, vel, dt, screen))
-		//{
-		//	vel.x = -vel.x;
-		//}
 
 		// Bounce against other mantis
 		if (IsBouncingAgainstAnotherMantis()
@@ -187,7 +182,7 @@ void Mantis::Update(float dt)
 		pos = ret.pos;
 
 		if (ret.groundCollision != Tile::NONE) {
-			EnterWalkingState();
+			EnterWalkingState(dt);
 			Particles::DoDustLand(vec(pos.x, pos.y + kSpriteSize.y/2));
 			jumpCooldownTimer = kJumpCooldown + Rand::rollf(kJumpCooldownRand);
 		} else if (ret.ceilingCollision != Tile::NONE) {
@@ -281,7 +276,7 @@ void Mantis::Draw() const
 }
 
 
-void Mantis::EnterWalkingState() {
+void Mantis::EnterWalkingState(float dt) {
 	JumpMan* player = JumpMan::instance();
 	vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
 	walkingBackwards = false;
@@ -289,7 +284,7 @@ void Mantis::EnterWalkingState() {
 		walkingBackwards = true;
 		vel.x = -vel.x; // If just hit move away instead of towards the player
 	}
-	vel.y = 0;
+	vel.y = kGravityAcc*dt;
 	state = State::WALKING;
 	anim.Set(AnimLib::MANTIS_WALK);
 }
