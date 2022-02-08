@@ -644,6 +644,12 @@
     <None Include="vendor\SDL_gpu\src\renderer_shapes_GL_common.inl">
       <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </None>
+    <None Include="asset_src\tiled2cpp.py">
+      <Filter>generated</Filter>
+    </None>
+    <None Include="asset_src\texturepacker2cpp.py">
+      <Filter>generated</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx">

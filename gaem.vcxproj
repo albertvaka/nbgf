@@ -280,6 +280,8 @@ exit /b 0</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)/asset_src/tiled2cpp.py</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)/asset_src/tiled2cpp.py</AdditionalInputs>
     </CustomBuild>
+    <None Include="asset_src\texturepacker2cpp.py" />
+    <None Include="asset_src\tiled2cpp.py" />
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl" />
     <None Include="vendor\SDL_gpu\src\renderer_shapes_GL_common.inl" />
   </ItemGroup>

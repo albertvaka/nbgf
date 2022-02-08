@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#321f2432" nextlayerid="14" nextobjectid="1050">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" nextlayerid="14" nextobjectid="1055">
  <editorsettings>
   <export format="json"/>
  </editorsettings>
- <tileset firstgid="1" name="mario" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" tilecount="1024" columns="32" objectalignment="center">
   <image source="../bin/data/spritesheet.png" width="512" height="512"/>
   <tile id="0" type="spawn"/>
   <tile id="1" type="breakable"/>
@@ -73,7 +73,8 @@
   <tile id="115" type="oneway"/>
   <tile id="116" type="oneway"/>
   <tile id="124" type="oneway"/>
-  <tile id="128" type="bat"/>
+  <tile id="128" type="batawake"/>
+  <tile id="134" type="angrybatawake"/>
   <tile id="143" type="solid"/>
   <tile id="144" type="oneway"/>
   <tile id="145" type="oneway"/>
@@ -88,6 +89,8 @@
   <tile id="183" type="oneway"/>
   <tile id="184" type="oneway"/>
   <tile id="185" type="oneway"/>
+  <tile id="192" type="bat"/>
+  <tile id="196" type="angrybat"/>
   <tile id="198" type="solid">
    <properties>
     <property name="alias" value="door"/>
@@ -4168,21 +4171,21 @@
   <object id="1032" name="cave" type="cave" x="1809.81" y="-834.833" width="1449.04" height="738.667"/>
  </objectgroup>
  <objectgroup id="4" name="Entities" opacity="0.9">
-  <object id="50" gid="129" x="-368" y="48" width="16" height="16"/>
+  <object id="50" gid="193" x="-368" y="48" width="16" height="16"/>
   <object id="58" gid="359" x="144.5" y="-275.5" width="16" height="16"/>
   <object id="60" gid="359" x="832.083" y="124.333" width="16" height="16"/>
-  <object id="61" type="batawake" gid="129" x="696.417" y="86.25" width="16" height="16"/>
-  <object id="62" gid="129" x="576" y="32" width="16" height="16"/>
-  <object id="63" gid="129" x="703" y="161" width="16" height="16"/>
-  <object id="65" gid="129" x="782.75" y="32.5" width="16" height="16"/>
+  <object id="61" gid="129" x="696.417" y="86.25" width="16" height="16"/>
+  <object id="62" gid="193" x="576" y="32" width="16" height="16"/>
+  <object id="63" gid="193" x="703" y="161" width="16" height="16"/>
+  <object id="65" gid="193" x="782.75" y="32.5" width="16" height="16"/>
   <object id="73" gid="1" x="-897.334" y="23.1667" width="16" height="16"/>
   <object id="76" type="initial_batawake" gid="129" x="-733" y="116.5" width="16" height="16"/>
   <object id="77" type="initial_batawake" gid="129" x="-1030.5" y="36" width="16" height="16"/>
   <object id="92" name="skill_attack" type="skill_attack" gid="98" x="-1799.63" y="154" width="16" height="16"/>
-  <object id="117" gid="129" x="128.5" y="304" width="16" height="16"/>
+  <object id="117" gid="193" x="128.5" y="304" width="16" height="16"/>
   <object id="118" gid="200" x="-158.333" y="304.667" width="16" height="16"/>
   <object id="126" gid="390" x="-78.4664" y="143.114" width="16" height="16"/>
-  <object id="127" gid="129" x="-1860" y="-16.5" width="16" height="16"/>
+  <object id="127" gid="193" x="-1860" y="-16.5" width="16" height="16"/>
   <object id="129" gid="200" x="-1629.45" y="130.545" width="16" height="16"/>
   <object id="167" name="boss_bipedal" type="boss_bipedal" gid="213" x="-2252.73" y="608.754" width="16" height="16"/>
   <object id="177" gid="13" x="-536.5" y="480" width="16" height="16"/>
@@ -4191,18 +4194,18 @@
   <object id="181" gid="13" x="-993.886" y="624.364" width="16" height="16"/>
   <object id="182" gid="13" x="-1038.8" y="560.182" width="16" height="16"/>
   <object id="184" gid="13" x="-1263.75" y="592.25" width="16" height="16"/>
-  <object id="191" type="batawake" gid="129" x="-637" y="493" width="16" height="16"/>
-  <object id="192" type="batawake" gid="129" x="-952" y="536.667" width="16" height="16"/>
-  <object id="196" gid="129" x="-709.333" y="373.667" width="16" height="16"/>
-  <object id="197" gid="129" x="-674.333" y="357.333" width="16" height="16"/>
+  <object id="191" gid="129" x="-637" y="493" width="16" height="16"/>
+  <object id="192" gid="129" x="-952" y="536.667" width="16" height="16"/>
+  <object id="196" gid="193" x="-709.333" y="373.667" width="16" height="16"/>
+  <object id="197" gid="193" x="-674.333" y="357.333" width="16" height="16"/>
   <object id="199" gid="13" x="-743.75" y="512.875" width="16" height="16"/>
   <object id="200" gid="13" x="-906.25" y="480.125" width="16" height="16"/>
   <object id="201" gid="13" x="-1194.5" y="528.5" width="16" height="16"/>
-  <object id="203" gid="129" x="-1267.08" y="424.542" width="16" height="16"/>
-  <object id="204" gid="129" x="-1239.58" y="404.792" width="16" height="16"/>
-  <object id="205" gid="129" x="-1019.33" y="373.667" width="16" height="16"/>
-  <object id="206" gid="129" x="-1042.67" y="373.333" width="16" height="16"/>
-  <object id="207" gid="129" x="-1361.75" y="510.5" width="16" height="16"/>
+  <object id="203" gid="193" x="-1267.08" y="424.542" width="16" height="16"/>
+  <object id="204" gid="193" x="-1239.58" y="404.792" width="16" height="16"/>
+  <object id="205" gid="193" x="-1019.33" y="373.667" width="16" height="16"/>
+  <object id="206" gid="193" x="-1042.67" y="373.333" width="16" height="16"/>
+  <object id="207" gid="193" x="-1361.75" y="510.5" width="16" height="16"/>
   <object id="208" gid="13" x="-1570.5" y="576.417" width="16" height="16"/>
   <object id="210" gid="13" x="-1585.67" y="640.167" width="16" height="16"/>
   <object id="211" gid="13" x="-1526" y="640.333" width="16" height="16"/>
@@ -4211,7 +4214,7 @@
   <object id="222" gid="51" x="-2757.36" y="-192.879" width="16" height="16"/>
   <object id="223" gid="51" x="-2548.91" y="-190.242" width="16" height="16"/>
   <object id="225" gid="51" x="-2643.66" y="66.606" width="16" height="16"/>
-  <object id="247" gid="129" x="591.333" y="126.667" width="16" height="16"/>
+  <object id="247" gid="193" x="591.333" y="126.667" width="16" height="16"/>
   <object id="334" gid="13" x="1351" y="209.5" width="16" height="16"/>
   <object id="338" gid="13" x="1535.5" y="337" width="16" height="16"/>
   <object id="359" gid="200" x="-2340.75" y="305" width="16" height="16"/>
@@ -4223,14 +4226,14 @@
   <object id="661" gid="359" x="1938.67" y="319.682" width="16" height="16"/>
   <object id="665" type="boss_minotaur" gid="56" x="331" y="-661.5" width="16" height="16"/>
   <object id="684" gid="13" x="609" y="-273" width="16" height="16"/>
-  <object id="691" type="angrybat" gid="129" x="590.833" y="-241.833" width="16" height="16"/>
-  <object id="697" type="angrybat" gid="129" x="544.5" y="-476.75" width="16" height="16"/>
-  <object id="724" type="angrybat" gid="129" x="869.404" y="-564.25" width="16" height="16"/>
-  <object id="744" type="batawake" gid="129" x="427.5" y="-386" width="16" height="16"/>
-  <object id="745" type="batawake" gid="129" x="505.5" y="-313" width="16" height="16"/>
-  <object id="746" gid="129" x="734" y="-333" width="16" height="16"/>
-  <object id="747" type="angrybat" gid="129" x="1046.5" y="-317" width="16" height="16"/>
-  <object id="751" type="angrybat" gid="129" x="850" y="-434" width="16" height="16"/>
+  <object id="691" gid="197" x="590.833" y="-241.833" width="16" height="16"/>
+  <object id="697" gid="197" x="544.5" y="-476.75" width="16" height="16"/>
+  <object id="724" gid="197" x="869.404" y="-564.25" width="16" height="16"/>
+  <object id="744" gid="129" x="427.5" y="-386" width="16" height="16"/>
+  <object id="745" gid="129" x="505.5" y="-313" width="16" height="16"/>
+  <object id="746" gid="193" x="734" y="-333" width="16" height="16"/>
+  <object id="747" gid="197" x="1046.5" y="-317" width="16" height="16"/>
+  <object id="751" gid="197" x="850" y="-434" width="16" height="16"/>
   <object id="770" gid="13" x="1447.67" y="78.6667" width="16" height="16"/>
   <object id="771" gid="13" x="1634" y="80.6667" width="16" height="16"/>
   <object id="772" gid="13" x="1456.67" y="-49.3333" width="16" height="16"/>
@@ -4240,19 +4243,19 @@
   <object id="777" gid="13" x="431.75" y="-432.5" width="16" height="16"/>
   <object id="778" gid="13" x="434.25" y="-304.75" width="16" height="16"/>
   <object id="779" gid="13" x="1350.5" y="334.5" width="16" height="16"/>
-  <object id="782" gid="129" x="886.5" y="-563.5" width="16" height="16"/>
+  <object id="782" gid="193" x="886.5" y="-563.5" width="16" height="16"/>
   <object id="784" name="skill_dive" type="skill_dive" gid="204" x="-150.5" y="-435.75" width="16" height="16"/>
   <object id="808" gid="359" x="456.667" y="450.333" width="16" height="16"/>
   <object id="836" gid="537" x="2785.39" y="257.724" width="16" height="16"/>
   <object id="839" gid="537" x="2787.38" y="351.807" width="16" height="16"/>
   <object id="841" gid="537" x="3168" y="351.333" width="16" height="16"/>
-  <object id="866" type="angrybat" gid="129" x="959.833" y="432.5" width="16" height="16"/>
-  <object id="867" type="angrybat" gid="129" x="736.167" y="479.5" width="16" height="16"/>
-  <object id="868" type="angrybat" gid="129" x="720.167" y="399.667" width="16" height="16"/>
-  <object id="887" type="angrybat" gid="129" x="1420.5" y="-219.5" width="16" height="16"/>
-  <object id="889" gid="129" x="1714.67" y="-283.333" width="16" height="16"/>
-  <object id="890" gid="129" x="841" y="-563.25" width="16" height="16"/>
-  <object id="892" gid="359" x="3120.5" y="447" width="16" height="16"/>
+  <object id="866" gid="197" x="959.833" y="432.5" width="16" height="16"/>
+  <object id="867" gid="197" x="736.167" y="479.5" width="16" height="16"/>
+  <object id="868" gid="197" x="720.167" y="399.667" width="16" height="16"/>
+  <object id="887" gid="197" x="1420.5" y="-219.5" width="16" height="16"/>
+  <object id="889" gid="193" x="1714.67" y="-283.333" width="16" height="16"/>
+  <object id="890" gid="193" x="841" y="-563.25" width="16" height="16"/>
+  <object id="892" gid="359" x="3128.25" y="439.875" width="16" height="16"/>
   <object id="895" gid="390" x="3593" y="318" width="16" height="16"/>
   <object id="896" gid="359" x="3840" y="209.333" width="16" height="16"/>
   <object id="902" gid="513" x="3326.38" y="563.479" width="16" height="16"/>
@@ -4262,27 +4265,27 @@
   <object id="907" gid="41" x="2736.5" y="200" width="16" height="16"/>
   <object id="908" gid="200" x="-14" y="306.5" width="16" height="16"/>
   <object id="920" name="skill_walljump" type="skill_walljump" gid="261" x="1480" y="905" width="16" height="16"/>
-  <object id="922" type="angrybat" gid="129" x="976.5" y="496.5" width="16" height="16"/>
-  <object id="924" type="angrybat" gid="129" x="591.333" y="464.667" width="16" height="16"/>
-  <object id="929" gid="129" x="2528.33" y="912.167" width="16" height="16"/>
-  <object id="930" gid="129" x="2368.33" y="816.167" width="16" height="16"/>
-  <object id="934" gid="129" x="2142.5" y="896" width="16" height="16"/>
-  <object id="935" gid="129" x="2253.17" y="928.167" width="16" height="16"/>
-  <object id="936" gid="129" x="2009.5" y="943.667" width="16" height="16"/>
-  <object id="937" gid="129" x="2030.5" y="846.333" width="16" height="16"/>
-  <object id="939" gid="129" x="650.5" y="847.5" width="16" height="16"/>
-  <object id="940" gid="129" x="608" y="880" width="16" height="16"/>
-  <object id="941" gid="129" x="912" y="896" width="16" height="16"/>
-  <object id="942" gid="129" x="768.5" y="944" width="16" height="16"/>
-  <object id="943" gid="129" x="544.5" y="944.5" width="16" height="16"/>
-  <object id="944" gid="129" x="427.5" y="864.5" width="16" height="16"/>
-  <object id="945" gid="129" x="2206.67" y="816" width="16" height="16"/>
-  <object id="948" gid="129" x="921.333" y="832" width="16" height="16"/>
-  <object id="949" gid="129" x="2200.67" y="698.667" width="16" height="16"/>
-  <object id="950" gid="129" x="2435.33" y="700" width="16" height="16"/>
-  <object id="951" gid="129" x="1932" y="702" width="16" height="16"/>
-  <object id="952" gid="129" x="964" y="700" width="16" height="16"/>
-  <object id="953" gid="129" x="589.333" y="698.667" width="16" height="16"/>
+  <object id="922" gid="197" x="976.5" y="496.5" width="16" height="16"/>
+  <object id="924" gid="197" x="591.333" y="464.667" width="16" height="16"/>
+  <object id="929" gid="193" x="2528.33" y="912.167" width="16" height="16"/>
+  <object id="930" gid="193" x="2368.33" y="816.167" width="16" height="16"/>
+  <object id="934" gid="193" x="2142.5" y="896" width="16" height="16"/>
+  <object id="935" gid="193" x="2253.17" y="928.167" width="16" height="16"/>
+  <object id="936" gid="193" x="2009.5" y="943.667" width="16" height="16"/>
+  <object id="937" gid="193" x="2030.5" y="846.333" width="16" height="16"/>
+  <object id="939" gid="193" x="650.5" y="847.5" width="16" height="16"/>
+  <object id="940" gid="193" x="608" y="880" width="16" height="16"/>
+  <object id="941" gid="193" x="912" y="896" width="16" height="16"/>
+  <object id="942" gid="193" x="768.5" y="944" width="16" height="16"/>
+  <object id="943" gid="193" x="544.5" y="944.5" width="16" height="16"/>
+  <object id="944" gid="193" x="427.5" y="864.5" width="16" height="16"/>
+  <object id="945" gid="193" x="2206.67" y="816" width="16" height="16"/>
+  <object id="948" gid="193" x="921.333" y="832" width="16" height="16"/>
+  <object id="949" gid="193" x="2200.67" y="698.667" width="16" height="16"/>
+  <object id="950" gid="193" x="2435.33" y="700" width="16" height="16"/>
+  <object id="951" gid="193" x="1932" y="702" width="16" height="16"/>
+  <object id="952" gid="193" x="964" y="700" width="16" height="16"/>
+  <object id="953" gid="193" x="589.333" y="698.667" width="16" height="16"/>
   <object id="967" type="lava_initial_height" gid="443" x="-1970" y="-242" width="16" height="16"/>
   <object id="969" gid="51" x="-2614.44" y="-420.015" width="16" height="16"/>
   <object id="973" name="skill_dash" type="skill_dash" gid="98" x="-2119" y="-325" width="16" height="16"/>
@@ -4297,9 +4300,9 @@
   <object id="992" gid="49" x="-2716.95" y="-871.267" width="16" height="16"/>
   <object id="993" type="temp_explosive" gid="69" x="-2765.1" y="-1020.68" width="16" height="16"/>
   <object id="994" type="explosive" gid="69" x="-2677.6" y="-1025.68" width="16" height="16"/>
-  <object id="998" type="angrybatawake" gid="129" x="767.333" y="-1492.67" width="16" height="16"/>
-  <object id="999" type="angrybatawake" gid="129" x="444.667" y="-1502" width="16" height="16"/>
-  <object id="1000" type="angrybatawake" gid="129" x="599.333" y="-1504.67" width="16" height="16"/>
+  <object id="998" gid="135" x="767.333" y="-1492.67" width="16" height="16"/>
+  <object id="999" gid="135" x="444.667" y="-1502" width="16" height="16"/>
+  <object id="1000" gid="135" x="599.333" y="-1504.67" width="16" height="16"/>
   <object id="1002" gid="390" x="2999.75" y="701.5" width="16" height="16"/>
   <object id="1003" gid="200" x="33.6667" y="-735" width="16" height="16"/>
   <object id="1006" type="npc" gid="1" x="-491" y="108.333" width="16" height="16"/>
@@ -4308,9 +4311,9 @@
   <object id="1020" gid="200" x="-2694" y="-958.333" width="16" height="16"/>
   <object id="1024" type="ooy" gid="811" x="2646" y="-503.5" width="16" height="16"/>
   <object id="1025" gid="200" x="2929.5" y="-592" width="16" height="16"/>
-  <object id="1027" type="angrybat" gid="129" x="2256.05" y="-1315.52" width="16" height="16"/>
-  <object id="1028" type="angrybat" gid="129" x="2128.19" y="-1347.52" width="16" height="16"/>
-  <object id="1029" type="angrybat" gid="129" x="2224.07" y="-1379.15" width="16" height="16"/>
+  <object id="1027" gid="197" x="2256.05" y="-1315.52" width="16" height="16"/>
+  <object id="1028" gid="197" x="2128.19" y="-1347.52" width="16" height="16"/>
+  <object id="1029" gid="197" x="2224.07" y="-1379.15" width="16" height="16"/>
   <object id="1031" gid="390" x="1335" y="-661.75" width="16" height="16"/>
   <object id="1033" gid="359" x="2980.67" y="-563" width="16" height="16"/>
   <object id="1035" type="rocks_origin_1" gid="906" x="2022.19" y="-291.227" width="16" height="16" rotation="13"/>
