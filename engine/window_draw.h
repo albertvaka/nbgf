@@ -28,6 +28,10 @@ namespace Window {
 			return withRect({ x, y, w, h });
 		}
 
+		constexpr DeferredDraw& withRect(const vec pos, const vec size) {
+			return withRect({ pos.x, pos.y, size.x, size.y });
+		}
+
 		constexpr DeferredDraw& withRect(const GPU_Rect& r) {
 			src = r;
 			return *this;
