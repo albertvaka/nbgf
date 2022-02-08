@@ -71,11 +71,9 @@ extern "C" void start_main_loop()
 
 int main(int argc, char* argv[])
 {
-#if !(MACOS_VER_MAJOR==10 && MACOS_VER_MINOR<=14)
 	// set working dir to the binary path
 	std::filesystem::path binaryPath(argv[0]);
 	std::filesystem::current_path(binaryPath.parent_path());
-#endif
 
 	init();
 
