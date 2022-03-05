@@ -13,16 +13,17 @@ constexpr const float chargeSpeed = 100;
 
 constexpr const float enterChargeTime = 0.35f;
 constexpr const float exitChargeTime = 0.2f;
+constexpr const float shieldingTime = 1.2f;
 
 // Area in front of it that if intersects with the player will trigger a charge towards them
 constexpr const vec playerNearbyArea = vec(Tile::Size * 11, Tile::Size * 2);
 
 constexpr const vec size = AnimLib::GOOMBA[0].GetSize();
 
-Goomba::Goomba(vec pos, bool isCharger)
-	: CircleEntity(pos - vec(0,8), 6)
-	, anim(isCharger ? AnimLib::GOOMBACHARGER : AnimLib::GOOMBA)
-	, isCharger(isCharger)
+Goomba::Goomba(vec pos, Type type)
+	: CircleEntity(AlignWithGround(pos, Tile::Sizes), 6)
+	, anim(type == Type::CHARGER? AnimLib::GOOMBACHARGER : (type == Type::SHIELDER ? AnimLib::GOOMBASHIELDER : AnimLib::GOOMBA))
+	, type(type)
 {
 	goingRight = Rand::OnceEvery(2);
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
@@ -67,8 +68,9 @@ void Goomba::Walk(float dt)
 
 void Goomba::Update(float dt)
 {
+	JumpMan* player = JumpMan::instance();
 	if (!InSameScreenAsPlayer(screen)) {
-		goingRight = pos.x < JumpMan::instance()->pos.x; // so we are facing towards the player when they enter the screem
+		goingRight = pos.x < player->pos.x; // so we are facing towards the player when they enter the screem
 		return;
 	}
 
@@ -76,7 +78,7 @@ void Goomba::Update(float dt)
 	{
 	case State::WALKING:
 		Walk(dt);
-		if (isCharger && Collide(ChargeBounds(), JumpMan::instance()->Bounds()))
+		if ((type == Type::CHARGER || type == Type::SHIELDER) && Collide(ChargeBounds(), player->Bounds()))
 		{
 			state = State::ENTER_CHARGE;
 			timer = 0.0f;
@@ -100,6 +102,13 @@ void Goomba::Update(float dt)
 		}
 		break;
 
+	case State::SHIELDING:
+		timer += dt;
+		if (timer > shieldingTime)
+		{
+			state = State::WALKING;
+		}
+		break;
 	case State::CHARGING:
 		Walk(dt);
 		anim.Update(dt*2);
@@ -109,9 +118,23 @@ void Goomba::Update(float dt)
 		break;
 	}
 
-	if (ReceiveDamageFromPlayer(Bounds(), false)) {
-		DieWithSmallExplosion(this); //single hit
-		return;
+	const vec* hitPos = ReceiveDamageFromPlayer(Bounds(), false);
+	if (hitPos) {
+		if (type == Type::SHIELDER) {
+			bool hitFromRight = (player->pos.x > pos.x);
+			if (hitFromRight != goingRight) {
+				DieWithSmallExplosion(this); //single hit
+				return;
+			}
+			else {
+				state = State::SHIELDING;
+				timer = 0;
+			}
+		}
+		else {
+			DieWithSmallExplosion(this); //single hit
+			return;
+		}
 	}
 
 	DamagePlayerOnCollision(Bounds());
@@ -132,10 +155,14 @@ void Goomba::Draw() const
 	{ 
 		drawPos.y -= sinf((timer / exitChargeTime) * M_PI) * 2;
 	}
+	else if (state == State::SHIELDING) {
+		rect = AnimLib::GOOMBASHIELDING;
+	}
 
 	Window::Draw(Assets::spritesheetTexture, drawPos)
 		.withRect(rect)
-		.withOrigin(rect.w / 2, rect.h / 2);
+		.withOrigin(rect.w / 2, rect.h / 2)
+		.withScale(goingRight? -1 : 1, 1);
 
 	// Debug-only
 	pos.DebugDraw();

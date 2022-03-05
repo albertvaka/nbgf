@@ -287,14 +287,21 @@ void JumpScene::EnterScene()
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::goomba) {
-		auto b = new Goomba(pos, false);
+		auto b = new Goomba(pos, Goomba::Type::WALKER);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::goombacharger) {
-		auto b = new Goomba(pos,true);
+		auto b = new Goomba(pos, Goomba::Type::CHARGER);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
+	for (auto const& [id, pos] : Tiled::Entities::goombashielder) {
+		auto b = new Goomba(pos, Goomba::Type::SHIELDER);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
 			s->AddEnemy(b);
 		}
@@ -933,7 +940,7 @@ void JumpScene::Draw()
 			Window::Draw(Assets::spritesheetTexture, Mouse::GetPositionInWorld())
 				.withRectWithOriginCentered(AnimLib::GOOMBA[0].rect);
 			if (Mouse::IsJustPressed()) {
-				(new Goomba(Mouse::GetPositionInWorld(), false))->state = Goomba::State::TEST_DUMMY;
+				new Goomba(Mouse::GetPositionInWorld(), Goomba::Type::DUMMY);
 				if (!Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 					placingDummy = false;
 				}

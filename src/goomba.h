@@ -13,21 +13,30 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 		ENTER_CHARGE,
 		EXIT_CHARGE,
 		CHARGING,
+		SHIELDING,
 		TEST_DUMMY
 	};
 
+	enum class Type
+	{
+		DUMMY,
+		WALKER,
+		CHARGER,
+		SHIELDER,
+	};
+
 	State state = State::WALKING;
+	Type type;
 
 	bool goingRight = true;
 
 	float timer = 0.0f;
-	bool isCharger;
 
 	Animation anim;
 
 	int screen;
 
-	Goomba(vec position, bool isCharger);
+	Goomba(vec position, Type type);
 
 	BoxBounds ChargeBounds() const;
 
