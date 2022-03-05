@@ -30,6 +30,7 @@ struct Entities {
 	static const vec single_goomba;
 	static const std::unordered_map<int, vec> goombacharger;
 	static const vec single_goombacharger;
+	static const std::unordered_map<int, vec> goombashielder;
 	static const std::unordered_map<int, vec> healthup;
 	static const std::unordered_map<int, vec> initial_batawake;
 	static const std::unordered_map<int, vec> lava_initial_height;

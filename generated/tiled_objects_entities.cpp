@@ -18,6 +18,10 @@ const std::unordered_map<int, vec> Entities::angrybat = {
 	{ 1027, vec(5328.05f, 476.48f) },
 	{ 1028, vec(5200.1900000000005f, 444.48f) },
 	{ 1029, vec(5296.07f, 412.8499999999999f) },
+	{ 1081, vec(3064.0f, 3052.33f) },
+	{ 1082, vec(3184.667f, 2871.33f) },
+	{ 1083, vec(3266.0f, 2702.333f) },
+	{ 1084, vec(3199.667f, 2327.667f) },
 };
 
 const std::unordered_map<int, vec> Entities::angrybatawake = {
@@ -45,25 +49,7 @@ const std::unordered_map<int, vec> Entities::bat = {
 	{ 782, vec(3958.5f, 1228.5f) },
 	{ 889, vec(4786.67f, 1508.667f) },
 	{ 890, vec(3913.0f, 1228.75f) },
-	{ 929, vec(5600.33f, 2704.167f) },
-	{ 930, vec(5440.33f, 2608.167f) },
-	{ 934, vec(5214.5f, 2688.0f) },
-	{ 935, vec(5325.17f, 2720.167f) },
-	{ 936, vec(5081.5f, 2735.667f) },
-	{ 937, vec(5102.5f, 2638.333f) },
-	{ 939, vec(3722.5f, 2639.5f) },
-	{ 940, vec(3680.0f, 2672.0f) },
-	{ 941, vec(3984.0f, 2688.0f) },
-	{ 942, vec(3840.5f, 2736.0f) },
-	{ 943, vec(3616.5f, 2736.5f) },
-	{ 944, vec(3499.5f, 2656.5f) },
-	{ 945, vec(5278.67f, 2608.0f) },
-	{ 948, vec(3993.333f, 2624.0f) },
-	{ 949, vec(5272.67f, 2490.667f) },
-	{ 950, vec(5507.33f, 2492.0f) },
-	{ 951, vec(5004.0f, 2494.0f) },
 	{ 952, vec(4036.0f, 2492.0f) },
-	{ 953, vec(3661.333f, 2490.667f) },
 };
 
 const std::unordered_map<int, vec> Entities::batawake = {
@@ -164,6 +150,22 @@ const std::unordered_map<int, vec> Entities::goombacharger = {
 const vec Entities::single_goombacharger = vec(355.0500000000002f, 920.733f);
 
 
+const std::unordered_map<int, vec> Entities::goombashielder = {
+	{ 1063, vec(5345.0f, 2735.0f) },
+	{ 1064, vec(5029.0f, 2800.0f) },
+	{ 1065, vec(4715.0f, 2849.0f) },
+	{ 1066, vec(4454.0f, 2754.0f) },
+	{ 1067, vec(4466.0f, 2912.0f) },
+	{ 1068, vec(4310.0f, 2884.0f) },
+	{ 1069, vec(4208.0f, 2947.0f) },
+	{ 1070, vec(4110.0f, 3034.0f) },
+	{ 1071, vec(4413.0f, 2979.0f) },
+	{ 1072, vec(3806.0f, 3148.0f) },
+	{ 1073, vec(3703.0f, 3041.0f) },
+	{ 1075, vec(5111.33f, 2693.333f) },
+	{ 1089, vec(3170.0f, 2610.0f) },
+};
+
 const std::unordered_map<int, vec> Entities::healthup = {
 	{ 58, vec(3216.5f, 1516.5f) },
 	{ 60, vec(3904.083f, 1916.333f) },
@@ -217,7 +219,6 @@ const std::unordered_map<int, vec> Entities::save = {
 	{ 126, vec(2993.5336f, 1935.114f) },
 	{ 213, vec(1041.0f, 2265.0f) },
 	{ 895, vec(6665.0f, 2110.0f) },
-	{ 1002, vec(6071.75f, 2493.5f) },
 	{ 1031, vec(4407.0f, 1130.25f) },
 };
 
@@ -252,9 +253,9 @@ const vec Entities::single_skill_gun = vec(3658.5f, 569.5f);
 
 
 const std::unordered_map<int, vec> Entities::skill_walljump = {
-	{ 920, vec(4552.0f, 2697.0f) },
+	{ 1056, vec(6062.5f, 2606.0f) },
 };
-const vec Entities::single_skill_walljump = vec(4552.0f, 2697.0f);
+const vec Entities::single_skill_walljump = vec(6062.5f, 2606.0f);
 
 
 const std::unordered_map<int, vec> Entities::spawn = {

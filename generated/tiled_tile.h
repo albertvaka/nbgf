@@ -226,6 +226,8 @@ struct Tile {
 		BG_183,
 		BG_184,
 		BG_185,
+		BG_186,
+		BG_187,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -243,10 +245,13 @@ struct Tile {
 		ONEWAY_15,
 		ONEWAY_16,
 		ONEWAY_17,
+		ONEWAY_18,
 		RSLOPE_1,
 		RSLOPE_2,
+		RSLOPE_3,
 		LSLOPE_1,
 		LSLOPE_2,
+		LSLOPE_3,
 		SOLID_1,
 		SOLID_2,
 		SOLID_3,
@@ -300,6 +305,22 @@ struct Tile {
 		SOLID_51,
 		SOLID_52,
 		SOLID_53,
+		SOLID_54,
+		SOLID_55,
+		SOLID_56,
+		SOLID_57,
+		SOLID_58,
+		SOLID_59,
+		SOLID_60,
+		SOLID_61,
+		SOLID_62,
+		SOLID_63,
+		SOLID_64,
+		SOLID_65,
+		SOLID_66,
+		SOLID_67,
+		SOLID_68,
+		SOLID_69,
 		BREAKABLE_1,
 		BREAKABLE_2,
 		BREAKABLE_3,
@@ -314,12 +335,12 @@ struct Tile {
 	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_31;
 	static constexpr Value BG_DOOR_OPENING = BG_68;
 	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_78;
-	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_8;
-	static constexpr Value ONEWAY_SIMPLE = ONEWAY_8;
+	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
+	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
 	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_1;
 	static constexpr Value SOLID_SIMPLE = SOLID_4;
-	static constexpr Value SOLID_DOOR = SOLID_27;
-	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_34;
+	static constexpr Value SOLID_DOOR = SOLID_33;
+	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_46;
 	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_1;
 	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_2;
 	static constexpr Value BREAKABLE_COVERING_CAVE_FLOOR = BREAKABLE_3;

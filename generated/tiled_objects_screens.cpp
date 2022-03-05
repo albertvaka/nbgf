@@ -3,14 +3,14 @@
 namespace Tiled {
 
 
-const std::array<BoxBounds, 30> Screens::screen = {
+const std::array<BoxBounds, 28> Screens::screen = {
 	BoxBounds(2808.045f,1735.5f,622.538f,304.5f),
 	BoxBounds(1762.88f,1713.6667f,1048.45f,348.497f),
 	BoxBounds(2813.333f,1379.0f,614.833f,338.0f),
 	BoxBounds(1139.28f,1711.0f,622.725f,346.909f),
 	BoxBounds(3430.25f,1714.5f,898.25f,350.5f),
 	BoxBounds(2903.833f,1060.167f,448.25f,309.167f),
-	BoxBounds(2899.55f,1970.0f,453.373f,835.5f),
+	BoxBounds(2899.55f,1970.0f,453.373f,1287.05f),
 	BoxBounds(1346.49f,2065.538f,1563.93f,414.212f),
 	BoxBounds(728.73f,2065.5f,614.038f,349.333f),
 	BoxBounds(119.23000000000002f,1236.333f,608.538f,921.83f),
@@ -21,13 +21,11 @@ const std::array<BoxBounds, 30> Screens::screen = {
 	BoxBounds(3981.583f,817.0f,614.833f,363.667f),
 	BoxBounds(5024.15f,217.17000000000007f,607.038f,351.667f),
 	BoxBounds(3487.417f,2081.0f,833.083f,350.0f),
-	BoxBounds(4250.08f,2473.333f,622.833f,338.0f),
 	BoxBounds(5752.25f,1937.333f,608.833f,349.833f),
 	BoxBounds(6359.0f,2273.25f,610.333f,348.5f),
-	BoxBounds(4875.15f,2467.333f,883.705f,349.333f),
 	BoxBounds(6362.25f,1937.083f,603.5f,349.833f),
 	BoxBounds(5754.0f,2302.084f,604.833f,349.833f),
-	BoxBounds(3350.647f,2469.333f,896.705f,349.333f),
+	BoxBounds(3353.647f,2465.333f,2399.7f,797.333f),
 	BoxBounds(727.73f,1158.4180000000001f,1391.54f,429.163f),
 	BoxBounds(2114.23f,337.0899999999999f,618.207f,1186.83f),
 	BoxBounds(2724.5f,250.32999999999993f,614.038f,349.333f),

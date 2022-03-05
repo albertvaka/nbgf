@@ -13,6 +13,7 @@ struct Zones {
 	// Bounds
 	static const std::array<BoxBounds, 1> cave;
 	static const BoxBounds single_cave;
+	static const std::array<BoxBounds, 3> sewers;
 
 };
 
