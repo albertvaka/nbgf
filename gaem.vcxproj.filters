@@ -400,6 +400,9 @@
     <ClInclude Include="src\dummyentity.h">
       <Filter>src\entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\miniooy.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
     <ClInclude Include="src\ooytear.h">
       <Filter>src\entities\bullets</Filter>
     </ClInclude>
@@ -629,6 +632,9 @@
     </ClCompile>
     <ClCompile Include="src\enemy_door.cpp">
       <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\miniooy.cpp">
+      <Filter>src\entities\enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\ooytear.cpp">
       <Filter>src\entities\bullets</Filter>

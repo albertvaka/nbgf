@@ -1,0 +1,31 @@
+#pragma once
+
+#include "vec.h"
+#include "selfregister.h"
+#include "entity.h"
+#include "steering_entity.h"
+#include "steering_behavior.h"
+
+struct MiniOoy : SteeringEntity, SelfRegister<MiniOoy>
+{
+	enum class State
+	{
+		IDLE,
+		ENTER_CHASE,
+		EXIT_CHASE,
+		CHASING,
+	};
+
+	State state = State::IDLE;
+	float timer = 0.f;
+	int screen;
+	SteeringBehavior steering;
+	BoxBounds bounds;
+
+	MiniOoy(vec position);
+
+	void Update(float dt);
+	void Draw() const;
+
+};
+

@@ -49,7 +49,6 @@ const std::unordered_map<int, vec> Entities::bat = {
 	{ 782, vec(3958.5f, 1228.5f) },
 	{ 889, vec(4786.67f, 1508.667f) },
 	{ 890, vec(3913.0f, 1228.75f) },
-	{ 952, vec(4036.0f, 2492.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::batawake = {
@@ -136,6 +135,9 @@ const std::unordered_map<int, vec> Entities::flyingalien = {
 	{ 977, vec(2298.442f, 972.015f) },
 	{ 978, vec(2506.892f, 974.652f) },
 	{ 979, vec(2413.333f, 682.6700000000001f) },
+	{ 1102, vec(4889.5f, 2722.5f) },
+	{ 1103, vec(3800.5f, 2989.5f) },
+	{ 1104, vec(4269.5f, 2782.5f) },
 };
 
 const std::unordered_map<int, vec> Entities::goomba = {
@@ -161,7 +163,7 @@ const std::unordered_map<int, vec> Entities::goombashielder = {
 	{ 1070, vec(4110.0f, 3034.0f) },
 	{ 1071, vec(4413.0f, 2979.0f) },
 	{ 1072, vec(3806.0f, 3148.0f) },
-	{ 1073, vec(3703.0f, 3041.0f) },
+	{ 1073, vec(3703.0f, 3027.0f) },
 	{ 1075, vec(5111.33f, 2693.333f) },
 	{ 1089, vec(3170.0f, 2610.0f) },
 };
@@ -192,6 +194,12 @@ const std::unordered_map<int, vec> Entities::mantis = {
 	{ 903, vec(6454.8f, 2351.7290000000003f) },
 	{ 904, vec(6889.63f, 2386.2709999999997f) },
 };
+
+const std::unordered_map<int, vec> Entities::miniooy = {
+	{ 1105, vec(3512.25f, 3156.75f) },
+};
+const vec Entities::single_miniooy = vec(3512.25f, 3156.75f);
+
 
 const std::unordered_map<int, vec> Entities::npc = {
 	{ 1006, vec(2581.0f, 1900.333f) },

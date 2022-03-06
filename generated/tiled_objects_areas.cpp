@@ -3,11 +3,21 @@
 namespace Tiled {
 
 
-const std::array<BoxBounds, 1> Areas::alien_bounds = {
-	BoxBounds(336.73f,952.902f,253.803f,237.227f),
+const std::unordered_map<int, vec> Areas::flyingalien = {
+	{ 1096, vec(6730.5f, 1991.0f) },
+	{ 1098, vec(6552.0f, 2136.0f) },
+	{ 1100, vec(6911.0f, 2141.0f) },
 };
-const BoxBounds Areas::single_alien_bounds = BoxBounds(336.73f,952.902f,253.803f,237.227f);
 
+const std::array<BoxBounds, 7> Areas::alien_bounds = {
+	BoxBounds(336.73f,952.902f,253.803f,237.227f),
+	BoxBounds(4111.0f,2727.0f,280.0f,114.0f),
+	BoxBounds(4705.0f,2666.0f,311.0f,114.0f),
+	BoxBounds(3637.0f,2925.0f,294.0f,114.0f),
+	BoxBounds(6561.5f,1948.0f,192.0f,114.0f),
+	BoxBounds(6383.0f,2093.0f,192.0f,114.0f),
+	BoxBounds(6742.0f,2098.0f,192.0f,114.0f),
+};
 
 const std::array<BoxBounds, 9> Areas::bat_bounds = {
 	BoxBounds(1174.43f,1760.053f,253.803f,209.727f),

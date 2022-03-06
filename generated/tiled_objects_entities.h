@@ -36,6 +36,8 @@ struct Entities {
 	static const std::unordered_map<int, vec> lava_initial_height;
 	static const vec single_lava_initial_height;
 	static const std::unordered_map<int, vec> mantis;
+	static const std::unordered_map<int, vec> miniooy;
+	static const vec single_miniooy;
 	static const std::unordered_map<int, vec> npc;
 	static const vec single_npc;
 	static const std::unordered_map<int, vec> ooy;

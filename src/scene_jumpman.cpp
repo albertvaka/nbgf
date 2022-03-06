@@ -13,6 +13,7 @@
 #include "enemy_door.h"
 #include "parallax.h"
 #include "bat.h"
+#include "miniooy.h"
 #include "missile.h"
 #include "mantis.h"
 #include "bipedal.h"
@@ -286,6 +287,13 @@ void JumpScene::EnterScene()
 		new RocketLauncher(pos);
 	}
 
+	for (auto const& [id, pos] : Tiled::Entities::miniooy) {
+		auto b = new MiniOoy(pos);
+		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+			s->AddEnemy(b);
+		}
+	}
+
 	for (auto const& [id, pos] : Tiled::Entities::goomba) {
 		auto b = new Goomba(pos, Goomba::Type::WALKER);
 		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
@@ -539,6 +547,7 @@ void JumpScene::ExitScene()
 	FireShot::DeleteAll();
 	OoyTear::DeleteAll();
 	Bat::DeleteAll();
+	MiniOoy::DeleteAll();
 	Goomba::DeleteAll();
 	Ooy::DeleteAll();
 	DummyEntity::DeleteAll();
@@ -652,6 +661,10 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 	}
 
+	for (MiniOoy* e : MiniOoy::GetAll()) {
+		e->Update(dt);
+	}
+
 	for (Goomba* e : Goomba::GetAll()) {
 		e->Update(dt);
 	}
@@ -762,6 +775,7 @@ void JumpScene::Update(float dt)
 	// Delete enemies after updating doors and savestations that might check for them
 	Bat::DeleteNotAlive();
 	Minotaur::DeleteNotAlive();
+	MiniOoy::DeleteNotAlive();
 	Goomba::DeleteNotAlive();
 	Ooy::DeleteNotAlive();
 	DummyEntity::DeleteNotAlive();
@@ -875,6 +889,7 @@ void JumpScene::Draw()
 		OneShotAnim::GetAll(),
 		DummyEntity::GetAll(),
 		Goomba::GetAll(),
+		MiniOoy::GetAll(),
 		&Particles::ooyTearTrail,
 		Ooy::GetAll(),
 		Minotaur::GetAll(),

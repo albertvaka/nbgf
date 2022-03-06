@@ -10,9 +10,10 @@ namespace Tiled {
 
 struct Areas {
 
+	// Positions
+	static const std::unordered_map<int, vec> flyingalien;
 	// Bounds
-	static const std::array<BoxBounds, 1> alien_bounds;
-	static const BoxBounds single_alien_bounds;
+	static const std::array<BoxBounds, 7> alien_bounds;
 	static const std::array<BoxBounds, 9> bat_bounds;
 	static const std::array<BoxBounds, 1> boss_bounds;
 	static const BoxBounds single_boss_bounds;

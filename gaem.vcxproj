@@ -79,6 +79,7 @@
     <ClInclude Include="src\fireshot.h" />
     <ClInclude Include="src\fireslime.h" />
     <ClInclude Include="src\flyingalien.h" />
+    <ClInclude Include="src\miniooy.h" />
     <ClInclude Include="src\minotaur.h" />
     <ClInclude Include="src\ooy.h" />
     <ClInclude Include="src\ooytear.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\jumpman.cpp" />
     <ClCompile Include="src\lava.cpp" />
     <ClCompile Include="src\mantis.cpp" />
+    <ClCompile Include="src\miniooy.cpp" />
     <ClCompile Include="src\minotaur.cpp" />
     <ClCompile Include="src\missile.cpp" />
     <ClCompile Include="src\ooy.cpp" />
