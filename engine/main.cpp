@@ -1,5 +1,6 @@
 #include <string>
 #include <filesystem>
+#include <chrono>
 
 #include "scene_manager.h"
 #include "input.h"
@@ -129,7 +130,7 @@ void init() {
 		exit(1);
 	}
 
-	srand(time(NULL));
+	srand(std::chrono::system_clock::now().time_since_epoch().count());
 
 	Assets::LoadAll();
 
