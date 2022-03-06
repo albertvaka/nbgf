@@ -23,14 +23,20 @@ constexpr const float kScale = 2.f;
 constexpr const float kRadius = 12.f*kScale;
 constexpr const float kMaxSpeed = 110.f;
 
+constexpr const int kHealth = 8;
+
 constexpr const float kTearVel = 120;
 constexpr const float kRandomTearVel = 10;
 
-constexpr const int kHealth = 8;
+constexpr const float kSteeringSeekWeightChasing = 300.f;
+constexpr const float kSteeringSeekWeightIdle = 150.f;
+constexpr const float kSteeringWanderWeight = 150.f;
+constexpr const float kSteeringBoundsAvoidanceWeight = 600.f;
+constexpr const float kSteeringTileMapAvoidanceWeight = 600.f;
 
-constexpr const float WanderRad = 4.8f; //Ganes que te de posar-se a fer cercles (the radius of the constraining circle for the wander behavior)
-constexpr const static float WanderDist = 6.5f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
-constexpr const static float WanderJitterPerSec = 175; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
+constexpr const float kSteeringWanderRad = 4.8f; //Ganes que te de posar-se a fer cercles (the radius of the constraining circle for the wander behavior)
+constexpr const static float kSteeringWanderDist = 6.5f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
+constexpr const static float kSteeringWanderJitterPerSec = 175; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
 
 
 extern float mainClock;
@@ -75,8 +81,8 @@ void Ooy::Update(float dt)
 		return;
 	}
 
-	vel += steering.BoundsAvoidance(bounds).Truncated(600*dt);
-	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(600*dt);
+	vel += steering.BoundsAvoidance(bounds).Truncated(kSteeringBoundsAvoidanceWeight*dt);
+	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(kSteeringTileMapAvoidanceWeight*dt);
 
 	JumpMan* player = JumpMan::instance();
 
@@ -96,26 +102,25 @@ void Ooy::Update(float dt)
 	switch (state) {
 		case State::IDLE:
 		{
-			vel += steering.Wander(WanderRad, WanderDist, WanderJitterPerSec, dt).Normalized() * 150 * dt;
-			vel += steering.Seek(bounds.Center()).Normalized() * 150 * dt;
+			vel += steering.Wander(kSteeringWanderRad, kSteeringWanderDist, kSteeringWanderJitterPerSec, dt).Normalized() * kSteeringWanderWeight * dt;
+			vel += steering.Seek(bounds.Center()).Normalized() * kSteeringSeekWeightIdle * dt;
 			if (state == State::IDLE && player->pos.Distance(pos) < kStartChasingRadius) {
 				state = State::ENTER_CHASE;
 				timer = 0;
 			}
 		}
-			break;
+		break;
 		case State::CHASING:
 		case State::ENTER_CHASE:
 		case State::EXIT_CHASE:
 		{
-			vec seekForce = steering.Seek(player->pos - vec(0, kTargetVerticalDistance)).Truncated(300 * dt);
+			vec seekForce = steering.Seek(player->pos - vec(0, kTargetVerticalDistance)).Truncated(kSteeringSeekWeightChasing * dt);
 			vel += seekForce;
 			if (state == State::CHASING) {
 				if (player->pos.Distance(pos) > kStopChasingRadius) {
 					state = State::EXIT_CHASE;
 					timer = 0;
 				} else {
-					timer += dt;
 					if (timer > kIntervalShoot) {
 						if (abs(pos.x - player->pos.x) < kHorizontalDistanceToShoot && pos.y < player->pos.y - kVerticalDistanceToShoot) {
 							vec vel = (player->pos - pos).Normalized() * kTearVel;
@@ -124,13 +129,15 @@ void Ooy::Update(float dt)
 							timer = 0.f;
 						}
 					}
-					
+					else {
+						timer += dt;
+					}
 				}
 			}
 		}
-			break;
+		break;
 		case State::STILL:
-			break;
+		break;
 	}
 
 	vel.DebugDrawAsArrow(pos);
