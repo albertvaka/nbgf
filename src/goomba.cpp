@@ -13,10 +13,12 @@ constexpr const float chargeSpeed = 100;
 
 constexpr const float enterChargeTime = 0.35f;
 constexpr const float exitChargeTime = 0.2f;
-constexpr const float shieldingTime = 1.2f;
+constexpr const float shieldingTime = 1.1f;
 
 // Area in front of it that if intersects with the player will trigger a charge towards them
-constexpr const vec playerNearbyArea = vec(Tile::Size * 11, Tile::Size * 2);
+constexpr const float detectDistanceInFront = Tile::Size * 11;
+constexpr const float detectDistanceBehind = Tile::Size * 4;
+constexpr const vec detectArea = vec(detectDistanceBehind + detectDistanceInFront, Tile::Size * 2);
 
 constexpr const vec size = AnimLib::GOOMBA[0].GetSize();
 
@@ -33,8 +35,8 @@ Goomba::Goomba(vec pos, Type type)
 
 BoxBounds Goomba::ChargeBounds() const
 {
-	BoxBounds chargeBounds = BoxBounds::FromCenter(pos, playerNearbyArea);
-	chargeBounds.left += WalkDirection() * chargeBounds.width / 2;
+	BoxBounds chargeBounds = BoxBounds::FromCenter(pos, detectArea);
+	chargeBounds.left += WalkDirection() * (chargeBounds.width / 2 - detectDistanceBehind);
 	return chargeBounds;
 }
 
@@ -55,10 +57,13 @@ void Goomba::Walk(float dt)
 		|| IsGoingToRunOffPlatform(pos, size, vel, dt)
 		|| IsGoingToLeaveTheScreen(pos, size, vel, dt, screen))
 	{
-		goingRight = !goingRight;
 		if (state == State::CHARGING) {
 			state = State::EXIT_CHARGE;
 			timer = 0.f;
+		}
+		else
+		{
+			goingRight = !goingRight;
 		}
 	}
 
@@ -80,6 +85,10 @@ void Goomba::Update(float dt)
 		Walk(dt);
 		if ((type == Type::CHARGER || type == Type::SHIELDER) && Collide(ChargeBounds(), player->Bounds()))
 		{
+			bool playerOnRight = (player->pos.x > pos.x);
+			if (playerOnRight != goingRight) {
+				goingRight = !goingRight;
+			}
 			state = State::ENTER_CHARGE;
 			timer = 0.0f;
 		}
