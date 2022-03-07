@@ -169,7 +169,7 @@ const std::unordered_map<int, vec> Entities::goombashielder = {
 	{ 1073, vec(3703.0f, 3027.0f) },
 	{ 1075, vec(5111.33f, 2693.333f) },
 	{ 1089, vec(3170.0f, 2610.0f) },
-	{ 1111, vec(4033.333f, 2934.67f) },
+	{ 1111, vec(4033.333f, 2918.67f) },
 };
 
 const std::unordered_map<int, vec> Entities::healthup = {

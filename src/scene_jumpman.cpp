@@ -990,8 +990,8 @@ void JumpScene::Draw()
 	//for (int i = 0; i < Parallax::GetAll().size(); i++) {
 	//	Parallax::GetAll()[i]->DrawImGUI(("parallax_" + std::to_string(i)).c_str());
 	//}
-	Parallax::GetAll().back()->DrawImGUI("parallax3");
-	Parallax::GetAll()[Parallax::GetAll().size() - 2]->DrawImGUI("parallax2");
+	//Parallax::GetAll().back()->DrawImGUI("parallax3");
+	//Parallax::GetAll()[Parallax::GetAll().size() - 2]->DrawImGUI("parallax2");
 	Parallax::GetAll()[Parallax::GetAll().size() - 3]->DrawImGUI("parallax1");
 
 #ifdef _DEBUG
