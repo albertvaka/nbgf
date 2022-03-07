@@ -174,7 +174,7 @@ const std::unordered_map<int, vec> Entities::healthup = {
 	{ 661, vec(5010.67f, 2111.682f) },
 	{ 808, vec(3528.667f, 2242.333f) },
 	{ 892, vec(6200.25f, 2231.875f) },
-	{ 896, vec(6912.0f, 2001.333f) },
+	{ 896, vec(6932.0f, 1981.333f) },
 	{ 1033, vec(6052.67f, 1229.0f) },
 };
 
@@ -261,9 +261,9 @@ const vec Entities::single_skill_gun = vec(3658.5f, 569.5f);
 
 
 const std::unordered_map<int, vec> Entities::skill_walljump = {
-	{ 1056, vec(6062.5f, 2606.0f) },
+	{ 1056, vec(6056.5f, 2618.0f) },
 };
-const vec Entities::single_skill_walljump = vec(6062.5f, 2606.0f);
+const vec Entities::single_skill_walljump = vec(6056.5f, 2618.0f);
 
 
 const std::unordered_map<int, vec> Entities::spawn = {

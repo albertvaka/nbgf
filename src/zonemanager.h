@@ -8,7 +8,7 @@ struct ZoneManager {
 
 	const SDL_Color normalBg = { 31, 36, 50, 255 };
 	const SDL_Color caveBg = { 59, 17, 88, 255 };
-	const SDL_Color sewerBg = { 12, 40, 30, 255 };
+	const SDL_Color sewerBg = { 0, 0, 0, 255 };
 	const float maxChangeDeltaPerSecond = 150;
 
 	SDL_Color currentBgColor;
