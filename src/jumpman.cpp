@@ -36,8 +36,8 @@ const float kFrictAccFloor_Crouched = 450;
 const float kFrictAcc_OnAir = 460;
 
 // friction Y
-const float kFrictAccVert_WallUp = 1200;
-const float kFrictAccVert_WallDown = 450;
+const float kFrictAccVert_WallUp = 400;
+const float kFrictAccVert_WallDown = 500;
 
 // jump
 const float kVelJump = -170; // Y axis
@@ -516,6 +516,7 @@ void JumpMan::Update(float dt)
 				attacking = false;
 			}
 			onWall = true;
+			initialJumpY = Mates::MaxFloat;
 			vel.x = -kFrictAcc_OnAir * 2 * dt; //stay against wall
 		}
 		else {
@@ -530,6 +531,7 @@ void JumpMan::Update(float dt)
 				attacking = false;
 			}
 			onWall = true;
+			initialJumpY = Mates::MaxFloat;
 			vel.x = 500.f * dt; //stay against wall
 		}
 		else {
