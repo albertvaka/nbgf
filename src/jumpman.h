@@ -16,31 +16,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     void Update(float dt);
     void Draw() const;
     void DrawGUI() const;
-    void Reset(vec position, int maxHp = 3) {
-        pos = position;
-        bfgPos = position + bfgOffset();
-        vel = vec(0, 0);
-        lastSafeTilePos = Tile::ToTiles(position);
-        invencibleTimer = -1.f;
-        bfgCooldownTimer = 0;
-        health = maxHealth = maxHp;
-        jumpTimeLeft = 0.0f;
-        crouchedTime = 0.0f;
-        timeAfterBeingGrounded = 9999.f;
-        onWall = false;
-        frozen = false;
-        alive = true;
-        groundTile = Tile::NONE;
-        canDash = true;
-        dashTimer = 0.0f;
-        dashCooldown = 0.0f;
-        divingRestTimer = 0.f;
-        justHit = false;
-        jumpFromWallTimer = 0.f;
-        attacking = false;
-        playerAttack.alive = false;
-        ScreenManager::instance()->UpdateCurrentScreen(pos);
-    }
+    void Reset(vec position, int maxHp = 3);
 
     BoxBounds Bounds() const {
         return BoxBounds(pos, size, vec(size.x/2, size.y));
@@ -72,43 +48,33 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     }
 
     Animation anim;
-    
-    CircleEntity playerAttack;
-
     vec size;
-
+    bool lookingLeft;
+    CircleEntity playerAttack;
+    Tile groundTile;
     veci lastSafeTilePos;
-    
-    int health;
-    int maxHealth;
-
-    bool onWall = false;
-    float jumpTimeLeft = 0.0f;
-    float jumpFromWallTimer = 0.f;
-    float timeAfterBeingGrounded = 9999.f;
-    float crouchedTime = 0.0f;
-    bool frozen = false;
-    bool justHit = false;
-
+    bool onWall;
+    float initialJumpY;
+    float jumpFromWallTimer;
+    float timeAfterBeingGrounded;
+    float crouchedTime;
+    bool frozen;
+    bool justHit;
+    float invencibleTimer;
+    float divingRestTimer;
+    bool diving;
+    bool dashing;
+    float dashTimer;
+    float dashCooldown;
+    bool crouched;
+    bool canDash;
+    bool attacking;
+    bool attackingUp;
     float bfgAngle;
     vec bfgPos;
-    float bfgCooldownTimer = 0.f;
-    float invencibleTimer = -1.f;
-
-    float divingRestTimer = 0.f;
-    bool diving = false;
-
-    bool dashing = false;
-    float dashTimer = 0.0f;
-    float dashCooldown = 0.0f;
-    
-    bool attacking = false;
-    bool attackingUp = false;
-
-    Tile groundTile = Tile::NONE;
-    bool crouched = false;
-    bool lookingLeft = false;
-    bool canDash = true;
+    float bfgCooldownTimer;
+    int health;
+    int maxHealth;
 
     void UpdateMoving(float dt);
 

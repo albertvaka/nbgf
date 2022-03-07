@@ -43,8 +43,7 @@ const float kFrictAccVert_WallDown = 450;
 const float kVelJump = -170; // Y axis
 const float kVelWalljump = 140; // X axis
 const float kVelSlopejump = 140; // X axis
-const float kJumpTime = 0.3f; // FIXME: Since we use a timer and not a max height, depending on the framerate we jump a height between 71 and 78 units
-const float kJumpTimeFromWall = 0.3f;
+const float kJumpHeightDiff = 72.f; // vertical pixels
 const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 const float kTimeToJumpFromWallAfterLettingGo = 0.2f;
 
@@ -148,11 +147,42 @@ void JumpMan::DealDamage(vec target) {
 		//if (groundTile == Tile::NONE || !IsGoingToRunOffPlatform(Bounds().Center(), size, vec(newVelX, vel.y), 1 / 60.f))
 		vel.x = newVelX;
 	}
-	jumpTimeLeft = 0;
+	initialJumpY = Mates::MaxFloat;
 	onWall = false;
 	crouched = false;
 	dashing = false;
 	diving = false;
+}
+
+void JumpMan::Reset(vec position, int maxHp) {
+	pos = position;
+	bfgPos = position + bfgOffset();
+	vel = vec(0, 0);
+	lastSafeTilePos = Tile::ToTiles(position);
+	invencibleTimer = -1.f;
+	bfgCooldownTimer = 0.f;
+	health = maxHealth = maxHp;
+	initialJumpY = Mates::MaxFloat;
+	crouchedTime = 0.0f;
+	timeAfterBeingGrounded = Mates::MaxFloat;
+	onWall = false;
+	frozen = false;
+	alive = true;
+	groundTile = Tile::NONE;
+	canDash = true;
+	diving = false;
+	dashing = false;
+	crouched = false;
+	lookingLeft = false;
+	dashTimer = 0.0f;
+	dashCooldown = 0.0f;
+	divingRestTimer = 0.f;
+	justHit = false;
+	jumpFromWallTimer = 0.f;
+	attacking = false;
+	attackingUp = false;
+	playerAttack.alive = false;
+	ScreenManager::instance()->UpdateCurrentScreen(pos);
 }
 
 void JumpMan::UpdateMoving(float dt) 
@@ -185,21 +215,13 @@ void JumpMan::UpdateMoving(float dt)
 		}
 	}
 
-	if (Input::IsPressed(0,GameKeys::JUMP) && jumpTimeLeft > 0)
+	if (pos.y > initialJumpY - kJumpHeightDiff && Input::IsPressed(0, GameKeys::JUMP))
 	{
 		vel.y = kVelJump;
 	}
 	else
 	{
-		jumpTimeLeft = 0; // Stop jumping
-	}
-
-	if (jumpTimeLeft > 0)
-	{
-		jumpTimeLeft -= dt; //We are still jumping
-	}
-	else
-	{
+		initialJumpY = Mates::MaxFloat;
 		acc.y += kGravityAcc;
 	}
 
@@ -262,8 +284,7 @@ void JumpMan::UpdateMoving(float dt)
 }
 
 #ifdef _IMGUI
-float initialJumpY = 0;
-float maxJumpY = 0;
+float debugMaxJumpY = 0;
 #endif
 
 void JumpMan::Update(float dt)
@@ -294,7 +315,7 @@ void JumpMan::Update(float dt)
 			if (onWall) {
 				lookingLeft = !lookingLeft;
 			}
-			jumpTimeLeft = 0;
+			initialJumpY = Mates::MaxFloat;
 			vel = vec(lookingLeft? -kVelDash : kVelDash, 0);
 			attacking = false;
 			anim.Ensure(AnimLib::WARRIOR_DASH);
@@ -411,8 +432,7 @@ void JumpMan::Update(float dt)
 			Input::ConsumeJustPressed(0, GameKeys::JUMP);
 
 #ifdef _IMGUI
-			initialJumpY = pos.y;
-			maxJumpY = 0;
+			debugMaxJumpY = 0;
 #endif
 
 			bool didJumpFromWall = false;
@@ -444,7 +464,7 @@ void JumpMan::Update(float dt)
 				crouchedTime = kTimeCrouchedToJumpDownOneWayTile;
 			}
 			else {
-				jumpTimeLeft = didJumpFromWall? kJumpTimeFromWall : kJumpTime; // the jump upwards velocity can last up to this duration
+				initialJumpY = pos.y;
 				float halfWidth = kStandingSize.x / 2;
 				Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
 				Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
@@ -478,6 +498,13 @@ void JumpMan::Update(float dt)
 	if (vel.y < -kVelMax.y) vel.y = -kVelMax.y;
 	float maxVelDown = diving ? kVelDive : kVelMax.y;
 	if (vel.y > maxVelDown) vel.y = kVelMax.y;
+	if (initialJumpY < Mates::MaxFloat && vel.y < 0) {
+		// Do not allow to jump higher than kJumpHeightDiff
+		float targetY = initialJumpY - kJumpHeightDiff;
+		if (pos.y + vel.y * dt < targetY) {
+			vel.y = (targetY - pos.y) / dt;
+		};
+	}
 
 	// Do move
 	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
@@ -517,7 +544,7 @@ void JumpMan::Update(float dt)
 
 	if (moved.ceilingCollision != Tile::NONE) {
 		vel.y = 0;
-		jumpTimeLeft = 0;
+		initialJumpY = Mates::MaxFloat;
 	}
 	if (moved.groundCollision != Tile::NONE) {
 		bool destroyingGround = false;
@@ -663,7 +690,7 @@ void JumpMan::Update(float dt)
 			vec tipOfTheGun = bfgPos + gunDirection*16.f;
 			new Bullet(tipOfTheGun, gunDirection*kBulletVel);
 			vel -= gunDirection*kBfgPushBack;
-			jumpTimeLeft = 0; // Overrides jump impulse
+			initialJumpY = Mates::MaxFloat; // Overrides jump impulse
 			if (onWall) {
 				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
 			}
@@ -688,7 +715,7 @@ void JumpMan::Update(float dt)
 static float toSafeGroundLambdaTimer;
 void JumpMan::ToSafeGround() {
 	invencibleTimer = kInvencibleTimeAfterHit;
-	jumpTimeLeft = 0;
+	initialJumpY = Mates::MaxFloat;
 	onWall = false;
 	crouched = false;
 	if (health > 0) {
@@ -722,7 +749,7 @@ void JumpMan::TakeDamage(vec src) {
 	if (groundTile != Tile::NONE) {
 		vel.y = kTakeDamageKnockbackVel.y;
 	}
-	jumpTimeLeft = 0;
+	initialJumpY = Mates::MaxFloat;
 	onWall = false;
 	crouched = false;
 	dashing = false;
@@ -756,10 +783,12 @@ void JumpMan::Draw() const {
 		}
 		ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10);
 		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
-		maxJumpY = std::max(maxJumpY, -(pos.y - initialJumpY));
-		ImGui::Text("jump height %f", maxJumpY);
+		if (initialJumpY < Mates::MaxFloat) {
+			debugMaxJumpY = std::max(debugMaxJumpY, -(pos.y - initialJumpY));
+		}
+		ImGui::Text("jump height %f", debugMaxJumpY);
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
-		ImGui::Text("jumpTimeLeft: %f divingRestTimer: %f", jumpTimeLeft, divingRestTimer);
+		ImGui::Text("divingRestTimer: %f", divingRestTimer);
 		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing, groundTile.isSlope());
 		ImGui::End();
 	}
