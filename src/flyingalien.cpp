@@ -142,22 +142,27 @@ void FlyingAlien::Update(float dt)
 
 		if (Mates::IsNearlyEqual(pos.y, initialPos.y, 0.5f)) {
 			if (Collide(player->Bounds(), ChargeBounds())) {
-				state = State::ENTER_CHARGE;
-				timer = 0.f;
+				float bigDtAttack = playerNearbyArea.y / speedAttack; // total time that will be spent attacking
+				if (!IsGoingToHitAWall(chargeBounds.Center(), chargeBounds.Size(), vel, bigDtAttack)
+					&& !IsGoingToLeaveBounds(chargeBounds.Center(), chargeBounds.Size(), vel, bigDtAttack, bounds))
+				{
+					state = State::ENTER_CHARGE;
+					timer = 0.f;
 
-				if (pos.x < player->pos.x) {
-					vel.x = speedAttack;
+					if (pos.x < player->pos.x) {
+						vel.x = speedAttack;
+					}
+					else {
+						vel.x = -speedAttack;
+					}
 				}
 				else {
-					vel.x = -speedAttack;
-				}
-
-				float bigDtAttack = playerNearbyArea.y / speedAttack; // total time that will be spent attacking
-				if (IsGoingToHitAWall(chargeBounds.Center(), chargeBounds.Size(), vel, bigDtAttack)
-					|| IsGoingToLeaveTheScreen(chargeBounds.Center(), chargeBounds.Size(), vel, bigDtAttack, screen))
-				{
-					//Debug::out << "Flipping because would hit a wall during the attack";
-					vel.x = -vel.x;
+					if (vel.x > 0) {
+						vel.x = speedAlert;
+					}
+					else {
+						vel.x = -speedAlert;
+					}
 				}
 			}
 		} else if (pos.y > initialPos.y) {
@@ -217,6 +222,7 @@ void FlyingAlien::Draw() const
 	// Debug-only
 	pos.DebugDraw();
 	vec(pos.x, initialPos.y).DebugDraw(0, 0, 255);
+	bounds.DebugDraw();
 	Bounds().DebugDraw();
 	ChargeBounds().DebugDraw(255, 0, 255);
 }
