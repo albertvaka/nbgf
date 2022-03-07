@@ -135,9 +135,9 @@ const std::unordered_map<int, vec> Entities::flyingalien = {
 	{ 977, vec(2298.442f, 972.015f) },
 	{ 978, vec(2506.892f, 974.652f) },
 	{ 979, vec(2413.333f, 682.6700000000001f) },
-	{ 1102, vec(4889.5f, 2722.5f) },
-	{ 1103, vec(3800.5f, 2989.5f) },
-	{ 1104, vec(4269.5f, 2782.5f) },
+	{ 1102, vec(4889.5f, 2692.5f) },
+	{ 1103, vec(3800.5f, 2943.5f) },
+	{ 1104, vec(4269.5f, 2766.5f) },
 };
 
 const std::unordered_map<int, vec> Entities::goomba = {
@@ -159,13 +159,14 @@ const std::unordered_map<int, vec> Entities::goombashielder = {
 	{ 1066, vec(4454.0f, 2754.0f) },
 	{ 1067, vec(4466.0f, 2912.0f) },
 	{ 1068, vec(4310.0f, 2884.0f) },
-	{ 1069, vec(4208.0f, 2947.0f) },
+	{ 1069, vec(4240.0f, 2947.0f) },
 	{ 1070, vec(4110.0f, 3034.0f) },
 	{ 1071, vec(4413.0f, 2979.0f) },
 	{ 1072, vec(3806.0f, 3148.0f) },
 	{ 1073, vec(3703.0f, 3027.0f) },
 	{ 1075, vec(5111.33f, 2693.333f) },
 	{ 1089, vec(3170.0f, 2610.0f) },
+	{ 1111, vec(4033.333f, 2934.67f) },
 };
 
 const std::unordered_map<int, vec> Entities::healthup = {
