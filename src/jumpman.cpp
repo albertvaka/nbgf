@@ -293,7 +293,18 @@ void JumpMan::Update(float dt)
 
 	justHit = false;
 
-	anim.Update(dt);
+	float absVelY = fabs(vel.y);
+	if (onWall && absVelY < 50.f) {
+		// do not update animation
+		anim.Update(dt* (absVelY/50.f));
+		if (anim.current_frame == 1) {
+			// hack: skip frame that looks weird if slowed down
+			anim.current_frame = 2;
+		}
+	}
+	else {
+		anim.Update(dt);
+	}
 
 
 	if (groundTile != Tile::NONE || onWall) {
