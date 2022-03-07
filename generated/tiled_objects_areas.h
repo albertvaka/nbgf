@@ -30,6 +30,12 @@ struct Areas {
 	static const BoxBounds single_parallax_forest;
 	static const std::array<BoxBounds, 1> parallax_island;
 	static const BoxBounds single_parallax_island;
+	static const std::array<BoxBounds, 1> parallax_sewer;
+	static const BoxBounds single_parallax_sewer;
+	static const std::array<BoxBounds, 1> parallax_sewer_2;
+	static const BoxBounds single_parallax_sewer_2;
+	static const std::array<BoxBounds, 1> parallax_sewer_3;
+	static const BoxBounds single_parallax_sewer_3;
 	static const std::array<BoxBounds, 5> rocket_launcher_awake;
 
 };

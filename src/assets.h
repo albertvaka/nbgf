@@ -47,10 +47,11 @@ namespace Assets
 	inline Voice yeah1Voice;
 	inline Voice yeah2Voice;
 
-	inline std::array<GPU_Image*, 1> lavaParallaxTextures;
 	inline std::array<GPU_Image*, 3> forestParallaxTextures;
 	inline std::array<GPU_Image*, 4> caveParallaxTextures;
 	inline std::array<GPU_Image*, 4> islandParallaxTextures;
+	inline std::array<GPU_Image*, 1> lavaParallaxTextures;
+	inline std::array<GPU_Image*, 1> sewerParallaxTextures;
 
 };
 

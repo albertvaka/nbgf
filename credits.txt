@@ -20,3 +20,4 @@ Knight NPC by Szadi Art https://szadiart.itch.io/2d-soulslike-character
 Jar sprites by Startled Pixels https://startledpixels.itch.io/2d-pixel-item-asset-pack
 Mantis sprite by Cheshire https://jeevo.itch.io/insect-enemies
 Sewer tiles by MrBeas https://opengameart.org/content/sewer-tileset
+Sewer background by Lil Cthulhu https://lil-cthulhu.itch.io/pixel-art-sewer-background

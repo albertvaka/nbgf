@@ -27,11 +27,6 @@ void Assets::LoadAll() {
     fadeOutDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_diamonds.frag");
     fadeOutCircleShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_circle.frag");
 
-    for (size_t i = 0; i < lavaParallaxTextures.size(); i++) {
-        lavaParallaxTextures[i] = LoadImage("data/lava_"+ std::to_string(i)+".png");
-        GPU_SetWrapMode(lavaParallaxTextures[i], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
-    }
-
     for (size_t i = 0; i < forestParallaxTextures.size(); i++) {
         forestParallaxTextures[i] = LoadImage("data/redforest_"+ std::to_string(i)+".png");
         GPU_SetWrapMode(forestParallaxTextures[i], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
@@ -46,6 +41,12 @@ void Assets::LoadAll() {
         islandParallaxTextures[i] = LoadImage("data/island_" + std::to_string(i) + ".png");
         GPU_SetWrapMode(islandParallaxTextures[i], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
     }
+
+    lavaParallaxTextures[0] = LoadImage("data/lava_0.png");
+    GPU_SetWrapMode(lavaParallaxTextures[0], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
+
+    sewerParallaxTextures[0] = LoadImage("data/sewer.png");
+    GPU_SetWrapMode(sewerParallaxTextures[0], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
 
     aiVoice.speak.Load("data/ai_1b.wav");
     aiVoice.end.Load("data/ai_6a.wav");

@@ -80,6 +80,24 @@ const std::array<BoxBounds, 1> Areas::parallax_island = {
 const BoxBounds Areas::single_parallax_island = BoxBounds(3120.8997f,798.104f,760.519f,339.125f);
 
 
+const std::array<BoxBounds, 1> Areas::parallax_sewer = {
+	BoxBounds(3003.8037f,2374.002f,3961.62f,860.728f),
+};
+const BoxBounds Areas::single_parallax_sewer = BoxBounds(3003.8037f,2374.002f,3961.62f,860.728f);
+
+
+const std::array<BoxBounds, 1> Areas::parallax_sewer_2 = {
+	BoxBounds(2896.47f,2070.04f,559.409f,452.062f),
+};
+const BoxBounds Areas::single_parallax_sewer_2 = BoxBounds(2896.47f,2070.04f,559.409f,452.062f);
+
+
+const std::array<BoxBounds, 1> Areas::parallax_sewer_3 = {
+	BoxBounds(6362.3f,2284.303f,599.409f,511.395f),
+};
+const BoxBounds Areas::single_parallax_sewer_3 = BoxBounds(6362.3f,2284.303f,599.409f,511.395f);
+
+
 const std::array<BoxBounds, 5> Areas::rocket_launcher_awake = {
 	BoxBounds(4962.71f,1932.292f,446.25f,351.0f),
 	BoxBounds(5288.04f,1929.458f,400.833f,351.0f),

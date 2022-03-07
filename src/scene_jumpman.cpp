@@ -64,10 +64,6 @@ JumpScene::JumpScene(int saveSlot)
 {
 	Particles::Init();
 
-	for (const BoxBounds& b : Tiled::Areas::lava_bg) {
-		new Parallax(b, Assets::lavaParallaxTextures, 0.3f, 1.f, -410.f);
-	}
-
 	for (const BoxBounds& b : Tiled::Areas::parallax_forest) {
 		new Parallax(b, Assets::forestParallaxTextures, 0.25f, 1.f, 172.f);
 	}
@@ -80,6 +76,17 @@ JumpScene::JumpScene(int saveSlot)
 		new Parallax(b, Assets::caveParallaxTextures, 0.4f, 0.65f, -165.f);
 	}
 
+	for (const BoxBounds& b : Tiled::Areas::lava_bg) {
+		new Parallax(b, Assets::lavaParallaxTextures, 0.3f, 1.f, -410.f);
+	}
+
+	for (const BoxBounds& b : Tiled::Areas::parallax_sewer) {
+		new Parallax(b, Assets::sewerParallaxTextures, 0.f, 1.f, -142.1f);
+	}
+
+	new Parallax(Tiled::Areas::single_parallax_sewer_2, Assets::sewerParallaxTextures, 0.f, 1.f, -82.7f);
+	new Parallax(Tiled::Areas::single_parallax_sewer_3, Assets::sewerParallaxTextures, 0.f, 1.f, -150.7f);
+
 	for (const auto& screen : Tiled::Screens::screen) {
 		int id = screenManager.AddScreen(screen);
 		for (const BoxBounds& b : Tiled::Areas::lava_bg) {
@@ -89,9 +96,6 @@ JumpScene::JumpScene(int saveSlot)
 		}
 	}
 
-	for (const BoxBounds& b : Tiled::Areas::lava_bg) {
-		new Parallax(b, Assets::lavaParallaxTextures, 0.3f, 1.f, -410.f);
-	}
 }
 
 JumpScene::~JumpScene() {
@@ -986,6 +990,9 @@ void JumpScene::Draw()
 	//for (int i = 0; i < Parallax::GetAll().size(); i++) {
 	//	Parallax::GetAll()[i]->DrawImGUI(("parallax_" + std::to_string(i)).c_str());
 	//}
+	Parallax::GetAll().back()->DrawImGUI("parallax3");
+	Parallax::GetAll()[Parallax::GetAll().size() - 2]->DrawImGUI("parallax2");
+	Parallax::GetAll()[Parallax::GetAll().size() - 3]->DrawImGUI("parallax1");
 
 #ifdef _DEBUG
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
