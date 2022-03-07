@@ -138,6 +138,9 @@ const std::unordered_map<int, vec> Entities::flyingalien = {
 	{ 1102, vec(4889.5f, 2692.5f) },
 	{ 1103, vec(3800.5f, 2943.5f) },
 	{ 1104, vec(4269.5f, 2766.5f) },
+	{ 1112, vec(6658.83f, 1988.333f) },
+	{ 1113, vec(6478.83f, 2122.833f) },
+	{ 1114, vec(6838.33f, 2122.333f) },
 };
 
 const std::unordered_map<int, vec> Entities::goomba = {
