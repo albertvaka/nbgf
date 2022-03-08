@@ -87,7 +87,7 @@ void Bat::Update(float dt)
 	}
 	case State::SIESTA:
 	{
-		bool close_to_player = pos.DistanceSq(JumpMan::instance()->Bounds().Center()) < (awake_player_distance * awake_player_distance);
+		bool close_to_player = pos.DistanceSq(JumpMan::instance()->CenterPos()) < (awake_player_distance * awake_player_distance);
 		if (awakened || close_to_player) {
 			state = State::AWAKENING;
 			anim.Ensure(AnimLib::BAT_AWAKE, false);
@@ -145,7 +145,7 @@ void Bat::Update(float dt)
 			state = State::FLYING; // Stop seeking if we hit an obstacle in the map
 		}
 		else {
-			vel = steering.Seek(jumpman->Bounds().Center());
+			vel = steering.Seek(jumpman->CenterPos());
 		}
 
 		vel = vel.Normalized() * max_speed;

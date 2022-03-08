@@ -39,7 +39,7 @@ void RocketLauncher::Update(float dt)
 
 	awoken = false;
 	for (const BoxBounds& e : awakeArea) {
-		if (Collide(e, JumpMan::instance()->Bounds())) {
+		if (Collide(e, JumpMan::instance()->CollisionBounds())) {
 			awoken = true;
 			break;
 		}

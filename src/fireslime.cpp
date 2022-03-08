@@ -76,7 +76,7 @@ void FireSlime::Update(float dt)
 		}
 		break;
 	case State::WALKING:
-		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), JumpMan::instance()->Bounds()));
+		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), JumpMan::instance()->HitBoxBounds()));
 		if (!anim.IsComplete() && anim.CurrentFrameNumber() >= kFirstFrameOnAir && anim.CurrentFrameNumber() < kFirstFrameOnGround) {
 			// in this part of the animation we are in the air, here we move and we never start an attack
 			pos.x += kSpeed * direction * dt;

@@ -49,7 +49,7 @@ bool SaveStation::Update(float dt)
 		return false;
 	}
 
-	return Collide(Bounds(), JumpMan::instance()->Bounds());
+	return Collide(Bounds(), JumpMan::instance()->CollisionBounds());
 }
 
 void SaveStation::Draw() const

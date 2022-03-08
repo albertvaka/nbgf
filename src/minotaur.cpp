@@ -144,7 +144,7 @@ void Minotaur::Update(float dt)
 			state = State::FLIP;
 			anim.Ensure(AnimLib::MINOTAUR_FLIP, false);
 		}
-		else if (hitTimer <= 0.f && Collide(JumpMan::instance()->Bounds(), BoxBounds::FromCenter(pos, vec(kDistanceAttack))))
+		else if (hitTimer <= 0.f && Collide(JumpMan::instance()->CollisionBounds(), BoxBounds::FromCenter(pos, vec(kDistanceAttack))))
 		{
 			state = State::ATTACK_BIG;
 			anim.Ensure(AnimLib::MINOTAUR_ATTACK_BIG, false);

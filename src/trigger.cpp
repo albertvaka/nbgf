@@ -8,7 +8,7 @@ void Trigger::Update(float dt)
 {
 	if (active) {
 		JumpMan* player = JumpMan::instance();
-		if (Collide(Bounds(), player->Bounds())) {
+		if (Collide(Bounds(), player->CollisionBounds())) {
 			callback(this, false);
 			if (singleTime) {
 				active = false;

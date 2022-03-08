@@ -42,7 +42,7 @@ const vec* ReceiveDamageFromPlayer(const B& bounds, bool enemyInvulnerable) {
 template<typename B>
 bool DamagePlayerOnCollision(const B& bounds) { // returns true if collided
 	JumpMan* player = JumpMan::instance();
-	if (Collide(player->Bounds(), bounds)) {
+	if (Collide(player->HitBoxBounds(), bounds)) {
 		if (!player->isInvencible()) {
 			player->TakeDamage(bounds.Center());
 		}

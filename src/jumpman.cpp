@@ -144,7 +144,7 @@ void JumpMan::DealDamage(vec target) {
 			knockback = -knockback;
 		}
 		float newVelX = vel.x / 2 + knockback;
-		//if (groundTile == Tile::NONE || !IsGoingToRunOffPlatform(Bounds().Center(), size, vec(newVelX, vel.y), 1 / 60.f))
+		//if (groundTile == Tile::NONE || !IsGoingToRunOffPlatform(CenterPos(), size, vec(newVelX, vel.y), 1 / 60.f))
 		vel.x = newVelX;
 	}
 	initialJumpY = Mates::MaxFloat;
@@ -773,7 +773,7 @@ void JumpMan::TakeDamage(vec src) {
 	justHit = true;
 	anim.Ensure(AnimLib::WARRIOR_HURT, false);
 
-	vec playerCenter = Bounds().Center();
+	vec playerCenter = CenterPos();
 	float direction = (playerCenter-src).AngleDegs();
 	new OneShotAnim(Assets::spritesheetTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
 	health--;
@@ -843,10 +843,10 @@ void JumpMan::Draw() const {
 	Shader::Deactivate();
 
 	// Debug-only
-	Bounds().DebugDraw();
+	HitBoxBounds().DebugDraw();
 	//Input::GetAnalog(0, AnalogInput::AIM).DebugDraw();
 	pos.DebugDraw();
-	//Bounds().Center().DebugDraw();
+	//CenterPos().DebugDraw();
 	if (playerAttack.alive) {
 		playerAttack.Bounds().DebugDraw(0,255,0);
 	}

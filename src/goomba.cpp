@@ -83,7 +83,7 @@ void Goomba::Update(float dt)
 	{
 	case State::WALKING:
 		Walk(dt);
-		if ((type == Type::CHARGER || type == Type::SHIELDER) && Collide(ChargeBounds(), player->Bounds()))
+		if ((type == Type::CHARGER || type == Type::SHIELDER) && Collide(ChargeBounds(), player->CollisionBounds()))
 		{
 			bool playerOnRight = (player->pos.x > pos.x);
 			if (playerOnRight != goingRight) {

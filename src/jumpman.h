@@ -18,8 +18,18 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     void DrawGUI() const;
     void Reset(vec position, int maxHp = 3);
 
-    BoxBounds Bounds() const {
-        return BoxBounds(pos, size, vec(size.x/2, size.y));
+    vec CenterPos() {
+        return vec(pos.x, pos.y - size.y / 2);
+    }
+
+    BoxBounds HitBoxBounds() const {
+        BoxBounds b = CollisionBounds();
+        b.top += 4;
+        b.height -= 4;
+        return b;
+    }
+    BoxBounds CollisionBounds() const {
+        return BoxBounds(pos, size, vec(size.x / 2, size.y));
     }
     BoxBounds MaxBounds() const;
 

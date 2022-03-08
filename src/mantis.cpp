@@ -104,7 +104,7 @@ void Mantis::Update(float dt)
 	break;
 	case State::WALKING: 
 	{
-		collideInnerRadius = Collide(CircleBounds(pos, kMeleeRadius), player->Bounds());
+		collideInnerRadius = Collide(CircleBounds(pos, kMeleeRadius), player->CollisionBounds());
 
 		if (walkingBackwards && (collideInnerRadius || jumpCooldownTimer <= 0.f)) {
 			walkingBackwards = false;
@@ -144,7 +144,7 @@ void Mantis::Update(float dt)
 			vel.y += kGravityAcc * dt;
 		}
 
-		if (!ret.groundCollision.isSlope() && !collideInnerRadius && jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, kJumpRadius), player->Bounds()))
+		if (!ret.groundCollision.isSlope() && !collideInnerRadius && jumpCooldownTimer <= 0.f && Collide(CircleBounds(pos, kJumpRadius), player->CollisionBounds()))
 		{
 			//Debug::out << "preparing";
 			initialPlayerPosition = player->pos;

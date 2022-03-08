@@ -140,7 +140,7 @@ void HellCrossScene::Update(float dt)
 
 	if (player.health <= 0) {
 		//Assets::soundDeath.Play();
-		vec normalizedPlayerPos = Camera::WorldToScreen(player.Bounds().Center()) / Camera::InScreenCoords::Size();
+		vec normalizedPlayerPos = Camera::WorldToScreen(player.CenterPos()) / Camera::InScreenCoords::Size();
 		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
 		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
 		Shader::Deactivate();

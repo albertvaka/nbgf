@@ -29,7 +29,7 @@ void HealthUp::Update(float dt)
 	}
 
 	JumpMan* player = JumpMan::instance();
-	if (!pickedUp && Collide(Bounds(), player->Bounds())) {
+	if (!pickedUp && Collide(Bounds(), player->CollisionBounds())) {
 
 		//TODO: Show popup or animation or something
 

@@ -591,7 +591,7 @@ void JumpScene::Update(float dt)
 
 	if (player.health <= 0) {
 		//Assets::soundDeath.Play();
-		vec normalizedPlayerPos = Camera::WorldToScreen(player.Bounds().Center()) / Camera::InScreenCoords::Size();
+		vec normalizedPlayerPos = Camera::WorldToScreen(player.CenterPos()) / Camera::InScreenCoords::Size();
 		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
 		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
 		Shader::Deactivate();
@@ -800,7 +800,7 @@ void JumpScene::Update(float dt)
 
 	for (BigItem* g : BigItem::GetAll()) {
 		g->Update(dt);
-		if (Collide(g->Bounds(), player.Bounds())) {
+		if (Collide(g->Bounds(), player.CollisionBounds())) {
 			skillTree.Enable(g->skill);
 			
 			//TODO: Pickup animation or popup or something
@@ -926,7 +926,7 @@ void JumpScene::Draw()
 		.withScale(-1.2*test_anim_scale, 1.2f);
 
 	if (contextActionButton) {
-		Window::Draw(Assets::spritesheetTexture, player.Bounds().TopRight() + vec(2, -6))
+		Window::Draw(Assets::spritesheetTexture, player.CollisionBounds().TopRight() + vec(2, -6))
 			.withRect(Animation::GetRectAtTime(AnimLib::BUTTON_B_PRESS, mainClock));
 	}
 

@@ -141,7 +141,7 @@ void FlyingAlien::Update(float dt)
 		pos.x += vel.x * dt;
 
 		if (Mates::IsNearlyEqual(pos.y, initialPos.y, 0.5f)) {
-			if (Collide(player->Bounds(), ChargeBounds())) {
+			if (Collide(player->CollisionBounds(), ChargeBounds())) {
 				float bigDtAttack = playerNearbyArea.y / speedAttack; // total time that will be spent attacking
 				if (!IsGoingToHitAWall(chargeBounds.Center(), chargeBounds.Size(), vel, bigDtAttack)
 					&& !IsGoingToLeaveBounds(chargeBounds.Center(), chargeBounds.Size(), vel, bigDtAttack, bounds))

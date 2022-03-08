@@ -18,7 +18,7 @@ vec Health::drawOffset() const {
 void Health::Update(float dt)
 {
 	JumpMan* player = JumpMan::instance();
-	if (Collide(Bounds(), player->Bounds())) {
+	if (Collide(Bounds(), player->CollisionBounds())) {
 		if (player->health < player->maxHealth) {
 			player->health++;
 		}
