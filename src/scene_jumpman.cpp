@@ -405,15 +405,22 @@ void JumpScene::EnterScene()
 	}
 	new Trigger("rockfall", Tiled::Triggers::single_trigger_rockfall, [this, fallingRock1, fallingRock2, fallingRock3](Trigger* t, bool isLoadingSave) {
 
+		map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_1), Tile::SOLID_TRANSPARENT);
+		map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_2), Tile::SOLID_TRANSPARENT);
+		map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_3), Tile::SOLID_TRANSPARENT);
+
 		if (isLoadingSave) {
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_1), Tile::SOLID_TRANSPARENT);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_2), Tile::SOLID_TRANSPARENT);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_3), Tile::SOLID_TRANSPARENT);
 			fallingRock1->SetTransform(Tiled::Entities::single_rocks_target_1);
 			fallingRock2->SetTransform(Tiled::Entities::single_rocks_target_2);
 			fallingRock3->SetTransform(Tiled::Entities::single_rocks_target_3);
+			if (boss_ooy) boss_ooy->state = Ooy::State::EXIT_CHASE;
 			return;
 		}
+
+		player.pos.x -= 100.f;
+		SaveGame();
+		player.pos.x += 100.f;
+
 
 		CutSceneBuilder()
 		.PlayOneFrame([]() {
@@ -484,12 +491,6 @@ void JumpScene::EnterScene()
 		.WaitAndThen()
 		.Play(0.5f, [fallingRock3](float progress) {
 			fallingRock3->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_bounce_3, Tiled::Entities::single_rocks_target_3));
-		})
-		.WaitAndThen()
-		.PlayOneFrame([this]() {
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_1), Tile::SOLID_TRANSPARENT);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_2), Tile::SOLID_TRANSPARENT);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_3), Tile::SOLID_TRANSPARENT);
 		});
 
 	});
