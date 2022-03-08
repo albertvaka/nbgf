@@ -6,7 +6,7 @@
 struct SceneManager
 {
 	static inline Scene* newScene = nullptr;
-	static inline Scene* currentScene;
+	static inline Scene* currentScene = nullptr;
 	static void ChangeScene(Scene* s)
 	{
 		assert(!newScene);

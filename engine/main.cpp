@@ -56,10 +56,9 @@ void main_loop();
 
 extern "C" void start_main_loop()
 {
-	// We wait until here to create the scene since here we know that
-	// the emscripten FS is ready, and the scene could try to use it.
-	SceneManager::currentScene = new EntryPointScene();
-	SceneManager::currentScene->EnterScene();
+	// We wait until here to create the scene so the emscripten FS
+	// emscripten is ready, since the scene constructor could use it
+	SceneManager::newScene = new EntryPointScene();
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(main_loop, 0, 1);
@@ -154,20 +153,6 @@ void init() {
 
 void main_loop() {
 
-	if (SceneManager::newScene != nullptr) {
-		SceneManager::currentScene->ExitScene();
-		if (SceneManager::currentScene != SceneManager::newScene) {
-			delete SceneManager::currentScene;
-			SceneManager::currentScene = SceneManager::newScene;
-		}
-		SceneManager::newScene = nullptr;
-		Camera::SetZoom(1.f);
-		Camera::SetTopLeft(0,0);
-		Input::IgnoreInput(false);
-		Fx::BeforeEnterScene();
-		SceneManager::currentScene->EnterScene();
-	}
-
 #ifdef _IMGUI
 	//GPU_ActivateShaderProgram(0, NULL);
 	GPU_FlushBlitBuffer(); // IMPORTANT: run GPU_FlushBlitBuffer before ImGui_ImplOpenGL3_NewFrame();
@@ -175,6 +160,28 @@ void main_loop() {
 	ImGui_ImplSDL2_NewFrame(Window::window);
 	ImGui::NewFrame();
 #endif
+
+	if (SceneManager::newScene != nullptr) {
+		if (SceneManager::currentScene == nullptr) {
+			// This branch is only taken the first time. We have this here so
+			// the first scene "transition" is as similar to the rest as possible
+			SceneManager::currentScene = SceneManager::newScene;
+		}
+		else {
+			SceneManager::currentScene->ExitScene();
+			if (SceneManager::currentScene != SceneManager::newScene) {
+				delete SceneManager::currentScene;
+				SceneManager::currentScene = SceneManager::newScene;
+			}
+		}
+
+		SceneManager::newScene = nullptr;
+		Camera::SetZoom(1.f);
+		Camera::SetTopLeft(0,0);
+		Input::IgnoreInput(false);
+		Fx::BeforeEnterScene();
+		SceneManager::currentScene->EnterScene();
+	}
 
 	int ticks = SDL_GetTicks();
 	float uncappedDt = (ticks - lastTicks) / 1000.f;

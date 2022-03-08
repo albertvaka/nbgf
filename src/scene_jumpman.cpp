@@ -885,7 +885,7 @@ void JumpScene::Draw()
 
 	destroyedTiles.Draw();
 
-	Particles::ooyTearTrail.DrawImGUI("Tears");
+	//Particles::ooyTearTrail.DrawImGUI("Tears");
 
 	DrawAllInOrder(
 		SaveStation::GetAll(),
