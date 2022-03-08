@@ -46,6 +46,10 @@ void Parallax::DrawImGUI(const char* title)
 	ImGui::SliderFloat("Depth min:", &depth_min, 0, 1);
 	ImGui::SliderFloat("Depth max:", &depth_max, 0, 1);
 	ImGui::SliderFloat("Base offset:", &base_offset, -500, 500);
+	static float initialY = bounds.top;
+	ImGui::SliderFloat("height", &bounds.height, 0, 3000);
+	ImGui::SliderFloat("y", &bounds.top, initialY-1000, initialY + 1000);
+
 	ImGui::End();
 #endif
 }
