@@ -6,7 +6,7 @@
 #include "animation.h"
 #include "selfregister.h"
 
-constexpr const float kOoyTearRadius = 7.f;
+constexpr const float kOoyTearRadius = 6.5f;
 
 struct OoyTear : CircleEntity, SelfRegister<OoyTear>
 {

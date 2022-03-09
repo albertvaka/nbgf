@@ -23,7 +23,7 @@ constexpr const float kScale = 0.8f;
 constexpr const float kRadius = 12.f*kScale;
 constexpr const float kMaxSpeed = 110.f;
 
-constexpr const float kTearVel = 120;
+constexpr const float kTearVel = 100;
 constexpr const float kRandomTearVel = 10;
 
 constexpr const float kSteeringSeekWeightChasing = 300.f;
@@ -54,8 +54,8 @@ void MiniOoy::Update(float dt)
 		return;
 	}
 
-	vel += steering.BoundsAvoidance(bounds).Truncated(600*dt);
-	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(600*dt);
+	vel += steering.BoundsAvoidance(bounds).Truncated(kSteeringTileMapAvoidanceWeight *dt);
+	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(kSteeringBoundsAvoidanceWeight *dt);
 
 	JumpMan* player = JumpMan::instance();
 

@@ -15,17 +15,17 @@
 constexpr const float kIntervalShoot = 0.07f;
 constexpr const float kStartChasingRadius = 200.f;
 constexpr const float kStopChasingRadius = 300.f;
-constexpr const float kHorizontalDistanceToShoot = 80.f;
+constexpr const float kHorizontalDistanceToShoot = 72.f;
 constexpr const float kTargetVerticalDistance = 90.f;
 constexpr const float kVerticalDistanceToShoot = 60.f;
 constexpr const float kTimeToChangeState = 1.2f;
 constexpr const float kScale = 2.f;
 constexpr const float kRadius = 12.f*kScale;
-constexpr const float kMaxSpeed = 110.f;
+constexpr const float kMaxSpeed = 105.f;
 
 constexpr const int kHealth = 8;
 
-constexpr const float kTearVel = 120;
+constexpr const float kTearVel = 110;
 constexpr const float kRandomTearVel = 10;
 
 constexpr const float kSteeringSeekWeightChasing = 300.f;
