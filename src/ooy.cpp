@@ -141,7 +141,7 @@ void Ooy::Update(float dt)
 	}
 
 	vel.DebugDrawAsArrow(pos);
-	vel.Clamp(vec(-kMaxSpeed, -kMaxSpeed*0.7), vec(kMaxSpeed, kMaxSpeed * 0.7));
+	vel.Clamp(vec(-kMaxSpeed, -kMaxSpeed * 0.7f), vec(kMaxSpeed, kMaxSpeed * 0.7f));
 	pos += vel * dt;
 
 	hitTimer -= dt;
@@ -177,7 +177,7 @@ void Ooy::Draw() const
 		break;
 	case State::EXIT_CHASE:
 	{
-		if ( ((timer / kTimeToChangeState)) > 0.75) {
+		if ( ((timer / kTimeToChangeState)) > 0.75f) {
 			rect = AnimLib::OOY_CHANGE_STATE_1;
 		} else {
 			int offset = 0;
@@ -212,7 +212,7 @@ void Ooy::Draw() const
 
 	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRectWithOriginCentered(rect)
-		.withScale(vec(kScale)+vec(0.1+0.1f*sin(mainClock), 0.f));
+		.withScale(vec(kScale)+vec(0.1f + 0.1f * sin(mainClock), 0.f));
 
 	Shader::Deactivate();
 

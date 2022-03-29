@@ -422,12 +422,12 @@ inline constexpr veci operator-(veci lhs, veci rhs)
 
 
 //treats a window as a toroid
-inline void WrapAround(vec &pos, int MaxX, int MaxY)
+inline void WrapAround(vec &pos, float MaxX, float MaxY)
 {
-	if (pos.x > MaxX) {pos.x = 0.0;}
-	if (pos.x < 0)    {pos.x = (float)MaxX;}
-	if (pos.y < 0)    {pos.y = (float)MaxY;}
-	if (pos.y > MaxY) {pos.y = 0.0;}
+	if (pos.x > MaxX) {pos.x = 0.f;}
+	if (pos.x < 0.f)  {pos.x = MaxX;}
+	if (pos.y < 0.f)  {pos.y = MaxY;}
+	if (pos.y > MaxY) {pos.y = 0.f;}
 }
 
 //  returns true if the target position is in the field of view of the entity
@@ -439,7 +439,7 @@ inline bool IsSecondInFOVOfFirst(vec posFirst,
 {
 	vec toTarget = (posSecond - posFirst);
 	toTarget.Normalize();
-	return facingFirst.Dot(toTarget) >= cos(fov/2.0);
+	return facingFirst.Dot(toTarget) >= cos(fov/2.0f);
 }
 
 //-------------------- LineIntersection2D-------------------------

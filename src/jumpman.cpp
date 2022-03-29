@@ -708,7 +708,7 @@ void JumpMan::Update(float dt)
 				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
 			}
 			if (groundTile != Tile::NONE) {
-				if (abs(vel.x) < 0.1) {
+				if (abs(vel.x) < 0.1f) {
 					Particles::DoDustLand(pos);
 				}
 				else {

@@ -133,7 +133,7 @@ namespace Mates
 		int    integral = (int)val;
 		float mantissa = val - integral;
 
-		if (mantissa < 0.5)
+		if (mantissa < 0.5f)
 		{
 			return integral;
 		}
@@ -163,7 +163,7 @@ namespace Mates
 	}
 
 	//compares two real numbers. Returns true if they are equal
-	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12)
+	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12f)
 	{
 		if (fabs(a - b) < margin)
 		{

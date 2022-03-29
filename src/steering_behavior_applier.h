@@ -138,7 +138,7 @@ inline bool SteeringBehaviorApplier::AccumulateForce(vec& RunningTot, vec ForceT
 	float MagnitudeRemaining = max_force - MagnitudeSoFar;
 
 	//return false if there is no more force left to use
-	if (MagnitudeRemaining <= 0.0) return false;
+	if (MagnitudeRemaining <= 0.f) return false;
 
 	//calculate the magnitude of the force we want to add
 	float MagnitudeToAdd = ForceToAdd.Length();

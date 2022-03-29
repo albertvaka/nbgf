@@ -113,7 +113,7 @@ void MiniOoy::Update(float dt)
 	}
 
 	vel.DebugDrawAsArrow(pos);
-	vel.Clamp(vec(-kMaxSpeed, -kMaxSpeed * 0.7), vec(kMaxSpeed, kMaxSpeed * 0.7));
+	vel.Clamp(vec(-kMaxSpeed, -kMaxSpeed * 0.7f), vec(kMaxSpeed, kMaxSpeed * 0.7f));
 	pos += vel * dt;
 
 
@@ -144,7 +144,7 @@ void MiniOoy::Draw() const
 		break;
 	case State::EXIT_CHASE:
 	{
-		if (((timer / kTimeToChangeState)) > 0.75) {
+		if (((timer / kTimeToChangeState)) > 0.75f) {
 			rect = AnimLib::OOY_CHANGE_STATE_1;
 		}
 		else {
@@ -175,7 +175,7 @@ void MiniOoy::Draw() const
 
 	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRectWithOriginCentered(rect)
-		.withScale(vec(kScale) + vec(0.05 + 0.05f * sin(mainClock), 0.f));
+		.withScale(vec(kScale) + vec(0.05f + 0.05f * sin(mainClock), 0.f));
 
 	// Debug-only
 	Bounds().DebugDraw();

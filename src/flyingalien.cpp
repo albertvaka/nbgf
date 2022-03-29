@@ -95,7 +95,7 @@ void FlyingAlien::Update(float dt)
 	case State::CHARGING:
 	{
 		pos.x += vel.x * dt;
-		pos.y = initialPos.y + walkDir*std::sin(((pos.x - beginAttackX) / playerNearbyArea.x) * M_PI) * playerNearbyArea.y;
+		pos.y = initialPos.y + walkDir*std::sin(((pos.x - beginAttackX) / playerNearbyArea.x) * Angles::Pi) * playerNearbyArea.y;
 		if (walkDir*(pos.x - beginAttackX) > playerNearbyArea.x) {
 			timer = 0.f;
 			state = State::EXIT_CHARGE;
@@ -106,7 +106,7 @@ void FlyingAlien::Update(float dt)
 	{
 		timer += dt;
 		pos.x += Mates::Lerp(speedAttack, speedAlert, (timer / exitAttackTime)) * walkDir * dt;
-		pos.y = initialPos.y - std::sin((timer/exitAttackTime) * M_PI/2) * overshotEndCharge;
+		pos.y = initialPos.y - std::sin((timer/exitAttackTime) * Angles::Pi/2) * overshotEndCharge;
 		if (timer >= exitAttackTime) {
 			state = State::FLYING;
 			if (pos.x < player->pos.x) {
@@ -208,7 +208,7 @@ void FlyingAlien::Draw() const
 
 	vec drawPos = pos + vec(vel.x > 0? 2 : -2,(std::sin((initialPos.x + pos.x)*0.1f)*4) - 3);
 	if (state == State::ENTER_CHARGE) {
-		drawPos.y -= sinf((timer / prepareAttackTime) * M_PI) * Tile::Size;
+		drawPos.y -= sinf((timer / prepareAttackTime) * Angles::Pi) * Tile::Size;
 	}
 
 	GPU_Rect rect = anim.CurrentFrameRect();

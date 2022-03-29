@@ -923,7 +923,7 @@ void JumpScene::Draw()
 
 	Window::Draw(Assets::warriorTexture, Tile::AlignToTiles(Tiled::Entities::single_npc)+vec(0.f,-6.f))
 		.withRect(Animation::GetRectAtTime(AnimLib::NPC_IDLE, mainClock))
-		.withScale(-1.2*test_anim_scale, 1.2f);
+		.withScale(-1.2f*test_anim_scale, 1.2f);
 
 	if (contextActionButton) {
 		Window::Draw(Assets::spritesheetTexture, player.CollisionBounds().TopRight() + vec(2, -6))

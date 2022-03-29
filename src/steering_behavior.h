@@ -174,7 +174,7 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
 
 				float ip = cX - SqrtPart;
 
-				if (ip <= 0.0)
+				if (ip <= 0.f)
 				{
 					ip = cX + SqrtPart;
 				}

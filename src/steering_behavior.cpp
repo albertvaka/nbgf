@@ -108,7 +108,7 @@ vec SteeringBehavior::Pursuit(const Entity* evader)
 
 	float RelativeHeading = heading.Dot(evader->vel.Normalized());
 
-	if ( (ToEvader.Dot(heading) > 0) && (RelativeHeading < -0.95))  //acos(0.95)=18 degs
+	if ( (ToEvader.Dot(heading) > 0) && (RelativeHeading < -0.95f))  //acos(0.95)=18 degs
 	{
 		return Seek(evader->pos);
 	}

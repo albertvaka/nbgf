@@ -158,11 +158,11 @@ void Goomba::Draw() const
 
 	if (state == State::ENTER_CHARGE)
 	{
-		drawPos.y -= sinf((timer / enterChargeTime) * M_PI) * Tile::Size;
+		drawPos.y -= sinf((timer / enterChargeTime) * Angles::Pi) * Tile::Size;
 	}
 	else if (state == State::EXIT_CHARGE)
 	{ 
-		drawPos.y -= sinf((timer / exitChargeTime) * M_PI) * 2;
+		drawPos.y -= sinf((timer / exitChargeTime) * Angles::Pi) * 2;
 	}
 	else if (state == State::SHIELDING) {
 		rect = AnimLib::GOOMBASHIELDING;
