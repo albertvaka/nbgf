@@ -10,26 +10,30 @@
 #include "missile.h"
 #include "fx.h"
 #include "camera.h"
+#include "oneshotanim.h"
 #include "common_enemy.h"
 
 const float walking_speed = 30.f; //per second
 
 // Constants relatives to the sprite, assuming the origin is at ground level
-const vec headHitBoxOffset = vec(-30, -105);
-const vec headHitBoxSize = vec(80, 45);
-const vec legsHitBoxOffset = vec(-20, -64);
-const vec legsHitBoxSize = vec(40, 60);
-const vec textureOffset = vec(-10, -88); 
-const vec missilesOriginOffset = vec(-10, -110);
-const float legsReceiveHitWidthIncrease = 20.f;
+const vec kHeadHitBoxOffset = vec(-30, -105);
+const vec kHeadHitBoxSize = vec(80, 45);
+const vec kLegsHitBoxOffset = vec(-20, -64);
+const vec kLegsHitBoxSize = vec(40, 60);
+const vec kTextureOffset = vec(-10, -88);
+const vec kMissilesOriginOffset = vec(-10, -110);
+const float kLegsReceiveHitWidthIncrease = 20.f;
+const float kTimeBetweenMissiles = 0.4f;
+const float kDieAnimTime = 3.f;
+const int kHealth = 18;
 
 Bipedal::Bipedal(vec pos)
 	: Entity(pos)
-	, timer(0)
+	, health(kHealth)
 	, anim(AnimLib::BIPEDAL_WALKING)
 	, state(State::WALKING_FORWARD)
-	, headHitBox(pos + headHitBoxOffset, headHitBoxSize)
-	, legsHitBox(pos + legsHitBoxOffset, legsHitBoxSize)
+	, headHitBox(pos + kHeadHitBoxOffset, kHeadHitBoxSize)
+	, legsHitBox(pos + kLegsHitBoxOffset, kLegsHitBoxSize)
 {
 	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::boss_bounds);
 	if (bounds_index >= Tiled::Areas::boss_bounds.size()) {
@@ -49,6 +53,31 @@ Bipedal::Bipedal(vec pos)
 
 void Bipedal::Update(float dt)
 {
+	if (state == State::DYING) {
+		timer -= dt;
+		hitTimer = hitTimer > 0 ? 0.f : 1.f;
+
+		if (Rand::OnceEvery(15)) {
+			vec explosionPos = Rand::OnceEvery(2) ? Rand::VecInRange(headHitBox) : Rand::VecInRange(legsHitBox);
+			float rand = Rand::rollf();
+			if (rand > 0.666f) {
+				new ForegroundOneShotAnim(Assets::scifiTexture, explosionPos, AnimLib::EXPLOSION_1, 0.75f);
+			} else if (rand > 0.333f) {
+				new ForegroundOneShotAnim(Assets::scifiTexture, explosionPos, AnimLib::EXPLOSION_2, 0.75f);
+			} else {
+				new ForegroundOneShotAnim(Assets::scifiTexture, explosionPos, AnimLib::EXPLOSION_3, 0.75f);
+			}
+		}
+		if (timer < 0) {
+			new ForegroundOneShotAnim(Assets::scifiTexture, headHitBox.Center(), AnimLib::EXPLOSION_3, 0.75f);
+			alive = false;
+			for (int i = 0; i < 6; i++) {
+				RandomlySpawnHealth(Rand::VecInRange(headHitBox), 100);
+			}
+		}
+		return;
+	}
+
 	if (!InSameScreenAsPlayer(screen)) {
 		return;
 	}
@@ -59,7 +88,7 @@ void Bipedal::Update(float dt)
 	if (damageFromPlayerPos) {
 		TakeDamage();
 		if (alive == false) return;
-	} else if (ReceiveDamageFromPlayer(legsHitBox.Grown(legsReceiveHitWidthIncrease,0), hitTimer > 0.f)) {
+	} else if (ReceiveDamageFromPlayer(legsHitBox.Grown(kLegsReceiveHitWidthIncrease,0), hitTimer > 0.f)) {
 		// Ignore attacks to the legs. We still call ReceiveDamageFromPlayer so the player gets the knockback. On an else to not knock back twice
 		// TODO: We could play a sfx here.
 	}
@@ -70,19 +99,18 @@ void Bipedal::Update(float dt)
 	case State::FIRING:
 	{
 		float oldTimer = timer;
-		float timeBetweenMissiles = 0.4f;
-		vec shotsOrigin = pos + missilesOriginOffset;
+		vec shotsOrigin = pos + kMissilesOriginOffset;
 		timer += dt;
-		if (oldTimer < timeBetweenMissiles && timer >= timeBetweenMissiles) {
+		if (oldTimer < kTimeBetweenMissiles && timer >= kTimeBetweenMissiles) {
 			new Missile(shotsOrigin, -135);
 		}
-		else if (oldTimer < 2 * timeBetweenMissiles && timer >= 2 * timeBetweenMissiles) {
+		else if (oldTimer < 2 * kTimeBetweenMissiles && timer >= 2 * kTimeBetweenMissiles) {
 			new Missile(shotsOrigin, -90);
 		}
-		else if (oldTimer < 3 * timeBetweenMissiles && timer >= 3 * timeBetweenMissiles) {
+		else if (oldTimer < 3 * kTimeBetweenMissiles && timer >= 3 * kTimeBetweenMissiles) {
 			new Missile(shotsOrigin, -45);
 		}
-		else if (timer >= 4 * timeBetweenMissiles) {
+		else if (timer >= 4 * kTimeBetweenMissiles) {
 			timer = 0.5f;
 			state = State::DRAMATIC_PAUSE;
 		}
@@ -133,8 +161,8 @@ void Bipedal::Update(float dt)
 		}
 
 		pos.x += speed * dt;
-		headHitBox.left = pos.x + headHitBoxOffset.x;
-		legsHitBox.left = pos.x + legsHitBoxOffset.x;
+		headHitBox.left = pos.x + kHeadHitBoxOffset.x;
+		legsHitBox.left = pos.x + kLegsHitBoxOffset.x;
 
 		if (Camera::Bounds().Contains(pos)) {
 			bool stomp = (frame != anim.current_frame) && (anim.current_frame == 0 || anim.current_frame == 3);
@@ -164,31 +192,27 @@ void Bipedal::Update(float dt)
 	}
 }
 
-void Bipedal::Die() {
-	alive = false;
-	DieScreenShake();
-	for (int i = 0; i < 6; i++) {
-		RandomlySpawnHealth(Rand::VecInRange(headHitBox), 100);
-	}
-}
-
 void Bipedal::TakeDamage() {
 	hitTimer = 0.3f;
 	health--;
 	if (health <= 0) {
-		Die();
+		for (Missile* m : Missile::GetAll()) {
+			m->explode();
+		}
+		Fx::Screenshake::Start(kDieAnimTime, vec(1.5f, 1.5f), vec(30.f, 39.f));
+		state = State::DYING;
+		timer = kDieAnimTime;
 	}
 }
 
 void Bipedal::Draw() const
 {
-
 	if (hitTimer > 0.f) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
-	Window::Draw(Assets::scifiTexture, pos+textureOffset)
+	Window::Draw(Assets::scifiTexture, pos+kTextureOffset)
 		.withScale(2.f)
 		.withOrigin(16.f, 14.f)
 		.withRect(anim.CurrentFrameRect());
@@ -198,7 +222,7 @@ void Bipedal::Draw() const
 	// Debug-only
 	legsHitBox.DebugDraw();
 	headHitBox.DebugDraw();
-	legsHitBox.Grown(legsReceiveHitWidthIncrease, 0).DebugDraw(0, 255, 0);
+	legsHitBox.Grown(kLegsReceiveHitWidthIncrease, 0).DebugDraw(0, 255, 0);
 	BoxBounds(Tiled::Areas::boss_bounds[0].Left(), pos.y, Tiled::Areas::boss_bounds[0].width, 2).DebugDraw(255, 255, 0);
 	BoxBounds(minX, pos.y, maxX - minX, 2).DebugDraw(0, 255, 0);
 	pos.DebugDraw();

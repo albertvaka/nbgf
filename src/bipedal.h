@@ -13,6 +13,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 		WALKING_BACK,
 		DRAMATIC_PAUSE,
 		FIRING,
+		DYING,
 	};
 
 	Animation anim;
@@ -22,7 +23,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 	bool charging = false;
 	float timer = 0.f;
 	float hitTimer = 0.f;
-	int health = 18;
+	int health;
 	BoxBounds legsHitBox, headHitBox;
 
 	Bipedal(vec position);
