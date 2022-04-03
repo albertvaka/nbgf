@@ -73,6 +73,7 @@
     <ClInclude Include="src\dialogbox.h" />
     <ClInclude Include="src\dialogdriver.h" />
     <ClInclude Include="src\dialogs.h" />
+    <ClInclude Include="src\drain.h" />
     <ClInclude Include="src\dummyentity.h" />
     <ClInclude Include="src\enemy_door.h" />
     <ClInclude Include="src\explosive.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="src\bullet.cpp" />
     <ClCompile Include="src\destroyedtiles.cpp" />
     <ClCompile Include="src\dialogbox.cpp" />
+    <ClCompile Include="src\drain.cpp" />
     <ClCompile Include="src\enemy_door.cpp" />
     <ClCompile Include="src\fireshot.cpp" />
     <ClCompile Include="src\fireslime.cpp" />

@@ -7,6 +7,14 @@
 #include "common_enemy.h"
 #include "particles.h"
 
+OoyTear::OoyTear(vec pos, vec vel)
+	: CircleEntity(pos, kOoyTearRadius, vel)
+	, anim(AnimLib::OOY_TEAR)
+{
+	anim.current_frame = Rand::roll(AnimLib::OOY_TEAR.size());
+	startedInsideWall = SmallBulletTilemapCollision(this, Tile::BreakResistance::NONE);
+}
+
 void OoyTear::Update(float dt)
 {
 	pos += vel * dt;
@@ -14,8 +22,13 @@ void OoyTear::Update(float dt)
 	anim.Update(dt);
 
 	if (SmallBulletTilemapCollision(this, Tile::BreakResistance::NONE)) {
-		alive = false;
-		return;
+		if (!startedInsideWall) {
+			alive = false;
+			return;
+		}
+	}
+	else {
+		startedInsideWall = false;
 	}
 
 	if (DamagePlayerOnCollision(Bounds())) {
@@ -27,7 +40,6 @@ void OoyTear::Update(float dt)
 	particlesTimer += dt;
 	Particles::ooyTearTrail.pos = pos;
 	Particles::ooyTearTrail.SpawnWithExternalTimer(particlesTimer, dt);
-
 }
 
 void OoyTear::Draw() const

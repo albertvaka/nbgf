@@ -406,6 +406,9 @@
     <ClInclude Include="src\ooytear.h">
       <Filter>src\entities\bullets</Filter>
     </ClInclude>
+    <ClInclude Include="src\drain.h">
+      <Filter>src\entities\enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -641,6 +644,9 @@
     </ClCompile>
     <ClCompile Include="engine\enable_discrete_gpu.cpp">
       <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\drain.cpp">
+      <Filter>src\entities\enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

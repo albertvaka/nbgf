@@ -1,8 +1,6 @@
 #pragma once
 
 #include "entity.h"
-#include "anim_lib.h"
-#include "rand.h"
 #include "animation.h"
 #include "selfregister.h"
 
@@ -12,13 +10,9 @@ struct OoyTear : CircleEntity, SelfRegister<OoyTear>
 {
 	Animation anim;
 	float particlesTimer = 0.f;
+	bool startedInsideWall;
 
-	OoyTear(vec pos, vec vel)
-		: CircleEntity(pos, kOoyTearRadius, vel)
-		, anim(AnimLib::OOY_TEAR)
-	{
-		anim.current_frame = Rand::roll(AnimLib::OOY_TEAR.size());
-	}
+	OoyTear(vec pos, vec vel);
 
 	void Update(float dt);
 

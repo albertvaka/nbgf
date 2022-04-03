@@ -18,10 +18,6 @@ const std::unordered_map<int, vec> Entities::angrybat = {
 	{ 1027, vec(5328.05f, 476.48f) },
 	{ 1028, vec(5200.1900000000005f, 444.48f) },
 	{ 1029, vec(5296.07f, 412.8499999999999f) },
-	{ 1081, vec(3064.0f, 3052.33f) },
-	{ 1082, vec(3184.667f, 2871.33f) },
-	{ 1083, vec(3266.0f, 2702.333f) },
-	{ 1084, vec(3199.667f, 2327.667f) },
 };
 
 const std::unordered_map<int, vec> Entities::angrybatawake = {
@@ -76,6 +72,18 @@ const std::unordered_map<int, vec> Entities::debug_teleport = {
 };
 const vec Entities::single_debug_teleport = vec(5808.5f, 1992.0f);
 
+
+const std::unordered_map<int, vec> Entities::drain = {
+	{ 1115, vec(3198.0f, 3038.5f) },
+	{ 1116, vec(3067.5f, 3021.5f) },
+	{ 1117, vec(3174.5f, 2855.5f) },
+	{ 1118, vec(3256.0f, 2506.5f) },
+	{ 1119, vec(3191.0f, 2299.0f) },
+	{ 1120, vec(3217.0f, 3164.5f) },
+	{ 1121, vec(3247.5f, 2652.0f) },
+	{ 1122, vec(3114.0f, 2652.0f) },
+	{ 1123, vec(3173.5f, 2652.0f) },
+};
 
 const std::unordered_map<int, vec> Entities::enemy_door = {
 	{ 118, vec(2913.667f, 2096.667f) },
@@ -168,7 +176,6 @@ const std::unordered_map<int, vec> Entities::goombashielder = {
 	{ 1072, vec(3806.0f, 3148.0f) },
 	{ 1073, vec(3703.0f, 3027.0f) },
 	{ 1075, vec(5111.33f, 2693.333f) },
-	{ 1089, vec(3170.0f, 2610.0f) },
 	{ 1111, vec(4033.333f, 2918.67f) },
 };
 

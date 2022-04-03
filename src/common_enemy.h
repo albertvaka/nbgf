@@ -4,17 +4,13 @@
 #include "bullet.h"
 #include "collide.h"
 #include "health.h"
-#include "screen.h"
+#include "screen.h" //Contains InSameScreenAsPlayer
 #include "rand.h"
 #include "oneshotanim.h"
 #include "anim_lib.h"
 #include "fx.h"
 #include "bounds.h"
 #include "assets.h"
-
-inline bool InSameScreenAsPlayer(int myScreen) {
-	return myScreen == -1 || myScreen == ScreenManager::instance()->CurrentScreen();
-}
 
 // returns the position of the attack if damaged or null otherwise. don't store the returned pointer for longer than this frame
 template<typename B>

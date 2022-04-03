@@ -37,7 +37,7 @@ const float kFrictAcc_OnAir = 460;
 
 // friction Y
 const float kFrictAccVert_WallUp = 400;
-const float kFrictAccVert_WallDown = 500;
+const float kFrictAccVert_WallDown = 540;
 
 // jump
 const float kVelJump = -170; // Y axis

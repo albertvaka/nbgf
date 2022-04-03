@@ -21,6 +21,7 @@ struct Entities {
 	static const vec single_boss_minotaur;
 	static const std::unordered_map<int, vec> debug_teleport;
 	static const vec single_debug_teleport;
+	static const std::unordered_map<int, vec> drain;
 	static const std::unordered_map<int, vec> enemy_door;
 	static const std::unordered_map<int, vec> explosive;
 	static const vec single_explosive;

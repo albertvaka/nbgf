@@ -36,6 +36,7 @@
 #include "savestate.h"
 #include "bigitem.h"
 #include "rocketlauncher.h"
+#include "drain.h"
 #include "dummyentity.h"
 #include "health.h"
 #include "healthup.h"
@@ -289,6 +290,10 @@ void JumpScene::EnterScene()
 
 	for (auto const& [id, pos] : Tiled::Entities::rocket_launcher) {
 		new RocketLauncher(pos);
+	}
+
+	for (auto const& [id, pos] : Tiled::Entities::drain) {
+		new Drain(pos);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::miniooy) {
@@ -557,6 +562,7 @@ void JumpScene::ExitScene()
 	Ooy::DeleteAll();
 	DummyEntity::DeleteAll();
 	RocketLauncher::DeleteAll();
+	Drain::DeleteAll();
 	Minotaur::DeleteAll();
 	Mantis::DeleteAll();
 	FlyingAlien::DeleteAll();
@@ -640,6 +646,10 @@ void JumpScene::Update(float dt)
 	}
 
 	for (RocketLauncher* e : RocketLauncher::GetAll()) {
+		e->Update(dt);
+	}
+
+	for (Drain* e : Drain::GetAll()) {
 		e->Update(dt);
 	}
 
@@ -910,6 +920,7 @@ void JumpScene::Draw()
 		&Particles::dust,
 		Mantis::GetAll(),
 		RocketLauncher::GetAll(),
+		Drain::GetAll(),
 		&Particles::bullet,
 		&Particles::missile,
 		ForegroundOneShotAnim::GetAll(),

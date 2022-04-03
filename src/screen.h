@@ -42,3 +42,6 @@ private:
 	std::vector<BoxBounds> screens;
 };
 
+inline bool InSameScreenAsPlayer(int myScreen) {
+	return myScreen == -1 || myScreen == ScreenManager::instance()->CurrentScreen();
+}

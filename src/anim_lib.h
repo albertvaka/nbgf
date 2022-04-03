@@ -133,6 +133,8 @@ namespace AnimLib {
 	};
 	constexpr const GPU_Rect GOOMBASHIELDING = { 31 * 16, 16, 16, 16 };
 
+	constexpr const GPU_Rect DRAIN = { 29 * 16, 16.f * 3, 16.f, 16.f };
+
 	constexpr const AnimationFrame BIPEDAL_WALKING[] = {
 		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_000, .25f },
 		{ TexturePackerRects::BIPEDALUNIT_WALKING_001_001, .25f },
