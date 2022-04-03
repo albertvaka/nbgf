@@ -207,10 +207,10 @@ const std::unordered_map<int, vec> Entities::mantis = {
 };
 
 const std::unordered_map<int, vec> Entities::miniooy = {
-	{ 1105, vec(3512.25f, 3156.75f) },
+	{ 1125, vec(2940.667f, 448.0f) },
+	{ 1126, vec(3151.3333f, 430.6700000000001f) },
+	{ 1127, vec(3092.6667f, 490.6700000000001f) },
 };
-const vec Entities::single_miniooy = vec(3512.25f, 3156.75f);
-
 
 const std::unordered_map<int, vec> Entities::npc = {
 	{ 1006, vec(2581.0f, 1900.333f) },
@@ -239,6 +239,7 @@ const std::unordered_map<int, vec> Entities::save = {
 	{ 213, vec(1041.0f, 2265.0f) },
 	{ 895, vec(6665.0f, 2110.0f) },
 	{ 1031, vec(4407.0f, 1130.25f) },
+	{ 1124, vec(3048.0f, 3083.0f) },
 };
 
 const std::unordered_map<int, vec> Entities::skill_attack = {

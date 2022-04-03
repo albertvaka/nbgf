@@ -221,7 +221,10 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 			}
 		}
 		for (auto const& [id, pos] : Tiled::Entities::initial_batawake) {
-			new Bat(pos, false, true);
+			Bat* b = new Bat(pos, false, true);
+			for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
+				s->AddEnemy(b);
+			}
 		}
 	}
 	break;
