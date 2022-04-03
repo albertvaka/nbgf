@@ -29,10 +29,14 @@ public:
 	float m_dWeightTileMapAvoidance = 2;
 
 //private:
-	// Wander values that work nice for the Bat (which so far is the only entity that uses this)
-	const float WanderRad = 0.37f;
-	const float WanderDist = 8.2f;
-	const float WanderJitterPerSec = 45.f;
+	// Wander parameters
+	// Defaults = values that work nice for the Bat enemy
+	float WanderRad = 0.37f;
+	float WanderDist = 8.2f;
+	float WanderJitterPerSec = 45.f;
+
+	// Bounds avoidance parameters
+	float m_boundsAvoidanceRadius = 20.f;
 
 	float max_force;
 
@@ -179,7 +183,7 @@ inline vec SteeringBehaviorApplier::CalculatePrioritized(float dt)
 
 	if (On(bounds_avoidance))
 	{
-		force = BoundsAvoidance(m_bounds) * m_dWeightBoundsAvoidance;
+		force = BoundsAvoidance(m_bounds, m_boundsAvoidanceRadius, m_boundsAvoidanceRadius/2) * m_dWeightBoundsAvoidance;
 
 		if (!AccumulateForce(m_vSteeringForce, force)) return m_vSteeringForce;
 	}
@@ -280,7 +284,7 @@ inline vec SteeringBehaviorApplier::CalculateWeightedSum(float dt)
 
 	if (On(bounds_avoidance))
 	{
-		vec force = BoundsAvoidance(m_bounds) * m_dWeightBoundsAvoidance;
+		vec force = BoundsAvoidance(m_bounds, m_boundsAvoidanceRadius, m_boundsAvoidanceRadius/2) * m_dWeightBoundsAvoidance;
 		m_vSteeringForce += force;
 	}
 

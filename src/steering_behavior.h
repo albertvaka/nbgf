@@ -52,7 +52,10 @@ struct SteeringBehavior
 	vec TileMapAvoidance(GaemTileMap* map);
 
     //this returns a steering force which will keep the agent in its bounds
-    vec BoundsAvoidance(const BoxBounds& m_bounds);
+    vec BoundsAvoidance(const BoxBounds& m_bounds, float frontFeelerLength, float sideFeelerLength);
+	vec BoundsAvoidance(const BoxBounds& m_bounds, float feelerLength) {
+		return BoundsAvoidance(m_bounds, feelerLength*2.f, feelerLength);
+	}
 
     //given another agent position to hide from and a list of Entitys this
     //method attempts to put an obstacle between itself and its opponent

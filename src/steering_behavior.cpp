@@ -169,28 +169,27 @@ vec SteeringBehavior::Wander(float WanderRad, float WanderDist, float WanderJitt
 
 //--------------------------- BoundsAvoidance --------------------------------
 //
-//  This returns a steering force that will keep the agent in an area
+// This returns a steering force that will keep the agent in an area
 //------------------------------------------------------------------------
-vec SteeringBehavior::BoundsAvoidance(const BoxBounds& m_bounds)
+vec SteeringBehavior::BoundsAvoidance(const BoxBounds& m_bounds, float frontFeelerLength, float sideFeelerLength)
 {
 	vec m_Feelers[3];
-	const float m_dWallDetectionFeelerLength = 20; //Front feeler length. Lateral feelers will be half as long.
 
 	vec heading = steeringEntity->Heading();
 
 	//feeler pointing straight in front
-	m_Feelers[0] = steeringEntity->pos + m_dWallDetectionFeelerLength * heading;
-	//m_Feelers[0].DebugDraw();
+	m_Feelers[0] = steeringEntity->pos + frontFeelerLength * heading;
+	m_Feelers[0].DebugDraw();
 
 	//feeler to left
 	vec temp = heading.RotatedAroundOriginRads(Angles::Pi * -0.3f);
-	m_Feelers[1] = steeringEntity->pos + m_dWallDetectionFeelerLength/2.0f * temp;
-	//m_Feelers[1].DebugDraw();
+	m_Feelers[1] = steeringEntity->pos + sideFeelerLength * temp;
+	m_Feelers[1].DebugDraw();
 
 	//feeler to right
 	temp = heading.RotatedAroundOriginRads(Angles::Pi * 0.3f);
-	m_Feelers[2] = steeringEntity->pos + m_dWallDetectionFeelerLength/2.0f * temp;
-	//m_Feelers[2].DebugDraw();
+	m_Feelers[2] = steeringEntity->pos + sideFeelerLength * temp;
+	m_Feelers[2].DebugDraw();
 
 	vec wallsv[5] = {vec(m_bounds.left, m_bounds.top),
 		vec(m_bounds.left, m_bounds.top+m_bounds.height),

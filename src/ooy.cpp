@@ -81,7 +81,7 @@ void Ooy::Update(float dt)
 		return;
 	}
 
-	vel += steering.BoundsAvoidance(bounds).Truncated(kSteeringBoundsAvoidanceWeight*dt);
+	vel += steering.BoundsAvoidance(bounds, kRadius*2, kRadius*2).Truncated(kSteeringBoundsAvoidanceWeight*dt);
 	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(kSteeringTileMapAvoidanceWeight*dt);
 
 	JumpMan* player = JumpMan::instance();
