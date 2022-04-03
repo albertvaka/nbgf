@@ -350,5 +350,11 @@ namespace AnimLib {
 
 	const constexpr SheetFrameCalculator ooyTearSheet({ 24, 24 }, 21, { 0,20 * 24 });
 	constexpr const std::array<AnimationFrame, 21> OOY_TEAR = ooyTearSheet.Frames<21>(0, .1f);
+
+	const constexpr SheetFrameCalculator explosionsSheet({ 96, 96 }, 6, { 1024 - 6 * 96, 0 });
+	constexpr const std::array<AnimationFrame, 11> EXPLOSION_1 = explosionsSheet.Frames<11>(0, .1f);
+	constexpr const std::array<AnimationFrame, 11> EXPLOSION_2 = explosionsSheet.Frames<11>(11, .1f);
+	constexpr const std::array<AnimationFrame, 11> EXPLOSION_3 = explosionsSheet.Frames<11>(22, .1f);
+
 }
 
