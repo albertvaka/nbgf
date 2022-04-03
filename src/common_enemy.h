@@ -65,7 +65,7 @@ inline void DieScreenShake() {
 inline void DieWithSmallExplosion(Entity* e) {
 	e->alive = false;
 	DieScreenShake();
-	new OneShotAnim(Assets::spritesheetTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
+	new BackgroundOneShotAnim(Assets::spritesheetTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
 	RandomlySpawnHealth(e->pos);
 }
 

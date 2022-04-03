@@ -775,7 +775,7 @@ void JumpMan::TakeDamage(vec src) {
 
 	vec playerCenter = CenterPos();
 	float direction = (playerCenter-src).AngleDegs();
-	new OneShotAnim(Assets::spritesheetTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
+	new BackgroundOneShotAnim(Assets::spritesheetTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
 	health--;
 }
 

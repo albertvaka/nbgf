@@ -561,7 +561,8 @@ void JumpScene::ExitScene()
 	Mantis::DeleteAll();
 	FlyingAlien::DeleteAll();
 	FireSlime::DeleteAll();
-	OneShotAnim::DeleteAll();
+	BackgroundOneShotAnim::DeleteAll();
+	ForegroundOneShotAnim::DeleteAll();
 	Bipedal::DeleteAll();
 	Lava::DeleteAll();
 	destroyedTiles.Clear();
@@ -601,10 +602,14 @@ void JumpScene::Update(float dt)
 
 	contextActionButton = false;
 
-	for (OneShotAnim* e : OneShotAnim::GetAll()) { // Update this first so one-frame anims aren't deleted before they are drawn once
+	for (ForegroundOneShotAnim* e : ForegroundOneShotAnim::GetAll()) { // Update this first so one-frame anims aren't deleted before they are drawn once
 		e->Update(dt);
 	}
-	OneShotAnim::DeleteNotAlive();
+	ForegroundOneShotAnim::DeleteNotAlive();
+	for (BackgroundOneShotAnim* e : BackgroundOneShotAnim::GetAll()) {
+		e->Update(dt);
+	}
+	BackgroundOneShotAnim::DeleteNotAlive();
 
 	dialogDriver.Update(dt);
 	if (dialogDriver.IsOpen()) {
@@ -891,7 +896,7 @@ void JumpScene::Draw()
 	DrawAllInOrder(
 		SaveStation::GetAll(),
 		EnemyDoor::GetAll(),
-		OneShotAnim::GetAll(),
+		BackgroundOneShotAnim::GetAll(),
 		DummyEntity::GetAll(),
 		Goomba::GetAll(),
 		MiniOoy::GetAll(),
@@ -907,6 +912,7 @@ void JumpScene::Draw()
 		RocketLauncher::GetAll(),
 		&Particles::bullet,
 		&Particles::missile,
+		ForegroundOneShotAnim::GetAll(),
 		Health::GetAll(),
 		&Particles::health,
 		Bullet::GetAll(),

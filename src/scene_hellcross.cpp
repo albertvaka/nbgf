@@ -118,7 +118,8 @@ void HellCrossScene::ExitScene()
 	Particles::ClearAll();
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
-	OneShotAnim::DeleteAll();
+	BackgroundOneShotAnim::DeleteAll();
+	ForegroundOneShotAnim::DeleteAll();
 	destroyedTiles.Clear();
 }
 
@@ -148,6 +149,15 @@ void HellCrossScene::Update(float dt)
 		return;
 	}
 
+	for (ForegroundOneShotAnim* e : ForegroundOneShotAnim::GetAll()) { // Update this first so one-frame anims aren't deleted before they are drawn once
+		e->Update(dt);
+	}
+	ForegroundOneShotAnim::DeleteNotAlive();
+	for (BackgroundOneShotAnim* e : BackgroundOneShotAnim::GetAll()) {
+		e->Update(dt);
+	}
+	BackgroundOneShotAnim::DeleteNotAlive();
+
 	player.Update(dt);
 
 	UpdateCamera();
@@ -160,11 +170,6 @@ void HellCrossScene::Update(float dt)
 	for (Bat* e : Bat::GetAll()) {
 		e->Update(dt);
 	}
-
-	for (OneShotAnim* e : OneShotAnim::GetAll()) {
-		e->Update(dt);
-	}
-	OneShotAnim::DeleteNotAlive();
 
 #ifdef _DEBUG
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
@@ -196,11 +201,12 @@ void HellCrossScene::Draw()
 	DrawAllInOrder(
 		&map,
 		&destroyedTiles,
+		BackgroundOneShotAnim::GetAll(),
 		Bat::GetAll(),
-		OneShotAnim::GetAll(),
 		&Particles::bullet,
 		Bullet::GetAll(),
 		&Particles::dust,
+		ForegroundOneShotAnim::GetAll(),
 		&player,
 		Lava::GetAll()
 	);
