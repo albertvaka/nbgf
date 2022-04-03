@@ -14,12 +14,12 @@ struct AnimationFrame
 };
 
 struct SheetFrameCalculator {
-	const float sprite_w;
-	const float sprite_h;
+	const int sprite_w;
+	const int sprite_h;
 	const int columns;
-	const float offset_x;
-	const float offset_y;
-	constexpr SheetFrameCalculator(vec size, int columns, vec offset = vec::Zero)
+	const int offset_x;
+	const int offset_y;
+	constexpr SheetFrameCalculator(veci size, int columns, veci offset = veci(0,0))
 		: sprite_w(size.x)
 		, sprite_h(size.y)
 		, columns(columns)
@@ -32,7 +32,7 @@ struct SheetFrameCalculator {
 		return make_array(begin, duration, std::make_index_sequence<N>{});
 	}
 	constexpr const GPU_Rect Rect(int index) const {
-		return GPU_Rect { offset_x + sprite_w * (index % columns), offset_y + sprite_h * (index / columns), sprite_w, sprite_h };
+		return GPU_Rect { (float) (offset_x + sprite_w * (index % columns)), (float) (offset_y + sprite_h * (index / columns)), (float)sprite_w, (float)sprite_h};
 	}
 	constexpr const AnimationFrame Frame(int index, float duration) const {
 		return AnimationFrame { Rect(index), duration};
