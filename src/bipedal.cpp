@@ -94,6 +94,7 @@ void Bipedal::Update(float dt)
 	}
 
 	switch (state) {
+	case State::DYING:
 	case State::DEACTIVATED:
 		return;
 	case State::FIRING:
