@@ -50,7 +50,12 @@ void BigItem::Update(float dt)
 
 	vec tilePos = Tile::AlignToTiles(pos);
 	Particles::itemSparks.pos.y = tilePos.y + 16;
-	Particles::itemSparks.pos.x = Rand::roll(tilePos.x - 13, tilePos.x + 13);
+
+	if (skill == Skill::BREAK) {
+		Particles::itemSparks.pos.x = Rand::roll(tilePos.x - 13, tilePos.x + 13 + 16);
+	} else {
+		Particles::itemSparks.pos.x = Rand::roll(tilePos.x - 13, tilePos.x + 13);
+	}
 	Particles::itemSparks.SpawnWithExternalTimer(particleTimer, dt);
 }
 
