@@ -67,6 +67,7 @@ PartSys::Particle& PartSys::AddParticle() {
 	p.vel = Rand::VecInRange(min_vel, max_vel);
 	p.sprite = Rand::roll(sprites.size());
 	p.rotation = Rand::rollf(min_rotation, max_rotation);
+	p.rotation_vel = Rand::rollf(min_rotation_vel, max_rotation_vel); ;
 	p.scale = Rand::rollf(min_scale, max_scale);
 	p.alpha = alpha;
 	return p;
@@ -126,8 +127,7 @@ void PartSys::DrawImGUI(const char* title) {
 	ImGui::SliderFloat("alpha", &alpha, 0.f, 1.f);
 	ImGui::SliderFloat("alpha_vel", &alpha_vel, -4.f, 4.f);
 	ImGui::SliderFloat("bounce_alpha", &bounce_alpha, -0.1f, 1.f);
-	ImGui::SliderFloat("rotation_vel", &rotation_vel, -360.f, 360.f);
-		if (ImGui::SliderFloat("min_rotation", &min_rotation, 0.f, 360.f)) {
+	if (ImGui::SliderFloat("min_rotation", &min_rotation, 0.f, 360.f)) {
 		if (min_rotation > max_rotation) {
 			max_rotation = min_rotation;
 		}
@@ -137,6 +137,8 @@ void PartSys::DrawImGUI(const char* title) {
 			min_rotation = max_rotation;
 		}
 	}
+	ImGui::SliderFloat("min_rotation_vel", &min_rotation_vel, -360.f, 360.f);
+	ImGui::SliderFloat("max_rotation_vel", &max_rotation_vel, -360.f, 360.f);
 	ImGui::SliderFloat2("accel", &acc.x, -50.f, 50.f);
 	ImGui::Text("Count: %lu", particles.size());
 	ImGui::End();
