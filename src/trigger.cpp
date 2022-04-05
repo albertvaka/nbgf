@@ -7,11 +7,14 @@
 void Trigger::Update(float dt)
 {
 	if (active) {
-		JumpMan* player = JumpMan::instance();
-		if (Collide(Bounds(), player->CollisionBounds())) {
+		if (Collide(Bounds(), JumpMan::instance()->CollisionBounds())) {
 			callback(this, false);
-			if (singleTime) {
-				active = false;
+			active = false;
+		}
+	} else {
+		if (!singleTime) { //non single-time triggers reactivate when the player leaves them
+			if (!Collide(Bounds(), JumpMan::instance()->CollisionBounds())) {
+				active = true;
 			}
 		}
 	}
