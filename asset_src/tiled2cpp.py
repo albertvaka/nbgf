@@ -89,6 +89,8 @@ for g in tileset.keys():
 
 gids_used.remove(-1)
 
+gids_used = sorted(gids_used)
+
 gids_by_type = defaultdict(list)
 for g in gids_used:
     type_ = tileset[g].type if g in tileset and tileset[g].type is not None else "bg"

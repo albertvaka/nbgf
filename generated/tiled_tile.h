@@ -337,15 +337,15 @@ struct Tile {
 	};
 
 	// Aliases
-	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_34;
-	static constexpr Value BG_DOOR_OPENING = BG_73;
-	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_83;
+	static constexpr Value BG_DOOR_OPENING = BG_53;
+	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_161;
+	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_173;
 	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
 	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
 	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_1;
 	static constexpr Value SOLID_SIMPLE = SOLID_4;
-	static constexpr Value SOLID_DOOR = SOLID_33;
-	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_46;
+	static constexpr Value SOLID_DOOR = SOLID_24;
+	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_31;
 	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_1;
 	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_2;
 	static constexpr Value BREAKABLE_COVERING_CAVE_FLOOR = BREAKABLE_3;
