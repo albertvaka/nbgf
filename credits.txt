@@ -22,3 +22,4 @@ Mantis sprite by Cheshire https://jeevo.itch.io/insect-enemies
 Sewer tiles by MrBeas https://opengameart.org/content/sewer-tileset
 Sewer background by Lil Cthulhu https://lil-cthulhu.itch.io/pixel-art-sewer-background
 Explosion animations by SurfaceToAsh https://surfacetoash.itch.io/
+Leafs sprites by Danaida https://danaida.itch.io/

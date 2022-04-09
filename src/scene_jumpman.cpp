@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "scene_jumpman.h"
+
 #include "scene_manager.h"
 #include "input.h"
 #ifdef _IMGUI
@@ -9,6 +10,7 @@
 #include "camera.h"
 #include "window.h"
 #include "assets.h"
+#include "screen.h"
 #include "bullet.h"
 #include "enemy_door.h"
 #include "parallax.h"
@@ -55,6 +57,8 @@ extern float mainClock;
 
 const float kCamSpeed = 2000.f;
 const float kCamZoomSpeed = 0.2f;
+
+const int kPlayerInitialHealth = 4;
 
 const char* kSaveStateGameName = "gaem2020";
 
@@ -117,6 +121,10 @@ void JumpScene::SaveGame() const {
 		g->SaveGame(saveState);
 	}
 
+	for (Shard* g : Shard::GetAll()) {
+		g->SaveGame(saveState);
+	}
+
 	for (EnemyDoor* g : EnemyDoor::GetAll()) {
 		g->SaveGame(saveState);
 	}
@@ -148,6 +156,10 @@ void JumpScene::LoadGame() {
 	}
 
 	for (HealthUp* g : HealthUp::GetAll()) {
+		g->LoadGame(saveState);
+	}
+
+	for (Shard* g : Shard::GetAll()) {
 		g->LoadGame(saveState);
 	}
 
@@ -235,8 +247,12 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 
 void JumpScene::EnterScene()
 {
-	player.Reset(Tiled::Entities::single_spawn);
+	player.Reset(Tiled::Entities::single_spawn, kPlayerInitialHealth);
 	skillTree.Reset();
+
+
+	screenManager.UpdateCurrentScreen(Tiled::Entities::single_initial_screen);
+
 
 	map.LoadFromTiled<Tiled::TileMap>();
 
@@ -380,6 +396,10 @@ void JumpScene::EnterScene()
 		new HealthUp(id, pos);
 	}
 
+	for (auto const& [id, pos] : Tiled::Entities::shard) {
+		new Shard(id, pos);
+	}
+
 	for (auto const& [id, pos] : Tiled::Entities::explosive) {
 		new Explosive(id, pos, false);
 	}
@@ -403,6 +423,17 @@ void JumpScene::EnterScene()
 
 	new Trigger("lava_raise", Tiled::Triggers::single_trigger_fast_lava, [this](Trigger* t, bool isLoadingSave) {
 		raising_lava->SetRaiseSpeed(Lava::kFastRaiseSpeed);
+	});
+
+	new Trigger(Tiled::Triggers::single_trigger_leafs, [this](Trigger* t) {
+		Particles::leafs.pos = JumpMan::instance()->pos;
+		Particles::leafs.AddParticles(17);
+		Particles::leafs.FlipX();
+		Particles::leafs.AddParticles(17);
+		for (auto& p : Particles::leafs.particles) {
+			p.pos.y += Rand::roll(-30, 30) - 48;
+			p.pos.x += Rand::roll(-18, 18);
+		}
 	});
 
 	DummyEntity* fallingRock1 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_1);
@@ -578,6 +609,7 @@ void JumpScene::ExitScene()
 	EnemyDoor::DeleteAll();
 	BigItem::DeleteAll();
 	HealthUp::DeleteAll();
+	Shard::DeleteAll();
 	Explosive::DeleteAll();
 	Health::DeleteAll();
 	SaveStation::DeleteAll();
@@ -811,6 +843,10 @@ void JumpScene::Update(float dt)
 		g->Update(dt);
 	}
 
+	for (Shard* g : Shard::GetAll()) {
+		g->Update(dt);
+	}
+
 	for (Health* g : Health::GetAll()) {
 		g->Update(dt);
 	}
@@ -924,6 +960,7 @@ void JumpScene::Draw()
 		Mantis::GetAll(),
 		RocketLauncher::GetAll(),
 		Drain::GetAll(),
+		&Particles::leafs,
 		&Particles::bullet,
 		&Particles::missile,
 		ForegroundOneShotAnim::GetAll(),
@@ -934,12 +971,15 @@ void JumpScene::Draw()
 		OoyTear::GetAll(),
 		Missile::GetAll(),
 		HealthUp::GetAll(),
+		Shard::GetAll(),
 		BigItem::GetAll(),
 		&Particles::itemSparks,
 		&player,
 		Lava::GetAll(),
 		Trigger::GetAll()
 	);
+
+	//Particles::leafs.DrawImGUI();
 
 	Window::Draw(Assets::warriorTexture, Tile::AlignToTiles(Tiled::Entities::single_npc)+vec(0.f,-6.f))
 		.withRect(Animation::GetRectAtTime(AnimLib::NPC_IDLE, mainClock))
@@ -960,14 +1000,6 @@ void JumpScene::Draw()
 		ImGui::Text("mainclock: %f", mainClock);
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
-		/*static char appearingString[256];
-		if (ImGui::InputText("AppearingText", appearingString, 256)) {
-			if (std::string(appearingString).empty()) {
-				dialogBox.Close();
-			} else {
-				dialogBox.ShowMessage(AnimLib::PORTRAIT_WARRIOR, Assets::growlyVoice, "Warrior", appearingString, true);
-			}
-		}*/
 		if (ImGui::Button("Start NPC dialog")) {
 			dialogDriver.StartDialog(dialogWithRandomNpc);
 		}
@@ -1013,7 +1045,7 @@ void JumpScene::Draw()
 	//}
 	//Parallax::GetAll().back()->DrawImGUI("parallax3");
 	//Parallax::GetAll()[Parallax::GetAll().size() - 2]->DrawImGUI("parallax2");
-	Parallax::GetAll()[Parallax::GetAll().size() - 3]->DrawImGUI("parallax1");
+	//Parallax::GetAll()[Parallax::GetAll().size() - 3]->DrawImGUI("parallax1");
 
 #ifdef _DEBUG
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
@@ -1024,6 +1056,20 @@ void JumpScene::Draw()
 	Fx::FullscreenShader::Deactivate(); // Does nothing if no shader was active
 
 	Camera::InScreenCoords::Begin();
+	player.DrawGUI();
+	int numBars = 0;
+	for (const Bipedal* g : Bipedal::GetAll()) {
+		numBars += g->DrawHealth(numBars);
+	}
+	for (const Minotaur* g : Minotaur::GetAll()) {
+		numBars += g->DrawHealth(numBars);
+	}
+	for (const Ooy* g : Ooy::GetAll()) {
+		numBars += g->DrawHealth(numBars);
+	}
+	for (const Mantis* g : Mantis::GetAll()) {
+		numBars += g->DrawHealth(numBars);
+	}
 	player.DrawGUI();
 	dialogDriver.Draw();
 	Camera::InScreenCoords::End();

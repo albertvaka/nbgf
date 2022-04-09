@@ -61,12 +61,12 @@ struct ZoneManager {
 	const SDL_Color& FindColorForScreen(int screen) {
 		BoxBounds screenBounds = ScreenManager::instance()->ScreenBounds(screen);
 		for (const BoxBounds& b : Tiled::Zones::cave) {
-			if (b.Contains(screenBounds)) {
+			if (b.Contains(screenBounds.Center())) {
 				return caveBg;
 			}
 		}
 		for (const BoxBounds& b : Tiled::Zones::sewers) {
-			if (b.Contains(screenBounds)) {
+			if (b.Contains(screenBounds.Center())) {
 				return sewerBg;
 			}
 		}

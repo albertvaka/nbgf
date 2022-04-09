@@ -15,10 +15,16 @@ const std::array<BoxBounds, 1> Triggers::trigger_lava = {
 const BoxBounds Triggers::single_trigger_lava = BoxBounds(1600.62f,1150.909f,158.705f,269.333f);
 
 
-const std::array<BoxBounds, 1> Triggers::trigger_rockfall = {
-	BoxBounds(5207.33f,1537.583f,33.5f,100.0f),
+const std::array<BoxBounds, 1> Triggers::trigger_leafs = {
+	BoxBounds(2155.0f,1697.0833f,42.0f,12.1667f),
 };
-const BoxBounds Triggers::single_trigger_rockfall = BoxBounds(5207.33f,1537.583f,33.5f,100.0f);
+const BoxBounds Triggers::single_trigger_leafs = BoxBounds(2155.0f,1697.0833f,42.0f,12.1667f);
+
+
+const std::array<BoxBounds, 1> Triggers::trigger_rockfall = {
+	BoxBounds(6419.33f,1537.583f,33.5f,100.0f),
+};
+const BoxBounds Triggers::single_trigger_rockfall = BoxBounds(6419.33f,1537.583f,33.5f,100.0f);
 
 
 const std::array<BoxBounds, 1> Triggers::trigger_test = {

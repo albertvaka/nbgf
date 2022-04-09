@@ -9,6 +9,7 @@
 #include "rand.h"
 #include "ooytear.h"
 #include "particles.h"
+#include "screen.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
 

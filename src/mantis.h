@@ -36,6 +36,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 
 	void Update(float dt);
 	void Draw() const;
+	int DrawHealth(int offset) const;
 
 	bool IsBouncingAgainstAnotherMantis();
 

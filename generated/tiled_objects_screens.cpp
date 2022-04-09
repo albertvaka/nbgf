@@ -3,7 +3,7 @@
 namespace Tiled {
 
 
-const std::array<BoxBounds, 28> Screens::screen = {
+const std::array<BoxBounds, 29> Screens::screen = {
 	BoxBounds(2808.045f,1735.5f,622.538f,304.5f),
 	BoxBounds(1762.88f,1713.6667f,1048.45f,348.497f),
 	BoxBounds(2813.333f,1379.0f,614.833f,338.0f),
@@ -30,8 +30,9 @@ const std::array<BoxBounds, 28> Screens::screen = {
 	BoxBounds(2114.23f,337.0899999999999f,618.207f,1186.83f),
 	BoxBounds(2724.5f,250.32999999999993f,614.038f,349.333f),
 	BoxBounds(3338.9809999999998f,251.32999999999993f,614.038f,349.333f),
-	BoxBounds(4936.15f,1068.833f,1287.37f,585.667f),
+	BoxBounds(4936.15f,1068.833f,1255.37f,585.667f),
 	BoxBounds(124.48000000000002f,688.1700000000001f,607.038f,351.667f),
+	BoxBounds(6194.32f,1068.167f,1287.37f,585.667f),
 };
 
 

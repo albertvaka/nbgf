@@ -6,7 +6,6 @@
 #include "destroyedtiles.h"
 #include "skilltree.h"
 #include "screen.h"
-#include "input.h"
 #include "rototext.h"
 #include "zonemanager.h"
 #include "dialogdriver.h"

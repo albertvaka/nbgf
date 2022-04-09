@@ -12,6 +12,7 @@ namespace Particles
 	inline PartSys missile(nullptr);
 	inline PartSys itemSparks(nullptr);
 	inline PartSys ooyTearTrail(nullptr);
+	inline PartSys leafs(nullptr);
 
 	void Init();
 	void UpdateAll(float dt);

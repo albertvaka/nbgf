@@ -29,9 +29,46 @@ void InitDust(PartSys& ps)
 
 	ps.min_rotation = 0.f;
 	ps.max_rotation = 360.f;
-	ps.rotation_vel = 160.f;
+	ps.min_rotation_vel = 160.f;
+	ps.max_rotation_vel = 160.f;
 
 	ps.alpha_vel = -1.8f;
+}
+
+void InitLeafs(PartSys& ps)
+{
+	ps.SetTexture(Assets::spritesheetTexture);
+	ps.AddSprite({ 496, 288     , 16, 16 });
+	ps.AddSprite({ 496, 288 + 16, 16, 16 });
+	ps.AddSprite({ 496, 288 + 32, 16, 16 });
+	ps.AddSprite({ 496, 288 + 48, 16, 16 });
+	ps.AddSprite({ 496, 288 + 64, 16, 16 });
+	ps.AddSprite({ 496, 288 + 80, 16, 16 });
+
+	ps.min_ttl = 2.f;
+	ps.max_ttl = 2.f;
+
+	ps.min_vel.x = -1.f;
+	ps.max_vel.x = 55.f;
+
+	ps.min_vel.y = 180.f;
+	ps.max_vel.y = 350.f;
+
+	ps.alpha = 1.f;
+	ps.alpha_vel = -0.35f;
+
+	ps.min_rotation = 0.f;
+	ps.max_rotation = 360.f;
+
+	ps.min_rotation_vel = -80.f;
+	ps.max_rotation_vel = -200.f;
+
+	ps.acc.y = -90.f;
+
+	ps.min_scale = 0.5f;
+	ps.max_scale = 0.8f;
+	ps.scale_vel = -0.14f;
+
 }
 
 void InitBullet(PartSys& ps)
@@ -51,7 +88,8 @@ void InitBullet(PartSys& ps)
 	ps.scale_vel = -2.5f;
 	ps.min_rotation = 0.f;
 	ps.max_rotation = 360.f;
-	ps.rotation_vel = 180.f;
+	ps.min_rotation_vel = 180.f;
+	ps.max_rotation_vel = 180.f;
 	ps.alpha = 0.75f;
 }
 
@@ -71,8 +109,8 @@ void InitHealth(PartSys& ps)
 	ps.scale_vel = -0.5f;
 	ps.min_rotation = 0.f;
 	ps.max_rotation = 360.f;
-	ps.rotation_vel = 180.f;
-	ps.rotation_vel = 180.f;
+	ps.min_rotation_vel = 180.f;
+	ps.max_rotation_vel = 180.f;
 	ps.alpha = 0.7f;
 }
 
@@ -130,6 +168,7 @@ void Init()
 {
 	if (missile.texture == nullptr)
 	{
+		InitLeafs(leafs);
 		InitDust(dust);
 		InitBullet(bullet);
 		InitHealth(health);
@@ -141,6 +180,7 @@ void Init()
 
 void UpdateAll(float dt)
 {
+	leafs.UpdateParticles(dt);
 	dust.UpdateParticles(dt);
 	bullet.UpdateParticles(dt);
 	health.UpdateParticles(dt);
@@ -151,6 +191,7 @@ void UpdateAll(float dt)
 
 void ClearAll()
 {
+	leafs.Clear();
 	dust.Clear();
 	bullet.Clear();
 	health.Clear();

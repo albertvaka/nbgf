@@ -16,7 +16,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     void Update(float dt);
     void Draw() const;
     void DrawGUI() const;
-    void Reset(vec position, int maxHp = 3);
+    void Reset(vec position, int maxHp);
 
     vec CenterPos() {
         return vec(pos.x, pos.y - size.y / 2);

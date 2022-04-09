@@ -34,6 +34,8 @@ struct Entities {
 	static const std::unordered_map<int, vec> goombashielder;
 	static const std::unordered_map<int, vec> healthup;
 	static const std::unordered_map<int, vec> initial_batawake;
+	static const std::unordered_map<int, vec> initial_screen;
+	static const vec single_initial_screen;
 	static const std::unordered_map<int, vec> lava_initial_height;
 	static const vec single_lava_initial_height;
 	static const std::unordered_map<int, vec> mantis;
@@ -44,6 +46,7 @@ struct Entities {
 	static const vec single_ooy;
 	static const std::unordered_map<int, vec> rocket_launcher;
 	static const std::unordered_map<int, vec> save;
+	static const std::unordered_map<int, vec> shard;
 	static const std::unordered_map<int, vec> skill_attack;
 	static const vec single_skill_attack;
 	static const std::unordered_map<int, vec> skill_breakblocks;

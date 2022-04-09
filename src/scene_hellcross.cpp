@@ -23,10 +23,12 @@
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
 
+const int kInitialPlayerHealth = 3;
+
 const Tile SOLID_TILE = Tile::SOLID_SIMPLE;
 const Tile BREAKABLE_TILE = Tile::BREAKABLE_SIMPLE;
 
-static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::Size);
+const static vec map_size = vec(1000, Window::GAME_HEIGHT/Tile::Size);
 
 HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
@@ -66,7 +68,7 @@ void HellCrossScene::RandomizeMap() {
 
 void HellCrossScene::EnterScene() 
 {
-	player.Reset(vec(160,160));
+	player.Reset(vec(160,160), kInitialPlayerHealth);
 
 	randomSeed = Rand::roll(0, 10000);
 	srand(randomSeed);

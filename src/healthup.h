@@ -26,3 +26,26 @@ struct HealthUp : BoxEntity, SelfRegister<HealthUp>
 private:
 	bool IsBehindBreakable() const;
 };
+
+
+struct Shard : BoxEntity, SelfRegister<Shard>
+{
+	Shard(int id, vec p);
+	void Update(float dt);
+	void Draw() const;
+
+	void SaveGame(SaveState& state) const {
+		state.StreamPut("shard_" + std::to_string(id)) << pickedUp;
+	};
+
+	void LoadGame(const SaveState& state) {
+		// This works as we add more entities that aren't present in the saves beacuse the stream will be empty and nothing will be read
+		state.StreamGet("shard_" + std::to_string(id)) >> pickedUp;
+	}
+
+	int id;
+	bool pickedUp;
+
+private:
+	bool IsBehindBreakable() const;
+};

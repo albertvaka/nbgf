@@ -345,8 +345,8 @@ namespace AnimLib {
 	constexpr const GPU_Rect PORTRAIT_WARRIOR = { 291, 821, 34, 36 };
 	constexpr const GPU_Rect PORTRAIT_RANDOM_NPC = { 291+49, 821, 34, 36 };
 
-	constexpr const GPU_Rect UI_ICON_NEXT = { 428, 266, 6, 11 };
-	constexpr const GPU_Rect UI_ICON_CLOSE = { 440, 267, 11, 10 };
+	constexpr const GPU_Rect UI_ICON_NEXT = { 422, 260, 6, 11 };
+	constexpr const GPU_Rect UI_ICON_CLOSE = { 434, 261, 11, 10 };
 
 	constexpr const GPU_Rect BIG_ROCK = { 134, 427, 42, 37 };
 

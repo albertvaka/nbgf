@@ -229,3 +229,10 @@ void Bipedal::Draw() const
 
 }
 
+int Bipedal::DrawHealth(int offset) const {
+	if (!InSameScreenAsPlayer(screen)) {
+		return 0;
+	}
+	DrawBossHealth(health, kHealth, offset);
+	return 1;
+}

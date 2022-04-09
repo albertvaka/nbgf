@@ -4,7 +4,6 @@
 #include "bullet.h"
 #include "collide.h"
 #include "health.h"
-#include "screen.h" //Contains InSameScreenAsPlayer
 #include "rand.h"
 #include "oneshotanim.h"
 #include "anim_lib.h"
@@ -81,4 +80,39 @@ inline int FindIndexOfSmallestBoundsContaining(vec pos, const BoundsIterable& bo
 		i++;
 	}
 	return smallest_i;
+}
+
+inline void DrawBossHealth(int current, int max, int offset)
+{
+	// TODO: Flash/animation/particles when health goes down
+
+	const vec pos(6, 28 + 19 * offset);
+	const int size = 8 * max;
+	const float scale = 1.5f;
+
+	// Background
+	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
+		.withScale(size * scale, scale)
+		.withRect(480, 260, 1, 9);
+
+	//Health
+	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
+		.withScale((float(current) / max) * size * scale, scale)
+		.withRect(478, 260, 1, 9);
+
+	// Bar begin
+	Window::Draw(Assets::spritesheetTexture, pos + vec())
+		.withScale(scale)
+		.withRect(463, 260, 4, 9);
+
+	// Bar
+	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
+		.withScale(size * scale, scale)
+		.withRect(466, 260, 1, 9);
+
+	// Bar end
+	Window::Draw(Assets::spritesheetTexture, pos + vec(size * scale, 0))
+		.withScale(scale)
+		.withRect(473, 260, 4, 9);
+
 }

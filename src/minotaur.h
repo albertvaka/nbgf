@@ -38,6 +38,7 @@ struct Minotaur : BoxEntity, SelfRegister<Minotaur>
 
 	void Update(float dt);
 	void Draw() const;
+	int DrawHealth(int offset) const;
 
 	void TakeDamage();
 };

@@ -6,6 +6,7 @@
 #include "assets.h"
 #include "rand.h"
 #include "fireshot.h"
+#include "screen.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
 

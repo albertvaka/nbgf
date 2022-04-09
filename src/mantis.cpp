@@ -7,6 +7,7 @@
 #include "shader.h"
 #include "rand.h"
 #include "particles.h"
+#include "screen.h"
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
 
@@ -275,6 +276,13 @@ void Mantis::Draw() const
 	CircleBounds(pos, kMeleeRadius).DebugDraw(COLOR_UINT8_RGB_RED);
 }
 
+int Mantis::DrawHealth(int offset) const {
+	if (!InSameScreenAsPlayer(screen)) {
+		return 0;
+	}
+	DrawBossHealth(health, kMantisHealth, offset);
+	return 1;
+}
 
 void Mantis::EnterWalkingState(float dt) {
 	JumpMan* player = JumpMan::instance();

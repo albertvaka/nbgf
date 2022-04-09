@@ -6,6 +6,7 @@
 #include "assets.h"
 #include "shader.h"
 #include "rand.h"
+#include "screen.h"
 #include "tiled_objects_areas.h"
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"

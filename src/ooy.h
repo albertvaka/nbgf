@@ -29,6 +29,8 @@ struct Ooy : SteeringEntity, SelfRegister<Ooy>
 
 	void Update(float dt);
 	void Draw() const;
+	int DrawHealth(int offset) const;
+
 	void TakeDamage();
 	void Die();
 

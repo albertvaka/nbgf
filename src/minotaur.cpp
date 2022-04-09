@@ -5,6 +5,7 @@
 #include "assets.h"
 #include "shader.h"
 #include "rand.h"
+#include "screen.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
 
@@ -194,4 +195,12 @@ void Minotaur::Draw() const
 	Shader::Deactivate();
 
 	Bounds().DebugDraw();
+}
+
+int Minotaur::DrawHealth(int offset) const {
+	if (!InSameScreenAsPlayer(screen)) {
+		return 0;
+	}
+	DrawBossHealth(health, kMinotaurHealth, offset);
+	return 1;
 }

@@ -9,6 +9,7 @@
 #include "rand.h"
 #include "ooytear.h"
 #include "particles.h"
+#include "screen.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
 
@@ -218,4 +219,12 @@ void Ooy::Draw() const
 
 	// Debug-only
 	Bounds().DebugDraw();
+}
+
+int Ooy::DrawHealth(int offset) const {
+	if (state == State::STILL || !InSameScreenAsPlayer(screen)) {
+		return 0;
+	}
+	DrawBossHealth(health, kHealth, offset);
+	return 1;
 }

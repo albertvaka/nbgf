@@ -30,6 +30,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 
 	void Update(float dt);
 	void Draw() const;
+	int DrawHealth(int offset) const;
 	void TakeDamage();
 	void Die();
 
