@@ -1000,8 +1000,7 @@ void JumpScene::Draw()
 		vec m = Mouse::GetPositionInWorld();
 		veci t = Tile::ToTiles(m);
 		ImGui::Text("mainclock: %f", mainClock);
-		ImGui::Text("Mouse: %f,%f", m.x, m.y);
-		ImGui::Text("Mouse tile: %d,%d", t.x, t.y);
+		ImGui::Text("Mouse: %f,%f Tile: %d,%d", m.x, m.y, t.x, t.y);
 		if (ImGui::Button("Start NPC dialog")) {
 			dialogDriver.StartDialog(dialogWithRandomNpc);
 		}
@@ -1023,16 +1022,15 @@ void JumpScene::Draw()
 				placingDummy = false;
 			}
 		}
-		if (ImGui::Button("Save")) {
-			SaveGame();
-		}
-		if (ImGui::Button("Load in same scene")) {
-			LoadGame();
-		}
-		if (ImGui::Button("Load in new scene")) {
+		if (ImGui::Button("Load")) {
 			LoadGame();
 			SceneManager::RestartScene();
 		}
+		ImGui::SameLine();
+		if (ImGui::Button("Save")) {
+			SaveGame();
+		}
+		ImGui::SameLine();
 		if (ImGui::Button("Clear save")) {
 			SaveState::Open(kSaveStateGameName, saveSlot)
 				.Clear()

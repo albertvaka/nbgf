@@ -109,7 +109,7 @@ void Shard::Draw() const
 		return;
 	}
 
-	float y = 1.5f * -sin(mainClock * 2);
+	float y = 2.f * -sin(mainClock * 3);
 
 	Window::Draw(Assets::spritesheetTexture, pos.x, pos.y - y)
 		.withRectWithOriginCentered(AnimLib::ROCK_SHARD);
