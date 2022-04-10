@@ -212,6 +212,18 @@ const std::unordered_map<int, vec> Entities::miniooy = {
 	{ 1125, vec(2940.667f, 448.0f) },
 	{ 1126, vec(3151.3333f, 430.6700000000001f) },
 	{ 1127, vec(3092.6667f, 490.6700000000001f) },
+	{ 1140, vec(5023.0f, 1148.5f) },
+	{ 1141, vec(5401.0f, 1191.5f) },
+	{ 1142, vec(5333.5f, 1242.0f) },
+	{ 1143, vec(5432.5f, 1525.5f) },
+	{ 1144, vec(5515.5f, 1578.0f) },
+	{ 1145, vec(5555.0f, 1505.0f) },
+	{ 1151, vec(6044.0f, 1474.0f) },
+	{ 1152, vec(5999.33f, 1153.333f) },
+	{ 1153, vec(5834.0f, 1238.0f) },
+	{ 1155, vec(6201.33f, 1220.667f) },
+	{ 1157, vec(6133.33f, 1136.667f) },
+	{ 1158, vec(5727.33f, 1136.667f) },
 };
 
 const std::unordered_map<int, vec> Entities::npc = {
@@ -242,6 +254,7 @@ const std::unordered_map<int, vec> Entities::save = {
 	{ 895, vec(6665.0f, 2110.0f) },
 	{ 1031, vec(4407.0f, 1130.25f) },
 	{ 1124, vec(3048.0f, 3083.0f) },
+	{ 1139, vec(5486.17f, 1562.833f) },
 };
 
 const std::unordered_map<int, vec> Entities::shard = {

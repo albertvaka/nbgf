@@ -22,6 +22,7 @@ struct Areas {
 	static const std::array<BoxBounds, 4> lava;
 	static const std::array<BoxBounds, 1> lava_bg;
 	static const BoxBounds single_lava_bg;
+	static const std::array<BoxBounds, 4> miniooy_bounds;
 	static const std::array<BoxBounds, 1> parallax_cave;
 	static const BoxBounds single_parallax_cave;
 	static const std::array<BoxBounds, 1> parallax_forest;
