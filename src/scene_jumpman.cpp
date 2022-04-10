@@ -54,6 +54,7 @@
 #include "tweeny.h"
 
 extern float mainClock;
+extern bool mainClockPaused;
 
 const float kCamSpeed = 2000.f;
 const float kCamZoomSpeed = 0.2f;
@@ -61,6 +62,18 @@ const float kCamZoomSpeed = 0.2f;
 const int kPlayerInitialHealth = 4;
 
 const char* kSaveStateGameName = "gaem2020";
+
+const auto kLavaFullScreenShader = []() {
+	Assets::waveShader.Activate();
+	Assets::waveShader.SetUniform("camera", Camera::Center() * Window::GetViewportScale());
+	Assets::waveShader.SetUniform("time", mainClock * 10);
+};
+
+const auto kPauseFullScreenShader = []() {
+	// FIXME: use a better shader
+	Assets::tintShader.Activate();
+	Assets::tintShader.SetUniform("flashColor", 0.5f, 0.5f, 0.5f, 0.5f);
+};
 
 JumpScene::JumpScene(int saveSlot)
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
@@ -247,6 +260,8 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 
 void JumpScene::EnterScene()
 {
+	Fx::BeforeEnterScene();
+
 	player.Reset(Tiled::Entities::single_spawn, kPlayerInitialHealth);
 	skillTree.Reset();
 
@@ -621,9 +636,25 @@ void JumpScene::Update(float dt)
 {
 #ifdef _DEBUG
 	if (Debug::FrameByFrame && Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
-		player.pos = Camera::Center()+vec(0,16);
+		player.pos = Camera::Center() + vec(0, 16);
 	}
 #endif
+
+	if (playerPaused) {
+		mainClockPaused = true;
+	} else {
+		Fx::Update(dt);
+		bool frozen = Fx::FreezeImage::IsFrozen();
+		mainClockPaused = frozen;
+		if (frozen) {
+			// Fx::FreezeImage's alternate update function has already run at this point
+			// FIXME: Get rid of the whole generic "frozen alternate update" thing and handle it here
+			return;
+		}
+		if (Fx::ScreenTransition::IsActive()) {
+			return;
+		}
+	}
 
 	if (Fx::ScreenTransition::IsJustFinished()) {
 		if (Fx::ScreenTransition::Current() != &Assets::fadeInDiamondsShader) {
@@ -656,6 +687,26 @@ void JumpScene::Update(float dt)
 
 	dialogDriver.Update(dt);
 	if (dialogDriver.IsOpen()) {
+		return;
+	}
+
+	if (Input::IsJustPressedAnyPlayer(GameKeys::PAUSE)) {
+		playerPaused = !playerPaused;
+
+		if (playerPaused) {
+			Fx::FullscreenShader::SetShader(kPauseFullScreenShader);
+		}
+		else {
+			if (shaderLavaActive) {
+				Fx::FullscreenShader::SetShader(kLavaFullScreenShader);
+			}
+			else {
+				Fx::FullscreenShader::SetShader(nullptr);
+			}
+		}
+	}
+
+	if (playerPaused) {
 		return;
 	}
 
@@ -912,11 +963,7 @@ void JumpScene::Update(float dt)
 	}
 	if (inLavaCave && !shaderLavaActive) {
 		shaderLavaActive = true;
-		Fx::FullscreenShader::SetShader([]() {
-			Assets::waveShader.Activate();
-			Assets::waveShader.SetUniform("camera", Camera::Center() * Window::GetViewportScale());
-			Assets::waveShader.SetUniform("time", mainClock * 10);
-		});
+		Fx::FullscreenShader::SetShader(kLavaFullScreenShader);
 	}
 	else if (!inLavaCave && shaderLavaActive) {
 		shaderLavaActive = false;
@@ -1072,7 +1119,17 @@ void JumpScene::Draw()
 	}
 	player.DrawGUI();
 	dialogDriver.Draw();
+
+	if (playerPaused) {
+		Window::Draw(Assets::spritesheetTexture, Window::GAME_WIDTH - 25, 25)
+			.withScale(2.5f)
+			.withRect(456, 308, 14, 19)
+			.withOrigin(14, 0);
+	}
+
 	Camera::InScreenCoords::End();
+
+	Fx::AfterDraw();
 
 	//player.dust.DrawImGUI("Dust");
 }

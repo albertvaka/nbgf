@@ -68,6 +68,11 @@ void HellCrossScene::RandomizeMap() {
 
 void HellCrossScene::EnterScene() 
 {
+	Fx::BeforeEnterScene();
+	if (Fx::ScreenTransition::IsActive()) {
+		return;
+	}
+
 	player.Reset(vec(160,160), kInitialPlayerHealth);
 
 	randomSeed = Rand::roll(0, 10000);
@@ -133,6 +138,8 @@ void HellCrossScene::UpdateCamera() {
 
 void HellCrossScene::Update(float dt)
 {
+	Fx::Update(dt);
+
 	if (Fx::ScreenTransition::IsJustFinished()) {
 		if (Fx::ScreenTransition::Current() != &Assets::fadeInDiamondsShader) {
 			// This was a death or outro transition: restart scene
@@ -236,6 +243,8 @@ void HellCrossScene::Draw()
 #endif
 
 	//player.dust.DrawImGUI("Dust");
+
+	Fx::AfterDraw();
 }
 
 

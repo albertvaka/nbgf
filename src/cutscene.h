@@ -85,7 +85,6 @@ struct CutSceneBuilder
 
 	CutSceneBuilder(bool pauseGame = false)
 	{
-		// FIXME: Maybe we should reuse Fx::FreezeImage to pause?
 		cutScene = new CutScene();
 		cutScene->pauseGame = pauseGame;
 	}

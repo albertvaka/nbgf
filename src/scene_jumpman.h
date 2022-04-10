@@ -41,6 +41,7 @@ struct JumpScene : Scene {
 	std::vector<int> waveShaderScreens;
 	bool shaderLavaActive = false;
 	bool contextActionButton = false;
+	bool playerPaused = false;
 
 	void SaveGame() const;
 	void LoadGame();

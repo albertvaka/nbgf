@@ -81,7 +81,7 @@ namespace Fx {
 		static inline float transitionTime = 0;
 		static inline float transitionDuration = 0;
 		static inline bool transitionJustFinished = false;
-		static inline GPU_Image* blankTexture;
+		static inline GPU_Image* blankTexture = nullptr;
 	};
 
 	struct FreezeImage {
@@ -125,7 +125,6 @@ namespace Fx {
 	};
 
 
-	void Init();
 	void BeforeEnterScene();
 	void AfterDraw();
 	void Update(float dt);

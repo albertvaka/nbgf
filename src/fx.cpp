@@ -8,7 +8,6 @@
 #include "imgui.h"
 #endif
 
-
 namespace Fx {
 
 void ScreenTransition::Start(Shader& shader, float duration)
@@ -72,7 +71,7 @@ void Update(float dt)
 				Screenshake::screenshakeAmplitude.y *= Screenshake::screenshakeDampening;
 			}
 		}
-		Camera::SetCenter(Camera::Center()); // makes sdl_gpu pick up the offset
+		Camera::SetCenter(Camera::Center()); // makes sdl_gpu pick up the offset in case nothing else updates the camera this frame
 	}
 }
 
@@ -156,19 +155,19 @@ void FullscreenShader::Deactivate()
 	Shader::Deactivate();
 }
 
-void Init()
-{
-	InitRenderToTextureTarget();
-
-    ScreenTransition::blankTexture = Window::CreateTexture(32,32);
-	Window::BeginRenderToTexture(ScreenTransition::blankTexture, false);
-    Window::Clear(255,255,0);
-    Window::EndRenderToTexture();
-
-}
 
 void BeforeEnterScene()
 {
+	// First time init
+	if (ScreenTransition::blankTexture == nullptr) {
+		InitRenderToTextureTarget();
+
+		ScreenTransition::blankTexture = Window::CreateTexture(32, 32);
+		Window::BeginRenderToTexture(ScreenTransition::blankTexture, false);
+		Window::Clear(255, 255, 0);
+		Window::EndRenderToTexture();
+	}
+
 	//Stop everything
 
 	FullscreenShader::shaderActivation = nullptr;

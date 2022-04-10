@@ -42,7 +42,7 @@ bool DialogBox::IsOpen() const
 bool DialogBox::Update(float dt) { // returns true when the text is fully displayed and the user presses action to close it
 	if (openCloseTimer < kTimeToOpenClose) {
 		openCloseTimer += dt;
-		if (Input::IsJustPressed(0, GameKeys::START)) {
+		if (Input::IsJustPressed(0, GameKeyAliases::DIALOG_SKIP)) {
 			body.SkipAnimation();
 		}
 		if (isOpen && openCloseTimer >= kTimeToOpenClose) {
@@ -56,13 +56,13 @@ bool DialogBox::Update(float dt) { // returns true when the text is fully displa
 	} else if (isOpen) {
 		bool justFinishedTyping = body.Update(dt);
 		if (!body.IsFullyShown()) {
-			if (Input::IsJustPressed(0, GameKeys::START)) {
+			if (Input::IsJustPressed(0, GameKeyAliases::DIALOG_SKIP)) {
 				body.SkipAnimation();
 				justFinishedTyping = true;
 			}
 		}
 		else {
-			if (Input::IsJustPressed(0, GameKeys::ACTION)) {
+			if (Input::IsJustPressed(0, GameKeyAliases::DIALOG_NEXT)) {
 				return true;
 			}
 		}

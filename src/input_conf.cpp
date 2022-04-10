@@ -104,15 +104,40 @@ void Input::MapGameKeys()
                )
         );
     };
-    action_mapping[(int)GameKeys::START] = [](int p)
+
+    action_mapping[(int)GameKeys::MENU_ACCEPT] = [](int p)
     {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) || (
-               (p == keyboard_player_id) && (
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN) ||
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE)
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) || (
+                (p == keyboard_player_id) && (
+                    Keyboard::IsKeyPressed(SDL_SCANCODE_O)
+                    || Keyboard::IsKeyPressed(SDL_SCANCODE_X)
+                    || Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN)
+                    || Keyboard::IsKeyPressed(SDL_SCANCODE_KP_ENTER)
+                    || Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE)
                )
         );
     };
+    action_mapping[(int)GameKeys::MENU_CANCEL] = [](int p)
+    {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) || (
+                (p == keyboard_player_id) && (
+                    Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE)
+                    )
+                );
+    };
+    action_mapping[(int)GameKeys::PAUSE] = [](int p)
+    {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) || (
+//            (p == keyboard_player_id) && (
+                Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE)
+//              )
+            );
+    };
+
+
+
+    // Analog
+
     analog_mapping[(int)AnalogInput::MOVE] = [](int p)
     {
         vec ret = vec::Zero;

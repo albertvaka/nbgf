@@ -9,7 +9,6 @@
 #include "debug.h"
 #include "camera.h"
 #include "window.h"
-#include "fx.h"
 
 #include "../src/assets.h"
 #include "../src/scene_entrypoint.h"
@@ -32,6 +31,7 @@
 #define _FPS_COUNTER
 #endif
 
+bool mainClockPaused = false;
 float mainClock;
 int lastTicks;
 
@@ -146,8 +146,6 @@ void init() {
 	fpsText->SetString("0");
 #endif
 
-	Fx::Init();
-
 	lastTicks = SDL_GetTicks();
 }
 
@@ -179,7 +177,6 @@ void main_loop() {
 		Camera::SetZoom(1.f);
 		Camera::SetTopLeft(0,0);
 		Input::IgnoreInput(false);
-		Fx::BeforeEnterScene();
 		SceneManager::currentScene->EnterScene();
 	}
 
@@ -284,13 +281,10 @@ void main_loop() {
 	{
 		BeforeSceneUpdate();
 #endif
-		Fx::Update(dt);
-		if (!Fx::FreezeImage::IsFrozen()) {
+		if (!mainClockPaused) {
 			mainClock += dt;
-			if (!Fx::ScreenTransition::IsActive()) {
-				SceneManager::currentScene->Update(dt);
-			}
 		}
+		SceneManager::currentScene->Update(dt);
 #ifdef _DEBUG
 	}
 
@@ -304,7 +298,6 @@ void main_loop() {
 #endif
 
 	SceneManager::currentScene->Draw();
-	Fx::AfterDraw();
 
 #ifdef _DEBUG
 	AfterSceneDraw();
@@ -332,6 +325,12 @@ void main_loop() {
 	ImGui::Render();
 	SDL_GL_MakeCurrent(Window::window, Window::screenTarget->context->context);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
+
+#ifdef _DEBUG
+	if (mainClockPaused) {
+		Window::DrawPrimitive::Circle(5, 5, 3, -1, 255, 0, 0);
+	}
 #endif
 
 	Camera::InScreenCoords::End();

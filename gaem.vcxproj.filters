@@ -307,9 +307,6 @@
     <ClInclude Include="engine\musicplayer.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="engine\fx.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="engine\window_draw.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -408,6 +405,9 @@
     </ClInclude>
     <ClInclude Include="src\drain.h">
       <Filter>src\entities\enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fx.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -585,9 +585,6 @@
     <ClCompile Include="engine\musicplayer.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="engine\fx.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="engine\mates.cpp">
       <Filter>engine</Filter>
     </ClCompile>
@@ -647,6 +644,9 @@
     </ClCompile>
     <ClCompile Include="src\drain.cpp">
       <Filter>src\entities\enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fx.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

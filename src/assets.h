@@ -32,12 +32,12 @@ namespace Assets
 	inline TTF_Font* font_30;
 	inline TTF_Font* font_30_outline;
 
-	inline Shader tintShader;
-	inline Shader fogShader;
-	inline Shader waveShader;
-	inline Shader fadeInDiamondsShader;
-	inline Shader fadeOutDiamondsShader;
-	inline Shader fadeOutCircleShader;
+	inline Shader tintShader; // uniforms: flashColor
+	inline Shader fogShader; //uniforms: vec offset, float time, int octaves, rgba fogColor
+	inline Shader waveShader; // uniforms: vec camera, float time
+	inline Shader fadeInDiamondsShader; // uniforms: float progress
+	inline Shader fadeOutDiamondsShader; // uniforms: float progress
+	inline Shader fadeOutCircleShader; // uniforms: float progress, vec normalizedTarget, float aspectRatio
 
 	inline Sound soundDeath;
 

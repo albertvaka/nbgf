@@ -17,7 +17,7 @@ void main()
 	colorDifference.g = flashColor.g - pixel_color.g;
 	colorDifference.b = flashColor.b - pixel_color.b;
 	pixel_color.r = pixel_color.r + colorDifference.r * percent;
-	pixel_color.g = pixel_color.g +colorDifference.g * percent;
+	pixel_color.g = pixel_color.g + colorDifference.g * percent;
 	pixel_color.b = pixel_color.b + colorDifference.b * percent;
 
 	fragColor = pixel_color;

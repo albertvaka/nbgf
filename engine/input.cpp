@@ -20,7 +20,7 @@ void Input::Update(float dt)
 	for (int player = 0; player < Input::kMaxPlayers; ++player) {
 		int gamepad_id = player;
 		for (size_t k = 1; k < magic_enum::enum_count<GameKeys>(); k++) {  //Skip GameKeys::NONE
-			bool isPressed = ignoreInput? false : (action_mapping[k] && action_mapping[k](gamepad_id));
+			bool isPressed = (player == 0 && ignoreInput)? false : (action_mapping[k] && action_mapping[k](gamepad_id));
 			if (isPressed) {
 				if (action_states[player][k] == JUST_PRESSED || action_states[player][k] == PRESSED) {
 					action_states[player][k] = PRESSED;

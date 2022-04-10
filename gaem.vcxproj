@@ -28,7 +28,6 @@
     <ClInclude Include="engine\collide.h" />
     <ClInclude Include="engine\debug.h" />
     <ClInclude Include="engine\entity.h" />
-    <ClInclude Include="engine\fx.h" />
     <ClInclude Include="engine\input.h" />
     <ClInclude Include="engine\mates.h" />
     <ClInclude Include="engine\matrix2d.h" />
@@ -80,6 +79,7 @@
     <ClInclude Include="src\fireshot.h" />
     <ClInclude Include="src\fireslime.h" />
     <ClInclude Include="src\flyingalien.h" />
+    <ClInclude Include="src\fx.h" />
     <ClInclude Include="src\miniooy.h" />
     <ClInclude Include="src\minotaur.h" />
     <ClInclude Include="src\ooy.h" />
@@ -143,7 +143,6 @@
     <ClCompile Include="engine\camera.cpp" />
     <ClCompile Include="engine\debug.cpp" />
     <ClCompile Include="engine\enable_discrete_gpu.cpp" />
-    <ClCompile Include="engine\fx.cpp" />
     <ClCompile Include="engine\input.cpp" />
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\mates.cpp" />
@@ -175,6 +174,7 @@
     <ClCompile Include="src\fireshot.cpp" />
     <ClCompile Include="src\fireslime.cpp" />
     <ClCompile Include="src\flyingalien.cpp" />
+    <ClCompile Include="src\fx.cpp" />
     <ClCompile Include="src\goomba.cpp" />
     <ClCompile Include="src\health.cpp" />
     <ClCompile Include="src\healthup.cpp" />
