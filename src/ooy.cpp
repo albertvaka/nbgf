@@ -8,6 +8,7 @@
 #include "animation.h"
 #include "rand.h"
 #include "ooytear.h"
+#include "miniooy.h"
 #include "particles.h"
 #include "screen.h"
 #include "common_enemy.h"
@@ -72,7 +73,19 @@ void Ooy::Die() {
 	}
 	for (int i = 0; i < 8; i++) {
 		RandomlySpawnHealth(pos+Rand::PosInsideCircle(kRadius), 100);
-		
+	}
+	for (OoyTear* e : OoyTear::GetAll()) {
+		e->alive = false;
+		Particles::ooyTearTrail.pos = pos + Rand::PosInsideCircle(kRadius);
+		PartSys::Particle& p = Particles::ooyTearTrail.AddParticle();
+		p.ttl += 6.f;
+		p.vel *= 5;
+	}
+	// Main reason for this is so the door opens
+	for (MiniOoy* e : MiniOoy::GetAll()) {
+		if (e->screen == screen) {
+			e->alive = false;
+		}
 	}
 }
 
@@ -105,7 +118,7 @@ void Ooy::Update(float dt)
 		{
 			vel += steering.Wander(kSteeringWanderRad, kSteeringWanderDist, kSteeringWanderJitterPerSec, dt).Normalized() * kSteeringWanderWeight * dt;
 			vel += steering.Seek(bounds.Center()).Normalized() * kSteeringSeekWeightIdle * dt;
-			if (state == State::IDLE && player->pos.Distance(pos) < kStartChasingRadius) {
+			if (player->pos.Distance(pos) < kStartChasingRadius) {
 				state = State::ENTER_CHASE;
 				timer = 0;
 			}
