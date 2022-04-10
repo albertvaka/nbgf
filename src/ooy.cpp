@@ -25,8 +25,6 @@ constexpr const float kScale = 2.f;
 constexpr const float kRadius = 12.f*kScale;
 constexpr const float kMaxSpeed = 105.f;
 
-constexpr const int kHealth = 8;
-
 constexpr const float kTearVel = 110;
 constexpr const float kRandomTearVel = 10;
 
@@ -40,6 +38,7 @@ constexpr const float kSteeringWanderRad = 4.8f; //Ganes que te de posar-se a fe
 constexpr const static float kSteeringWanderDist = 6.5f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
 constexpr const static float kSteeringWanderJitterPerSec = 175; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
 
+constexpr const int kHealth = 8;
 
 extern float mainClock;
 

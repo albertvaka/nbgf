@@ -15,12 +15,12 @@
 #include "common_tilemapcharacter.h"
 
 constexpr const float kIntervalShoot = 1.5f;
-constexpr const float kStartChasingRadius = 120.f;
-constexpr const float kStopChasingRadius = 150.f;
+constexpr const float kStartChasingRadius = 160.f;
+constexpr const float kStopChasingRadius = 180.f;
 constexpr const float kHorizontalDistanceToShoot = 40.f;
 constexpr const float kTargetVerticalDistance = 120.f;
 constexpr const float kVerticalDistanceToShoot = 60.f;
-constexpr const float kTimeToChangeState = 1.2f;
+constexpr const float kTimeToChangeState = 0.65f;
 constexpr const float kScale = 0.8f;
 constexpr const float kRadius = 12.f*kScale;
 constexpr const float kMaxSpeed = 80.f;
@@ -31,7 +31,7 @@ constexpr const float kRandomTearVel = 10;
 constexpr const float kSteeringSeekWeightChasing = 300.f;
 constexpr const float kSteeringSeekWeightIdle = 150.f;
 constexpr const float kSteeringWanderWeight = 150.f;
-constexpr const float kSteeringBoundsAvoidanceWeight = 800.f;
+constexpr const float kSteeringBoundsAvoidanceWeight = 600.f;
 constexpr const float kSteeringTileMapAvoidanceWeight = 600.f;
 
 constexpr const float kSteeringWanderRad = 4.8f; //Ganes que te de posar-se a fer cercles (the radius of the constraining circle for the wander behavior)
