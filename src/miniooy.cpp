@@ -84,7 +84,7 @@ void MiniOoy::Update(float dt)
 		{
 			vel += steering.Wander(kSteeringWanderRad, kSteeringWanderDist, kSteeringWanderJitterPerSec, dt).Normalized() * kSteeringWanderWeight * dt;
 			vel += steering.Seek(bounds.Center()).Normalized() * kSteeringSeekWeightIdle * dt;
-			if (state == State::IDLE && player->pos.Distance(pos) < kStartChasingRadius) {
+			if (Collide(bounds, player->CollisionBounds()) && player->pos.Distance(pos) < kStartChasingRadius) {
 				state = State::ENTER_CHASE;
 				timer = 0;
 			}
