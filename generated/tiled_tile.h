@@ -234,6 +234,19 @@ struct Tile {
 		BG_191,
 		BG_192,
 		BG_193,
+		BG_194,
+		BG_195,
+		BG_196,
+		BG_197,
+		BG_198,
+		BG_199,
+		BG_200,
+		BG_201,
+		BG_202,
+		BG_203,
+		BG_204,
+		BG_205,
+		BG_206,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -335,6 +348,7 @@ struct Tile {
 		SOLID_73,
 		SOLID_74,
 		SOLID_75,
+		SOLID_76,
 		BREAKABLE_1,
 		BREAKABLE_2,
 		BREAKABLE_3,
@@ -348,7 +362,7 @@ struct Tile {
 	// Aliases
 	static constexpr Value BG_DOOR_OPENING = BG_53;
 	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_161;
-	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_176;
+	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_177;
 	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
 	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
 	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_1;

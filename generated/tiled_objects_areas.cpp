@@ -54,10 +54,10 @@ const BoxBounds Areas::single_lava_bg = BoxBounds(6376.49f,390.24f,881.025f,339.
 
 
 const std::array<BoxBounds, 4> Areas::miniooy_bounds = {
-	BoxBounds(5565.67f,1086.0f,705.333f,236.0f),
-	BoxBounds(4957.33f,1087.667f,516.667f,235.333f),
-	BoxBounds(5247.0f,1469.333f,477.5f,150.667f),
-	BoxBounds(5846.17f,1431.333f,351.833f,198.0f),
+	BoxBounds(5565.67f,1086.0f,705.333f,240.0f),
+	BoxBounds(4957.33f,1087.667f,516.667f,238.333f),
+	BoxBounds(5218.0f,1461.333f,519.5f,158.667f),
+	BoxBounds(5810.17f,1398.333f,387.833f,231.0f),
 };
 
 const std::array<BoxBounds, 1> Areas::parallax_cave = {
