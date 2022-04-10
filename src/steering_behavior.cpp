@@ -173,82 +173,102 @@ vec SteeringBehavior::Wander(float WanderRad, float WanderDist, float WanderJitt
 //------------------------------------------------------------------------
 vec SteeringBehavior::BoundsAvoidance(const BoxBounds& m_bounds, float frontFeelerLength, float sideFeelerLength)
 {
-	vec m_Feelers[3];
+	avoidingBounds = false;
 
 	vec heading = steeringEntity->Heading();
 
+	vec m_Feelers[3];
 	//feeler pointing straight in front
 	m_Feelers[0] = steeringEntity->pos + frontFeelerLength * heading;
 	m_Feelers[0].DebugDraw();
-
 	//feeler to left
 	vec temp = heading.RotatedAroundOriginRads(Angles::Pi * -0.3f);
 	m_Feelers[1] = steeringEntity->pos + sideFeelerLength * temp;
 	m_Feelers[1].DebugDraw();
-
 	//feeler to right
 	temp = heading.RotatedAroundOriginRads(Angles::Pi * 0.3f);
 	m_Feelers[2] = steeringEntity->pos + sideFeelerLength * temp;
 	m_Feelers[2].DebugDraw();
 
-	vec wallsv[5] = {vec(m_bounds.left, m_bounds.top),
-		vec(m_bounds.left, m_bounds.top+m_bounds.height),
-		vec(m_bounds.left+m_bounds.width, m_bounds.top+m_bounds.height),
-		vec(m_bounds.left+m_bounds.width, m_bounds.top),
-		vec(m_bounds.left, m_bounds.top)
+	vec wallsv[5] = {
+		vec(m_bounds.Left(), m_bounds.Top()), // 0->1 Vertical wall
+		vec(m_bounds.Left(), m_bounds.Bottom()), // 1->2 Horizontal wall
+		vec(m_bounds.Right(), m_bounds.Bottom()), // 2->3 Vertical wall
+		vec(m_bounds.Right(), m_bounds.Top()), // 3->4 Horizontal wall
+		vec(m_bounds.Left(), m_bounds.Top())
 	};
 
-	float DistToClosestIP = Mates::MaxFloat;
-	vec ClosestPoint;
-	int ClosestWall = -1; //index in wallsv
+	float DistToClosestVerticalIP = Mates::MaxFloat;
+	float DistToClosestHorizontalIP = Mates::MaxFloat;
+	vec ClosestVerticalPoint;
+	vec ClosestHorizontalPoint;
+	int ClosestVerticalWall = -1; //index in wallsv
+	int ClosestHorizontalWall = -1; //index in wallsv
 
-	vec SteeringForce;
-	avoidingBounds = false;
+	vec SteeringForce = vec::Zero;
 
-	//examine each feeler in turn
-	for (unsigned int flr=0; flr < 3; ++flr) {
+	for (unsigned int feeler=0; feeler < 3; ++feeler) {
 
-		//run through each wall checking for any intersection points
 		for (int i = 0; i < 4; i++) {
 
+			//(wallsv[i + 1] - wallsv[i]).DebugDrawAsArrow(wallsv[i]);
+
 			float DistToThisIP;
-			vec point;
+			vec ClosestPoint;
 			if (LineIntersection2D(steeringEntity->pos,
-				m_Feelers[flr],
-				wallsv[i],
-				wallsv[i+1],
-				DistToThisIP,
-				point))
+				m_Feelers[feeler],
+				wallsv[i], wallsv[i+1],
+				DistToThisIP, ClosestPoint))
 			{
-				//is this the closest found so far? If so keep a record
-				if (DistToThisIP < DistToClosestIP)
-				{
-					DistToClosestIP = DistToThisIP;
-					ClosestWall = i;
-					ClosestPoint = point;
+				if (i == 0 || i == 2) {
+					if (DistToThisIP < DistToClosestVerticalIP)
+					{
+						DistToClosestVerticalIP = DistToThisIP;
+						ClosestVerticalWall = i;
+						ClosestVerticalPoint = ClosestPoint;
+					}
+				} else {
+					if (DistToThisIP < DistToClosestHorizontalIP)
+					{
+						DistToClosestHorizontalIP = DistToThisIP;
+						ClosestHorizontalWall = i;
+						ClosestHorizontalPoint = ClosestPoint;
+					}
 				}
 			}
-		}//next wall
+		}
 
-
-		//if an intersection point has been detected, calculate a force  
-		//that will direct the agent away
-		if (ClosestWall != -1)
+		//if an intersection point has been detected, calculate a force   that will direct the agent away
+		if (ClosestVerticalWall != -1)
 		{
-			//calculate by what distance the projected position of the agent
-			//will overshoot the wall
-			vec OverShoot = m_Feelers[flr] - ClosestPoint;
+			//calculate by what distance the projected position of the agent will overshoot the wall
+			vec OverShoot = m_Feelers[feeler] - ClosestVerticalPoint;
 
-			vec temp = (wallsv[ClosestWall] - wallsv[ClosestWall+1]).Normalized();
+			//(wallsv[ClosestVerticalWall + 1] - wallsv[ClosestVerticalWall]).DebugDrawAsArrow(wallsv[ClosestVerticalWall], 255, 0, 0);
+
+			vec temp = (wallsv[ClosestVerticalWall] - wallsv[ClosestVerticalWall+1]).Normalized();
 			vec normal (-temp.y,temp.x);
 
-			//create a force in the direction of the wall normal, with a 
-			//magnitude of the overshoot
-			SteeringForce = normal * OverShoot.Length();
+			//create a force in the direction of the wall normal, with a magnitude of the overshoot
+			SteeringForce += normal * OverShoot.Length();
+			avoidingBounds = true;
+		}
+		if (ClosestHorizontalWall != -1)
+		{
+			//calculate by what distance the projected position of the agent will overshoot the wall
+			vec OverShoot = m_Feelers[feeler] - ClosestHorizontalPoint;
+
+			//(wallsv[ClosestHorizontalWall + 1] - wallsv[ClosestHorizontalWall]).DebugDrawAsArrow(wallsv[ClosestHorizontalWall], 255, 0, 0);
+
+			vec temp = (wallsv[ClosestHorizontalWall] - wallsv[ClosestHorizontalWall + 1]).Normalized();
+			vec normal(-temp.y, temp.x);
+
+			//create a force in the direction of the wall normal, with a magnitude of the overshoot
+			SteeringForce += normal * OverShoot.Length();
 			avoidingBounds = true;
 		}
 
-	}//next feeler
+	}
 
 	return SteeringForce;
 }
