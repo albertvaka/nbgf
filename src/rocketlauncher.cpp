@@ -6,6 +6,7 @@
 #include "window_drawprimitive.h"
 #include "tiled_objects_areas.h"
 #include "missile.h"
+#include "anim_lib.h"
 #include "tile.h"
 #include "collide.h"
 #include "common_tilemapcharacter.h"

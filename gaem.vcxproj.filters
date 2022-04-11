@@ -671,4 +671,7 @@
       <Filter>generated</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="credits.txt" />
+  </ItemGroup>
 </Project>

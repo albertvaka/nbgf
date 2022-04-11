@@ -39,7 +39,15 @@ namespace Assets
 	inline Shader fadeOutDiamondsShader; // uniforms: float progress
 	inline Shader fadeOutCircleShader; // uniforms: float progress, vec normalizedTarget, float aspectRatio
 
-	inline Sound soundDeath;
+	inline Sound soundMegazero;
+	inline MultiSound<2> soundExplode;
+	inline MultiSound<3> soundRobotStep;
+	inline Sound soundRattle;
+	inline MultiSound<2> soundVoiceAttack;
+	inline MultiSound<2> soundVoiceDiveAttack;
+	inline MultiSound<2> soundVoiceDamage;
+	inline MultiSound<4> soundVoiceJump;
+	inline MultiSound<2> soundMetallicBounce;
 
 	inline Voice aiVoice;
 	inline Voice growlyVoice;

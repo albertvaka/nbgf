@@ -88,6 +88,13 @@ void Missile::Update(float dt)
 
 }
 
+void Missile::explode() 
+{
+	exploding = true;
+	Assets::soundExplode.Play();
+	anim.Set(AnimLib::EXPLOSION, false);
+}
+
 void Missile::Draw() const
 {
 	if (exploding) {

@@ -32,5 +32,11 @@ int Sound::Play() const {
 }
 
 void Sound::Stop(int channel) {
+	if (channel < 0) return;
 	Mix_HaltChannel(channel);
+}
+
+bool Sound::Playing(int channel) {
+	if (channel < 0) return false; // for sdl_mixer, -1 means all channels
+	return Mix_Playing(channel);
 }

@@ -53,6 +53,10 @@ Bipedal::Bipedal(vec pos)
 
 void Bipedal::Update(float dt)
 {
+	if (hitLegsSoundChannel != -1 && !Sound::Playing(hitLegsSoundChannel)) {
+		hitLegsSoundChannel = -1;
+	}
+
 	if (state == State::DYING) {
 		timer -= dt;
 		hitTimer = hitTimer > 0 ? 0.f : 1.f;
@@ -62,10 +66,13 @@ void Bipedal::Update(float dt)
 			float rand = Rand::rollf();
 			if (rand > 0.666f) {
 				new ForegroundOneShotAnim(Assets::scifiTexture, explosionPos, AnimLib::EXPLOSION_1, 0.75f);
+				Assets::soundExplode.Play();
 			} else if (rand > 0.333f) {
 				new ForegroundOneShotAnim(Assets::scifiTexture, explosionPos, AnimLib::EXPLOSION_2, 0.75f);
+				Assets::soundExplode.Play();
 			} else {
 				new ForegroundOneShotAnim(Assets::scifiTexture, explosionPos, AnimLib::EXPLOSION_3, 0.75f);
+				Assets::soundExplode.Play();
 			}
 		}
 		if (timer < 0) {
@@ -91,6 +98,9 @@ void Bipedal::Update(float dt)
 	} else if (ReceiveDamageFromPlayer(legsHitBox.Grown(kLegsReceiveHitWidthIncrease,0), hitTimer > 0.f)) {
 		// Ignore attacks to the legs. We still call ReceiveDamageFromPlayer so the player gets the knockback. On an else to not knock back twice
 		// TODO: We could play a sfx here.
+		if (hitLegsSoundChannel == -1) {
+			hitLegsSoundChannel = Assets::soundMetallicBounce.Play();
+		}
 	}
 
 	switch (state) {
@@ -113,6 +123,7 @@ void Bipedal::Update(float dt)
 		}
 		else if (timer >= 4 * kTimeBetweenMissiles) {
 			timer = 0.5f;
+			Assets::soundRattle.Play();
 			state = State::DRAMATIC_PAUSE;
 		}
 	}
@@ -124,7 +135,7 @@ void Bipedal::Update(float dt)
 			if (pos.x < minX) {
 				forward = true;
 			}
-			else if (pos.x > (maxX)) {
+			else if (pos.x > maxX) {
 				forward = false;
 			}
 			else {
@@ -169,6 +180,7 @@ void Bipedal::Update(float dt)
 			bool stomp = (frame != anim.current_frame) && (anim.current_frame == 0 || anim.current_frame == 3);
 			if (stomp) {
 				Fx::Screenshake::StartPreset(charging? Fx::Screenshake::Preset::Stomp : Fx::Screenshake::Preset::LittleStomp);
+				Assets::soundRobotStep.Play();
 			}
 		}
 
@@ -176,10 +188,12 @@ void Bipedal::Update(float dt)
 		bool animationLooped = (frame != anim.current_frame) && (anim.current_frame == 0);
 		if (animationLooped && (outOfBounds || Rand::PercentChance(40))) {
 			if (Rand::OnceEvery(3)) {
+				Assets::soundRattle.Play();
 				state = State::DRAMATIC_PAUSE;
 				timer = Rand::rollf(0.5f, 1.0f);
 			}
 			else {
+				Assets::soundRattle.Play();
 				state = State::FIRING;
 				timer = 0;
 			}

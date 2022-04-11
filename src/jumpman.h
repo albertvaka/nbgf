@@ -85,6 +85,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     float bfgCooldownTimer;
     int health;
     int maxHealth;
+    int voiceSoundChannel = -1;
 
     void UpdateMoving(float dt);
 

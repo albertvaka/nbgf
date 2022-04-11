@@ -23,3 +23,8 @@ Sewer tiles by MrBeas https://opengameart.org/content/sewer-tileset
 Sewer background by Lil Cthulhu https://lil-cthulhu.itch.io/pixel-art-sewer-background
 Explosion animations by SurfaceToAsh https://surfacetoash.itch.io/
 Leafs sprites by Danaida https://danaida.itch.io/
+Explosion sounds by Michel Baradari http://cubeengine.com/forum.php4?action=display_thread&thread_id=2164
+Misile launch sounds by dklon https://opengameart.org/users/dklon
+Robot step sounds by Lee Barkovich https://opengameart.org/users/bmaczero
+Main character voice by PlumpDev https://opengameart.org/content/female-gruntwork-1
+Step sounds and metal impact sounds by Brian MacIntosh https://opengameart.org/users/bmaczero

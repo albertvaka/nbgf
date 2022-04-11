@@ -35,6 +35,7 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 	Animation anim;
 
 	int screen;
+	int hitShieldSoundChannel = -1;
 
 	Goomba(vec position, Type type);
 

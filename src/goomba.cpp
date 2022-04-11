@@ -75,6 +75,10 @@ void Goomba::Walk(float dt)
 
 void Goomba::Update(float dt)
 {
+	if (hitShieldSoundChannel != -1 && !Sound::Playing(hitShieldSoundChannel)) {
+		hitShieldSoundChannel = -1;
+	}
+
 	JumpMan* player = JumpMan::instance();
 	if (!InSameScreenAsPlayer(screen)) {
 		goingRight = pos.x < player->pos.x; // so we are facing towards the player when they enter the screem
@@ -138,6 +142,9 @@ void Goomba::Update(float dt)
 				return;
 			}
 			else {
+				if (hitShieldSoundChannel == -1) {
+					hitShieldSoundChannel = Assets::soundMetallicBounce.Play();
+				}
 				state = State::SHIELDING;
 				timer = 0;
 			}

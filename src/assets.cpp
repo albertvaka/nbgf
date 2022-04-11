@@ -18,7 +18,16 @@ void Assets::LoadAll() {
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 
-    soundDeath.Load("data/death.ogg");
+    soundMegazero.Load("data/death.ogg");
+    soundExplode.Load({ "data/explode.wav", "data/explodemini.wav" });
+    soundRobotStep.Load({ "data/robotstep1.wav","data/robotstep2.wav","data/robotstep3.wav" });
+    soundRattle.Load("data/rattle1.wav");
+    
+    soundVoiceJump.Load({ "data/voice_jump1.wav", "data/voice_jump2.wav", "data/voice_jump3.wav", "data/voice_jump4.wav" });
+    soundVoiceDamage.Load({ "data/voice_damage1.wav", "data/voice_damage2.wav" });
+    soundVoiceAttack.Load({ "data/voice_attack1.wav", "data/voice_attack2.wav" });
+    soundVoiceDiveAttack.Load({ "data/voice_diveattack1.wav", "data/voice_diveattack2.wav" });
+    soundMetallicBounce.Load({"data/clink2.wav", "data/clink3.wav"});
 
     tintShader.Load(nullptr, nullptr, "data/tint.frag");
     //fogShader.Load("data/vertex_out.vert", nullptr, "data/fog.frag");

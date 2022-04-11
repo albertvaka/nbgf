@@ -290,6 +290,9 @@ exit /b 0</Command>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl" />
     <None Include="vendor\SDL_gpu\src\renderer_shapes_GL_common.inl" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="credits.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{DD692F54-6DEA-4A3F-A5C9-D6C1D7E488A7}</ProjectGuid>

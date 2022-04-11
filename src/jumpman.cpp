@@ -291,6 +291,10 @@ void JumpMan::Update(float dt)
 {
 	if (frozen || !alive) return;
 
+	if (voiceSoundChannel != -1 && !Sound::Playing(voiceSoundChannel)) {
+		voiceSoundChannel = -1;
+	}
+
 	justHit = false;
 
 	float absVelY = fabs(vel.y);
@@ -319,6 +323,8 @@ void JumpMan::Update(float dt)
 	if (!diving && SkillTree::instance()->IsEnabled(Skill::DASH) && canDash && dashCooldown <= 0.f) {
 		if (Input::IsJustPressed(0, GameKeys::DASH, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::DASH);
+			Sound::Stop(voiceSoundChannel);
+			voiceSoundChannel = Assets::soundVoiceJump.Play();
 			dashCooldown = kDashCooldown;
 			dashTimer = 0.f;
 			dashing = true;
@@ -337,6 +343,8 @@ void JumpMan::Update(float dt)
 		if (groundTile == Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			diving = true;
+			Sound::Stop(voiceSoundChannel);
+			voiceSoundChannel = Assets::soundVoiceDiveAttack.Play();
 			attacking = false;
 			anim.Ensure(AnimLib::WARRIOR_ATTACK_DOWN_TRANSITION, false);
 		}
@@ -346,6 +354,8 @@ void JumpMan::Update(float dt)
 		if (Input::IsJustPressed(0, GameKeys::ATTACK, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			attacking = true;
+			Sound::Stop(voiceSoundChannel);
+			voiceSoundChannel = Assets::soundVoiceAttack.Play();
 			if (onWall) {
 				attackingUp = false;
 				anim.Ensure(AnimLib::WARRIOR_WALL_SLIDE_ATTACK, false);
@@ -445,6 +455,8 @@ void JumpMan::Update(float dt)
 #ifdef _IMGUI
 			debugMaxJumpY = 0;
 #endif
+			Sound::Stop(voiceSoundChannel);
+			voiceSoundChannel = Assets::soundVoiceJump.Play();
 
 			bool didJumpFromWall = false;
 			if (jumpFromWallTimer > 0.f) {
@@ -772,7 +784,8 @@ void JumpMan::TakeDamage(vec src) {
 	Fx::FreezeImage::Freeze(0.25f);
 	justHit = true;
 	anim.Ensure(AnimLib::WARRIOR_HURT, false);
-
+	Sound::Stop(voiceSoundChannel);
+	voiceSoundChannel = Assets::soundVoiceDamage.Play();
 	vec playerCenter = CenterPos();
 	float direction = (playerCenter-src).AngleDegs();
 	new BackgroundOneShotAnim(Assets::spritesheetTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
