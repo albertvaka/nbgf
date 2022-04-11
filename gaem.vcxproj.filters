@@ -409,6 +409,9 @@
     <ClInclude Include="src\fx.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\background_bird.h">
+      <Filter>src\entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

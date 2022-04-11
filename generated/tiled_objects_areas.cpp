@@ -11,7 +11,7 @@ const std::array<BoxBounds, 4> Areas::alien_bounds = {
 };
 
 const std::array<BoxBounds, 9> Areas::bat_bounds = {
-	BoxBounds(1174.43f,1760.053f,253.803f,209.727f),
+	BoxBounds(1174.43f,1810.803f,253.803f,158.977f),
 	BoxBounds(1863.78f,1719.4598f,842.45f,291.747f),
 	BoxBounds(1576.6f,2116.7200000000003f,1197.47f,331.894f),
 	BoxBounds(3075.265f,2080.553f,269.97f,138.394f),
@@ -21,6 +21,12 @@ const std::array<BoxBounds, 9> Areas::bat_bounds = {
 	BoxBounds(5085.77f,257.3800000000001f,549.451f,274.913f),
 	BoxBounds(3538.274f,2094.043f,572.451f,250.913f),
 };
+
+const std::array<BoxBounds, 1> Areas::bg_bird_spawner = {
+	BoxBounds(1862.87f,1752.25f,819.75f,104.25f),
+};
+const BoxBounds Areas::single_bg_bird_spawner = BoxBounds(1862.87f,1752.25f,819.75f,104.25f);
+
 
 const std::array<BoxBounds, 1> Areas::boss_bounds = {
 	BoxBounds(793.5f,2369.5f,476.333f,39.0f),

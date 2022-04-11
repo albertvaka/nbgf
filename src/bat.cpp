@@ -179,6 +179,8 @@ void Bat::Draw() const
 
 	// Debug-only
 	Bounds().DebugDraw();
+	pos.DebugDraw();
+	steering.m_bounds.DebugDraw();
 	CircleBounds(pos, awake_player_distance).DebugDraw(255, 255, 0);
 	CircleBounds(pos, awake_nearby_distance).DebugDraw(0, 255, 255);
 	if (state == State::FLYING) {

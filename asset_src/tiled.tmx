@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" nextlayerid="14" nextobjectid="1159">
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" nextlayerid="14" nextobjectid="1163">
  <editorsettings>
   <export format="json"/>
  </editorsettings>
@@ -2114,8 +2114,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,144,476,475,
-0,0,0,0,0,0,0,0,0,0,0,0,476,508,442,441,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,144,144,
+0,0,0,0,0,0,0,0,0,0,0,0,476,475,508,441,
 0,0,0,0,0,0,0,0,0,0,0,508,441,266,298,505,
 0,0,0,0,0,0,0,0,0,0,508,441,267,0,0,0,
 0,0,0,0,0,0,0,0,0,508,441,473,0,0,0,0
@@ -2151,8 +2151,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,176,176,176,
 144,144,144,144,144,144,144,144,144,144,144,0,0,176,176,176,
-233,234,235,233,233,234,297,298,234,297,442,473,0,176,144,144,
-0,0,0,0,0,0,0,0,0,0,12,442,507,176,144,144,
+233,234,235,233,233,234,297,298,234,297,442,507,0,176,144,144,
+0,0,0,0,0,0,0,0,0,0,12,442,507,144,144,144,
 0,0,0,0,0,0,0,0,0,0,0,506,442,507,144,144,
 0,0,0,0,0,0,0,0,0,0,0,0,12,442,144,144
 </chunk>
@@ -2682,8 +2682,8 @@
 144,144,144,508,473,0,0,0,0,0,0,0,0,0,0,0,
 144,144,508,441,277,0,0,0,0,0,0,0,0,0,0,406,
 144,508,441,505,176,148,0,0,0,0,0,0,0,0,0,0,
-508,441,267,0,176,180,0,0,0,0,0,0,0,0,0,0,
-266,505,0,0,176,212,0,0,0,0,0,0,0,0,0,0,
+508,441,267,176,176,180,0,0,0,0,0,0,0,0,0,0,
+266,505,176,176,176,212,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,176,244,0,0,406,413,413,412,412,407,0,0,
 0,0,0,0,176,276,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,176,176,148,0,0,0,0,0,0,0,0,0,
@@ -4825,7 +4825,7 @@
   <object id="117" gid="193" x="128.5" y="304" width="16" height="16"/>
   <object id="118" gid="200" x="-158.333" y="304.667" width="16" height="16"/>
   <object id="126" gid="390" x="-78.4664" y="143.114" width="16" height="16"/>
-  <object id="127" gid="193" x="-1860" y="-16.5" width="16" height="16"/>
+  <object id="127" gid="193" x="-1877.33" y="21.25" width="16" height="16"/>
   <object id="129" gid="200" x="-1629.45" y="130.545" width="16" height="16"/>
   <object id="167" name="boss_bipedal" type="boss_bipedal" gid="213" x="-2252.73" y="608.754" width="16" height="16"/>
   <object id="177" gid="13" x="-536.5" y="480" width="16" height="16"/>
@@ -4922,7 +4922,7 @@
   <object id="999" gid="135" x="444.667" y="-1502" width="16" height="16"/>
   <object id="1000" gid="135" x="599.333" y="-1504.67" width="16" height="16"/>
   <object id="1003" gid="200" x="33.6667" y="-735" width="16" height="16"/>
-  <object id="1006" type="npc" gid="1" x="-491" y="108.333" width="16" height="16"/>
+  <object id="1006" type="npc" gid="1" x="-1018" y="133" width="16" height="16"/>
   <object id="1013" name="skill_breakblocks" type="skill_breakblocks" gid="361" x="4311.42" y="-197.666" width="16" height="16"/>
   <object id="1019" gid="200" x="-269.636" y="128.909" width="16" height="16"/>
   <object id="1020" gid="200" x="-2694" y="-958.333" width="16" height="16"/>
@@ -5014,7 +5014,7 @@
  </objectgroup>
  <objectgroup id="8" name="Areas">
   <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
-  <object id="131" name="bat_bounds" type="bat_bounds" x="-1897.57" y="-31.947" width="253.803" height="209.727"/>
+  <object id="131" name="bat_bounds" type="bat_bounds" x="-1897.57" y="18.803" width="253.803" height="158.977"/>
   <object id="132" name="bat_bounds" type="bat_bounds" x="-1208.22" y="-72.5402" width="842.45" height="291.747"/>
   <object id="134" name="fog" type="fog" x="-1167.5" y="111.5" width="734" height="85.5"/>
   <object id="169" name="parallax_cave" type="parallax_cave" x="-1721.17" y="287.25" width="1543.67" height="381.625"/>
@@ -5049,6 +5049,7 @@
   <object id="1148" name="miniooy_bounds" type="miniooy_bounds" x="1885.33" y="-704.333" width="516.667" height="238.333"/>
   <object id="1149" name="miniooy_bounds" type="miniooy_bounds" x="2146" y="-330.667" width="519.5" height="158.667"/>
   <object id="1150" name="miniooy_bounds" type="miniooy_bounds" x="2738.17" y="-393.667" width="387.833" height="231"/>
+  <object id="1160" name="bg_bird_spawner" type="bg_bird_spawner" x="-1209.13" y="-39.75" width="819.75" height="104.25"/>
  </objectgroup>
  <objectgroup id="2" name="Screens" visible="0">
   <object id="42" name="Screen" type="screen" x="-263.955" y="-56.5" width="622.538" height="304.5"/>

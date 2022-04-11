@@ -14,6 +14,7 @@
 #include "bullet.h"
 #include "enemy_door.h"
 #include "parallax.h"
+#include "background_bird.h"
 #include "bat.h"
 #include "miniooy.h"
 #include "missile.h"
@@ -278,6 +279,9 @@ void JumpScene::EnterScene()
 	new BigItem(Tiled::Entities::single_skill_dive, Skill::DIVE);
 	new BigItem(Tiled::Entities::single_skill_dash, Skill::DASH);
 
+	// FIXME: NPC
+	(new ForegroundOneShotAnim(Assets::warriorTexture, Tiled::Entities::single_npc, AnimLib::NPC_IDLE, 1.2f))->anim.loopable = true;
+
 	for (auto const& [id, pos] : Tiled::Entities::save) {
 		new SaveStation(id, pos);
 	}
@@ -423,6 +427,10 @@ void JumpScene::EnterScene()
 		new Explosive(id, pos, true);
 	}
 
+	for (const BoxBounds& a : Tiled::Areas::bg_bird_spawner) {
+		new BackgroundBirdSpawner(a);
+	}
+
 	for (const BoxBounds& a : Tiled::Areas::lava) {
 		Lava* lava = new Lava(a);
 		if (a.Contains(Tiled::Entities::single_lava_initial_height)) {
@@ -551,21 +559,6 @@ void JumpScene::EnterScene()
 
 	});
 
-	test_anim_scale = 1.f;
-	/*
-	new Trigger("my_test_trigger", Tiled::Triggers::single_trigger_test, [this](Trigger* t, bool isLoadingSave) {
-		CutSceneBuilder(true).Play(1.0f, [this](float progress) {
-			this->test_anim_scale = 1.f+(progress*progress);
-		}).PlayOneFrame([this]() {
-			Assets::soundDeath.Play();
-		}).WaitAndThen().Play(1.0f, [this](float progress) {
-			this->test_anim_scale = 2.f - (progress * progress);
-		}).WaitAndThen().PlayOneFrame([t]() {
-			Debug::out << "cutscene done";
-		});
-	});
-	*/
-
 	Camera::SetCenter(player.GetCameraTargetPos());
 
 	LoadGame();
@@ -609,6 +602,8 @@ void JumpScene::ExitScene()
 	OoyTear::DeleteAll();
 	Bat::DeleteAll();
 	MiniOoy::DeleteAll();
+	BackgroundBirdSpawner::DeleteAll();
+	BackgroundBird::DeleteAll();
 	Goomba::DeleteAll();
 	Ooy::DeleteAll();
 	DummyEntity::DeleteAll();
@@ -731,6 +726,14 @@ void JumpScene::Update(float dt)
 	bool inScreenTransition = UpdateCamera(dt);
 	if (inScreenTransition) {
 		return;
+	}
+
+	for (BackgroundBirdSpawner* e : BackgroundBirdSpawner::GetAll()) {
+		e->Update(dt);
+	}
+	BackgroundBird::DeleteNotAlive();
+	for (BackgroundBird* e : BackgroundBird::GetAll()) {
+		e->Update(dt);
 	}
 
 	for (RocketLauncher* e : RocketLauncher::GetAll()) {
@@ -981,6 +984,10 @@ void JumpScene::Draw()
 		g->Draw();
 	}
 
+	for (const BackgroundBird* g : BackgroundBird::GetAll()) {
+		g->Draw();
+	}
+
 	map.Draw();
 
 	for (const BigItem* g : BigItem::GetAll()) {
@@ -1029,10 +1036,6 @@ void JumpScene::Draw()
 	);
 
 	//Particles::leafs.DrawImGUI();
-
-	Window::Draw(Assets::warriorTexture, Tile::AlignToTiles(Tiled::Entities::single_npc)+vec(0.f,-6.f))
-		.withRect(Animation::GetRectAtTime(AnimLib::NPC_IDLE, mainClock))
-		.withScale(-1.2f*test_anim_scale, 1.2f);
 
 	if (contextActionButton) {
 		Window::Draw(Assets::spritesheetTexture, player.CollisionBounds().TopRight() + vec(2, -6))

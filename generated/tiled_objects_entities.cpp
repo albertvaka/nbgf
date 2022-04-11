@@ -32,7 +32,7 @@ const std::unordered_map<int, vec> Entities::bat = {
 	{ 63, vec(3775.0f, 1953.0f) },
 	{ 65, vec(3854.75f, 1824.5f) },
 	{ 117, vec(3200.5f, 2096.0f) },
-	{ 127, vec(1212.0f, 1775.5f) },
+	{ 127, vec(1194.67f, 1813.25f) },
 	{ 196, vec(2362.667f, 2165.667f) },
 	{ 197, vec(2397.667f, 2149.333f) },
 	{ 203, vec(1804.92f, 2216.542f) },
@@ -227,9 +227,9 @@ const std::unordered_map<int, vec> Entities::miniooy = {
 };
 
 const std::unordered_map<int, vec> Entities::npc = {
-	{ 1006, vec(2581.0f, 1900.333f) },
+	{ 1006, vec(2054.0f, 1925.0f) },
 };
-const vec Entities::single_npc = vec(2581.0f, 1900.333f);
+const vec Entities::single_npc = vec(2054.0f, 1925.0f);
 
 
 const std::unordered_map<int, vec> Entities::ooy = {

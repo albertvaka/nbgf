@@ -82,6 +82,14 @@ inline int FindIndexOfSmallestBoundsContaining(vec pos, const BoundsIterable& bo
 	return smallest_i;
 }
 
+namespace AnimLib {
+	constexpr const GPU_Rect ENEMY_HEALTH_BACKGROUND = { 479, 260, 1, 9 };
+	constexpr const GPU_Rect ENEMY_HEALTH_FOREGROUND = { 477, 260, 1, 9 };
+	constexpr const GPU_Rect ENEMY_HEALTH_BEGIN = { 463, 260, 4, 9 };
+	constexpr const GPU_Rect ENEMY_HEALTH_MIDDLE = { 466, 260, 1, 9 };
+	constexpr const GPU_Rect ENEMY_HEALTH_END = { 473, 260, 4, 9 };
+};
+
 inline void DrawBossHealth(int current, int max, int offset)
 {
 	// TODO: Flash/animation/particles when health goes down
@@ -93,26 +101,26 @@ inline void DrawBossHealth(int current, int max, int offset)
 	// Background
 	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
 		.withScale(size * scale, scale)
-		.withRect(480, 260, 1, 9);
+		.withRect(AnimLib::ENEMY_HEALTH_BACKGROUND);
 
-	//Health
+	// Health
 	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
 		.withScale((float(current) / max) * size * scale, scale)
-		.withRect(478, 260, 1, 9);
+		.withRect(AnimLib::ENEMY_HEALTH_FOREGROUND);
 
 	// Bar begin
 	Window::Draw(Assets::spritesheetTexture, pos + vec())
 		.withScale(scale)
-		.withRect(463, 260, 4, 9);
+		.withRect(AnimLib::ENEMY_HEALTH_BEGIN);
 
-	// Bar
+	// Bar middle
 	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
 		.withScale(size * scale, scale)
-		.withRect(466, 260, 1, 9);
+		.withRect(AnimLib::ENEMY_HEALTH_MIDDLE);
 
 	// Bar end
 	Window::Draw(Assets::spritesheetTexture, pos + vec(size * scale, 0))
 		.withScale(scale)
-		.withRect(473, 260, 4, 9);
+		.withRect(AnimLib::ENEMY_HEALTH_END);
 
 }
