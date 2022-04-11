@@ -25,7 +25,7 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 		SHIELDER,
 	};
 
-	State state = State::WALKING;
+	State state;
 	Type type;
 
 	bool goingRight = true;

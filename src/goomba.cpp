@@ -27,6 +27,7 @@ Goomba::Goomba(vec pos, Type type)
 	: CircleEntity(AlignWithGround(pos, Tile::Sizes), 6)
 	, anim(type == Type::CHARGER? AnimLib::GOOMBACHARGER : (type == Type::SHIELDER ? AnimLib::GOOMBASHIELDER : AnimLib::GOOMBA))
 	, type(type)
+	, state(type == Type::DUMMY? State::TEST_DUMMY : State::WALKING)
 {
 	goingRight = Rand::OnceEvery(2);
 	screen = ScreenManager::instance()->FindScreenContaining(pos);
