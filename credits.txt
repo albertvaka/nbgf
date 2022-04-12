@@ -27,4 +27,5 @@ Explosion sounds by Michel Baradari http://cubeengine.com/forum.php4?action=disp
 Misile launch sounds by dklon https://opengameart.org/users/dklon
 Robot step sounds by Lee Barkovich https://opengameart.org/users/bmaczero
 Main character voice by PlumpDev https://opengameart.org/content/female-gruntwork-1
-Step sounds and metal impact sounds by Brian MacIntosh https://opengameart.org/users/bmaczero
+Metal impact sounds by Brian MacIntosh https://opengameart.org/users/bmaczero
+Slime die sounds by pauliuw https://opengameart.org/users/pauliuw

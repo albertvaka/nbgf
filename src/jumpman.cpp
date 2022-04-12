@@ -339,7 +339,7 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	if (!dashing && SkillTree::instance()->IsEnabled(Skill::DIVE) && divingRestTimer <= 0.f) {
+	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::DIVE) && divingRestTimer <= 0.f) {
 		if (groundTile == Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			diving = true;
@@ -350,7 +350,7 @@ void JumpMan::Update(float dt)
 		}
 	}
 
-	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::ATTACK) && (!Input::IsPressed(0, GameKeys::CROUCH) || !SkillTree::instance()->IsEnabled(Skill::DIVE))) {
+	if (!dashing && !diving && !attacking && SkillTree::instance()->IsEnabled(Skill::ATTACK) && (!Input::IsPressed(0, GameKeys::CROUCH) || !SkillTree::instance()->IsEnabled(Skill::DIVE))) {
 		if (Input::IsJustPressed(0, GameKeys::ATTACK, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			attacking = true;

@@ -412,6 +412,9 @@
     <ClInclude Include="src\background_bird.h">
       <Filter>src\entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\assets_sounds.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

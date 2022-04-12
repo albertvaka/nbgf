@@ -7,6 +7,7 @@
 #include "rand.h"
 #include "fireshot.h"
 #include "screen.h"
+#include "assets_sounds.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
 
@@ -103,6 +104,7 @@ void FireSlime::Update(float dt)
 
 	if (ReceiveDamageFromPlayer(Bounds(), false)) {
 		DieWithSmallExplosion(this); //single hit
+		Assets::soundSlimyDead.Play();
 		return;
 	}
 

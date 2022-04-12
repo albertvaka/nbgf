@@ -1,4 +1,5 @@
 #include "assets.h"
+#include "assets_sounds.h"
 
 #include "asset_load.h"
 
@@ -27,8 +28,9 @@ void Assets::LoadAll() {
     soundVoiceDamage.Load({ "data/voice_damage1.wav", "data/voice_damage2.wav" });
     soundVoiceAttack.Load({ "data/voice_attack1.wav", "data/voice_attack2.wav" });
     soundVoiceDiveAttack.Load({ "data/voice_diveattack1.wav", "data/voice_diveattack2.wav" });
-    soundMetallicBounce.Load({"data/clink2.wav", "data/clink3.wav"});
 
+    soundMetallicBounce.Load({"data/clink1.wav", "data/clink3.wav"});
+    soundSlimyDead.Load({ "data/slimy_monster_or_murderd_sound_6.ogg","data/slimy_monster_or_murderd_sound_4.ogg" });
     tintShader.Load(nullptr, nullptr, "data/tint.frag");
     //fogShader.Load("data/vertex_out.vert", nullptr, "data/fog.frag");
     waveShader.Load("data/vertex_out.vert", nullptr, "data/wave.frag");

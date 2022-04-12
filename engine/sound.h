@@ -11,6 +11,7 @@ struct Sound
 	~Sound();
 
 	int Play() const; //returns a channel id
+	int PlayInLoop() const; // plays forever until stopped
 	static bool Playing(int channel_id);
 	static void Stop(int channel_id);
 

@@ -57,6 +57,7 @@
     <ClInclude Include="generated\tiled_objects_zones.h" />
     <ClInclude Include="generated\tiled_tilemap.h" />
     <ClInclude Include="generated\tiled_tile.h" />
+    <ClInclude Include="src\assets_sounds.h" />
     <ClInclude Include="src\background_bird.h" />
     <ClInclude Include="src\cutscene.h" />
     <ClInclude Include="src\anim_lib.h" />

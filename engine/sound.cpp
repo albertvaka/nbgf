@@ -31,6 +31,11 @@ int Sound::Play() const {
 	return Mix_PlayChannel(-1, sound, 0);
 }
 
+int Sound::PlayInLoop() const {
+	if (Mix_VolumeChunk(sound, -1) == 0) return -1;
+	return Mix_PlayChannel(-1, sound, -1);
+}
+
 void Sound::Stop(int channel) {
 	if (channel < 0) return;
 	Mix_HaltChannel(channel);
