@@ -1,12 +1,7 @@
 #pragma once
 //Based on the work of: Mat Buckland (fup@ai-junkie.com)
 
-#include <cassert>
-#include <vector>
-#include <string>
-
 #include "entity.h"
-#include "matrix2d.h"
 #include "vec.h"
 
 struct SteeringBehavior;

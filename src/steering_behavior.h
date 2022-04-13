@@ -2,14 +2,12 @@
 //Based on the work of: Mat Buckland (fup@ai-junkie.com)
 
 #include <vector>
-#include <string>
-#include <list>
 
 #include "entity.h"
 #include "vec.h"
-#include "mates.h"
 #include "bounds.h"
 #include "steering_entity.h"
+#include "matrix2d.h"
 
 struct GaemTileMap;
 

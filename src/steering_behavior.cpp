@@ -3,6 +3,7 @@
 #include "steering_behavior.h"
 
 #include "angles.h"
+#include "mates.h"
 #include "rand.h"
 #include "steering_entity.h"
 #include "gaemtilemap.h"

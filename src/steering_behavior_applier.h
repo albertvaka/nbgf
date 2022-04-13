@@ -3,6 +3,8 @@
 
 #include "steering_behavior.h"
 
+#include <cassert>
+
 // Adds together multiple steerig behaviour forces
 // Only use this if you are super lazy and don't want to use SteeringBehavior directly 
 struct SteeringBehaviorApplier : SteeringBehavior {
