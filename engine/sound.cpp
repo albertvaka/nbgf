@@ -32,6 +32,22 @@ int Sound::Play() const {
 	return Mix_PlayChannel(-1, sound, 0);
 }
 
+int Sound::Play(vec source, vec listener, float silenceDistance) const {
+	float distance = listener.Distance(source);
+	if (distance >= silenceDistance) {
+		return -1;
+	}
+	Uint8 intDistance = (Uint8)(distance*(255.f/silenceDistance));
+	Sint16 angle = (Sint16)(listener.AngleDegs(source) + 90.f + 360.f);
+	int channel = Play();
+	if (channel >= 0) {
+		Debug::out << (int)angle;
+		Mix_SetPosition(channel, angle, intDistance); // Unlike with Mix_Volume(), the next sound that plays on the same channel won't have this effect set
+	}
+	return channel;
+}
+
+
 int Sound::PlayInLoop() const {
 	if (Mix_VolumeChunk(sound, -1) == 0) return -1;
 	return Mix_PlayChannel(-1, sound, -1);

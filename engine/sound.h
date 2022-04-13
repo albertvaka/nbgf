@@ -2,8 +2,11 @@
 
 #include <array>
 #include "rand.h"
+#include "vec.h"
 
 struct Mix_Chunk;
+
+// Note: By default, SDL_Mixer can only play 8 sounds at once
 
 struct Sound
 {
@@ -11,7 +14,10 @@ struct Sound
 	~Sound();
 
 	int Play() const; //returns a channel id
+	int Play(vec source, vec listener, float silenceDistance = 300.f) const; //returns a channel id
+
 	int PlayInLoop() const; // plays forever until stopped
+
 	static bool Playing(int channel_id);
 	static void Stop(int channel_id);
 
@@ -34,6 +40,10 @@ struct MultiSound
 
 	int Play() {
 		return sounds[Rand::roll(Size)].Play();
+	}
+
+	int Play(vec source, vec listener, float silenceDistance = 300.f) const {
+		return sounds[Rand::roll(Size)].Play(source, listener, silenceDistance);
 	}
 
 private:
