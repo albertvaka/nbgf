@@ -19,6 +19,7 @@ Sound::~Sound() {
 }
 
 void Sound::SetVolume(float v) { //from 0 to 100
+	SDL_assert(v >= 0.f && v <= 100.f);
 	Mix_VolumeChunk(sound, v * (128 / 100.f));
 }
 
