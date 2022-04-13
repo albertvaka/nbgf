@@ -448,7 +448,7 @@ void JumpScene::EnterScene()
 		raising_lava->SetRaiseSpeed(Lava::kFastRaiseSpeed);
 	});
 
-	new Trigger(Tiled::Triggers::single_trigger_leafs, [this](Trigger* t) {
+	new Trigger(Tiled::Triggers::single_trigger_leafs, [](Trigger* t) {
 		Particles::leafs.pos = JumpMan::instance()->pos;
 		Particles::leafs.AddParticles(17);
 		Particles::leafs.FlipX();
@@ -916,19 +916,19 @@ void JumpScene::Update(float dt)
 			//TODO: Pickup animation or popup or something
 			switch(g->skill) {
 				case Skill::WALLJUMP:
-					rotoText.ShowMessage("You remembered\nhow to walljump");
+					rotoText.ShowMessage("Walljumperino");
 					break;
 				case Skill::ATTACK:
-					rotoText.ShowMessage("You remembered\nhow to fight!");
+					rotoText.ShowMessage("Sworderino!");
 					break;
 				case Skill::DIVE:
-					rotoText.ShowMessage("You remembered\nhow to stab down");
+					rotoText.ShowMessage("Stab downerino!");
 					break;
 				case Skill::DASH:
-					rotoText.ShowMessage("You remembered\nhow to dash");
+					rotoText.ShowMessage("Dasherino");
 					break;
 				case Skill::GUN:
-					rotoText.ShowMessage("You remembered\nyour Big F. Gun");
+					rotoText.ShowMessage("Big F. Gun");
 					break;
 				case Skill::BREAK:
 					rotoText.ShowMessage("Your sword can\nnow break stuff!");

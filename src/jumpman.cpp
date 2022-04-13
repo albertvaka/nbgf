@@ -89,6 +89,7 @@ const vec kSwordAttackWallSlideOffset = vec(-16.f, -15.5f);
 // Sprite
 const vec kStandingSize = vec(13, 32);
 const vec kCrouchedSize = vec(13, 22);
+const int kOffsetSwordlessSpritesheet = 413;
 
 void DestroyTilesWithSword(const CircleBounds& e) {
 	GaemTileMap* map = GaemTileMap::instance();
@@ -825,9 +826,14 @@ void JumpMan::Draw() const {
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 
+	GPU_Rect rect = anim.CurrentFrameRect();
+	if (!SkillTree::instance()->IsEnabled(Skill::ATTACK)) {
+		rect.x += kOffsetSwordlessSpritesheet;
+	}
+
 	Window::Draw(Assets::warriorTexture, pos)
 		.withOrigin(AnimLib::warriorSheet.sprite_w/2, AnimLib::warriorSheet.sprite_h-4)
-		.withRect(anim.CurrentFrameRect())
+		.withRect(rect)
 		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
 
 	//BFG
