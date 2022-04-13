@@ -4,6 +4,10 @@
 
 namespace Assets
 {
-	inline MultiSound<2> soundSlimyDead;
+	inline Sound soundSlimyDead;
+	inline Sound soundSlimyAttack;
+	inline MultiSound<2> soundLeaves;
+	inline MultiSound<4> soundMissile;
+	inline Sound soundJumpLand;
 };
 

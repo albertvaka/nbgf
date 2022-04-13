@@ -15,14 +15,13 @@ struct Sound
 
 	int Play() const; //returns a channel id
 	int Play(vec source, vec listener, float silenceDistance = 300.f) const; //returns a channel id
-
-	int PlayInLoop() const; // plays forever until stopped
+	int PlayInLoop() const; // plays forever until stopped, returns a channel id
 
 	static bool Playing(int channel_id);
 	static void Stop(int channel_id);
 
 	void SetVolume(float v); //from 0 to 100
-	float Volume(); //from 0 to 100
+	float Volume() const; //from 0 to 100
 
 private:
 	Mix_Chunk* sound = nullptr;
@@ -44,6 +43,10 @@ struct MultiSound
 
 	int Play(vec source, vec listener, float silenceDistance = 300.f) const {
 		return sounds[Rand::roll(Size)].Play(source, listener, silenceDistance);
+	}
+
+	const Sound& operator[](int i) {
+		return sounds[i];
 	}
 
 private:

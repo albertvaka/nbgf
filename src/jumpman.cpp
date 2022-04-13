@@ -5,6 +5,7 @@
 #include "mates.h"
 #include "destroyedtiles.h"
 #include "assets.h"
+#include "assets_sounds.h"
 #include "anim_lib.h"
 #include "fx.h"
 #include "oneshotanim.h"
@@ -597,7 +598,10 @@ void JumpMan::Update(float dt)
 			groundTile = Tile::NONE;
 		}
 		else if (!destroyingGround) {
-			if (vel.y > 50) Particles::DoDustLand(pos);
+			if (vel.y > 50) {
+				Assets::soundJumpLand.Play();
+				Particles::DoDustLand(pos);
+			}
 			vel.y = 0;
 			onWall = false;
 			groundTile = moved.groundCollision;
@@ -666,7 +670,9 @@ void JumpMan::Update(float dt)
 						anim.Ensure(AnimLib::WARRIOR_TURN);
 						isTurning = true;
 					}
-					else anim.Ensure(AnimLib::WARRIOR_RUN);
+					else {
+						anim.Ensure(AnimLib::WARRIOR_RUN);
+					}
 				}
 				else
 				{

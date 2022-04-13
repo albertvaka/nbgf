@@ -9,6 +9,7 @@ struct Missile : CircleEntity, SelfRegister<Missile>
 	bool exploding = false;
 	Animation anim;
 	float smokeTimer = 0;
+	int soundChannel;
 
 	Missile(vec position, float angleDegs);
 

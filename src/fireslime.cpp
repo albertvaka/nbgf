@@ -20,7 +20,7 @@ constexpr const float kSpriteScale = 1.3f;
 constexpr const float kSpriteOffsetY = 7.f;
 
 constexpr const int kFirstFrameOnAir = 2;
-constexpr const int kFirstFrameOnGround = 7;
+constexpr const int kFirstFrameOnGround = 6;
 constexpr const int kFrameShooting = 2;
 
 constexpr const float kShotsPerAttack = 4;
@@ -74,6 +74,7 @@ void FireSlime::Update(float dt)
 					timer += kTimeBetweenShots;
 				}
 				new FireShot(pos, vec(direction * kShotSpeed.x, kShotSpeed.y), kShotAccel);
+				Assets::soundSlimyAttack.Play(pos, JumpMan::instance()->pos);
 			}
 		}
 		break;

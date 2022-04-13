@@ -21,16 +21,22 @@ void Assets::LoadAll() {
 
     soundMegazero.Load("data/death.ogg");
     soundExplode.Load({ "data/explode.wav", "data/explodemini.wav" });
+    soundMissile.Load({ "data/rocket_launch_1.ogg", "data/rocket_launch_2.ogg", "data/rocket_launch_3.ogg", "data/rocket_launch_4.ogg" });
     soundRobotStep.Load({ "data/robotstep1.wav","data/robotstep2.wav","data/robotstep3.wav" });
     soundRattle.Load("data/rattle1.wav");
     
+    soundLeaves.Load({ "data/leaves01.ogg","data/leaves02.ogg" });
+    soundJumpLand.Load("data/hit.ogg");
+
     soundVoiceJump.Load({ "data/voice_jump1.wav", "data/voice_jump2.wav", "data/voice_jump3.wav", "data/voice_jump4.wav" });
     soundVoiceDamage.Load({ "data/voice_damage1.wav", "data/voice_damage2.wav" });
     soundVoiceAttack.Load({ "data/voice_attack1.wav", "data/voice_attack2.wav" });
     soundVoiceDiveAttack.Load({ "data/voice_diveattack1.wav", "data/voice_diveattack2.wav" });
 
     soundMetallicBounce.Load({"data/clink1.wav", "data/clink3.wav"});
-    soundSlimyDead.Load({ "data/slimy_monster_or_murderd_sound_6.ogg","data/slimy_monster_or_murderd_sound_4.ogg" });
+    soundSlimyDead.Load("data/slimy_monster_or_murderd_sound_6.ogg");
+    soundSlimyAttack.Load("data/slimy_monster_or_murderd_sound_4.ogg");
+
     tintShader.Load(nullptr, nullptr, "data/tint.frag");
     //fogShader.Load("data/vertex_out.vert", nullptr, "data/fog.frag");
     waveShader.Load("data/vertex_out.vert", nullptr, "data/wave.frag");

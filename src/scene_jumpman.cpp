@@ -10,6 +10,7 @@
 #include "camera.h"
 #include "window.h"
 #include "assets.h"
+#include "assets_sounds.h"
 #include "screen.h"
 #include "bullet.h"
 #include "enemy_door.h"
@@ -457,6 +458,9 @@ void JumpScene::EnterScene()
 			p.pos.y += Rand::roll(-30, 30) - 48;
 			p.pos.x += Rand::roll(-18, 18);
 		}
+		Assets::soundLeaves.Play();
+		Assets::soundLeaves[0].Play();
+		Assets::soundLeaves[1].Play();
 	});
 
 	DummyEntity* fallingRock1 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_1);

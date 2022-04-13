@@ -23,7 +23,7 @@ void Sound::SetVolume(float v) { //from 0 to 100
 	Mix_VolumeChunk(sound, v * (128 / 100.f));
 }
 
-float Sound::Volume() {
+float Sound::Volume() const {
 	return Mix_VolumeChunk(sound, -1) * (100 / 128.f);
 }
 

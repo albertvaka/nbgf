@@ -8,6 +8,7 @@
 #include "bat.h"
 #include "collide.h"
 #include "assets.h"
+#include "assets_sounds.h"
 #include "common_bullet.h"
 #include "common_enemy.h"
 #include "particles.h"
@@ -23,6 +24,7 @@ Missile::Missile(vec position, float angleDegs)
 	, anim(AnimLib::MISSILE)
 {
 	vel = vec::FromAngleDegs(angleDegs, kSpeed);
+	soundChannel = Assets::soundMissile.Play();
 }
 
 void Missile::Update(float dt)
@@ -91,6 +93,7 @@ void Missile::Update(float dt)
 void Missile::explode() 
 {
 	exploding = true;
+	Sound::Stop(soundChannel);
 	Assets::soundExplode.Play();
 	anim.Set(AnimLib::EXPLOSION, false);
 }
