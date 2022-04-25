@@ -668,6 +668,7 @@
     <None Include="asset_src\texturepacker2cpp.py">
       <Filter>generated</Filter>
     </None>
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx">

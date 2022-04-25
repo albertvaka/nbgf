@@ -375,6 +375,12 @@ The `Rand::OnceEvery(n)` and `Rand::PercentChance(percentage)` functions are ver
 
 To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-100>)` method you can use. See [`engine/sound.h`](engine/sound.h).
 
+You can also use `PlayInLoop()` to play something forever and play positional audio with `Play(vec source, vec listener, float silenceDistance)`.
+
+The family of `Play` functions all return a channel id. Store that id to then call `Sound::Stop(channel)` and `Sound::Playing(channel)`.
+
+By default SDL_Mixer allocates 8 channels, which means that up to 8 sounds can play simultaneously.
+
 To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::Pause()`, `MusicPlayer::Resume()` and `MusicPlayer::Stop()` and the volume adjusted with `MusicPlayer::SetVolume(<0-100>)`. See [`engine/musicplayer.h`](engine/musicplayer.h).
 
 ## Drawing on screen: part two (the advanced stuff)
@@ -402,13 +408,25 @@ TODO
 
 ### Using shaders
 
-TODO
+To activate a shader call `Assets::myShader.Activate()`.
+
+You can pass uniforms to the active shader with `Assets::myShader.SetUniform(...)`. See [`engine/shader.h`](engine/shader.h).
+
+Only one shader can be active at a time. You can go back to the default shader by calling `Shader::Deactivate()`.
 
 ### Render to texture and fullscreen shaders
 
-TODO
-
 To apply a fullscreen shader, render the whole scene as a render-to-texture, then render the resulting texture applying the shader.
+
+The following examples assume you want your render-to-texture texture be the size of the game window (like you would to apply a fullscreen shader), but you can do a render-to-texture of any size.
+
+* Use `GPU_Texture* myTexture = Window::CreateTexture(Window::GAME_WIDTH, Window::GAME_HEIGHT)` to create a new empty texture.
+* Set the texture you created as the render target with `Window::BeginRenderToTexture(myTexture)`.
+* Use `Window::Draw` calls as normal. They will be rendered to `myTexture`.
+* When done, use `Window::EndRenderToTexture()` to resume drawing to the screen.
+* Finally, draw your generated texture normally like `Window::Draw(myTexture, Camera::TopLeft())`.
+
+Note: Since `Window::CreateTexture` takes sizes in virtual pixels, you should recreate your base texture everytime `Window::GetViewportScale()` changes. Remember to free the previous texture with `Window::DestroyTexture(myTexture)` when creating a new one.
 
 ### Screenshake
 
