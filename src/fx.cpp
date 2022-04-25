@@ -99,17 +99,15 @@ void Screenshake::DrawImgui()
 void InitRenderToTextureTarget()
 {
 	if (FullscreenShader::renderToTextureTarget) {
-		GPU_FreeImage(FullscreenShader::renderToTextureTarget);
+		Window::DestroyTexture(FullscreenShader::renderToTextureTarget);
 		FullscreenShader::renderToTextureTarget = nullptr;
 	}
-	FullscreenShader::renderToTextureTarget = Window::CreateTexture(Window::screenTarget->base_w, Window::screenTarget->base_h);
-	GPU_Target* target = GPU_GetTarget(FullscreenShader::renderToTextureTarget);
-	GPU_SetVirtualResolution(target, Window::GAME_WIDTH, Window::GAME_HEIGHT);
-	FullscreenShader::renderToTextureSize = vec(Window::screenTarget->base_w, Window::screenTarget->base_h);
+	FullscreenShader::renderToTextureTarget = Window::CreateTexture(Window::GAME_WIDTH, Window::GAME_HEIGHT);
+	FullscreenShader::renderToTextureScale = Window::GetViewportScale();
 	// Start with both buffers fully black
-	Window::Clear(0, 0, 0);
-	GPU_Flip(Window::screenTarget);
-	Window::Clear(0, 0, 0);
+	//Window::Clear(0, 0, 0);
+	//GPU_Flip(Window::screenTarget);
+	//Window::Clear(0, 0, 0);
 }
 
 void FullscreenShader::Activate(bool clear)
@@ -121,13 +119,13 @@ void FullscreenShader::Activate(bool clear)
 		return;
 	}
 	enabled = true;
-	if (renderToTextureSize.x != Window::screenTarget->base_w || renderToTextureSize.y != Window::screenTarget->base_h) 
+	if (renderToTextureScale != Window::GetViewportScale())
 	{
 		InitRenderToTextureTarget();
 	}
 	Window::BeginRenderToTexture(renderToTextureTarget, true);
 	if (clear) {
-		GPU_ClearRGBA(Window::currentDrawTarget, 0, 0, 0, 0);
+		Window::Clear(0, 0, 0);
 	}
 }
 
@@ -146,11 +144,7 @@ void FullscreenShader::Deactivate()
 		shaderActivation();
 	}
 
-	GPU_UnsetVirtualResolution(Window::screenTarget);
-	Camera::InScreenCoords::Begin();
-	Window::Draw(FullscreenShader::renderToTextureTarget, Camera::InScreenCoords::TopLeft());
-	Camera::InScreenCoords::End();
-	GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+	Window::Draw(FullscreenShader::renderToTextureTarget, Camera::TopLeft());
 
 	Shader::Deactivate();
 }

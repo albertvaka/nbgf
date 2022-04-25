@@ -121,7 +121,7 @@ namespace Fx {
 		static inline bool enabled = false;
 		static inline std::function<void()> shaderActivation = nullptr;
 		static inline GPU_Image* renderToTextureTarget;
-		static inline vec renderToTextureSize = vec(-1,-1);
+		static inline float renderToTextureScale = -1.f;
 	};
 
 

@@ -35,15 +35,23 @@ namespace Window {
 		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);
 	}
 
-	inline GPU_Image* CreateTexture(int w, int h) {
-		GPU_Image* texture = GPU_CreateImage(w, h, GPU_FORMAT_RGBA);
+	inline float GetViewportScale() {
+		return Window::screenTarget->viewport.w / Window::GAME_WIDTH;
+	}
+
+	inline GPU_Image* CreateTexture(int w, int h) { // To match the Window scaling, textures should be recreated whenever Window::GetViewportScale() changes
+		float scale = Window::screenTarget->base_w/ Window::GAME_WIDTH;
+		GPU_Image* texture = GPU_CreateImage(w*scale, h*scale, GPU_FORMAT_RGBA);
 		GPU_SetImageFilter(texture, GPU_FILTER_NEAREST);
 		GPU_SetSnapMode(texture, GPU_SNAP_NONE);
+		GPU_Target* target = GPU_GetTarget(texture);
+		GPU_SetVirtualResolution(target, w, h);
+		GPU_SetImageVirtualResolution(texture, w, h); // this must go after setting the target virtual res
 		return texture;
 	}
 
-	inline float GetViewportScale() {
-		return Window::screenTarget->viewport.w / Window::GAME_WIDTH;
+	inline void DestroyTexture(GPU_Image* texture) {
+		GPU_FreeImage(texture); // frees the target if needed
 	}
 
 	inline vec GetViewportMargins() {

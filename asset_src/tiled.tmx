@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" nextlayerid="14" nextobjectid="1163">
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" nextlayerid="14" nextobjectid="1164">
  <editorsettings>
   <export format="json"/>
  </editorsettings>
@@ -5033,7 +5033,7 @@
   <object id="871" name="bat_bounds" type="bat_bounds" x="367.108" y="-578.714" width="861.367" height="401.671"/>
   <object id="872" name="bat_bounds" type="bat_bounds" x="2013.77" y="-1534.62" width="549.451" height="274.913"/>
   <object id="923" name="lava" type="lava" x="496" y="561.72" width="544" height="77.7273"/>
-  <object id="925" name="lava_bg" type="lava_bg" x="3304.49" y="-1401.76" width="881.025" height="339.52"/>
+  <object id="925" name="lava_bg" type="lava_bg" x="1192.49" y="-1649.76" width="1509.03" height="471.52"/>
   <object id="956" name="bat_bounds" type="bat_bounds" x="466.274" y="302.043" width="572.451" height="250.913"/>
   <object id="960" name="lava" type="lava" x="-2335.74" y="-1183.93" width="1997.65" height="1014.41"/>
   <object id="980" name="rocket_launcher_awake" type="rocket_launcher_awake" x="-945.284" y="-1183.66" width="577.568" height="244.813"/>
@@ -5051,7 +5051,7 @@
   <object id="1150" name="miniooy_bounds" type="miniooy_bounds" x="2738.17" y="-393.667" width="387.833" height="231"/>
   <object id="1160" name="bg_bird_spawner" type="bg_bird_spawner" x="-1209.13" y="-39.75" width="819.75" height="104.25"/>
  </objectgroup>
- <objectgroup id="2" name="Screens" visible="0">
+ <objectgroup id="2" name="Screens">
   <object id="42" name="Screen" type="screen" x="-263.955" y="-56.5" width="622.538" height="304.5"/>
   <object id="44" name="Screen" type="screen" x="-1309.12" y="-78.3333" width="1048.45" height="348.497"/>
   <object id="45" name="Screen" type="screen" x="-258.667" y="-413" width="614.833" height="338"/>
@@ -5080,6 +5080,7 @@
   <object id="989" name="Screen" type="screen" x="266.981" y="-1540.67" width="614.038" height="349.333"/>
   <object id="1016" name="Screen" type="screen" x="1864.15" y="-723.167" width="2541.37" height="576.667"/>
   <object id="1021" name="Screen" type="screen" x="-2947.52" y="-1103.83" width="607.038" height="351.667"/>
+  <object id="1163" name="Screen" type="screen" x="1340.48" y="-1575.83" width="607.038" height="351.667"/>
  </objectgroup>
  <objectgroup id="12" name="Triggers" visible="0">
   <object id="1023" name="trigger_test" type="trigger_test" x="-546" y="-5" width="42" height="55.5"/>

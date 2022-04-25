@@ -54,9 +54,9 @@ const std::array<BoxBounds, 4> Areas::lava = {
 };
 
 const std::array<BoxBounds, 1> Areas::lava_bg = {
-	BoxBounds(6376.49f,390.24f,881.025f,339.52f),
+	BoxBounds(4264.49f,142.24f,1509.03f,471.52f),
 };
-const BoxBounds Areas::single_lava_bg = BoxBounds(6376.49f,390.24f,881.025f,339.52f);
+const BoxBounds Areas::single_lava_bg = BoxBounds(4264.49f,142.24f,1509.03f,471.52f);
 
 
 const std::array<BoxBounds, 4> Areas::miniooy_bounds = {
