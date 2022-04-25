@@ -127,7 +127,7 @@ namespace Window
                     int height = event.window.data2;
                     GPU_SetWindowResolution(width, height);
 
-                    // Workaround: Re-read the width and height for scaling.
+                    // Workaround: Re-read the width and height for scaling instead of using the data fields in the event.
                     // On high-dpi mode, the width and height reported in the event are not the real ones.
                     // See: https://github.com/grimfang4/sdl-gpu/issues/188
                     SDL_GL_GetDrawableSize(window, &width, &height);

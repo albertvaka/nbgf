@@ -110,13 +110,13 @@ void InitRenderToTextureTarget()
 	//Window::Clear(0, 0, 0);
 }
 
-void FullscreenShader::Activate(bool clear)
+bool FullscreenShader::Activate()
 {
 	if (!shaderActivation) {
-		return;
+		return false;
 	}
 	if (enabled) {
-		return;
+		return true;
 	}
 	enabled = true;
 	if (renderToTextureScale != Window::GetViewportScale())
@@ -124,9 +124,7 @@ void FullscreenShader::Activate(bool clear)
 		InitRenderToTextureTarget();
 	}
 	Window::BeginRenderToTexture(renderToTextureTarget, true);
-	if (clear) {
-		Window::Clear(0, 0, 0);
-	}
+	return true;
 }
 
 

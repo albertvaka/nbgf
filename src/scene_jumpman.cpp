@@ -980,9 +980,12 @@ void JumpScene::Update(float dt)
 
 void JumpScene::Draw()
 {
-	Fx::FullscreenShader::Activate(); // Does nothing if no shader is set
-
-	Window::Clear(zoneManager.GetBgColor());
+	const SDL_Color& bgColor = zoneManager.GetBgColor();
+	Window::Clear(bgColor);
+	bool isFullScreenshaderActive = Fx::FullscreenShader::Activate();
+	if (isFullScreenshaderActive) { // Clear again, this time for the fullscreen texture
+		Window::Clear(bgColor);
+	}
 
 	for (const Parallax* g : Parallax::GetAll()) {
 		g->Draw();

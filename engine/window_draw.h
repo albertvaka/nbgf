@@ -9,6 +9,7 @@ namespace Window {
 
 	extern GPU_Target* currentDrawTarget;
 
+	// NOTE: If using this to achive z-ordering, check GPU_AddDepthBuffer() instead
 	struct DeferredDraw {
 
 		constexpr DeferredDraw(GPU_Image* t, vec pos) : t(t), dest(pos) {
