@@ -101,6 +101,8 @@ All your images must be in PNG format. Use [`LoadImage("<path>")`](engine/asset_
 
 All your sounds must be either OGG or WAV. Define your sound effects as `static inline` instances of the [`Sound`](engine/sound.h) class and use its `sound.Load("<path>")` method to load them.
 
+There's also a [`MultiSound`](engine/sound.h) class that takes an array of paths and each time will play one of them at random.
+
 ### Music: `Mix_Music*`
 
 All your music files must be in OGG format. Use [`LoadMusic("<path>")`](engine/asset_load.h) to load them into a `Mix_Music*`.
@@ -402,25 +404,17 @@ TODO
 
 TODO
 
-### Screen effects
-
-#### Screenshake
+### Render to texture and fullscreen shaders
 
 TODO
 
-#### Screen transitions
+To apply a fullscreen shader, render the whole scene as a render-to-texture, then render the resulting texture applying the shader.
 
-TODO
+### Screenshake
 
-#### Freeze the image
+While there's no ready-made screenshake function, the `Camera` namespace contains a `screenshake_offset` variable that you can update and gets added to your camera each time you set its position, without affecting the returned camera position when you get it. This should make implementing a screenshake effect easy. 
 
-TODO
-
-#### Fullscreen shaders
-
-Fullscreen shaders do a render-to-texture, then render the result applying the shader.
-
-TODO
+If you are not setting the camera position each frame, make sure to add a call like `Camera::SetCenter(Camera::Center());` to make sure the offset is applied after you set it.
 
 ### Drawing primitives
 
