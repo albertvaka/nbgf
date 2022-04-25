@@ -44,8 +44,12 @@ struct Explosive : SelfRegister<Explosive>
 
 	void LoadGame(const SaveState& save)
 	{
+		if (respawn_tiles) return;
 		bool exploded = false;
 		save.StreamGet("explosive_" + std::to_string(saveId)) >> exploded;
+		if (exploded) {
+			DestroyTiles();
+		}
 	}
 
 private:

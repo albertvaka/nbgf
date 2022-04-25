@@ -97,7 +97,7 @@ struct PartSys {
 
 	void Spawn(float dt) { SpawnWithExternalTimer(time, dt); }
 	void SpawnWithExternalTimer(float& timer, float dt);
-	void UpdateParticles(float dt); //Doesn't create new particles, use Spawn() 
+	void UpdateParticles(float dt); //Doesn't create new particles, use Spawn(), SpawnWithExternalTimer(), AddParticle() or AddParticles()
 	void Draw() const;
 
 	Particle& AddParticle();

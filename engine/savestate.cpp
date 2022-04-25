@@ -16,7 +16,7 @@
 std::string SaveState::GetSaveFilePath()
 {
 	// directory /saves gets mounted in main.cpp
-	return "/saves/save" + std::to_string(stateNum);
+	return "/saves/" + gaemName + "_" + std::to_string(stateNum);
 }
 
 void emscripten_sync_to_persistent_storage()

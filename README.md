@@ -60,11 +60,8 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 	- [Particle systems](#particle-systems)
 	- [Tile maps](#tile-maps)
 	- [Using shaders](#using-shaders)
-	- [Screen effects](#screen-effects)
-		- [Screenshake](#screenshake)
-		- [Screen transitions](#screen-transitions)
-		- [Freeze the image](#freeze-the-image)
-		- [Fullscreen shaders](#fullscreen-shaders)
+	- [Render to texture and fullscreen shaders](#render-to-texture-and-fullscreen-shaders)
+	- [Screenshake](#screenshake)
 	- [Drawing primitives](#drawing-primitives)
 	- [Drawing raw quads](#drawing-raw-quads)
 - [Save games](#save-games)
@@ -387,15 +384,23 @@ To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one m
 
 ### Particle systems
 
-[`PartSys`](engine/partsys.h)
+The [`PartSys`](engine/partsys.h) class implements a simple particle system.
 
-TODO
+The constructor `PartSys(GPU_Image* texture)` takes a spritesheet that should contain all the particles. The specific positions of the particle sprites withing the spritesheet are indicated with `AddSprite(const GPU_Rect& rect)`. 
+
+Particles can be spawned based on a timer using `partSys.Spawn(float dt)` and `partSys.SpawnWithExternalTimer(float& timer, float dt)` or manually using `AddParticle()` and `AddParticles(int n)`.
+
+The [`PartSys`](engine/partsys.h) class contains a bunch of public fields that let you configure the range of velocities, accelerations, scales, etc that particles will be spawned with. You should set these fields directly after instantiating the class.
+
+Finally, you should `partSys.Draw()` your particle system. `PartSys` is a `SelfRegister` class, so you can use `PartSys::GetAll()` to iterate through your particle systems.
+
+To test different values without having to rebuild you game after each change, you can use `partSys.DrawImGUI()` to draw an interactive ImGUI window which lets you change all the parameters at runtime (but doesn't store them, you still need to set them by code).
 
 ### `DeferredDraw`
 
 Use `Window::DeferredDraw` instead of `Windows::Draw` to get yourself an object you can draw at a later moment in time. This is useful, for example, to simulate perspective by sorting all your draw calls by their Y coordinate before actually drawing them, so things that are closer to the camera are drawn on top. `DeferredDraw` has the same interface as `Draw` but won't actually draw anything on screen until you manually call its `.Draw()` method.
 
-```
+```C++
 auto a = Window::DeferredDraw(...);
 auto b = Window::DeferredDraw(...);
 b.Draw();
@@ -456,7 +461,31 @@ Do so with the following pairs of batch and flush functions, defined in `Window:
 
 ## Save games
 
-TODO
+The [`SaveState`](engine/savestate.h) class lets you write your game state to persistent storage.
+
+You can get a `SaveState` instance by calling `SaveStance::Open(const char* game_name, int state_num)`. This will load any existing data from it.
+
+Each `SaveState` contains several entries and an abritary number of values per entry. Each entry is meant to store the state of on entity in your game.
+
+Values on an entry can be written and read using stream operators. For example, to write three variables (which could have different types) to an entry called `player_1` you would call:
+
+```C++
+saveState.StreamPut("player_1") << player_level << player_health << player_name;
+```
+
+Reading the same variables is then possible by doing:
+
+```C++
+saveState.StreamGet("player_1") >> player_level >> player_health >> player_name;
+```
+
+As usual in C++ streams, if the `player_1` entry is empty, trying to read from it won't overwrite the output variables. This means you can set default values before loading a state and they will be preserved if there's no saved data.
+
+If you hate streams, you can also read and write entries as string key-value pairs by using `saveState.Put(std::string key, std::string value)` and `saveState.Get(std::string key)`.
+
+After you have modified a `SaveState` instance, you can persist the changes to disk by calling `saveState.Save()`.
+
+Note: if you open the same save state twice (ie: passing the same name and number values to `SaveState::Open`), data written to one instance won't be synced to the other!
 
 ## Window properties
 
