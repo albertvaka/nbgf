@@ -7,7 +7,8 @@
 struct ZoneManager {
 
 	const SDL_Color normalBg = { 31, 36, 50, 255 };
-	const SDL_Color caveBg = { 59, 17, 88, 255 };
+	const SDL_Color caveBg = { 18, 25, 26, 255 };
+	const SDL_Color pinkCaveBg = { 59, 17, 88, 255 };
 	const SDL_Color sewerBg = { 0, 0, 0, 255 };
 	const float maxChangeDeltaPerSecond = 150;
 
@@ -63,6 +64,11 @@ struct ZoneManager {
 		for (const BoxBounds& b : Tiled::Zones::cave) {
 			if (b.Contains(screenBounds.Center())) {
 				return caveBg;
+			}
+		}
+		for (const BoxBounds& b : Tiled::Zones::pink_cave) {
+			if (b.Contains(screenBounds.Center())) {
+				return pinkCaveBg;
 			}
 		}
 		for (const BoxBounds& b : Tiled::Zones::sewers) {

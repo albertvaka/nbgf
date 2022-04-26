@@ -4,9 +4,15 @@ namespace Tiled {
 
 
 const std::array<BoxBounds, 1> Zones::cave = {
+	BoxBounds(1298.14f,2032.455f,1647.71f,484.423f),
+};
+const BoxBounds Zones::single_cave = BoxBounds(1298.14f,2032.455f,1647.71f,484.423f);
+
+
+const std::array<BoxBounds, 1> Zones::pink_cave = {
 	BoxBounds(4881.8099999999995f,957.167f,2649.04f,738.667f),
 };
-const BoxBounds Zones::single_cave = BoxBounds(4881.8099999999995f,957.167f,2649.04f,738.667f);
+const BoxBounds Zones::single_pink_cave = BoxBounds(4881.8099999999995f,957.167f,2649.04f,738.667f);
 
 
 const std::array<BoxBounds, 3> Zones::sewers = {
