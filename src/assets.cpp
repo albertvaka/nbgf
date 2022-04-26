@@ -20,13 +20,14 @@ void Assets::LoadAll() {
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 
     soundMegazero.Load("data/megazero.ogg");
-    soundExplode.Load({ "data/explode.wav", "data/explodemini.wav" });
+    soundExplode.Load({ "data/explode.ogg", "data/explodemini.ogg" });
     soundMissile.Load({ "data/rocket_launch_1.ogg", "data/rocket_launch_2.ogg" });
-    soundRobotStep.Load({ "data/robotstep1.wav","data/robotstep2.wav","data/robotstep3.wav" });
-    soundRattle.Load("data/rattle1.wav");
+    soundRobotStep.Load({ "data/robotstep1.ogg","data/robotstep2.ogg","data/robotstep3.ogg" });
+    soundRattle.Load("data/rattle1.ogg");
     
     soundLeaves.Load({ "data/leaves01.ogg","data/leaves02.ogg" });
     soundSword.Load({ "data/sword1.ogg","data/sword2.ogg" });
+    //soundStep.Load({ "data/step1.wav","data/step2.wav", "data/step3.wav","data/step4.wav" });
     soundJumpLand.Load("data/hit.ogg");
 
     soundVoiceJump.Load({ "data/voice_jump1.ogg", "data/voice_jump2.ogg", "data/voice_jump3.ogg", "data/voice_jump4.ogg" });
@@ -34,7 +35,7 @@ void Assets::LoadAll() {
     soundVoiceAttack.Load({ "data/voice_attack1.ogg", "data/voice_attack2.ogg", "data/voice_attack3.ogg"});
     soundVoiceDiveAttack.Load({ "data/voice_diveattack1.ogg", "data/voice_diveattack2.ogg" });
 
-    soundMetallicBounce.Load({"data/clink1.wav", "data/clink3.wav"});
+    soundMetallicBounce.Load({"data/clink3.ogg", "data/clink4.ogg"});
     soundSlimyDead.Load("data/slimy_monster_or_murderd_sound_6.ogg");
     soundSlimyAttack.Load("data/slimy_monster_or_murderd_sound_4.ogg");
 
@@ -66,14 +67,14 @@ void Assets::LoadAll() {
     sewerParallaxTextures[0] = LoadImage("data/sewer.png");
     GPU_SetWrapMode(sewerParallaxTextures[0], GPU_WRAP_REPEAT, GPU_WRAP_NONE);
 
-    aiVoice.speak.Load("data/ai_1b.wav");
-    aiVoice.end.Load("data/ai_6a.wav");
-    growlyVoice.speak.Load("data/growly_2c.wav");
-    growlyVoice.end.Load("data/ai_6c.wav");
-    sinecrushVoice.speak.Load("data/sinecrush_2b.wav");
-    sinecrushVoice.end.Load("data/sinecrush_6c.wav");
-    yeah1Voice.speak.Load("data/yeah_3a.wav");
-    yeah1Voice.end.Load("data/yeah_6b.wav");
-    yeah2Voice.speak.Load("data/yeah_3b.wav");
-    yeah2Voice.end.Load("data/yeah_6c.wav");
+    aiVoice.speak.Load("data/ai_1b.ogg");
+    aiVoice.end.Load("data/ai_6a.ogg");
+    growlyVoice.speak.Load("data/growly_2c.ogg");
+    growlyVoice.end.Load("data/ai_6c.ogg");
+    sinecrushVoice.speak.Load("data/sinecrush_2b.ogg");
+    sinecrushVoice.end.Load("data/sinecrush_6c.ogg");
+    yeah1Voice.speak.Load("data/yeah_3a.ogg");
+    yeah1Voice.end.Load("data/yeah_6b.ogg");
+    yeah2Voice.speak.Load("data/yeah_3b.ogg");
+    yeah2Voice.end.Load("data/yeah_6c.ogg");
 }
