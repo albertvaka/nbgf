@@ -32,6 +32,7 @@ struct MultiSound
 {
 	void Load(std::array<const char*, Size> paths) 
 	{
+		// FIXME: why does this compile if the paths size is smaller than the size of the MultiSound?
 		for (int i = 0; i < Size; i++) {
 			sounds[i].Load(paths[i]);
 		}

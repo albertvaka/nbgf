@@ -43,7 +43,7 @@ namespace Assets
 	inline MultiSound<2> soundExplode;
 	inline MultiSound<3> soundRobotStep;
 	inline Sound soundRattle;
-	inline MultiSound<2> soundVoiceAttack;
+	inline MultiSound<3> soundVoiceAttack;
 	inline MultiSound<2> soundVoiceDiveAttack;
 	inline MultiSound<2> soundVoiceDamage;
 	inline MultiSound<4> soundVoiceJump;

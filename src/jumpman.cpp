@@ -358,6 +358,7 @@ void JumpMan::Update(float dt)
 			attacking = true;
 			Sound::Stop(voiceSoundChannel);
 			voiceSoundChannel = Assets::soundVoiceAttack.Play();
+			Assets::soundSword.Play();
 			if (onWall) {
 				attackingUp = false;
 				anim.Ensure(AnimLib::WARRIOR_WALL_SLIDE_ATTACK, false);
