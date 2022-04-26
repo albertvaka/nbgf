@@ -41,7 +41,6 @@ int Sound::Play(vec source, vec listener, float silenceDistance) const {
 	Sint16 angle = (Sint16)(listener.AngleDegs(source) + 90.f + 360.f);
 	int channel = Play();
 	if (channel >= 0) {
-		Debug::out << (int)angle;
 		Mix_SetPosition(channel, angle, intDistance); // Unlike with Mix_Volume(), the next sound that plays on the same channel won't have this effect set
 	}
 	return channel;

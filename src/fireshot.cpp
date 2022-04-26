@@ -6,6 +6,16 @@
 #include "common_bullet.h"
 #include "common_enemy.h"
 
+
+constexpr const float kFireShotRadius = 2.f;
+constexpr const float kFireShotScale = 1.5f;
+
+FireShot::FireShot(vec pos, vec vel, vec accel)
+	: CircleEntity(pos, kFireShotRadius * kFireShotScale, vel)
+	, accel(accel)
+{
+}
+
 void FireShot::Update(float dt)
 {
 	
@@ -33,6 +43,7 @@ void FireShot::Draw() const
 {
 	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRect(AnimLib::FIRESHOT)
+		.withScale(kFireShotScale)
 		.withOrigin(AnimLib::FIRESHOT.w / 2, AnimLib::FIRESHOT.h / 2);
 
 	// Debug-only
