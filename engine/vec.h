@@ -137,6 +137,8 @@ struct vec
 	//squared version of above.
 	[[nodiscard]] inline float    DistanceSq(vec v2) const;
 
+	[[nodiscard]] inline vec ManhattanDistance(vec v2) const;
+
 	constexpr vec operator+=(vec rhs)
 	{
 		x += rhs.x;
@@ -276,6 +278,14 @@ inline float vec::DistanceSq(vec v2) const
 	float xSeparation = v2.x - x;
 
 	return ySeparation*ySeparation + xSeparation*xSeparation;
+}
+
+inline vec vec::ManhattanDistance(vec v2) const
+{
+	return vec(
+		fabs(v2.x - x),
+		fabs(v2.y - y)
+	);
 }
 
 //  truncates a vector so that its length does not exceed max
