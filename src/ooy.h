@@ -26,6 +26,7 @@ struct Ooy : SteeringEntity, SelfRegister<Ooy>
 	BoxBounds bounds;
 
 	Ooy(vec position);
+	~Ooy();
 
 	void Update(float dt);
 	void Draw() const;

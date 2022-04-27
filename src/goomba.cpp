@@ -8,6 +8,7 @@
 #include "screen.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
+#include "enemies_by_screen.h"
 
 constexpr const float speed = 25;
 constexpr const float chargeSpeed = 100;
@@ -30,9 +31,15 @@ Goomba::Goomba(vec pos, Type type)
 	, state(type == Type::DUMMY? State::TEST_DUMMY : State::WALKING)
 {
 	goingRight = Rand::OnceEvery(2);
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::FindScreenContaining(pos);
 	
 	this->pos = AlignWithGround(this->pos, size);
+	EnemiesByScreen::Add(screen, this);
+}
+
+Goomba::~Goomba()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 BoxBounds Goomba::ChargeBounds() const

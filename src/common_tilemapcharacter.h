@@ -68,7 +68,7 @@ inline bool IsGoingToLeaveBounds(vec pos, vec size, vec vel, float dt, BoxBounds
 
 inline bool IsGoingToLeaveTheScreen(vec pos, vec size, vec vel, float dt, int screen) {
 	if (screen < 0) return false;
-	return IsGoingToLeaveBounds(pos, size, vel, dt, ScreenManager::instance()->ScreenBounds(screen));
+	return IsGoingToLeaveBounds(pos, size, vel, dt, ScreenManager::ScreenBounds(screen));
 }
 
 struct MoveResult {

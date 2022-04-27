@@ -32,6 +32,8 @@ struct FlyingAlien : CircleEntity, SelfRegister<FlyingAlien>
 	float hitTimer = 0.f;
 
 	FlyingAlien(vec position);
+	~FlyingAlien();
+
 	BoxBounds ChargeBounds() const;
 
 	void Update(float dt);

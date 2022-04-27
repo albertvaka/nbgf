@@ -12,6 +12,7 @@
 #include "camera.h"
 #include "oneshotanim.h"
 #include "common_enemy.h"
+#include "enemies_by_screen.h"
 
 const float walking_speed = 30.f; //per second
 
@@ -48,7 +49,13 @@ Bipedal::Bipedal(vec pos)
 		minX += maxDistanceItCanWalkInOneLoop; // We do this since it never changes direction mid-animation
 		maxX -= maxDistanceItCanWalkInOneLoop;
 	}
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::FindScreenContaining(pos);
+	EnemiesByScreen::Add(screen, this);
+}
+
+Bipedal::~Bipedal()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 void Bipedal::Update(float dt)

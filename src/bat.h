@@ -29,6 +29,7 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 	int screen;
 
 	Bat(vec position, bool aggresive, bool awake);
+	~Bat();
 
 	void Update(float dt);
 	void Draw() const;

@@ -10,31 +10,13 @@
 #include "debug.h"
 #include "collide.h"
 #include "common_enemy.h"
+#include "enemies_by_screen.h"
 
 const float awake_player_distance = 100.f;
 const float awake_nearby_distance = 70.f;
 
 float RandomSeekingTime() {
 	return Rand::rollf(0.2f, 1.6f) + Rand::rollf(0.2f, 1.6f); // Random between 0.4 and 3.2, with values closer to 1.7 more likely
-}
-
-void Bat::AwakeNearbyBats(vec pos) {
-	for (Bat* bat : Bat::GetAll()) {
-		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
-			bat->awakened = true;
-		}
-	}
-}
-
-void Bat::EnableBoundsAvoidance() {
-	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::bat_bounds);
-	if (bounds_index > -1) {
-		steering.BoundsAvoidanceOn(Tiled::Areas::bat_bounds[bounds_index]);
-	} else if (screen > -1) {
-		steering.BoundsAvoidanceOn(ScreenManager::instance()->ScreenBounds(screen));
-	} else {
-		Debug::out << "Unbounded bat";
-	}
 }
 
 Bat::Bat(vec pos, bool aggresive, bool awake)
@@ -55,13 +37,19 @@ Bat::Bat(vec pos, bool aggresive, bool awake)
 	steering.ForwardOn();
 	steering.WanderOn();
 
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::FindScreenContaining(pos);
 	EnableBoundsAvoidance(); //Expects screen to be set
 
 	if (aggresive) {
 		max_speed *= 1.4f;
 		seekingTimer = RandomSeekingTime();
 	}
+	EnemiesByScreen::Add(screen, this);
+}
+
+Bat::~Bat()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 void Bat::Update(float dt)
@@ -162,6 +150,26 @@ void Bat::Update(float dt)
 	DamagePlayerOnCollision(Bounds());
 }
 
+void Bat::AwakeNearbyBats(vec pos) {
+	for (Bat* bat : Bat::GetAll()) {
+		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
+			bat->awakened = true;
+		}
+	}
+}
+
+void Bat::EnableBoundsAvoidance() {
+	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::bat_bounds);
+	if (bounds_index > -1) {
+		steering.BoundsAvoidanceOn(Tiled::Areas::bat_bounds[bounds_index]);
+	}
+	else if (screen > -1) {
+		steering.BoundsAvoidanceOn(ScreenManager::ScreenBounds(screen));
+	}
+	else {
+		Debug::out << "Unbounded bat";
+	}
+}
 
 void Bat::Draw() const
 {

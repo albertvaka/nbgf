@@ -184,7 +184,7 @@ void JumpMan::Reset(vec position, int maxHp) {
 	attacking = false;
 	attackingUp = false;
 	playerAttack.alive = false;
-	ScreenManager::instance()->UpdateCurrentScreen(pos);
+	ScreenManager::UpdateCurrentScreen(pos);
 }
 
 void JumpMan::UpdateMoving(float dt) 

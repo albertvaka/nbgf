@@ -25,6 +25,7 @@ struct FireSlime : CircleEntity, SelfRegister<FireSlime>
 	bool didJustAttack = false; // to force one move between attacks
 
 	FireSlime(vec position);
+	~FireSlime();
 
 	BoxBounds AttackBounds() const;
 	bool CanMoveForward() const;

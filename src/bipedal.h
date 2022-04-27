@@ -28,6 +28,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 	BoxBounds legsHitBox, headHitBox;
 
 	Bipedal(vec position);
+	~Bipedal();
 
 	void Update(float dt);
 	void Draw() const;

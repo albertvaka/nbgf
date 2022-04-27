@@ -10,6 +10,7 @@
 #include "tiled_objects_areas.h"
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
+#include "enemies_by_screen.h"
 
 constexpr const float speedInitial = 25;
 constexpr const float speedAlert = 75;
@@ -34,7 +35,7 @@ FlyingAlien::FlyingAlien(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, anim(AnimLib::FLYING_ALIEN)
 {
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::FindScreenContaining(pos);
 	initialPos = this->pos;
 	initialVelX = Rand::OnceEvery(2) ? -speedInitial : speedInitial;
 	Reset();
@@ -43,10 +44,16 @@ FlyingAlien::FlyingAlien(vec pos)
 	if (bounds_index > -1) {
 		bounds = Tiled::Areas::alien_bounds[bounds_index];
 	} else if (screen > -1) {
-		bounds = ScreenManager::instance()->ScreenBounds(screen);
+		bounds = ScreenManager::ScreenBounds(screen);
 	} else {
 		Debug::out << "Unbounded FlyingAlien";
 	}
+	EnemiesByScreen::Add(screen, this);
+}
+
+FlyingAlien::~FlyingAlien()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 void FlyingAlien::Reset() {

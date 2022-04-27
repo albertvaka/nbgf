@@ -38,6 +38,7 @@ struct Goomba : CircleEntity, SelfRegister<Goomba>
 	int hitShieldSoundChannel = -1;
 
 	Goomba(vec position, Type type);
+	~Goomba();
 
 	BoxBounds ChargeBounds() const;
 

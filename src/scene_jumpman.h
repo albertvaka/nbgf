@@ -5,7 +5,6 @@
 #include "scene.h"
 #include "destroyedtiles.h"
 #include "skilltree.h"
-#include "screen.h"
 #include "rototext.h"
 #include "zonemanager.h"
 #include "dialogdriver.h"
@@ -16,10 +15,8 @@ struct EnemyDoor;
 struct BigItem;
 struct Ooy;
 
-struct JumpScene : Scene {
-
-	ScreenManager screenManager;
-
+struct JumpScene : Scene
+{
 	GaemTileMap map;
 	JumpMan player;
 	SkillTree skillTree;
@@ -43,7 +40,7 @@ struct JumpScene : Scene {
 	bool contextActionButton = false;
 	bool playerPaused = false;
 
-	void SaveGame() const;
+	void SaveGame(int saveStation) const;
 	void LoadGame();
 
 	JumpScene(int saveSlot = 0);

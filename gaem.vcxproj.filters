@@ -415,6 +415,9 @@
     <ClInclude Include="src\assets_sounds.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\enemies_by_screen.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -652,6 +655,9 @@
       <Filter>src\entities\enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\fx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemies_by_screen.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

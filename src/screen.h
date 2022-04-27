@@ -2,46 +2,50 @@
 
 #include "bounds.h"
 #include "singleinstance.h"
+#include "entity.h"
 #include <vector>
 
-struct ScreenManager : SingleInstance<ScreenManager>
+struct ScreenManager
 {
-	int AddScreen(const BoxBounds& b) {
+
+	static int AddScreen(const BoxBounds& b) {
 		screens.push_back(b);
 		return screens.size()-1;
 	}
 
-	int ScreenCount() {
+	static int ScreenCount() {
 		return screens.size();
 	}
 
-	void DeleteAllScreens() {
+	static void DeleteAllScreens() {
+		currentScreen = -1;
 		screens.clear();
 	}
 
-	int FindScreenContaining(vec pos) const;
+	static int FindScreenContaining(vec pos);
 
-	int CurrentScreen() const {
+	static int CurrentScreen() {
 		return currentScreen;
 	}
 
-	const BoxBounds& CurrentBounds() const {
+	static const BoxBounds& CurrentBounds() {
 		return screens[currentScreen];
 	}
 
-	const BoxBounds& ScreenBounds(int screen) const {
+	static const BoxBounds& ScreenBounds(int screen) {
 		return screens[screen];
 	}
 
-	const void ClampCameraToScreen(vec& camPos) const;
+	static const void ClampCameraToScreen(vec& camPos);
 
-	void UpdateCurrentScreen(vec pos);
+	static void UpdateCurrentScreen(vec pos);
 
 private:
-	int currentScreen = -1;
-	std::vector<BoxBounds> screens;
+	static int currentScreen;
+	static std::vector<BoxBounds> screens;
 };
 
 inline bool InSameScreenAsPlayer(int myScreen) {
-	return myScreen == -1 || myScreen == ScreenManager::instance()->CurrentScreen();
+	return myScreen == -1 || myScreen == ScreenManager::CurrentScreen();
 }
+

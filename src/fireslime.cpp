@@ -10,6 +10,7 @@
 #include "assets_sounds.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
+#include "enemies_by_screen.h"
 
 constexpr const float kSpeed = 25;
 
@@ -37,9 +38,15 @@ FireSlime::FireSlime(vec pos)
 	, anim(AnimLib::FIRESLIME_WALK, false)
 {
 	direction = Rand::OnceEvery(2) ? 1 : -1;
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::FindScreenContaining(pos);
 
 	this->pos = AlignWithGround(this->pos, kGroundCollision);
+	EnemiesByScreen::Add(screen, this);
+}
+
+FireSlime::~FireSlime()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 BoxBounds FireSlime::AttackBounds() const

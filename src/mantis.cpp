@@ -10,6 +10,7 @@
 #include "screen.h"
 #include "common_tilemapcharacter.h"
 #include "common_enemy.h"
+#include "enemies_by_screen.h"
 
 constexpr const float kGravityAcc = 660; // TODO: reuse from jumpman for consistency, keep in sync meanwhile
 
@@ -40,10 +41,16 @@ Mantis::Mantis(vec pos)
 	, anim(AnimLib::MANTIS_WALK)
 	, walkingBackwards(false)
 {
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::FindScreenContaining(pos);
 	initialPos = this->pos;
 	initialVelX = Rand::OnceEvery(2) ? -kSpeed : kSpeed;
 	Reset();
+	EnemiesByScreen::Add(screen, this);
+}
+
+Mantis::~Mantis()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 void Mantis::Reset() {

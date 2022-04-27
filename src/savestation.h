@@ -11,14 +11,12 @@ struct SaveStation : BoxEntity, SelfRegister<SaveStation>
 {
 	int id;
 	bool hidden; // will be hidden when in a room with enemies
-	bool glowing;
-	bool prevFrameInScene;
 	int screen;
 	std::vector<Entity*> hiddenBy;
 
 	static std::unordered_map<int, std::vector<SaveStation*>> ByScreen;
 
-	void AddHiddenBy(Entity* entity) {
+	void AddEnemy(Entity* entity) {
 		hidden = true;
 		hiddenBy.push_back(entity);
 	}

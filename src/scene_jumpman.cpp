@@ -54,6 +54,7 @@
 #include "cutscene.h"
 #include "dialogs.h"
 #include "tweeny.h"
+#include "enemies_by_screen.h"
 
 extern float mainClock;
 extern bool mainClockPaused;
@@ -108,22 +109,21 @@ JumpScene::JumpScene(int saveSlot)
 	new Parallax(Tiled::Areas::single_parallax_sewer_3, Assets::sewerParallaxTextures, 0.f, 1.f, -150.7f);
 
 	for (const auto& screen : Tiled::Screens::screen) {
-		int id = screenManager.AddScreen(screen);
+		int id = ScreenManager::AddScreen(screen);
 		for (const BoxBounds& b : Tiled::Areas::lava_bg) {
 			if (Collide(screen, b)) {
 				waveShaderScreens.push_back(id);
 			}
 		}
 	}
-
 }
 
 JumpScene::~JumpScene() {
 	Parallax::DeleteAll();
-	screenManager.DeleteAllScreens();
+	ScreenManager::DeleteAllScreens();
 }
 
-void JumpScene::SaveGame() const {
+void JumpScene::SaveGame(int saveStationId) const {
 	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
 	if (saveState.HasData()) {
 		Debug::out << "Overwriting data in slot " << saveSlot;
@@ -159,6 +159,7 @@ void JumpScene::SaveGame() const {
 	saveState.StreamPut("bossdead_minotaur") << (boss_minotaur == nullptr);
 	saveState.StreamPut("bossdead_ooy") << (boss_ooy == nullptr);
 	saveState.StreamPut("bossdead_mantis") << (Mantis::GetAll().empty());
+	saveState.StreamPut("savestation") << saveStationId;
 
 	saveState.Save();
 }
@@ -228,6 +229,20 @@ void JumpScene::LoadGame() {
 
 	player.LoadGame(saveState);
 
+	// Kill enemies near the save station
+	int saveStation = -1;
+	saveState.StreamGet("savestation") >> saveStation;
+	if (saveStation >= 0) {
+		for (SaveStation* s : SaveStation::GetAll()) {
+			if (s->id == saveStation) {
+				for (Entity* e : s->hiddenBy) {
+					e->alive = false;
+				}
+				player.pos = s->pos;
+			}
+		}
+	}
+
 	Camera::SetCenter(player.GetCameraTargetPos()); // Needed so Update doesn't return because we are on a "camera transition"
 	Update(0); //Hackish way to make sure the entities with alive=false trigger things on other components before being deleted
 }
@@ -241,7 +256,7 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 	break;
 	case Skill::ATTACK:
 	{
-		int screen_gun = screenManager.FindScreenContaining(g->pos);
+		int screen_gun = ScreenManager::FindScreenContaining(g->pos);
 		for (Bat* e : Bat::GetAll()) {
 			if (e->screen == screen_gun) {
 				e->awakened = true;
@@ -249,8 +264,8 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 		}
 		for (auto const& [id, pos] : Tiled::Entities::initial_batawake) {
 			Bat* b = new Bat(pos, false, true);
-			for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-				s->AddEnemy(b);
+			for (EnemyDoor* d : EnemyDoor::ByScreen[b->screen]) {
+				d->AddEnemy(b);
 			}
 		}
 	}
@@ -267,9 +282,7 @@ void JumpScene::EnterScene()
 	player.Reset(Tiled::Entities::single_spawn, kPlayerInitialHealth);
 	skillTree.Reset();
 
-
-	screenManager.UpdateCurrentScreen(Tiled::Entities::single_initial_screen);
-
+	ScreenManager::UpdateCurrentScreen(Tiled::Entities::single_initial_screen);
 
 	map.LoadFromTiled<Tiled::TileMap>();
 
@@ -281,50 +294,26 @@ void JumpScene::EnterScene()
 	new BigItem(Tiled::Entities::single_skill_dash, Skill::DASH);
 
 	// FIXME: NPC
-	(new ForegroundOneShotAnim(Assets::warriorTexture, Tiled::Entities::single_npc, AnimLib::NPC_IDLE, 1.2f))->anim.loopable = true;
-
-	for (auto const& [id, pos] : Tiled::Entities::save) {
-		new SaveStation(id, pos);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::enemy_door) {
-		EnemyDoor* d = new EnemyDoor(id, pos);
-		screenManager.FindScreenContaining(d->pos);
-	}
+	//(new ForegroundOneShotAnim(Assets::warriorTexture, Tiled::Entities::single_npc, AnimLib::NPC_IDLE, 1.2f))->anim.loopable = true;
 
 	for (auto const& [id, pos] : Tiled::Entities::bat) {
-		Bat* b = new Bat(pos, false, false);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new Bat(pos, false, false);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::angrybat) {
-		Bat* b = new Bat(pos, true, false);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new Bat(pos, true, false);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::angrybatawake) {
-		Bat* b = new Bat(pos, true, true);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new Bat(pos, true, true);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::batawake) {
-		Bat* b =new Bat(pos, false, true);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new Bat(pos, false, true);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::fireslime) {
-		auto b = new FireSlime(pos);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new FireSlime(pos);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::rocket_launcher) {
@@ -336,81 +325,39 @@ void JumpScene::EnterScene()
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::miniooy) {
-		auto b = new MiniOoy(pos);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new MiniOoy(pos);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::goomba) {
-		auto b = new Goomba(pos, Goomba::Type::WALKER);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new Goomba(pos, Goomba::Type::WALKER);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::goombacharger) {
-		auto b = new Goomba(pos, Goomba::Type::CHARGER);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new Goomba(pos, Goomba::Type::CHARGER);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::goombashielder) {
-		auto b = new Goomba(pos, Goomba::Type::SHIELDER);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::mantis) {
-		auto b = new Mantis(pos);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
-		for (SaveStation* s : SaveStation::ByScreen[b->screen]) {
-			s->AddHiddenBy(b);
-		}
+		new Goomba(pos, Goomba::Type::SHIELDER);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::flyingalien) {
-		auto b = new FlyingAlien(pos);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
+		new FlyingAlien(pos);
 	}
 
-	Bipedal* bipedal = new Bipedal(Tiled::Entities::single_boss_bipedal);
-	for (EnemyDoor* s : EnemyDoor::ByScreen[bipedal->screen]) {
-		s->AddEnemy(bipedal);
+	for (auto const& [id, pos] : Tiled::Entities::save) {
+		new SaveStation(id, pos);
 	}
-	boss_bipedal = bipedal;
 
-
-	Minotaur* minotaur = new Minotaur(Tiled::Entities::single_boss_minotaur);
-	for (EnemyDoor* s : EnemyDoor::ByScreen[minotaur->screen]) {
-		s->AddEnemy(minotaur);
+	// Bosses
+	for (auto const& [id, pos] : Tiled::Entities::mantis) {
+		new Mantis(pos);
 	}
-	boss_minotaur = minotaur;
 
-	Ooy* ooy = new Ooy(Tiled::Entities::single_ooy);
-	for (EnemyDoor* s : EnemyDoor::ByScreen[ooy->screen]) {
-		s->AddEnemy(ooy);
-	}
-	boss_ooy = ooy;
+	boss_bipedal = new Bipedal(Tiled::Entities::single_boss_bipedal);
 
-	/*
-	for (auto const& [id, pos] : Tiled::Entities::minotaur) {
-		auto b = new Minotaur(pos);
-		for (EnemyDoor* s : EnemyDoor::ByScreen[b->screen]) {
-			s->AddEnemy(b);
-		}
-	}
-	*/
+	boss_minotaur = new Minotaur(Tiled::Entities::single_boss_minotaur);
 
-	for (SaveStation* s : SaveStation::ByScreen[screenManager.FindScreenContaining(boss_bipedal->pos)]) {
-		s->AddHiddenBy(boss_bipedal);
-	}
+	boss_ooy = new Ooy(Tiled::Entities::single_ooy);
 
 	for (auto const& [id, pos] : Tiled::Entities::healthup) {
 		new HealthUp(id, pos);
@@ -430,6 +377,31 @@ void JumpScene::EnterScene()
 
 	for (const BoxBounds& a : Tiled::Areas::bg_bird_spawner) {
 		new BackgroundBirdSpawner(a);
+	}
+
+	for (auto const& [id, pos] : Tiled::Entities::enemy_door) {
+		new EnemyDoor(id, pos);
+	}
+
+	// Enemies <-> EnemyDoor
+	for (auto const& [screen, doors] : EnemyDoor::ByScreen) {
+		for (EnemyDoor* door : doors) {
+			for (Entity* enemy : EnemiesByScreen::Get(screen)) {
+				door->AddEnemy(enemy);
+			}
+		}
+	}
+
+	// Enemies <-> SaveStation
+	for (auto const& [screen, stations] : SaveStation::ByScreen) {
+		for (SaveStation* station : stations) {
+			for (Entity* enemy : EnemiesByScreen::Get(screen)) {
+				vec dist = enemy->pos.ManhattanDistance(station->pos);
+				if (dist.x < Window::GAME_WIDTH / 2 && dist.y < Window::GAME_HEIGHT / 2) {
+					station->AddEnemy(enemy);
+				}
+			}
+		}
 	}
 
 	for (const BoxBounds& a : Tiled::Areas::lava) {
@@ -483,7 +455,7 @@ void JumpScene::EnterScene()
 		}
 
 		player.pos.x -= 100.f;
-		SaveGame();
+		SaveGame(-1);
 		player.pos.x += 100.f;
 
 
@@ -629,6 +601,7 @@ void JumpScene::ExitScene()
 	Explosive::DeleteAll();
 	Health::DeleteAll();
 	SaveStation::DeleteAll();
+	EnemiesByScreen::AssertEmpty();
 }
 
 void JumpScene::Update(float dt)
@@ -725,7 +698,7 @@ void JumpScene::Update(float dt)
 		e->Update(dt);
 	}
 
-	screenManager.UpdateCurrentScreen(player.pos);
+	ScreenManager::UpdateCurrentScreen(player.pos);
 
 	bool inScreenTransition = UpdateCamera(dt);
 	if (inScreenTransition) {
@@ -822,7 +795,7 @@ void JumpScene::Update(float dt)
 	}
 	if (Keyboard::IsKeyJustPressed(teleport)) {
 		player.pos = Tiled::Entities::single_debug_teleport;
-		screenManager.UpdateCurrentScreen(player.pos);
+		ScreenManager::UpdateCurrentScreen(player.pos);
 		Camera::SetCenter(player.GetCameraTargetPos());
 	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
@@ -843,16 +816,24 @@ void JumpScene::Update(float dt)
 	}
 	if (Keyboard::IsKeyJustPressed(killall)) {
 		for (Bat* e : Bat::GetAll()) {
-			if (e->screen == screenManager.CurrentScreen()) {
+			if (e->screen == ScreenManager::CurrentScreen()) {
 				DieWithSmallExplosion(e);
 			}
 		}
 		for (FireSlime* e : FireSlime::GetAll()) {
-			if (e->screen == screenManager.CurrentScreen()) {
+			if (e->screen == ScreenManager::CurrentScreen()) {
 				DieWithSmallExplosion(e);
 			}
 		}
 	}
+
+	// Sound tests
+	//if (Mouse::IsJustPressed()) {
+	//	Debug::out << Assets::soundMegazero.Play(Mouse::GetPositionInWorld(), player.pos);
+	//}
+	//if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_M)) {
+	//	Debug::out << Assets::soundMegazero.Play();
+	//}
 
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 		map.DebugEdit();
@@ -870,9 +851,8 @@ void JumpScene::Update(float dt)
 			contextActionButton = true;
 			if (Input::IsJustPressed(0, GameKeys::ACTION)) {
 				// TODO: Interaction animation
-				SaveGame();
-				// Exit and Enter the scene again, resetting the state of everything and loading the state we just saved
-				Fx::ScreenTransition::Start(Assets::fadeOutDiamondsShader);
+				SaveGame(ss->id);
+				dialogDriver.StartDialog(saveGameDialog);
 			}
 		}
 	}
@@ -945,7 +925,7 @@ void JumpScene::Update(float dt)
 			
 			g->alive = false;
 
-			SaveGame(); // silently save
+			SaveGame(-1); // silently save
 		}
 	}
 	BigItem::DeleteNotAlive();
@@ -963,7 +943,7 @@ void JumpScene::Update(float dt)
 	// Enable waves shader in lava cave
 	bool inLavaCave = false;
 	for (int screen : waveShaderScreens) {
-		if (screen == screenManager.CurrentScreen()) {
+		if (screen == ScreenManager::CurrentScreen()) {
 			inLavaCave = true;
 			break;
 		}
@@ -1085,7 +1065,7 @@ void JumpScene::Draw()
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Save")) {
-			SaveGame();
+			SaveGame(-1);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Clear save")) {

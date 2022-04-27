@@ -17,7 +17,7 @@ EnemyDoor::EnemyDoor(int saveId, vec p)
 	, saveId(saveId)
 {
 	SpawnTiles();
-	screen = ScreenManager::instance()->FindScreenContaining(p);
+	screen = ScreenManager::FindScreenContaining(p);
 	EnemyDoor::ByScreen[screen].push_back(this);
 }
 

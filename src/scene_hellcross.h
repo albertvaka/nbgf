@@ -8,17 +8,17 @@
 #include "skilltree.h"
 #include "screen.h"
 
-struct HellCrossScene : Scene {
-
+struct HellCrossScene : Scene
+{
 	int randomSeed;
 	GaemTileMap map;
 	JumpMan player;
 	Lava lava;
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;
-	ScreenManager sceneManager;
 
 	HellCrossScene();
+	~HellCrossScene();
 
 	void RandomizeMap();
 

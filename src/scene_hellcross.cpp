@@ -19,6 +19,7 @@
 #include "oneshotanim.h"
 #include "drawall.h"
 #include "particles.h"
+#include "enemies_by_screen.h"
 
 const float batClusterSize = 22.f;
 const float chanceAngryBat = 0.2f;
@@ -35,13 +36,12 @@ HellCrossScene::HellCrossScene()
 	, lava(BoxBounds(0, map_size.y*16 - 20, map_size.x*16, 200))
 {
 	Particles::Init();
+	ScreenManager::AddScreen(map.BoundsInWorld());
+}
 
-	skillTree.Enable(Skill::GUN);
-	skillTree.Enable(Skill::WALLJUMP);
-	skillTree.Enable(Skill::BREAK);
-
-	ScreenManager::instance()->AddScreen(map.BoundsInWorld());
-	ScreenManager::instance()->UpdateCurrentScreen(map.BoundsInWorld().Center());
+HellCrossScene::~HellCrossScene()
+{
+	ScreenManager::DeleteAllScreens();
 }
 
 void HellCrossScene::RandomizeMap() {
@@ -69,15 +69,18 @@ void HellCrossScene::RandomizeMap() {
 void HellCrossScene::EnterScene() 
 {
 	Fx::BeforeEnterScene();
-	if (Fx::ScreenTransition::IsActive()) {
-		return;
-	}
-
-	player.Reset(vec(160,160), kInitialPlayerHealth);
 
 	randomSeed = Rand::roll(0, 10000);
 	srand(randomSeed);
 	RandomizeMap();
+
+	ScreenManager::UpdateCurrentScreen(map.BoundsInWorld().Center());
+
+	player.Reset(vec(160, 160), kInitialPlayerHealth);
+
+	skillTree.Enable(Skill::GUN);
+	skillTree.Enable(Skill::WALLJUMP);
+	skillTree.Enable(Skill::BREAK);
 
 	SimplexNoise simplex;
 	for (int y = -1; y < map.Height() - 5; y++) { //don't spawn at the bottom rows
@@ -128,6 +131,7 @@ void HellCrossScene::ExitScene()
 	BackgroundOneShotAnim::DeleteAll();
 	ForegroundOneShotAnim::DeleteAll();
 	destroyedTiles.Clear();
+	EnemiesByScreen::AssertEmpty();
 }
 
 void HellCrossScene::UpdateCamera() {
@@ -139,6 +143,9 @@ void HellCrossScene::UpdateCamera() {
 void HellCrossScene::Update(float dt)
 {
 	Fx::Update(dt);
+	if (Fx::ScreenTransition::IsActive()) {
+		return;
+	}
 
 	if (Fx::ScreenTransition::IsJustFinished()) {
 		if (Fx::ScreenTransition::Current() != &Assets::fadeInDiamondsShader) {

@@ -53,7 +53,7 @@ struct JumpMan : Entity, SingleInstance<JumpMan>
     vec GetCameraTargetPos() {
         // TODO: keep the camera so you see a bit more in the direction you are going (like in https://youtu.be/AqturoCh5lM?t=3801)
         vec camPos = (pos - vec(0, 16));
-        ScreenManager::instance()->ClampCameraToScreen(camPos);
+        ScreenManager::ClampCameraToScreen(camPos);
         return camPos;
     }
 

@@ -31,6 +31,7 @@ struct Minotaur : BoxEntity, SelfRegister<Minotaur>
 	bool goingRight = true;
 
 	Minotaur(vec position);
+	~Minotaur();
 
 	void Reset();
 	BoxBounds AttackBounds() const;

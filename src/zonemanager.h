@@ -18,7 +18,7 @@ struct ZoneManager {
 
 
 	void Reset() {
-		currentScreen = ScreenManager::instance()->CurrentScreen();
+		currentScreen = ScreenManager::CurrentScreen();
 		currentBgColor = targetBgColor = FindColorForScreen(currentScreen);
 	}
 
@@ -45,7 +45,7 @@ struct ZoneManager {
 	}
 
 	void Update(float dt) {
-		int actualCurrentScreen = ScreenManager::instance()->CurrentScreen();
+		int actualCurrentScreen = ScreenManager::CurrentScreen();
 		if (currentScreen != actualCurrentScreen) {
 			currentScreen = actualCurrentScreen;
 			targetBgColor = FindColorForScreen(currentScreen);
@@ -60,7 +60,7 @@ struct ZoneManager {
 	}
 
 	const SDL_Color& FindColorForScreen(int screen) {
-		BoxBounds screenBounds = ScreenManager::instance()->ScreenBounds(screen);
+		BoxBounds screenBounds = ScreenManager::ScreenBounds(screen);
 		for (const BoxBounds& b : Tiled::Zones::cave) {
 			if (b.Contains(screenBounds.Center())) {
 				return caveBg;

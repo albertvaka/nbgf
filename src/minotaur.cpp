@@ -8,6 +8,7 @@
 #include "screen.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
+#include "enemies_by_screen.h"
 
 constexpr const float kScale = 2.0f;
 constexpr const vec kMinotaurSize = vec(25, 38) * kScale;
@@ -31,12 +32,18 @@ Minotaur::Minotaur(vec pos)
 	: BoxEntity(pos-vec(0,kMinotaurSize.y/2), kMinotaurSize)
 	, anim(AnimLib::MINOTAUR_IDLE)
 {
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::FindScreenContaining(pos);
 
 	this->pos = AlignWithGround(this->pos, size);
 	initialPos = this->pos;
 
 	Reset();
+	EnemiesByScreen::Add(screen, this);
+}
+
+Minotaur::~Minotaur()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 void Minotaur::Reset()

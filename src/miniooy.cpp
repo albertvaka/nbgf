@@ -13,6 +13,7 @@
 #include "tiled_objects_areas.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
+#include "enemies_by_screen.h"
 
 constexpr const float kIntervalShoot = 1.5f;
 constexpr const float kStartChasingRadius = 160.f;
@@ -46,13 +47,19 @@ MiniOoy::MiniOoy(vec pos)
 	: SteeringEntity(pos, kRadius, kMaxSpeed, vec(0, 0))
 	, steering(this)
 {
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
+	screen = ScreenManager::FindScreenContaining(pos);
 	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::miniooy_bounds);
 	if (bounds_index > -1) {
 		bounds = Tiled::Areas::miniooy_bounds[bounds_index];
 	} else {
-		bounds = ScreenManager::instance()->ScreenBounds(screen);
+		bounds = ScreenManager::ScreenBounds(screen);
 	}
+	EnemiesByScreen::Add(screen, this);
+}
+
+MiniOoy::~MiniOoy()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 void MiniOoy::Update(float dt)

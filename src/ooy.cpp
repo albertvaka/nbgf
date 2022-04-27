@@ -13,6 +13,7 @@
 #include "screen.h"
 #include "common_enemy.h"
 #include "common_tilemapcharacter.h"
+#include "enemies_by_screen.h"
 
 constexpr const float kIntervalShoot = 0.07f;
 constexpr const float kStartChasingRadius = 200.f;
@@ -49,8 +50,14 @@ Ooy::Ooy(vec pos)
 	, steering(this)
 	, health(kHealth)
 {
-	screen = ScreenManager::instance()->FindScreenContaining(pos);
-	bounds = ScreenManager::instance()->ScreenBounds(screen);
+	screen = ScreenManager::FindScreenContaining(pos);
+	bounds = ScreenManager::ScreenBounds(screen);
+	EnemiesByScreen::Add(screen, this);
+}
+
+Ooy::~Ooy()
+{
+	EnemiesByScreen::Remove(screen, this);
 }
 
 void Ooy::TakeDamage() {

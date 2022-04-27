@@ -31,6 +31,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	bool collideInnerRadius = false;
 
 	Mantis(vec position);
+	~Mantis();
 
 	vec GetJumpSpeedToTarget(vec pos);
 

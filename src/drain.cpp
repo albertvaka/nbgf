@@ -17,7 +17,7 @@ constexpr const float kDropVel = 230;
 
 Drain::Drain(vec pos)
 	: pos(pos)
-	, screen(ScreenManager::instance()->FindScreenContaining(pos))
+	, screen(ScreenManager::FindScreenContaining(pos))
 	, timer(Rand::rollf(kTotalCycleTime))
 {
 }

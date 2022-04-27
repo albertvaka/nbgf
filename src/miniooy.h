@@ -23,6 +23,7 @@ struct MiniOoy : SteeringEntity, SelfRegister<MiniOoy>
 	BoxBounds bounds;
 
 	MiniOoy(vec position);
+	~MiniOoy();
 
 	void Update(float dt);
 	void Draw() const;

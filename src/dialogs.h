@@ -21,3 +21,7 @@ inline Dialog dialogWithRandomNpc = { {
 	{"b", {randomNpcChar, "I'm not madafaca. And I haven't seen any sweet potatoes here."}},
 	{"c", {protaChar, "Bye bye1"}},
 } };
+
+inline Dialog saveGameDialog = { {
+	{"a", {protaChar, "Game saved."}},
+} };
