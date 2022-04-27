@@ -299,6 +299,7 @@ void JumpMan::Update(float dt)
 
 	justHit = false;
 
+	int prev_frame = anim.current_frame;
 	float absVelY = fabs(vel.y);
 	if (onWall && absVelY < 50.f) {
 		// do not update animation
@@ -311,6 +312,7 @@ void JumpMan::Update(float dt)
 	else {
 		anim.Update(dt);
 	}
+	bool animationNewFrame = (prev_frame != anim.current_frame);
 
 
 	if (groundTile != Tile::NONE || onWall) {
@@ -662,6 +664,9 @@ void JumpMan::Update(float dt)
 					}
 					else {
 						anim.Ensure(AnimLib::WARRIOR_RUN);
+						if (animationNewFrame && (anim.current_frame == 6 || anim.current_frame == 2)) {
+							//Assets::soundLeaves.Play();
+						}
 					}
 				}
 				else if (Input::IsPressed(0, GameKeys::RIGHT) && !Input::IsPressed(0, GameKeys::LEFT))
@@ -673,6 +678,9 @@ void JumpMan::Update(float dt)
 					}
 					else {
 						anim.Ensure(AnimLib::WARRIOR_RUN);
+						if (animationNewFrame && (anim.current_frame == 6 || anim.current_frame == 2)) {
+							//Assets::soundLeaves.Play();
+						}
 					}
 				}
 				else
