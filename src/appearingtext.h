@@ -42,7 +42,7 @@ struct AppearingText : Text
 					}
 					//footgun avoided: stringstream::clear() exists but doesn't do what you expect,
 					//this is the right way to clear it. 
-					//bonus footgun: using ::str(nextWord) didn't work either.
+					//bonus footgun: using currentLine::str(nextWord) didn't work either.
 					currentLine.str(std::string());
 					currentLine << nextWord;
 				}
@@ -76,6 +76,9 @@ struct AppearingText : Text
 			if (timer > SPEED) {
 				timer -= SPEED;
 				index++;
+				while ((targetString[index] & 0b11000000) == 0b11000000) { //handles muli-byte characters
+					index++;
+				}
 				SetString(targetString.substr(0,index));
 				return index >= targetString.size();
 			}
