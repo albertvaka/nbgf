@@ -117,7 +117,7 @@ private:
 		}
 	}
 
-	SDL_Surface* Render();
+	SDL_Surface* Render(SDL_Color color);
 	SDL_Surface* MultiLineRender();
 
 	TTF_Font* font;
@@ -131,3 +131,25 @@ private:
 	std::string str;
 };
 
+struct TextColor {
+	const static char MagicSeparator = 0x09;
+	const static char MagicIndicator = 0x07;
+	const static char Length = 6;
+	constexpr Uint8 sanitize(Uint8 c) {
+		if (c == 0 || c == '\n') return c + 1;
+		else return c;
+	}
+	Uint8 data[Length] = { MagicSeparator, MagicIndicator, 0,0,0, MagicSeparator };
+	constexpr TextColor(Uint8 r, Uint8 g, Uint8 b) { data[2] = sanitize(r); data[3] = sanitize(g); data[4] = sanitize(b); }
+	constexpr TextColor(SDL_Color color) : TextColor(color.r, color.g, color.b) {}
+};
+
+inline std::string operator+(const TextColor tc, const std::string& str)
+{
+	return std::string((char*)tc.data, TextColor::Length) + str;
+}
+
+inline std::string operator+(const std::string& str, const TextColor tc)
+{
+	return str + std::string((char*)tc.data, TextColor::Length);
+}

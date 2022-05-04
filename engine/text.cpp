@@ -3,8 +3,8 @@
 #include <vector>
 #include "debug.h"
 
-SDL_Surface* Text::Render() {
-	SDL_Surface* fg_surface = TTF_RenderUTF8_Blended(font, str.c_str(), color);
+SDL_Surface* Text::Render(SDL_Color fg) {
+	SDL_Surface* fg_surface = TTF_RenderUTF8_Blended(font, str.c_str(), fg);
 	if (!fg_surface) {
 		printf("Unable to create text surface. SDL Error: %s\n", TTF_GetError());
 		return nullptr; // Note this will crash the program
@@ -30,27 +30,47 @@ SDL_Surface* Text::Render() {
 }
 
 SDL_Surface* Text::MultiLineRender() {
-	std::vector<SDL_Surface*> surfaces;
+	typedef std::vector<SDL_Surface*> TextRow;
+	std::vector<TextRow> rows;
 	int totalHeight = 0;
 	int maxWidth = 0;
-	std::stringstream ss(str);
-	while (std::getline(ss, str, '\n')) {
+	std::stringstream rowss(str);
+	SDL_Color fg = color;
+	while (std::getline(rowss, str, '\n')) {
 		if (str.empty()) {
-			surfaces.push_back(NULL);
+			rows.push_back(TextRow());
 			totalHeight += empty_line_spacing;
 			continue;
 		}
-		SDL_Surface* s = Render();
-		totalHeight += s->h + spacing;
-		if (s->w > maxWidth) {
-			maxWidth = s->w;
+		TextRow row;
+		int maxHeight = 0;
+		int totalWidth = 0;
+		std::stringstream columnss(str);
+		while (std::getline(columnss, str, TextColor::MagicSeparator)) {
+			if (str.size() == 4 && str[0] == TextColor::MagicIndicator) { // Did we find a color indicator?
+				fg = { (Uint8)str[1], (Uint8)str[2], (Uint8)str[3] };
+				continue;
+			}
+			SDL_Surface* s = Render(fg);
+			if (s) {
+				if (s->h > maxHeight) {
+					maxHeight = s->h;
+				}
+				totalWidth += s->w;
+				row.push_back(s);
+			}
 		}
-		surfaces.push_back(s);
+		if (totalWidth > maxWidth) {
+			maxWidth = totalWidth;
+		}
+		totalHeight += maxHeight + spacing;
+		rows.push_back(row);
 	}
 
-	if (surfaces.size() == 1 && surfaces[0]) {
-		return surfaces[0];
+	if (rows.size() == 1 && rows[0].size() == 1 && rows[0][0]) {
+		return rows[0][0];
 	}
+
 	if (totalHeight == 0 || maxWidth == 0) {
 		Debug::out << "warning: trying to render an empty string";
 		if (totalHeight == 0) {
@@ -62,10 +82,19 @@ SDL_Surface* Text::MultiLineRender() {
 	}
 	SDL_Surface* final = SDL_CreateRGBSurfaceWithFormat(0, maxWidth, totalHeight, 32, SDL_PIXELFORMAT_ARGB8888);
 	totalHeight = 0;
-	for (SDL_Surface* surface : surfaces) {
-		if (!surface) {
+	for (TextRow& row : rows) {
+		if (row.empty()) {
 			totalHeight += empty_line_spacing;
 			continue;
+		}
+
+		int rowWidth = 0;
+		int rowHeight = 0;
+		for (SDL_Surface* surface : row) {
+			rowWidth += surface->w;
+			if (surface->h > rowHeight) {
+				rowHeight = surface->h;
+			};
 		}
 
 		int leftPad;
@@ -75,16 +104,22 @@ SDL_Surface* Text::MultiLineRender() {
 			leftPad = 0;
 			break;
 		case MultilineAlignment::CENTER:
-			leftPad = (maxWidth - surface->w) / 2;
+			leftPad = (maxWidth - rowWidth) / 2;
 			break;
 		case MultilineAlignment::RIGHT:
-			leftPad = (maxWidth - surface->w);
+			leftPad = (maxWidth - rowWidth);
 			break;
 		}
-		SDL_Rect dest = { leftPad, totalHeight, surface->w, surface->h };
-		totalHeight += surface->h + spacing;
-		SDL_BlitSurface(surface, NULL, final, &dest);
-		SDL_FreeSurface(surface);
+
+		int x = leftPad;
+		for (SDL_Surface* surface : row) {
+			SDL_Rect dest = { x, totalHeight, surface->w, surface->h };
+			SDL_BlitSurface(surface, NULL, final, &dest);
+			x += surface->w;
+			SDL_FreeSurface(surface);
+		}
+		totalHeight += rowHeight + spacing;
+
 	}
 
 	return final;
