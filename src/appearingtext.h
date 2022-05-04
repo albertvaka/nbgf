@@ -46,22 +46,24 @@ struct AppearingText : Text
 				if (!oldCurrentLine.empty()) {
 					currentLine << " ";
 				}
-				currentLine << nextWord;
+				currentLine.write(&nextWord[0], nextWord.size());
 				SetString(currentLine.str());
 				float lineWidth = Size().x;
 				if (lineWidth > maxLineWidth) {
 					if (!oldCurrentLine.empty()) { // fix for words that don't fit in maxLineWidth
-						ss << oldCurrentLine << '\n';
+						ss.write(&oldCurrentLine[0], oldCurrentLine.size());
+						ss << '\n';
 					}
 					//footgun avoided: stringstream::clear() exists but doesn't do what you expect,
 					//this is the right way to clear it. 
 					//bonus footgun: using currentLine::str(nextWord) didn't work either.
 					currentLine.str(std::string());
-					currentLine << nextWord;
+					currentLine.write(&nextWord[0], nextWord.size());
 				}
 			}
 		}
-		ss << currentLine.str();
+		std::string currentLineString = currentLine.str();
+		ss.write(&currentLineString[0], currentLineString.size());
 		SetString(oldStr);
 		return ss.str();
 	}
