@@ -132,11 +132,12 @@ private:
 };
 
 struct TextColor {
-	const static char MagicSeparator = 0x09;
+	const static char MagicSeparator = 0x05;
 	const static char MagicIndicator = 0x07;
 	const static char Length = 6;
 	constexpr Uint8 sanitize(Uint8 c) {
-		if (c == 0 || c == '\n') return c + 1;
+		// nulls shouldn't be a problem, but just in case
+		if (c == 0 || c == '\n' || c == MagicSeparator) return c + 1;
 		else return c;
 	}
 	Uint8 data[Length] = { MagicSeparator, MagicIndicator, 0,0,0, MagicSeparator };
