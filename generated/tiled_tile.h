@@ -178,75 +178,6 @@ struct Tile {
 		BG_135,
 		BG_136,
 		BG_137,
-		BG_138,
-		BG_139,
-		BG_140,
-		BG_141,
-		BG_142,
-		BG_143,
-		BG_144,
-		BG_145,
-		BG_146,
-		BG_147,
-		BG_148,
-		BG_149,
-		BG_150,
-		BG_151,
-		BG_152,
-		BG_153,
-		BG_154,
-		BG_155,
-		BG_156,
-		BG_157,
-		BG_158,
-		BG_159,
-		BG_160,
-		BG_161,
-		BG_162,
-		BG_163,
-		BG_164,
-		BG_165,
-		BG_166,
-		BG_167,
-		BG_168,
-		BG_169,
-		BG_170,
-		BG_171,
-		BG_172,
-		BG_173,
-		BG_174,
-		BG_175,
-		BG_176,
-		BG_177,
-		BG_178,
-		BG_179,
-		BG_180,
-		BG_181,
-		BG_182,
-		BG_183,
-		BG_184,
-		BG_185,
-		BG_186,
-		BG_187,
-		BG_188,
-		BG_189,
-		BG_190,
-		BG_191,
-		BG_192,
-		BG_193,
-		BG_194,
-		BG_195,
-		BG_196,
-		BG_197,
-		BG_198,
-		BG_199,
-		BG_200,
-		BG_201,
-		BG_202,
-		BG_203,
-		BG_204,
-		BG_205,
-		BG_206,
 		ONEWAY_1,
 		ONEWAY_2,
 		ONEWAY_3,
@@ -265,9 +196,13 @@ struct Tile {
 		ONEWAY_16,
 		ONEWAY_17,
 		ONEWAY_18,
+		ONEWAY_19,
+		ONEWAY_20,
 		RSLOPE_1,
 		RSLOPE_2,
 		RSLOPE_3,
+		RSLOPE_4,
+		RSLOPE_5,
 		LSLOPE_1,
 		LSLOPE_2,
 		LSLOPE_3,
@@ -328,52 +263,33 @@ struct Tile {
 		SOLID_53,
 		SOLID_54,
 		SOLID_55,
-		SOLID_56,
-		SOLID_57,
-		SOLID_58,
-		SOLID_59,
-		SOLID_60,
-		SOLID_61,
-		SOLID_62,
-		SOLID_63,
-		SOLID_64,
-		SOLID_65,
-		SOLID_66,
-		SOLID_67,
-		SOLID_68,
-		SOLID_69,
-		SOLID_70,
-		SOLID_71,
-		SOLID_72,
-		SOLID_73,
-		SOLID_74,
-		SOLID_75,
-		SOLID_76,
 		BREAKABLE_1,
 		BREAKABLE_2,
 		BREAKABLE_3,
 		BREAKABLE_4,
+		BREAKABLE_5,
 		BREAKABLE_HARD_1,
 		BREAKABLE_HARD_2,
 		BREAKABLE_GND_1,
+		BREAKABLE_GND_2,
 		SOLID_TRANSPARENT,
 	};
 
 	// Aliases
-	static constexpr Value BG_DOOR_OPENING = BG_53;
-	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_161;
-	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_177;
-	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_9;
-	static constexpr Value ONEWAY_SIMPLE = ONEWAY_9;
+	static constexpr Value BG_DOOR_OPENING = BG_37;
+	static constexpr Value BG_CAVE_CEILING_BEHIND_BREAKABLE = BG_95;
+	static constexpr Value BG_CAVE_FLOOR_BEHIND_BREAKABLE = BG_114;
+	static constexpr Value ONEWAY_BEHIND_BREAKABLE = ONEWAY_7;
+	static constexpr Value ONEWAY_SIMPLE = ONEWAY_7;
 	static constexpr Value SOLID_OUT_OF_BOUNDS = SOLID_1;
 	static constexpr Value SOLID_SIMPLE = SOLID_4;
-	static constexpr Value SOLID_DOOR = SOLID_24;
-	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_31;
+	static constexpr Value SOLID_DOOR = SOLID_18;
+	static constexpr Value SOLID_DOOR_BOTTOM = SOLID_19;
 	static constexpr Value BREAKABLE_SIMPLE = BREAKABLE_1;
 	static constexpr Value BREAKABLE_COVERING_ONEWAY = BREAKABLE_2;
-	static constexpr Value BREAKABLE_COVERING_CAVE_FLOOR = BREAKABLE_3;
-	static constexpr Value BREAKABLE_COVERING_CAVE_CEILING = BREAKABLE_4;
-	static constexpr Value BREAKABLE_HARD_EXPLOSIVE_BLOCK = BREAKABLE_HARD_2;
+	static constexpr Value BREAKABLE_EXPLOSIVE_BLOCK = BREAKABLE_3;
+	static constexpr Value BREAKABLE_COVERING_CAVE_FLOOR = BREAKABLE_4;
+	static constexpr Value BREAKABLE_COVERING_CAVE_CEILING = BREAKABLE_5;
 
 	constexpr operator Value() const { return value; }  // Allow switch and comparisons.
 	explicit constexpr operator bool() = delete;        // Prevent if(tile)

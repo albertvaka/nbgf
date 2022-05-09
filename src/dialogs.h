@@ -8,7 +8,7 @@ const inline DialogCharacter randomNpcChar = { "Random NPC", AnimLib::PORTRAIT_R
 namespace Color {
 	static const TextColor BLACK(0, 0, 0);
 	static const TextColor WHITE(255, 255, 255);
-	static const TextColor PINK(250, 10, 250);
+	static const TextColor PINK(250, 100, 250);
 	static const TextColor YELLOW(250, 250, 10);
 }
 
@@ -24,9 +24,10 @@ inline Dialog dialogWithRandomNpcWithChoices = {{
 }};
 
 inline Dialog dialogWithRandomNpc = { {
-	{"a", {protaChar, "I'm looking for a " + Color::PINK + "sweet potato" + Color::WHITE + ". Are you a " + Color::PINK + "sweet potato" + Color::WHITE + " in disguise? "}},
-	{"b", {randomNpcChar, "I'm not " + Color::YELLOW + "madafaca"+ Color::WHITE + ". And I haven't seen any " + Color::PINK + "sweet potatoes" + Color::WHITE + " here."}},
-	{"c", {protaChar, "Bye bye1"}},
+	{"a", {protaChar, "Welcome!"}},
+	{"b", {protaChar, "NBGF" + Color::YELLOW + "(No-Bullshit Game Framework)" + Color::WHITE + " is an opinionated C++ framework to make games in minutes."} },
+	{"c", {protaChar, "In this talk we will go through some of the " + Color::PINK + "built-in debug features" + Color::WHITE + "."}},
+	{"d", {protaChar, "Enjoy!"}},
 } };
 
 inline Dialog saveGameDialog = { {

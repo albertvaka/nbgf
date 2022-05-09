@@ -23,9 +23,12 @@ struct JumpScene : Scene
 	DestroyedTiles destroyedTiles;
 	DialogDriver dialogDriver;
 	RotoText rotoText;
-	Entity* boss_bipedal;
-	Entity* boss_minotaur;
-	Ooy* boss_ooy;
+	Text text_holi;
+	Text text_holi_2;
+	Text text_frame_by_frame;
+	Text text_debug_draw;
+	Text text_move_cam;
+	Text text_imgui;
 	ZoneManager zoneManager;
 	float test_anim_scale;
 	int saveSlot;
@@ -39,9 +42,6 @@ struct JumpScene : Scene
 	bool shaderLavaActive = false;
 	bool contextActionButton = false;
 	bool playerPaused = false;
-
-	void SaveGame(int saveStation) const;
-	void LoadGame();
 
 	JumpScene(int saveSlot = 0);
 	~JumpScene();

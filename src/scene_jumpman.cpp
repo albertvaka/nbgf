@@ -81,6 +81,12 @@ const auto kPauseFullScreenShader = []() {
 JumpScene::JumpScene(int saveSlot)
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
+	, text_holi(Assets::font_30, Assets::font_30_outline)
+	, text_holi_2(Assets::font_30, Assets::font_30_outline)
+	, text_frame_by_frame(Assets::font_30, Assets::font_30_outline)
+	, text_debug_draw(Assets::font_30, Assets::font_30_outline)
+	, text_move_cam(Assets::font_30, Assets::font_30_outline)
+	, text_imgui(Assets::font_30, Assets::font_30_outline)
 	, saveSlot(saveSlot)
 {
 	Particles::Init();
@@ -89,33 +95,16 @@ JumpScene::JumpScene(int saveSlot)
 		new Parallax(b, Assets::forestParallaxTextures, 0.25f, 1.f, 172.f);
 	}
 
-	for (const BoxBounds& b : Tiled::Areas::parallax_island) {
-		new Parallax(b, Assets::islandParallaxTextures, 0.f, 0.3f, -88.9f);
-	}
-
-	for (const BoxBounds& b : Tiled::Areas::parallax_cave) {
-		new Parallax(b, Assets::caveParallaxTextures, 0.4f, 0.65f, -165.f);
-	}
-
-	for (const BoxBounds& b : Tiled::Areas::lava_bg) {
-		new Parallax(b, Assets::lavaParallaxTextures, 0.3f, 1.f, -410.f);
-	}
-
-	for (const BoxBounds& b : Tiled::Areas::parallax_sewer) {
-		new Parallax(b, Assets::sewerParallaxTextures, 0.f, 1.f, -142.1f);
-	}
-
-	new Parallax(Tiled::Areas::single_parallax_sewer_2, Assets::sewerParallaxTextures, 0.f, 1.f, -82.7f);
-	new Parallax(Tiled::Areas::single_parallax_sewer_3, Assets::sewerParallaxTextures, 0.f, 1.f, -150.7f);
-
 	for (const auto& screen : Tiled::Screens::screen) {
 		int id = ScreenManager::AddScreen(screen);
-		for (const BoxBounds& b : Tiled::Areas::lava_bg) {
-			if (Collide(screen, b)) {
-				waveShaderScreens.push_back(id);
-			}
-		}
 	}
+	text_holi.SetString("NBGF: Debug features");
+	text_holi_2.SetString("Albert Vaca Cintora <albertvaka@gmail.com>");
+	text_frame_by_frame.SetString("Frame-by-frame mode");
+	text_debug_draw.SetString("Debug view");
+	text_move_cam.SetString("Free camera\nmode");
+	text_move_cam.SetMultilineAlignment(Text::MultilineAlignment::CENTER);
+	text_imgui.SetString("Dear ImGUI!");
 }
 
 JumpScene::~JumpScene() {
@@ -123,156 +112,9 @@ JumpScene::~JumpScene() {
 	ScreenManager::DeleteAllScreens();
 }
 
-void JumpScene::SaveGame(int saveStationId) const {
-	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
-	if (saveState.HasData()) {
-		Debug::out << "Overwriting data in slot " << saveSlot;
-	}
-	saveState.Clear();
-
-	player.SaveGame(saveState);
-
-	for (HealthUp* g : HealthUp::GetAll()) {
-		g->SaveGame(saveState);
-	}
-
-	for (Shard* g : Shard::GetAll()) {
-		g->SaveGame(saveState);
-	}
-
-	for (EnemyDoor* g : EnemyDoor::GetAll()) {
-		g->SaveGame(saveState);
-	}
-
-	for (Explosive* g : Explosive::GetAll()) {
-		g->SaveGame(saveState);
-	}
-
-	for (Trigger* g : Trigger::GetAll()) {
-		g->SaveGame(saveState);
-	}
-
-	skillTree.SaveGame(saveState);
-	destroyedTiles.SaveGame(saveState);
-
-	saveState.StreamPut("bossdead_bipedal") << (boss_bipedal == nullptr);
-	saveState.StreamPut("bossdead_minotaur") << (boss_minotaur == nullptr);
-	saveState.StreamPut("bossdead_ooy") << (boss_ooy == nullptr);
-	saveState.StreamPut("bossdead_mantis") << (Mantis::GetAll().empty());
-	saveState.StreamPut("savestation") << saveStationId;
-
-	saveState.Save();
-}
-
-void JumpScene::LoadGame() {
-	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
-	if (!saveState.HasData()) {
-		Debug::out << "No data to load in slot " << saveSlot;
-		return;
-	}
-
-	for (HealthUp* g : HealthUp::GetAll()) {
-		g->LoadGame(saveState);
-	}
-
-	for (Shard* g : Shard::GetAll()) {
-		g->LoadGame(saveState);
-	}
-
-	for (EnemyDoor* g : EnemyDoor::GetAll()) {
-		g->LoadGame(saveState);
-	}
-
-	for (Explosive* g : Explosive::GetAll()) {
-		g->LoadGame(saveState);
-	}
-
-	for (Trigger* g : Trigger::GetAll()) {
-		g->LoadGame(saveState);
-	}
-
-	destroyedTiles.LoadGame(saveState);
-	skillTree.LoadGame(saveState);
-
-	for (BigItem* g : BigItem::GetAll()) {
-		if (skillTree.IsEnabled(g->skill)) {
-			TriggerPickupItem(g, true);
-			g->alive = false;
-		}
-	}
-
-	bool bossdead_bipedal = false;
-	saveState.StreamGet("bossdead_bipedal") >> bossdead_bipedal;
-	if (bossdead_bipedal && boss_bipedal) {
-		boss_bipedal->alive = false;
-	}
-
-	bool bossdead_minotaur = false;
-	saveState.StreamGet("bossdead_minotaur") >> bossdead_minotaur;
-	if (bossdead_minotaur && boss_minotaur) {
-		boss_minotaur->alive = false;
-	}
-
-	bool bossdead_ooy = false;
-	saveState.StreamGet("bossdead_ooy") >> bossdead_ooy;
-	if (bossdead_ooy) {
-		boss_ooy->alive = false;
-	}
-
-	bool bossdead_mantis = false;
-	saveState.StreamGet("bossdead_mantis") >> bossdead_mantis;
-	if (bossdead_mantis) {
-		for (auto m : Mantis::GetAll()) {
-			m->alive = false;
-		}
-	}
-
-	player.LoadGame(saveState);
-
-	// Kill enemies near the save station
-	int saveStation = -1;
-	saveState.StreamGet("savestation") >> saveStation;
-	if (saveStation >= 0) {
-		for (SaveStation* s : SaveStation::GetAll()) {
-			if (s->id == saveStation) {
-				for (Entity* e : s->hiddenBy) {
-					e->alive = false;
-				}
-				player.pos = s->pos;
-			}
-		}
-	}
-
-	Camera::SetCenter(player.GetCameraTargetPos()); // Needed so Update doesn't return because we are on a "camera transition"
-	Update(0); //Hackish way to make sure the entities with alive=false trigger things on other components before being deleted
-}
 
 void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 
-	switch (g->skill) {
-	case Skill::WALLJUMP:
-	{
-	}
-	break;
-	case Skill::ATTACK:
-	{
-		int screen_gun = ScreenManager::FindScreenContaining(g->pos);
-		for (Bat* e : Bat::GetAll()) {
-			if (e->screen == screen_gun) {
-				e->awakened = true;
-			}
-		}
-		for (auto const& [id, pos] : Tiled::Entities::initial_batawake) {
-			Bat* b = new Bat(pos, false, true);
-			for (EnemyDoor* d : EnemyDoor::ByScreen[b->screen]) {
-				d->AddEnemy(b);
-			}
-		}
-	}
-	break;
-	default:
-		break;
-	}
 }
 
 void JumpScene::EnterScene()
@@ -281,35 +123,22 @@ void JumpScene::EnterScene()
 
 	player.Reset(Tiled::Entities::single_spawn, kPlayerInitialHealth);
 	skillTree.Reset();
+	skillTree.Enable(Skill::ATTACK);
+	skillTree.Enable(Skill::DIVE);
+	skillTree.Enable(Skill::DASH);
+	skillTree.Enable(Skill::WALLJUMP);
+	skillTree.Enable(Skill::BREAK);
 
-	ScreenManager::UpdateCurrentScreen(Tiled::Entities::single_initial_screen);
+
+	ScreenManager::UpdateCurrentScreen(player.pos);
 
 	map.LoadFromTiled<Tiled::TileMap>();
-
-	new BigItem(Tiled::Entities::single_skill_walljump, Skill::WALLJUMP);
-	new BigItem(Tiled::Entities::single_skill_gun, Skill::GUN);
-	new BigItem(Tiled::Entities::single_skill_breakblocks, Skill::BREAK);
-	new BigItem(Tiled::Entities::single_skill_attack, Skill::ATTACK);
-	new BigItem(Tiled::Entities::single_skill_dive, Skill::DIVE);
-	new BigItem(Tiled::Entities::single_skill_dash, Skill::DASH);
 
 	// FIXME: NPC
 	//(new ForegroundOneShotAnim(Assets::warriorTexture, Tiled::Entities::single_npc, AnimLib::NPC_IDLE, 1.2f))->anim.loopable = true;
 
 	for (auto const& [id, pos] : Tiled::Entities::bat) {
 		new Bat(pos, false, false);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::angrybat) {
-		new Bat(pos, true, false);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::angrybatawake) {
-		new Bat(pos, true, true);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::batawake) {
-		new Bat(pos, false, true);
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::fireslime) {
@@ -320,59 +149,13 @@ void JumpScene::EnterScene()
 		new RocketLauncher(pos);
 	}
 
-	for (auto const& [id, pos] : Tiled::Entities::drain) {
-		new Drain(pos);
-	}
-
 	for (auto const& [id, pos] : Tiled::Entities::miniooy) {
 		new MiniOoy(pos);
 	}
 
-	for (auto const& [id, pos] : Tiled::Entities::goomba) {
-		new Goomba(pos, Goomba::Type::WALKER);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::goombacharger) {
-		new Goomba(pos, Goomba::Type::CHARGER);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::goombashielder) {
-		new Goomba(pos, Goomba::Type::SHIELDER);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::flyingalien) {
-		new FlyingAlien(pos);
-	}
 
 	for (auto const& [id, pos] : Tiled::Entities::save) {
 		new SaveStation(id, pos);
-	}
-
-	// Bosses
-	for (auto const& [id, pos] : Tiled::Entities::mantis) {
-		new Mantis(pos);
-	}
-
-	boss_bipedal = new Bipedal(Tiled::Entities::single_boss_bipedal);
-
-	boss_minotaur = new Minotaur(Tiled::Entities::single_boss_minotaur);
-
-	boss_ooy = new Ooy(Tiled::Entities::single_ooy);
-
-	for (auto const& [id, pos] : Tiled::Entities::healthup) {
-		new HealthUp(id, pos);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::shard) {
-		new Shard(id, pos);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::explosive) {
-		new Explosive(id, pos, false);
-	}
-
-	for (auto const& [id, pos] : Tiled::Entities::temp_explosive) {
-		new Explosive(id, pos, true);
 	}
 
 	for (const BoxBounds& a : Tiled::Areas::bg_bird_spawner) {
@@ -406,138 +189,11 @@ void JumpScene::EnterScene()
 
 	for (const BoxBounds& a : Tiled::Areas::lava) {
 		Lava* lava = new Lava(a);
-		if (a.Contains(Tiled::Entities::single_lava_initial_height)) {
-			raising_lava = lava;
-			raising_lava_target_height = lava->CurrentLevel();
-			lava->SetLevel(Tiled::Entities::single_lava_initial_height.y, true);
-		}
+		raising_lava = lava;
+		raising_lava->SetRaiseSpeed(60.f);
 	}
-
-	new Trigger("lava_raise", Tiled::Triggers::single_trigger_lava, [this](Trigger* t, bool isLoadingSave) {
-		raising_lava->SetLevel(raising_lava_target_height, isLoadingSave);
-	});
-
-	new Trigger("lava_raise", Tiled::Triggers::single_trigger_fast_lava, [this](Trigger* t, bool isLoadingSave) {
-		raising_lava->SetRaiseSpeed(Lava::kFastRaiseSpeed);
-	});
-
-	new Trigger(Tiled::Triggers::single_trigger_leafs, [](Trigger* t) {
-		Particles::leafs.pos = JumpMan::instance()->pos;
-		Particles::leafs.AddParticles(17);
-		Particles::leafs.FlipX();
-		Particles::leafs.AddParticles(17);
-		for (auto& p : Particles::leafs.particles) {
-			p.pos.y += Rand::roll(-30, 30) - 48;
-			p.pos.x += Rand::roll(-18, 18);
-		}
-		Assets::soundLeaves.Play();
-		Assets::soundLeaves[0].Play();
-		Assets::soundLeaves[1].Play();
-	});
-
-	DummyEntity* fallingRock1 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_1);
-	DummyEntity* fallingRock2 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_2);
-	DummyEntity* fallingRock3 = new DummyEntity(AnimLib::BIG_ROCK, Tiled::Entities::single_rocks_origin_3);
-	if (boss_ooy) {
-		boss_ooy->state = Ooy::State::STILL;
-	}
-	new Trigger("rockfall", Tiled::Triggers::single_trigger_rockfall, [this, fallingRock1, fallingRock2, fallingRock3](Trigger* t, bool isLoadingSave) {
-
-		if (isLoadingSave) {
-			fallingRock1->SetTransform(Tiled::Entities::single_rocks_target_1);
-			fallingRock2->SetTransform(Tiled::Entities::single_rocks_target_2);
-			fallingRock3->SetTransform(Tiled::Entities::single_rocks_target_3);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_1), Tile::SOLID_TRANSPARENT);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_2), Tile::SOLID_TRANSPARENT);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_3), Tile::SOLID_TRANSPARENT);
-			if (boss_ooy) boss_ooy->state = Ooy::State::EXIT_CHASE;
-			return;
-		}
-
-		player.pos.x -= 100.f;
-		SaveGame(-1);
-		player.pos.x += 100.f;
-
-
-		CutSceneBuilder()
-		.PlayOneFrame([]() {
-			//FIXME: Replace by calling a special "ragdoll update" function on the player during the cutscene
-			//that ignores input but keeps the player's current momentum until it stops naturally
-			Input::IgnoreInput(true);
-		})
-		.WaitAndThen()
-		.PlayOneFrame([]() {
-			Fx::Screenshake::Start(3.5f, vec(0.6f, 0.6f), vec(35.f, 45.f));
-			Fx::Screenshake::screenshakeDampening = 1.03f;
-		})
-		.DoNothingFor(0.35f)
-		.WaitAndThen()
-		.PlayOneFrame([this]() {
-			player.lookingLeft = true;
-		})
-		.DoNothingFor(0.4f)
-		.WaitAndThen()
-		.PlayOneFrame([]() {
-			Fx::Screenshake::screenshakeDampening = -1.f;
-		})
-		.DoNothingFor(2.5f)
-		.WaitAndThen()
-		.PlayOneFrame([]() {
-			Fx::Screenshake::screenshakeDampening = 0.9f;
-		})
-		.DoNothingFor(1.0f)
-		.WaitAndThen()
-		.PlayOneFrame([this]() {
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_1), Tile::SOLID_TRANSPARENT);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_2), Tile::SOLID_TRANSPARENT);
-			map.SetTile(Tile::ToTiles(Tiled::Entities::single_rocks_target_3), Tile::SOLID_TRANSPARENT);
-			player.lookingLeft = false;
-			Input::IgnoreInput(false);
-			if (boss_ooy) boss_ooy->state = Ooy::State::EXIT_CHASE;
-		});
-
-		CutSceneBuilder()
-		.DoNothingFor(0.9f)
-		.WaitAndThen()
-		.Play(0.7f, [fallingRock1](float progress) {
-			fallingRock1->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_origin_1, Tiled::Entities::single_rocks_middle_1));
-		})
-		.WaitAndThen()
-		.Play(1.0f, [fallingRock1](float progress) {
-			fallingRock1->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_1, Tiled::Entities::single_rocks_target_1));
-		});
-
-		CutSceneBuilder()
-		.DoNothingFor(1.1f)
-		.WaitAndThen()
-		.Play(1.0f, [fallingRock2](float progress) {
-			fallingRock2->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_origin_2, Tiled::Entities::single_rocks_middle_2));
-		})
-		.WaitAndThen()
-		.Play(0.6f, [fallingRock2](float progress) {
-			fallingRock2->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_2, Tiled::Entities::single_rocks_target_2));
-		});
-
-		CutSceneBuilder()
-		.DoNothingFor(1.4f)
-		.WaitAndThen()
-		.Play(0.6f, [fallingRock3](float progress) {
-			fallingRock3->SetTransform(tweeny::easing::cubicIn.run(progress, Tiled::Entities::single_rocks_origin_3, Tiled::Entities::single_rocks_middle_3));
-		})
-		.WaitAndThen()
-		.Play(0.5f, [fallingRock3](float progress) {
-			fallingRock3->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_3, Tiled::Entities::single_rocks_middle_bounce_3));
-		})
-		.WaitAndThen()
-		.Play(0.5f, [fallingRock3](float progress) {
-			fallingRock3->SetTransform(tweeny::easing::quadraticIn.run(progress, Tiled::Entities::single_rocks_middle_bounce_3, Tiled::Entities::single_rocks_target_3));
-		});
-
-	});
 
 	Camera::SetCenter(player.GetCameraTargetPos());
-
-	LoadGame();
 
 	zoneManager.Reset();
 
@@ -793,11 +449,6 @@ void JumpScene::Update(float dt)
 			saveState.Save();
 		}
 	}
-	if (Keyboard::IsKeyJustPressed(teleport)) {
-		player.pos = Tiled::Entities::single_debug_teleport;
-		ScreenManager::UpdateCurrentScreen(player.pos);
-		Camera::SetCenter(player.GetCameraTargetPos());
-	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
 		skillTree.Enable(Skill::ATTACK);
 		skillTree.Enable(Skill::DIVE);
@@ -843,28 +494,6 @@ void JumpScene::Update(float dt)
 	for (EnemyDoor* ed : EnemyDoor::GetAll()) {
 		// If clossed, it checks for enemies with alive == false to open
 		ed->Update(dt);
-	}
-
-	for (SaveStation* ss : SaveStation::GetAll()) {
-		// If hidden, it checks for enemies with alive == false to unhide
-		if (ss->Update(dt)) { // true if player can interact with it
-			contextActionButton = true;
-			if (Input::IsJustPressed(0, GameKeys::ACTION)) {
-				// TODO: Interaction animation
-				SaveGame(ss->id);
-				dialogDriver.StartDialog(saveGameDialog);
-			}
-		}
-	}
-
-	if (boss_bipedal && !boss_bipedal->alive) {
-		boss_bipedal = nullptr;
-	}
-	if (boss_minotaur && !boss_minotaur->alive) {
-		boss_minotaur = nullptr;
-	}
-	if (boss_ooy && !boss_ooy->alive) {
-		boss_ooy = nullptr;
 	}
 
 	// Delete enemies after updating doors and savestations that might check for them
@@ -925,7 +554,6 @@ void JumpScene::Update(float dt)
 			
 			g->alive = false;
 
-			SaveGame(-1); // silently save
 		}
 	}
 	BigItem::DeleteNotAlive();
@@ -985,6 +613,13 @@ void JumpScene::Draw()
 
 	//Particles::ooyTearTrail.DrawImGUI("Tears");
 
+	Window::Draw(text_holi, Tiled::Entities::single_holi).withScale(0.5f);
+	Window::Draw(text_holi_2, Tiled::Entities::single_holi_2).withScale(0.25f);
+	Window::Draw(text_frame_by_frame, Tiled::Entities::single_frame_by_frame).withScale(0.4f);
+	Window::Draw(text_debug_draw, Tiled::Entities::single_debug_draw).withScale(0.4f);
+	Window::Draw(text_move_cam, Tiled::Entities::single_move_cam).withScale(0.4f);
+	Window::Draw(text_imgui, Tiled::Entities::single_imgui).withScale(0.4f);
+	
 	DrawAllInOrder(
 		SaveStation::GetAll(),
 		EnemyDoor::GetAll(),
@@ -1036,43 +671,24 @@ void JumpScene::Draw()
 		ImGui::Begin("scene");
 		vec m = Mouse::GetPositionInWorld();
 		veci t = Tile::ToTiles(m);
-		ImGui::Text("mainclock: %f", mainClock);
 		ImGui::Text("Mouse: %f,%f Tile: %d,%d", m.x, m.y, t.x, t.y);
 		if (ImGui::Button("Start NPC dialog")) {
 			dialogDriver.StartDialog(dialogWithRandomNpc);
 		}
 
-		static bool placingDummy = false;
-		if (ImGui::Button("Place dummy enemy")) {
-			placingDummy = true;
+		static bool invincible = false;
+		ImGui::Checkbox("invincible", &invincible);
+		if (invincible) {
+			*(const_cast<int*>(&player.health)) = std::max(player.health, player.maxHealth);
 		}
-		if (placingDummy) {
-			Window::Draw(Assets::spritesheetTexture, Mouse::GetPositionInWorld())
-				.withRectWithOriginCentered(AnimLib::GOOMBA[0].rect);
-			if (Mouse::IsJustPressed()) {
-				new Goomba(Mouse::GetPositionInWorld(), Goomba::Type::DUMMY);
-				if (!Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
-					placingDummy = false;
-				}
-			}
-			if (Mouse::IsJustPressed(Mouse::Button::Right)) {
-				placingDummy = false;
-			}
+		ImGui::SliderInt("health", const_cast<int*>(&player.health), 0, 7);
+		ImGui::SliderInt("max_health", const_cast<int*>(&player.maxHealth), 0, 7);
+		static float intial_lava_height = raising_lava->CurrentLevel();
+		static float current_lava_height = raising_lava->CurrentLevel();
+			if (ImGui::SliderFloat("lava_height", &current_lava_height, 1736, intial_lava_height)) {
+				raising_lava->SetLevel(current_lava_height);
 		}
-		if (ImGui::Button("Load")) {
-			LoadGame();
-			SceneManager::RestartScene();
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Save")) {
-			SaveGame(-1);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Clear save")) {
-			SaveState::Open(kSaveStateGameName, saveSlot)
-				.Clear()
-				.Save();
-		}
+
 		ImGui::End();
 	}
 #endif

@@ -35,20 +35,7 @@ FlyingAlien::FlyingAlien(vec pos)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, anim(AnimLib::FLYING_ALIEN)
 {
-	screen = ScreenManager::FindScreenContaining(pos);
-	initialPos = this->pos;
-	initialVelX = Rand::OnceEvery(2) ? -speedInitial : speedInitial;
-	Reset();
 
-	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::alien_bounds);
-	if (bounds_index > -1) {
-		bounds = Tiled::Areas::alien_bounds[bounds_index];
-	} else if (screen > -1) {
-		bounds = ScreenManager::ScreenBounds(screen);
-	} else {
-		Debug::out << "Unbounded FlyingAlien";
-	}
-	EnemiesByScreen::Add(screen, this);
 }
 
 FlyingAlien::~FlyingAlien()

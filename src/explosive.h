@@ -17,14 +17,7 @@ struct Explosive : SelfRegister<Explosive>
 		, respawn_tiles(respawn_tiles)
 		, targetTile(Tile::ToTiles(pos))
 	{
-		for (const BoxBounds& e : Tiled::Areas::explosion) {
-			if (e.Contains(pos)) {
-				areaToDestroy.push_back(e);
-			}
-		}
-
-		GaemTileMap::instance()->SetTile(targetTile, Tile::BREAKABLE_HARD_EXPLOSIVE_BLOCK);
-		target = Tile::Bounds(targetTile);
+		
 	}
 
 	bool CheckBulletCollision(const CircleBounds& bullet)

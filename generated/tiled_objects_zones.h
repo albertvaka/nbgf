@@ -11,12 +11,10 @@ namespace Tiled {
 struct Zones {
 
 	// Bounds
-	static const std::array<BoxBounds, 1> cave;
-	static const BoxBounds single_cave;
 	static const std::array<BoxBounds, 1> pink_cave;
 	static const BoxBounds single_pink_cave;
-	static const std::array<BoxBounds, 3> sewers;
-	static const std::array<BoxBounds, 2> volcano;
+	static const std::array<BoxBounds, 1> sewers;
+	static const BoxBounds single_sewers;
 
 };
 

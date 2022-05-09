@@ -815,26 +815,6 @@ BoxBounds JumpMan::MaxBounds() const
 
 void JumpMan::Draw() const {
 
-#ifdef _IMGUI
-	{
-		ImGui::Begin("jumpman");
-		static bool invincible = false;
-		ImGui::Checkbox("invincible", &invincible);
-		if (invincible) {
-			*(const_cast<int*>(&health)) = std::max(health, maxHealth);
-		}
-		ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10);
-		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
-		if (initialJumpY < Mates::MaxFloat) {
-			debugMaxJumpY = std::max(debugMaxJumpY, -(pos.y - initialJumpY));
-		}
-		ImGui::Text("jump height %f", debugMaxJumpY);
-		ImGui::Text("vel %f,%f", vel.x, vel.y);
-		ImGui::Text("divingRestTimer: %f", divingRestTimer);
-		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing, groundTile.isSlope());
-		ImGui::End();
-	}
-#endif
 
 	if (isHit()) {
 		Assets::tintShader.Activate();

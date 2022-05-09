@@ -189,8 +189,9 @@ void Bat::Draw() const
 	Bounds().DebugDraw();
 	pos.DebugDraw();
 	steering.m_bounds.DebugDraw();
-	CircleBounds(pos, awake_player_distance).DebugDraw(255, 255, 0);
-	CircleBounds(pos, awake_nearby_distance).DebugDraw(0, 255, 255);
+	if (state == State::SIESTA) {
+		CircleBounds(pos, awake_player_distance).DebugDraw(255, 255, 0);
+	}
 	if (state == State::FLYING) {
 		(Heading() * 15).DebugDrawAsArrow(pos, 255, 255, 0);
 	} else if (state == State::SEEKING) {
