@@ -8,7 +8,7 @@
 #include <math.h>
 #include <limits>
 #include <string>
-#include <cassert>
+#include "SDL_assert.h"
 
 namespace Mates
 {
@@ -55,6 +55,12 @@ namespace Mates
 		return int((total_time_before_dt_increment + dt) / period_sec) != int((total_time_before_dt_increment) / period_sec);
 	}
 
+	[[nodiscard]] inline int RoundUpToMultipleOf(int value, int multiple)
+	{
+		// Rounds away from zero for negative numbers
+		return ((value + multiple - 1) / multiple) * multiple;
+	}
+
 	//-----------------------------------------------------------------------
 	//
 	//  some handy little functions
@@ -71,9 +77,7 @@ namespace Mates
 	template <class T, class U, class V>
 	inline void Clamp(T& arg, const U& minVal, const V& maxVal)
 	{
-#if _DEBUG
-		assert(((double)minVal <= (double)maxVal) && "<Clamp>MaxVal < MinVal!");
-#endif
+		SDL_assert(minVal <= maxVal);
 
 		if (arg < (T)minVal)
 		{
@@ -84,6 +88,13 @@ namespace Mates
 		{
 			arg = (T)maxVal;
 		}
+	}
+
+	template <class T, class U, class V>
+	T Clamped(T arg, const U& minVal, const V& maxVal)
+	{
+		Clamp(arg, minVal, maxVal);
+		return arg;
 	}
 
 	template <class T, class V>
@@ -120,7 +131,7 @@ namespace Mates
 		int    integral = (int)val;
 		float mantissa = val - integral;
 
-		if (mantissa < 0.5)
+		if (mantissa < 0.5f)
 		{
 			return integral;
 		}
@@ -150,7 +161,7 @@ namespace Mates
 	}
 
 	//compares two real numbers. Returns true if they are equal
-	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12)
+	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12f)
 	{
 		if (fabs(a - b) < margin)
 		{

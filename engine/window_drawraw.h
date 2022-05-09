@@ -197,3 +197,20 @@ namespace Window {
 
 
 }
+
+inline void FixTextureBleeding(GPU_Rect& tr) {
+	// I made a similar fix in SDL_GPU's BlitTransformX, but when drawing raw vertices it's not used so we need it here as well
+	const float e = 0.1f;
+	tr.x += e;
+	tr.y += e;
+	tr.w -= 2*e;
+	tr.h -= 2*e;
+}
+
+inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {
+	FixTextureBleeding(tr);
+	tr.x /= i->texture_w;
+	tr.y /= i->texture_h;
+	tr.w /= i->texture_w;
+	tr.h /= i->texture_h;
+}

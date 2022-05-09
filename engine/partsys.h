@@ -17,6 +17,7 @@ struct PartSys {
 		float ttl;
 		float scale;
 		float rotation;
+		float rotation_vel;
 		float alpha;
 		inline bool Update(float dt, const PartSys& system) {
 			ttl -= dt;
@@ -32,7 +33,7 @@ struct PartSys {
 					scale = 0.0001f;
 				}
 			}
-			rotation += system.rotation_vel * dt;
+			rotation += rotation_vel * dt;
 			alpha += system.alpha_vel * dt;
 			if (alpha < 0.f) {
 				if (system.alpha_vel < 0.f) {
@@ -74,7 +75,8 @@ struct PartSys {
 	float min_rotation = 0.f;
 	float max_rotation = 0.f;
 
-	float rotation_vel = 0.f;
+	float min_rotation_vel = 0.f;
+	float max_rotation_vel = 0.f;
 
 	float alpha = 1.f;
 	float alpha_vel = 0.f;
@@ -95,7 +97,7 @@ struct PartSys {
 
 	void Spawn(float dt) { SpawnWithExternalTimer(time, dt); }
 	void SpawnWithExternalTimer(float& timer, float dt);
-	void UpdateParticles(float dt); //Doesn't create new particles, use Spawn() 
+	void UpdateParticles(float dt); //Doesn't create new particles, use Spawn(), SpawnWithExternalTimer(), AddParticle() or AddParticles()
 	void Draw() const;
 
 	Particle& AddParticle();
@@ -113,10 +115,13 @@ struct PartSys {
 		max_vel.x = -min_vel.x;
 		min_vel.x = -aux;
 		acc.x = -acc.x;
+		aux = max_rotation_vel;
+		max_rotation_vel = -min_rotation_vel;
+		min_rotation_vel = -aux;
 	}
 
-private:
 	std::vector<Particle> particles;
+private:
 	mutable std::vector<GPU_Rect> sprites;
 };
 

@@ -2,13 +2,16 @@
 
 #include "SDL_gpu.h"
 
+#include "vec.h"
+#include "bounds.h"
+
 namespace Window {
 
 	namespace DrawPrimitive {
 
 		// pass thickness = 1 to draw one pixel (virtual, after scaling)
-		void Point(float x, float y, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-		inline void Point(vec v, uint8_t r, float thickness, uint8_t g, uint8_t b, uint8_t a) { Point(v.x, v.y, thickness, r, g, b, a); }
+		void Point(float x, float y, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a=255);
+		inline void Point(vec v, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a=255) { Point(v.x, v.y, thickness, r, g, b, a); }
 		inline void Point(float x, float y, float thickness, const SDL_Color& c) { Point(x, y, thickness, c.r, c.g, c.b, c.a); }
 		inline void Point(vec v, float thickness, const SDL_Color & c) { Point(v.x, v.y, thickness, c.r, c.g, c.b, c.a); }
 
@@ -82,13 +85,4 @@ namespace Window {
 		}
 	}
 
-}
-
-inline void FixTextureBleeding(GPU_Rect& tr) {
-	// I made a similar fix in SDL_GPU's BlitTransformX, but when drawing raw vertices it's not used so we need it here as well
-	const float e = 0.1f;
-	tr.x += e;
-	tr.y += e;
-	tr.w -= 2*e;
-	tr.h -= 2*e;
 }

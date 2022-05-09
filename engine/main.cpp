@@ -1,5 +1,6 @@
 #include <string>
 #include <filesystem>
+#include <chrono>
 
 #include "scene_manager.h"
 #include "input.h"
@@ -7,7 +8,7 @@
 #include "debug.h"
 #include "debug.h"
 #include "camera.h"
-#include "fx.h"
+#include "window.h"
 
 #include "../src/assets.h"
 #include "../src/scene_entrypoint.h"
@@ -30,6 +31,7 @@
 #define _FPS_COUNTER
 #endif
 
+bool mainClockPaused = false;
 float mainClock;
 int lastTicks;
 
@@ -41,6 +43,9 @@ float fpsClock = 0.f;
 #endif
 
 #ifdef _DEBUG
+vec fixedCamera;
+float fixedZoom;
+float fixedRotationDegs;
 void BeforeSceneUpdate();
 void BeforeSceneDraw();
 void AfterSceneDraw();
@@ -51,10 +56,9 @@ void main_loop();
 
 extern "C" void start_main_loop()
 {
-	// We wait until here to create the scene since here we know that
-	// the emscripten FS is ready, and the scene could try to use it.
-	SceneManager::currentScene = new EntryPointScene();
-	SceneManager::currentScene->EnterScene();
+	// We wait until here to create the scene so the emscripten FS
+	// emscripten is ready, since the scene constructor could use it
+	SceneManager::newScene = new EntryPointScene();
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(main_loop, 0, 1);
@@ -67,11 +71,9 @@ extern "C" void start_main_loop()
 
 int main(int argc, char* argv[])
 {
-#if !(MACOS_VER_MAJOR==10 && MACOS_VER_MINOR<=14)
 	// set working dir to the binary path
 	std::filesystem::path binaryPath(argv[0]);
 	std::filesystem::current_path(binaryPath.parent_path());
-#endif
 
 	init();
 
@@ -127,6 +129,10 @@ void init() {
 		exit(1);
 	}
 
+	srand(std::chrono::system_clock::now().time_since_epoch().count());
+
+	Assets::LoadAll();
+
 	Input::Init();
 
 #ifdef _IMGUI
@@ -135,39 +141,15 @@ void init() {
 	ImGui_ImplOpenGL3_Init(nullptr);
 #endif
 
-	Assets::LoadAll();
-
-	srand(time(NULL));
-
 #ifdef _FPS_COUNTER
 	fpsText = new Text(Assets::font_30);
 	fpsText->SetString("0");
 #endif
 
-	// Start with the both buffers fully black
-	Window::Clear(0, 0, 0);
-	GPU_Flip(Window::screenTarget);
-	Window::Clear(0, 0, 0);
-
-	Fx::Init();
-
 	lastTicks = SDL_GetTicks();
 }
 
 void main_loop() {
-
-	if (SceneManager::newScene != nullptr) {
-		SceneManager::currentScene->ExitScene();
-		if (SceneManager::currentScene != SceneManager::newScene) {
-			delete SceneManager::currentScene;
-			SceneManager::currentScene = SceneManager::newScene;
-		}
-		SceneManager::newScene = nullptr;
-		Camera::SetZoom(1.f);
-		Camera::SetTopLeft(0,0);
-		Fx::BeforeEnterScene();
-		SceneManager::currentScene->EnterScene();
-	}
 
 #ifdef _IMGUI
 	//GPU_ActivateShaderProgram(0, NULL);
@@ -176,6 +158,27 @@ void main_loop() {
 	ImGui_ImplSDL2_NewFrame(Window::window);
 	ImGui::NewFrame();
 #endif
+
+	if (SceneManager::newScene != nullptr) {
+		if (SceneManager::currentScene == nullptr) {
+			// This branch is only taken the first time. We have this here so
+			// the first scene "transition" is as similar to the rest as possible
+			SceneManager::currentScene = SceneManager::newScene;
+		}
+		else {
+			SceneManager::currentScene->ExitScene();
+			if (SceneManager::currentScene != SceneManager::newScene) {
+				delete SceneManager::currentScene;
+				SceneManager::currentScene = SceneManager::newScene;
+			}
+		}
+
+		SceneManager::newScene = nullptr;
+		Camera::SetZoom(1.f);
+		Camera::SetTopLeft(0,0);
+		Input::IgnoreInput(false);
+		SceneManager::currentScene->EnterScene();
+	}
 
 	int ticks = SDL_GetTicks();
 	float uncappedDt = (ticks - lastTicks) / 1000.f;
@@ -219,6 +222,7 @@ void main_loop() {
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME = SDL_SCANCODE_F1;
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME_NEXT = SDL_SCANCODE_E;
 	const SDL_Scancode DEBUG_MODE = SDL_SCANCODE_F2;
+	const SDL_Scancode FIXED_CAMERA = SDL_SCANCODE_F3;
 	const SDL_Scancode DEBUG_RELOAD_ASSETS = SDL_SCANCODE_F4;
 	const SDL_Scancode DEBUG_RESTART_SCENE = SDL_SCANCODE_F5;
 	const SDL_Scancode DEBUG_FAST_FORWARD = SDL_SCANCODE_F10;
@@ -227,6 +231,13 @@ void main_loop() {
 		// Leaks all already loaded assets, but we don't care since this is just for testing
 		Assets::LoadAll();
 		Debug::out << "Assets reloaded";
+	}
+
+	if (Keyboard::IsKeyJustPressed(FIXED_CAMERA)) {
+		Debug::CameraFixed = !Debug::CameraFixed;
+		fixedCamera = Camera::Center();
+		fixedZoom = Camera::Zoom();
+		fixedRotationDegs = Camera::GetRotationDegs();
 	}
 
 	if (Keyboard::IsKeyJustPressed(DEBUG_MODE)) {
@@ -247,12 +258,21 @@ void main_loop() {
 		SceneManager::RestartScene();
 	}
 
-	if (Debug::FrameByFrame && Debug::Draw) {
-		Camera::MoveCameraWithArrows(dt);
-		Camera::ChangeZoomWithPlusAndMinus(dt);
-		Camera::RotateWithPagUpDown(dt);
+	if (Debug::CameraFixed) {
+		 Camera::SetCenter(fixedCamera);
+		 Camera::SetZoom(fixedZoom);
+		 Camera::SetRotationDegs(fixedRotationDegs);
 	}
 
+	if (Debug::FrameByFrame && Debug::Draw) {
+		float vel = Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT) ? 2.f : 1.f;
+		Camera::MoveCameraWithArrows(vel*dt);
+		Camera::ChangeZoomWithPlusAndMinus(vel* dt);
+		Camera::RotateWithPagUpDown(vel* dt);
+		fixedCamera = Camera::Center();
+		fixedZoom = Camera::Zoom();
+		fixedRotationDegs = Camera::GetRotationDegs();
+	}
 	if (Debug::FastForward || Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
 		dt = kMinDt;
 	}
@@ -261,21 +281,23 @@ void main_loop() {
 	{
 		BeforeSceneUpdate();
 #endif
-		Fx::Update(dt);
-		if (!Fx::FreezeImage::IsFrozen()) {
+		if (!mainClockPaused) {
 			mainClock += dt;
-			if (!Fx::ScreenTransition::IsActive()) {
-				SceneManager::currentScene->Update(dt);
-			}
 		}
+		SceneManager::currentScene->Update(dt);
 #ifdef _DEBUG
+	}
+
+	if (Debug::CameraFixed) {
+		Camera::SetCenter(fixedCamera);
+		Camera::SetZoom(fixedZoom);
+		Camera::SetRotationDegs(fixedRotationDegs);
 	}
 
 	BeforeSceneDraw();
 #endif
 
 	SceneManager::currentScene->Draw();
-	Fx::AfterDraw();
 
 #ifdef _DEBUG
 	AfterSceneDraw();
@@ -303,6 +325,12 @@ void main_loop() {
 	ImGui::Render();
 	SDL_GL_MakeCurrent(Window::window, Window::screenTarget->context->context);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
+
+#ifdef _DEBUG
+	if (mainClockPaused) {
+		Window::DrawPrimitive::Circle(5, 5, 3, -1, 255, 0, 0);
+	}
 #endif
 
 	Camera::InScreenCoords::End();

@@ -1,0 +1,60 @@
+#pragma once
+
+#include "vec.h"
+#include "bounds.h"
+#include "mates.h"
+#include "SDL_gpu.h"
+
+namespace Tiled {
+
+struct Tile {
+	
+	static constexpr const int Size = 74;
+	static constexpr const vec Sizes = vec(74,74);
+
+	static const GPU_Rect TileToTextureRect[];
+	constexpr const GPU_Rect& textureRect() const { return TileToTextureRect[int(value)]; }
+
+	// Coordinate conversion functions
+
+	static veci ToTiles(vec pos) { return ToTiles(pos.x, pos.y); }
+	static veci ToTiles(float x, float y) { return veci(ToTiles(x), ToTiles(y)); }
+	static int ToTiles(float x) { return Mates::fastfloor(x / Tile::Size); } // floor could be just a cast to int if we know we will never get < 0
+
+	static vec FromTiles(int x, int y) { return vec(x * Tile::Size, y * Tile::Size); }
+	static vec FromTiles(veci pos) { return FromTiles(pos.x, pos.y);  }
+
+	static vec AlignToTiles(vec v) { return ToTiles(v) * Tile::Size; }
+	static vec AlignToTiles(float x, float y) { return ToTiles(x, y) * Tile::Size; }
+	static float AlignToTiles(float x) { return ToTiles(x) * Tile::Size; }
+
+	static vec OffsetInTile(float x, float y) { return vec(x, y) - AlignToTiles(x, y); }
+
+	static float Bottom(int y) { return float(y + 1) * Tile::Size; }
+	static float Top(int y) { return float(y) * Tile::Size; }
+	static float Left(int x) { return float(x) * Tile::Size; }
+	static float Right(int x) { return float(x + 1) * Tile::Size; }
+	
+	static BoxBounds Bounds(int x, int y) { return BoxBounds(x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size); }
+	static BoxBounds Bounds(veci pos) { return Bounds(pos.x, pos.y); }
+
+	enum Value : uint16_t
+	{
+		NONE = 0,
+		SOLID_1,
+		SOLID_TRANSPARENT,
+	};
+
+	// Aliases
+
+	constexpr operator Value() const { return value; }  // Allow switch and comparisons.
+	explicit constexpr operator bool() = delete;        // Prevent if(tile)
+
+	Tile() = default;
+	constexpr Tile(Value t) : value(t) { }
+
+protected:
+	Value value;
+};
+
+}

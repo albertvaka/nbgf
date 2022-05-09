@@ -9,7 +9,7 @@ vec vec::RotatedToFacePositionRads(vec target, float maxTurnRateRads) const
 	float angle = acos(heading.Dot(toTarget));
 
 	//return true if already facing the target
-	if (angle < 0.00001 || isnan(angle)) {
+	if (angle < 0.00001f || isnan(angle)) {
 		return *this;
 	}
 

@@ -29,7 +29,8 @@ SceneMain::SceneMain()
 	alienPartSys.min_vel = vec(-50,-50);
 	alienPartSys.min_rotation = 0;
 	alienPartSys.max_rotation = 360;
-	alienPartSys.rotation_vel = 100.f;
+	alienPartSys.max_rotation_vel = 100.f;
+	alienPartSys.min_rotation_vel = 100.f;
 	alienPartSys.scale_vel = -0.2f;
 }
 

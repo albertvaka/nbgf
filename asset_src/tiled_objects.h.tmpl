@@ -10,7 +10,7 @@ namespace Tiled {
 
 struct {{name}} {
 {% if entities_by_type|length >= 1 %}
-	// Objects
+	// Positions
 {%- endif %}
 {%- for type, positions in entities_by_type %}
 	static const std::unordered_map<int, vec> {{type}};
@@ -19,11 +19,24 @@ struct {{name}} {
 	{%- endif %}
 {%- endfor %}
 
+{%- if transforms_by_type|length >= 1 %}
+	// Transforms
+{%- endif %}
+{%- for type, positions in transforms_by_type %}
+	static const std::unordered_map<int, Transform> {{type}};
+	{%- if positions|length == 1 %}
+	static const Transform single_{{type}};
+	{%- endif %}
+{%- endfor %}
+
 {%- if areas_by_type|length >= 1 %}
 	// Bounds
 {%- endif %}
 {%- for type, bounds_list in areas_by_type %}
 	static const std::array<BoxBounds, {{bounds_list|length}}> {{type}};
+	{%- if bounds_list|length == 1 %}
+	static const BoxBounds single_{{type}};
+	{%- endif %}
 {%- endfor %}
 
 };

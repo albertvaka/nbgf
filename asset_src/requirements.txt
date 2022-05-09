@@ -1,2 +1,2 @@
-pytiled_parser==1.1.0
+pytiled_parser==2.0.1
 jinja2==2.11.3

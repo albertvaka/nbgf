@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 from collections import defaultdict, OrderedDict
 
-level = pytiled_parser.parse_map(Path("tiled.json"))
+level = pytiled_parser.parse_map(Path("tiled.tmx"))
 
 known_tile_types = ['bg','oneway','rslope','lslope','solid','breakable', 'breakable_hard', 'breakable_gnd']
 
@@ -88,6 +88,8 @@ for g in tileset.keys():
                 gids_used.add(g)
 
 gids_used.remove(-1)
+
+gids_used = sorted(gids_used)
 
 gids_by_type = defaultdict(list)
 for g in gids_used:
@@ -173,12 +175,15 @@ for objects in object_layers:
 
     entities_by_type = defaultdict(list)
     areas_by_type = defaultdict(list)
+    types_with_rotation = set()
 
     for e in objects.tiled_objects:
         if isinstance(e,  pytiled_parser.tiled_object.Tile):
             type_ = e.type if e.type else tileset[e.gid-1].type
             if type_:
-                entities_by_type[type_].append((e.id, float(e.coordinates.x)-min_x*tilesize, float(e.coordinates.y)-min_y*tilesize))
+                entities_by_type[type_].append((e.id, float(e.coordinates.x)-min_x*tilesize, float(e.coordinates.y)-min_y*tilesize, e.rotation))
+                if e.rotation != 0:
+                    types_with_rotation.add(type_)
             else:
                 print("Warning: ignoring object without type nor tile type")
         elif isinstance(e, pytiled_parser.tiled_object.Rectangle):
@@ -187,10 +192,15 @@ for objects in object_layers:
             else:
                 print("Warning: ignoring rectangle without type")
 
+    transforms_by_type = defaultdict(list)
+    for t in types_with_rotation:
+        transforms_by_type[t] = entities_by_type.pop(t)
+
     tm = Template(Path('tiled_objects.h.tmpl').read_text())
     out_content = tm.render(
         name=objects.name,
         entities_by_type=sorted(entities_by_type.items()),
+        transforms_by_type=sorted(transforms_by_type.items()),
         areas_by_type=sorted(areas_by_type.items()),
     )
 
@@ -210,6 +220,7 @@ for objects in object_layers:
     out_content = tm.render(
         name=objects.name,
         entities_by_type=sorted(entities_by_type.items()),
+        transforms_by_type=sorted(transforms_by_type.items()),
         areas_by_type=sorted(areas_by_type.items()),
         debug = False,
     )
@@ -228,8 +239,9 @@ for objects in object_layers:
 
 
 print("Total different tiles used:", len(gids_used))
-if len(gids_used) > 255:
-    print("Warning: There are more than 255 tiles used, but we try to represent them as a uint8!")
+# We use uint16 now
+#if len(gids_used) > 255:
+#    print("Warning: There are more than 255 tiles used, but we try to represent them as a uint8!")
 
 # Tileset
 tm = Template(Path('tiled_tile.h.tmpl').read_text())
@@ -275,4 +287,7 @@ else:
     print("UPDATING: {}".format(os.path.basename(fname)))
     Path(fname).write_text(out_content)
 
-
+# VS compares the dates from this and tiled.tmx to know if it needs to re-trigger this script.
+# We can't use the dates from the generated files themselves because we don't change the files
+# if there are no changes to not trigger a rebuild.
+Path("../obj/last_tiled_generation").touch()

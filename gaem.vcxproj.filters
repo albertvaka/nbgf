@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Bundled Dependencies">
       <UniqueIdentifier>{256968a6-009b-4651-8ae5-a4f95670f698}</UniqueIdentifier>
     </Filter>
@@ -28,6 +24,15 @@
     </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{4ac15e07-3b9f-47b2-ae09-134038d673c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated">
+      <UniqueIdentifier>{8c51efac-7be1-4746-af80-1e0855902e22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bundled Dependencies\sdl_ttf">
+      <UniqueIdentifier>{af4f02d3-1ca6-46a9-a168-b5b1a981eed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generated\scripts">
+      <UniqueIdentifier>{d6e4d2bd-646e-4331-b6ee-a4bfa2c9f6ae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,32 +108,50 @@
     <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
-    <ClInclude Include="src\alien.h">
-      <Filter>src</Filter>
+    <ClInclude Include="vendor\tweeny\tweeny.h">
+      <Filter>Bundled Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="src\anim_lib.h">
-      <Filter>src</Filter>
+    <ClInclude Include="vendor\SDL_ttf\include\SDL_ttf.h">
+      <Filter>Bundled Dependencies\sdl_ttf</Filter>
     </ClInclude>
-    <ClInclude Include="src\assets.h">
-      <Filter>src</Filter>
+    <ClInclude Include="generated\tiled_objects_entities.h">
+      <Filter>generated</Filter>
     </ClInclude>
-    <ClInclude Include="src\bullet.h">
-      <Filter>src</Filter>
+    <ClInclude Include="generated\tiled_tile.h">
+      <Filter>generated</Filter>
     </ClInclude>
-    <ClInclude Include="src\player.h">
-      <Filter>src</Filter>
+    <ClInclude Include="generated\tiled_tilemap.h">
+      <Filter>generated</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_main.h">
-      <Filter>src</Filter>
+    <ClInclude Include="engine\angles.h">
+      <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\window_conf.h">
-      <Filter>src</Filter>
+    <ClInclude Include="engine\animation.h">
+      <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\input_conf.h">
-      <Filter>src</Filter>
+    <ClInclude Include="engine\animation_frame.h">
+      <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_entrypoint.h">
-      <Filter>src</Filter>
+    <ClInclude Include="engine\asset_load.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\bounds.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\camera.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\collide.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\debug.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\drawall.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\entity.h">
+      <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\input.h">
       <Filter>engine</Filter>
@@ -184,6 +207,9 @@
     <ClInclude Include="engine\window.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="engine\window_conf.h">
+      <Filter>engine</Filter>
+    </ClInclude>
     <ClInclude Include="engine\window_draw.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -193,38 +219,32 @@
     <ClInclude Include="engine\window_drawraw.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="engine\angles.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\window_conf.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="engine\animation.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\alien.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="engine\animation_frame.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\anim_lib.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="engine\asset_load.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\assets.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="engine\bounds.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\bullet.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="engine\camera.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\input_conf.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="engine\collide.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\player.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="engine\debug.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\scene_entrypoint.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="engine\drawall.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\entity.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\fx.h">
-      <Filter>engine</Filter>
+    <ClInclude Include="src\scene_main.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -288,17 +308,26 @@
     <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
-    <ClCompile Include="src\assets.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="vendor\SDL_ttf\SDL_ttf.c">
+      <Filter>Bundled Dependencies\sdl_ttf</Filter>
     </ClCompile>
-    <ClCompile Include="src\player.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="generated\tiled_objects_entities.cpp">
+      <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_main.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="generated\tiled_tile.cpp">
+      <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="src\input_conf.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="generated\tiled_tilemap.cpp">
+      <Filter>generated</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\camera.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\debug.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\enable_discrete_gpu.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="engine\input.cpp">
       <Filter>engine</Filter>
@@ -327,20 +356,26 @@
     <ClCompile Include="engine\sound.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="engine\text.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
     <ClCompile Include="engine\vec.cpp">
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="engine\window.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="engine\camera.cpp">
-      <Filter>engine</Filter>
+    <ClCompile Include="src\assets.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="engine\debug.cpp">
-      <Filter>engine</Filter>
+    <ClCompile Include="src\input_conf.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="engine\fx.cpp">
-      <Filter>engine</Filter>
+    <ClCompile Include="src\player.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_main.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,5 +385,18 @@
     <None Include="vendor\SDL_gpu\src\renderer_shapes_GL_common.inl">
       <Filter>Bundled Dependencies\sdl_gpu</Filter>
     </None>
+    <None Include="README.md" />
+    <None Include="asset_src\tiled2cpp.py">
+      <Filter>generated\scripts</Filter>
+    </None>
+    <None Include="asset_src\texturepacker2cpp.py">
+      <Filter>generated\scripts</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="credits.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="asset_src\tiled.tmx" />
   </ItemGroup>
 </Project>
