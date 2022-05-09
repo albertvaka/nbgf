@@ -8,6 +8,7 @@
 
 struct MiniOoy : SteeringEntity, SelfRegister<MiniOoy>
 {
+
 	enum class State
 	{
 		IDLE,
@@ -19,6 +20,8 @@ struct MiniOoy : SteeringEntity, SelfRegister<MiniOoy>
 	State state = State::IDLE;
 	float timer = 0.f;
 	int screen;
+	int health;
+	float hitTimer = 0.f;
 	SteeringBehavior steering;
 	BoxBounds bounds;
 
@@ -28,5 +31,6 @@ struct MiniOoy : SteeringEntity, SelfRegister<MiniOoy>
 	void Update(float dt);
 	void Draw() const;
 
+	void TakeDamage();
 };
 

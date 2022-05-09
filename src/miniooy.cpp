@@ -39,6 +39,8 @@ constexpr const float kSteeringWanderRad = 4.8f; //Ganes que te de posar-se a fe
 constexpr const static float kSteeringWanderDist = 6.5f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
 constexpr const static float kSteeringWanderJitterPerSec = 175; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
 
+constexpr const int kHealth = 2;
+
 extern float mainClock;
 
 constexpr const GPU_Rect directions[] = { AnimLib::OOY_CHASE_SE, AnimLib::OOY_CHASE_SW, AnimLib::OOY_CHASE_NW, AnimLib::OOY_CHASE_NE };
@@ -46,6 +48,7 @@ constexpr const GPU_Rect directions[] = { AnimLib::OOY_CHASE_SE, AnimLib::OOY_CH
 MiniOoy::MiniOoy(vec pos)
 	: SteeringEntity(pos, kRadius, kMaxSpeed, vec(0, 0))
 	, steering(this)
+	, health(kHealth)
 {
 	screen = ScreenManager::FindScreenContaining(pos);
 	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::miniooy_bounds);
@@ -60,6 +63,15 @@ MiniOoy::MiniOoy(vec pos)
 MiniOoy::~MiniOoy()
 {
 	EnemiesByScreen::Remove(screen, this);
+}
+
+void MiniOoy::TakeDamage() {
+	hitTimer = 0.3f;
+	health--;
+	vel += (pos - JumpMan::instance()->CenterPos()).Normalized() * 400;
+	if (health <= 0) {
+		DieWithSmallExplosion(this);
+	}
 }
 
 void MiniOoy::Update(float dt)
@@ -130,9 +142,9 @@ void MiniOoy::Update(float dt)
 	vel.Clamp(vec(-kMaxSpeed, -kMaxSpeed * 0.7f), vec(kMaxSpeed, kMaxSpeed * 0.7f));
 	pos += vel * dt;
 
-
-	if (ReceiveDamageFromPlayer(Bounds(), false)) {
-		DieWithSmallExplosion(this);
+	hitTimer -= dt;
+	if (ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f)) {
+		TakeDamage();
 		return;
 	}
 
@@ -187,9 +199,16 @@ void MiniOoy::Draw() const
 		}
 	*/
 
+	if (hitTimer > 0.f) {
+		Assets::tintShader.Activate();
+		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
+	}
+
 	Window::Draw(Assets::spritesheetTexture, pos)
 		.withRectWithOriginCentered(rect)
 		.withScale(vec(kScale) + vec(0.05f + 0.05f * sin(mainClock), 0.f));
+
+	Shader::Deactivate();
 
 	// Debug-only
 	Bounds().DebugDraw();
