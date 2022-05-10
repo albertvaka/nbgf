@@ -328,6 +328,9 @@ void main_loop() {
 #endif
 
 #ifdef _DEBUG
+	if (Debug::CameraFixed) {
+		Window::DrawPrimitive::Rectangle(5.f, 5.f, 10.f, 10.f, -1, 0, 255, 0);
+	}
 	if (mainClockPaused) {
 		Window::DrawPrimitive::Circle(5, 5, 3, -1, 255, 0, 0);
 	}
