@@ -50,9 +50,6 @@
     <Filter Include="src\world">
       <UniqueIdentifier>{15866b45-8d39-495f-92cb-7109ecdda311}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Bundled Dependencies\sdl_ttf">
-      <UniqueIdentifier>{af4f02d3-1ca6-46a9-a168-b5b1a981eed6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\glew\glew.h">
@@ -421,9 +418,6 @@
     <ClInclude Include="src\enemies_by_screen.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\SDL_ttf\include\SDL_ttf.h">
-      <Filter>Bundled Dependencies\sdl_ttf</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -665,9 +659,6 @@
     </ClCompile>
     <ClCompile Include="src\enemies_by_screen.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\SDL_ttf\SDL_ttf.c">
-      <Filter>Bundled Dependencies\sdl_ttf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
