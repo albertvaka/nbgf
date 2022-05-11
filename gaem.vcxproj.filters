@@ -28,9 +28,6 @@
     <Filter Include="generated">
       <UniqueIdentifier>{8c51efac-7be1-4746-af80-1e0855902e22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Bundled Dependencies\sdl_ttf">
-      <UniqueIdentifier>{af4f02d3-1ca6-46a9-a168-b5b1a981eed6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="generated\scripts">
       <UniqueIdentifier>{d6e4d2bd-646e-4331-b6ee-a4bfa2c9f6ae}</UniqueIdentifier>
     </Filter>
@@ -110,9 +107,6 @@
     </ClInclude>
     <ClInclude Include="vendor\tweeny\tweeny.h">
       <Filter>Bundled Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\SDL_ttf\include\SDL_ttf.h">
-      <Filter>Bundled Dependencies\sdl_ttf</Filter>
     </ClInclude>
     <ClInclude Include="generated\tiled_objects_entities.h">
       <Filter>generated</Filter>
@@ -308,9 +302,6 @@
     <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\SDL_ttf\SDL_ttf.c">
-      <Filter>Bundled Dependencies\sdl_ttf</Filter>
-    </ClCompile>
     <ClCompile Include="generated\tiled_objects_entities.cpp">
       <Filter>generated</Filter>
     </ClCompile>
@@ -392,9 +383,6 @@
     <None Include="asset_src\texturepacker2cpp.py">
       <Filter>generated\scripts</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="credits.txt" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx" />
