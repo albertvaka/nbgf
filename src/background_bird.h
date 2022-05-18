@@ -6,11 +6,12 @@
 #include "animation.h"
 #include "rand.h"
 #include "collide.h"
+#include "camera.h"
 #include "window_draw.h"
 #include "selfregister.h"
 #include "assets.h"
 
-const constexpr float kMinTimeBirdSpawn = 5;
+const constexpr float kMinTimeBirdSpawn = 4;
 const constexpr float kMaxTimeBirdSpawn = 12;
 const constexpr float kMinBirdSpeed = 120;
 const constexpr float kMaxBirdSpeed = 150;
@@ -45,7 +46,7 @@ struct BackgroundBird : Entity, SelfRegister<BackgroundBird>
 
 	void Draw() const
 	{
-		Window::Draw(Assets::spritesheetTexture, pos+vec(0.f, sin((mainClock+vel.x)*3.f)*vel.y))
+		Window::Draw(Assets::spritesheetTexture, pos+vec(0.f, sin(mainClock)*vel.y))
 			.withScale(scale)
 			.withRectWithOriginCentered(anim.CurrentFrameRect());
 	}
@@ -55,34 +56,47 @@ struct BackgroundBirdSpawner : SelfRegister<BackgroundBirdSpawner>
 {
 	bool alive = true;
 	BoxBounds bounds;
-	float timer;
+	float timer[2]; // two timers: one to spawn from left and one from right
 
 	BackgroundBirdSpawner(BoxBounds bounds)
 		: bounds(bounds)
-		, timer(0)
+		, timer{ RandSpawnTime(), RandSpawnTime() }
 	{
 	}
 
 	void Update(float dt)
 	{
+		if (!Collide(Camera::Bounds(), bounds)) {
+			return;
+		}
+
 		for (BackgroundBird* b : BackgroundBird::GetAll()) {
 			if (!bounds.Contains(b->pos)) {
 				b->alive = false;
 			}
 		}
-		//if (Input::IsJustPressed(0, GameKeys::ACTION)) timer = 0.f;
-		timer -= dt;
-		if (timer <= 0) {
-			timer += Rand::rollf(kMinTimeBirdSpawn, kMaxTimeBirdSpawn);
-			if (Rand::OnceEvery(2)) {
-				timer /= 20.f; // Creates flocks (if we are lucky and they spawn on the same side)
+		Spawn(0, dt); // from right
+		Spawn(1, dt); // from left
+	}
+
+	void Spawn(int timerIdx, float dt) {
+		timer[timerIdx] -= dt;
+		if (timer[timerIdx] <= 0) {
+			timer[timerIdx] += RandSpawnTime();
+			if (Rand::OnceEvery(3)) {
+				timer[timerIdx] /= Rand::rollf(15.f, 25.f); // Creates flocks
 			}
-			bool fromRight = Rand::OnceEvery(2);
+			bool fromRight = (timerIdx == 0);
 			float speed_x = Rand::rollf(kMinBirdSpeed, kMaxBirdSpeed);
-			vec spawnSpeed(fromRight ? -speed_x : speed_x, Rand::rollf(5.f, 10.f));
+			vec spawnSpeed((fromRight ? -speed_x : speed_x)*Rand::rollf(0.9f,1.f), Rand::rollf(15.f, 30.f));
 			vec spawnScale(fromRight ? -0.8f : 0.8f, 0.8f);
 			vec spawnPos(fromRight ? bounds.Right() : bounds.Left(), Rand::rollf(bounds.Top(), bounds.Bottom()));
 			new BackgroundBird(spawnPos, spawnSpeed, spawnScale, AnimLib::BACKGROUND_BIRD);
 		}
 	}
+
+	static float RandSpawnTime() {
+		return Rand::rollf(kMinTimeBirdSpawn, kMaxTimeBirdSpawn);
+	}
+
 };
