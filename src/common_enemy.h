@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jumpman.h"
+#include "player.h"
 #include "bullet.h"
 #include "collide.h"
 #include "health.h"
@@ -23,7 +23,7 @@ const vec* ReceiveDamageFromPlayer(const B& bounds, bool enemyInvulnerable) {
 		}
 	}
 
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	if (player->playerAttack.alive) {
 		if (Collide(player->playerAttack.Bounds(), bounds)) {
 			player->DealDamage(bounds.Center());
@@ -36,7 +36,7 @@ const vec* ReceiveDamageFromPlayer(const B& bounds, bool enemyInvulnerable) {
 
 template<typename B>
 bool DamagePlayerOnCollision(const B& bounds) { // returns true if collided
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	if (Collide(player->HitBoxBounds(), bounds)) {
 		if (!player->isInvencible()) {
 			player->TakeDamage(bounds.Center());

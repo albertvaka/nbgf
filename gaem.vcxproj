@@ -95,7 +95,7 @@
     <ClInclude Include="src\health.h" />
     <ClInclude Include="src\healthup.h" />
     <ClInclude Include="src\input_conf.h" />
-    <ClInclude Include="src\jumpman.h" />
+    <ClInclude Include="src\player.h" />
     <ClInclude Include="src\lava.h" />
     <ClInclude Include="src\mantis.h" />
     <ClInclude Include="src\missile.h" />
@@ -105,7 +105,7 @@
     <ClInclude Include="src\savestation.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_hellcross.h" />
-    <ClInclude Include="src\scene_jumpman.h" />
+    <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\screen.h" />
     <ClInclude Include="src\simplexnoise.h" />
     <ClInclude Include="src\skilltree.h" />
@@ -183,7 +183,7 @@
     <ClCompile Include="src\health.cpp" />
     <ClCompile Include="src\healthup.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
-    <ClCompile Include="src\jumpman.cpp" />
+    <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\lava.cpp" />
     <ClCompile Include="src\mantis.cpp" />
     <ClCompile Include="src\miniooy.cpp" />
@@ -196,7 +196,7 @@
     <ClCompile Include="src\rocketlauncher.cpp" />
     <ClCompile Include="src\savestation.cpp" />
     <ClCompile Include="src\scene_hellcross.cpp" />
-    <ClCompile Include="src\scene_jumpman.cpp" />
+    <ClCompile Include="src\scene_main.cpp" />
     <ClCompile Include="src\screen.cpp" />
     <ClCompile Include="src\simplexnoise.cpp" />
     <ClCompile Include="src\skilltree.cpp" />

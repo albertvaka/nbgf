@@ -238,7 +238,7 @@
     <ClInclude Include="src\scene_hellcross.h">
       <Filter>src\scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_jumpman.h">
+    <ClInclude Include="src\scene_main.h">
       <Filter>src\scenes</Filter>
     </ClInclude>
     <ClInclude Include="src\bat.h">
@@ -262,7 +262,7 @@
     <ClInclude Include="src\spawningtile.h">
       <Filter>src\world</Filter>
     </ClInclude>
-    <ClInclude Include="src\jumpman.h">
+    <ClInclude Include="src\player.h">
       <Filter>src\entities</Filter>
     </ClInclude>
     <ClInclude Include="src\steering_behavior.h">
@@ -540,7 +540,7 @@
     <ClCompile Include="src\scene_hellcross.cpp">
       <Filter>src\scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_jumpman.cpp">
+    <ClCompile Include="src\scene_main.cpp">
       <Filter>src\scenes</Filter>
     </ClCompile>
     <ClCompile Include="src\bat.cpp">
@@ -561,7 +561,7 @@
     <ClCompile Include="src\spawningtile.cpp">
       <Filter>src\world</Filter>
     </ClCompile>
-    <ClCompile Include="src\jumpman.cpp">
+    <ClCompile Include="src\player.cpp">
       <Filter>src\entities</Filter>
     </ClCompile>
     <ClCompile Include="src\steering_behavior.cpp">

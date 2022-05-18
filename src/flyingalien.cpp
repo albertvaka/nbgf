@@ -1,6 +1,6 @@
 #include "flyingalien.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "collide.h"
 #include "window_draw.h"
 #include "assets.h"
@@ -94,7 +94,7 @@ void FlyingAlien::Update(float dt)
 
 	anim.Update(dt);
 
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 
 	float walkDir = vel.x > 0 ? 1 : -1;
 
@@ -193,7 +193,7 @@ void FlyingAlien::TakeDamage(vec src) {
 	// TODO: Knockback
 	
 	if (state == State::FLYING) {
-		if (pos.x < JumpMan::instance()->pos.x) {
+		if (pos.x < Player::instance()->pos.x) {
 			vel.x = speedAttack;
 		}
 		else {

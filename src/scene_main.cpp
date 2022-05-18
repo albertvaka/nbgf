@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "scene_jumpman.h"
+#include "scene_main.h"
 
 #include "scene_manager.h"
 #include "input.h"
@@ -422,7 +422,7 @@ void JumpScene::EnterScene()
 	});
 
 	new Trigger(Tiled::Triggers::single_trigger_leafs, [](Trigger* t) {
-		Particles::leafs.pos = JumpMan::instance()->pos;
+		Particles::leafs.pos = Player::instance()->pos;
 		Particles::leafs.AddParticles(17);
 		Particles::leafs.FlipX();
 		Particles::leafs.AddParticles(17);

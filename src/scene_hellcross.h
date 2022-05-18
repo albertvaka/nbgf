@@ -2,7 +2,7 @@
 
 #include "scene.h"
 #include "gaemtilemap.h"
-#include "jumpman.h"
+#include "player.h"
 #include "lava.h"
 #include "destroyedtiles.h"
 #include "skilltree.h"
@@ -12,7 +12,7 @@ struct HellCrossScene : Scene
 {
 	int randomSeed;
 	GaemTileMap map;
-	JumpMan player;
+	Player player;
 	Lava lava;
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;

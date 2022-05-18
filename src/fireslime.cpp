@@ -1,6 +1,6 @@
 #include "fireslime.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "collide.h"
 #include "window_draw.h"
 #include "assets.h"
@@ -81,12 +81,12 @@ void FireSlime::Update(float dt)
 					timer += kTimeBetweenShots;
 				}
 				new FireShot(pos, vec(direction * kShotSpeed.x, kShotSpeed.y), kShotAccel);
-				Assets::soundSlimyAttack.Play(pos, JumpMan::instance()->pos);
+				Assets::soundSlimyAttack.Play(pos, Player::instance()->pos);
 			}
 		}
 		break;
 	case State::WALKING:
-		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), JumpMan::instance()->HitBoxBounds()));
+		willAttack = willAttack || (!didJustAttack && Collide(AttackBounds(), Player::instance()->HitBoxBounds()));
 		if (!anim.IsComplete() && anim.CurrentFrameNumber() >= kFirstFrameOnAir && anim.CurrentFrameNumber() < kFirstFrameOnGround) {
 			// in this part of the animation we are in the air, here we move and we never start an attack
 			pos.x += kSpeed * direction * dt;

@@ -1,6 +1,6 @@
 #include "drain.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "assets.h"
 #include "rand.h"
 #include "screen.h"

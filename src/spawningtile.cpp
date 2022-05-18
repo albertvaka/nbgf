@@ -1,6 +1,6 @@
 #include "spawningtile.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "assets.h"
 #include "collide.h"
 #include "bat.h"
@@ -11,7 +11,7 @@
 const float respawnAnimTime = 0.2f;
 
 bool SpawningTile::CanSpawn() const {
-	if (Collide(JumpMan::instance()->MaxBounds(), this->Bounds())) return false;
+	if (Collide(Player::instance()->MaxBounds(), this->Bounds())) return false;
 	for (Bat* b : Bat::GetAll()) {
 		if (Collide(b->Bounds(), this->Bounds())) return false;
 	}
@@ -27,7 +27,7 @@ void SpawningTile::Draw() const {
 	}
 
 	// Debug-only
-	JumpMan::instance()->MaxBounds().DebugDraw(0, 0, 255);
+	Player::instance()->MaxBounds().DebugDraw(0, 0, 255);
 	this->Bounds().DebugDraw(0, 0, 0);
 }
 

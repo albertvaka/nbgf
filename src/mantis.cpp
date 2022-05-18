@@ -1,6 +1,6 @@
 #include "mantis.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "collide.h"
 #include "window_draw.h"
 #include "assets.h"
@@ -12,7 +12,7 @@
 #include "common_enemy.h"
 #include "enemies_by_screen.h"
 
-constexpr const float kGravityAcc = 660; // TODO: reuse from jumpman for consistency, keep in sync meanwhile
+constexpr const float kGravityAcc = 660; // TODO: reuse from player for consistency, keep in sync meanwhile
 
 constexpr const float kSpeed = 60;
 constexpr const float kJumpSpeedY = -370;
@@ -98,7 +98,7 @@ void Mantis::Update(float dt)
 		if (alive == false) return;
 	}
 
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	collideInnerRadius = false;
 	switch (state)
 	{
@@ -292,7 +292,7 @@ int Mantis::DrawHealth(int offset) const {
 }
 
 void Mantis::EnterWalkingState(float dt) {
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	vel.x = player->pos.x > pos.x ? kSpeed : -kSpeed;
 	walkingBackwards = false;
 	if (hitTimer > kHitTime / 2 || Rand::OnceEvery(4)) {

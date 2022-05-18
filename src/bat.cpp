@@ -1,6 +1,6 @@
 #include "bat.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "gaemtilemap.h"
 #include "tiled_objects_areas.h"
 #include "screen.h"
@@ -75,7 +75,7 @@ void Bat::Update(float dt)
 	}
 	case State::SIESTA:
 	{
-		bool close_to_player = pos.DistanceSq(JumpMan::instance()->CenterPos()) < (awake_player_distance * awake_player_distance);
+		bool close_to_player = pos.DistanceSq(Player::instance()->CenterPos()) < (awake_player_distance * awake_player_distance);
 		if (awakened || close_to_player) {
 			state = State::AWAKENING;
 			anim.Ensure(AnimLib::BAT_AWAKE, false);
@@ -114,7 +114,7 @@ void Bat::Update(float dt)
 				anim.Ensure(AnimLib::BAT_FLYING);
 				state = State::SEEKING;
 			}
-			if (steering.isFleeOn() && !JumpMan::instance()->isHit()) {
+			if (steering.isFleeOn() && !Player::instance()->isHit()) {
 				steering.FleeOff();
 			}
 		}
@@ -122,10 +122,10 @@ void Bat::Update(float dt)
     break;
 	case State::SEEKING:
 	{
-		JumpMan* jumpman = JumpMan::instance();
-		if (jumpman->isHit()) {
+		Player* player = Player::instance();
+		if (player->isHit()) {
 			state = State::FLYING;
-			steering.FleeOn(jumpman); // Stop seeking and start fleeing after hitting (me or someone else) the player
+			steering.FleeOn(player); // Stop seeking and start fleeing after hitting (me or someone else) the player
 		}
 
 		vel = steering.CalculatePrioritized(dt); // Calling this updates 'avoidingBounds' and 'avoidingTileMap'
@@ -133,7 +133,7 @@ void Bat::Update(float dt)
 			state = State::FLYING; // Stop seeking if we hit an obstacle in the map
 		}
 		else {
-			vel = steering.Seek(jumpman->CenterPos());
+			vel = steering.Seek(player->CenterPos());
 		}
 
 		vel = vel.Normalized() * max_speed;

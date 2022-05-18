@@ -3,7 +3,7 @@
 #include "anim_lib.h"
 #include "rand.h"
 #include "camera.h"
-#include "jumpman.h"
+#include "player.h"
 #include "explosive.h"
 #include "bat.h"
 #include "collide.h"
@@ -38,7 +38,7 @@ void Missile::Update(float dt)
 		return;
 	}
 
-	vec target = JumpMan::instance()->pos;
+	vec target = Player::instance()->pos;
 
 	// Prevent missiles from merging all into one.
 	// Note it's an n^2 check. We could also do without it

@@ -7,7 +7,7 @@
 #include "mates.h"
 #include "anim_lib.h"
 #include "window_drawraw.h"
-#include "jumpman.h"
+#include "player.h"
 
 constexpr const float kWaveAmplitude = 1.f;
 constexpr const float kChunkSize = 5.4f;
@@ -83,7 +83,7 @@ void Lava::Update(float dt) {
 	lavaPartSys.UpdateParticles(dt);
 
 	// Kill the player
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	const float kLavaDamageAreaOffsetFromTop = 8.5f;
 	if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
 		// TODO: All this should be done by a method of player

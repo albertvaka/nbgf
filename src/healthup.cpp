@@ -3,8 +3,8 @@
 #include "mates.h"
 #include "assets.h"
 #include "window_draw.h"
-#include "jumpman.h"
-#include "jumpman.h"
+#include "player.h"
+#include "player.h"
 #include "collide.h"
 #include "gaemtilemap.h"
 #include "rand.h"
@@ -34,7 +34,7 @@ void HealthUp::Update(float dt)
 		return;
 	}
 
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	if (!pickedUp && Collide(Bounds(), player->CollisionBounds())) {
 
 		//TODO: Show popup or animation or something
@@ -86,7 +86,7 @@ void Shard::Update(float dt)
 		return;
 	}
 
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	if (!pickedUp && Collide(Bounds(), player->CollisionBounds())) {
 
 		//TODO: Show popup or animation or something

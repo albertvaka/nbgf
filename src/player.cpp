@@ -1,4 +1,4 @@
-#include "jumpman.h"
+#include "player.h"
 
 #include "input.h"
 #include "bullet.h"
@@ -115,7 +115,7 @@ void DestroyTilesWithSword(const CircleBounds& e) {
 	}
 }
 
-JumpMan::JumpMan()
+Player::Player()
 	: anim(AnimLib::WARRIOR_IDLE)
 	, playerAttack(vec::Zero, kSwordAttackRadius)
 	, size(kStandingSize)
@@ -123,16 +123,16 @@ JumpMan::JumpMan()
 {
 }
 
-void JumpMan::SaveGame(SaveState& state) const {
+void Player::SaveGame(SaveState& state) const {
 	state.StreamPut("player") << pos.x << pos.y << maxHealth;
 }
 
-void JumpMan::LoadGame(const SaveState& state) {
+void Player::LoadGame(const SaveState& state) {
 	state.StreamGet("player") >> pos.x >> pos.y >> maxHealth;
 	Reset(pos, maxHealth);
 }
 
-void JumpMan::DealDamage(vec target) {
+void Player::DealDamage(vec target) {
 	if (diving) {
 		vel.y = kDoDamageDownKnockbackVel;
 		divingRestTimer = kDiveRestTimeAfterHitting;
@@ -156,7 +156,7 @@ void JumpMan::DealDamage(vec target) {
 	diving = false;
 }
 
-void JumpMan::Reset(vec position, int maxHp) {
+void Player::Reset(vec position, int maxHp) {
 	pos = position;
 	bfgPos = position + bfgOffset();
 	vel = vec(0, 0);
@@ -187,7 +187,7 @@ void JumpMan::Reset(vec position, int maxHp) {
 	ScreenManager::UpdateCurrentScreen(pos);
 }
 
-void JumpMan::UpdateMoving(float dt) 
+void Player::UpdateMoving(float dt) 
 {
 	crouched = (groundTile != Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH));
 	if (crouched) {
@@ -289,7 +289,7 @@ void JumpMan::UpdateMoving(float dt)
 float debugMaxJumpY = 0;
 #endif
 
-void JumpMan::Update(float dt)
+void Player::Update(float dt)
 {
 	if (frozen || !alive) return;
 
@@ -754,7 +754,7 @@ void JumpMan::Update(float dt)
 }
 
 static float toSafeGroundLambdaTimer;
-void JumpMan::ToSafeGround() {
+void Player::ToSafeGround() {
 	invencibleTimer = kInvencibleTimeAfterHit;
 	initialJumpY = Mates::MaxFloat;
 	onWall = false;
@@ -779,7 +779,7 @@ void JumpMan::ToSafeGround() {
 	}
 }
 
-void JumpMan::TakeDamage(vec src) {
+void Player::TakeDamage(vec src) {
 	invencibleTimer = kInvencibleTimeAfterHit;
 	if (pos.x > src.x) {
 		vel.x = kTakeDamageKnockbackVel.x;
@@ -808,16 +808,16 @@ void JumpMan::TakeDamage(vec src) {
 	health--;
 }
 
-BoxBounds JumpMan::MaxBounds() const
+BoxBounds Player::MaxBounds() const
 {
 	return BoxBounds(pos, kStandingSize, vec(kStandingSize.x / 2, kStandingSize.y));
 }
 
-void JumpMan::Draw() const {
+void Player::Draw() const {
 
 #ifdef _IMGUI
 	{
-		ImGui::Begin("jumpman");
+		ImGui::Begin("player");
 		static bool invincible = false;
 		ImGui::Checkbox("invincible", &invincible);
 		if (invincible) {
@@ -886,7 +886,7 @@ void JumpMan::Draw() const {
 	}
 }
 
-void JumpMan::DrawGUI() const {
+void Player::DrawGUI() const {
 	for (int i = 0; i < maxHealth; i++) {
 		float scale = 1.5f;
 		if (health == 1) {

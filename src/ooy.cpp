@@ -1,7 +1,7 @@
 #include "ooy.h"
 
 #include "imgui.h"
-#include "jumpman.h"
+#include "player.h"
 #include "collide.h"
 #include "window_draw.h"
 #include "assets.h"
@@ -104,7 +104,7 @@ void Ooy::Update(float dt)
 	vel += steering.BoundsAvoidance(bounds, kRadius*2, kRadius*2).Truncated(kSteeringBoundsAvoidanceWeight*dt);
 	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(kSteeringTileMapAvoidanceWeight*dt);
 
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 
 	if (state == State::ENTER_CHASE || state == State::EXIT_CHASE) {
 		timer += dt;
@@ -201,7 +201,7 @@ void Ooy::Draw() const
 			rect = AnimLib::OOY_CHANGE_STATE_1;
 		} else {
 			int offset = 0;
-			if (JumpMan::instance()->pos.y < pos.y) {
+			if (Player::instance()->pos.y < pos.y) {
 				offset = 2;
 			}
 			rect = directions[offset + (int)((timer / kTimeToChangeState) * 4) % 2];
@@ -210,7 +210,7 @@ void Ooy::Draw() const
 		break;
 	}
 	case State::CHASING:
-		float degs = JumpMan::instance()->pos.AngleDegs(pos)+180;
+		float degs = Player::instance()->pos.AngleDegs(pos)+180;
 		rect = directions[(int)(degs / 90)];
 		CircleBounds(pos, kStopChasingRadius).DebugDraw(255, 0, 255);
 		break;

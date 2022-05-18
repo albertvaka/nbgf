@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gaemtilemap.h"
-#include "jumpman.h"
+#include "player.h"
 #include "scene.h"
 #include "destroyedtiles.h"
 #include "skilltree.h"
@@ -18,7 +18,7 @@ struct Ooy;
 struct JumpScene : Scene
 {
 	GaemTileMap map;
-	JumpMan player;
+	Player player;
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;
 	DialogDriver dialogDriver;

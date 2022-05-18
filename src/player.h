@@ -10,9 +10,9 @@
 
 struct SaveState;
 
-struct JumpMan : Entity, SingleInstance<JumpMan>
+struct Player : Entity, SingleInstance<Player>
 {
-    JumpMan();
+    Player();
     void Update(float dt);
     void Draw() const;
     void DrawGUI() const;

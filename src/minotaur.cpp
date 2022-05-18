@@ -1,6 +1,6 @@
 #include "minotaur.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "window_draw.h"
 #include "assets.h"
 #include "shader.h"
@@ -100,8 +100,8 @@ void Minotaur::Update(float dt)
 	switch (state) {
 	case State::IDLE:
 	{
-		goingRight = pos.x < JumpMan::instance()->pos.x; // face the player
-		if (wasAttacked || pos.Distance(JumpMan::instance()->pos) < kExitIdleDistance) {
+		goingRight = pos.x < Player::instance()->pos.x; // face the player
+		if (wasAttacked || pos.Distance(Player::instance()->pos) < kExitIdleDistance) {
 			state = State::RUN;
 			anim.Ensure(AnimLib::MINOTAUR_RUN);
 		}
@@ -146,13 +146,13 @@ void Minotaur::Update(float dt)
 			// Continue executing State::RUN
 		}
 		BoxBounds::FromCenter(pos, vec(kDistanceAttack)).DebugDraw(0, 255, 255);
-		if (hitTimer <= 0.f && goingRight != pos.x < JumpMan::instance()->pos.x)
+		if (hitTimer <= 0.f && goingRight != pos.x < Player::instance()->pos.x)
 		{
 			goingRight = !goingRight;
 			state = State::FLIP;
 			anim.Ensure(AnimLib::MINOTAUR_FLIP, false);
 		}
-		else if (hitTimer <= 0.f && Collide(JumpMan::instance()->CollisionBounds(), BoxBounds::FromCenter(pos, vec(kDistanceAttack))))
+		else if (hitTimer <= 0.f && Collide(Player::instance()->CollisionBounds(), BoxBounds::FromCenter(pos, vec(kDistanceAttack))))
 		{
 			state = State::ATTACK_BIG;
 			anim.Ensure(AnimLib::MINOTAUR_ATTACK_BIG, false);

@@ -1,7 +1,7 @@
 #include "input_conf.h"
 
 #include "input.h"
-#include "jumpman.h"
+#include "player.h"
 
 #include "magic_enum.h"
 #include <functional>
@@ -177,7 +177,7 @@ void Input::MapGameKeys()
         if (joystick != vec::Zero) {
             lastAnalogAim = joystick;
         }
-        return JumpMan::instance()->pos + lastAnalogAim;
+        return Player::instance()->pos + lastAnalogAim;
     };
 }
 

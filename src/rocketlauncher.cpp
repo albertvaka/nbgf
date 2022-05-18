@@ -1,6 +1,6 @@
 #include "rocketlauncher.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "assets.h"
 #include "window_draw.h"
 #include "window_drawprimitive.h"
@@ -35,12 +35,12 @@ RocketLauncher::RocketLauncher(vec pos)
 
 void RocketLauncher::Update(float dt)
 {
-	angle = pos.AngleDegs(JumpMan::instance()->pos);
+	angle = pos.AngleDegs(Player::instance()->pos);
 	Mates::Clamp(angle, 30, 150);
 
 	awoken = false;
 	for (const BoxBounds& e : awakeArea) {
-		if (Collide(e, JumpMan::instance()->CollisionBounds())) {
+		if (Collide(e, Player::instance()->CollisionBounds())) {
 			awoken = true;
 			break;
 		}

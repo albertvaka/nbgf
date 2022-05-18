@@ -3,7 +3,7 @@
 #include "mates.h"
 #include "assets.h"
 #include "window_draw.h"
-#include "jumpman.h"
+#include "player.h"
 #include "collide.h"
 #include "rand.h"
 #include "particles.h"
@@ -17,7 +17,7 @@ vec Health::drawOffset() const {
 
 void Health::Update(float dt)
 {
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	if (Collide(Bounds(), player->CollisionBounds())) {
 		if (player->health < player->maxHealth) {
 			player->health++;

@@ -1,7 +1,7 @@
 #include "miniooy.h"
 
 #include "imgui.h"
-#include "jumpman.h"
+#include "player.h"
 #include "collide.h"
 #include "window_draw.h"
 #include "assets.h"
@@ -68,7 +68,7 @@ MiniOoy::~MiniOoy()
 void MiniOoy::TakeDamage() {
 	hitTimer = 0.3f;
 	health--;
-	vel += (pos - JumpMan::instance()->CenterPos()).Normalized() * 400;
+	vel += (pos - Player::instance()->CenterPos()).Normalized() * 400;
 	if (health <= 0) {
 		DieWithSmallExplosion(this);
 	}
@@ -83,7 +83,7 @@ void MiniOoy::Update(float dt)
 	vel += steering.BoundsAvoidance(bounds, kRadius*2, kRadius).Truncated(kSteeringTileMapAvoidanceWeight *dt);
 	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(kSteeringBoundsAvoidanceWeight *dt);
 
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 
 	if (state == State::ENTER_CHASE || state == State::EXIT_CHASE) {
 		timer += dt;
@@ -175,7 +175,7 @@ void MiniOoy::Draw() const
 		}
 		else {
 			int offset = 0;
-			if (JumpMan::instance()->pos.y < pos.y) {
+			if (Player::instance()->pos.y < pos.y) {
 				offset = 2;
 			}
 			rect = directions[offset + (int)((timer / kTimeToChangeState) * 4) % 2];
@@ -184,7 +184,7 @@ void MiniOoy::Draw() const
 		break;
 	}
 	case State::CHASING:
-		float degs = JumpMan::instance()->pos.AngleDegs(pos) + 180;
+		float degs = Player::instance()->pos.AngleDegs(pos) + 180;
 		rect = directions[(int)(degs / 90)];
 		CircleBounds(pos, kStopChasingRadius).DebugDraw(255, 0, 255);
 		break;

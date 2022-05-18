@@ -4,7 +4,7 @@
 #include "window_draw.h"
 #include "screen.h"
 #include "collide.h"
-#include "jumpman.h"
+#include "player.h"
 
 #ifdef _DEBUG
 #include "text.h"
@@ -41,7 +41,7 @@ bool SaveStation::Update(float dt)
 	}
 
 	// Return true if it can be activated
-	return Collide(Bounds(), JumpMan::instance()->CollisionBounds());
+	return Collide(Bounds(), Player::instance()->CollisionBounds());
 }
 
 void SaveStation::Draw() const

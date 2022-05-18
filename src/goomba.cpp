@@ -1,6 +1,6 @@
 #include "goomba.h"
 
-#include "jumpman.h"
+#include "player.h"
 #include "collide.h"
 #include "window_draw.h"
 #include "assets.h"
@@ -86,7 +86,7 @@ void Goomba::Update(float dt)
 		hitShieldSoundChannel = -1;
 	}
 
-	JumpMan* player = JumpMan::instance();
+	Player* player = Player::instance();
 	if (!InSameScreenAsPlayer(screen)) {
 		goingRight = pos.x < player->pos.x; // so we are facing towards the player when they enter the screem
 		return;
