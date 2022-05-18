@@ -1,6 +1,7 @@
 #include "player.h"
 
 #include "input.h"
+#include "tweeny.h"
 #include "bullet.h"
 #include "mates.h"
 #include "destroyedtiles.h"
@@ -12,6 +13,7 @@
 #include "debug.h"
 #include "savestate.h"
 #include "particles.h"
+#include "cutscene.h"
 #include "common_tilemapcharacter.h"
 #include "common_bullet.h"
 #include "skilltree.h"
@@ -159,7 +161,7 @@ void Player::DealDamage(vec target) {
 void Player::Reset(vec position, int maxHp) {
 	pos = position;
 	bfgPos = position + bfgOffset();
-	vel = vec(0, 0);
+	vel = vec(0.f, 0.f);
 	lastSafeTilePos = Tile::ToTiles(position);
 	invencibleTimer = -1.f;
 	bfgCooldownTimer = 0.f;
@@ -176,14 +178,15 @@ void Player::Reset(vec position, int maxHp) {
 	dashing = false;
 	crouched = false;
 	lookingLeft = false;
-	dashTimer = 0.0f;
-	dashCooldown = 0.0f;
+	dashTimer = 0.f;
+	dashCooldown = 0.f;
 	divingRestTimer = 0.f;
 	justHit = false;
 	jumpFromWallTimer = 0.f;
 	attacking = false;
 	attackingUp = false;
 	playerAttack.alive = false;
+	stretch = vec(1.f,1.f);
 	ScreenManager::UpdateCurrentScreen(pos);
 }
 
@@ -488,10 +491,11 @@ void Player::Update(float dt)
 			}
 
 			if (Input::IsPressed(0, GameKeys::CROUCH)) {
-				// Allow jumping down one-way tiles faster if jump is pressed while crouching
+				// Allow jumping down one-way tiles faster if jump & crouch are pressed
 				crouchedTime = kTimeCrouchedToJumpDownOneWayTile;
 			}
 			else {
+				// Actual jump
 				initialJumpY = pos.y;
 				float halfWidth = kStandingSize.x / 2;
 				Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
@@ -503,6 +507,18 @@ void Player::Update(float dt)
 						groundTile = Tile::NONE;
 					}
 				}
+				// FIXME: Find a better way to express interpolations
+				this->stretch.y = 0.85f;
+				CutSceneBuilder()
+					.Play(0.2f, [this](float progress) {
+						this->stretch.y = tweeny::easing::quadraticOut.run(progress, 0.85f, 1.2f);
+						Debug::out << 1 << " " << progress << " " << this->stretch.y;
+					})
+					.WaitAndThen()
+					.Play(0.2f, [this](float progress) {
+						this->stretch.y = tweeny::easing::quadraticOut.run(progress, 1.2f, 1.f);
+						Debug::out << 2 << " " << progress << " " << this->stretch.y;
+					});
 				crouched = false;
 			}
 		}
@@ -849,7 +865,7 @@ void Player::Draw() const {
 	Window::Draw(Assets::warriorTexture, pos)
 		.withOrigin(AnimLib::warriorSheet.sprite_w/2, AnimLib::warriorSheet.sprite_h-4)
 		.withRect(rect)
-		.withScale(lookingLeft ? -1.f : 1.f, 1.f);
+		.withScale(stretch.Mirrored(lookingLeft, false));
 
 	//BFG
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {

@@ -81,6 +81,7 @@ struct Player : Entity, SingleInstance<Player>
     bool attacking;
     bool attackingUp;
     float bfgAngle;
+    vec stretch;
     vec bfgPos;
     float bfgCooldownTimer;
     int health;
