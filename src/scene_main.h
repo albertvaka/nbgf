@@ -6,6 +6,7 @@
 #include "destroyedtiles.h"
 #include "skilltree.h"
 #include "rototext.h"
+#include "cutscene.h"
 #include "zonemanager.h"
 #include "dialogdriver.h"
 
@@ -17,6 +18,7 @@ struct Ooy;
 
 struct MainScene : Scene
 {
+	Tweening tweening;
 	GaemTileMap map;
 	Player player;
 	SkillTree skillTree;

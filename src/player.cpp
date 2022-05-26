@@ -495,7 +495,7 @@ void Player::Update(float dt)
 				crouchedTime = kTimeCrouchedToJumpDownOneWayTile;
 			}
 			else {
-				// Actual jump
+				// Start to jump
 				initialJumpY = pos.y;
 				float halfWidth = kStandingSize.x / 2;
 				Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
@@ -507,18 +507,13 @@ void Player::Update(float dt)
 						groundTile = Tile::NONE;
 					}
 				}
-				// FIXME: Find a better way to express interpolations
-				this->stretch.y = 0.85f;
-				CutSceneBuilder()
-					.Play(0.2f, [this](float progress) {
+				Tweening::Play(0.4f, [this](float progress) {
+					if (progress < 0.5f) {
 						this->stretch.y = tweeny::easing::quadraticOut.run(progress, 0.85f, 1.2f);
-						Debug::out << 1 << " " << progress << " " << this->stretch.y;
-					})
-					.WaitAndThen()
-					.Play(0.2f, [this](float progress) {
+					} else {
 						this->stretch.y = tweeny::easing::quadraticOut.run(progress, 1.2f, 1.f);
-						Debug::out << 2 << " " << progress << " " << this->stretch.y;
-					});
+					}
+				});
 				crouched = false;
 			}
 		}

@@ -569,6 +569,8 @@ bool MainScene::UpdateCamera(float dt) {
 
 void MainScene::ExitScene()
 {
+	tweening.Clear();
+	destroyedTiles.Clear();
 	Trigger::DeleteAll();
 	CutScene::DeleteAll();
 	Particles::ClearAll();
@@ -593,7 +595,6 @@ void MainScene::ExitScene()
 	ForegroundOneShotAnim::DeleteAll();
 	Bipedal::DeleteAll();
 	Lava::DeleteAll();
-	destroyedTiles.Clear();
 	EnemyDoor::DeleteAll();
 	BigItem::DeleteAll();
 	HealthUp::DeleteAll();
@@ -956,6 +957,8 @@ void MainScene::Update(float dt)
 		shaderLavaActive = false;
 		Fx::FullscreenShader::SetShader(nullptr);
 	}
+
+	tweening.Update(dt);
 }
 
 void MainScene::Draw()
