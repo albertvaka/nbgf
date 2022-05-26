@@ -78,7 +78,7 @@ const auto kPauseFullScreenShader = []() {
 	Assets::tintShader.SetUniform("flashColor", 0.5f, 0.5f, 0.5f, 0.5f);
 };
 
-JumpScene::JumpScene(int saveSlot)
+MainScene::MainScene(int saveSlot)
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	, rotoText(Assets::font_30, Assets::font_30_outline)
 	, saveSlot(saveSlot)
@@ -118,12 +118,12 @@ JumpScene::JumpScene(int saveSlot)
 	}
 }
 
-JumpScene::~JumpScene() {
+MainScene::~MainScene() {
 	Parallax::DeleteAll();
 	ScreenManager::DeleteAllScreens();
 }
 
-void JumpScene::SaveGame(int saveStationId) const {
+void MainScene::SaveGame(int saveStationId) const {
 	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
 	if (saveState.HasData()) {
 		Debug::out << "Overwriting data in slot " << saveSlot;
@@ -164,7 +164,7 @@ void JumpScene::SaveGame(int saveStationId) const {
 	saveState.Save();
 }
 
-void JumpScene::LoadGame() {
+void MainScene::LoadGame() {
 	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
 	if (!saveState.HasData()) {
 		Debug::out << "No data to load in slot " << saveSlot;
@@ -247,7 +247,7 @@ void JumpScene::LoadGame() {
 	Update(0); //Hackish way to make sure the entities with alive=false trigger things on other components before being deleted
 }
 
-void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
+void MainScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 
 	switch (g->skill) {
 	case Skill::WALLJUMP:
@@ -275,7 +275,7 @@ void JumpScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 	}
 }
 
-void JumpScene::EnterScene()
+void MainScene::EnterScene()
 {
 	Fx::BeforeEnterScene();
 
@@ -548,7 +548,7 @@ void JumpScene::EnterScene()
 	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 }
 
-bool JumpScene::UpdateCamera(float dt) {
+bool MainScene::UpdateCamera(float dt) {
 	zoneManager.Update(dt);
 
 	if (Debug::CameraFixed) return false;
@@ -567,7 +567,7 @@ bool JumpScene::UpdateCamera(float dt) {
 	return inScreenTransition;
 }
 
-void JumpScene::ExitScene()
+void MainScene::ExitScene()
 {
 	Trigger::DeleteAll();
 	CutScene::DeleteAll();
@@ -604,7 +604,7 @@ void JumpScene::ExitScene()
 	EnemiesByScreen::AssertEmpty();
 }
 
-void JumpScene::Update(float dt)
+void MainScene::Update(float dt)
 {
 #ifdef _DEBUG
 	if (Debug::FrameByFrame && Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
@@ -958,7 +958,7 @@ void JumpScene::Update(float dt)
 	}
 }
 
-void JumpScene::Draw()
+void MainScene::Draw()
 {
 	const SDL_Color& bgColor = zoneManager.GetBgColor();
 	Window::Clear(bgColor);

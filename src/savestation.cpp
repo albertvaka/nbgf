@@ -64,6 +64,6 @@ void SaveStation::Draw() const
 		text.SetString(std::to_string(hiddenBy.size()));
 		Window::Draw(text, pos).withScale(0.5f);
 	}
-#endif _DEBUG
+#endif
 }
 

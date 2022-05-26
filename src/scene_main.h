@@ -15,7 +15,7 @@ struct EnemyDoor;
 struct BigItem;
 struct Ooy;
 
-struct JumpScene : Scene
+struct MainScene : Scene
 {
 	GaemTileMap map;
 	Player player;
@@ -43,8 +43,8 @@ struct JumpScene : Scene
 	void SaveGame(int saveStation) const;
 	void LoadGame();
 
-	JumpScene(int saveSlot = 0);
-	~JumpScene();
+	MainScene(int saveSlot = 0);
+	~MainScene();
 	void EnterScene() override;
 	void ExitScene() override;
 	void Update(float dt) override;
