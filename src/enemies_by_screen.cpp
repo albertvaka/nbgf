@@ -3,6 +3,7 @@
 #include <SDL.h>
 
 #include <unordered_map>
+#include <algorithm>
 
 static std::vector<Entity*> emptyVec;
 static std::unordered_map<int, std::vector<Entity*>> maperino;
