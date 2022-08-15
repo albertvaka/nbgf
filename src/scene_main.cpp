@@ -800,13 +800,15 @@ void MainScene::Update(float dt)
 		Camera::SetCenter(player.GetCameraTargetPos());
 	}
 	if (Keyboard::IsKeyJustPressed(unlockbasics)) {
-		skillTree.Enable(Skill::ATTACK);
-		skillTree.Enable(Skill::DIVE);
-		skillTree.Enable(Skill::DASH);
-		skillTree.Enable(Skill::WALLJUMP);
-		skillTree.Enable(Skill::BREAK);
 		if (Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
-			skillTree.Enable(Skill::GUN);
+			skillTree.Reset();
+		}
+		else {
+			skillTree.Enable(Skill::ATTACK);
+			skillTree.Enable(Skill::DIVE);
+			skillTree.Enable(Skill::DASH);
+			skillTree.Enable(Skill::WALLJUMP);
+			skillTree.Enable(Skill::BREAK);
 		}
 	}
 	if (Keyboard::IsKeyJustPressed(screen_left)) {
