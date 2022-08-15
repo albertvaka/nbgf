@@ -29,7 +29,7 @@ const float kJumpTimeAfterBeingGrounded = 0.07f; //~4 frames
 
 // accel
 const float kRunAcc = 1400;
-const float kRunAcc_OnAir = 650;
+const float kRunAcc_OnAir = 850;
 const float kGravityAcc = 660;
 const float kDiveHorizontalAcc = 10;
 
