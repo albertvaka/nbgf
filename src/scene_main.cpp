@@ -852,6 +852,7 @@ void MainScene::Update(float dt)
 			contextActionButton = true;
 			if (Input::IsJustPressed(0, GameKeys::ACTION)) {
 				// TODO: Interaction animation
+				player.health = player.maxHealth;
 				SaveGame(ss->id);
 				dialogDriver.StartDialog(saveGameDialog);
 			}
