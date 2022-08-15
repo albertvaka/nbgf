@@ -137,6 +137,8 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
 
 	for (const CircleEntity* obst : obstacles)
 	{
+		if (obst == steeringEntity) continue;
+
 		vec to = obst->pos - steeringEntity->pos;
 
 		//the bounding radius of the other is taken into account by adding it 

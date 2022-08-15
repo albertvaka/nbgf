@@ -34,6 +34,7 @@ constexpr const float kSteeringSeekWeightIdle = 150.f;
 constexpr const float kSteeringWanderWeight = 150.f;
 constexpr const float kSteeringBoundsAvoidanceWeight = 600.f;
 constexpr const float kSteeringTileMapAvoidanceWeight = 600.f;
+constexpr const float kSteeringPeersAvoidanceWeight = 250.f;
 
 constexpr const float kSteeringWanderRad = 4.8f; //Ganes que te de posar-se a fer cercles (the radius of the constraining circle for the wander behavior)
 constexpr const static float kSteeringWanderDist = 6.5f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
@@ -81,7 +82,8 @@ void MiniOoy::Update(float dt)
 	}
 
 	vel += steering.BoundsAvoidance(bounds, kRadius*2, kRadius).Truncated(kSteeringTileMapAvoidanceWeight *dt);
-	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(kSteeringBoundsAvoidanceWeight *dt);
+	vel += steering.TileMapAvoidance(GaemTileMap::instance()).Truncated(kSteeringBoundsAvoidanceWeight * dt);
+	vel += steering.ObstacleAvoidance(MiniOoy::GetAll()).Truncated(kSteeringPeersAvoidanceWeight * dt);
 
 	Player* player = Player::instance();
 
