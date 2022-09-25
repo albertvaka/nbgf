@@ -4964,7 +4964,7 @@
   <object id="971" name="Screen" type="screen" x="-957.77" y="-1454.91" width="618.207" height="1186.83"/>
   <object id="986" name="Screen" type="screen" x="-347.5" y="-1541.67" width="614.038" height="349.333"/>
   <object id="989" name="Screen" type="screen" x="266.981" y="-1540.67" width="614.038" height="349.333"/>
-  <object id="1016" name="Screen" type="screen" x="1864.15" y="-721.834" width="2541.37" height="600.667"/>
+  <object id="1016" name="Screen" type="screen" x="1864.15" y="-719.584" width="2541.37" height="598.417"/>
   <object id="1021" name="Screen" type="screen" x="-2947.52" y="-1103.83" width="607.038" height="351.667"/>
  </objectgroup>
  <objectgroup id="12" name="Triggers" visible="0">

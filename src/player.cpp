@@ -27,24 +27,24 @@ const float kJumpTimeAfterBeingGrounded = 0.07f; //~4 frames
 
 // accel
 const float kRunAcc = 1400;
-const float kRunAcc_OnAir = 850;
+const float kRunAcc_OnAir = 1000;
 const float kGravityAcc = 660;
 const float kDiveHorizontalAcc = 10;
 
 // friction X
 const float kFrictAccFloor = 1000;
 const float kFrictAccFloor_Crouched = 450;
-const float kFrictAcc_OnAir = 460;
+const float kFrictAcc_OnAir = 500;
 
 // friction Y
 const float kFrictAccVert_WallUp = 400;
 const float kFrictAccVert_WallDown = 540;
 
 // jump
-const float kVelJump = -210; // Y axis
+const float kVelJump = -200; // Y axis
 const float kVelWalljump = 140; // X axis
 const float kVelSlopejump = 140; // X axis
-const float kJumpHeightDiff = 72.f; // vertical pixels
+const float kJumpHeightDiff = 72.f; // vertical pixels (note: this is the height at wich we stop adding vertical velocity, but we jump slightly higher thant his, ~8px more;
 const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 const float kTimeToJumpFromWallAfterLettingGo = 0.2f;
 
