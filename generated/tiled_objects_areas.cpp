@@ -10,7 +10,7 @@ const std::array<BoxBounds, 4> Areas::alien_bounds = {
 	BoxBounds(6583.0f,2087.5f,386.0f,181.5f),
 };
 
-const std::array<BoxBounds, 9> Areas::bat_bounds = {
+const std::array<BoxBounds, 8> Areas::bat_bounds = {
 	BoxBounds(1174.43f,1810.803f,253.803f,158.977f),
 	BoxBounds(1863.78f,1719.4598f,842.45f,291.747f),
 	BoxBounds(1576.6f,2116.7200000000003f,1197.47f,331.894f),
@@ -18,7 +18,6 @@ const std::array<BoxBounds, 9> Areas::bat_bounds = {
 	BoxBounds(3563.025f,1797.1265f,363.45f,237.247f),
 	BoxBounds(4356.9400000000005f,1349.71f,555.45f,268.58f),
 	BoxBounds(3439.108f,1213.286f,861.367f,401.671f),
-	BoxBounds(5085.77f,257.3800000000001f,549.451f,274.913f),
 	BoxBounds(3538.274f,2094.043f,572.451f,250.913f),
 };
 
@@ -54,16 +53,17 @@ const std::array<BoxBounds, 4> Areas::lava = {
 };
 
 const std::array<BoxBounds, 1> Areas::lava_bg = {
-	BoxBounds(4264.49f,142.24f,1509.03f,471.52f),
+	BoxBounds(5276.49f,262.24f,1509.03f,471.52f),
 };
-const BoxBounds Areas::single_lava_bg = BoxBounds(4264.49f,142.24f,1509.03f,471.52f);
+const BoxBounds Areas::single_lava_bg = BoxBounds(5276.49f,262.24f,1509.03f,471.52f);
 
 
-const std::array<BoxBounds, 4> Areas::miniooy_bounds = {
+const std::array<BoxBounds, 5> Areas::miniooy_bounds = {
 	BoxBounds(5565.67f,1086.0f,705.333f,240.0f),
 	BoxBounds(4957.33f,1087.667f,516.667f,238.333f),
 	BoxBounds(5218.0f,1461.333f,519.5f,158.667f),
 	BoxBounds(5810.17f,1398.333f,387.833f,231.0f),
+	BoxBounds(5945.33f,1091.0f,321.333f,231.0f),
 };
 
 const std::array<BoxBounds, 1> Areas::parallax_cave = {

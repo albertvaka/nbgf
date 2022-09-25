@@ -12,7 +12,7 @@ struct Areas {
 
 	// Bounds
 	static const std::array<BoxBounds, 4> alien_bounds;
-	static const std::array<BoxBounds, 9> bat_bounds;
+	static const std::array<BoxBounds, 8> bat_bounds;
 	static const std::array<BoxBounds, 1> bg_bird_spawner;
 	static const BoxBounds single_bg_bird_spawner;
 	static const std::array<BoxBounds, 1> boss_bounds;
@@ -24,7 +24,7 @@ struct Areas {
 	static const std::array<BoxBounds, 4> lava;
 	static const std::array<BoxBounds, 1> lava_bg;
 	static const BoxBounds single_lava_bg;
-	static const std::array<BoxBounds, 4> miniooy_bounds;
+	static const std::array<BoxBounds, 5> miniooy_bounds;
 	static const std::array<BoxBounds, 1> parallax_cave;
 	static const BoxBounds single_parallax_cave;
 	static const std::array<BoxBounds, 1> parallax_forest;

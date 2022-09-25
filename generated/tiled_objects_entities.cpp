@@ -15,9 +15,6 @@ const std::unordered_map<int, vec> Entities::angrybat = {
 	{ 887, vec(4492.5f, 1572.5f) },
 	{ 922, vec(4048.5f, 2288.5f) },
 	{ 924, vec(3663.333f, 2256.667f) },
-	{ 1027, vec(5328.05f, 476.48f) },
-	{ 1028, vec(5200.1900000000005f, 444.48f) },
-	{ 1029, vec(5296.07f, 412.8499999999999f) },
 };
 
 const std::unordered_map<int, vec> Entities::angrybatawake = {
@@ -214,16 +211,13 @@ const std::unordered_map<int, vec> Entities::miniooy = {
 	{ 1127, vec(3092.6667f, 490.6700000000001f) },
 	{ 1140, vec(5023.0f, 1148.5f) },
 	{ 1141, vec(5401.0f, 1191.5f) },
-	{ 1142, vec(5333.5f, 1242.0f) },
 	{ 1143, vec(5432.5f, 1525.5f) },
-	{ 1144, vec(5515.5f, 1578.0f) },
 	{ 1145, vec(5555.0f, 1505.0f) },
 	{ 1151, vec(6044.0f, 1474.0f) },
 	{ 1152, vec(5999.33f, 1153.333f) },
 	{ 1153, vec(5834.0f, 1238.0f) },
 	{ 1155, vec(6201.33f, 1220.667f) },
-	{ 1157, vec(6133.33f, 1136.667f) },
-	{ 1158, vec(5727.33f, 1136.667f) },
+	{ 1158, vec(5664.33f, 1145.667f) },
 };
 
 const std::unordered_map<int, vec> Entities::npc = {
@@ -251,10 +245,9 @@ const std::unordered_map<int, vec> Entities::rocket_launcher = {
 const std::unordered_map<int, vec> Entities::save = {
 	{ 126, vec(2993.5336f, 1935.114f) },
 	{ 213, vec(1041.0f, 2265.0f) },
-	{ 895, vec(6665.0f, 2110.0f) },
+	{ 895, vec(7528.0f, 2250.0f) },
 	{ 1031, vec(4407.0f, 1130.25f) },
 	{ 1124, vec(3048.0f, 3083.0f) },
-	{ 1139, vec(5486.17f, 1562.833f) },
 };
 
 const std::unordered_map<int, vec> Entities::shard = {
