@@ -40,7 +40,7 @@ constexpr const float kSteeringWanderRad = 4.8f; //Ganes que te de posar-se a fe
 constexpr const static float kSteeringWanderDist = 6.5f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
 constexpr const static float kSteeringWanderJitterPerSec = 175; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
 
-constexpr const int kHealth = 2;
+constexpr const int kHealth = 1;
 
 extern float mainClock;
 
