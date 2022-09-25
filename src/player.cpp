@@ -41,7 +41,7 @@ const float kFrictAccVert_WallUp = 400;
 const float kFrictAccVert_WallDown = 540;
 
 // jump
-const float kVelJump = -170; // Y axis
+const float kVelJump = -210; // Y axis
 const float kVelWalljump = 140; // X axis
 const float kVelSlopejump = 140; // X axis
 const float kJumpHeightDiff = 72.f; // vertical pixels
