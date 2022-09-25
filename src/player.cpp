@@ -1,7 +1,6 @@
 #include "player.h"
 
 #include "input.h"
-#include "tweeny.h"
 #include "bullet.h"
 #include "mates.h"
 #include "destroyedtiles.h"
@@ -13,7 +12,6 @@
 #include "debug.h"
 #include "savestate.h"
 #include "particles.h"
-#include "cutscene.h"
 #include "common_tilemapcharacter.h"
 #include "common_bullet.h"
 #include "skilltree.h"
@@ -186,7 +184,6 @@ void Player::Reset(vec position, int maxHp) {
 	attacking = false;
 	attackingUp = false;
 	playerAttack.alive = false;
-	stretch = vec(1.f,1.f);
 	ScreenManager::UpdateCurrentScreen(pos);
 }
 
@@ -507,13 +504,6 @@ void Player::Update(float dt)
 						groundTile = Tile::NONE;
 					}
 				}
-				Tweening::Play(0.4f, [this](float progress) {
-					if (progress < 0.5f) {
-						this->stretch.y = tweeny::easing::quadraticOut.run(progress, 0.85f, 1.2f);
-					} else {
-						this->stretch.y = tweeny::easing::quadraticOut.run(progress, 1.2f, 1.f);
-					}
-				});
 				crouched = false;
 			}
 		}
@@ -856,7 +846,7 @@ void Player::Draw() const {
 	Window::Draw(Assets::warriorTexture, pos)
 		.withOrigin(AnimLib::warriorSheet.sprite_w/2, AnimLib::warriorSheet.sprite_h-4)
 		.withRect(rect)
-		.withScale(stretch.Mirrored(lookingLeft, false));
+		.withScale(lookingLeft? -1.f : 1.f, 1.f);
 
 	//BFG
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
