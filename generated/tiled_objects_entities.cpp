@@ -253,7 +253,7 @@ const std::unordered_map<int, vec> Entities::save = {
 const std::unordered_map<int, vec> Entities::shard = {
 	{ 1135, vec(3912.0f, 1911.0f) },
 	{ 1136, vec(3534.545f, 2233.727f) },
-	{ 1137, vec(3223.0f, 1514.75f) },
+	{ 1137, vec(3223.0f, 1528.75f) },
 	{ 1138, vec(6200.0f, 2232.0f) },
 };
 
