@@ -3350,9 +3350,9 @@
 0,0,0,85,441,267,0,0,0,0,0,0,0,0,0,0,
 0,0,0,85,473,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,85,473,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,144,473,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,508,473,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,265,11,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,85,473,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,85,473,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,506,11,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -4787,7 +4787,7 @@
   <object id="887" gid="197" x="1420.5" y="-219.5" width="16" height="16"/>
   <object id="889" gid="193" x="1714.67" y="-283.333" width="16" height="16"/>
   <object id="890" gid="193" x="841" y="-563.25" width="16" height="16"/>
-  <object id="895" gid="390" x="4456" y="458" width="16" height="16"/>
+  <object id="895" gid="390" x="4456" y="474" width="16" height="16"/>
   <object id="896" gid="359" x="3860" y="189.333" width="16" height="16"/>
   <object id="902" gid="513" x="3326.38" y="563.479" width="16" height="16"/>
   <object id="903" gid="513" x="3382.8" y="559.729" width="16" height="16"/>
@@ -4937,7 +4937,7 @@
   <object id="1160" name="bg_bird_spawner" class="bg_bird_spawner" x="-1209.13" y="-39.75" width="819.75" height="104.25"/>
   <object id="1165" name="miniooy_bounds" class="miniooy_bounds" x="2873.33" y="-701" width="321.333" height="231"/>
  </objectgroup>
- <objectgroup id="2" name="Screens" visible="0">
+ <objectgroup id="2" name="Screens">
   <object id="42" name="Screen" class="screen" x="-263.955" y="-56.5" width="622.538" height="304.5"/>
   <object id="44" name="Screen" class="screen" x="-1309.12" y="-78.3333" width="1048.45" height="348.497"/>
   <object id="45" name="Screen" class="screen" x="-258.667" y="-413" width="614.833" height="338"/>
@@ -4953,7 +4953,7 @@
   <object id="664" name="Screen" class="screen" x="1865.4" y="146.333" width="813.705" height="348"/>
   <object id="668" name="Screen" class="screen" x="-55.5192" y="-993.667" width="964.372" height="353.166"/>
   <object id="671" name="Screen" class="screen" x="909.583" y="-975" width="614.833" height="363.667"/>
-  <object id="673" name="Screen" class="screen" x="3896.15" y="219.17" width="626.371" height="351.667"/>
+  <object id="673" name="Screen" class="screen" x="3896.15" y="219.17" width="621.371" height="351.667"/>
   <object id="793" name="Screen" class="screen" x="415.417" y="289" width="833.083" height="350"/>
   <object id="807" name="Screen" class="screen" x="2680.25" y="145.333" width="608.833" height="349.833"/>
   <object id="846" name="Screen" class="screen" x="3287" y="481.25" width="610.333" height="348.5"/>

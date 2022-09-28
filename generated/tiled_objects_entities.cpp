@@ -245,7 +245,7 @@ const std::unordered_map<int, vec> Entities::rocket_launcher = {
 const std::unordered_map<int, vec> Entities::save = {
 	{ 126, vec(2993.5336f, 1935.114f) },
 	{ 213, vec(1041.0f, 2265.0f) },
-	{ 895, vec(7528.0f, 2250.0f) },
+	{ 895, vec(7528.0f, 2266.0f) },
 	{ 1031, vec(4407.0f, 1130.25f) },
 	{ 1124, vec(3048.0f, 3083.0f) },
 };
