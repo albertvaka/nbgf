@@ -1,190 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" nextlayerid="14" nextobjectid="1170">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" nextlayerid="14" nextobjectid="1170">
  <editorsettings>
   <export format="json"/>
  </editorsettings>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" tilecount="1280" columns="32" objectalignment="center">
   <image source="../bin/data/spritesheet.png" width="512" height="640"/>
-  <tile id="0" type="spawn"/>
-  <tile id="1" type="breakable"/>
-  <tile id="12" type="fireslime"/>
-  <tile id="23" type="solid"/>
-  <tile id="24" type="breakable"/>
-  <tile id="25" type="rslope"/>
-  <tile id="26" type="lslope"/>
-  <tile id="28" type="oneway"/>
-  <tile id="33" type="breakable"/>
-  <tile id="40" type="debug_teleport"/>
-  <tile id="42" type="rslope"/>
-  <tile id="43" type="lslope"/>
-  <tile id="44" type="lslope"/>
-  <tile id="45" type="rslope"/>
-  <tile id="46" type="goomba"/>
-  <tile id="48" type="goombacharger"/>
-  <tile id="50" type="flyingalien"/>
-  <tile id="55" type="minotaur"/>
-  <tile id="56" type="breakable">
+  <tile id="0" class="spawn"/>
+  <tile id="1" class="breakable"/>
+  <tile id="12" class="fireslime"/>
+  <tile id="23" class="solid"/>
+  <tile id="24" class="breakable"/>
+  <tile id="25" class="rslope"/>
+  <tile id="26" class="lslope"/>
+  <tile id="28" class="oneway"/>
+  <tile id="33" class="breakable"/>
+  <tile id="40" class="debug_teleport"/>
+  <tile id="42" class="rslope"/>
+  <tile id="43" class="lslope"/>
+  <tile id="44" class="lslope"/>
+  <tile id="45" class="rslope"/>
+  <tile id="46" class="goomba"/>
+  <tile id="48" class="goombacharger"/>
+  <tile id="50" class="flyingalien"/>
+  <tile id="55" class="minotaur"/>
+  <tile id="56" class="breakable">
    <properties>
     <property name="alias" value="simple"/>
    </properties>
   </tile>
-  <tile id="57" type="breakable">
+  <tile id="57" class="breakable">
    <properties>
     <property name="alias" value="covering_oneway"/>
    </properties>
   </tile>
-  <tile id="58" type="breakable_hard"/>
-  <tile id="59" type="breakable_gnd"/>
-  <tile id="60" type="oneway"/>
-  <tile id="61" type="goombashielder"/>
-  <tile id="67" type="solid">
+  <tile id="58" class="breakable_hard"/>
+  <tile id="59" class="breakable_gnd"/>
+  <tile id="60" class="oneway"/>
+  <tile id="61" class="goombashielder"/>
+  <tile id="67" class="solid">
    <properties>
     <property name="alias" value="out_of_bounds"/>
    </properties>
   </tile>
-  <tile id="68" type="breakable_hard">
+  <tile id="68" class="breakable_hard">
    <properties>
     <property name="alias" value="explosive_block"/>
    </properties>
   </tile>
-  <tile id="69" type="rslope"/>
-  <tile id="70" type="lslope"/>
-  <tile id="71" type="breakable_gnd"/>
-  <tile id="76" type="solid"/>
-  <tile id="77" type="solid"/>
-  <tile id="78" type="solid">
+  <tile id="69" class="rslope"/>
+  <tile id="70" class="lslope"/>
+  <tile id="71" class="breakable_gnd"/>
+  <tile id="76" class="solid"/>
+  <tile id="77" class="solid"/>
+  <tile id="78" class="solid">
    <properties>
     <property name="alias" value="simple"/>
    </properties>
   </tile>
-  <tile id="79" type="solid"/>
-  <tile id="80" type="solid"/>
-  <tile id="81" type="solid"/>
-  <tile id="82" type="solid"/>
-  <tile id="83" type="solid"/>
-  <tile id="84" type="solid"/>
-  <tile id="92" type="oneway"/>
-  <tile id="97" type="gun"/>
-  <tile id="104" type="solid"/>
-  <tile id="105" type="solid"/>
-  <tile id="106" type="solid"/>
-  <tile id="107" type="solid"/>
-  <tile id="108" type="solid"/>
-  <tile id="109" type="solid"/>
-  <tile id="115" type="oneway"/>
-  <tile id="116" type="oneway"/>
-  <tile id="124" type="oneway"/>
-  <tile id="125" type="drain"/>
-  <tile id="126" type="rslope"/>
-  <tile id="127" type="lslope"/>
-  <tile id="128" type="batawake"/>
-  <tile id="134" type="angrybatawake"/>
-  <tile id="143" type="solid"/>
-  <tile id="144" type="oneway"/>
-  <tile id="145" type="oneway"/>
-  <tile id="146" type="oneway"/>
-  <tile id="148" type="oneway"/>
-  <tile id="156" type="oneway">
+  <tile id="79" class="solid"/>
+  <tile id="80" class="solid"/>
+  <tile id="81" class="solid"/>
+  <tile id="82" class="solid"/>
+  <tile id="83" class="solid"/>
+  <tile id="84" class="solid"/>
+  <tile id="92" class="oneway"/>
+  <tile id="97" class="gun"/>
+  <tile id="104" class="solid"/>
+  <tile id="105" class="solid"/>
+  <tile id="106" class="solid"/>
+  <tile id="107" class="solid"/>
+  <tile id="108" class="solid"/>
+  <tile id="109" class="solid"/>
+  <tile id="115" class="oneway"/>
+  <tile id="116" class="oneway"/>
+  <tile id="124" class="oneway"/>
+  <tile id="125" class="drain"/>
+  <tile id="126" class="rslope"/>
+  <tile id="127" class="lslope"/>
+  <tile id="128" class="batawake"/>
+  <tile id="134" class="angrybatawake"/>
+  <tile id="143" class="solid"/>
+  <tile id="144" class="oneway"/>
+  <tile id="145" class="oneway"/>
+  <tile id="146" class="oneway"/>
+  <tile id="148" class="oneway"/>
+  <tile id="156" class="oneway">
    <properties>
     <property name="alias" value="behind_breakable;simple"/>
    </properties>
   </tile>
-  <tile id="157" type="solid"/>
-  <tile id="158" type="solid"/>
-  <tile id="159" type="solid"/>
-  <tile id="182" type="oneway"/>
-  <tile id="183" type="oneway"/>
-  <tile id="184" type="oneway"/>
-  <tile id="185" type="oneway"/>
-  <tile id="189" type="solid"/>
-  <tile id="190" type="solid"/>
-  <tile id="191" type="solid"/>
-  <tile id="192" type="bat"/>
-  <tile id="196" type="angrybat"/>
-  <tile id="198" type="solid">
+  <tile id="157" class="solid"/>
+  <tile id="158" class="solid"/>
+  <tile id="159" class="solid"/>
+  <tile id="182" class="oneway"/>
+  <tile id="183" class="oneway"/>
+  <tile id="184" class="oneway"/>
+  <tile id="185" class="oneway"/>
+  <tile id="189" class="solid"/>
+  <tile id="190" class="solid"/>
+  <tile id="191" class="solid"/>
+  <tile id="192" class="bat"/>
+  <tile id="196" class="angrybat"/>
+  <tile id="198" class="solid">
    <properties>
     <property name="alias" value="door"/>
    </properties>
   </tile>
-  <tile id="199" type="enemy_door"/>
-  <tile id="216" type="oneway"/>
-  <tile id="217" type="oneway"/>
-  <tile id="221" type="solid"/>
-  <tile id="222" type="solid"/>
-  <tile id="223" type="solid"/>
+  <tile id="199" class="enemy_door"/>
+  <tile id="216" class="oneway"/>
+  <tile id="217" class="oneway"/>
+  <tile id="221" class="solid"/>
+  <tile id="222" class="solid"/>
+  <tile id="223" class="solid"/>
   <tile id="230">
    <properties>
     <property name="alias" value="door_opening"/>
    </properties>
   </tile>
-  <tile id="247" type="rslope"/>
-  <tile id="248" type="solid"/>
-  <tile id="249" type="solid"/>
-  <tile id="250" type="solid"/>
-  <tile id="251" type="lslope"/>
-  <tile id="253" type="solid"/>
-  <tile id="254" type="solid"/>
-  <tile id="255" type="solid"/>
-  <tile id="260" type="walljump"/>
-  <tile id="262" type="solid">
+  <tile id="247" class="rslope"/>
+  <tile id="248" class="solid"/>
+  <tile id="249" class="solid"/>
+  <tile id="250" class="solid"/>
+  <tile id="251" class="lslope"/>
+  <tile id="253" class="solid"/>
+  <tile id="254" class="solid"/>
+  <tile id="255" class="solid"/>
+  <tile id="260" class="walljump"/>
+  <tile id="262" class="solid">
    <properties>
     <property name="alias" value="door_bottom"/>
    </properties>
   </tile>
-  <tile id="278" type="rslope"/>
-  <tile id="279" type="solid"/>
-  <tile id="283" type="solid"/>
-  <tile id="284" type="lslope"/>
-  <tile id="285" type="solid"/>
-  <tile id="286" type="solid"/>
-  <tile id="287" type="solid"/>
-  <tile id="292" type="solid"/>
-  <tile id="310" type="solid"/>
-  <tile id="316" type="solid"/>
-  <tile id="317" type="solid"/>
-  <tile id="318" type="solid"/>
-  <tile id="319" type="solid"/>
-  <tile id="342" type="solid"/>
-  <tile id="348" type="solid"/>
-  <tile id="357" type="gunup"/>
-  <tile id="358" type="healthup"/>
-  <tile id="379" type="oneway"/>
-  <tile id="389" type="save"/>
-  <tile id="405" type="oneway"/>
-  <tile id="406" type="oneway"/>
-  <tile id="407" type="oneway"/>
-  <tile id="408" type="oneway"/>
-  <tile id="409" type="oneway"/>
-  <tile id="410" type="oneway"/>
-  <tile id="411" type="oneway"/>
-  <tile id="412" type="oneway"/>
-  <tile id="440" type="solid"/>
-  <tile id="441" type="solid"/>
-  <tile id="445" type="shard"/>
-  <tile id="472" type="solid"/>
-  <tile id="473" type="solid"/>
-  <tile id="506" type="solid"/>
-  <tile id="507" type="solid"/>
-  <tile id="510" type="oneway"/>
-  <tile id="512" type="mantis"/>
-  <tile id="536" type="rocket_launcher"/>
-  <tile id="601" type="solid"/>
-  <tile id="602" type="solid"/>
-  <tile id="603" type="solid"/>
-  <tile id="622" type="solid"/>
-  <tile id="623" type="solid"/>
-  <tile id="626" type="solid"/>
-  <tile id="627" type="solid"/>
-  <tile id="628" type="solid"/>
-  <tile id="629" type="solid"/>
-  <tile id="630" type="lslope"/>
-  <tile id="631" type="rslope"/>
-  <tile id="633" type="breakable">
+  <tile id="278" class="rslope"/>
+  <tile id="279" class="solid"/>
+  <tile id="283" class="solid"/>
+  <tile id="284" class="lslope"/>
+  <tile id="285" class="solid"/>
+  <tile id="286" class="solid"/>
+  <tile id="287" class="solid"/>
+  <tile id="292" class="solid"/>
+  <tile id="310" class="solid"/>
+  <tile id="316" class="solid"/>
+  <tile id="317" class="solid"/>
+  <tile id="318" class="solid"/>
+  <tile id="319" class="solid"/>
+  <tile id="342" class="solid"/>
+  <tile id="348" class="solid"/>
+  <tile id="357" class="gunup"/>
+  <tile id="358" class="healthup"/>
+  <tile id="379" class="oneway"/>
+  <tile id="389" class="save"/>
+  <tile id="405" class="oneway"/>
+  <tile id="406" class="oneway"/>
+  <tile id="407" class="oneway"/>
+  <tile id="408" class="oneway"/>
+  <tile id="409" class="oneway"/>
+  <tile id="410" class="oneway"/>
+  <tile id="411" class="oneway"/>
+  <tile id="412" class="oneway"/>
+  <tile id="440" class="solid"/>
+  <tile id="441" class="solid"/>
+  <tile id="445" class="shard"/>
+  <tile id="472" class="solid"/>
+  <tile id="473" class="solid"/>
+  <tile id="506" class="solid"/>
+  <tile id="507" class="solid"/>
+  <tile id="510" class="oneway"/>
+  <tile id="512" class="mantis"/>
+  <tile id="536" class="rocket_launcher"/>
+  <tile id="601" class="solid"/>
+  <tile id="602" class="solid"/>
+  <tile id="603" class="solid"/>
+  <tile id="622" class="solid"/>
+  <tile id="623" class="solid"/>
+  <tile id="626" class="solid"/>
+  <tile id="627" class="solid"/>
+  <tile id="628" class="solid"/>
+  <tile id="629" class="solid"/>
+  <tile id="630" class="lslope"/>
+  <tile id="631" class="rslope"/>
+  <tile id="633" class="breakable">
    <properties>
     <property name="alias" value="covering_cave_floor"/>
    </properties>
   </tile>
-  <tile id="634" type="breakable">
+  <tile id="634" class="breakable">
    <properties>
     <property name="alias" value="covering_cave_ceiling"/>
    </properties>
@@ -194,39 +194,39 @@
     <property name="alias" value="cave_ceiling_behind_breakable"/>
    </properties>
   </tile>
-  <tile id="662" type="solid"/>
-  <tile id="663" type="solid"/>
-  <tile id="692" type="lslope"/>
-  <tile id="695" type="rslope"/>
-  <tile id="696" type="solid"/>
-  <tile id="718" type="solid"/>
-  <tile id="719" type="solid"/>
-  <tile id="720" type="solid"/>
-  <tile id="721" type="solid"/>
-  <tile id="722" type="solid"/>
-  <tile id="723" type="solid"/>
-  <tile id="725" type="solid"/>
-  <tile id="726" type="solid"/>
+  <tile id="662" class="solid"/>
+  <tile id="663" class="solid"/>
+  <tile id="692" class="lslope"/>
+  <tile id="695" class="rslope"/>
+  <tile id="696" class="solid"/>
+  <tile id="718" class="solid"/>
+  <tile id="719" class="solid"/>
+  <tile id="720" class="solid"/>
+  <tile id="721" class="solid"/>
+  <tile id="722" class="solid"/>
+  <tile id="723" class="solid"/>
+  <tile id="725" class="solid"/>
+  <tile id="726" class="solid"/>
   <tile id="759">
    <properties>
     <property name="alias" value="cave_floor_behind_breakable"/>
    </properties>
   </tile>
-  <tile id="790" type="solid"/>
-  <tile id="791" type="solid"/>
-  <tile id="792" type="solid"/>
-  <tile id="793" type="solid"/>
-  <tile id="808" type="miniooy"/>
-  <tile id="810" type="ooy"/>
-  <tile id="822" type="solid"/>
-  <tile id="824" type="solid"/>
-  <tile id="825" type="solid"/>
-  <tile id="854" type="solid"/>
-  <tile id="857" type="solid"/>
-  <tile id="886" type="solid"/>
-  <tile id="887" type="solid"/>
-  <tile id="888" type="solid"/>
-  <tile id="889" type="solid"/>
+  <tile id="790" class="solid"/>
+  <tile id="791" class="solid"/>
+  <tile id="792" class="solid"/>
+  <tile id="793" class="solid"/>
+  <tile id="808" class="miniooy"/>
+  <tile id="810" class="ooy"/>
+  <tile id="822" class="solid"/>
+  <tile id="824" class="solid"/>
+  <tile id="825" class="solid"/>
+  <tile id="854" class="solid"/>
+  <tile id="857" class="solid"/>
+  <tile id="886" class="solid"/>
+  <tile id="887" class="solid"/>
+  <tile id="888" class="solid"/>
+  <tile id="889" class="solid"/>
  </tileset>
  <layer id="1" name="World" width="448" height="192">
   <data encoding="csv">
@@ -4697,13 +4697,13 @@
   </data>
  </layer>
  <objectgroup id="13" name="Zones" visible="0">
-  <object id="1032" name="pink_cave" type="pink_cave" x="1809.81" y="-834.833" width="2649.04" height="738.667"/>
-  <object id="1085" name="sewers" type="sewers" x="75.48" y="619.757" width="2645.71" height="895.09"/>
-  <object id="1087" name="sewers" type="sewers" x="2636.18" y="480.879" width="1327.04" height="577.757"/>
-  <object id="1088" name="sewers" type="sewers" x="-270.855" y="158.455" width="715.71" height="1327.09"/>
-  <object id="1133" name="volcano" type="volcano" x="-2946.85" y="-629.545" width="601.71" height="1059.09"/>
-  <object id="1134" name="volcano" type="volcano" x="-2952.86" y="-1637.55" width="2613.71" height="1432.42"/>
-  <object id="1164" name="cave" type="cave" x="-1773.86" y="240.455" width="1647.71" height="484.423"/>
+  <object id="1032" name="pink_cave" class="pink_cave" x="1809.81" y="-834.833" width="2649.04" height="738.667"/>
+  <object id="1085" name="sewers" class="sewers" x="75.48" y="619.757" width="2645.71" height="895.09"/>
+  <object id="1087" name="sewers" class="sewers" x="2636.18" y="480.879" width="1327.04" height="577.757"/>
+  <object id="1088" name="sewers" class="sewers" x="-270.855" y="158.455" width="715.71" height="1327.09"/>
+  <object id="1133" name="volcano" class="volcano" x="-2946.85" y="-629.545" width="601.71" height="1059.09"/>
+  <object id="1134" name="volcano" class="volcano" x="-2952.86" y="-1637.55" width="2613.71" height="1432.42"/>
+  <object id="1164" name="cave" class="cave" x="-1773.86" y="240.455" width="1647.71" height="484.423"/>
  </objectgroup>
  <objectgroup id="4" name="Entities">
   <object id="50" gid="193" x="-368" y="48" width="16" height="16"/>
@@ -4712,15 +4712,15 @@
   <object id="63" gid="193" x="703" y="161" width="16" height="16"/>
   <object id="65" gid="193" x="782.75" y="32.5" width="16" height="16"/>
   <object id="73" gid="1" x="-897.834" y="-128.833" width="16" height="16"/>
-  <object id="76" type="initial_batawake" gid="129" x="-733" y="116.5" width="16" height="16"/>
-  <object id="77" type="initial_batawake" gid="129" x="-1030.5" y="36" width="16" height="16"/>
-  <object id="92" name="skill_attack" type="skill_attack" gid="98" x="-1799.63" y="154" width="16" height="16"/>
+  <object id="76" class="initial_batawake" gid="129" x="-733" y="116.5" width="16" height="16"/>
+  <object id="77" class="initial_batawake" gid="129" x="-1030.5" y="36" width="16" height="16"/>
+  <object id="92" name="skill_attack" class="skill_attack" gid="98" x="-1799.63" y="154" width="16" height="16"/>
   <object id="117" gid="193" x="128.5" y="304" width="16" height="16"/>
   <object id="118" gid="200" x="-158.333" y="304.667" width="16" height="16"/>
   <object id="126" gid="390" x="-78.4664" y="143.114" width="16" height="16"/>
   <object id="127" gid="193" x="-1877.33" y="21.25" width="16" height="16"/>
   <object id="129" gid="200" x="-1629.45" y="130.545" width="16" height="16"/>
-  <object id="167" name="boss_bipedal" type="boss_bipedal" gid="213" x="-2252.73" y="608.754" width="16" height="16"/>
+  <object id="167" name="boss_bipedal" class="boss_bipedal" gid="213" x="-2252.73" y="608.754" width="16" height="16"/>
   <object id="177" gid="13" x="-536.5" y="480" width="16" height="16"/>
   <object id="178" gid="13" x="-466.75" y="560.25" width="16" height="16"/>
   <object id="180" gid="13" x="-695.5" y="656.5" width="16" height="16"/>
@@ -4757,7 +4757,7 @@
   <object id="659" gid="537" x="2050.8" y="176.318" width="16" height="16"/>
   <object id="660" gid="537" x="2404.67" y="177.182" width="16" height="16"/>
   <object id="661" gid="359" x="1938.67" y="319.682" width="16" height="16"/>
-  <object id="665" type="boss_minotaur" gid="56" x="331" y="-661.5" width="16" height="16"/>
+  <object id="665" class="boss_minotaur" gid="56" x="331" y="-661.5" width="16" height="16"/>
   <object id="684" gid="13" x="609" y="-273" width="16" height="16"/>
   <object id="691" gid="197" x="590.833" y="-241.833" width="16" height="16"/>
   <object id="697" gid="197" x="544.5" y="-476.75" width="16" height="16"/>
@@ -4777,7 +4777,7 @@
   <object id="778" gid="13" x="434.25" y="-304.75" width="16" height="16"/>
   <object id="779" gid="13" x="1350.5" y="334.5" width="16" height="16"/>
   <object id="782" gid="193" x="886.5" y="-563.5" width="16" height="16"/>
-  <object id="784" name="skill_dive" type="skill_dive" gid="204" x="-150.5" y="-435.75" width="16" height="16"/>
+  <object id="784" name="skill_dive" class="skill_dive" gid="204" x="-150.5" y="-435.75" width="16" height="16"/>
   <object id="836" gid="537" x="2785.39" y="257.724" width="16" height="16"/>
   <object id="839" gid="537" x="2787.38" y="351.807" width="16" height="16"/>
   <object id="841" gid="537" x="3168" y="351.333" width="16" height="16"/>
@@ -4797,43 +4797,43 @@
   <object id="908" gid="200" x="-14" y="306.5" width="16" height="16"/>
   <object id="922" gid="197" x="976.5" y="496.5" width="16" height="16"/>
   <object id="924" gid="197" x="591.333" y="464.667" width="16" height="16"/>
-  <object id="967" type="lava_initial_height" gid="443" x="-1970" y="-242" width="16" height="16"/>
+  <object id="967" class="lava_initial_height" gid="443" x="-1970" y="-242" width="16" height="16"/>
   <object id="969" gid="51" x="-2614.44" y="-420.015" width="16" height="16"/>
-  <object id="973" name="skill_dash" type="skill_dash" gid="98" x="-2119" y="-325" width="16" height="16"/>
+  <object id="973" name="skill_dash" class="skill_dash" gid="98" x="-2119" y="-325" width="16" height="16"/>
   <object id="976" gid="51" x="-662.525" y="-596.924" width="16" height="16"/>
   <object id="977" gid="51" x="-773.558" y="-819.985" width="16" height="16"/>
   <object id="978" gid="51" x="-565.108" y="-817.348" width="16" height="16"/>
   <object id="979" gid="51" x="-658.667" y="-1109.33" width="16" height="16"/>
   <object id="981" gid="537" x="-412" y="-1167.33" width="16" height="16"/>
   <object id="982" gid="537" x="-911.333" y="-1166.33" width="16" height="16"/>
-  <object id="990" name="skill_gun" type="skill_gun" gid="98" x="586.5" y="-1222.5" width="16" height="16"/>
+  <object id="990" name="skill_gun" class="skill_gun" gid="98" x="586.5" y="-1222.5" width="16" height="16"/>
   <object id="991" gid="47" x="-2656.04" y="-806.722" width="16" height="16"/>
   <object id="992" gid="49" x="-2716.95" y="-871.267" width="16" height="16"/>
-  <object id="993" type="temp_explosive" gid="69" x="-2765.1" y="-1020.68" width="16" height="16"/>
-  <object id="994" type="explosive" gid="69" x="-2677.6" y="-1025.68" width="16" height="16"/>
+  <object id="993" class="temp_explosive" gid="69" x="-2765.1" y="-1020.68" width="16" height="16"/>
+  <object id="994" class="explosive" gid="69" x="-2677.6" y="-1025.68" width="16" height="16"/>
   <object id="998" gid="135" x="767.333" y="-1492.67" width="16" height="16"/>
   <object id="999" gid="135" x="444.667" y="-1502" width="16" height="16"/>
   <object id="1000" gid="135" x="599.333" y="-1504.67" width="16" height="16"/>
   <object id="1003" gid="200" x="33.6667" y="-735" width="16" height="16"/>
-  <object id="1006" type="npc" gid="1" x="-1018" y="133" width="16" height="16"/>
-  <object id="1013" name="skill_breakblocks" type="skill_breakblocks" gid="361" x="4311.42" y="-165.666" width="16" height="16"/>
+  <object id="1006" class="npc" gid="1" x="-1018" y="133" width="16" height="16"/>
+  <object id="1013" name="skill_breakblocks" class="skill_breakblocks" gid="361" x="4311.42" y="-165.666" width="16" height="16"/>
   <object id="1019" gid="200" x="-269.636" y="128.909" width="16" height="16"/>
   <object id="1020" gid="200" x="-2694" y="-958.333" width="16" height="16"/>
-  <object id="1024" type="ooy" gid="811" x="3894.5" y="-472.833" width="16" height="16"/>
+  <object id="1024" class="ooy" gid="811" x="3894.5" y="-472.833" width="16" height="16"/>
   <object id="1025" gid="200" x="4183.5" y="-559.583" width="16" height="16"/>
   <object id="1031" gid="390" x="1335" y="-661.75" width="16" height="16"/>
   <object id="1033" gid="359" x="4229.17" y="-532.333" width="16" height="16"/>
-  <object id="1035" type="rocks_origin_1" gid="906" x="3270.69" y="-260.56" width="16" height="16" rotation="13"/>
-  <object id="1036" type="rocks_target_1" gid="906" x="3267.22" y="-157.845" width="16" height="16" rotation="29.688"/>
-  <object id="1038" type="rocks_origin_3" gid="906" x="3274.18" y="-303.295" width="16" height="16" rotation="40.6624"/>
-  <object id="1039" type="rocks_origin_2" gid="906" x="3234.37" y="-277.866" width="16" height="16" rotation="333.69"/>
-  <object id="1040" type="rocks_middle_1" gid="906" x="3252.67" y="-213.507" width="16" height="16" rotation="150"/>
-  <object id="1041" type="rocks_middle_2" gid="906" x="3281.76" y="-229.891" width="16" height="16" rotation="203.94"/>
-  <object id="1042" type="rocks_middle_3" gid="906" x="3243.51" y="-278.127" width="16" height="16" rotation="80.8945"/>
-  <object id="1045" type="rocks_target_2" gid="906" x="3246.98" y="-156.84" width="16" height="16" rotation="316.25"/>
-  <object id="1046" type="rocks_target_3" gid="906" x="3257.88" y="-186.216" width="16" height="16" rotation="359"/>
-  <object id="1049" type="rocks_middle_bounce_3" gid="906" x="3277.28" y="-250.042" width="16" height="16" rotation="180"/>
-  <object id="1056" name="skill_walljump" type="skill_walljump" gid="261" x="2984.5" y="826" width="16" height="16"/>
+  <object id="1035" class="rocks_origin_1" gid="906" x="3270.69" y="-260.56" width="16" height="16" rotation="13"/>
+  <object id="1036" class="rocks_target_1" gid="906" x="3267.22" y="-157.845" width="16" height="16" rotation="29.688"/>
+  <object id="1038" class="rocks_origin_3" gid="906" x="3274.18" y="-303.295" width="16" height="16" rotation="40.6624"/>
+  <object id="1039" class="rocks_origin_2" gid="906" x="3234.37" y="-277.866" width="16" height="16" rotation="333.69"/>
+  <object id="1040" class="rocks_middle_1" gid="906" x="3252.67" y="-213.507" width="16" height="16" rotation="150"/>
+  <object id="1041" class="rocks_middle_2" gid="906" x="3281.76" y="-229.891" width="16" height="16" rotation="203.94"/>
+  <object id="1042" class="rocks_middle_3" gid="906" x="3243.51" y="-278.127" width="16" height="16" rotation="80.8945"/>
+  <object id="1045" class="rocks_target_2" gid="906" x="3246.98" y="-156.84" width="16" height="16" rotation="316.25"/>
+  <object id="1046" class="rocks_target_3" gid="906" x="3257.88" y="-186.216" width="16" height="16" rotation="359"/>
+  <object id="1049" class="rocks_middle_bounce_3" gid="906" x="3277.28" y="-250.042" width="16" height="16" rotation="180"/>
+  <object id="1056" name="skill_walljump" class="skill_walljump" gid="261" x="2984.5" y="826" width="16" height="16"/>
   <object id="1063" gid="62" x="2273" y="943" width="16" height="16"/>
   <object id="1064" gid="62" x="1957" y="1008" width="16" height="16"/>
   <object id="1065" gid="62" x="1643" y="1057" width="16" height="16"/>
@@ -4866,7 +4866,7 @@
   <object id="1125" gid="809" x="-131.333" y="-1344" width="16" height="16"/>
   <object id="1126" gid="809" x="79.3333" y="-1361.33" width="16" height="16"/>
   <object id="1127" gid="809" x="20.6667" y="-1301.33" width="16" height="16"/>
-  <object id="1132" type="initial_screen" gid="1" x="-897.333" y="-48.6667" width="16" height="16"/>
+  <object id="1132" class="initial_screen" gid="1" x="-897.333" y="-48.6667" width="16" height="16"/>
   <object id="1135" gid="446" x="840" y="119" width="16" height="16"/>
   <object id="1136" gid="446" x="462.545" y="441.727" width="16" height="16"/>
   <object id="1137" gid="446" x="151" y="-263.25" width="16" height="16"/>
@@ -4899,79 +4899,79 @@
   </object>
  </objectgroup>
  <objectgroup id="8" name="Areas" visible="0">
-  <object id="104" name="parallax_forest" type="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
-  <object id="131" name="bat_bounds" type="bat_bounds" x="-1897.57" y="18.803" width="253.803" height="158.977"/>
-  <object id="132" name="bat_bounds" type="bat_bounds" x="-1208.22" y="-72.5402" width="842.45" height="291.747"/>
-  <object id="134" name="fog" type="fog" x="-1167.5" y="111.5" width="734" height="85.5"/>
-  <object id="169" name="parallax_cave" type="parallax_cave" x="-1721.17" y="287.25" width="1543.67" height="381.625"/>
-  <object id="194" name="boss_bounds" type="boss_bounds" x="-2278.5" y="577.5" width="476.333" height="39"/>
-  <object id="198" name="bat_bounds" type="bat_bounds" x="-1495.4" y="324.72" width="1197.47" height="331.894"/>
-  <object id="466" name="bat_bounds" type="bat_bounds" x="3.265" y="288.553" width="269.97" height="138.394"/>
-  <object id="493" name="lava" type="lava" x="368" y="247.273" width="592" height="27.706"/>
-  <object id="507" name="bat_bounds" type="bat_bounds" x="491.025" y="5.1265" width="363.45" height="237.247"/>
-  <object id="513" name="parallax_island" type="parallax_island" x="48.8997" y="-993.896" width="760.519" height="339.125"/>
-  <object id="640" name="lava" type="lava" x="1982.29" y="476.041" width="644.5" height="39.5"/>
-  <object id="644" name="rocket_launcher_awake" type="rocket_launcher_awake" x="1890.71" y="140.292" width="446.25" height="351"/>
-  <object id="651" name="rocket_launcher_awake" type="rocket_launcher_awake" x="2216.04" y="137.458" width="400.833" height="351"/>
-  <object id="738" name="bat_bounds" type="bat_bounds" x="1284.94" y="-442.29" width="555.45" height="268.58"/>
-  <object id="843" name="rocket_launcher_awake" type="rocket_launcher_awake" x="2768.68" y="241.529" width="430.568" height="81.3127"/>
-  <object id="844" name="rocket_launcher_awake" type="rocket_launcher_awake" x="2767.75" y="336.158" width="432.902" height="129.313"/>
-  <object id="871" name="bat_bounds" type="bat_bounds" x="367.108" y="-578.714" width="861.367" height="401.671"/>
-  <object id="923" name="lava" type="lava" x="496" y="561.72" width="544" height="77.7273"/>
-  <object id="925" name="lava_bg" type="lava_bg" x="2204.49" y="-1529.76" width="1509.03" height="471.52"/>
-  <object id="956" name="bat_bounds" type="bat_bounds" x="466.274" y="302.043" width="572.451" height="250.913"/>
-  <object id="960" name="lava" type="lava" x="-2335.74" y="-1183.93" width="1997.65" height="1014.41"/>
-  <object id="980" name="rocket_launcher_awake" type="rocket_launcher_awake" x="-945.284" y="-1183.66" width="577.568" height="244.813"/>
-  <object id="996" name="explosion" type="explosion" x="-2773.89" y="-1049.27" width="153.837" height="56.125"/>
-  <object id="997" name="alien_bounds" type="alien_bounds" x="-2735.27" y="-839.098" width="253.803" height="237.227"/>
-  <object id="1097" name="alien_bounds" type="alien_bounds" x="3357.5" y="156" width="512.5" height="246"/>
-  <object id="1099" name="alien_bounds" type="alien_bounds" x="3288" y="301" width="370.5" height="174.5"/>
-  <object id="1101" name="alien_bounds" type="alien_bounds" x="3511" y="295.5" width="386" height="181.5"/>
-  <object id="1107" name="parallax_sewer_2" type="parallax_sewer_2" x="-175.53" y="278.04" width="559.409" height="452.062"/>
-  <object id="1108" name="parallax_sewer" type="parallax_sewer" x="-68.1963" y="582.002" width="3961.62" height="860.728"/>
-  <object id="1109" name="parallax_sewer_3" type="parallax_sewer_3" x="3290.3" y="492.303" width="599.409" height="511.395"/>
-  <object id="1147" name="miniooy_bounds" type="miniooy_bounds" x="2493.67" y="-706" width="705.333" height="240"/>
-  <object id="1148" name="miniooy_bounds" type="miniooy_bounds" x="1885.33" y="-704.333" width="516.667" height="238.333"/>
-  <object id="1149" name="miniooy_bounds" type="miniooy_bounds" x="2146" y="-330.667" width="519.5" height="158.667"/>
-  <object id="1150" name="miniooy_bounds" type="miniooy_bounds" x="2738.17" y="-393.667" width="387.833" height="231"/>
-  <object id="1160" name="bg_bird_spawner" type="bg_bird_spawner" x="-1209.13" y="-39.75" width="819.75" height="104.25"/>
-  <object id="1165" name="miniooy_bounds" type="miniooy_bounds" x="2873.33" y="-701" width="321.333" height="231"/>
+  <object id="104" name="parallax_forest" class="parallax_forest" x="-1209.5" y="-94.5" width="824" height="289.5"/>
+  <object id="131" name="bat_bounds" class="bat_bounds" x="-1897.57" y="18.803" width="253.803" height="158.977"/>
+  <object id="132" name="bat_bounds" class="bat_bounds" x="-1208.22" y="-72.5402" width="842.45" height="291.747"/>
+  <object id="134" name="fog" class="fog" x="-1167.5" y="111.5" width="734" height="85.5"/>
+  <object id="169" name="parallax_cave" class="parallax_cave" x="-1721.17" y="287.25" width="1543.67" height="381.625"/>
+  <object id="194" name="boss_bounds" class="boss_bounds" x="-2278.5" y="577.5" width="476.333" height="39"/>
+  <object id="198" name="bat_bounds" class="bat_bounds" x="-1495.4" y="324.72" width="1197.47" height="331.894"/>
+  <object id="466" name="bat_bounds" class="bat_bounds" x="3.265" y="288.553" width="269.97" height="138.394"/>
+  <object id="493" name="lava" class="lava" x="368" y="247.273" width="592" height="27.706"/>
+  <object id="507" name="bat_bounds" class="bat_bounds" x="491.025" y="5.1265" width="363.45" height="237.247"/>
+  <object id="513" name="parallax_island" class="parallax_island" x="48.8997" y="-993.896" width="760.519" height="339.125"/>
+  <object id="640" name="lava" class="lava" x="1982.29" y="476.041" width="644.5" height="39.5"/>
+  <object id="644" name="rocket_launcher_awake" class="rocket_launcher_awake" x="1890.71" y="140.292" width="446.25" height="351"/>
+  <object id="651" name="rocket_launcher_awake" class="rocket_launcher_awake" x="2216.04" y="137.458" width="400.833" height="351"/>
+  <object id="738" name="bat_bounds" class="bat_bounds" x="1284.94" y="-442.29" width="555.45" height="268.58"/>
+  <object id="843" name="rocket_launcher_awake" class="rocket_launcher_awake" x="2768.68" y="241.529" width="430.568" height="81.3127"/>
+  <object id="844" name="rocket_launcher_awake" class="rocket_launcher_awake" x="2767.75" y="336.158" width="432.902" height="129.313"/>
+  <object id="871" name="bat_bounds" class="bat_bounds" x="367.108" y="-578.714" width="861.367" height="401.671"/>
+  <object id="923" name="lava" class="lava" x="496" y="561.72" width="544" height="77.7273"/>
+  <object id="925" name="lava_bg" class="lava_bg" x="2204.49" y="-1529.76" width="1509.03" height="471.52"/>
+  <object id="956" name="bat_bounds" class="bat_bounds" x="466.274" y="302.043" width="572.451" height="250.913"/>
+  <object id="960" name="lava" class="lava" x="-2335.74" y="-1183.93" width="1997.65" height="1014.41"/>
+  <object id="980" name="rocket_launcher_awake" class="rocket_launcher_awake" x="-945.284" y="-1183.66" width="577.568" height="244.813"/>
+  <object id="996" name="explosion" class="explosion" x="-2773.89" y="-1049.27" width="153.837" height="56.125"/>
+  <object id="997" name="alien_bounds" class="alien_bounds" x="-2735.27" y="-839.098" width="253.803" height="237.227"/>
+  <object id="1097" name="alien_bounds" class="alien_bounds" x="3357.5" y="156" width="512.5" height="246"/>
+  <object id="1099" name="alien_bounds" class="alien_bounds" x="3288" y="301" width="370.5" height="174.5"/>
+  <object id="1101" name="alien_bounds" class="alien_bounds" x="3511" y="295.5" width="386" height="181.5"/>
+  <object id="1107" name="parallax_sewer_2" class="parallax_sewer_2" x="-175.53" y="278.04" width="559.409" height="452.062"/>
+  <object id="1108" name="parallax_sewer" class="parallax_sewer" x="-68.1963" y="582.002" width="3961.62" height="860.728"/>
+  <object id="1109" name="parallax_sewer_3" class="parallax_sewer_3" x="3290.3" y="492.303" width="599.409" height="511.395"/>
+  <object id="1147" name="miniooy_bounds" class="miniooy_bounds" x="2493.67" y="-706" width="705.333" height="240"/>
+  <object id="1148" name="miniooy_bounds" class="miniooy_bounds" x="1885.33" y="-704.333" width="516.667" height="238.333"/>
+  <object id="1149" name="miniooy_bounds" class="miniooy_bounds" x="2146" y="-330.667" width="519.5" height="158.667"/>
+  <object id="1150" name="miniooy_bounds" class="miniooy_bounds" x="2738.17" y="-393.667" width="387.833" height="231"/>
+  <object id="1160" name="bg_bird_spawner" class="bg_bird_spawner" x="-1209.13" y="-39.75" width="819.75" height="104.25"/>
+  <object id="1165" name="miniooy_bounds" class="miniooy_bounds" x="2873.33" y="-701" width="321.333" height="231"/>
  </objectgroup>
  <objectgroup id="2" name="Screens" visible="0">
-  <object id="42" name="Screen" type="screen" x="-263.955" y="-56.5" width="622.538" height="304.5"/>
-  <object id="44" name="Screen" type="screen" x="-1309.12" y="-78.3333" width="1048.45" height="348.497"/>
-  <object id="45" name="Screen" type="screen" x="-258.667" y="-413" width="614.833" height="338"/>
-  <object id="46" name="Screen" type="screen" x="-1932.72" y="-81" width="622.725" height="346.909"/>
-  <object id="54" name="Screen" type="screen" x="358.25" y="-77.5" width="898.25" height="350.5"/>
-  <object id="57" name="Screen" type="screen" x="-168.167" y="-731.833" width="448.25" height="309.167"/>
-  <object id="105" name="Screen" type="screen" x="-172.45" y="178" width="453.373" height="1293.55"/>
-  <object id="171" name="screen" type="screen" x="-1725.51" y="273.538" width="1563.93" height="414.212"/>
-  <object id="173" name="Screen" type="screen" x="-2343.27" y="273.5" width="614.038" height="349.333"/>
-  <object id="215" name="Screen" type="screen" x="-2952.77" y="-555.667" width="608.538" height="921.83"/>
-  <object id="281" name="Screen" type="screen" x="359.481" y="-623.083" width="897.371" height="549.75"/>
-  <object id="314" name="Screen" type="screen" x="1256.81" y="-479" width="607.038" height="1025.67"/>
-  <object id="664" name="Screen" type="screen" x="1865.4" y="146.333" width="813.705" height="348"/>
-  <object id="668" name="Screen" type="screen" x="-55.5192" y="-993.667" width="964.372" height="353.166"/>
-  <object id="671" name="Screen" type="screen" x="909.583" y="-975" width="614.833" height="363.667"/>
-  <object id="673" name="Screen" type="screen" x="3896.15" y="219.17" width="626.371" height="351.667"/>
-  <object id="793" name="Screen" type="screen" x="415.417" y="289" width="833.083" height="350"/>
-  <object id="807" name="Screen" type="screen" x="2680.25" y="145.333" width="608.833" height="349.833"/>
-  <object id="846" name="Screen" type="screen" x="3287" y="481.25" width="610.333" height="348.5"/>
-  <object id="894" name="Screen" type="screen" x="3290.25" y="145.083" width="603.5" height="349.833"/>
-  <object id="897" name="Screen" type="screen" x="2682" y="510.084" width="604.833" height="349.833"/>
-  <object id="911" name="Screen" type="screen" x="281.647" y="673.333" width="2399.7" height="798.635"/>
-  <object id="970" name="Screen" type="screen" x="-2344.27" y="-633.582" width="1391.54" height="429.163"/>
-  <object id="971" name="Screen" type="screen" x="-957.77" y="-1454.91" width="618.207" height="1186.83"/>
-  <object id="986" name="Screen" type="screen" x="-347.5" y="-1541.67" width="614.038" height="349.333"/>
-  <object id="989" name="Screen" type="screen" x="266.981" y="-1540.67" width="614.038" height="349.333"/>
-  <object id="1016" name="Screen" type="screen" x="1864.15" y="-719.584" width="2541.37" height="598.417"/>
-  <object id="1021" name="Screen" type="screen" x="-2947.52" y="-1103.83" width="607.038" height="351.667"/>
+  <object id="42" name="Screen" class="screen" x="-263.955" y="-56.5" width="622.538" height="304.5"/>
+  <object id="44" name="Screen" class="screen" x="-1309.12" y="-78.3333" width="1048.45" height="348.497"/>
+  <object id="45" name="Screen" class="screen" x="-258.667" y="-413" width="614.833" height="338"/>
+  <object id="46" name="Screen" class="screen" x="-1932.72" y="-81" width="622.725" height="346.909"/>
+  <object id="54" name="Screen" class="screen" x="358.25" y="-77.5" width="898.25" height="350.5"/>
+  <object id="57" name="Screen" class="screen" x="-168.167" y="-731.833" width="448.25" height="309.167"/>
+  <object id="105" name="Screen" class="screen" x="-172.45" y="178" width="453.373" height="1293.55"/>
+  <object id="171" name="screen" class="screen" x="-1725.51" y="273.538" width="1563.93" height="414.212"/>
+  <object id="173" name="Screen" class="screen" x="-2343.27" y="273.5" width="614.038" height="349.333"/>
+  <object id="215" name="Screen" class="screen" x="-2952.77" y="-555.667" width="608.538" height="921.83"/>
+  <object id="281" name="Screen" class="screen" x="359.481" y="-623.083" width="897.371" height="549.75"/>
+  <object id="314" name="Screen" class="screen" x="1256.81" y="-479" width="607.038" height="1025.67"/>
+  <object id="664" name="Screen" class="screen" x="1865.4" y="146.333" width="813.705" height="348"/>
+  <object id="668" name="Screen" class="screen" x="-55.5192" y="-993.667" width="964.372" height="353.166"/>
+  <object id="671" name="Screen" class="screen" x="909.583" y="-975" width="614.833" height="363.667"/>
+  <object id="673" name="Screen" class="screen" x="3896.15" y="219.17" width="626.371" height="351.667"/>
+  <object id="793" name="Screen" class="screen" x="415.417" y="289" width="833.083" height="350"/>
+  <object id="807" name="Screen" class="screen" x="2680.25" y="145.333" width="608.833" height="349.833"/>
+  <object id="846" name="Screen" class="screen" x="3287" y="481.25" width="610.333" height="348.5"/>
+  <object id="894" name="Screen" class="screen" x="3290.25" y="145.083" width="603.5" height="349.833"/>
+  <object id="897" name="Screen" class="screen" x="2682" y="510.084" width="604.833" height="349.833"/>
+  <object id="911" name="Screen" class="screen" x="281.647" y="673.333" width="2399.7" height="798.635"/>
+  <object id="970" name="Screen" class="screen" x="-2344.27" y="-633.582" width="1391.54" height="429.163"/>
+  <object id="971" name="Screen" class="screen" x="-957.77" y="-1454.91" width="618.207" height="1186.83"/>
+  <object id="986" name="Screen" class="screen" x="-347.5" y="-1541.67" width="614.038" height="349.333"/>
+  <object id="989" name="Screen" class="screen" x="266.981" y="-1540.67" width="614.038" height="349.333"/>
+  <object id="1016" name="Screen" class="screen" x="1864.15" y="-719.584" width="2541.37" height="598.417"/>
+  <object id="1021" name="Screen" class="screen" x="-2947.52" y="-1103.83" width="607.038" height="351.667"/>
  </objectgroup>
  <objectgroup id="12" name="Triggers" visible="0">
-  <object id="1023" name="trigger_test" type="trigger_test" x="-546" y="-5" width="42" height="55.5"/>
-  <object id="1034" type="trigger_rockfall" x="3347.33" y="-254.417" width="33.5" height="100"/>
-  <object id="1001" name="trigger_fast_lava" type="trigger_fast_lava" x="-943.852" y="-548" width="577.705" height="156"/>
-  <object id="987" name="trigger_lava" type="trigger_lava" x="-1471.38" y="-641.091" width="158.705" height="269.333"/>
-  <object id="1129" name="trigger_leafs" type="trigger_leafs" x="-917" y="-94.9167" width="42" height="12.1667"/>
+  <object id="1023" name="trigger_test" class="trigger_test" x="-546" y="-5" width="42" height="55.5"/>
+  <object id="1034" class="trigger_rockfall" x="3347.33" y="-254.417" width="33.5" height="100"/>
+  <object id="1001" name="trigger_fast_lava" class="trigger_fast_lava" x="-943.852" y="-548" width="577.705" height="156"/>
+  <object id="987" name="trigger_lava" class="trigger_lava" x="-1471.38" y="-641.091" width="158.705" height="269.333"/>
+  <object id="1129" name="trigger_leafs" class="trigger_leafs" x="-917" y="-94.9167" width="42" height="12.1667"/>
  </objectgroup>
 </map>

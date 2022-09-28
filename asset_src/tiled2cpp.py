@@ -54,7 +54,7 @@ max_y = 0
 
 for chunk in tiles.chunks:
     if chunk.coordinates.x < min_x:
-        min_x = chunk.coordinates.x 
+        min_x = chunk.coordinates.x
     elif chunk.coordinates.x + chunk.size.width > max_x:
         max_x = chunk.coordinates.x + chunk.size.width
     if chunk.coordinates.y < min_y:
@@ -93,7 +93,7 @@ gids_used = sorted(gids_used)
 
 gids_by_type = defaultdict(list)
 for g in gids_used:
-    type_ = tileset[g].type if g in tileset and tileset[g].type is not None else "bg"
+    type_ = tileset[g].class_ if g in tileset and tileset[g].class_ is not None else "bg"
     gids_by_type[type_].append(g)
 
 
@@ -143,7 +143,7 @@ if out_content == current:
 else:
     print("UPDATING: {}".format(os.path.basename(fname)))
     Path(fname).write_text(out_content)
-                
+
 
 tm = Template(Path('tiled_tilemap.cpp.tmpl').read_text())
 #template.globals['custom_function'] = custom_function
@@ -179,7 +179,7 @@ for objects in object_layers:
 
     for e in objects.tiled_objects:
         if isinstance(e,  pytiled_parser.tiled_object.Tile):
-            type_ = e.type if e.type else tileset[e.gid-1].type
+            type_ = e.class_ if e.class_ else tileset[e.gid-1].class_
             if type_:
                 entities_by_type[type_].append((e.id, float(e.coordinates.x)-min_x*tilesize, float(e.coordinates.y)-min_y*tilesize, e.rotation))
                 if e.rotation != 0:
@@ -187,8 +187,8 @@ for objects in object_layers:
             else:
                 print("Warning: ignoring object without type nor tile type")
         elif isinstance(e, pytiled_parser.tiled_object.Rectangle):
-            if e.type:
-                areas_by_type[e.type].append((float(e.coordinates.x)-min_x*tilesize, float(e.coordinates.y)-min_y*tilesize, float(e.size.width), float(e.size.height)))
+            if e.class_:
+                areas_by_type[e.class_].append((float(e.coordinates.x)-min_x*tilesize, float(e.coordinates.y)-min_y*tilesize, float(e.size.width), float(e.size.height)))
             else:
                 print("Warning: ignoring rectangle without type")
 
@@ -214,7 +214,7 @@ for objects in object_layers:
     else:
         print("UPDATING: {}".format(os.path.basename(fname)))
         Path(fname).write_text(out_content)
-                    
+
     tm = Template(Path('tiled_objects.cpp.tmpl').read_text())
     #template.globals['custom_function'] = custom_function
     out_content = tm.render(
@@ -263,7 +263,7 @@ if out_content == current:
 else:
     print("UPDATING: {}".format(os.path.basename(fname)))
     Path(fname).write_text(out_content)
-                
+
 tm = Template(Path('tiled_tile.cpp.tmpl').read_text())
 #template.globals['custom_function'] = custom_function
 out_content = tm.render(
