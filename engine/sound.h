@@ -30,9 +30,9 @@ private:
 template<size_t Size>
 struct MultiSound
 {
-	void Load(std::array<const char*, Size> paths) 
-	{
-		// FIXME: why does this compile if the paths size is smaller than the size of the MultiSound?
+	template<std::size_t N>
+	void Load(const char * const (&paths)[N]) {
+		static_assert(N == Size);
 		for (int i = 0; i < Size; i++) {
 			sounds[i].Load(paths[i]);
 		}

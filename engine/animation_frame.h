@@ -13,6 +13,7 @@ struct AnimationFrame
 	constexpr vec GetSize() const { return vec(rect.w, rect.h); }
 };
 
+// TODO: All constexpr here should be consteval in C++20
 struct SheetFrameCalculator {
 	const int sprite_w;
 	const int sprite_h;
