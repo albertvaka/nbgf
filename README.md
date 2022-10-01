@@ -9,7 +9,7 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 # Requisites
 
 ### Windows
-- VisualStudio 2019
+- VisualStudio 2022
 - All the dependencies are bundled, the project does just build :)
 
 ### Linux and Mac
