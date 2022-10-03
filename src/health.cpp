@@ -19,9 +19,7 @@ void Health::Update(float dt)
 {
 	Player* player = Player::instance();
 	if (Collide(Bounds(), player->CollisionBounds())) {
-		if (player->health < player->maxHealth) {
-			player->health++;
-		}
+		player->Heal();
 		alive = false;
 	}
 

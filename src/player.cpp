@@ -883,14 +883,65 @@ void Player::Draw() const {
 	}
 }
 
+void Player::Heal() {
+	// TODO: Animation
+	health += 5;
+	Mates::ClampMax(health, maxHealth);
+}
+
+void Player::HealthUp() {
+	// TODO: Animation
+	health += 5;
+	maxHealth += 5;
+}
+
+namespace AnimLib {
+	constexpr const GPU_Rect HEALTH_BACKGROUND = { 479+18, 260, 1, 9 };
+	constexpr const GPU_Rect HEALTH_FOREGROUND = { 477+18, 260, 1, 9 };
+	constexpr const GPU_Rect HEALTH_BEGIN = { 463+18, 260, 4, 9 };
+	constexpr const GPU_Rect HEALTH_MIDDLE = { 466+18, 260, 1, 9 };
+	constexpr const GPU_Rect HEALTH_END = { 473+18, 260, 4, 9 };
+}
+
+// Duplicated from DrawBossHealth
 void Player::DrawGUI() const {
-	for (int i = 0; i < maxHealth; i++) {
-		float scale = 1.5f;
-		if (health == 1) {
-			scale += std::abs(Mates::Clamped(sin(mainClock * 6), -0.6f, 9.f))/3;
-		}
-		Window::Draw(Assets::spritesheetTexture, 18 + 24 * i, 18)
-			.withRectWithOriginCentered(i < health ? AnimLib::HEALTH_FULL : AnimLib::HEALTH_EMPTY)
-			.withScale(scale);
-	}
+	float scale = 1.5f;
+
+	//if (health == 1) {
+	//	scale += std::abs(Mates::Clamped(sin(mainClock * 6), -0.6f, 9.f))/3;
+	//}
+	//for (int i = 0; i < maxHealth; i++) {
+	//	Window::Draw(Assets::spritesheetTexture, 18 + 24 * i, 18)
+	//		.withRectWithOriginCentered(i < health ? AnimLib::HEALTH_FULL : AnimLib::HEALTH_EMPTY)
+	//		.withScale(scale);
+	//}
+
+	const vec pos(6, 28-19);
+	const int size = 8 * maxHealth;
+
+	// Background
+	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
+		.withScale(size * scale, scale)
+		.withRect(AnimLib::HEALTH_BACKGROUND);
+
+	// Health
+	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
+		.withScale((float(health) / maxHealth) * size * scale, scale)
+		.withRect(AnimLib::HEALTH_FOREGROUND);
+
+	// Bar begin
+	Window::Draw(Assets::spritesheetTexture, pos + vec())
+		.withScale(scale)
+		.withRect(AnimLib::HEALTH_BEGIN);
+
+	// Bar middle
+	Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
+		.withScale(size * scale, scale)
+		.withRect(AnimLib::HEALTH_MIDDLE);
+
+	// Bar end
+	Window::Draw(Assets::spritesheetTexture, pos + vec(size * scale, 0))
+		.withScale(scale)
+		.withRect(AnimLib::HEALTH_END);
+
 }

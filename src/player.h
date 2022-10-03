@@ -33,6 +33,8 @@ struct Player : Entity, SingleInstance<Player>
     }
     BoxBounds MaxBounds() const;
 
+    void Heal();
+    void HealthUp();
     void TakeDamage(vec src);
     void DealDamage(vec target);
     void ToSafeGround();

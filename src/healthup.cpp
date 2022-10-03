@@ -36,12 +36,7 @@ void HealthUp::Update(float dt)
 
 	Player* player = Player::instance();
 	if (!pickedUp && Collide(Bounds(), player->CollisionBounds())) {
-
-		//TODO: Show popup or animation or something
-
-		player->health++;
-		player->maxHealth++;
-
+		player->HealthUp();
 		pickedUp = true;
 	}
 }
