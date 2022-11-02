@@ -68,7 +68,7 @@ ifeq ($(strip $(DEBUG)),1)
 	DEBUGFLAGS=-D_DEBUG -g
 endif
 ifeq ($(strip $(IMGUI)),1)
-	IMGUIFLAGS=-D_IMGUI -DIMGUI_DISABLE_DEMO_WINDOWS
+	IMGUIFLAGS=-D_IMGUI
 endif
 
 $(EXEC): $(OBJ) $(ENGINE_OBJ) $(GENERATED_OBJ) $(DEP_OBJ) Makefile

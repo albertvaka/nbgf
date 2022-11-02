@@ -155,7 +155,7 @@ void main_loop() {
 	//GPU_ActivateShaderProgram(0, NULL);
 	GPU_FlushBlitBuffer(); // IMPORTANT: run GPU_FlushBlitBuffer before ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(Window::window);
+	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 #endif
 

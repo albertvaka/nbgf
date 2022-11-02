@@ -61,24 +61,6 @@
     <ClInclude Include="vendor\glew\wglew.h">
       <Filter>Bundled Dependencies\glew</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\imgui\imconfig.h">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui.h">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imgui_internal.h">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imstb_rectpack.h">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imstb_textedit.h">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui\imstb_truetype.h">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\magic_enum\magic_enum.h">
       <Filter>Bundled Dependencies</Filter>
     </ClInclude>
@@ -117,12 +99,6 @@
     </ClInclude>
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>Bundled Dependencies\stb_image</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
     <ClInclude Include="engine\animation.h">
       <Filter>engine</Filter>
@@ -418,22 +394,37 @@
     <ClInclude Include="src\enemies_by_screen.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_rectpack.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_textedit.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_truetype.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imconfig.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui_internal.h">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3_loader.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
       <Filter>Bundled Dependencies\glew</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui.cpp">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_demo.cpp">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_draw.cpp">
-      <Filter>Bundled Dependencies\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
-      <Filter>Bundled Dependencies\imgui</Filter>
     </ClCompile>
     <ClCompile Include="vendor\SDL_gpu\src\renderer_GLES_1.c">
       <Filter>Bundled Dependencies\sdl_gpu</Filter>
@@ -473,12 +464,6 @@
     </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.c">
       <Filter>Bundled Dependencies\stb_image</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
     <ClCompile Include="engine\debug.cpp">
       <Filter>engine</Filter>
@@ -659,6 +644,27 @@
     </ClCompile>
     <ClCompile Include="src\enemies_by_screen.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
