@@ -110,7 +110,7 @@ void InitRenderToTextureTarget()
 	//Window::Clear(0, 0, 0);
 }
 
-bool FullscreenShader::Activate()
+bool FullscreenShader::Begin()
 {
 	if (!shaderActivation) {
 		return false;
@@ -128,7 +128,7 @@ bool FullscreenShader::Activate()
 }
 
 
-void FullscreenShader::Deactivate()
+void FullscreenShader::End()
 {
 	if (!enabled) {
 		return;
@@ -179,7 +179,7 @@ void BeforeEnterScene()
 void AfterDraw()
 {
 
-	FullscreenShader::Deactivate();
+	FullscreenShader::End();
 
 	if (ScreenTransition::transitionTime > 0.f || ScreenTransition::transitionJustFinished) {
 		Camera::InScreenCoords::Begin();

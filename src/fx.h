@@ -115,8 +115,8 @@ namespace Fx {
 
 		static void SetShader(std::function<void()> shaderActivationLambda) { shaderActivation = shaderActivationLambda; }
 
-		static bool Activate(); // Returns true if it did something (ie: if there was a shader set)
-		static void Deactivate();
+		static bool Begin(); // Returns true if it did something (ie: if there was a shader set)
+		static void End();
 
 		static inline bool enabled = false;
 		static inline std::function<void()> shaderActivation = nullptr;

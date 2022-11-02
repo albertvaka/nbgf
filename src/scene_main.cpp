@@ -968,7 +968,7 @@ void MainScene::Draw()
 {
 	const SDL_Color& bgColor = zoneManager.GetBgColor();
 	Window::Clear(bgColor);
-	bool isFullScreenshaderActive = Fx::FullscreenShader::Activate();
+	bool isFullScreenshaderActive = Fx::FullscreenShader::Begin();
 	if (isFullScreenshaderActive) { // Clear again, this time for the fullscreen texture
 		Window::Clear(bgColor);
 	}
@@ -1096,7 +1096,7 @@ void MainScene::Draw()
 	}
 #endif
 
-	Fx::FullscreenShader::Deactivate(); // Does nothing if no shader was active
+	Fx::FullscreenShader::End(); // Does nothing if no shader was active
 
 	Camera::InScreenCoords::Begin();
 	player.DrawGUI();
