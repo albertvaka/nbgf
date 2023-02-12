@@ -5,6 +5,7 @@
 #include "vec.h"
 #include "bounds.h"
 #include "camera.h"
+#include "window_drawraw.h"
 
 template<class Tile> // A TileSet as exported from Tiled (or a class that inherits from it)
 struct TileMap
@@ -22,8 +23,8 @@ struct TileMap
 	
 	template<typename TiledTileMap> // A TileMap as exported from Tiled
 	void LoadFromTiled() {
-		assert(TiledTileMap::Size.x == sizes.x);
-		assert(TiledTileMap::Size.y == sizes.y);
+		SDL_assert(TiledTileMap::Size.x == sizes.x);
+		SDL_assert(TiledTileMap::Size.y == sizes.y);
 		memcpy((void*)tiles, (void*)TiledTileMap::Map, TiledTileMap::Size.x * TiledTileMap::Size.y * sizeof(Tile));
 	}
 
@@ -48,6 +49,9 @@ struct TileMap
 
 	void SetTile(const veci& pos, Tile tile) { return SetTile(pos.x, pos.y, tile); }
 	Tile GetTile(const veci& pos) const { return GetTile(pos.x, pos.y); }
+
+	Tile GetTileUnsafe(veci pos) const { return GetTileUnsafe(pos.x, pos.y); }
+	void SetTileUnsafe(veci pos, Tile col) { SetTileUnsafe(pos.x, pos.y, col); }
 
 	int Width() const { return sizes.x; }
 	int Height() const { return sizes.y; }

@@ -9,6 +9,7 @@ namespace Window {
 
 	extern GPU_Target* currentDrawTarget;
 
+	// NOTE: If using this to achive z-ordering, check GPU_AddDepthBuffer() instead
 	struct DeferredDraw {
 
 		constexpr DeferredDraw(GPU_Image* t, vec pos) : t(t), dest(pos) {
@@ -28,9 +29,23 @@ namespace Window {
 			return withRect({ x, y, w, h });
 		}
 
+		constexpr DeferredDraw& withRect(const vec pos, const vec size) {
+			return withRect({ pos.x, pos.y, size.x, size.y });
+		}
+
 		constexpr DeferredDraw& withRect(const GPU_Rect& r) {
 			src = r;
 			return *this;
+		}
+
+		constexpr DeferredDraw& withRectWithOriginCentered(float x, float y, float w, float h) {
+			return withRectWithOriginCentered({ x, y, w, h });
+		}
+
+		constexpr DeferredDraw& withRectWithOriginCentered(const GPU_Rect& r) {
+			origin.x = r.w / 2;
+			origin.y = r.h / 2;
+			return withRect(r);;
 		}
 
 		constexpr DeferredDraw& withOrigin(float x, float y) {
@@ -87,7 +102,6 @@ namespace Window {
 			}
 		}
 
-	protected:
 		GPU_Image* t;
 		vec dest;
 		GPU_Rect src = {};

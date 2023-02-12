@@ -8,7 +8,6 @@
 #include "imgui.h"
 #endif
 
-
 namespace Fx {
 
 void ScreenTransition::Start(Shader& shader, float duration)
@@ -42,15 +41,18 @@ void Update(float dt)
 				FreezeImage::unfreezeCallback();
 			}
 		}
-		return;
+		if (!FreezeImage::continueScreenShake) {
+			return;
+		}
 	}
 
-	if (Screenshake::screenshakeTime > 0) {
-		Screenshake::screenshakeTime -= dt;
+	if (Screenshake::shaking) {
 		if (Screenshake::screenshakeTime <= 0) {
 			Camera::screenshake_offset = vec::Zero;
+			Screenshake::shaking = false;
 		}
 		else {
+			Screenshake::screenshakeTime -= dt;
 			const int discreteSteps = 4; // There will be N fixed position up and N down the screen can be at.
 			if (Screenshake::screenshakeAmplitude.y > 0) {
 				Camera::screenshake_offset.y = (int(cos(Screenshake::screenshakeTime * Screenshake::screenshakeSpeed.y) * discreteSteps) * Screenshake::screenshakeAmplitude.y) / discreteSteps;
@@ -64,10 +66,13 @@ void Update(float dt)
 			else {
 				Camera::screenshake_offset.x = 0;
 			}
+			if (Screenshake::screenshakeDampening > 0) {
+				Screenshake::screenshakeAmplitude.x *= Screenshake::screenshakeDampening;
+				Screenshake::screenshakeAmplitude.y *= Screenshake::screenshakeDampening;
+			}
 		}
-		Camera::SetCenter(Camera::Center()); // makes it pick up the offset
+		Camera::SetCenter(Camera::Center()); // makes sdl_gpu pick up the offset in case nothing else updates the camera this frame
 	}
-
 }
 
 void Screenshake::DrawImgui()
@@ -75,13 +80,13 @@ void Screenshake::DrawImgui()
 #ifdef _IMGUI
 	ImGui::Begin("Screenshake");
 	static float shakeTime = 1.f;
-	static int shakeAmplitudeX = 0;
-	static int shakeAmplitudeY = 5;
+	static float shakeAmplitudeX = 0;
+	static float shakeAmplitudeY = 5;
 	static float shakeSpeedX = 10;
 	static float shakeSpeedY = 10;
 	ImGui::SliderFloat("shakeTime", &shakeTime, 0.1f, 2.f);
-	ImGui::SliderInt("shakeAmplitudeX", &shakeAmplitudeX, 0, 10);
-	ImGui::SliderInt("shakeAmplitudeY", &shakeAmplitudeY, 0, 10);
+	ImGui::SliderFloat("shakeAmplitudeX", &shakeAmplitudeX, 0.f, 10.f);
+	ImGui::SliderFloat("shakeAmplitudeY", &shakeAmplitudeY, 0.f, 10.f);
 	ImGui::SliderFloat("shakeSpeedX", &shakeSpeedX, 0, 100);
 	ImGui::SliderFloat("shakeSpeedY", &shakeSpeedY, 0, 100);
 	if (ImGui::Button("Shake")) {
@@ -94,40 +99,36 @@ void Screenshake::DrawImgui()
 void InitRenderToTextureTarget()
 {
 	if (FullscreenShader::renderToTextureTarget) {
-		GPU_FreeImage(FullscreenShader::renderToTextureTarget);
+		Window::DestroyTexture(FullscreenShader::renderToTextureTarget);
 		FullscreenShader::renderToTextureTarget = nullptr;
 	}
-	FullscreenShader::renderToTextureTarget = Window::CreateTexture(Window::screenTarget->base_w, Window::screenTarget->base_h);
-	GPU_Target* target = GPU_GetTarget(FullscreenShader::renderToTextureTarget);
-	GPU_SetVirtualResolution(target, Window::GAME_WIDTH, Window::GAME_HEIGHT);
-	FullscreenShader::renderToTextureSize = vec(Window::screenTarget->base_w, Window::screenTarget->base_h);
+	FullscreenShader::renderToTextureTarget = Window::CreateTexture(Window::GAME_WIDTH, Window::GAME_HEIGHT);
+	FullscreenShader::renderToTextureScale = Window::GetViewportScale();
 	// Start with both buffers fully black
-	Window::Clear(0, 0, 0);
-	GPU_Flip(Window::screenTarget);
-	Window::Clear(0, 0, 0);
+	//Window::Clear(0, 0, 0);
+	//GPU_Flip(Window::screenTarget);
+	//Window::Clear(0, 0, 0);
 }
 
-void FullscreenShader::Activate(bool clear)
+bool FullscreenShader::Begin()
 {
 	if (!shaderActivation) {
-		return;
+		return false;
 	}
 	if (enabled) {
-		return;
+		return true;
 	}
 	enabled = true;
-	if (renderToTextureSize.x != Window::screenTarget->base_w || renderToTextureSize.y != Window::screenTarget->base_h) 
+	if (renderToTextureScale != Window::GetViewportScale())
 	{
 		InitRenderToTextureTarget();
 	}
 	Window::BeginRenderToTexture(renderToTextureTarget, true);
-	if (clear) {
-		GPU_ClearRGBA(Window::currentDrawTarget, 0, 0, 0, 0);
-	}
+	return true;
 }
 
 
-void FullscreenShader::Deactivate()
+void FullscreenShader::End()
 {
 	if (!enabled) {
 		return;
@@ -141,28 +142,23 @@ void FullscreenShader::Deactivate()
 		shaderActivation();
 	}
 
-	GPU_UnsetVirtualResolution(Window::screenTarget);
-	Camera::InScreenCoords::Begin();
-	Window::Draw(FullscreenShader::renderToTextureTarget, Camera::InScreenCoords::TopLeft());
-	Camera::InScreenCoords::End();
-	GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+	Window::Draw(FullscreenShader::renderToTextureTarget, Camera::TopLeft());
 
 	Shader::Deactivate();
 }
 
-void Init()
-{
-	InitRenderToTextureTarget();
-
-    ScreenTransition::blankTexture = Window::CreateTexture(32,32);
-	Window::BeginRenderToTexture(ScreenTransition::blankTexture, false);
-    Window::Clear(255,255,0);
-    Window::EndRenderToTexture();
-
-}
 
 void BeforeEnterScene()
 {
+	// First time init
+	if (ScreenTransition::blankTexture == nullptr) {
+		InitRenderToTextureTarget();
+
+		ScreenTransition::blankTexture = Window::CreateTexture(32, 32);
+		Window::BeginRenderToTexture(ScreenTransition::blankTexture, false);
+		Window::Clear(255, 255, 0);
+		Window::EndRenderToTexture();
+	}
 
 	//Stop everything
 
@@ -170,6 +166,7 @@ void BeforeEnterScene()
 
 	ScreenTransition::transitionJustFinished = false;
 
+	Screenshake::shaking = false;
 	Screenshake::screenshakeTime = -1;
 	Camera::screenshake_offset = vec::Zero;
 	Camera::SetCenter(Camera::Center());
@@ -182,7 +179,7 @@ void BeforeEnterScene()
 void AfterDraw()
 {
 
-	FullscreenShader::Deactivate();
+	FullscreenShader::End();
 
 	if (ScreenTransition::transitionTime > 0.f || ScreenTransition::transitionJustFinished) {
 		Camera::InScreenCoords::Begin();

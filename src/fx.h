@@ -19,33 +19,42 @@ namespace Fx {
 
 		static inline void StartPreset(Preset preset) {
 			switch (preset) {
-			case Preset::Earthquake: // Make it long by calling this repeatedly
-				Start(0.1f, veci(2, 2), vec(35.f, 45.f));
+				break;
+			case Preset::Earthquake:
+				Start(0.2f, vec(2.5f, 2.5f), vec(35.f, 45.f));
 				break;
 			case Preset::LittleStomp:
-				Start(0.17f, veci(0, 2), vec(0.f, 47.f));
+				Start(0.3f, vec(0, 3), vec(0.f, 47.f));
 				break;
 			case Preset::Stomp:
-				Start(0.17f, veci(0, 3), vec(0.f, 47.f));
+				Start(0.3f, vec(0, 5), vec(0.f, 47.f));
 				break;
 			case Preset::ElectricShock:
-				Start(0.157f, veci(8, 2), vec(86.7f, 14.1f));
+				Start(0.157f, vec(8, 2), vec(86.7f, 14.1f));
 				break;
 			}
 		}
 
-		static inline void Start(float time, veci amplitude, vec speed) {
+		static inline void Start(float time, vec amplitude, vec speed, float dampening = -1.f) {
 			if (time >= screenshakeTime) {
+				shaking = true;
 				screenshakeTime = time;
 				screenshakeAmplitude = amplitude;
 				screenshakeSpeed = speed;
+				screenshakeDampening = dampening;
 			}
+		}
+
+		static inline void Stop() {
+			screenshakeTime = -1.f;
 		}
 
 		static void DrawImgui();
 
+		static inline bool shaking = false;
 		static inline float screenshakeTime;
-		static inline veci screenshakeAmplitude = veci(0, 0);
+		static inline float screenshakeDampening;
+		static inline vec screenshakeAmplitude = veci(0, 0);
 		static inline vec screenshakeSpeed = veci(0, 0);
 	};
 
@@ -72,13 +81,18 @@ namespace Fx {
 		static inline float transitionTime = 0;
 		static inline float transitionDuration = 0;
 		static inline bool transitionJustFinished = false;
-		static inline GPU_Image* blankTexture;
+		static inline GPU_Image* blankTexture = nullptr;
 	};
 
 	struct FreezeImage {
 
-		static void Freeze(float during_time) {
-			worldStoppedTime = during_time;
+		static void Freeze(float durationSeconds, bool continueScreenShakeWhileFrozen = false) {
+			worldStoppedTime = durationSeconds;
+			continueScreenShake = continueScreenShakeWhileFrozen;
+		}
+
+		static std::function<void(float dt)> GetAlternativeUpdateFnWhileFrozen() {
+			return worldStoppedUpdate;
 		}
 
 		static void SetAlternativeUpdateFnWhileFrozen(std::function<void(float dt)> update = nullptr) {
@@ -94,23 +108,23 @@ namespace Fx {
 		static inline std::function<void(float dt)> worldStoppedUpdate = nullptr;
 		static inline std::function<void()> unfreezeCallback = nullptr;
 		static inline float worldStoppedTime = -1.f;
+		static inline bool continueScreenShake = false;
 	};
 
 	struct FullscreenShader {
 
 		static void SetShader(std::function<void()> shaderActivationLambda) { shaderActivation = shaderActivationLambda; }
 
-		static void Activate(bool clearLastFrame=true);
-		static void Deactivate();
+		static bool Begin(); // Returns true if it did something (ie: if there was a shader set)
+		static void End();
 
 		static inline bool enabled = false;
 		static inline std::function<void()> shaderActivation = nullptr;
 		static inline GPU_Image* renderToTextureTarget;
-		static inline vec renderToTextureSize = vec(-1,-1);
+		static inline float renderToTextureScale = -1.f;
 	};
 
 
-	void Init();
 	void BeforeEnterScene();
 	void AfterDraw();
 	void Update(float dt);

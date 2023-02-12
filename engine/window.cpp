@@ -2,12 +2,12 @@
 
 #include "SDL_gpu.h"
 
-#ifdef _IMGUI
-#include "imgui_impl_sdl.h"
-#endif
-
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
+#endif
+
+#ifdef _IMGUI
+#include "imgui_impl_sdl.h"
 #endif
 
 #include "debug.h"
@@ -30,15 +30,23 @@ namespace Window
         SDL_GetDesktopDisplayMode(0, &dm);
         dm.h -= 64; // Account for some pixels used by the window decorations
         int scale = std::min(dm.w / GAME_WIDTH, dm.h / GAME_HEIGHT);
+        if (scale <= 0) {
+            Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the window resolution (" << dm.w << "*" << dm.h << ")";
+            scale = 1;
+        }
         Debug::out << "Scaling to x" << scale;
         //Debug::out << dm.w << " " << dm.h;
  #endif
-        auto sdl_create_window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
+
+        GPU_SetPreInitFlags(GPU_INIT_DISABLE_AUTO_VIRTUAL_RESOLUTION);
+
+        auto sdl_create_window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN;
         screenTarget = GPU_Init(GAME_WIDTH * scale, GAME_HEIGHT * scale, sdl_create_window_flags);
         if (screenTarget == NULL) {
             Debug::out << "GPU_Init failed";
             return 1;
         }
+
         window = SDL_GetWindowFromID(screenTarget->context->windowID);
         SDL_SetWindowTitle(window, Window::WINDOW_TITLE);
 
@@ -57,6 +65,13 @@ namespace Window
         Camera::SetTopLeft(0.f, 0.f);
 
         GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+
+        SDL_ShowWindow(window);
+
+        // Start with both buffers fully black
+        Clear(0, 0, 0);
+        GPU_Flip(screenTarget);
+        Clear(0, 0, 0);
 
         return 0;
     }
@@ -117,7 +132,7 @@ namespace Window
                     int height = event.window.data2;
                     GPU_SetWindowResolution(width, height);
 
-                    // Workaround: Re-read the width and height for scaling.
+                    // Workaround: Re-read the width and height for scaling instead of using the data fields in the event.
                     // On high-dpi mode, the width and height reported in the event are not the real ones.
                     // See: https://github.com/grimfang4/sdl-gpu/issues/188
                     SDL_GL_GetDrawableSize(window, &width, &height);

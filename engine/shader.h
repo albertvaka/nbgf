@@ -30,6 +30,8 @@ struct Shader {
 		return *this;
 	}
 
+	Shader& SetUniform(int location, vec v) { return SetUniform(location, v.x, v.y); }
+
 	Shader& SetUniform(int location, float r, float g, float b, float a) {
 		assertActive();
 		float v[] = { r,g,b,a };
@@ -37,7 +39,6 @@ struct Shader {
 		return *this;
 	}
 
-	Shader& SetUniform(int location, vec v) { return SetUniform(location, v.x, v.y); }
 	Shader& SetUniform(const char* name, int i) { return SetUniform(GetUniformLocation(name), i); }
 	Shader& SetUniform(const char* name, float f) { return SetUniform(GetUniformLocation(name), f); }
 	Shader& SetUniform(const char* name, float x, float y) { return SetUniform(GetUniformLocation(name), x, y); }

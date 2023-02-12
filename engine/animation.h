@@ -40,7 +40,7 @@ struct Animation
 		return (animation.data() == anim);
 	}
 
-	template<uint8_t size>
+	template<std::size_t size>
 	constexpr Animation(const AnimationFrame(&animation)[size], bool is_loopable = true)
 		: anim(animation)
 		, anim_size(size)
@@ -48,7 +48,7 @@ struct Animation
 	{
 	}
 
-	template<uint8_t size>
+	template<std::size_t size>
 	constexpr void Set(const AnimationFrame(&animation)[size], bool is_loopable = true) // Sets an animation and restarts it
 	{
 		anim = animation;
@@ -57,7 +57,7 @@ struct Animation
 		Restart();
 	}
 
-	template<uint8_t size>
+	template<std::size_t size>
 	constexpr void Ensure(const AnimationFrame(&animation)[size], bool is_loopable = true) // Sets an animation if not alreay set
 	{
 		if (!IsSet(animation))
@@ -66,7 +66,7 @@ struct Animation
 		}
 	}
 
-	template<uint8_t size>
+	template<std::size_t size>
 	constexpr bool IsSet(const AnimationFrame(&animation)[size])
 	{
 		return (animation == anim);

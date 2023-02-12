@@ -8,7 +8,7 @@
 // Action-based input
 struct Input {
 
-	static const int kMaxPlayers = 4;
+	static const int kMaxPlayers = 2;
 
 	static vec GetAnalog(int player, AnalogInput k) {
 		return analog_states[player][int(k)];
@@ -71,6 +71,8 @@ struct Input {
 	// Called from main.cpp
 	static void Update(float dt);
 	static void Init();
+
+	static void IgnoreInput(bool enable);
 
 private:
 	static void MapGameKeys();

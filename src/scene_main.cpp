@@ -124,6 +124,7 @@ MainScene::MainScene(int level)
 
 void MainScene::EnterScene() 
 {
+	Fx::BeforeEnterScene();
 	Fx::FreezeImage::SetUnfreezeCallback([]() {
 		SceneManager::RestartScene();
 	});
@@ -248,6 +249,11 @@ void MainScene::ExitScene()
 
 void MainScene::Update(float dt)
 {
+	Fx::Update(dt);
+	bool frozen = Fx::FreezeImage::IsFrozen();
+	if (frozen) {
+		return;
+	}
 	MusicPlayer::ToggleMusicWithM();
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F5;
@@ -466,5 +472,6 @@ void MainScene::Draw()
 
 	//Particles::explosion.DrawImGUI();
 #endif
+	Fx::AfterDraw();
 
 }

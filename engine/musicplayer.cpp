@@ -1,8 +1,8 @@
 #include "musicplayer.h"
 
-#include <SDL_mixer.h>
-
 #include "raw_input.h"
+
+#include <SDL_mixer.h>
 
 namespace MusicPlayer
 {
@@ -37,7 +37,8 @@ namespace MusicPlayer
 		return current; 
 	}
 
-	void Pause() {
+	void Pause(bool keepPausedOnChange) {
+		stayPaused = keepPausedOnChange;
 		Mix_PauseMusic();
 	}
 
@@ -46,6 +47,7 @@ namespace MusicPlayer
 	}
 
 	void Resume() {
+		stayPaused = false;
 		Mix_ResumeMusic();
 	}
 
@@ -66,10 +68,8 @@ namespace MusicPlayer
 		if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_M)) {
 			if (IsPaused()) {
 				Resume();
-				stayPaused = false;
 			} else {
-				Pause();
-				stayPaused = keepPausedOnChange;
+				Pause(keepPausedOnChange);
 			}
 		}
 	}

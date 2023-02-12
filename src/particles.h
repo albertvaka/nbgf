@@ -27,7 +27,8 @@ struct Particles
 		explosion.min_vel = vec(-50, -50);
 		explosion.min_rotation = 0;
 		explosion.max_rotation = 360;
-		explosion.rotation_vel = 100.f;
+		explosion.min_rotation_vel = 100.f;
+		explosion.max_rotation_vel = 100.f;
 		explosion.scale_vel = -0.2f;
 
 		GPU_Rect playerSprite = AnimLib::PLAYER;
@@ -42,7 +43,8 @@ struct Particles
 		playerExplosion.min_vel = vec(-50, -50);
 		playerExplosion.min_rotation = 0;
 		playerExplosion.max_rotation = 360;
-		playerExplosion.rotation_vel = 100.f;
+		playerExplosion.min_rotation_vel = 100.f;
+		playerExplosion.max_rotation_vel = 100.f;
 		playerExplosion.scale_vel = -0.15f;
 	}
 };

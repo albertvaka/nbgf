@@ -3,7 +3,7 @@
 #include "debug.h"
 
 #include "SDL_gpu.h"
-#include "window.h"
+#include "window_conf.h"
 
 #include <cerrno>
 #include <cassert>

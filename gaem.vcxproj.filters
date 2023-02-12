@@ -221,7 +221,7 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\fx.h">
-      <Filter>engine</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\simple_enemy.h">
       <Filter>src\enemies</Filter>
@@ -353,7 +353,7 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="engine\fx.cpp">
-      <Filter>engine</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\scene_main.cpp">
       <Filter>src\scenes</Filter>
