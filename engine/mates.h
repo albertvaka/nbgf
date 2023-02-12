@@ -8,11 +8,10 @@
 #include <math.h>
 #include <limits>
 #include <string>
-#include <cassert>
+#include "SDL_assert.h"
 
 namespace Mates
 {
-
 	//a few useful constants
 	const constexpr int     MaxInt = (std::numeric_limits<int>::max)();
 	const constexpr int     MinInt = (std::numeric_limits<int>::min)();
@@ -50,6 +49,18 @@ namespace Mates
 
 	[[nodiscard]] std::string to_string_with_precision(const float a_value, const int n = 2);
 
+	[[nodiscard]] std::string to_hexa(int a_value);
+
+	[[nodiscard]] inline bool EachPeriod(float period_sec, float total_time_before_dt_increment, float dt) {
+		return int((total_time_before_dt_increment + dt) / period_sec) != int((total_time_before_dt_increment) / period_sec);
+	}
+
+	[[nodiscard]] inline int RoundUpToMultipleOf(int value, int multiple)
+	{
+		// Rounds away from zero for negative numbers
+		return ((value + multiple - 1) / multiple) * multiple;
+	}
+
 	//-----------------------------------------------------------------------
 	//
 	//  some handy little functions
@@ -66,9 +77,7 @@ namespace Mates
 	template <class T, class U, class V>
 	inline void Clamp(T& arg, const U& minVal, const V& maxVal)
 	{
-#if _DEBUG
-		assert(((double)minVal < (double)maxVal) && "<Clamp>MaxVal < MinVal!");
-#endif
+		SDL_assert(minVal <= maxVal);
 
 		if (arg < (T)minVal)
 		{
@@ -79,6 +88,13 @@ namespace Mates
 		{
 			arg = (T)maxVal;
 		}
+	}
+
+	template <class T, class U, class V>
+	T Clamped(T arg, const U& minVal, const V& maxVal)
+	{
+		Clamp(arg, minVal, maxVal);
+		return arg;
 	}
 
 	template <class T, class V>
@@ -115,7 +131,7 @@ namespace Mates
 		int    integral = (int)val;
 		float mantissa = val - integral;
 
-		if (mantissa < 0.5)
+		if (mantissa < 0.5f)
 		{
 			return integral;
 		}
@@ -145,7 +161,7 @@ namespace Mates
 	}
 
 	//compares two real numbers. Returns true if they are equal
-	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12)
+	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12f)
 	{
 		if (fabs(a - b) < margin)
 		{
@@ -196,4 +212,18 @@ namespace Mates
 	}
 
 	[[nodiscard]] inline int fastfloor(const float x) { return x > 0 ? (int)x : (int)x - 1; }
+
+	struct Range {
+		float min;
+		float max;
+	};
+
+	[[nodiscard]] inline Range SortTwo(float a, float b) {
+		if (a > b) {
+			return Range{ b, a };
+		}
+		else {
+			return Range{ a, b };
+		}
+	}
 }

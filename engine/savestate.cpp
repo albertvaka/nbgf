@@ -16,7 +16,7 @@
 std::string SaveState::GetSaveFilePath()
 {
 	// directory /saves gets mounted in main.cpp
-	return "/saves/save" + std::to_string(stateNum);
+	return "/saves/" + gaemName + "_" + std::to_string(stateNum);
 }
 
 void emscripten_sync_to_persistent_storage()
@@ -27,11 +27,6 @@ void emscripten_sync_to_persistent_storage()
 }
 
 #else
-
-#if !(MACOS_VER_MAJOR==10 && MACOS_VER_MINOR<=14)
-	// std::filesystem is only supported on MacOS 10.15+
-	#define SAVESTATE_SAVE_IN_LOCAL_DIR
-#endif
 
 inline std::string osConfigDir()
 {
@@ -82,7 +77,7 @@ void SaveState::Load()
 
 	std::string path = GetSaveFilePath();
 
-#if !defined(__EMSCRIPTEN__) && !(MACOS_VER_MAJOR==10 && MACOS_VER_MINOR<=14)
+#if !defined(__EMSCRIPTEN__)
 	if (!std::filesystem::exists(path)) {
 		//Debug::out << "Save doesn't exist";
 		return;

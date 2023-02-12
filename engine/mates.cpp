@@ -13,4 +13,12 @@ std::string to_string_with_precision(const float a_value, const int n)
 	return out.str();
 }
 
+std::string to_hexa(int a_value)
+{
+	std::ostringstream out;
+	out << std::hex << a_value;
+	return out.str();
 }
+
+}
+

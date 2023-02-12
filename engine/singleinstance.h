@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cassert>
+#include "SDL_assert.h"
 
 template <typename T>
 class SingleInstance
@@ -14,9 +14,7 @@ public:
 protected:
 		SingleInstance()
 		{
-#ifdef _DEBUG
-			assert(instance() == nullptr); //Creating a second instance of a singleton
-#endif
+			SDL_assert(instance() == nullptr); //Creating a second instance of a singleton
 			instance() = (T*)this;
 		}
 		~SingleInstance()

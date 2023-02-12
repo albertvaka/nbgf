@@ -5,7 +5,7 @@
 
 #include "vec.h"
 #include "bounds.h"
-#include "window.h"
+#include "window_drawprimitive.h"
 
 namespace Debug {
 	DebugStream out;

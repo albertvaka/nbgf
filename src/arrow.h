@@ -27,9 +27,9 @@ struct Arrow : BoxEntity, SelfRegister<Arrow>
         anim.Update(dt);
     }
 
-    Window::PartialDraw Draw() const {
+    Window::DeferredDraw Draw() const {
         const GPU_Rect& rect = anim.CurrentFrameRect();
-        return Window::PartialDraw(Assets::arrowTexture, pos)
+        return Window::DeferredDraw(Assets::arrowTexture, pos)
             .withRect(rect)
             .withOrigin(rect.w / 2, rect.h)
             .withScale(vec(3, 3));

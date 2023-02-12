@@ -3,6 +3,7 @@
 #include <SDL.h>
 
 #include "camera.h"
+#include "window_conf.h"
 #include "debug.h"
 
 const GamePad::AnalogStick GamePad::AnalogStick::Left(SDL_CONTROLLER_AXIS_LEFTX, SDL_CONTROLLER_AXIS_LEFTY);

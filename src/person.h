@@ -244,7 +244,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 	}
 
 
-	Window::PartialDraw Draw() const
+	Window::DeferredDraw Draw() const
 	{
 		if (!alive) {
 			float scale = std::min(timerdead/2.f, 0.6f);
@@ -263,7 +263,7 @@ struct Person : BoxEntity, SelfRegister<Person>
 		}
 
 		const GPU_Rect& rect = anim.CurrentFrameRect();
-		return Window::PartialDraw(Assets::npcTexture, pos - vec(0, 80*scale) + jumpoffset)
+		return Window::DeferredDraw(Assets::npcTexture, pos - vec(0, 80*scale) + jumpoffset)
 			.withRect(rect)
 			.withOrigin(rect.w / 2, rect.h / 2)
 			.withScale(goingLeft? -scale : scale, scale);

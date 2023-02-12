@@ -2,7 +2,7 @@
 
 #include "magic_enum.h"
 
-#include "window.h"
+#include "vec.h"
 
 #include <SDL.h>
 
@@ -36,7 +36,7 @@ struct GamePad
 			SDL_GameController* joystick = joysticks[player];
 			if (!joystick) return 0;
 			float a = SDL_GameControllerGetAxis(joystick, axis) / 327.67f;
-			return a > 0.1 ? a : 0;
+			return a > 0.1f ? a : 0;
 		}
 		bool IsPressed(int player) const { return (state[player] == PRESSED || state[player] == JUST_PRESSED); }
 		bool IsJustPressed(int player) const { return (state[player] == JUST_PRESSED); }
@@ -53,7 +53,7 @@ struct GamePad
 	{
 		const static AnalogStick Left;
 		const static AnalogStick Right;
-		vec get(int player, float dead_area = 0) const
+		vec get(int player, float dead_area = 30.f) const
 		{ //Pos between -100 and 100
 			//if (player > Input::kMaxPlayers) return vec();
 			SDL_GameController* joystick = joysticks[player];

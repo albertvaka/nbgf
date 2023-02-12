@@ -17,9 +17,9 @@ struct Building : BoxEntity, SelfRegister<Building>
 		assert(texture != nullptr);
 	}
 
-	Window::PartialDraw Draw() const
+	Window::DeferredDraw Draw() const
 	{
-		return Window::PartialDraw(texture, pos)
+		return Window::DeferredDraw(texture, pos)
 			.withOrigin(texture->w/2, texture->h - Bounds().height/2);
 	}
 };

@@ -4,10 +4,43 @@
 
 #include "vec.h"
 #include "animation_frame.h"
+#include <array>
 
 struct Animation
 {
-	template<int size>
+	template<std::size_t size>
+	constexpr Animation(const std::array<AnimationFrame, size>& animation, bool is_loopable = true)
+		: anim(animation.data())
+		, anim_size(size)
+		, loopable(is_loopable)
+	{
+	}
+
+	template<std::size_t size>
+	constexpr void Set(const std::array<AnimationFrame, size>& animation, bool is_loopable = true) // Sets an animation and restarts it
+	{
+		anim = animation.data();
+		anim_size = size;
+		loopable = is_loopable;
+		Restart();
+	}
+
+	template<std::size_t size>
+	constexpr void Ensure(const std::array<AnimationFrame, size>& animation, bool is_loopable = true) // Sets an animation if not alreay set
+	{
+		if (!IsSet(animation))
+		{
+			Set(animation, is_loopable);
+		}
+	}
+
+	template<std::size_t size>
+	constexpr bool IsSet(const std::array<AnimationFrame, size>& animation)
+	{
+		return (animation.data() == anim);
+	}
+
+	template<std::size_t size>
 	constexpr Animation(const AnimationFrame(&animation)[size], bool is_loopable = true)
 		: anim(animation)
 		, anim_size(size)
@@ -15,7 +48,7 @@ struct Animation
 	{
 	}
 
-	template<int size>
+	template<std::size_t size>
 	constexpr void Set(const AnimationFrame(&animation)[size], bool is_loopable = true) // Sets an animation and restarts it
 	{
 		anim = animation;
@@ -24,13 +57,19 @@ struct Animation
 		Restart();
 	}
 
-	template<int size>
+	template<std::size_t size>
 	constexpr void Ensure(const AnimationFrame(&animation)[size], bool is_loopable = true) // Sets an animation if not alreay set
 	{
-		if (animation != anim)
+		if (!IsSet(animation))
 		{
 			Set(animation, is_loopable);
 		}
+	}
+
+	template<std::size_t size>
+	constexpr bool IsSet(const AnimationFrame(&animation)[size])
+	{
+		return (animation == anim);
 	}
 
 	bool IsComplete() const // Only for non-looping animations
@@ -91,12 +130,12 @@ struct Animation
 		}
 	}
 
-	int CurrentFrameNumber() const
+	uint8_t CurrentFrameNumber() const
 	{
 		return current_frame;
 	}
 
-	int TotalFrames() const
+	uint8_t TotalFrames() const
 	{
 		return anim_size;
 	}
@@ -116,19 +155,19 @@ struct Animation
 		return SumDuration(anim, anim_size);
 	}
 
-	template<int size>
+	template<uint8_t size>
 	static constexpr float TotalDuration(const AnimationFrame(&animation)[size])
 	{
 		return SumDuration(animation, size);
 	}
 
-	template<int size>
-	static constexpr float TotalDurationForFrames(const AnimationFrame(&animation)[size], int first_frame, int num_frames)
+	template<uint8_t size>
+	static constexpr float TotalDurationForFrames(const AnimationFrame(&animation)[size], uint8_t first_frame, uint8_t num_frames)
 	{
 		return SumDuration(&animation[first_frame], num_frames);
 	}
 
-	template<int size>
+	template<uint8_t size>
 	static const GPU_Rect& GetRectAtTime(const AnimationFrame(&animation)[size], float time)
 	{
 		// This is not very efficient, but it's handy if you are too lazy to store an Animation between frames and want to use something like the global clock
@@ -141,20 +180,18 @@ struct Animation
 		return anim.CurrentFrameRect();
 	}
 
-	float timer = 0;
-	int current_frame = 0;
-
+	const AnimationFrame* anim;
+	uint8_t anim_size;
+	uint8_t current_frame = 0;
 	bool loopable = true;
 	bool complete = false;
-
-	const AnimationFrame* anim;
-	int anim_size;
+	float timer = 0;
 
 private:
-	static constexpr float SumDuration(const AnimationFrame* anim, int size)
+	static constexpr float SumDuration(const AnimationFrame* anim, uint8_t size)
 	{
 		float t = 0;
-		for (int i = 0; i < size; i++) {
+		for (uint8_t i = 0; i < size; i++) {
 			t += anim[i].duration;
 		}
 		return t;

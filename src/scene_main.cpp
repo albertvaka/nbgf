@@ -45,11 +45,11 @@ SceneMain::SceneMain()
 
 	rotoText.SetMultilineAlignment(Text::MultilineAlignment::CENTER);
 
-	Camera::SetZoom(0.375f);
-	Camera::SetTopLeft(vec(0, -10));
 }
 
 void SceneMain::EnterScene() {
+	Camera::SetZoom(0.375f);
+	Camera::SetTopLeft(vec(0, -10));
 	SpawnCity();
 	curr_stage = OVERSEER_CLOSE_EYES;
 	time_until_next_stage = stage_duration;
@@ -299,8 +299,8 @@ void SceneMain::Update(float dt)
 	
 }
 
-std::vector<Window::PartialDraw> draws;
-std::vector<Window::PartialDraw*> drawps;
+std::vector<Window::DeferredDraw> draws;
+std::vector<Window::DeferredDraw*> drawps;
 void SceneMain::Draw()
 {
 	Window::Clear(0, 5, 20);
@@ -339,16 +339,16 @@ void SceneMain::Draw()
 	}
 
 	drawps.clear();
-	for (Window::PartialDraw& pd : draws) {
+	for (Window::DeferredDraw& pd : draws) {
 		drawps.push_back(&pd);
 	}
 
-	std::sort(drawps.begin(), drawps.end(), [](Window::PartialDraw* a, Window::PartialDraw* b) {
+	std::sort(drawps.begin(), drawps.end(), [](Window::DeferredDraw* a, Window::DeferredDraw* b) {
 		return (a->dest.y) < (b->dest.y);
 	});
 
-	for (Window::PartialDraw* pd : drawps) {
-		pd->DoDraw();
+	for (Window::DeferredDraw* pd : drawps) {
+		pd->Draw();
 	}
 
 	for (const WaveSkill* b : WaveSkill::GetAll()) {

@@ -2,6 +2,10 @@
 
 #include "SDL_gpu.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #ifdef _IMGUI
 #include "imgui_impl_sdl.h"
 #endif
@@ -10,16 +14,11 @@
 #include "raw_input.h"
 #include "camera.h"
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
-
 namespace Window
 {
     SDL_Window* window;
     GPU_Target* screenTarget;
     GPU_Target* currentDrawTarget;
-    SDL_PixelFormatEnum nativePixelFormat;
 
     int Init() {
         GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
@@ -29,22 +28,27 @@ namespace Window
 #else
         SDL_DisplayMode dm;
         SDL_GetDesktopDisplayMode(0, &dm);
+        dm.h -= 64; // Account for some pixels used by the window decorations
         int scale = std::min(dm.w / GAME_WIDTH, dm.h / GAME_HEIGHT);
+        if (scale <= 0) {
+            Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the window resolution (" << dm.w << "*" << dm.h << ")";
+            scale = 1;
+        }
         Debug::out << "Scaling to x" << scale;
         //Debug::out << dm.w << " " << dm.h;
  #endif
-        auto sdl_create_window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
+
+        GPU_SetPreInitFlags(GPU_INIT_DISABLE_AUTO_VIRTUAL_RESOLUTION);
+
+        auto sdl_create_window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN;
         screenTarget = GPU_Init(GAME_WIDTH * scale, GAME_HEIGHT * scale, sdl_create_window_flags);
         if (screenTarget == NULL) {
             Debug::out << "GPU_Init failed";
             return 1;
         }
+
         window = SDL_GetWindowFromID(screenTarget->context->windowID);
         SDL_SetWindowTitle(window, Window::WINDOW_TITLE);
-
-        // SDL_GetWindowPixelFormat() doesn't always do what we want (eg: on Windows it returns a format without alpha)
-        // We should probably use glGetInternalFormativ() instead, but for now I'm hardcoding it.
-        nativePixelFormat = SDL_PIXELFORMAT_ARGB8888;
 
         // SDL-gpu anchors images at the center by default, change it to the top-left corner
         GPU_SetDefaultAnchor(0.f, 0.f);
@@ -61,6 +65,13 @@ namespace Window
         Camera::SetTopLeft(0.f, 0.f);
 
         GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
+
+        SDL_ShowWindow(window);
+
+        // Start with both buffers fully black
+        Clear(0, 0, 0);
+        GPU_Flip(screenTarget);
+        Clear(0, 0, 0);
 
         return 0;
     }
@@ -102,9 +113,16 @@ namespace Window
             case SDL_CONTROLLERDEVICEREMOVED:
                 GamePad::_Removed(SDL_GameControllerFromInstanceID(event.jdevice.which));
                 break;
-            case SDL_MOUSEWHEEL:
-                Mouse::scrollWheel += event.wheel.y;
-                break;
+            case SDL_MOUSEWHEEL: {
+                float wheel = event.wheel.y;
+#ifdef __APPLE__
+                if (Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT) || Keyboard::IsKeyPressed(SDL_SCANCODE_RSHIFT)) {
+                    wheel = event.wheel.x; //shift makes the axis change on osx for some reason
+                }
+#endif
+                Mouse::scrollWheel += wheel;
+            }
+            break;
             case SDL_QUIT:
                 exit(0);
                 break;
@@ -114,7 +132,7 @@ namespace Window
                     int height = event.window.data2;
                     GPU_SetWindowResolution(width, height);
 
-                    // Workaround: Re-read the width and height for scaling.
+                    // Workaround: Re-read the width and height for scaling instead of using the data fields in the event.
                     // On high-dpi mode, the width and height reported in the event are not the real ones.
                     // See: https://github.com/grimfang4/sdl-gpu/issues/188
                     SDL_GL_GetDrawableSize(window, &width, &height);
@@ -156,8 +174,10 @@ namespace Window
 
     namespace DrawPrimitive {
 
-        void Pixel(float x, float y, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-            GPU_Pixel(Window::currentDrawTarget, x, y, { r,g,b,a });
+        void Point(float x, float y, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+            GPU_SetLineThickness(0);
+            float d = thickness / 2;
+            GPU_RectangleFilled(Window::currentDrawTarget, x - d, y - d, x + d, y + d, { r,g,b,a });
         }
 
         void Rectangle(float x1, float y1, float x2, float y2, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {

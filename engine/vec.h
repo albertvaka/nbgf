@@ -66,12 +66,22 @@ struct vec
 		else if (y < minv.y) y = minv.y;
 	}
 
+	[[nodiscard]] vec Clamped(vec minv, vec maxv)
+	{
+		vec ret = *this;
+		ret.Clamp(minv, maxv);
+		return ret;
+	}
+
 	[[nodiscard]] std::string ToString() const {
 		std::stringstream stream;
 		stream << std::fixed << std::setprecision(2) << x << "," << y;
 		return stream.str();
 	}
 
+	[[nodiscard]] vec Mirrored(bool mirror_x, bool mirror_y) const {
+		return vec(mirror_x ? -x : x, mirror_y ? -y : y);
+	}
 
 	//returns positive if v2 is clockwise of this vector,
 	//negative if anticlockwise (assuming the Y axis is pointing down,
@@ -101,7 +111,7 @@ struct vec
 		return vec(x * cs - y * sn, x * sn + y * cs);
 	}
 
-	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees) 
+	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees)  const
 	{
 		return RotatedAroundOriginRads(Angles::DegsToRads(degrees));
 	}
@@ -127,7 +137,8 @@ struct vec
 	//squared version of above.
 	[[nodiscard]] inline float    DistanceSq(vec v2) const;
 
-	//we need some overloaded operators
+	[[nodiscard]] inline vec ManhattanDistance(vec v2) const;
+
 	constexpr vec operator+=(vec rhs)
 	{
 		x += rhs.x;
@@ -148,6 +159,15 @@ struct vec
 	{
 		x *= rhs;
 		y *= rhs;
+
+		return *this;
+	}
+
+	// Component-wise product (like in GLSL)
+	constexpr vec operator*=(const vec& rhs)
+	{
+		x *= rhs.x;
+		y *= rhs.y;
 
 		return *this;
 	}
@@ -260,6 +280,14 @@ inline float vec::DistanceSq(vec v2) const
 	return ySeparation*ySeparation + xSeparation*xSeparation;
 }
 
+inline vec vec::ManhattanDistance(vec v2) const
+{
+	return vec(
+		fabs(v2.x - x),
+		fabs(v2.y - y)
+	);
+}
+
 //  truncates a vector so that its length does not exceed max
 inline bool vec::Truncate(float max)
 {
@@ -346,70 +374,70 @@ inline constexpr vec operator*(float lhs, vec rhs)
 	return result;
 }
 
+// Component-wise product (like in GLSL)
+inline constexpr vec operator*(vec lhs, vec rhs)
+{
+	return vec(lhs.x * rhs.x, lhs.y * rhs.y);
+}
+
 inline constexpr vec operator-(vec lhs, vec rhs)
 {
 	vec result(lhs);
-	result.x -= rhs.x;
-	result.y -= rhs.y;
-
+	result -= rhs;
 	return result;
 }
 
 inline constexpr vec operator+(vec lhs, vec rhs)
 {
 	vec result(lhs);
-	result.x += rhs.x;
-	result.y += rhs.y;
-
+	result += rhs;
 	return result;
 }
 
-inline constexpr vec operator/(vec lhs, float val)
+inline constexpr vec operator/(vec lhs, float rhs)
 {
 	vec result(lhs);
-	result.x /= val;
-	result.y /= val;
-
+	result /= rhs;
 	return result;
 }
 
 inline constexpr vec operator/(vec lhs, vec rhs)
 {
 	vec result(lhs);
-	result.x /= rhs.x;
-	result.y /= rhs.y;
-
+	result /= rhs;
 	return result;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 inline constexpr veci operator+(veci lhs, veci rhs)
 {
-	veci result(lhs);
-	result.x += rhs.x;
-	result.y += rhs.y;
+    veci result(lhs);
+    result.x += rhs.x;
+    result.y += rhs.y;
 
-	return result;
+    return result;
 }
 
 inline constexpr veci operator-(veci lhs, veci rhs)
 {
-	veci result(lhs);
-	result.x -= rhs.x;
-	result.y -= rhs.y;
+    veci result(lhs);
+    result.x -= rhs.x;
+    result.y -= rhs.y;
 
-	return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 //treats a window as a toroid
-inline void WrapAround(vec &pos, int MaxX, int MaxY)
+inline void WrapAround(vec &pos, float MaxX, float MaxY)
 {
-	if (pos.x > MaxX) {pos.x = 0.0;}
-	if (pos.x < 0)    {pos.x = (float)MaxX;}
-	if (pos.y < 0)    {pos.y = (float)MaxY;}
-	if (pos.y > MaxY) {pos.y = 0.0;}
+	if (pos.x > MaxX) {pos.x = 0.f;}
+	if (pos.x < 0.f)  {pos.x = MaxX;}
+	if (pos.y < 0.f)  {pos.y = MaxY;}
+	if (pos.y > MaxY) {pos.y = 0.f;}
 }
 
 //  returns true if the target position is in the field of view of the entity
@@ -421,7 +449,7 @@ inline bool IsSecondInFOVOfFirst(vec posFirst,
 {
 	vec toTarget = (posSecond - posFirst);
 	toTarget.Normalize();
-	return facingFirst.Dot(toTarget) >= cos(fov/2.0);
+	return facingFirst.Dot(toTarget) >= cos(fov/2.0f);
 }
 
 //-------------------- LineIntersection2D-------------------------
@@ -462,6 +490,15 @@ inline bool LineIntersection2D(vec A, vec B, vec C, vec D, float& dist, vec& poi
 	}
 }
 
+// Lerp for vecs
+
+namespace Mates {
+	[[nodiscard]] inline vec Lerp(vec from, vec to, float t)
+	{
+		return vec(Lerp(from.x, to.x, t), Lerp(from.y, to.y, t));
+	}
+}
+
 //-----------------------------------------------------------------------------
 //  printing
 //-----------------------------------------------------------------------------
@@ -472,3 +509,110 @@ inline std::ostream& operator<<(std::ostream& os, vec rhs)
 	return os;
 }
 
+struct Transform : public vec {
+	constexpr Transform(vec pos, float rotationDegs) : vec(pos), rotationDegs(rotationDegs) { Angles::KeepDegsBetween0and360(rotationDegs); }
+	constexpr Transform(float x, float y, float rotationDegs) : Transform(vec(x, y), rotationDegs) { }
+	float rotationDegs;
+
+	constexpr const Transform operator-() const
+	{
+		return Transform(-x, -y, 360-rotationDegs);
+	}
+
+	constexpr Transform operator+=(Transform rhs)
+	{
+		x += rhs.x;
+		y += rhs.y;
+		rotationDegs += rhs.rotationDegs;
+		Angles::KeepDegsBetween0and360(rotationDegs);
+		return *this;
+	}
+
+	constexpr Transform operator+=(vec rhs)
+	{
+		x += rhs.x;
+		y += rhs.y;
+		return *this;
+	}
+
+	constexpr Transform operator-=(Transform rhs)
+	{
+		x -= rhs.x;
+		y -= rhs.y;
+		rotationDegs -= rhs.rotationDegs;
+		Angles::KeepDegsBetween0and360(rotationDegs);
+		return *this;
+	}
+
+	constexpr Transform operator*=(const float& rhs)
+	{
+		x *= rhs;
+		y *= rhs;
+		rotationDegs *= rhs;
+		Angles::KeepDegsBetween0and360(rotationDegs);
+		return *this;
+	}
+
+	constexpr Transform operator/=(const float& rhs)
+	{
+		x /= rhs;
+		y /= rhs;
+		rotationDegs /= rhs;
+		Angles::KeepDegsBetween0and360(rotationDegs);
+		return *this;
+	}
+
+	constexpr bool operator==(Transform rhs) const
+	{
+		return (x == rhs.x) && (y == rhs.y) && (rotationDegs == rhs.rotationDegs);
+	}
+
+	constexpr bool operator!=(Transform rhs) const
+	{
+		return (x != rhs.x) || (y != rhs.y) || (rotationDegs == rhs.rotationDegs);
+	}
+
+};
+
+//------------------------------------------------------------------------operator overloads
+inline constexpr Transform operator*(Transform lhs, float rhs)
+{
+	Transform result(lhs);
+	result *= rhs;
+	return result;
+}
+
+inline constexpr Transform operator*(float lhs, Transform rhs)
+{
+	Transform result(rhs);
+	result *= lhs;
+	return result;
+}
+
+inline constexpr Transform operator-(Transform lhs, Transform rhs)
+{
+	Transform result(lhs);
+	result -= rhs;
+	return result;
+}
+
+inline constexpr Transform operator+(Transform lhs, Transform rhs)
+{
+	Transform result(lhs);
+	result += rhs;
+	return result;
+}
+
+inline constexpr Transform operator+(Transform lhs, vec rhs)
+{
+	Transform result(lhs);
+	result += rhs;
+	return result;
+}
+
+inline constexpr Transform operator/(Transform lhs, float rhs)
+{
+	Transform result(lhs);
+	result /= rhs;
+	return result;
+}

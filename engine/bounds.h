@@ -16,15 +16,18 @@ struct BoxBounds
     float width, height;
 
     constexpr BoxBounds(float x, float y, float w, float h) : left(x), top(y), width(w), height(h) { }
-    constexpr BoxBounds() : BoxBounds(-1,-1,0,0) { }
+    constexpr BoxBounds() : BoxBounds(-1, -1, 0, 0) { }
     constexpr BoxBounds(vec topleft, vec size) : BoxBounds(topleft.x, topleft.y, size.x, size.y) {}
-    constexpr explicit BoxBounds(vec size) : BoxBounds(0,0,size.x,size.y) { }
+    constexpr explicit BoxBounds(vec size) : BoxBounds(0, 0, size.x, size.y) { }
     constexpr explicit BoxBounds(vec pos, vec size, vec origin) : BoxBounds(pos.x, pos.y, size.x, size.y) {
         left -= origin.x;
         top -= origin.y;
     }
+    template<typename T> //Works with GPU_Rect, SDL_Rect and SDL_FRect
+    constexpr explicit BoxBounds(T rect) : BoxBounds(rect.x, rect.y, rect.w, rect.h) { }
 
-    [[nodiscard]] static constexpr BoxBounds FromCenter(vec center, vec size) { return BoxBounds(center - size/2, size); }
+
+    [[nodiscard]] static constexpr BoxBounds FromCenter(vec center, vec size) { return BoxBounds(center - size / 2, size); }
 
     [[nodiscard]] GPU_Rect AsRect() {
         return GPU_Rect{ left, top, width, height };
@@ -32,12 +35,28 @@ struct BoxBounds
 
     //Expands arround the center by a factor
     [[nodiscard]] BoxBounds operator*(float f) const
-	{
+    {
         vec center = Center();
         BoxBounds ret = *this;
         ret.width *= f;
         ret.height *= f;
         ret.SetCenter(center);
+        return ret;
+    }
+
+    //Expands arround the center by a value
+    void Grow(float x, float y)
+    {
+        left -= x / 2;
+        top -= y / 2;
+        width += x;
+        height += y;
+    }
+
+    [[nodiscard]] BoxBounds Grown(float x, float y) const
+    {
+        BoxBounds ret = *this;
+        ret.Grow(x, y);
         return ret;
     }
 
@@ -55,6 +74,12 @@ struct BoxBounds
 	{
         left = x - width/2;
         top = y - height/2;
+    }
+
+    void SetTopAndBottom(float newTop, float newBottom)
+    {
+        top = newTop;
+        height = newBottom - newTop;
     }
 
     void SetCenter(vec center)
@@ -148,10 +173,6 @@ struct BoxBounds
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
     [[nodiscard]] float Distance(const BoxBounds& a) const;
     [[nodiscard]] float Distance(const CircleBounds& a) const;
-
-    //TODO
-    //void ExpandToInclude(vec point);
-
 };
 
 struct CircleBounds
@@ -179,6 +200,11 @@ struct CircleBounds
     [[nodiscard]] float Distance(const CircleBounds& a) const { 
         return a.pos.Distance(this->pos) - (a.radius + this->radius);
     }
+
+    [[nodiscard]] bool Contains(float x, float y) const { return Contains(vec(x, y)); }
+    [[nodiscard]] bool Contains(vec v) const { return (pos.DistanceSq(v) < radius*radius); }
+
+    [[nodiscard]] BoxBounds EnclosingBoxBounds() const { return BoxBounds::FromCenter(Center(), vec(radius*2)); }
 };
 
 inline float BoxBounds::DistanceSq(const BoxBounds& a) const {

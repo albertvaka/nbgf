@@ -6,14 +6,13 @@
 #include "window_draw.h"
 #include "window_drawprimitive.h"
 #include "window_drawraw.h"
-#include "../src/window_conf.h"
+#include "window_conf.h"
 
 namespace Window {
 
 	extern SDL_Window* window;
 	extern GPU_Target* screenTarget;
 	extern GPU_Target* currentDrawTarget;
-	extern SDL_PixelFormatEnum nativePixelFormat;
 
 	int Init();
 	void ProcessEvents();
@@ -32,15 +31,27 @@ namespace Window {
 		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);
 	}
 
-	inline GPU_Image* CreateTexture(int w, int h) {
-		GPU_Image* texture = GPU_CreateImage(w, h, GPU_FORMAT_RGBA);
-		GPU_SetImageFilter(texture, GPU_FILTER_NEAREST);
-		GPU_SetSnapMode(texture, GPU_SNAP_NONE);
-		return texture;
+	inline void Clear(const SDL_Color& c) {
+		Clear(c.r, c.g, c.b);
 	}
 
 	inline float GetViewportScale() {
 		return Window::screenTarget->viewport.w / Window::GAME_WIDTH;
+	}
+
+	inline GPU_Image* CreateTexture(int w, int h) { // To match the Window scaling, textures should be recreated whenever Window::GetViewportScale() changes
+		float scale = Window::screenTarget->base_w/ Window::GAME_WIDTH;
+		GPU_Image* texture = GPU_CreateImage(w*scale, h*scale, GPU_FORMAT_RGBA);
+		GPU_SetImageFilter(texture, GPU_FILTER_NEAREST);
+		GPU_SetSnapMode(texture, GPU_SNAP_NONE);
+		GPU_Target* target = GPU_GetTarget(texture);
+		GPU_SetVirtualResolution(target, w, h);
+		GPU_SetImageVirtualResolution(texture, w, h); // this must go after setting the target virtual res
+		return texture;
+	}
+
+	inline void DestroyTexture(GPU_Image* texture) {
+		GPU_FreeImage(texture); // frees the target if needed
 	}
 
 	inline vec GetViewportMargins() {
@@ -52,23 +63,6 @@ namespace Window {
 		Window::currentDrawTarget = Window::screenTarget;
 	}
 
-}
-
-inline void FixTextureBleeding(GPU_Rect& tr) {
-	// I made a similar fix in SDL_GPU's BlitTransformX, but when drawing raw vertices it's not used so we need it here as well
-	const float e = 0.1f;
-	tr.x += e;
-	tr.y += e;
-	tr.w -= 2*e;
-	tr.h -= 2*e;
-}
-
-inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {
-	FixTextureBleeding(tr);
-	tr.x /= i->texture_w;
-	tr.y /= i->texture_h;
-	tr.w /= i->texture_w;
-	tr.h /= i->texture_h;
 }
 
 inline std::ostream& operator<<(std::ostream& os, const SDL_Point& rhs)
