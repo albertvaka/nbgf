@@ -19,11 +19,13 @@ struct SimpleEnemy : CircleEntity, SelfRegister<SimpleEnemy>
 	vec initialPos;
 	float dirOffsetRadians = 0;
 	float shootTimer = 0.f; // start shooting
+	char c;
 
-	SimpleEnemy(vec pos, float dirOffsetRadians = 0)
+	SimpleEnemy(char c, vec pos, float dirOffsetRadians = 0)
 		: CircleEntity(pos, 15.f)
 		, initialPos(pos)
 		, dirOffsetRadians(dirOffsetRadians)
+		, c(c)
 	{
 	}
 

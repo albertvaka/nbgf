@@ -14,4 +14,5 @@ struct Player : CircleEntity, SingleInstance<Player>
 
 	int playerNum;
 	float shotTimer;
+	float angle;
 };

@@ -8,15 +8,10 @@
 struct MainScene : Scene {
 
 	Player player;
-	int currentLevel;
-	float timer;
-	bool won;
 	Text timerText;
 	bool player_invincible = false;
 
-	MainScene() : MainScene(1) { };
-
-	MainScene(int level);
+	MainScene();
 
 	void EnterScene() override;
 	void ExitScene() override;
@@ -24,6 +19,5 @@ struct MainScene : Scene {
 	void Draw() override;
 
 private:
-	float LevelDuration() const;
 	void PlayerDie();
 };

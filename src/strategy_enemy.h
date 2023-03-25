@@ -29,17 +29,19 @@ struct StrategyEnemy : CircleEntity, SelfRegister<StrategyEnemy>
 	ShootingStrategy shootingStrategy;
 	float total_time = 0.0f;
 	float rot_rads = 0.0f;
-	int hp = 5;
+	int hp = 1;
 	float flashRedTimer = 0.f;
+	char c;
 
 	GPU_Rect animRect;
 
-	StrategyEnemy(const GPU_Rect& animRect, vec pos, const ShootingStrategy& shooting_strategy = EmptyShootingStrategy, const MovingStrategy& moving_strategy = StaticMovingStrategy)
+	StrategyEnemy(char c, const GPU_Rect& animRect, vec pos, const ShootingStrategy& shooting_strategy = EmptyShootingStrategy, const MovingStrategy& moving_strategy = StaticMovingStrategy)
 		: CircleEntity(pos, 15.f)
 		, initialPos(pos)
 		, movingStrategy(moving_strategy)
 		, shootingStrategy(shooting_strategy)
 		, animRect(animRect)
+		, c(c)
 	{
 	}
 	void Hit() {
