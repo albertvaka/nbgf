@@ -13,7 +13,7 @@ float kAlienMinDistance = 300;
 float kAlienMaxDistance = 400;
 
 SceneMain::SceneMain()
-	: player(0, 200)
+	: player(200)
 	, alienPartSys(Assets::invadersTexture)
 	, deadAliensText(Assets::font_30, Assets::font_30_outline)
 {

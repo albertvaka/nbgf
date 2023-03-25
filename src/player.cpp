@@ -10,7 +10,7 @@
 
 const float bulletSpeed = 200.f;
 
-Player::Player(float angle, float distance)
+Player::Player(float distance)
 	: distance(distance)
 {
 }

@@ -4,12 +4,11 @@
 
 struct Player : Entity
 {
-	float angle;
 	float distance;
 
-	Player(float angle, float distance);
+	Player(float distance_from_planet);
 
 	void Update(float dt);
 	void Draw() const;
-	
+
 };
