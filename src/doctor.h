@@ -17,9 +17,12 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 	State state = WANDERING;
 	bool lookingLeft = true;
 	float highness = 0.f;
+	float hitTimer = 0.f;
 
 	Doctor(vec pos);
 
 	void Update(float dt);
 	void Draw() const;
+
+	int FindMyRoom();
 };

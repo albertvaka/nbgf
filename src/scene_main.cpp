@@ -64,19 +64,12 @@ void SceneMain::Update(float dt)
 
 	player.Update(dt);
 
-	for (Doctor* a : Doctor::GetAll()) {
-		a->Update(dt);
-	}
-
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
-		for (Doctor* a  : Doctor::GetAll()) {
-			if (Collide(a,b)) {
-				//deadAliensText.SetString("Kills: " + std::to_string(deadAliens));
-				b->alive = false;
-				a->highness += 1.f;
-			}
-		}
+	}
+
+	for (Doctor* a : Doctor::GetAll()) {
+		a->Update(dt);
 	}
 
 	Bullet::DeleteNotAlive();
