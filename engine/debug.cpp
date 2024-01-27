@@ -92,10 +92,10 @@ void AfterSceneDraw()
         }
         for (const debugvec& v : debugbounds) {
             if (v.radius < 0) {
-                Window::DrawPrimitive::Rectangle(v.v, v.from, 1, v.color);
+                Window::DrawPrimitive::Rectangle(v.v, v.from, 6, v.color);
             }
             else {
-                Window::DrawPrimitive::Circle(v.v, v.radius, 1, v.color);
+                Window::DrawPrimitive::Circle(v.v, v.radius, 6, v.color);
             }
         }
     }

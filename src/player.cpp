@@ -7,40 +7,46 @@
 #include "bullet.h"
 #include "debug.h"
 #include "window.h"
+#include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
-float PLAYER_ACCEL = 5500.f;
-float maxVel = 600.f;
-float minVel = 50.f;
-vec PLAYER_SIZE = vec(120, 190);
-float imageScale = 0.3f;
-float shakeHeight = 20.f;
-float shakeVerticalSpeed = 41.f;
-float shakeHorizontalSpeed = 31.f;
-float shakeHorizontalDegrees = 2.f;
+const vec playerSize = vec(120, 190);
+const float playerAccel = 5500.f;
+const float maxVel = 600.f;
+const float minVel = 50.f;
+const float imageScale = 0.25f;
+const float shakeHeight = 20.f;
+const float shakeVerticalSpeed = 41.f;
+const float shakeHorizontalSpeed = 31.f;
+const float shakeHorizontalDegrees = 2.f;
+const float gasCooldownTime = 0.01f;
+const float gasSpeed = 550.f;
+const float gasAngleVariationRads = 0.08*Angles::Tau;
+const float gasOriginOffset = 25.f;
 
 extern float mainClock;
 
-Player::Player()
-	: BoxEntity(vec(120, 120), PLAYER_SIZE)
-	, playerNum(0)
+Player::Player(int num)
+	: BoxEntity(Tiled::Entities::single_spawn, playerSize)
+	, playerNum(num)
 {
 }
 
 void Player::Update(float dt)
 {
-	vec accel = vec::Zero;
+	// Move
+	vec accel = Input::GetAnalog(playerNum, AnalogInput::MOVE)* playerAccel;
 	if (Input::IsPressed(playerNum, GameKeys::LEFT)) {
-		accel.x = -PLAYER_ACCEL * dt;
+		accel.x = -playerAccel * dt;
 		lookingLeft = true;
 	} else  if (Input::IsPressed(playerNum, GameKeys::RIGHT)) {
-		accel.x = PLAYER_ACCEL * dt;
+		accel.x = playerAccel * dt;
 		lookingLeft = false;
 	}
 	if (Input::IsPressed(playerNum, GameKeys::UP)) {
-		accel.y = -PLAYER_ACCEL * dt;
+		accel.y = -playerAccel * dt;
 	} else if (Input::IsPressed(playerNum, GameKeys::DOWN)) {
-		accel.y = PLAYER_ACCEL * dt;
+		accel.y = playerAccel * dt;
 	}
 	if (accel.x == 0) {
 		vel.x = vel.x * 0.6;
@@ -58,14 +64,22 @@ void Player::Update(float dt)
 	if (vel.x > maxVel) vel.x = maxVel;
 	if (vel.y < -maxVel) vel.y = -maxVel;
 	if (vel.y > maxVel) vel.y = maxVel;
-	
 	if (vel.x < minVel && vel.x > -minVel) vel.x = 0;
-
 	if (vel.y < minVel && vel.y > -minVel) vel.y = 0;
-
 	MoveResult res = MoveAgainstTileMap(pos, size, vel, dt);
-
 	pos = res.pos;
+
+
+	if (gasCooldown > 0) gasCooldown -= dt;
+
+	// Shoot
+	while (gasCooldown <= 0.f &&  Input::IsPressed(playerNum, GameKeys::SHOOT)) {
+		gasCooldown += gasCooldownTime;
+		float angle = pos.AngleRads(Input::GetAnalog(0, AnalogInput::AIM));
+		angle += Rand::rollf(-gasAngleVariationRads/2, gasAngleVariationRads / 2);
+		vec vecFromAngle = vec::FromAngleRads(angle);
+		new Bullet(pos + vecFromAngle*gasOriginOffset, vel*0.5f + vecFromAngle * gasSpeed);
+	}
 }
 
 void Player::Draw() const

@@ -6,7 +6,7 @@ namespace Tiled {
 
 struct TileMap {
 	static const uint16_t Map[];
-	static const vec Size;
+	static constexpr const veci Size = veci({{ width }}, {{ height }});
 };
 
 }

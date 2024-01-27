@@ -12,4 +12,5 @@ enum class AnalogInput
 {
 	NONE = 0,
 	MOVE, // between 0-1
+	AIM, // in world coordinates
 };
