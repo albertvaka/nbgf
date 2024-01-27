@@ -45,6 +45,7 @@ void SceneMain::EnterScene()
 		new Doctor(Rand::VecInRange(room*0.7f));
 	}
 	new Doctor(Tiled::Entities::single_waiting.Center());
+	new Patient(Tiled::Entities::single_waiting.Center()+vec(200,0));
 }
 
 void SceneMain::ExitScene()
@@ -67,6 +68,10 @@ void SceneMain::Update(float dt)
 
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
+	}
+
+	for (Patient* a : Patient::GetAll()) {
+		a->Update(dt);
 	}
 
 	for (Doctor* a : Doctor::GetAll()) {

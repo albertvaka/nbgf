@@ -16,7 +16,10 @@ struct Assets
 	static inline GPU_Image* spritesheetTexture;
 	static inline GPU_Image* playerTexture;
 	static inline GPU_Image* doctorTexture;
-	static inline GPU_Image* patientTexture;
+	static inline GPU_Image* patientIdleTexture;
+	static inline GPU_Image* patientDeadTexture;
+	static inline GPU_Image* patientNarcosisTexture;
+	static inline GPU_Image* patientScreamTexture;
 
 	static inline TTF_Font* font_30;
 	static inline TTF_Font* font_30_outline;

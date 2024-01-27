@@ -9,12 +9,12 @@
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
-const float doctorHitTime = 0.25f;
+const float patientHitTime = 0.25f;
 const float patientWaitMinTime = 0.5f;
 const float patientWaitMaxTime = 2.f;
-const vec patientSize = vec(90, 180);
+const vec patientSize = vec(180, 90);
 const float patientVel = 600.f;
-const float imageScale = 0.6f;
+const float imageScale = 0.7f;
 const float shakeHeight = 20.f;
 const float shakeVerticalSpeed = 41.f;
 const float shakeHorizontalSpeed = 31.f;
@@ -38,10 +38,13 @@ void Patient::Update(float dt)
 		for (Bullet* b : Bullet::GetAll()) {
 			if (Collide(this, b)) {
 				highness += 1.f;
-				hitTimer = doctorHitTime;
+				hitTimer = patientHitTime;
 			}
 		}
 	}
+
+	float shakeMagnitude = vel.Normalized().Length();
+	sortY = pos.y - (imageScale * (Assets::patientIdleTexture->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
 }
 
 void Patient::Draw() const
@@ -51,9 +54,17 @@ void Patient::Draw() const
 		Assets::tintShader.SetUniform("flashColor", 0.f, 1.f, 0.f, 0.7f);
 	}
 	float shakeMagnitude = vel.Normalized().Length();
-	Window::Draw(Assets::patientTexture, pos)
+	GPU_Image* tex;
+	switch (state) {
+	case SCREAM: tex = Assets::patientScreamTexture; break;
+	case NARCOSIS: tex = Assets::patientNarcosisTexture; break;
+	case DEAD: tex = Assets::patientDeadTexture; break;
+	default: tex = Assets::patientIdleTexture; break;
+	}
+	Window::Draw(tex, pos)
+		.withScale(imageScale)
 		.withRotationDegs(sin(offset + mainClock * shakeHorizontalSpeed * shakeMagnitude) * shakeHorizontalDegrees)
-		.withOrigin(Assets::doctorTexture->base_w / 2, Assets::doctorTexture->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight);
+		.withOrigin(tex->base_w / 2, tex->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight);
 
 	Shader::Deactivate();
 
