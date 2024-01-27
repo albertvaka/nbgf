@@ -6,13 +6,13 @@
 #include "anim_lib.h"
 #include "bullet.h"
 #include "debug.h"
-#include "window.h"
+#include "window_draw.h"
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
-const vec playerSize = vec(110, 120);
-const float playerDisplacementY = 70;
-const vec noozleDisplacement = vec(10, -30);
+const vec playerSize = vec(110.f, 120.f);
+const float playerDisplacementY = 65.f;
+const vec noozleDisplacement = vec(10.f, -30.f);
 const float playerAccel = 5500.f;
 const float maxVel = 600.f;
 const float minVel = 50.f;
@@ -23,7 +23,7 @@ const float shakeHorizontalSpeed = 31.f;
 const float shakeHorizontalDegrees = 2.f;
 const float gasCooldownTime = 0.01f;
 const float gasSpeed = 550.f;
-const float gasAngleVariationRads = 0.08*Angles::Tau;
+const float gasAngleVariationRads = 0.08f*Angles::Tau;
 const float gasOriginOffset = 25.f;
 
 extern float mainClock;
@@ -82,12 +82,15 @@ void Player::Update(float dt)
 		vec vecFromAngle = vec::FromAngleRads(angle);
 		new Bullet(pos + vecFromAngle*gasOriginOffset + noozleDisplacement, vel * 0.5f + vecFromAngle * gasSpeed);
 	}
+
+	float shakeMagnitude = vel.Normalized().Length();
+	sortY = pos.y - (imageScale*(Assets::playerTexture->base_h/2 + playerDisplacementY + sin(mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
 }
 
 void Player::Draw() const
 {
 	float shakeMagnitude = vel.Normalized().Length();
-	Window::Draw(Assets::playerTexture, pos)
+	auto a = Window::Draw(Assets::playerTexture, pos)
 		.withRotationDegs(sin(mainClock* shakeHorizontalSpeed *shakeMagnitude)*shakeHorizontalDegrees)
 		.withOrigin(Assets::playerTexture->base_w/2, Assets::playerTexture->base_h / 2 + playerDisplacementY + sin(mainClock*shakeVerticalSpeed)*shakeMagnitude* shakeHeight)
 		.withScale(lookingLeft ? -imageScale : imageScale, imageScale);

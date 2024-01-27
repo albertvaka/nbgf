@@ -25,7 +25,7 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 	Doctor(vec pos);
 
 	void Update(float dt);
-	void Draw() const;
+	void Draw() const override;
 
 	void RandomState();
 	void StartWaiting();

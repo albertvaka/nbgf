@@ -249,6 +249,9 @@
     <ClInclude Include="src\doctor.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\patient.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -378,6 +381,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\doctor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\patient.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

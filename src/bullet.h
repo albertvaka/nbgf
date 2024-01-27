@@ -15,7 +15,7 @@ const float gasScale = 4.f;
 const float minRotationSpeed = 60.f;
 const float maxRotationSpeed = 130.f;
 const float gasSize = 6.f;
-const float elasticGasBounceRatio = 0.3;
+const float elasticGasBounceRatio = 0.3f;
 
 struct Bullet : CircleEntity, SelfRegister<Bullet>
 {

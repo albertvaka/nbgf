@@ -6,6 +6,7 @@
 #include "assets.h"
 #include "bullet.h"
 #include "doctor.h"
+#include "patient.h"
 #include "collide.h"
 #include "debug.h"
 #include "tiled_tilemap.h"
@@ -41,7 +42,7 @@ void SceneMain::EnterScene()
 {
 	Camera::SetZoom(0.5f, false);
 	for (const BoxBounds& room : Tiled::Entities::room) {
-		new Doctor(Rand::VecInRange(room*0.7));
+		new Doctor(Rand::VecInRange(room*0.7f));
 	}
 	new Doctor(Tiled::Entities::single_waiting.Center());
 }
@@ -81,11 +82,19 @@ void SceneMain::Draw()
 	Window::Clear(120, 120, 120);
 
 	map.Draw();
-	player.Draw();
 
-	for (const Doctor* a : Doctor::GetAll()) {
+	std::vector<BoxEntity*> draws;
+	draws.reserve(Doctor::GetAll().size() + Patient::GetAll().size() + 1);
+	draws.push_back(&player);
+	draws.insert(draws.end(), Doctor::GetAll().begin(), Doctor::GetAll().end());
+	draws.insert(draws.end(), Patient::GetAll().begin(), Patient::GetAll().end());
+	std::sort(draws.begin(), draws.end(), [](const BoxEntity* a, const BoxEntity* b)
+	{
+		return a->sortY < b->sortY;
+	});
+	for (const BoxEntity* a : draws) {
 		a->Draw();
-		a->Bounds().DebugDraw(255,0,0);
+		a->Bounds().DebugDraw(255, 0, 0);
 	}
 
 	for (const Bullet* b : Bullet::GetAll()) {

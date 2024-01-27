@@ -61,6 +61,7 @@
     <ClInclude Include="src\doctor.h" />
     <ClInclude Include="src\gaemtilemap.h" />
     <ClInclude Include="src\input_conf.h" />
+    <ClInclude Include="src\patient.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\doctor.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
+    <ClCompile Include="src\patient.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />

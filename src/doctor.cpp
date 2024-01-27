@@ -1,12 +1,10 @@
 
 #include "doctor.h"
 
-#include "input.h"
 #include "assets.h"
-#include "anim_lib.h"
 #include "bullet.h"
 #include "debug.h"
-#include "window.h"
+#include "window_draw.h"
 #include "collide.h"
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
@@ -16,7 +14,9 @@ const float doctorWaitMinTime = 0.5f;
 const float doctorWaitMaxTime = 2.f;
 const vec doctorSize = vec(90, 180);
 const float doctorVel = 600.f;
+
 const float imageScale = 0.6f;
+
 const float shakeHeight = 20.f;
 const float shakeVerticalSpeed = 41.f;
 const float shakeHorizontalSpeed = 31.f;
@@ -101,6 +101,8 @@ void Doctor::Update(float dt)
 		break;
 	}
 	pos += vel * dt;
+	float shakeMagnitude = vel.Normalized().Length();
+	sortY = pos.y - (imageScale*(Assets::doctorTexture->base_h/2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
 
 }
 

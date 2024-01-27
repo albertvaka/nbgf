@@ -23,6 +23,9 @@ struct BoxEntity : Entity {
 	[[nodiscard]] constexpr BoxBounds Bounds() const {
 		return BoxBounds::FromCenter(pos, size);
 	}
+
+	float sortY = 0.f;
+	virtual void Draw() const = 0;
 };
 
 struct CircleEntity : Entity {
