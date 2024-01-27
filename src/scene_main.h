@@ -8,9 +8,12 @@
 
 struct SceneMain : Scene {
 
+	static int maxPatients;
+
 	Player player;
 	GaemTileMap map;
 	Text deadAliensText;
+	float patientIncreaseTimer;
 
 	SceneMain();
 

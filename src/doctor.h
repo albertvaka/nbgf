@@ -3,12 +3,14 @@
 #include "entity.h"
 #include "selfregister.h"
 
+struct Patient;
+
 struct Doctor: BoxEntity, SelfRegister<Doctor>
 {
 	enum State {
 		WAITING,
 		WANDERING,
-		SEARCHING_PATIENT,
+		SEEKING_PATIENT,
 		MOVING_PATIENT_TO_ROOM,
 		ENTERING_ROOM_WITH_PATIENT,
 		HEALING_PATIENT,
@@ -21,6 +23,7 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 	float timer = 0.f;
 	float offset;
 	vec wanderTarget = vec::Zero;
+	Patient* pacientTarget = nullptr;
 
 	Doctor(vec pos);
 
@@ -30,5 +33,7 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 	void RandomState();
 	void StartWaiting();
 	void StartWandering();
+	void StartSeekingPacient();
+
 	int FindMyRoom();
 };

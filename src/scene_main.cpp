@@ -12,6 +12,11 @@
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
 
+const float timeBetweenPatientIncrease = 6.f;
+const int maxMaxPatients = 6;
+
+int SceneMain::maxPatients = 1;
+
 SceneMain::SceneMain()
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	, player()
@@ -40,18 +45,20 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
+	patientIncreaseTimer = timeBetweenPatientIncrease;
+	maxPatients = 1;
 	Camera::SetZoom(0.5f, false);
 	for (const BoxBounds& room : Tiled::Entities::room) {
 		new Doctor(Rand::VecInRange(room*0.7f));
 	}
 	new Doctor(Tiled::Entities::single_waiting.Center());
-	new Patient(Tiled::Entities::single_waiting.Center()+vec(200,0));
 }
 
 void SceneMain::ExitScene()
 {
 	Bullet::DeleteAll();
 	Doctor::DeleteAll();
+	Patient::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
@@ -63,6 +70,23 @@ void SceneMain::Update(float dt)
 		return;
 	}
 #endif
+
+	if (maxPatients < maxMaxPatients) {
+		patientIncreaseTimer -= dt;
+		if (patientIncreaseTimer < 0) {
+			maxPatients++;
+			patientIncreaseTimer = timeBetweenPatientIncrease*maxPatients;
+		}
+	}
+
+	if (Patient::GetAll().size() < maxPatients) {
+		if (Rand::OnceEvery(200)) {
+			const float offset = 200;
+			float marginX = Rand::OnceEvery(2) ? Tiled::Entities::single_waiting.Left()-offset : Tiled::Entities::single_waiting.Right()+offset;
+			vec targetPos = Patient::FindEmptySpot();
+			new Patient(vec(marginX, targetPos.y), targetPos);
+		}
+	}
 
 	player.Update(dt);
 
@@ -80,6 +104,7 @@ void SceneMain::Update(float dt)
 
 	Bullet::DeleteNotAlive();
 	Doctor::DeleteNotAlive();
+	Patient::DeleteNotAlive();
 }
 
 void SceneMain::Draw()
@@ -117,8 +142,8 @@ void SceneMain::Draw()
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
-		vec m = Mouse::GetPositionInWorld();
-		ImGui::Text("Mouse: %f,%f", m.x, m.y);
+		ImGui::Text("Max patients: %i", maxPatients);
+		ImGui::Text("Patient increase timer %f", patientIncreaseTimer);
 		//if (ImGui::SliderInt("level", &currentLevel, 1, 20)) {
 		//};
 		ImGui::End();

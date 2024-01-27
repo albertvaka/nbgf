@@ -5,20 +5,31 @@
 
 struct Patient: BoxEntity, SelfRegister<Patient>
 {
-	enum State {
+	enum MovementState {
+		ENTERING,
+		WAITING_DOCTOR,
+		BEING_MOVED,
+	};
+
+	enum GasState {
 		IDLE,
 		NARCOSIS,
 		SCREAM,
 		DEAD,
 	};
-	State state = IDLE;
+	GasState gasState = IDLE;
+	MovementState movementState = ENTERING;
 	float highness = 0.f;
 	float offset;
 	float hitTimer = 0.f;
+	vec targetPos;
 
-	Patient(vec pos);
+	BoxBounds GetTargetBounds();
+
+	Patient(vec pos, vec targetPos);
 
 	void Update(float dt);
 	void Draw() const override;
 	
+	static vec FindEmptySpot();
 };

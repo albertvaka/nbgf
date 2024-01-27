@@ -10,7 +10,8 @@
 #include "common_tilemapcharacter.h"
 
 const float patientHitTime = 0.25f;
-const vec patientSize = vec(180, 90);
+const vec patientSize = vec(180, 110);
+const float patientEnteringSpeed = 500.f;
 
 const float imageScale = 0.7f;
 
@@ -21,9 +22,36 @@ const float shakeHorizontalDegrees = 2.f;
 
 extern float mainClock;
 
+bool CollidesWithOtherTargets(vec maybePos) {
+	BoxBounds maybeBounds(maybePos, patientSize);
+	for (Patient* p : Patient::GetAll()) {
+		if (Collide(p->GetTargetBounds(), maybeBounds)) {
+			return true;
+		}
+	}
+	return false;
+}
 
-Patient::Patient(vec pos)
+vec Patient::FindEmptySpot() {
+	for (int i = 0; i < 50; i++) {
+		vec maybePos = Rand::VecInRange(Tiled::Entities::single_waiting);
+		if (CollidesWithOtherTargets(maybePos)) {
+			continue;
+		} else {
+			return maybePos;
+		}
+	}
+	Debug::out << "Can't find empty spot for patient";
+	return Rand::VecInRange(Tiled::Entities::single_waiting);
+}
+
+BoxBounds Patient::GetTargetBounds() {
+	return BoxBounds(targetPos, patientSize);
+}
+
+Patient::Patient(vec pos, vec targetPos)
 	: BoxEntity(pos, patientSize)
+	, targetPos(targetPos)
 	, offset(0)
 {
 }
@@ -42,6 +70,20 @@ void Patient::Update(float dt)
 		}
 	}
 
+	if (movementState == ENTERING) {
+		if (pos.x < targetPos.x) {
+			pos.x += patientEnteringSpeed * dt;
+			if (pos.x >= targetPos.x) pos.x = targetPos.x;
+		}
+		else if (pos.x > targetPos.x) {
+			pos.x -= patientEnteringSpeed * dt;
+			if (pos.x <= targetPos.x) pos.x = targetPos.x;
+		}
+		else {
+			movementState = WAITING_DOCTOR;
+		}
+	}
+
 	float shakeMagnitude = vel.Normalized().Length();
 	sortY = pos.y - (imageScale * (Assets::patientIdleTexture->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
 }
@@ -54,7 +96,7 @@ void Patient::Draw() const
 	}
 	float shakeMagnitude = vel.Normalized().Length();
 	GPU_Image* tex;
-	switch (state) {
+	switch (gasState) {
 	case SCREAM: tex = Assets::patientScreamTexture; break;
 	case NARCOSIS: tex = Assets::patientNarcosisTexture; break;
 	case DEAD: tex = Assets::patientDeadTexture; break;

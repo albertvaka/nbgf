@@ -2,10 +2,12 @@
 #include "doctor.h"
 
 #include "assets.h"
+#include "patient.h"
 #include "bullet.h"
 #include "debug.h"
 #include "window_draw.h"
 #include "collide.h"
+#include "scene_main.h"
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
@@ -118,9 +120,21 @@ void Doctor::StartWandering() {
 	wanderTarget = Rand::VecInRange(Tiled::Entities::single_waiting);
 }
 
+void Doctor::StartSeekingPacient() {
+	vel = vec::Zero;
+	state = SEEKING_PATIENT;
+    // grab patient at random
+	pacientTarget = Patient::GetAll()[Rand::roll(0, Patient::GetAll().size())];
+}
+
 void Doctor::RandomState() {
 	vel = vec::Zero;
-	StartWandering();
+	int numPatients = Patient::GetAll().size();
+	if (Rand::roll(0, SceneMain::maxPatients*2) < numPatients) {
+		StartSeekingPacient();
+	} else {
+		StartWandering();
+	}
 }
 
 void Doctor::Draw() const
