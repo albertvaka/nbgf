@@ -10,11 +10,10 @@
 #include "common_tilemapcharacter.h"
 
 const float patientHitTime = 0.25f;
-const float patientWaitMinTime = 0.5f;
-const float patientWaitMaxTime = 2.f;
 const vec patientSize = vec(180, 90);
-const float patientVel = 600.f;
+
 const float imageScale = 0.7f;
+
 const float shakeHeight = 20.f;
 const float shakeVerticalSpeed = 41.f;
 const float shakeHorizontalSpeed = 31.f;
