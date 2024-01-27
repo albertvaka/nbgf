@@ -41,7 +41,7 @@ void SceneMain::EnterScene()
 {
 	Camera::SetZoom(0.5f, false);
 	for (const BoxBounds& room : Tiled::Entities::room) {
-		new Doctor(room.Center());
+		new Doctor(Rand::VecInRange(room*0.7));
 	}
 	new Doctor(Tiled::Entities::single_waiting.Center());
 }

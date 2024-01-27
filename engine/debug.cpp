@@ -88,7 +88,7 @@ void AfterSceneDraw()
             Window::DrawPrimitive::Rectangle(v.v - vec(2, 2), v.v + vec(2, 2), 6, v.color);
         }
         for (const debugvec& v : debugarrows) {
-            Window::DrawPrimitive::Arrow(v.from, v.from + v.v, 1, 3, v.color);
+            Window::DrawPrimitive::Arrow(v.from, v.v, 1, 3, v.color);
         }
         for (const debugvec& v : debugbounds) {
             if (v.radius < 0) {

@@ -10,15 +10,15 @@ const vec Entities::single_spawn = vec(370.0f, 956.0f);
 
 
 const std::array<BoxBounds, 3> Entities::room = {
-	BoxBounds(12.0f,13.3545f,658.0f,622.646f),
-	BoxBounds(687.0f,19.677f,658.0f,618.646f),
-	BoxBounds(1377.0f,19.677f,658.0f,620.646f),
+	BoxBounds(12.0f,13.3545f,658.0f,650.646f),
+	BoxBounds(693.0f,19.677f,660.0f,646.646f),
+	BoxBounds(1377.0f,19.677f,658.0f,644.646f),
 };
 
 const std::array<BoxBounds, 1> Entities::waiting = {
-	BoxBounds(11.0f,678.677f,2020.0f,584.646f),
+	BoxBounds(143.0f,752.677f,1756.0f,436.646f),
 };
-const BoxBounds Entities::single_waiting = BoxBounds(11.0f,678.677f,2020.0f,584.646f);
+const BoxBounds Entities::single_waiting = BoxBounds(143.0f,752.677f,1756.0f,436.646f);
 
 
 

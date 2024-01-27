@@ -14,15 +14,21 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 		HEALING_PATIENT,
 		LEAVING_ROOM,
 	};
-	State state = WANDERING;
+	State state = WAITING;
 	bool lookingLeft = true;
 	float highness = 0.f;
 	float hitTimer = 0.f;
+	float timer = 0.f;
+	float offset;
+	vec wanderTarget = vec::Zero;
 
 	Doctor(vec pos);
 
 	void Update(float dt);
 	void Draw() const;
 
+	void RandomState();
+	void StartWaiting();
+	void StartWandering();
 	int FindMyRoom();
 };

@@ -557,10 +557,10 @@
   </data>
  </layer>
  <objectgroup id="4" name="Entities" opacity="0.9">
-  <object id="500" name="room" type="room" x="12" y="13.3545" width="658" height="622.646"/>
-  <object id="504" name="room" type="room" x="687" y="19.677" width="658" height="618.646"/>
-  <object id="505" name="room" type="room" x="1377" y="19.677" width="658" height="620.646"/>
+  <object id="500" name="room" type="room" x="12" y="13.3545" width="658" height="650.646"/>
+  <object id="504" name="room" type="room" x="693" y="19.677" width="660" height="646.646"/>
+  <object id="505" name="room" type="room" x="1377" y="19.677" width="658" height="644.646"/>
   <object id="509" gid="9" x="370" y="956" width="16" height="16"/>
-  <object id="510" name="waiting" type="waiting" x="11" y="678.677" width="2020" height="584.646"/>
+  <object id="510" name="waiting" type="waiting" x="143" y="752.677" width="1756" height="436.646"/>
  </objectgroup>
 </map>
