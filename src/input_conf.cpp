@@ -23,7 +23,7 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::DOWN] = [](int p)
     {
-        return GamePad::AnalogStick::Left.get(p).y > -50.0f ||
+        return GamePad::AnalogStick::Left.get(p).y > 50.0f ||
             GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_DOWN) || (
                 (p == keyboard_player_id) && (
                     Keyboard::IsKeyPressed(SDL_SCANCODE_S) ||
