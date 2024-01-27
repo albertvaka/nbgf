@@ -4,7 +4,7 @@ namespace Tiled {
 
 const GPU_Rect Tile::TileToTextureRect[] = {
 	{},	//NONE
-	{ 0 * 74, 0 * 74, 74, 74 }, //=1, SOLID_1, gid=0
+	{ 3 * 16, 2 * 16, 16, 16 }, //=1, SOLID_1, gid=67
 	{},	//SOLID_TRANSPARENT
 };
 

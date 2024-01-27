@@ -2,13 +2,13 @@
 
 #include "entity.h"
 
-struct Player : Entity
+struct Player : BoxEntity
 {
-	float distance;
+	int playerNum;
 
-	Player(float distance_from_planet);
+	Player();
 
 	void Update(float dt);
 	void Draw() const;
-
+	bool lookingLeft;
 };

@@ -240,6 +240,15 @@
     <ClInclude Include="src\scene_main.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\gaemtilemap.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tile.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common_tilemapcharacter.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">

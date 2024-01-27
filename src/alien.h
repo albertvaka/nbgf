@@ -55,7 +55,7 @@ struct Alien : CircleEntity, SelfRegister<Alien>
 	void Draw() const
 	{
 		const GPU_Rect& animRect = anim.CurrentFrameRect();
-		Window::Draw(Assets::invadersTexture, pos)
+		Window::Draw(Assets::spritesheetTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)
 			.withRotationDegs(angle + 90)

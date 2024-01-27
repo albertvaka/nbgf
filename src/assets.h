@@ -12,10 +12,9 @@ typedef struct _Mix_Music Mix_Music;
 struct Assets
 {
 	static void LoadAll();
-
-	static inline GPU_Image* invadersTexture;
 	
-	static inline GPU_Image* backgroundTexture;
+	static inline GPU_Image* spritesheetTexture;
+	static inline GPU_Image* playerTexture;
 
 	static inline TTF_Font* font_30;
 	static inline TTF_Font* font_30_outline;

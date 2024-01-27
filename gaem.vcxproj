@@ -58,10 +58,13 @@
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bullet.h" />
+    <ClInclude Include="src\common_tilemapcharacter.h" />
+    <ClInclude Include="src\gaemtilemap.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
+    <ClInclude Include="src\tile.h" />
     <ClInclude Include="src\window_conf.h" />
     <ClInclude Include="vendor\glew\glew.h" />
     <ClInclude Include="vendor\glew\glxew.h" />

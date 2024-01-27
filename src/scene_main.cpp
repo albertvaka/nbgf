@@ -8,19 +8,21 @@
 #include "alien.h"
 #include "collide.h"
 #include "debug.h"
-
-float kAlienMinDistance = 300;
-float kAlienMaxDistance = 400;
+#include "tiled_tilemap.h"
 
 SceneMain::SceneMain()
-	: player(200)
-	, alienPartSys(Assets::invadersTexture)
+	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
+	, player()
+	//, alienPartSys(Assets::invadersTexture)
 	, deadAliensText(Assets::font_30, Assets::font_30_outline)
 {
-	deadAliensText.SetString("Kill the invaders");
+	map.LoadFromTiled<Tiled::TileMap>();
+
+
+	deadAliensText.SetString("Hola");
 	deadAliensText.SetFillColor(0, 0, 0);
 	deadAliensText.SetOutlineColor(255, 255, 0);
-
+	/*
 	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
 	alienPartSys.AddSprite(AnimLib::ALIEN_2[0].rect);
 	alienPartSys.min_scale = 0.15f;
@@ -31,43 +33,29 @@ SceneMain::SceneMain()
 	alienPartSys.max_rotation = 360;
 	alienPartSys.max_rotation_vel = 100.f;
 	alienPartSys.min_rotation_vel = 100.f;
-	alienPartSys.scale_vel = -0.2f;
+	alienPartSys.scale_vel = -0.2f;*/
 }
 
 void SceneMain::EnterScene() 
 {
-	SpawnAliens();
-}
-
-void SceneMain::SpawnAliens() {
-	for (int angle = 0; angle < 360; angle += 360/currentLevel) {
-		new Alien(angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
-	}
+	Camera::SetZoom(0.5f, false);
 }
 
 void SceneMain::ExitScene()
 {
-	alienPartSys.Clear();
 	Bullet::DeleteAll();
 	Alien::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
 {
-
 #ifdef _DEBUG
-	const SDL_Scancode restart = SDL_SCANCODE_F5;
+	const SDL_Scancode restart = SDL_SCANCODE_F6;
 	if (Keyboard::IsKeyJustPressed(restart)) {
 		ExitScene();
-		EnterScene();
 		return;
 	}
 #endif
-
-	if (Alien::GetAll().empty()) {
-		currentLevel++;
-		SpawnAliens();
-	}
 
 	player.Update(dt);
 
@@ -79,14 +67,9 @@ void SceneMain::Update(float dt)
 		b->Update(dt);
 		for (Alien* a  : Alien::GetAll()) {
 			if (Collide(a,b)) {
-				Debug::out << "KABOOM " << a->pos;
 
-				deadAliens++;
-				deadAliensText.SetString("Kills: " + std::to_string(deadAliens));
+				//deadAliensText.SetString("Kills: " + std::to_string(deadAliens));
 
-				alienPartSys.pos = a->pos;
-				alienPartSys.AddParticles(10);
-				
 				a->alive = false;
 				b->alive = false;
 			}
@@ -95,18 +78,13 @@ void SceneMain::Update(float dt)
 
 	Bullet::DeleteNotAlive();
 	Alien::DeleteNotAlive();
-
-	alienPartSys.UpdateParticles(dt);
-
 }
 
 void SceneMain::Draw()
 {
-	Window::Clear(0, 0, 0);
+	Window::Clear(120, 120, 120);
 
-	Window::Draw(Assets::backgroundTexture, Camera::Center())
-		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
-
+	map.Draw();
 	player.Draw();
 
 	for (const Alien* a : Alien::GetAll()) {
@@ -119,26 +97,20 @@ void SceneMain::Draw()
 		b->Bounds().DebugDraw(255, 0, 0);
 	}
 
-	alienPartSys.Draw();
-
-	Window::Draw(deadAliensText, vec(Camera::Center().x, 30))
+	//Draw GUI
+	Camera::InScreenCoords::Begin();
+	Window::Draw(deadAliensText, vec(Camera::InScreenCoords::Center().x, 30))
 		.withOrigin(deadAliensText.Size()/2)
 		.withScale(0.666f);
-
-	if (Debug::Draw) {
-		Window::DrawPrimitive::Circle(Camera::Center(), kAlienMinDistance, 1, 255, 255, 255);
-		Window::DrawPrimitive::Circle(Camera::Center(), kAlienMaxDistance, 1, 255, 255, 255);
-	}
+	Camera::InScreenCoords::End();
 
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
 		vec m = Mouse::GetPositionInWorld();
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
-		if (ImGui::SliderInt("level", &currentLevel, 1, 20)) {
-			Alien::DeleteAll();
-			SpawnAliens();
-		};
+		//if (ImGui::SliderInt("level", &currentLevel, 1, 20)) {
+		//};
 		ImGui::End();
 	}
 
