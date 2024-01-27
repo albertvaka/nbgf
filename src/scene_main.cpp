@@ -5,10 +5,11 @@
 #endif
 #include "assets.h"
 #include "bullet.h"
-#include "alien.h"
+#include "doctor.h"
 #include "collide.h"
 #include "debug.h"
 #include "tiled_tilemap.h"
+#include "tiled_objects_entities.h"
 
 SceneMain::SceneMain()
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
@@ -39,12 +40,16 @@ SceneMain::SceneMain()
 void SceneMain::EnterScene() 
 {
 	Camera::SetZoom(0.5f, false);
+	for (const BoxBounds& room : Tiled::Entities::room) {
+		new Doctor(room.Center());
+	}
+	new Doctor(Tiled::Entities::single_waiting.Center());
 }
 
 void SceneMain::ExitScene()
 {
 	Bullet::DeleteAll();
-	Alien::DeleteAll();
+	Doctor::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
@@ -59,25 +64,23 @@ void SceneMain::Update(float dt)
 
 	player.Update(dt);
 
-	for (Alien* a : Alien::GetAll()) {
+	for (Doctor* a : Doctor::GetAll()) {
 		a->Update(dt);
 	}
 
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
-		for (Alien* a  : Alien::GetAll()) {
+		for (Doctor* a  : Doctor::GetAll()) {
 			if (Collide(a,b)) {
-
 				//deadAliensText.SetString("Kills: " + std::to_string(deadAliens));
-
-				a->alive = false;
 				b->alive = false;
+				a->highness += 1.f;
 			}
 		}
 	}
 
 	Bullet::DeleteNotAlive();
-	Alien::DeleteNotAlive();
+	Doctor::DeleteNotAlive();
 }
 
 void SceneMain::Draw()
@@ -87,7 +90,7 @@ void SceneMain::Draw()
 	map.Draw();
 	player.Draw();
 
-	for (const Alien* a : Alien::GetAll()) {
+	for (const Doctor* a : Doctor::GetAll()) {
 		a->Draw();
 		a->Bounds().DebugDraw(255,0,0);
 	}

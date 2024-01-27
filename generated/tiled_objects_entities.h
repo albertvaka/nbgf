@@ -14,7 +14,9 @@ struct Entities {
 	static const std::unordered_map<int, vec> spawn;
 	static const vec single_spawn;
 	// Bounds
-	static const std::array<BoxBounds, 3> area;
+	static const std::array<BoxBounds, 3> room;
+	static const std::array<BoxBounds, 1> waiting;
+	static const BoxBounds single_waiting;
 
 };
 

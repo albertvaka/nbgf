@@ -216,9 +216,6 @@
     <ClInclude Include="src\window_conf.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\alien.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\anim_lib.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -247,6 +244,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\common_tilemapcharacter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\doctor.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -375,6 +375,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\scene_main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\doctor.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

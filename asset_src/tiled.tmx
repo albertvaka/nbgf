@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#321f2432" nextlayerid="12" nextobjectid="510">
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#321f2432" nextlayerid="12" nextobjectid="511">
  <editorsettings>
   <export format="json"/>
  </editorsettings>
@@ -557,9 +557,10 @@
   </data>
  </layer>
  <objectgroup id="4" name="Entities" opacity="0.9">
-  <object id="500" name="area" type="area" x="12" y="13.3545" width="658" height="622.646"/>
-  <object id="504" name="area" type="area" x="687" y="19.677" width="658" height="618.646"/>
-  <object id="505" name="area" type="area" x="1377" y="19.677" width="658" height="620.646"/>
+  <object id="500" name="room" type="room" x="12" y="13.3545" width="658" height="622.646"/>
+  <object id="504" name="room" type="room" x="687" y="19.677" width="658" height="618.646"/>
+  <object id="505" name="room" type="room" x="1377" y="19.677" width="658" height="620.646"/>
   <object id="509" gid="9" x="370" y="956" width="16" height="16"/>
+  <object id="510" name="waiting" type="waiting" x="11" y="678.677" width="2020" height="584.646"/>
  </objectgroup>
 </map>

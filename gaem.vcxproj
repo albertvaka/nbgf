@@ -54,11 +54,11 @@
     <ClInclude Include="generated\tiled_objects_entities.h" />
     <ClInclude Include="generated\tiled_tile.h" />
     <ClInclude Include="generated\tiled_tilemap.h" />
-    <ClInclude Include="src\alien.h" />
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\common_tilemapcharacter.h" />
+    <ClInclude Include="src\doctor.h" />
     <ClInclude Include="src\gaemtilemap.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\player.h" />
@@ -112,6 +112,7 @@
     <ClCompile Include="generated\tiled_tile.cpp" />
     <ClCompile Include="generated\tiled_tilemap.cpp" />
     <ClCompile Include="src\assets.cpp" />
+    <ClCompile Include="src\doctor.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\scene_main.cpp" />

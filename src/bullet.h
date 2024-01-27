@@ -49,7 +49,6 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 			vel.y *= -elasticGasBounceRatio;
 			float sign = vel.x > 0? 1.f : -1.f;
 			vel.x += abs(prevVelY + vel.y) * sign;
-
 		}
 		pos = res.pos;
 		anim.Update(dt);
@@ -70,6 +69,5 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 			.withRect(animRect)
 			.withRotationDegs(roationOffset + mainClock*rotationSpeed)
 			.withScale(gasScale);
-		Bounds().DebugDraw();
 	}
 };

@@ -6,6 +6,7 @@ void Assets::LoadAll() {
 
     spritesheetTexture = LoadImage("data/spritesheet.png");
     playerTexture = LoadImage("data/player.png");
+    doctorTexture = LoadImage("data/doctor.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
