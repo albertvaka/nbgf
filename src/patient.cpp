@@ -24,7 +24,7 @@ extern float mainClock;
 
 Patient::Patient(vec pos)
 	: BoxEntity(pos, patientSize)
-	, offset(pos.x)
+	, offset(0)
 {
 }
 
