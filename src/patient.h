@@ -22,6 +22,8 @@ struct Patient: BoxEntity, SelfRegister<Patient>
 	float highness = 0.f;
 	float offset;
 	float hitTimer = 0.f;
+	float enterTimer = 0.f;
+	vec initPos;
 	vec targetPos;
 
 	BoxBounds GetTargetBounds();

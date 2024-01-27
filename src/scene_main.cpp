@@ -17,6 +17,13 @@ const int maxMaxPatients = 6;
 
 int SceneMain::maxPatients = 1;
 
+void SpawnPatient() {
+	const float offset = 200;
+	vec targetPos = Patient::FindEmptySpot();
+	float marginX = targetPos.x < Tiled::Entities::single_waiting.Center().x ? Tiled::Entities::single_waiting.Left()-offset : Tiled::Entities::single_waiting.Right()+offset;
+	new Patient(vec(marginX, targetPos.y), targetPos);
+}
+
 SceneMain::SceneMain()
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	, player()
@@ -52,7 +59,9 @@ void SceneMain::EnterScene()
 		new Doctor(Rand::VecInRange(room*0.7f));
 	}
 	new Doctor(Tiled::Entities::single_waiting.Center());
+	SpawnPatient();
 }
+
 
 void SceneMain::ExitScene()
 {
@@ -80,11 +89,10 @@ void SceneMain::Update(float dt)
 	}
 
 	if (Patient::GetAll().size() < maxPatients) {
-		if (Rand::OnceEvery(200)) {
-			const float offset = 200;
-			float marginX = Rand::OnceEvery(2) ? Tiled::Entities::single_waiting.Left()-offset : Tiled::Entities::single_waiting.Right()+offset;
-			vec targetPos = Patient::FindEmptySpot();
-			new Patient(vec(marginX, targetPos.y), targetPos);
+		timerSpawnPatients -= dt;
+		if (timerSpawnPatients <= 0) {
+			timerSpawnPatients += Rand::rollf(0, 5.f);
+			SpawnPatient();
 		}
 	}
 

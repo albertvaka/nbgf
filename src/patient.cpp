@@ -11,7 +11,6 @@
 
 const float patientHitTime = 0.25f;
 const vec patientSize = vec(180, 110);
-const float patientEnteringSpeed = 500.f;
 
 const float imageScale = 0.7f;
 
@@ -46,16 +45,26 @@ vec Patient::FindEmptySpot() {
 }
 
 BoxBounds Patient::GetTargetBounds() {
-	return BoxBounds(targetPos, patientSize);
+	if (movementState == ENTERING || movementState == WAITING_DOCTOR) {
+		return BoxBounds(targetPos, patientSize);
+	} else {
+		return BoxBounds(vec::Zero, vec::Zero);
+	}
 }
 
 Patient::Patient(vec pos, vec targetPos)
 	: BoxEntity(pos, patientSize)
 	, targetPos(targetPos)
+	, initPos(pos)
 	, offset(0)
 {
 }
-
+float lerp(float start, float end, float t) {
+    return (1 - t) * start + t * end;
+}
+float easeOutQuad(float t) {
+    return t * (2 - t);
+}
 void Patient::Update(float dt)
 {
 	if (hitTimer > 0) {
@@ -71,16 +80,13 @@ void Patient::Update(float dt)
 	}
 
 	if (movementState == ENTERING) {
-		if (pos.x < targetPos.x) {
-			pos.x += patientEnteringSpeed * dt;
-			if (pos.x >= targetPos.x) pos.x = targetPos.x;
-		}
-		else if (pos.x > targetPos.x) {
-			pos.x -= patientEnteringSpeed * dt;
-			if (pos.x <= targetPos.x) pos.x = targetPos.x;
-		}
-		else {
+		enterTimer += dt;
+		if (enterTimer >= 2.f) {
 			movementState = WAITING_DOCTOR;
+		} else {
+			float easedT = easeOutQuad(enterTimer/2.f);
+			float result = lerp(initPos.x, targetPos.x, easedT);
+			pos.x = result;
 		}
 	}
 

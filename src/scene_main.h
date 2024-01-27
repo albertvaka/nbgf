@@ -14,6 +14,7 @@ struct SceneMain : Scene {
 	GaemTileMap map;
 	Text deadAliensText;
 	float patientIncreaseTimer;
+	float timerSpawnPatients;
 
 	SceneMain();
 
