@@ -54,6 +54,7 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
+	timerSpawnPatients = 0.f;
 	savedPatients = 0;
 	deadPatients = 0;
 	patientIncreaseTimer = timeBetweenPatientIncrease;

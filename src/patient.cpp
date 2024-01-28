@@ -11,7 +11,7 @@
 #include "common_tilemapcharacter.h"
 
 const float highnessRate = 30.f;
-const float highnessDecreaseRate = 12.f;
+const float highnessDecreaseRate = 10.f;
 const float gasHitTime = 0.2f;
 
 const float asleepThreshold = 30.f;
