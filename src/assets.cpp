@@ -23,8 +23,9 @@ void Assets::LoadAll() {
     emojiHigh = LoadImage("data/emoji_high.png");
     
     heart = LoadImage("data/heart.png");
-    bar = LoadImage("data/patient_bar.png");
-    
+    bar = LoadImage("data/bar_inside.png");
+    barOutline = LoadImage("data/bar_outline.png");
+
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 

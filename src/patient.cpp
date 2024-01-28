@@ -6,21 +6,26 @@
 #include "debug.h"
 #include "window_draw.h"
 #include "collide.h"
+#include "scene_main.h"
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
 const float highnessRate = 30.f;
-const float highnessDecreaseRate = 15.f;
+const float highnessDecreaseRate = 12.f;
 const float gasHitTime = 0.2f;
 
 const float asleepThreshold = 30.f;
-const float dyingThreshold = 80.f;
+const float dyingThreshold = 89.f;
+
+const float damagedTimeToDie = 3.f;
 
 const vec patientSize = vec(180, 110);
 const float sortYOffset = -30;
-const float patientLeavingVel = 500.f;
+const float patientLeavingVel = 400.f;
 
 const float imageScale = 0.7f;
+
+const float waitTimeAfterEnter = 3.f;
 
 const float shakeHeight = 20.f;
 const float shakeVerticalSpeed = 41.f;
@@ -29,6 +34,7 @@ const float shakeHorizontalDegrees = 2.f;
 
 const vec screenOffset = vec(-10, -103);
 const vec iconOffset = vec(29, 13);
+const vec barOffset = vec(10, 65);
 
 extern float mainClock;
 
@@ -109,11 +115,23 @@ void Patient::Update(float dt)
 			gasState = IDLE;
 		}
 	}
+	else {
+		highness = 100.f;
+	}
+
+	if (beingDamaged()) {
+		damageTimer += dt;
+		if (damageTimer > damagedTimeToDie) {
+			gasState = GasState::DEAD;
+		}
+	}
 
 	if (movementState == ENTERING) {
 		enterTimer += dt;
 		if (enterTimer >= 2.f) {
-			movementState = WAITING_DOCTOR;
+			if (enterTimer > 2.f + waitTimeAfterEnter) {
+				movementState = WAITING_DOCTOR;
+			}
 		} else {
 			float easedT = Mates::EaseOutQuad(enterTimer/2.f);
 			float result = Mates::Lerp(initPos.x, targetPos.x, easedT);
@@ -121,21 +139,23 @@ void Patient::Update(float dt)
 		}
 	}
 	else if (movementState == LEAVING) {
-		pos.y -= patientLeavingVel * dt;
+		pos.y += patientLeavingVel * dt;
 		if (!Collide(Bounds(), Camera::Bounds())) {
 			if (gasState == DEAD) {
-				Debug::out << "PATIENT SAVE";
-				
+				SceneMain::deadPatients++;
 			}
 			else {
-				Debug::out << "PATIENT KILLED";
-				
+				SceneMain::savedPatients++;
 			}
 			alive = false;
 		}
 	}
 	float shakeMagnitude = movementState == MovementState::BEING_MOVED ? 1 : 0;
 	sortY = pos.y - sortYOffset - (imageScale * (Assets::patientIdleTexture->base_h / 2)); // +sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
+}
+
+bool Patient::beingDamaged() const {
+	return (doctorHigh || gasState == OVERDOSE || (gasState == IDLE && movementState == MovementState::BEING_SURGERIED));
 }
 
 void Patient::Draw() const
@@ -157,21 +177,43 @@ void Patient::Draw() const
 	default: iconTex = Assets::emojiAwake; break;
 	}
 	
-	if (doctorHigh || gasState == OVERDOSE) {
+	if (beingDamaged()) {
 		iconTex = Assets::heart;
 		screenTex = (int(mainClock*3) % 2) ? Assets::screenBgDamage : Assets::screenBgDamageBlink;
 	}
 
+	//Screen bg
 	Window::Draw(screenTex, pos + screenOffset)
 		.withScale(imageScale)
 		.withRotationDegs(shakerinoRot)
 		.withOrigin(0, shakerinoY);
 
+	// Screen emoji
 	Window::Draw(iconTex, pos + screenOffset + iconOffset)
 		.withScale(imageScale)
 		//.withRotationDegs(shakerinoRot)
 		.withOrigin(0, shakerinoY);
-	
+
+	// Screen bar inside
+	Assets::tintShader.Activate();
+	if (gasState == GasState::NARCOSIS) {
+		Assets::tintShader.SetUniform("flashColor", 0.f, 1.f, 0.f, 0.7f);
+	} else {
+		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
+	}
+	Window::Draw(Assets::bar, pos + screenOffset + barOffset)
+		.withRect(0,0, Assets::bar->base_w*highness/100.f, Assets::bar->base_h)
+		.withScale(imageScale)
+		//.withRotationDegs(shakerinoRot)
+		.withOrigin(0, shakerinoY);
+	Shader::Deactivate();
+
+	// Screen bar outline
+	Window::Draw(Assets::barOutline, pos + screenOffset + barOffset)
+		.withScale(imageScale)
+		//.withRotationDegs(shakerinoRot)
+		.withOrigin(0, shakerinoY);
+
 	// Patient
 
 	if (hitTimer > 0.f) {
@@ -181,9 +223,9 @@ void Patient::Draw() const
 	GPU_Image* tex;
 	switch (gasState) {
 	case OVERDOSE: tex = Assets::patientOverdoseTexture; break;
-	case NARCOSIS: tex = Assets::patientNarcosisTexture; break;
+	case NARCOSIS: tex = doctorHigh ? Assets::patientOverdoseTexture : Assets::patientNarcosisTexture; break;
 	case DEAD: tex = Assets::patientDeadTexture; break;
-	default: tex = Assets::patientIdleTexture; break;
+	default: tex = movementState == MovementState::BEING_SURGERIED ? Assets::patientScreamTexture : Assets::patientIdleTexture; break;
 	}
 
 	Window::Draw(tex, pos)

@@ -31,7 +31,8 @@ struct Assets
 	static inline GPU_Image * emojiOverdose;
 	static inline GPU_Image * emojiHigh;
 	static inline GPU_Image * heart;
-	static inline GPU_Image * bar;
+	static inline GPU_Image* bar;
+	static inline GPU_Image* barOutline;
 
 	static inline TTF_Font* font_30;
 	static inline TTF_Font* font_30_outline;

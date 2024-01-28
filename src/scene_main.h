@@ -15,8 +15,12 @@ struct SceneMain : Scene {
 	Text deadAliensText;
 	float patientIncreaseTimer;
 	float timerSpawnPatients;
+	static int deadPatients;
+	static int savedPatients;
 
 	SceneMain();
+
+	void UpdateScore();
 
 	void EnterScene() override;
 	void ExitScene() override;

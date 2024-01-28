@@ -18,6 +18,8 @@ const float minDelaySpawnPatient = 0.5f;
 const float maxDelaySpawnPatient = 6.f;
 
 int SceneMain::maxPatients = 1;
+int SceneMain::deadPatients = 1;
+int SceneMain::savedPatients = 1;
 
 void SpawnPatient() {
 	const float offset = 200;
@@ -34,8 +36,6 @@ SceneMain::SceneMain()
 {
 	map.LoadFromTiled<Tiled::TileMap>();
 
-
-	deadAliensText.SetString("Hola");
 	deadAliensText.SetFillColor(0, 0, 0);
 	deadAliensText.SetOutlineColor(255, 255, 0);
 	/*
@@ -54,6 +54,8 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
+	savedPatients = 0;
+	deadPatients = 0;
 	patientIncreaseTimer = timeBetweenPatientIncrease;
 	maxPatients = 1;
 	Camera::SetZoom(0.5f, false);
@@ -144,7 +146,8 @@ void SceneMain::Draw()
 
 	//Draw GUI
 	Camera::InScreenCoords::Begin();
-	Window::Draw(deadAliensText, vec(Camera::InScreenCoords::Center().x, 30))
+	deadAliensText.SetString("Patients saved: " + std::to_string(savedPatients) + " killed: " + std::to_string(deadPatients));
+	Window::Draw(deadAliensText, vec(Camera::InScreenCoords::Center().x, 20))
 		.withOrigin(deadAliensText.Size()/2)
 		.withScale(0.666f);
 	Camera::InScreenCoords::End();

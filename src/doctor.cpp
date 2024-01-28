@@ -17,12 +17,12 @@ const float gasHitTime = 0.2f;
 
 const float highThreshold = 50.f;
 
-const float surgeryDuration = 10.f;
+const float surgeryDuration = 5.f;
 
 const float doctorWaitMinTime = 0.5f;
 const float doctorWaitMaxTime = 2.f;
 const vec doctorSize = vec(90, 180);
-const float doctorVel = 600.f;
+const float doctorVel = 400.f;
 
 const float imageScale = 0.6f;
 
@@ -259,6 +259,7 @@ void Doctor::StartSurgery() {
 	patientTarget->movementState = Patient::MovementState::BEING_SURGERIED;
 	state = DOING_SURGERY;
 	vel = vec::Zero;
+	patientTarget->offset = 0;
 }
 
 void Doctor::Draw() const

@@ -29,10 +29,14 @@ struct Patient: BoxEntity, SelfRegister<Patient>
 	float enterTimer = 0.f;
 	vec initPos;
 	vec targetPos;
+	float damageTimer = 0.f;
+	float exitTimer = 0.f;
 
 	BoxBounds GetTargetBounds();
 
 	Patient(vec pos, vec targetPos);
+
+	bool beingDamaged() const;
 
 	void Update(float dt);
 	void Draw() const override;
