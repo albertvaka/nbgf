@@ -12,6 +12,17 @@ void Assets::LoadAll() {
     patientNarcosisTexture = LoadImage("data/patient_narcosis.png");
     patientScreamTexture = LoadImage("data/patient_scream.png");
 
+    screenBg = LoadImage("data/screen_bg.png");
+    screenBgDamage = LoadImage("data/screen_bg_damage.png");
+    screenBgDamageBlink = LoadImage("data/screen_bg_damage _blink.png");
+    
+    emojiDead = LoadImage("data/emoji_dead.png");
+    emojiAwake = LoadImage("data/emoji_awake.png");
+    emojiHigh = LoadImage("data/emoji_high.png");
+    
+    heart = LoadImage("data/heart.png");
+    bar = LoadImage("data/patient_bar.png");
+    
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 
