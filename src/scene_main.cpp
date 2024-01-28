@@ -13,13 +13,13 @@
 #include "tiled_objects_entities.h"
 
 const float timeBetweenPatientIncrease = 6.f;
-const int maxMaxPatients = 6;
+const int maxMaxPatients = 5;
 const float minDelaySpawnPatient = 0.5f;
 const float maxDelaySpawnPatient = 6.f;
 
 int SceneMain::maxPatients = 1;
-int SceneMain::deadPatients = 1;
-int SceneMain::savedPatients = 1;
+int SceneMain::deadPatients = 99;
+int SceneMain::savedPatients = 99;
 
 void SpawnPatient() {
 	const float offset = 200;

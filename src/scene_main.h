@@ -20,8 +20,6 @@ struct SceneMain : Scene {
 
 	SceneMain();
 
-	void UpdateScore();
-
 	void EnterScene() override;
 	void ExitScene() override;
 	void Update(float dt) override;

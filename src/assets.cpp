@@ -24,7 +24,9 @@ void Assets::LoadAll() {
     emojiAwake = LoadImage("data/emoji_awake.png");
     emojiHigh = LoadImage("data/emoji_high.png");
     
+    greenTick = LoadImage("data/tick.png");
     heart = LoadImage("data/heart.png");
+
     bar = LoadImage("data/bar_inside.png");
     barOutline = LoadImage("data/bar_outline.png");
 

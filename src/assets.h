@@ -25,14 +25,15 @@ struct Assets
 	static inline GPU_Image* patientNarcosisTexture;
 	static inline GPU_Image* patientScreamTexture;
 	
-	static inline GPU_Image * screenBg;
-	static inline GPU_Image * screenBgDamage;
-	static inline GPU_Image * screenBgDamageBlink;
-	static inline GPU_Image * emojiDead;
-	static inline GPU_Image * emojiAwake;
-	static inline GPU_Image * emojiOverdose;
-	static inline GPU_Image * emojiHigh;
-	static inline GPU_Image * heart;
+	static inline GPU_Image* screenBg;
+	static inline GPU_Image* screenBgDamage;
+	static inline GPU_Image* screenBgDamageBlink;
+	static inline GPU_Image* emojiDead;
+	static inline GPU_Image* emojiAwake;
+	static inline GPU_Image* emojiOverdose;
+	static inline GPU_Image* emojiHigh;
+	static inline GPU_Image* greenTick;
+	static inline GPU_Image* heart;
 	static inline GPU_Image* bar;
 	static inline GPU_Image* barOutline;
 

@@ -11,7 +11,7 @@
 #include "common_tilemapcharacter.h"
 
 const float highnessRate = 30.f;
-const float highnessDecreaseRate = 9.f;
+const float highnessDecreaseRate = 7.f;
 const float highnessDecreaseRateWhenOverdoses = 15.f;
 const float gasHitTime = 0.15f;
 
@@ -188,6 +188,13 @@ void Patient::Draw() const
 		screenTex = (int(mainClock*3) % 2) ? Assets::screenBgDamage : Assets::screenBgDamageBlink;
 	}
 
+	if (gasState == GasState::DEAD) {
+		iconTex = Assets::emojiDead;
+	}
+	else if (movementState == LEAVING) {
+		iconTex = Assets::greenTick;
+	}
+
 	//Screen bg
 	Window::Draw(screenTex, pos + screenOffset)
 		.withScale(imageScale)
@@ -200,6 +207,14 @@ void Patient::Draw() const
 		//.withRotationDegs(shakerinoRot)
 		.withOrigin(0, shakerinoY);
 
+
+	float highvalue = highness;
+	if (gasState == GasState::DEAD) {
+		highvalue = 100.f;
+	}
+	else if (movementState == LEAVING) {
+		highvalue = 0.f;
+	}
 	// Screen bar inside
 	Assets::tintShader.Activate();
 	if (gasState == GasState::NARCOSIS) {
@@ -208,7 +223,7 @@ void Patient::Draw() const
 		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
 	}
 	Window::Draw(Assets::bar, pos + screenOffset + barOffset)
-		.withRect(0,0, Assets::bar->base_w*highness/100.f, Assets::bar->base_h)
+		.withRect(0,0, Assets::bar->base_w* highvalue /100.f, Assets::bar->base_h)
 		.withScale(imageScale)
 		//.withRotationDegs(shakerinoRot)
 		.withOrigin(0, shakerinoY);
