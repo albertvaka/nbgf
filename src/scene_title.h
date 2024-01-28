@@ -25,19 +25,18 @@ struct SceneTitle : Scene {
 		startText.SetString("- Press Start -");
 
 		creditsText.SetFillColor(12, 12, 12);
-		creditsText.SetString("A game by:\n\nJohanna Krueger\nAlbert Vaca Cintora\n");// \nGame music by:\n\nKevin MacLeod
+		creditsText.SetString("A game by:\n\nJohanna Krueger\nAlbert Vaca Cintora\n\nGame music by:\n\nKevin MacLeod");
 	}
 
 	void EnterScene() override
 	{
 		Camera::SetZoom(0.5f, false);
-		//MusicPlayer::SetVolume(90);
-		//MusicPlayer::Play(Assets::menuMusic);
+		MusicPlayer::SetVolume(40);
+		MusicPlayer::Play(Assets::menuMusic);
 	}
+
 	void ExitScene() override
 	{
-		//MusicPlayer::SetVolume(30); // the rest of the game music is much louder
-		//BackgroundElement::DeleteAll();
 	}
 
 	void Update(float dt) override
@@ -62,7 +61,7 @@ struct SceneTitle : Scene {
 				.withScale(0.7f, 0.8f);
 		}
 
-		Window::Draw(creditsText, vec(25, 545))
+		Window::Draw(creditsText, vec(25, 495))
 			.withScale(0.66f);
 
 		Camera::InScreenCoords::End();

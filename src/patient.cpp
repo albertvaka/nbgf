@@ -239,7 +239,7 @@ void Patient::Draw() const
 
 	if (hitTimer > 0.f) {
 		Assets::tintShader.Activate();
-		Assets::tintShader.SetUniform("flashColor", 0.f, 1.f, 0.f, 0.7f);
+		Assets::tintShader.SetUniform("flashColor", 0.8f, 1.f, 0.f, 0.5f);
 	}
 	GPU_Image* tex;
 	switch (gasState) {
