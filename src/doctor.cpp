@@ -17,7 +17,8 @@ const float gasHitTime = 0.2f;
 
 const float highThreshold = 50.f;
 
-const float surgeryDuration = 5.f;
+const float surgeryDuration = 2.f;
+const int surgeryTimes = 4;
 
 const float doctorWaitMinTime = 0.5f;
 const float doctorWaitMaxTime = 2.f;
@@ -164,12 +165,47 @@ void Doctor::Update(float dt)
 		break;
 		case DOING_SURGERY: {
 			surgeryTimer += dt;
-			patientTarget->doctorHigh = (highness > highThreshold);
-			if (surgeryTimer >= surgeryDuration || patientTarget->gasState == Patient::GasState::DEAD) {
+			const float totalSurgeryTime = surgeryTimes * 2 * surgeryDuration;
+			if (surgeryTimer >= totalSurgeryTime || patientTarget->gasState == Patient::GasState::DEAD) {
 				patientTarget->movementState = Patient::MovementState::LEAVING;
 				patientTarget = nullptr;
 				state = LEAVING_ROOM;
+				break;
 			}
+			int cycle = surgeryTimer / 2;
+			switch (cycle) {
+			case 0:
+			case 3:
+			case 6:
+			case 9:
+				vel = vec::Zero;
+				patientTarget->movementState = Patient::MovementState::BEING_SURGERIED;
+				patientTarget->doctorHigh = (highness > highThreshold);
+				wanderTarget = vec::FromAngleRads(Rand::rollf(0, Angles::Tau))*0.7;
+				break;
+			case 1:
+			case 4:
+			case 7: {
+				patientTarget->movementState = Patient::MovementState::BEING_TARGETED;
+				int subcycle = surgeryTimer;
+				if (subcycle % 2) {
+					vel = vec::Zero;
+				}
+				else {
+					vel = wanderTarget * doctorVel;
+				}
+			}
+				break;
+			case 2:
+			case 5:
+			case 8:
+				patientTarget->movementState = Patient::MovementState::BEING_TARGETED;
+				vel = -wanderTarget * doctorVel / 2;
+				break;
+			default:
+				Debug::out << "WTF?";
+			}
+
 		}
 		break;
 	}
@@ -191,7 +227,6 @@ void Doctor::MaybeSwapRoom() {
 	for (Doctor* d : Doctor::GetAll()) {
 		if (d == this) continue;
 		if (d->state == WAITING || d->state == WANDERING) {
-			if (SceneMain::maxPatients > 3) Debug::out << "Late game swapedoodledoo"; 
 			int oldRoom = myRoom;
 			myRoom = d->myRoom;
 			d->myRoom = oldRoom;
@@ -221,7 +256,7 @@ void Doctor::StartSeekingPacient() {
 		// grab patient at random
 		patientTarget = Patient::GetAll()[Rand::roll(0, Patient::GetAll().size())];
 		if (i++ == 10) {
-			Debug::out << "No patient available, wandering";
+			//Debug::out << "No patient available, wandering";
 			StartWandering();
 			return;
 		}

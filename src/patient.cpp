@@ -17,7 +17,7 @@ const float gasHitTime = 0.2f;
 const float asleepThreshold = 30.f;
 const float dyingThreshold = 89.f;
 
-const float damagedTimeToDie = 3.f;
+const float damagedTimeToDie = 4.f;
 
 const vec patientSize = vec(180, 110);
 const float sortYOffset = -30;

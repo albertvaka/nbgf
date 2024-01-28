@@ -121,9 +121,13 @@ void SceneMain::Update(float dt)
 
 void SceneMain::Draw()
 {
-	Window::Clear(120, 120, 120);
+	Window::Clear(0, 0, 0);
 
-	map.Draw();
+	Window::Draw(Assets::bgTexture, vec(0,0));
+
+	if (Debug::Draw) {
+		map.Draw();
+	}
 
 	std::vector<BoxEntity*> draws;
 	draws.reserve(Doctor::GetAll().size() + Patient::GetAll().size() + 1);

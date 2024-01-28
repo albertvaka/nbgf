@@ -4,6 +4,8 @@
 
 void Assets::LoadAll() {
 
+    bgTexture = LoadImage("data/background.png");
+
     spritesheetTexture = LoadImage("data/spritesheet.png");
     playerTexture = LoadImage("data/player.png");
     doctorTexture = LoadImage("data/doctor.png");
