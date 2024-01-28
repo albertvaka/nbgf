@@ -64,7 +64,12 @@ void Doctor::Update(float dt)
 {
 	if (hitTimer > 0) {
 		hitTimer -= dt;
+		bool wasHigh = highness > highThreshold;
 		highness += highnessRate * dt;
+		bool isHigh = highness > highThreshold;
+		if (!wasHigh && isHigh) {
+			Assets::doctorLaughing.Play();
+		}
 		if (highness >= 100.f) {
 			highness = 100.f;
 

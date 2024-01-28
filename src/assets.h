@@ -43,7 +43,7 @@ struct Assets
 
 	static inline Shader tintShader;
 
-	static inline Sound doctorLaughing;
+	static inline MultiSound<4> doctorLaughing;
 	static inline Sound patientScreaming;
 	static inline Sound patientAsleep;
 

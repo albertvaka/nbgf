@@ -37,4 +37,6 @@ void Assets::LoadAll() {
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
 
     menuMusic = LoadMusic("data/jaunty.ogg");
+
+    doctorLaughing.Load({ "data/laughing1.ogg","data/laughing2.ogg","data/laughing3.ogg","data/laughing4.ogg" });
 }
