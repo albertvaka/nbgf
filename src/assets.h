@@ -16,6 +16,7 @@ struct Assets
 	static inline GPU_Image* spritesheetTexture;
 	static inline GPU_Image* playerTexture;
 	static inline GPU_Image* doctorTexture;
+	static inline GPU_Image* doctorHighTexture;
 	static inline GPU_Image* patientIdleTexture;
 	static inline GPU_Image* patientDeadTexture;
 	static inline GPU_Image* patientOverdoseTexture;

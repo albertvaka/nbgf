@@ -20,7 +20,7 @@ struct Patient: BoxEntity, SelfRegister<Patient>
 		OVERDOSE,
 		DEAD,
 	};
-	bool damaged = false;
+	bool doctorHigh = false;
 	GasState gasState = IDLE;
 	MovementState movementState = ENTERING;
 	float highness = 0.f;

@@ -11,12 +11,13 @@
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
-const float highnessRate = 5.f;
-const float highnessDecreaseRate = 1.f;
+const float highnessRate = 30.f;
+const float highnessDecreaseRate = 15.f;
 const float gasHitTime = 0.2f;
 
-const float surgeryDuration = 10.f;
+const float highThreshold = 50.f;
 
+const float surgeryDuration = 10.f;
 
 const float doctorWaitMinTime = 0.5f;
 const float doctorWaitMaxTime = 2.f;
@@ -163,6 +164,7 @@ void Doctor::Update(float dt)
 		break;
 		case DOING_SURGERY: {
 			surgeryTimer += dt;
+			patientTarget->doctorHigh = (highness > highThreshold);
 			if (surgeryTimer >= surgeryDuration || patientTarget->gasState == Patient::GasState::DEAD) {
 				patientTarget->movementState = Patient::MovementState::LEAVING;
 				patientTarget = nullptr;
@@ -253,6 +255,7 @@ void Doctor::RandomState() {
 }
 
 void Doctor::StartSurgery() {
+	surgeryTimer = 0.f;
 	patientTarget->movementState = Patient::MovementState::BEING_SURGERIED;
 	state = DOING_SURGERY;
 	vel = vec::Zero;
@@ -265,7 +268,7 @@ void Doctor::Draw() const
 		Assets::tintShader.SetUniform("flashColor", 0.f, 1.f, 0.f, 0.7f);
 	}
 	float shakeMagnitude = vel.Normalized().Length();
-	Window::Draw(Assets::doctorTexture, pos)
+	Window::Draw(highness > highThreshold ? Assets::doctorHighTexture : Assets::doctorTexture, pos)
 		.withRotationDegs(sin(offset + mainClock* shakeHorizontalSpeed *shakeMagnitude)*shakeHorizontalDegrees)
 		.withOrigin(Assets::doctorTexture->base_w/2, Assets::doctorTexture->base_h / 2 + sin(offset + mainClock*shakeVerticalSpeed)*shakeMagnitude* shakeHeight)
 		.withScale(lookingLeft ? imageScale : -imageScale, imageScale);

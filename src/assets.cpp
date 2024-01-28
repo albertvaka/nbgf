@@ -7,6 +7,7 @@ void Assets::LoadAll() {
     spritesheetTexture = LoadImage("data/spritesheet.png");
     playerTexture = LoadImage("data/player.png");
     doctorTexture = LoadImage("data/doctor.png");
+    doctorHighTexture = LoadImage("data/doctor_high.png");
     patientIdleTexture = LoadImage("data/patient_idle.png");
     patientOverdoseTexture = LoadImage("data/patient_overdose.png");
     patientDeadTexture = LoadImage("data/patient_dead.png");

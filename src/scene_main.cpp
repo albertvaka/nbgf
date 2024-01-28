@@ -160,13 +160,13 @@ void SceneMain::Draw()
 		int i = 0;
 		for (Doctor* d : Doctor::GetAll()) {
 			auto ms = magic_enum::enum_name(d->state);
-			ImGui::Text("Doctor %d: %s", i++, ms.data());
+			ImGui::Text("Doctor %d: %f %s", i++, d->highness, ms.data());
 		}
 		i = 0;
 		for (Patient* d : Patient::GetAll()) {
 			auto ms = magic_enum::enum_name(d->movementState);
 			auto gs = magic_enum::enum_name(d->gasState);
-			ImGui::Text("Patient %d: %s %s", i++, ms.data(), gs.data());
+			ImGui::Text("Patient %d: %f %s %s", i++, d->highness, ms.data(), gs.data());
 		}
 		ImGui::End();
 	}

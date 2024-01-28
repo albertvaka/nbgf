@@ -9,8 +9,8 @@
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
-const float highnessRate = 5.f;
-const float highnessDecreaseRate = 1.f;
+const float highnessRate = 30.f;
+const float highnessDecreaseRate = 15.f;
 const float gasHitTime = 0.2f;
 
 const float asleepThreshold = 30.f;
@@ -28,7 +28,7 @@ const float shakeHorizontalSpeed = 31.f;
 const float shakeHorizontalDegrees = 2.f;
 
 const vec screenOffset = vec(-10, -103);
-const vec iconOffset = vec(25, 16);
+const vec iconOffset = vec(29, 13);
 
 extern float mainClock;
 
@@ -157,7 +157,7 @@ void Patient::Draw() const
 	default: iconTex = Assets::emojiAwake; break;
 	}
 	
-	if (damaged) {
+	if (doctorHigh || gasState == OVERDOSE) {
 		iconTex = Assets::heart;
 		screenTex = (int(mainClock*3) % 2) ? Assets::screenBgDamage : Assets::screenBgDamageBlink;
 	}
@@ -169,7 +169,7 @@ void Patient::Draw() const
 
 	Window::Draw(iconTex, pos + screenOffset + iconOffset)
 		.withScale(imageScale)
-		.withRotationDegs(shakerinoRot)
+		//.withRotationDegs(shakerinoRot)
 		.withOrigin(0, shakerinoY);
 	
 	// Patient
