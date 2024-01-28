@@ -28,7 +28,7 @@ const float shakeHorizontalSpeed = 31.f;
 const float shakeHorizontalDegrees = 2.f;
 
 const vec screenOffset = vec(-10, -103);
-const vec iconOffset = vec(25, 15);
+const vec iconOffset = vec(25, 16);
 
 extern float mainClock;
 
