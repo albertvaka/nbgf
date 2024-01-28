@@ -14,6 +14,8 @@
 
 const float timeBetweenPatientIncrease = 6.f;
 const int maxMaxPatients = 6;
+const float minDelaySpawnPatient = 0.5f;
+const float maxDelaySpawnPatient = 6.f;
 
 int SceneMain::maxPatients = 1;
 
@@ -91,7 +93,7 @@ void SceneMain::Update(float dt)
 	if (Patient::GetAll().size() < maxPatients) {
 		timerSpawnPatients -= dt;
 		if (timerSpawnPatients <= 0) {
-			timerSpawnPatients += Rand::rollf(0, 5.f);
+			timerSpawnPatients += Rand::rollf(minDelaySpawnPatient, maxDelaySpawnPatient);
 			SpawnPatient();
 		}
 	}
@@ -152,8 +154,20 @@ void SceneMain::Draw()
 		ImGui::Begin("scene");
 		ImGui::Text("Max patients: %i", maxPatients);
 		ImGui::Text("Patient increase timer %f", patientIncreaseTimer);
-		//if (ImGui::SliderInt("level", &currentLevel, 1, 20)) {
-		//};
+		if (ImGui::Button("Spawn patient")) {
+			SpawnPatient();
+		};
+		int i = 0;
+		for (Doctor* d : Doctor::GetAll()) {
+			auto ms = magic_enum::enum_name(d->state);
+			ImGui::Text("Doctor %d: %s", i++, ms.data());
+		}
+		i = 0;
+		for (Patient* d : Patient::GetAll()) {
+			auto ms = magic_enum::enum_name(d->movementState);
+			auto gs = magic_enum::enum_name(d->gasState);
+			ImGui::Text("Patient %d: %s %s", i++, ms.data(), gs.data());
+		}
 		ImGui::End();
 	}
 

@@ -11,6 +11,7 @@
 
 const float patientHitTime = 0.25f;
 const vec patientSize = vec(180, 110);
+float sortYOffset = -30;
 
 const float imageScale = 0.7f;
 
@@ -59,12 +60,7 @@ Patient::Patient(vec pos, vec targetPos)
 	, offset(0)
 {
 }
-float lerp(float start, float end, float t) {
-    return (1 - t) * start + t * end;
-}
-float easeOutQuad(float t) {
-    return t * (2 - t);
-}
+
 void Patient::Update(float dt)
 {
 	if (hitTimer > 0) {
@@ -84,14 +80,14 @@ void Patient::Update(float dt)
 		if (enterTimer >= 2.f) {
 			movementState = WAITING_DOCTOR;
 		} else {
-			float easedT = easeOutQuad(enterTimer/2.f);
-			float result = lerp(initPos.x, targetPos.x, easedT);
+			float easedT = Mates::EaseOutQuad(enterTimer/2.f);
+			float result = Mates::Lerp(initPos.x, targetPos.x, easedT);
 			pos.x = result;
 		}
 	}
 
-	float shakeMagnitude = vel.Normalized().Length();
-	sortY = pos.y - (imageScale * (Assets::patientIdleTexture->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
+	float shakeMagnitude = movementState == MovementState::BEING_MOVED ? 1 : 0;
+	sortY = pos.y - sortYOffset - (imageScale * (Assets::patientIdleTexture->base_h / 2)); // +sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
 }
 
 void Patient::Draw() const
@@ -100,7 +96,7 @@ void Patient::Draw() const
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 0.f, 1.f, 0.f, 0.7f);
 	}
-	float shakeMagnitude = vel.Normalized().Length();
+	float shakeMagnitude = movementState == MovementState::BEING_MOVED ? 1 : 0;
 	GPU_Image* tex;
 	switch (gasState) {
 	case SCREAM: tex = Assets::patientScreamTexture; break;

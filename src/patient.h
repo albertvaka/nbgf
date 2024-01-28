@@ -8,7 +8,9 @@ struct Patient: BoxEntity, SelfRegister<Patient>
 	enum MovementState {
 		ENTERING,
 		WAITING_DOCTOR,
+		BEING_TARGETED,
 		BEING_MOVED,
+		BEING_SURGERIED,
 	};
 
 	enum GasState {

@@ -84,7 +84,7 @@ void Player::Update(float dt)
 	}
 
 	float shakeMagnitude = vel.Normalized().Length();
-	sortY = pos.y - (imageScale*(Assets::playerTexture->base_h/2 + playerDisplacementY + sin(mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
+	sortY = pos.y - imageScale * (Assets::playerTexture->base_h / 2 + playerDisplacementY); //+ sin(mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
 }
 
 void Player::Draw() const

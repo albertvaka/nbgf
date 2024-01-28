@@ -12,8 +12,7 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 		WANDERING,
 		SEEKING_PATIENT,
 		MOVING_PATIENT_TO_ROOM,
-		ENTERING_ROOM_WITH_PATIENT,
-		HEALING_PATIENT,
+		DOING_SURGERY,
 		LEAVING_ROOM,
 	};
 	State state = WAITING;
@@ -22,8 +21,9 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 	float hitTimer = 0.f;
 	float timer = 0.f;
 	float offset;
+	int myRoom = -1;
 	vec wanderTarget = vec::Zero;
-	Patient* pacientTarget = nullptr;
+	Patient* patientTarget = nullptr;
 
 	Doctor(vec pos);
 
@@ -34,6 +34,9 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 	void StartWaiting();
 	void StartWandering();
 	void StartSeekingPacient();
+	void StartMovingPatient();
+	void MaybeSwapRoom();
+	void StartSurgery();
 
 	int FindMyRoom();
 };

@@ -120,6 +120,9 @@ namespace Mates
 		return (from)+(to - from) * t;
 	}
 
+	[[nodiscard]] inline float EaseOutQuad(float t) {
+		return t * (2 - t);
+	}
 
 	[[nodiscard]] inline float SmoothDamp(float current, float target, float dampening) {
 		return ((current * (dampening - 1)) + target) / dampening; //weighted average formula
