@@ -11,7 +11,13 @@
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
-const float doctorHitTime = 0.25f;
+const float highnessRate = 5.f;
+const float highnessDecreaseRate = 1.f;
+const float gasHitTime = 0.2f;
+
+const float surgeryDuration = 10.f;
+
+
 const float doctorWaitMinTime = 0.5f;
 const float doctorWaitMaxTime = 2.f;
 const vec doctorSize = vec(90, 180);
@@ -56,12 +62,24 @@ void Doctor::Update(float dt)
 {
 	if (hitTimer > 0) {
 		hitTimer -= dt;
-	} 
+		highness += highnessRate * dt;
+		if (highness >= 100.f) {
+			highness = 100.f;
+
+		}
+	}
+	else {
+		if (highness > 0) {
+			highness -= highnessDecreaseRate * dt;
+			if (highness < 0.f) {
+				highness = 0.f;
+			}
+		}
+	}
 	if (hitTimer <= 0) {
 		for (Bullet* b : Bullet::GetAll()) {
 			if (Collide(this, b)) {
-				highness += 1.f;
-				hitTimer = doctorHitTime;
+				hitTimer = gasHitTime;
 			}
 		}
 	}
@@ -82,13 +100,13 @@ void Doctor::Update(float dt)
 					vel.y = 0;
 				}
 				else {
-					float distFromCenterY = pos.y - room.Bottom();
-					if (distFromCenterY > stepDistance) {
+					float distFromOutsideY = room.Bottom() - Bounds().Top();
+					if (distFromOutsideY > stepDistance) {
 						vel.x = 0;
 						vel.y = doctorVel;
 					}
 					else {
-						StartWaiting();
+						StartWandering();
 					}
 				}
 			}
@@ -144,7 +162,12 @@ void Doctor::Update(float dt)
 		}
 		break;
 		case DOING_SURGERY: {
-			
+			surgeryTimer += dt;
+			if (surgeryTimer >= surgeryDuration || patientTarget->gasState == Patient::GasState::DEAD) {
+				patientTarget->movementState = Patient::MovementState::LEAVING;
+				patientTarget = nullptr;
+				state = LEAVING_ROOM;
+			}
 		}
 		break;
 	}
@@ -166,7 +189,7 @@ void Doctor::MaybeSwapRoom() {
 	for (Doctor* d : Doctor::GetAll()) {
 		if (d == this) continue;
 		if (d->state == WAITING || d->state == WANDERING) {
-			Debug::out << "Swapedoodledoo";
+			if (SceneMain::maxPatients > 3) Debug::out << "Late game swapedoodledoo"; 
 			int oldRoom = myRoom;
 			myRoom = d->myRoom;
 			d->myRoom = oldRoom;

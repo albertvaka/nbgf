@@ -11,6 +11,7 @@ struct Patient: BoxEntity, SelfRegister<Patient>
 		BEING_TARGETED,
 		BEING_MOVED,
 		BEING_SURGERIED,
+		LEAVING,
 	};
 
 	enum GasState {

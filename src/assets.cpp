@@ -14,7 +14,7 @@ void Assets::LoadAll() {
 
     screenBg = LoadImage("data/screen_bg.png");
     screenBgDamage = LoadImage("data/screen_bg_damage.png");
-    screenBgDamageBlink = LoadImage("data/screen_bg_damage _blink.png");
+    screenBgDamageBlink = LoadImage("data/screen_bg_damage_blink.png");
     
     emojiDead = LoadImage("data/emoji_dead.png");
     emojiAwake = LoadImage("data/emoji_awake.png");

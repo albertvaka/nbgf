@@ -9,9 +9,16 @@
 #include "tiled_objects_entities.h"
 #include "common_tilemapcharacter.h"
 
-const float patientHitTime = 0.25f;
+const float highnessRate = 5.f;
+const float highnessDecreaseRate = 1.f;
+const float gasHitTime = 0.2f;
+
+const float asleepThreshold = 30.f;
+const float dyingThreshold = 80.f;
+
 const vec patientSize = vec(180, 110);
-float sortYOffset = -30;
+const float sortYOffset = -30;
+const float patientLeavingVel = 500.f;
 
 const float imageScale = 0.7f;
 
@@ -65,12 +72,24 @@ void Patient::Update(float dt)
 {
 	if (hitTimer > 0) {
 		hitTimer -= dt;
+		highness += highnessRate * dt;
+		if (highness >= 100.f) {
+			highness = 100.f;
+			
+		}
+	}
+	else {
+		if (highness > 0) {
+			highness -= highnessDecreaseRate * dt;
+			if (highness < 0.f) {
+				highness = 0.f;
+			}
+		}
 	}
 	if (hitTimer <= 0) {
 		for (Bullet* b : Bullet::GetAll()) {
 			if (Collide(this, b)) {
-				highness += 1.f;
-				hitTimer = patientHitTime;
+				hitTimer = gasHitTime;
 			}
 		}
 	}
@@ -85,7 +104,20 @@ void Patient::Update(float dt)
 			pos.x = result;
 		}
 	}
-
+	else if (movementState == LEAVING) {
+		pos.y -= patientLeavingVel * dt;
+		if (!Collide(Bounds(), Camera::Bounds())) {
+			if (gasState == DEAD) {
+				Debug::out << "PATIENT SAVE";
+				
+			}
+			else {
+				Debug::out << "PATIENT KILLED";
+				
+			}
+			alive = false;
+		}
+	}
 	float shakeMagnitude = movementState == MovementState::BEING_MOVED ? 1 : 0;
 	sortY = pos.y - sortYOffset - (imageScale * (Assets::patientIdleTexture->base_h / 2)); // +sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight));
 }
@@ -108,7 +140,12 @@ void Patient::Draw() const
 		.withScale(imageScale)
 		.withRotationDegs(sin(offset + mainClock * shakeHorizontalSpeed * shakeMagnitude) * shakeHorizontalDegrees)
 		.withOrigin(tex->base_w / 2, tex->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight);
-
+	
+	Window::Draw(tex, pos)
+		.withScale(imageScale)
+		.withRotationDegs(sin(offset + mainClock * shakeHorizontalSpeed * shakeMagnitude) * shakeHorizontalDegrees)
+		.withOrigin(tex->base_w / 2, tex->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight);
+	
 	Shader::Deactivate();
 
 }

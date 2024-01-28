@@ -29,8 +29,6 @@ struct Assets
 	static inline GPU_Image * emojiHigh;
 	static inline GPU_Image * heart;
 	static inline GPU_Image * bar;
-	static inline GPU_Image * patientScreamTexture;
-	static inline GPU_Image * patientScreamTexture;
 
 	static inline TTF_Font* font_30;
 	static inline TTF_Font* font_30_outline;

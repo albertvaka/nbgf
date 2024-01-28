@@ -24,6 +24,7 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 	int myRoom = -1;
 	vec wanderTarget = vec::Zero;
 	Patient* patientTarget = nullptr;
+	float surgeryTimer = 0.f;
 
 	Doctor(vec pos);
 
