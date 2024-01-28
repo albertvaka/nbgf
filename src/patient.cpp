@@ -128,7 +128,10 @@ void Patient::Update(float dt)
 	if (beingDamaged()) {
 		damageTimer += dt;
 		if (damageTimer > damagedTimeToDie) {
-			gasState = GasState::DEAD;
+			if (gasState != GasState::DEAD) {
+				gasState = GasState::DEAD;
+				Assets::patientScreaming.Play();
+			}
 		}
 	}
 

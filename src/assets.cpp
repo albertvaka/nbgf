@@ -39,4 +39,6 @@ void Assets::LoadAll() {
     menuMusic = LoadMusic("data/jaunty.ogg");
 
     doctorLaughing.Load({ "data/laughing1.ogg","data/laughing2.ogg","data/laughing3.ogg","data/laughing4.ogg" });
+    patientScreaming.Load({ "data/damage1.ogg","data/damage2.ogg","data/damage3.ogg","data/damage4.ogg" });
+    patientAsleep.Load({ "data/asleep1.ogg","data/asleep2.ogg","data/asleep3.ogg" });
 }

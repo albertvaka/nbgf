@@ -44,8 +44,8 @@ struct Assets
 	static inline Shader tintShader;
 
 	static inline MultiSound<4> doctorLaughing;
-	static inline Sound patientScreaming;
-	static inline Sound patientAsleep;
+	static inline MultiSound<4> patientScreaming;
+	static inline MultiSound<3> patientAsleep;
 
 	static inline Mix_Music* menuMusic;
 
