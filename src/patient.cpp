@@ -27,6 +27,9 @@ const float shakeVerticalSpeed = 41.f;
 const float shakeHorizontalSpeed = 31.f;
 const float shakeHorizontalDegrees = 2.f;
 
+const vec screenOffset = vec(-10, -103);
+const vec iconOffset = vec(25, 15);
+
 extern float mainClock;
 
 bool CollidesWithOtherTargets(vec maybePos) {
@@ -93,6 +96,19 @@ void Patient::Update(float dt)
 			}
 		}
 	}
+	if (gasState != DEAD) {
+		if (highness > asleepThreshold) {
+			if (highness > dyingThreshold) {
+				gasState = OVERDOSE;
+			}
+			else {
+				gasState = NARCOSIS;
+			}
+		}
+		else {
+			gasState = IDLE;
+		}
+	}
 
 	if (movementState == ENTERING) {
 		enterTimer += dt;
@@ -124,27 +140,56 @@ void Patient::Update(float dt)
 
 void Patient::Draw() const
 {
+	float shakeMagnitude = movementState == MovementState::BEING_MOVED ? 1 : 0;
+	float shakerinoY = sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight;
+	float shakerinoRot = sin(offset + mainClock * shakeHorizontalSpeed * shakeMagnitude) * shakeHorizontalDegrees;
+
+
+	// Screen
+
+	GPU_Image* screenTex = Assets::screenBg;
+
+	GPU_Image* iconTex;
+	switch (gasState) {
+	case OVERDOSE: iconTex = Assets::emojiOverdose; break; // Should always be overriden by damage
+	case NARCOSIS: iconTex = Assets::emojiHigh; break;
+	case DEAD: iconTex = Assets::emojiDead; break;
+	default: iconTex = Assets::emojiAwake; break;
+	}
+	
+	if (damaged) {
+		iconTex = Assets::heart;
+		screenTex = (int(mainClock*3) % 2) ? Assets::screenBgDamage : Assets::screenBgDamageBlink;
+	}
+
+	Window::Draw(screenTex, pos + screenOffset)
+		.withScale(imageScale)
+		.withRotationDegs(shakerinoRot)
+		.withOrigin(0, shakerinoY);
+
+	Window::Draw(iconTex, pos + screenOffset + iconOffset)
+		.withScale(imageScale)
+		.withRotationDegs(shakerinoRot)
+		.withOrigin(0, shakerinoY);
+	
+	// Patient
+
 	if (hitTimer > 0.f) {
 		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 0.f, 1.f, 0.f, 0.7f);
 	}
-	float shakeMagnitude = movementState == MovementState::BEING_MOVED ? 1 : 0;
 	GPU_Image* tex;
 	switch (gasState) {
-	case SCREAM: tex = Assets::patientScreamTexture; break;
+	case OVERDOSE: tex = Assets::patientOverdoseTexture; break;
 	case NARCOSIS: tex = Assets::patientNarcosisTexture; break;
 	case DEAD: tex = Assets::patientDeadTexture; break;
 	default: tex = Assets::patientIdleTexture; break;
 	}
+
 	Window::Draw(tex, pos)
 		.withScale(imageScale)
-		.withRotationDegs(sin(offset + mainClock * shakeHorizontalSpeed * shakeMagnitude) * shakeHorizontalDegrees)
-		.withOrigin(tex->base_w / 2, tex->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight);
-	
-	Window::Draw(tex, pos)
-		.withScale(imageScale)
-		.withRotationDegs(sin(offset + mainClock * shakeHorizontalSpeed * shakeMagnitude) * shakeHorizontalDegrees)
-		.withOrigin(tex->base_w / 2, tex->base_h / 2 + sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight);
+		.withRotationDegs(shakerinoRot)
+		.withOrigin(tex->base_w / 2, tex->base_h / 2 + shakerinoY);
 	
 	Shader::Deactivate();
 

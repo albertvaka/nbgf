@@ -18,6 +18,7 @@ struct Assets
 	static inline GPU_Image* doctorTexture;
 	static inline GPU_Image* patientIdleTexture;
 	static inline GPU_Image* patientDeadTexture;
+	static inline GPU_Image* patientOverdoseTexture;
 	static inline GPU_Image* patientNarcosisTexture;
 	static inline GPU_Image* patientScreamTexture;
 	
@@ -26,6 +27,7 @@ struct Assets
 	static inline GPU_Image * screenBgDamageBlink;
 	static inline GPU_Image * emojiDead;
 	static inline GPU_Image * emojiAwake;
+	static inline GPU_Image * emojiOverdose;
 	static inline GPU_Image * emojiHigh;
 	static inline GPU_Image * heart;
 	static inline GPU_Image * bar;

@@ -8,6 +8,7 @@ void Assets::LoadAll() {
     playerTexture = LoadImage("data/player.png");
     doctorTexture = LoadImage("data/doctor.png");
     patientIdleTexture = LoadImage("data/patient_idle.png");
+    patientOverdoseTexture = LoadImage("data/patient_overdose.png");
     patientDeadTexture = LoadImage("data/patient_dead.png");
     patientNarcosisTexture = LoadImage("data/patient_narcosis.png");
     patientScreamTexture = LoadImage("data/patient_scream.png");

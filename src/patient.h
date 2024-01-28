@@ -17,9 +17,10 @@ struct Patient: BoxEntity, SelfRegister<Patient>
 	enum GasState {
 		IDLE,
 		NARCOSIS,
-		SCREAM,
+		OVERDOSE,
 		DEAD,
 	};
+	bool damaged = false;
 	GasState gasState = IDLE;
 	MovementState movementState = ENTERING;
 	float highness = 0.f;
