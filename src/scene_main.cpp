@@ -32,12 +32,12 @@ SceneMain::SceneMain()
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	, player()
 	//, alienPartSys(Assets::invadersTexture)
-	, deadAliensText(Assets::font_30, Assets::font_30_outline)
+	, scoreText(Assets::font_30, Assets::font_30_outline)
 {
 	map.LoadFromTiled<Tiled::TileMap>();
 
-	deadAliensText.SetFillColor(0, 0, 0);
-	deadAliensText.SetOutlineColor(255, 255, 0);
+	scoreText.SetFillColor(0, 0, 0);
+	scoreText.SetOutlineColor(255, 255, 0);
 	/*
 	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
 	alienPartSys.AddSprite(AnimLib::ALIEN_2[0].rect);
@@ -151,9 +151,9 @@ void SceneMain::Draw()
 
 	//Draw GUI
 	Camera::InScreenCoords::Begin();
-	deadAliensText.SetString("Patients saved: " + std::to_string(savedPatients) + " killed: " + std::to_string(deadPatients));
-	Window::Draw(deadAliensText, vec(Camera::InScreenCoords::Center().x, 20))
-		.withOrigin(deadAliensText.Size()/2)
+	scoreText.SetString("Patients saved: " + std::to_string(savedPatients) + " killed: " + std::to_string(deadPatients));
+	Window::Draw(scoreText, vec(Camera::InScreenCoords::Center().x, 20))
+		.withOrigin(scoreText.Size()/2)
 		.withScale(0.666f);
 	Camera::InScreenCoords::End();
 

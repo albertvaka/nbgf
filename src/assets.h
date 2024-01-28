@@ -14,6 +14,7 @@ struct Assets
 	static void LoadAll();
 	
 	static inline GPU_Image* bgTexture;
+	static inline GPU_Image* titleTexture;
 
 	static inline GPU_Image* spritesheetTexture;
 	static inline GPU_Image* playerTexture;

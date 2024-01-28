@@ -12,7 +12,7 @@ struct SceneMain : Scene {
 
 	Player player;
 	GaemTileMap map;
-	Text deadAliensText;
+	Text scoreText;
 	float patientIncreaseTimer;
 	float timerSpawnPatients;
 	static int deadPatients;

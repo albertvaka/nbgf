@@ -252,6 +252,9 @@
     <ClInclude Include="src\patient.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene_title.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
