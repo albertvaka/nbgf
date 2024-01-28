@@ -13,12 +13,12 @@
 
 const float highnessRate = 30.f;
 const float highnessDecreaseRate = 15.f;
-const float gasHitTime = 0.2f;
+const float gasHitTime = 0.15f;
 
 const float highThreshold = 50.f;
 
 const float surgeryDuration = 2.f;
-const int surgeryTimes = 4;
+const int surgeryTimes = 3;
 
 const float doctorWaitMinTime = 0.5f;
 const float doctorWaitMaxTime = 2.f;
@@ -165,7 +165,7 @@ void Doctor::Update(float dt)
 		break;
 		case DOING_SURGERY: {
 			surgeryTimer += dt;
-			const float totalSurgeryTime = surgeryTimes * 2 * surgeryDuration;
+			const float totalSurgeryTime = surgeryTimes * 2 * surgeryDuration + surgeryDuration;
 			if (surgeryTimer >= totalSurgeryTime || patientTarget->gasState == Patient::GasState::DEAD) {
 				patientTarget->movementState = Patient::MovementState::LEAVING;
 				patientTarget = nullptr;
@@ -177,7 +177,6 @@ void Doctor::Update(float dt)
 			case 0:
 			case 3:
 			case 6:
-			case 9:
 				vel = vec::Zero;
 				patientTarget->movementState = Patient::MovementState::BEING_SURGERIED;
 				patientTarget->doctorHigh = (highness > highThreshold);
@@ -185,7 +184,7 @@ void Doctor::Update(float dt)
 				break;
 			case 1:
 			case 4:
-			case 7: {
+			{
 				patientTarget->movementState = Patient::MovementState::BEING_TARGETED;
 				int subcycle = surgeryTimer;
 				if (subcycle % 2) {
@@ -198,7 +197,6 @@ void Doctor::Update(float dt)
 				break;
 			case 2:
 			case 5:
-			case 8:
 				patientTarget->movementState = Patient::MovementState::BEING_TARGETED;
 				vel = -wanderTarget * doctorVel / 2;
 				break;

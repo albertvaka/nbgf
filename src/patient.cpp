@@ -11,11 +11,12 @@
 #include "common_tilemapcharacter.h"
 
 const float highnessRate = 30.f;
-const float highnessDecreaseRate = 10.f;
-const float gasHitTime = 0.2f;
+const float highnessDecreaseRate = 9.f;
+const float highnessDecreaseRateWhenOverdoses = 15.f;
+const float gasHitTime = 0.15f;
 
 const float asleepThreshold = 30.f;
-const float dyingThreshold = 89.f;
+const float dyingThreshold = 90.f;
 
 const float damagedTimeToDie = 4.f;
 
@@ -89,7 +90,12 @@ void Patient::Update(float dt)
 	}
 	else {
 		if (highness > 0) {
-			highness -= highnessDecreaseRate * dt;
+			if (highness >= dyingThreshold) {
+				highness -= highnessDecreaseRateWhenOverdoses * dt;
+			}
+			else {
+				highness -= highnessDecreaseRate * dt;
+			}
 			if (highness < 0.f) {
 				highness = 0.f;
 			}
