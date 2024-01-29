@@ -28,7 +28,6 @@
     <ClInclude Include="engine\collide.h" />
     <ClInclude Include="engine\debug.h" />
     <ClInclude Include="engine\entity.h" />
-    <ClInclude Include="engine\fx.h" />
     <ClInclude Include="engine\input.h" />
     <ClInclude Include="engine\mates.h" />
     <ClInclude Include="engine\matrix2d.h" />
@@ -52,7 +51,6 @@
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\building.h" />
     <ClInclude Include="src\freeze_skill.h" />
-    <ClInclude Include="src\goal.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\overlord.h" />
     <ClInclude Include="src\person.h" />
@@ -72,6 +70,7 @@
     <ClInclude Include="vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h" />
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h" />
     <ClInclude Include="vendor\magic_enum\magic_enum.h" />
     <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu.h" />
@@ -90,7 +89,6 @@
   <ItemGroup>
     <ClCompile Include="engine\camera.cpp" />
     <ClCompile Include="engine\debug.cpp" />
-    <ClCompile Include="engine\fx.cpp" />
     <ClCompile Include="engine\input.cpp" />
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\mates.cpp" />
@@ -100,6 +98,7 @@
     <ClCompile Include="engine\savestate.cpp" />
     <ClCompile Include="engine\shader.cpp" />
     <ClCompile Include="engine\sound.cpp" />
+    <ClCompile Include="engine\text.cpp" />
     <ClCompile Include="engine\vec.cpp" />
     <ClCompile Include="engine\window.cpp" />
     <ClCompile Include="src\assets.cpp" />
@@ -111,6 +110,7 @@
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp" />
     <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp" />
@@ -131,6 +131,9 @@
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl" />
     <None Include="vendor\SDL_gpu\src\renderer_shapes_GL_common.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="vendor\imgui\LICENSE.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
