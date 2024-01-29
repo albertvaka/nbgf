@@ -191,6 +191,7 @@ void Doctor::Update(float dt)
 			case 4:
 			{
 				patientTarget->movementState = Patient::MovementState::BEING_TARGETED;
+				patientTarget->doctorHigh = false;
 				int subcycle = surgeryTimer;
 				if (subcycle % 2) {
 					vel = vec::Zero;
@@ -202,6 +203,7 @@ void Doctor::Update(float dt)
 				break;
 			case 2:
 			case 5:
+				patientTarget->doctorHigh = false;
 				patientTarget->movementState = Patient::MovementState::BEING_TARGETED;
 				vel = -wanderTarget * doctorVel / 2;
 				break;
