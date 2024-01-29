@@ -1,0 +1,154 @@
+name: Build and deploy
+on: [push]
+
+jobs:
+  windows-debug:
+    runs-on: windows-latest
+    name: Windows debug build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Builderino
+      run: |
+        msbuild /p:Configuration=Debug /p:Platform=x64
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: WindowsDebug
+        path: |
+            bin/
+            !bin/*.html
+
+  windows-release:
+    runs-on: windows-latest
+    name: Windows release build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Builderino
+      run: |
+        msbuild /p:Configuration=Release /p:Platform=x64
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: WindowsRelease
+        path: |
+            bin/
+            !bin/*.html
+
+  web-release:
+    runs-on: ubuntu-latest
+    name: Emscripten release build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Find and define GITHUB_REF_SLUG
+        uses: rlespinasse/github-slug-action@v4
+
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          # use branch name for cache invalidation (Linux-build-name-of-branch)
+          key: ${{ runner.os }}-build-release-${{ env.GITHUB_REF_SLUG }}
+          path: |
+            ~/.cache/emsdk
+
+      - name: Build release
+        run: |
+          docker run --rm \
+                     -v $GITHUB_WORKSPACE:/workspace \
+                     --workdir /workspace \
+                     -v ~/.cache/emsdk:/emsdk/upstream/emscripten/cache/ \
+                     emscripten/emsdk:latest sh -c "emmake make -j2 OPTIM=2 DEBUG=0; chmod 777 -R /emsdk/upstream/emscripten/cache"
+
+      - name: FrontPage 2000
+        run: |
+          mkdir -p www-release
+          cp bin/{gaem.data,gaem.wasm,gaem.js,index.html} www-release
+          echo "https://albertvaka.github.io/nbgf/${{ env.GITHUB_REF_SLUG }}" >> www-release/README.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmscriptenRelease
+          path: www-release
+
+  web-debug:
+    runs-on: ubuntu-latest
+    name: Emscripten debug build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Find and define GITHUB_REF_SLUG
+        uses: rlespinasse/github-slug-action@v4
+
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          # use branch name for cache invalidation (Linux-build-name-of-branch)
+          key: ${{ runner.os }}-build-debug-${{ env.GITHUB_REF_SLUG }}
+          path: |
+            ~/.cache/emsdk
+
+      - name: Build debug
+        run: |
+          docker run --rm \
+                     -v $GITHUB_WORKSPACE:/workspace \
+                     --workdir /workspace \
+                     -v ~/.cache/emsdk:/emsdk/upstream/emscripten/cache/ \
+                     emscripten/emsdk:latest sh -c "emmake make -j2 OPTIM=1 DEBUG=1; chmod 777 -R /emsdk/upstream/emscripten/cache"
+
+      - name: FrontPage 2000
+        run: |
+          mkdir -p www-debug
+          cp bin/{gaem.data,gaem.wasm,gaem.js,index.html} www-debug
+          echo "https://albertvaka.github.io/nbgf/${{ env.GITHUB_REF_SLUG }}/debug" >> www-debug/README.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmscriptenDebug
+          path: www-debug
+
+  deploy-web:
+    needs: [ web-debug, web-release ]
+    concurrency: deploy-github-io
+    runs-on: ubuntu-latest
+    name: Publish emscripten builds
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Find and define GITHUB_REF_SLUG
+        uses: rlespinasse/github-slug-action@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: EmscriptenRelease
+          path: www
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: EmscriptenDebug
+          path: www/debug
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: albertvaka/albertvaka.github.io
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          branch: main
+          folder: www
+          target-folder: nbgf/${{ env.GITHUB_REF_SLUG }}
