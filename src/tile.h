@@ -4,12 +4,8 @@
 
 struct Tile : Tiled::Tile
 {
-	bool isEmpty() const {
-		return value == NONE;
-	}
-
 	bool isInvisible() const {
-		return false;
+		return value == NONE;
 	}
 
 	bool isSolid() const {

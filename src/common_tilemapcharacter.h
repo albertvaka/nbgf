@@ -4,56 +4,6 @@
 #include "gaemtilemap.h"
 #include "bounds.h"
 
-inline bool IsMovingTowardsInX(vec pos, vec vel, vec target) {
-	return (vel.x < 0 && pos.x > target.x) || (vel.x > 0 && pos.x < target.x);
-}
-
-inline bool IsMovingTowardsInY(vec pos, vec vel, vec target) {
-	return (vel.y < 0 && pos.y > target.y) || (vel.y > 0 && pos.y < target.y);
-}
-
-inline vec AlignWithGround(vec pos, vec size) {
-	const int marginPixels = 2; // If the entity is sunken into the ground by this much, we will push it up instead of down to the next tile
-	pos.y = Tile::Bottom(Tile::ToTiles(pos.y + size.y / 2 - marginPixels)) - size.y / 2;
-	return pos;
-}
-
-inline vec AlignWithCeiling(vec pos, vec size) {
-	const int marginPixels = 2; // If the entity is sunken into the ceiling by this much, we will push it down instead of up to the next tile
-	pos.y = Tile::Top(Tile::ToTiles(pos.y + size.y / 2 + marginPixels)) - size.y / 2;
-	return pos;
-}
-
-inline bool IsGoingToHitAWall(vec pos, vec size, vec vel, float dt) {
-	GaemTileMap* map = GaemTileMap::instance();
-	vec newPos = pos + vel * dt;
-	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
-	if (size.y < Tile::Size) {
-		vec side = vec(newPos.x + toTheSideImMoving, newPos.y);
-		veci tilePosSide = Tile::ToTiles(side);
-		return map->GetTile(tilePosSide).isSolid();
-	} else {
-		const float E = 1;
-		int x = Tile::ToTiles(newPos.x + toTheSideImMoving);
-		int yTop = Tile::ToTiles(newPos.y - size.y/2 + E);
-		int yBottom = Tile::ToTiles(pos.y + size.y/2 - E);
-		for (int y = yTop; y <= yBottom; y++)
-		{
-			if (map->GetTile(x, y).isSolid()) {
-				return true;
-			}
-		}
-		return false;
-	}
-}
-
-inline bool IsGoingToLeaveBounds(vec pos, vec size, vec vel, float dt, BoxBounds bounds) {
-	vec newPos = pos + vel * dt;
-	float toTheSideImMoving = vel.x > 0 ? size.x / 2 : -size.x / 2;
-	vec sidePos = vec(newPos.x + toTheSideImMoving, newPos.y);
-	return !bounds.Contains(sidePos);
-}
-
 struct MoveResult {
 	Tile leftWallCollision = Tile::NONE;
 	Tile rightWallCollision = Tile::NONE;
@@ -72,9 +22,7 @@ inline MoveResult MoveAgainstTileMap(vec position, vec size, vec vel, float dt) 
 
 	GaemTileMap* map = GaemTileMap::instance();
 
-	vec appliedVel = vel;
-
-	vec posf = pos + appliedVel * dt;
+	vec posf = pos + vel * dt;
 
 	//Debug::out << "----------";
 	//Debug::out << abs(pos.x - posf.x) / dt;

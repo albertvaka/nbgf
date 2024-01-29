@@ -185,7 +185,7 @@ void Doctor::Update(float dt)
 				vel = vec::Zero;
 				patientTarget->movementState = Patient::MovementState::BEING_SURGERIED;
 				patientTarget->doctorHigh = (highness > highThreshold);
-				wanderTarget = vec::FromAngleRads(Rand::rollf(0, Angles::Tau))*0.7;
+				wanderTarget = vec::FromAngleRads(Rand::rollf(0, Angles::Tau))*0.7f;
 				break;
 			case 1:
 			case 4:
