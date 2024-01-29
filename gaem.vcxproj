@@ -20,8 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\angles.h" />
-    <ClInclude Include="engine\animation.h" />
-    <ClInclude Include="engine\animation_frame.h" />
     <ClInclude Include="engine\asset_load.h" />
     <ClInclude Include="engine\bounds.h" />
     <ClInclude Include="engine\camera.h" />
@@ -54,14 +52,28 @@
     <ClInclude Include="generated\tiled_objects_entities.h" />
     <ClInclude Include="generated\tiled_tile.h" />
     <ClInclude Include="generated\tiled_tilemap.h" />
-    <ClInclude Include="src\alien.h" />
-    <ClInclude Include="src\anim_lib.h" />
+    <ClInclude Include="src\animation.h" />
+    <ClInclude Include="src\anim_data.h" />
     <ClInclude Include="src\assets.h" />
-    <ClInclude Include="src\bullet.h" />
+    <ClInclude Include="src\cadaver.h" />
+    <ClInclude Include="src\cinta.h" />
+    <ClInclude Include="src\cleaner.h" />
+    <ClInclude Include="src\collider.h" />
+    <ClInclude Include="src\door.h" />
+    <ClInclude Include="src\entity.h" />
+    <ClInclude Include="src\extremity.h" />
     <ClInclude Include="src\input_conf.h" />
+    <ClInclude Include="src\intro_scene.h" />
+    <ClInclude Include="src\lever.h" />
+    <ClInclude Include="src\main_scene.h" />
+    <ClInclude Include="src\main_scene_collider.h" />
+    <ClInclude Include="src\main_scene_tile.h" />
+    <ClInclude Include="src\mesa.h" />
     <ClInclude Include="src\player.h" />
+    <ClInclude Include="src\popupText.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
-    <ClInclude Include="src\scene_main.h" />
+    <ClInclude Include="src\spawner.h" />
+    <ClInclude Include="src\taca.h" />
     <ClInclude Include="src\window_conf.h" />
     <ClInclude Include="vendor\glew\glew.h" />
     <ClInclude Include="vendor\glew\glxew.h" />
@@ -110,8 +122,6 @@
     <ClCompile Include="generated\tiled_tilemap.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
-    <ClCompile Include="src\player.cpp" />
-    <ClCompile Include="src\scene_main.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />

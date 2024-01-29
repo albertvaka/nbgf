@@ -616,3 +616,13 @@ inline constexpr Transform operator/(Transform lhs, float rhs)
 	result /= rhs;
 	return result;
 }
+
+
+inline veci PosToTile(vec pos)
+{
+	return
+	{
+		int((pos.x) / 16),
+		int((pos.y) / 16)
+	};
+}

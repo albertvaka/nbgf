@@ -4,7 +4,7 @@
 #include <functional>
 #include <algorithm>
 
-#define SUPPORT_MULTIPLE_SELFREGISTER_INHERITANCE false
+#define SUPPORT_MULTIPLE_SELFREGISTER_INHERITANCE true
 #define ENABLE_OPTIMIZATION_BULK_DELETE_ALL false
 
 /**

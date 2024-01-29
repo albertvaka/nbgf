@@ -120,12 +120,6 @@
     <ClInclude Include="engine\angles.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="engine\animation.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\animation_frame.h">
-      <Filter>engine</Filter>
-    </ClInclude>
     <ClInclude Include="engine\asset_load.h">
       <Filter>engine</Filter>
     </ClInclude>
@@ -213,31 +207,73 @@
     <ClInclude Include="engine\window_drawraw.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\window_conf.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\alien.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\anim_lib.h">
+    <ClInclude Include="src\animation.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\assets.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\bullet.h">
+    <ClInclude Include="src\cadaver.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cinta.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cleaner.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\collider.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\door.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\extremity.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\input_conf.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\intro_scene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lever.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main_scene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main_scene_collider.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\main_scene_tile.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesa.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\player.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\popupText.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_entrypoint.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene_main.h">
+    <ClInclude Include="src\spawner.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\taca.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\window_conf.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\anim_data.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -360,12 +396,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\input_conf.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\player.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene_main.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
