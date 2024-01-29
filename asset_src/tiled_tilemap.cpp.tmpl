@@ -2,8 +2,6 @@
 
 namespace Tiled {
 
-const vec TileMap::Size = vec({{ width }}, {{ height }});
-
 const uint16_t TileMap::Map[] = {
     {% for t in map -%}
 		{%- if debug -%}

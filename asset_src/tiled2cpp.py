@@ -131,6 +131,8 @@ for type_ in ordered_tiletypes:
 tm = Template(Path('tiled_tilemap.h.tmpl').read_text())
 out_content = tm.render(
     name=tiles.name,
+    width = out_width,
+    height = out_height,
 )
 
 fname = '../generated/tiled_tilemap.h'
