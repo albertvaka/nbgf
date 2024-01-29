@@ -69,7 +69,7 @@ ifeq ($(strip $(IMGUI)),1)
 endif
 
 $(EXEC): $(OBJ) $(ENGINE_OBJ) $(GENERATED_OBJ) $(DEP_OBJ) Makefile
-	$(CXX) $(LDFLAGS) $(OBJ) $(GENERATED_OBJ) $(ENGINE_OBJ) $(DEP_OBJ) -o $(OUT_FILE)
+	$(CXX) $(OBJ) $(GENERATED_OBJ) $(ENGINE_OBJ) $(DEP_OBJ) $(LDFLAGS) -o $(OUT_FILE)
 
 $(OBJ_DIR)/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/scene_entrypoint.h src/window_conf.h Makefile
 	@mkdir -p $(OBJ_DIR)/engine
