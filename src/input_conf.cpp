@@ -1,14 +1,22 @@
 #include "input_conf.h"
 
 #include "input.h"
+#include "player.h"
 
-#include "magic_enum.h"
 #include <functional>
 
+const int Input::kMaxPlayers = 2;
+
 static int keyboard_player_id = 0; // Keyboard controls player one
+static bool aimingWithMouse = true;
+static vec lastAnalogAim;
 
 std::function<bool(int)> Input::action_mapping[magic_enum::enum_count<GameKeys>()];
 std::function<vec(int)> Input::analog_mapping[magic_enum::enum_count<AnalogInput>()];
+KeyStates Input::action_states[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { RELEASED } };
+float Input::action_times[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { 0 } };
+vec Input::analog_states[Input::kMaxPlayers][magic_enum::enum_count<AnalogInput>()];
+
 void Input::MapGameKeys()
 {
     action_mapping[(int)GameKeys::UP] = [](int p) // p is the player id

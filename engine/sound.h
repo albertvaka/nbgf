@@ -13,15 +13,15 @@ struct Sound
 	void Load(const char* path);
 	~Sound();
 
-	int Play() const; //returns a channel id
-	int Play(vec source, vec listener, float silenceDistance = 300.f) const; //returns a channel id
+	int Play() const; // returns a channel id
+	int Play(vec source, vec listener, float silenceDistance = 300.f) const; // returns a channel id
 	int PlayInLoop() const; // plays forever until stopped, returns a channel id
 
 	static bool Playing(int channel_id);
 	static void Stop(int channel_id);
 
-	void SetVolume(float v); //from 0 to 100
-	float Volume() const; //from 0 to 100
+	void SetVolume(float volume); // between 0 and 1
+	float Volume() const; // between 0 and 1
 
 private:
 	Mix_Chunk* sound = nullptr;
@@ -35,6 +35,12 @@ struct MultiSound
 		static_assert(N == Size);
 		for (int i = 0; i < Size; i++) {
 			sounds[i].Load(paths[i]);
+		}
+	}
+
+	void SetVolumeForAll(float volume) {
+		for (int i = 0; i < Size; i++) {
+			sounds[i].SetVolume(volume);
 		}
 	}
 

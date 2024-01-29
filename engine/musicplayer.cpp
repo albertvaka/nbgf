@@ -3,6 +3,7 @@
 #include "raw_input.h"
 
 #include <SDL_mixer.h>
+#include <SDL_assert.h>
 
 namespace MusicPlayer
 {
@@ -56,12 +57,13 @@ namespace MusicPlayer
 		current = nullptr;
 	}
 
-	void SetVolume(float volume) {
-		Mix_VolumeMusic(volume * (128 / 100.f));
+	void SetVolume(float v) {
+		SDL_assert(v >= 0.f && v <= 1.f);
+		Mix_VolumeMusic(v * 128);
 	}
 	
 	float Volume() {
-		return Mix_VolumeMusic(-1) * (100 / 128.f);
+		return Mix_VolumeMusic(-1) / 128.f;
 	}
 
 	void ToggleMusicWithM(bool keepPausedOnChange) {

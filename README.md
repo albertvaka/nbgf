@@ -370,7 +370,7 @@ The `Rand::OnceEvery(n)` and `Rand::PercentChance(percentage)` functions are ver
 
 ## Playing sounds and music
 
-To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-100>)` method you can use. See [`engine/sound.h`](engine/sound.h).
+To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-1>)` method you can use. See [`engine/sound.h`](engine/sound.h).
 
 You can also use `PlayInLoop()` to play something forever and play positional audio with `Play(vec source, vec listener, float silenceDistance)`.
 
@@ -378,7 +378,7 @@ The family of `Play` functions all return a channel id. Store that id to then ca
 
 By default SDL_Mixer allocates 8 channels, which means that up to 8 sounds can play simultaneously.
 
-To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::Pause()`, `MusicPlayer::Resume()` and `MusicPlayer::Stop()` and the volume adjusted with `MusicPlayer::SetVolume(<0-100>)`. See [`engine/musicplayer.h`](engine/musicplayer.h).
+To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::Pause()`, `MusicPlayer::Resume()` and `MusicPlayer::Stop()` and the volume adjusted with `MusicPlayer::SetVolume(<0-1>)`. See [`engine/musicplayer.h`](engine/musicplayer.h).
 
 ## Drawing on screen: part two (the advanced stuff)
 
@@ -463,7 +463,7 @@ Do so with the following pairs of batch and flush functions, defined in `Window:
 
 The [`SaveState`](engine/savestate.h) class lets you write your game state to persistent storage.
 
-You can get a `SaveState` instance by calling `SaveStance::Open(const char* game_name, int state_num)`. This will load any existing data from it.
+You can get a `SaveState` instance by calling `SaveStance(const char* game_name, int state_num)`. This will load any existing data from it.
 
 Each `SaveState` contains several entries and an abritary number of values per entry. Each entry is meant to store the state of on entity in your game.
 
@@ -485,7 +485,7 @@ If you hate streams, you can also read and write entries as string key-value pai
 
 After you have modified a `SaveState` instance, you can persist the changes to disk by calling `saveState.Save()`.
 
-Note: if you open the same save state twice (ie: passing the same name and number values to `SaveState::Open`), data written to one instance won't be synced to the other!
+Note: if you open the same save state twice (ie: passing the same name and number values to `SaveState()`), data written to one instance won't be synced to the other!
 
 ## Window properties
 

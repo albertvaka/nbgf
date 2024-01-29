@@ -28,8 +28,8 @@ namespace MusicPlayer
 
 	void Stop();
 
-	void SetVolume(float volume); // from 0 to 100
-	float Volume(); // from 0 to 100
+	void SetVolume(float volume); // between 0 and 1
+	float Volume(); // between 0 and 1
 
 	void ToggleMusicWithM(bool keepPausedOnMusicChange = true);
 

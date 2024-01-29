@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDL_assert.h"
+#include <SDL_assert.h>
 
 template <typename T>
 class SingleInstance
