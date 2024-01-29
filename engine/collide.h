@@ -40,6 +40,9 @@ inline bool Collide(const CircleEntity* a, const CircleEntity* b) {
 inline bool Collide(const CircleEntity* a, const BoxEntity* b) {
     return Collide(a->Bounds(), b->Bounds());
 }
+inline bool Collide(const BoxEntity* a, const CircleEntity* b) {
+    return Collide(a->Bounds(), b->Bounds());
+}
 
 // Calls callback for each pair of colliding objects
 template <typename A, typename B, typename F>
