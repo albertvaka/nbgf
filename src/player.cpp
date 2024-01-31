@@ -14,8 +14,8 @@ const vec playerSize = vec(110.f, 120.f);
 const float playerDisplacementY = 65.f;
 const vec noozleDisplacement = vec(10.f, -30.f);
 const float playerAccel = 5500.f;
+const float friction = 31.f;
 const float maxVel = 600.f;
-const float minVel = 50.f;
 const float imageScale = 0.6f;
 const float shakeHeight = 20.f;
 const float shakeVerticalSpeed = 41.f;
@@ -51,13 +51,13 @@ void Player::Update(float dt)
 		accel.y = playerAccel * dt;
 	}
 	if (accel.x == 0) {
-		vel.x = vel.x * 0.6;
+		vel.x -= vel.x * friction * dt;
 	}
 	else {
 		vel.x += accel.x;
 	}
 	if (accel.y == 0) {
-		vel.y = vel.y * 0.6;
+		vel.y = vel.y * friction * dt;
 	}
 	else {
 		vel.y += accel.y;
@@ -66,8 +66,8 @@ void Player::Update(float dt)
 	if (vel.x > maxVel) vel.x = maxVel;
 	if (vel.y < -maxVel) vel.y = -maxVel;
 	if (vel.y > maxVel) vel.y = maxVel;
-	if (vel.x < minVel && vel.x > -minVel) vel.x = 0;
-	if (vel.y < minVel && vel.y > -minVel) vel.y = 0;
+	if (vel.x < playerAccel*0.5f*dt && vel.x > -playerAccel*0.5f*dt) vel.x = 0;
+	if (vel.y < playerAccel*0.5f*dt && vel.y > -playerAccel*0.5f*dt) vel.y = 0;
 	MoveResult res = MoveAgainstTileMap(pos, size, vel, dt);
 	pos = res.pos;
 

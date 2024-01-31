@@ -162,6 +162,7 @@ void SceneMain::Draw()
 		ImGui::Begin("scene");
 		ImGui::Text("Max patients: %i", maxPatients);
 		ImGui::Text("Patient increase timer %f", patientIncreaseTimer);
+		ImGui::Text("Player vel: %f %f", player.vel.x, player.vel.y);
 		if (ImGui::Button("Spawn patient")) {
 			SpawnPatient();
 		};
