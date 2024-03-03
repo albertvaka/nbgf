@@ -27,8 +27,7 @@ void Assets::LoadAll() {
     
     soundLeaves.Load({ "data/leaves01.ogg","data/leaves02.ogg" });
     soundSword.Load({ "data/sword1.ogg","data/sword2.ogg" });
-    //soundStep.Load({ "data/step1.wav","data/step2.wav", "data/step3.wav","data/step4.wav" });
-    soundJumpLand.Load("data/hit.ogg");
+    soundStep.Load({ "data/step1.ogg","data/step2.ogg", "data/step3.ogg","data/step4.ogg" });
 
     soundVoiceJump.Load({ "data/voice_jump1.ogg", "data/voice_jump2.ogg", "data/voice_jump3.ogg", "data/voice_jump4.ogg" });
     soundVoiceDamage.Load({ "data/voice_damage1.ogg", "data/voice_damage2.ogg" });

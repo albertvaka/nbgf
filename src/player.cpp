@@ -599,7 +599,7 @@ void Player::Update(float dt)
 		}
 		else if (!destroyingGround) {
 			if (vel.y > 50) {
-				Assets::soundJumpLand.Play();
+				Assets::soundStep.Play();
 				Particles::DoDustLand(pos);
 			}
 			vel.y = 0;
