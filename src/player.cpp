@@ -460,8 +460,6 @@ void Player::Update(float dt)
 #ifdef _IMGUI
 			debugMaxJumpY = 0;
 #endif
-			Sound::Stop(voiceSoundChannel);
-			voiceSoundChannel = Assets::soundVoiceJump.Play();
 
 			bool didJumpFromWall = false;
 			if (jumpFromWallTimer > 0.f) {
@@ -492,6 +490,8 @@ void Player::Update(float dt)
 				crouchedTime = kTimeCrouchedToJumpDownOneWayTile;
 			}
 			else {
+				Sound::Stop(voiceSoundChannel);
+				voiceSoundChannel = Assets::soundVoiceJump.Play();
 				// Start to jump
 				initialJumpY = pos.y;
 				float halfWidth = kStandingSize.x / 2;
@@ -592,6 +592,8 @@ void Player::Update(float dt)
 			}
 		}
 		if (moved.groundCollision.isOneWay() && crouchedTime >= kTimeCrouchedToJumpDownOneWayTile) {
+			Sound::Stop(voiceSoundChannel);
+			voiceSoundChannel = Assets::soundVoiceJump.Play();
 			pos.y += 3.f;
 			vel.y = 0;
 			crouched = false;
