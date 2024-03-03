@@ -15,7 +15,7 @@ struct Player : Entity, SingleInstance<Player>
     Player();
     void Update(float dt);
     void Draw() const;
-    void DrawGUI() const;
+    void DrawGUI(bool discreteHealth = false) const;
     void Reset(vec position, int maxHp);
 
     vec CenterPos() {

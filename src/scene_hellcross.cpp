@@ -250,7 +250,7 @@ void HellCrossScene::Draw()
 #endif
 
 	Camera::InScreenCoords::Begin();
-	player.DrawGUI();
+	player.DrawGUI(true);
 	Camera::InScreenCoords::End();
 
 #ifdef _IMGUI
