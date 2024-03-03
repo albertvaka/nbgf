@@ -86,36 +86,28 @@ void Lava::Update(float dt) {
 	Player* player = Player::instance();
 	const float kLavaDamageAreaOffsetFromTop = 8.5f;
 	if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
-		// TODO: All this should be done by a method of player
 		if (!player->frozen) {
-			player->anim.Ensure(AnimLib::WARRIOR_HURT, false);
 			player->pos.y = CurrentLevel() + kLavaDamageAreaOffsetFromTop;
-			player->frozen = true; // disable movement
-			player->health -= 1;
+			player->TakeDamageFromLava();
 		}
-		player->invencibleTimer = 1;
 		player->pos.y += 6 * dt; //sink slowly in the lava
-		player->bfgPos.y = -1000;
-		player->onWall = false;
-		player->crouched = false;
-		player->dashing = false;
-		player->diving = false;
-		player->attacking = false;
 
 		// we don't need this because we never lower the lava level, but if we did we would have
 		// to do something like this to prevent it lowering after killing us and suddently us not being inside
 		//if (targetY > CurrentLevel()) {
 			//targetY = CurrentLevel();
 		//}
-	}
-	if (IsInside(player->pos - vec(0, 13.f))) {
-		player->ToSafeGround();
-		if (targetY != bounds.top) { // moving lava
-			float heightBelowPlayerPos = player->SafeGroundPos().y + 4 * Tile::Size;
-			if (heightBelowPlayerPos > CurrentLevel()) {
-				float prev_target = targetY;
-				SetLevel(heightBelowPlayerPos, true);
-				SetLevel(prev_target, false);
+
+		if (IsInside(player->pos - vec(0, 13.f))) {
+			player->ToSafeGround();
+			// If the lava is moving up, we want to move the lava away from the player's safe ground
+			if (targetY != bounds.top) {
+				float heightBelowPlayerPos = player->SafeGroundPos().y + 4 * Tile::Size;
+				if (heightBelowPlayerPos > CurrentLevel()) {
+					float prev_target = targetY;
+					SetLevel(heightBelowPlayerPos, true);
+					SetLevel(prev_target, false);
+				}
 			}
 		}
 	}

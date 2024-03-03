@@ -35,6 +35,7 @@ struct Player : Entity, SingleInstance<Player>
 
     void Heal();
     void HealthUp();
+    void TakeDamageFromLava();
     void TakeDamage(vec src);
     void DealDamage(vec target);
     void ToSafeGround();

@@ -778,6 +778,20 @@ void Player::ToSafeGround() {
 	}
 }
 
+void Player::TakeDamageFromLava() {
+	anim.Ensure(AnimLib::WARRIOR_HURT, false);
+	frozen = true; // disable movement
+	invencibleTimer = 1;
+	bfgPos.y = -1000;
+	onWall = false;
+	crouched = false;
+	dashing = false;
+	diving = false;
+	attacking = false;
+	health--;
+
+}
+
 void Player::TakeDamage(vec src) {
 	invencibleTimer = kInvencibleTimeAfterHit;
 	if (pos.x > src.x) {
