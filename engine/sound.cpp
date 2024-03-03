@@ -1,6 +1,7 @@
 #include "sound.h"
 
 #include <SDL_mixer.h>
+#include <SDL_assert.h>
 #include <cassert>
 
 #include "debug.h"
@@ -18,13 +19,13 @@ Sound::~Sound() {
 	if (sound) Mix_FreeChunk(sound);
 }
 
-void Sound::SetVolume(float v) { //from 0 to 100
-	SDL_assert(v >= 0.f && v <= 100.f);
-	Mix_VolumeChunk(sound, v * (128 / 100.f));
+void Sound::SetVolume(float v) { // between 0 and 1
+	SDL_assert(v >= 0.f && v <= 1.f);
+	Mix_VolumeChunk(sound, v * 128);
 }
 
 float Sound::Volume() const {
-	return Mix_VolumeChunk(sound, -1) * (100 / 128.f);
+	return Mix_VolumeChunk(sound, -1) / 128.f;
 }
 
 int Sound::Play() const {

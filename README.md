@@ -370,7 +370,7 @@ The `Rand::OnceEvery(n)` and `Rand::PercentChance(percentage)` functions are ver
 
 ## Playing sounds and music
 
-To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-100>)` method you can use. See [`engine/sound.h`](engine/sound.h).
+To play a sound just call `Assets::mySound.Play()`. Sounds also have a `SetVolume(<0-1>)` method you can use. See [`engine/sound.h`](engine/sound.h).
 
 You can also use `PlayInLoop()` to play something forever and play positional audio with `Play(vec source, vec listener, float silenceDistance)`.
 
@@ -378,7 +378,7 @@ The family of `Play` functions all return a channel id. Store that id to then ca
 
 By default SDL_Mixer allocates 8 channels, which means that up to 8 sounds can play simultaneously.
 
-To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::Pause()`, `MusicPlayer::Resume()` and `MusicPlayer::Stop()` and the volume adjusted with `MusicPlayer::SetVolume(<0-100>)`. See [`engine/musicplayer.h`](engine/musicplayer.h).
+To play a music track, use `MusicPlayer::Play(Assets::myMusic)`. Note only one music track can play at a time. The current track can be controlled with `MusicPlayer::Pause()`, `MusicPlayer::Resume()` and `MusicPlayer::Stop()` and the volume adjusted with `MusicPlayer::SetVolume(<0-1>)`. See [`engine/musicplayer.h`](engine/musicplayer.h).
 
 ## Drawing on screen: part two (the advanced stuff)
 
