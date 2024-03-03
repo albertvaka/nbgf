@@ -715,7 +715,8 @@ void Player::Update(float dt)
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
 		bfgPos = pos + bfgOffset();
 		bfgAngle = bfgPos.AngleDegs(Input::GetAnalog(0, AnalogInput::AIM));
-		bfgAngle = (int(bfgAngle + 360 + (45.f / 2)) / 45) * 45.f;
+		// Discretize to 8 directions
+		//bfgAngle = (int(bfgAngle + (45.f / 2)) / 45) * 45.f;
 		if (bfgCooldownTimer > 0.f) {
 			bfgCooldownTimer -= dt;
 			if (bfgCooldownTimer < 0.f) {
@@ -877,7 +878,7 @@ void Player::Draw() const {
 		}
 		float scale = (0.333f + (std::max(kBfgCooldown / 1.5f, bfgCooldownTimer) / kBfgCooldown));
 		vec vscale = vec(scale, scale);
-		if (bfgAngle < 270 || bfgAngle  > 450) {
+		if (bfgAngle < -90 || bfgAngle > 90) {
 			vscale.y = -vscale.y;
 		}
 		Window::Draw(Assets::spritesheetTexture, bfgPos)
