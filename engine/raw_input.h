@@ -32,7 +32,6 @@ struct GamePad
 		static Trigger Right;
 		float get(int player) const
 		{ //Pos between 0 and 100
-			//if (player > Input::kMaxPlayers) return vec();
 			SDL_GameController* joystick = joysticks[player];
 			if (!joystick) return 0;
 			float a = SDL_GameControllerGetAxis(joystick, axis) / 327.67f;
@@ -55,16 +54,16 @@ struct GamePad
 		const static AnalogStick Right;
 		vec get(int player, float dead_area = 30.f) const
 		{ //Pos between -100 and 100
-			//if (player > Input::kMaxPlayers) return vec();
 			SDL_GameController* joystick = joysticks[player];
 			if (!joystick) return vec();
-			float a = SDL_GameControllerGetAxis(joystick, x) / 327.67f;
-			float b = SDL_GameControllerGetAxis(joystick, y) / 327.67f;
-			return vec(abs(a) > dead_area ? a : 0, abs(b) > dead_area ? b : 0);
+			float x = SDL_GameControllerGetAxis(joystick, axisX) / 327.67f;
+			float y = SDL_GameControllerGetAxis(joystick, axisY) / 327.67f;
+			vec pos(x, y);
+			return pos.Length() < dead_area ? vec::Zero : pos;
 		}
 	private:
-		AnalogStick(SDL_GameControllerAxis mx, SDL_GameControllerAxis my) : x(mx), y(my) { }
-		SDL_GameControllerAxis x, y;
+		AnalogStick(SDL_GameControllerAxis mx, SDL_GameControllerAxis my) : axisX(mx), axisY(my) { }
+		SDL_GameControllerAxis axisX, axisY;
 	};
 
 	static void _UpdateInputState__Xbox(SDL_GameController* joy, int player);
