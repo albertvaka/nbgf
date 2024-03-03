@@ -300,13 +300,18 @@ void Player::Update(float dt)
 	justHit = false;
 
 	int prev_frame = anim.current_frame;
-	float absVelY = fabs(vel.y);
-	if (onWall && absVelY < 50.f) {
-		// do not update animation
-		anim.Update(dt* (absVelY/50.f));
-		if (anim.current_frame == 1) {
-			// hack: skip frame that looks weird if slowed down
+	if (onWall) {
+		if (vel.y < 30.f) {
+			// do not update animation
 			anim.current_frame = 2;
+		} else if (vel.y < 100.f) {
+			anim.Update(dt * ((vel.y - 30.) / 70.f));
+			if (anim.current_frame == 1) {
+				// hack: skip frame that looks weird if slowed down
+				anim.current_frame = 2;
+			}
+		} else {
+			anim.Update(dt);
 		}
 	}
 	else {
@@ -539,30 +544,43 @@ void Player::Update(float dt)
 	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
 	pos = moved.pos + vec(0, size.y/2);
 
+	bool displayWallSlideAnimEarly = false;
+
 	if (moved.leftWallCollision != Tile::NONE) {
 		vel.x = 0;
 		dashing = false;
 		lookingLeft = true;
-		if (vel.y > 0 && (onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.leftWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
-			if (!onWall && attacking && anim.current_frame > 0) {
-				attacking = false;
+
+		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.leftWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
+			if (vel.y > 0) {
+				if (!onWall && attacking && anim.current_frame > 0) {
+					attacking = false;
+				}
+				onWall = true;
+				initialJumpY = Mates::MaxFloat;
+				vel.x = -kFrictAcc_OnAir * 2 * dt; //stay against wall
 			}
-			onWall = true;
-			initialJumpY = Mates::MaxFloat;
-			vel.x = -kFrictAcc_OnAir * 2 * dt; //stay against wall
+			else if (vel.y > -80.f) {
+				displayWallSlideAnimEarly = true;
+			}
 		}
 	}
 	else if (moved.rightWallCollision != Tile::NONE) {
 		vel.x = 0;
 		dashing = false;
 		lookingLeft = false;
-		if (vel.y > 0 && (onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.rightWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
-			if (!onWall && attacking && anim.current_frame > 0) {
-				attacking = false;
+		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.rightWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
+			if (vel.y > 0) {
+				if (!onWall && attacking && anim.current_frame > 0) {
+					attacking = false;
+				}
+				onWall = true;
+				initialJumpY = Mates::MaxFloat;
+				vel.x = kFrictAcc_OnAir * 2 * dt; //stay against wall
 			}
-			onWall = true;
-			initialJumpY = Mates::MaxFloat;
-			vel.x = kFrictAcc_OnAir * 2 * dt; //stay against wall
+			else if (vel.y > -80.f) {
+				displayWallSlideAnimEarly = true;
+			}
 		}
 	}
 	else {
@@ -689,8 +707,12 @@ void Player::Update(float dt)
 			}
 			else
 			{
-				if (onWall) {
+				if (onWall || displayWallSlideAnimEarly) {
 					anim.Ensure(AnimLib::WARRIOR_WALL_SLIDE);
+					if (displayWallSlideAnimEarly) {
+						anim.current_frame = 2;
+						anim.timer = 0.f;
+					}
 				}
 				else if (!anim.IsSet(AnimLib::WARRIOR_HURT) || invencibleTimer <= 0.f) {
 					if (vel.y <= kVelJump) {
