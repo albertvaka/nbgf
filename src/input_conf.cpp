@@ -3,16 +3,19 @@
 #include "input.h"
 #include "player.h"
 
-#include "magic_enum.h"
 #include <functional>
 
+const int Input::kMaxPlayers = 2;
+
 static int keyboard_player_id = 0; // Keyboard controls player one
+static bool aimingWithMouse = true;
+static vec lastAnalogAim;
 
 std::function<bool(int)> Input::action_mapping[magic_enum::enum_count<GameKeys>()];
 std::function<vec(int)> Input::analog_mapping[magic_enum::enum_count<AnalogInput>()];
-
-static bool aimingWithMouse = true;
-static vec lastAnalogAim;
+KeyStates Input::action_states[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { RELEASED } };
+float Input::action_times[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { 0 } };
+vec Input::analog_states[Input::kMaxPlayers][magic_enum::enum_count<AnalogInput>()];
 
 void Input::MapGameKeys()
 {
@@ -135,7 +138,6 @@ void Input::MapGameKeys()
     };
 
 
-
     // Analog
 
     analog_mapping[(int)AnalogInput::MOVE] = [](int p)
@@ -165,18 +167,21 @@ void Input::MapGameKeys()
     analog_mapping[(int)AnalogInput::AIM] = [](int p)
     {
         vec joystick = GamePad::AnalogStick::Right.get(p);
-        if (joystick != vec::Zero) {
-            aimingWithMouse = false;
-        }
-        if (Mouse::IsPressed()) {
-            aimingWithMouse = true;
-        }
-        if (p == keyboard_player_id && aimingWithMouse) {
-            return Mouse::GetPositionInWorld();
+        if (p == keyboard_player_id) {
+            if (joystick != vec::Zero) {
+                aimingWithMouse = false;
+            }
+            if (Mouse::IsPressed()) {
+                aimingWithMouse = true;
+            }
+            if (aimingWithMouse) {
+                return Mouse::GetPositionInWorld();
+            }
         }
         if (joystick != vec::Zero) {
             lastAnalogAim = joystick;
         }
+        // For 2 players, lastAnalogAim needs to be turned into an array.
         return Player::instance()->pos + lastAnalogAim;
     };
 }

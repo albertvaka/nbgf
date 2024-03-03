@@ -8,7 +8,7 @@
 #include <math.h>
 #include <limits>
 #include <string>
-#include "SDL_assert.h"
+#include <SDL_assert.h>
 
 namespace Mates
 {

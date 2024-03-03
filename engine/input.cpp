@@ -4,11 +4,6 @@
 #include <functional>
 
 //int player_to_joystick[Input::kMaxPlayers] = { nullptr };
-
-KeyStates Input::action_states[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { RELEASED } };
-float Input::action_times[Input::kMaxPlayers][magic_enum::enum_count<GameKeys>()] = { { 0 } };
-vec Input::analog_states[Input::kMaxPlayers][magic_enum::enum_count<AnalogInput>()];
-
 bool ignoreInput = false;
 
 void Input::IgnoreInput(bool enable) {

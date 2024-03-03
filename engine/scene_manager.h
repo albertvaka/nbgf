@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene.h"
-#include "SDL_assert.h"
+#include <SDL_assert.h>
 
 struct SceneManager
 {
