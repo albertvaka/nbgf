@@ -63,7 +63,7 @@ const vec kVelMax(220, 350);
 
 // bfg
 const float kBulletVel = 400.f;
-const float kBfgCooldown = 0.6f;
+const float kBfgCooldown = 0.2f;
 const float kBfgPushBack = 150.f;
 
 // knockback
