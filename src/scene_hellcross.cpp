@@ -12,6 +12,7 @@
 #include "assets.h"
 #include "simplexnoise.h"
 #include "bat.h"
+#include "health.h"
 #include "debug.h"
 #include "collide.h"
 #include "rand.h"
@@ -135,6 +136,7 @@ void HellCrossScene::ExitScene()
 	ForegroundOneShotAnim::DeleteAll();
 	destroyedTiles.Clear();
 	EnemiesByScreen::AssertEmpty();
+	Health::DeleteAll();
 }
 
 void HellCrossScene::UpdateCamera() {
@@ -190,6 +192,11 @@ void HellCrossScene::Update(float dt)
 	}
 	Bullet::DeleteNotAlive();
 
+	for (Health* g : Health::GetAll()) {
+		g->Update(dt);
+	}
+	Health::DeleteNotAlive();
+
 	for (Bat* e : Bat::GetAll()) {
 		e->Update(dt);
 	}
@@ -225,10 +232,12 @@ void HellCrossScene::Draw()
 		&map,
 		&destroyedTiles,
 		BackgroundOneShotAnim::GetAll(),
+		&Particles::dust,
 		Bat::GetAll(),
 		&Particles::bullet,
 		Bullet::GetAll(),
-		&Particles::dust,
+		Health::GetAll(),
+		&Particles::health,
 		ForegroundOneShotAnim::GetAll(),
 		&player,
 		Lava::GetAll()
