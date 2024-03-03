@@ -44,7 +44,8 @@ void Input::MapGameKeys()
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) || (
                (p == keyboard_player_id) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_Z) ||
-                   Keyboard::IsKeyPressed(SDL_SCANCODE_P)
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_P) ||
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE)
                )
         );
     };
