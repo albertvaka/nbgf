@@ -728,12 +728,14 @@ void Player::Update(float dt)
 			vec gunDirection = vec::FromAngleDegs(bfgAngle);
 			vec tipOfTheGun = bfgPos + gunDirection*16.f;
 			new Bullet(tipOfTheGun, gunDirection*kBulletVel);
+			float oldVelY = vel.y;
 			vel -= gunDirection*kBfgPushBack;
 			initialJumpY = Mates::MaxFloat; // Overrides jump impulse
 			if (onWall) {
 				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
 			}
 			if (groundTile != Tile::NONE) {
+				vel.y = oldVelY; // Do not push towards the ground to prevent playing the "land" sound & particles
 				if (abs(vel.x) < 0.1f) {
 					Particles::DoDustLand(pos);
 				}
