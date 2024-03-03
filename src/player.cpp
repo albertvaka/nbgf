@@ -757,10 +757,12 @@ void Player::ToSafeGround() {
 	onWall = false;
 	crouched = false;
 	if (health > 0) {
+		invencibleTimer = 0.f;
+		anim.Ensure(AnimLib::WARRIOR_FALL, false);
 		vec newPos = SafeGroundPos();
 		toSafeGroundLambdaTimer = 0.f;
 		auto previousUpdateWhileFrozen = Fx::FreezeImage::GetAlternativeUpdateFnWhileFrozen();
-		Fx::FreezeImage::Freeze(0.8f);
+		Fx::FreezeImage::Freeze(0.5f);
 		Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([this, newPos, previousUpdateWhileFrozen](float dt) {
 			toSafeGroundLambdaTimer += dt;
 			pos = Mates::Lerp(pos, newPos, toSafeGroundLambdaTimer);
