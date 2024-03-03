@@ -864,7 +864,8 @@ void Player::Draw() const {
 			*(const_cast<int*>(&health)) = std::max(health, maxHealth);
 		}
 		ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10);
-		ImGui::SliderFloat2("pos", (float*)&pos, 16.f, 4500.f);
+		vec mapSize = GaemTileMap::instance()->BoundsInWorld().BottomRight();
+		ImGui::SliderFloat2("pos", (float*)&pos, 0, std::max(mapSize.x, mapSize.y));
 		if (initialJumpY < Mates::MaxFloat) {
 			debugMaxJumpY = std::max(debugMaxJumpY, -(pos.y - initialJumpY));
 		}
