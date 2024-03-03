@@ -87,7 +87,6 @@ void Lava::Update(float dt) {
 	const float kLavaDamageAreaOffsetFromTop = 8.5f;
 	if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
 		// TODO: All this should be done by a method of player
-		// TODO: Animate player moving to the new position (and the lava level if it has to change?)
 		if (!player->frozen) {
 			player->anim.Ensure(AnimLib::WARRIOR_HURT, false);
 			player->pos.y = CurrentLevel() + kLavaDamageAreaOffsetFromTop;

@@ -83,7 +83,7 @@ void HellCrossScene::EnterScene()
 	skillTree.Enable(Skill::BREAK);
 
 	SimplexNoise simplex;
-	for (int y = -1; y < map.Height() - 5; y++) { //don't spawn at the bottom rows
+	for (int y = -1; y < map.Height() - 5; y++) { // don't spawn at the bottom rows
 		for (int x = 20; x < map.Width(); x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
 			if (map.GetTile(x, y).isSolid()) {
 				float noise = simplex.noise(randomSeed + x / batClusterSize, y / batClusterSize); // returns a number between -1 and 1
@@ -121,6 +121,9 @@ void HellCrossScene::EnterScene()
 
 	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 	UpdateCamera();
+	Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([this](float dt) {
+		UpdateCamera();
+	});
 }
 
 void HellCrossScene::ExitScene()
@@ -143,6 +146,10 @@ void HellCrossScene::UpdateCamera() {
 void HellCrossScene::Update(float dt)
 {
 	Fx::Update(dt);
+	if (Fx::FreezeImage::IsFrozen()) {
+		// Fx::FreezeImage's alternate update function has already run at this point
+		return;
+	}
 	if (Fx::ScreenTransition::IsActive()) {
 		return;
 	}
