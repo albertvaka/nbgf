@@ -841,7 +841,7 @@ void Player::Draw() const {
 	}
 
 	GPU_Rect rect = anim.CurrentFrameRect();
-	if (!SkillTree::instance()->IsEnabled(Skill::ATTACK)) {
+	if (!SkillTree::instance()->IsEnabled(Skill::ATTACK) && !SkillTree::instance()->IsEnabled(Skill::WALLJUMP)) { // Walljump doesn't have animations without sword
 		rect.x += kOffsetSwordlessSpritesheet;
 	}
 

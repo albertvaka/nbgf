@@ -79,7 +79,7 @@ void HellCrossScene::EnterScene()
 	player.Reset(vec(160, 160), kInitialPlayerHealth);
 
 	skillTree.Enable(Skill::GUN);
-	skillTree.Enable(Skill::WALLJUMP);
+	//skillTree.Enable(Skill::WALLJUMP);
 	skillTree.Enable(Skill::BREAK);
 
 	SimplexNoise simplex;
