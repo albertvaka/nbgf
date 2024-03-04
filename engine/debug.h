@@ -26,7 +26,7 @@ struct DebugStreamDelegate
     DebugStreamDelegate() = default;
     ~DebugStreamDelegate();
     template <typename T>
-    DebugStreamDelegate& operator<<(T&& val) {
+    DebugStreamDelegate& operator<<(T&& val) noexcept {
         Debug::_forwarded_out << std::forward<T>(val);
         return *this;
     }
@@ -35,7 +35,7 @@ struct DebugStreamDelegate
 };
 struct DebugStream {
     template <typename T>
-    DebugStreamDelegate operator<<(T&& val) {
+    DebugStreamDelegate operator<<(T&& val) noexcept {
         Debug::_forwarded_out << lastTicks << ": " << std::forward<T>(val);
         return DebugStreamDelegate();
     }

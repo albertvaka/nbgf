@@ -66,7 +66,7 @@ struct SaveStream
 		state->Put(id, stream.str()); 
 	}
 	template <typename T>
-	SaveStream& operator<<(T&& val) {
+	SaveStream& operator<<(T&& val) noexcept {
 		stream << " " << std::forward<T>(val);
 		return *this;
 	}
