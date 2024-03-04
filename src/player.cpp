@@ -303,12 +303,12 @@ void Player::Update(float dt)
 	justHit = false;
 
 	int prev_frame = anim.current_frame;
-	if (onWall) {
-		if (vel.y < 30.f) {
+	if (anim.IsSet(AnimLib::WARRIOR_WALL_SLIDE)) {
+		if (vel.y < 10.f) {
 			// do not update animation
 			anim.current_frame = 2;
-		} else if (vel.y < 100.f) {
-			anim.Update(dt * ((vel.y - 30.) / 70.f));
+		} else if (vel.y < 90.f) {
+			anim.Update(dt * (vel.y / 100.f));
 			if (anim.current_frame == 1) {
 				// hack: skip frame that looks weird if slowed down
 				anim.current_frame = 2;
