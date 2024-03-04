@@ -62,7 +62,7 @@ extern bool mainClockPaused;
 const float kCamSpeed = 2000.f;
 const float kCamZoomSpeed = 0.2f;
 
-const int kPlayerInitialHealth = 20;
+const int kPlayerInitialHealth = 10;
 
 const char* kSaveStateGameName = "gaem2020";
 

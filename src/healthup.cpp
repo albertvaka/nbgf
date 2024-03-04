@@ -36,7 +36,7 @@ void HealthUp::Update(float dt)
 
 	Player* player = Player::instance();
 	if (!pickedUp && Collide(Bounds(), player->CollisionBounds())) {
-		player->HealthUp();
+		player->HealthUp(5);
 		pickedUp = true;
 	}
 }
