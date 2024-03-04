@@ -40,6 +40,7 @@ constexpr const static float kSteeringWanderDist = 6.5f; //Velocitat a la que va
 constexpr const static float kSteeringWanderJitterPerSec = 175; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
 
 constexpr const int kHealth = 8;
+constexpr const float kHitTime = 0.3f;
 
 extern float mainClock;
 
@@ -49,6 +50,7 @@ Ooy::Ooy(vec pos)
 	: SteeringEntity(pos, kRadius, kMaxSpeed, vec(0,0))
 	, steering(this)
 	, health(kHealth)
+	, previousHealth(kHealth)
 {
 	screen = ScreenManager::FindScreenContaining(pos);
 	bounds = ScreenManager::ScreenBounds(screen);
@@ -61,7 +63,7 @@ Ooy::~Ooy()
 }
 
 void Ooy::TakeDamage() {
-	hitTimer = 0.3f;
+	hitTimer = kHitTime;
 	health--;
 	if (health <= 0) {
 		Die();
@@ -164,7 +166,13 @@ void Ooy::Update(float dt)
 	vel.Clamp(vec(-kMaxSpeed, -kMaxSpeed * 0.7f), vec(kMaxSpeed, kMaxSpeed * 0.7f));
 	pos += vel * dt;
 
-	hitTimer -= dt;
+	if (hitTimer > 0.f) {
+		hitTimer -= dt;
+		if (hitTimer <= 0.f) {
+			previousHealth = health;
+		}
+	}
+
 	if (ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f)) {
 		TakeDamage();
 		if (alive == false) return;
@@ -244,6 +252,6 @@ int Ooy::DrawHealth(int offset) const {
 	if (state == State::STILL || !InSameScreenAsPlayer(screen)) {
 		return 0;
 	}
-	DrawBossHealth(health, kHealth, offset);
+	DrawBossHealth(health, previousHealth, kHealth, offset);
 	return 1;
 }

@@ -28,6 +28,8 @@ constexpr const int kFlipDamageFramesBegin = 2;
 constexpr const int kFlipDamageFramesEnd = 3;
 constexpr const float kFlipAttackHitboxHeight = kMinotaurSize.y/3;
 
+constexpr const float kHitTime = 0.3f;
+
 Minotaur::Minotaur(vec pos)
 	: BoxEntity(pos-vec(0,kMinotaurSize.y/2), kMinotaurSize)
 	, anim(AnimLib::MINOTAUR_IDLE)
@@ -53,6 +55,7 @@ void Minotaur::Reset()
 	pos = initialPos;
 	hitTimer = 0.f;
 	health = kMinotaurHealth;
+	previousHealth = kMinotaurHealth;
 }
 
 BoxBounds Minotaur::AttackBounds() const {
@@ -64,7 +67,7 @@ BoxBounds Minotaur::FlipAttackBounds() const {
 }
 
 void Minotaur::TakeDamage() {
-	hitTimer = 0.3f;
+	hitTimer = kHitTime;
 	health--;
 	if (health <= 0) {
 		DieWithSmallExplosion(this);
@@ -89,7 +92,13 @@ void Minotaur::Update(float dt)
 
 	bool wasAttacked = false;
 
-	hitTimer  -= dt;
+	if (hitTimer > 0.f) {
+		hitTimer -= dt;
+		if (hitTimer <= 0.f) {
+			previousHealth = health;
+		}
+	}
+
 	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
 	if (damageFromPlayerPos) {
 		wasAttacked = true;
@@ -208,6 +217,6 @@ int Minotaur::DrawHealth(int offset) const {
 	if (!InSameScreenAsPlayer(screen)) {
 		return 0;
 	}
-	DrawBossHealth(health, kMinotaurHealth, offset);
+	DrawBossHealth(health, previousHealth, kMinotaurHealth, offset);
 	return 1;
 }

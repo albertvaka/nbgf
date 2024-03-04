@@ -26,6 +26,7 @@ struct Minotaur : BoxEntity, SelfRegister<Minotaur>
 
 	int screen;
 	int health;
+	int previousHealth;
 	vec initialPos;
 
 	bool goingRight = true;

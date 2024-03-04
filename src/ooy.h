@@ -21,6 +21,7 @@ struct Ooy : SteeringEntity, SelfRegister<Ooy>
 	float timer = 0.f;
 	int screen;
 	int health;
+	int previousHealth;
 	float hitTimer = 0.f;
 	SteeringBehavior steering;
 	BoxBounds bounds;

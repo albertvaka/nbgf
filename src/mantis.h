@@ -23,6 +23,7 @@ struct Mantis : CircleEntity, SelfRegister<Mantis>, SelfColliding<Mantis>
 	Animation anim;
 	vec initialPlayerPosition;
 	int health;
+	int previousHealth;
 
 	vec initialPos;
 	float initialVelX;

@@ -31,7 +31,7 @@ constexpr const float kSpriteRadius = 10.f* kScale;
 
 
 constexpr const vec kKnockbackVel(180.f, -150.f);
-constexpr const float kHitTime = 0.5f;
+constexpr const float kHitTime = 0.3f;
 
 constexpr const float kJumpCooldown = .3f;
 constexpr const float kJumpCooldownRand = 1.6f;
@@ -56,6 +56,7 @@ Mantis::~Mantis()
 void Mantis::Reset() {
 	pos = initialPos;
 	health = kMantisHealth;
+	previousHealth = kMantisHealth;
 	vel.y = 10;
 	vel.x = initialVelX;
 	state = State::JUMP;
@@ -91,7 +92,14 @@ void Mantis::Update(float dt)
 	//Debug::out << ENUM_NAME_OF(state);
 
 	jumpCooldownTimer -= dt;
-	hitTimer -= dt;
+
+	if (hitTimer > 0.f) {
+		hitTimer -= dt;
+		if (hitTimer <= 0.f) {
+			previousHealth = health;
+		}
+	}
+
 	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
 	if (damageFromPlayerPos) {
 		TakeDamage(*damageFromPlayerPos);
@@ -287,7 +295,7 @@ int Mantis::DrawHealth(int offset) const {
 	if (!InSameScreenAsPlayer(screen)) {
 		return 0;
 	}
-	DrawBossHealth(health, kMantisHealth, offset);
+	DrawBossHealth(health, previousHealth, kMantisHealth, offset);
 	return 1;
 }
 

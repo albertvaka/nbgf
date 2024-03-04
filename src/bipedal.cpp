@@ -14,23 +14,25 @@
 #include "common_enemy.h"
 #include "enemies_by_screen.h"
 
-const float walking_speed = 30.f; //per second
+constexpr const float walking_speed = 30.f; //per second
 
 // Constants relatives to the sprite, assuming the origin is at ground level
-const vec kHeadHitBoxOffset = vec(-30, -105);
-const vec kHeadHitBoxSize = vec(80, 45);
-const vec kLegsHitBoxOffset = vec(-20, -64);
-const vec kLegsHitBoxSize = vec(40, 60);
-const vec kTextureOffset = vec(-10, -88);
-const vec kMissilesOriginOffset = vec(-10, -110);
-const float kLegsReceiveHitWidthIncrease = 20.f;
-const float kTimeBetweenMissiles = 0.4f;
-const float kDieAnimTime = 3.f;
-const int kHealth = 18;
+constexpr const vec kHeadHitBoxOffset = vec(-30, -105);
+constexpr const vec kHeadHitBoxSize = vec(80, 45);
+constexpr const vec kLegsHitBoxOffset = vec(-20, -64);
+constexpr const vec kLegsHitBoxSize = vec(40, 60);
+constexpr const vec kTextureOffset = vec(-10, -88);
+constexpr const vec kMissilesOriginOffset = vec(-10, -110);
+constexpr const float kLegsReceiveHitWidthIncrease = 20.f;
+constexpr const float kTimeBetweenMissiles = 0.4f;
+constexpr const float kDieAnimTime = 3.f;
+constexpr const int kHealth = 18;
+constexpr const float kHitTime = 0.3f;
 
 Bipedal::Bipedal(vec pos)
 	: Entity(pos)
 	, health(kHealth)
+	, previousHealth(kHealth)
 	, anim(AnimLib::BIPEDAL_WALKING)
 	, state(State::WALKING_FORWARD)
 	, headHitBox(pos + kHeadHitBoxOffset, kHeadHitBoxSize)
@@ -96,7 +98,12 @@ void Bipedal::Update(float dt)
 		return;
 	}
 
-	hitTimer -= dt;
+	if (hitTimer > 0.f) {
+		hitTimer -= dt;
+		if (hitTimer <= 0.f) {
+			previousHealth = health;
+		}
+	}
 
 	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(headHitBox, hitTimer > 0.f);
 	if (damageFromPlayerPos) {
@@ -215,7 +222,7 @@ void Bipedal::Update(float dt)
 }
 
 void Bipedal::TakeDamage() {
-	hitTimer = 0.3f;
+	hitTimer = kHitTime;
 	health--;
 	if (health <= 0) {
 		for (Missile* m : Missile::GetAll()) {
@@ -255,6 +262,6 @@ int Bipedal::DrawHealth(int offset) const {
 	if (!InSameScreenAsPlayer(screen)) {
 		return 0;
 	}
-	DrawBossHealth(health, kHealth, offset);
+	DrawBossHealth(health, previousHealth, kHealth, offset);
 	return 1;
 }
