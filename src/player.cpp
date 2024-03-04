@@ -92,6 +92,8 @@ const vec kStandingSize = vec(13, 32);
 const vec kCrouchedSize = vec(13, 22);
 const int kOffsetSwordlessSpritesheet = 413;
 
+const float kHealthAnimationTime = 0.3f;
+
 void DestroyTilesWithSword(const CircleBounds& e) {
 	GaemTileMap* map = GaemTileMap::instance();
 	DestroyedTiles* destroyedTiles = DestroyedTiles::instance();
@@ -163,7 +165,8 @@ void Player::Reset(vec position, int maxHp) {
 	lastSafeTilePos = Tile::ToTiles(position);
 	invencibleTimer = -1.f;
 	bfgCooldownTimer = 0.f;
-	health = maxHealth = maxHp;
+	healthAnimationOldHealth = health = maxHealth = maxHp;
+	healthAnimationTimer = 0.f;
 	initialJumpY = Mates::MaxFloat;
 	crouchedTime = 0.0f;
 	timeAfterBeingGrounded = Mates::MaxFloat;
@@ -775,6 +778,10 @@ void Player::Update(float dt)
 		invencibleTimer -= dt;
 	}
 
+	// We use mainClock so it also counts while the screen is frozen, when you are hit. Otherwise, when hit the animation would last longer.
+	if (healthAnimationTimer < mainClock) {
+		healthAnimationOldHealth = health;
+	}
 }
 
 static float toSafeGroundLambdaTimer;
@@ -816,6 +823,7 @@ void Player::TakeDamageFromLava() {
 	diving = false;
 	attacking = false;
 	health--;
+	healthAnimationTimer = mainClock + kHealthAnimationTime;
 
 }
 
@@ -846,6 +854,7 @@ void Player::TakeDamage(vec src) {
 	float direction = (playerCenter-src).AngleDegs();
 	new BackgroundOneShotAnim(Assets::spritesheetTexture, playerCenter, AnimLib::HIT_SPLASH, 2, direction);
 	health--;
+	healthAnimationTimer = mainClock + kHealthAnimationTime;
 }
 
 BoxBounds Player::MaxBounds() const
@@ -854,28 +863,6 @@ BoxBounds Player::MaxBounds() const
 }
 
 void Player::Draw() const {
-
-#ifdef _IMGUI
-	{
-		ImGui::Begin("player");
-		static bool invincible = false;
-		ImGui::Checkbox("invincible", &invincible);
-		if (invincible) {
-			*(const_cast<int*>(&health)) = std::max(health, maxHealth);
-		}
-		ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10);
-		vec mapSize = GaemTileMap::instance()->BoundsInWorld().BottomRight();
-		ImGui::SliderFloat2("pos", (float*)&pos, 0, std::max(mapSize.x, mapSize.y));
-		if (initialJumpY < Mates::MaxFloat) {
-			debugMaxJumpY = std::max(debugMaxJumpY, -(pos.y - initialJumpY));
-		}
-		ImGui::Text("jump height %f", debugMaxJumpY);
-		ImGui::Text("vel %f,%f", vel.x, vel.y);
-		ImGui::Text("divingRestTimer: %f", divingRestTimer);
-		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing, groundTile.isSlope());
-		ImGui::End();
-	}
-#endif
 
 	if (isHit()) {
 		Assets::tintShader.Activate();
@@ -927,28 +914,54 @@ void Player::Draw() const {
 	}
 }
 
-void Player::Heal() {
-	// TODO: Animation
-	health += 1;
+void Player::Heal(int n) {
+	health += n;
+	healthAnimationTimer = mainClock + kHealthAnimationTime;
 	Mates::ClampMax(health, maxHealth);
 }
 
-void Player::HealthUp() {
-	// TODO: Animation
-	health += 1;
-	maxHealth += 1;
+void Player::HealthUp(int n) {
+	health += n;
+	healthAnimationTimer = mainClock + kHealthAnimationTime;
+	maxHealth += n;
 }
 
 namespace AnimLib {
-	constexpr const GPU_Rect HEALTH_BACKGROUND = { 479+18, 260, 1, 9 };
-	constexpr const GPU_Rect HEALTH_FOREGROUND = { 477+18, 260, 1, 9 };
-	constexpr const GPU_Rect HEALTH_BEGIN = { 463+18, 260, 4, 9 };
-	constexpr const GPU_Rect HEALTH_MIDDLE = { 466+18, 260, 1, 9 };
-	constexpr const GPU_Rect HEALTH_END = { 473+18, 260, 4, 9 };
+	constexpr const GPU_Rect HEALTH_FOREGROUND = { 495, 260, 1, 9 };
+	constexpr const GPU_Rect HEALTH_BACKGROUND = { 497, 260, 1, 9 };
+	constexpr const GPU_Rect HEALTH_HIGHLIGHTED = { 499, 260, 1, 9 };
+	constexpr const GPU_Rect HEALTH_BEGIN = { 463 + 18, 260, 4, 9 };
+	constexpr const GPU_Rect HEALTH_MIDDLE = { 466 + 18, 260, 1, 9 };
+	constexpr const GPU_Rect HEALTH_END = { 473 + 18, 260, 4, 9 };
 }
 
 // Duplicated from DrawBossHealth
-void Player::DrawGUI(bool discreteHealth) const {
+void Player::DrawGUI(bool discreteHealth)
+{
+#ifdef _IMGUI
+	{
+		ImGui::Begin("player");
+		static bool invincible = false;
+		ImGui::Checkbox("invincible", &invincible);
+		if (invincible) {
+			*(const_cast<int*>(&health)) = std::max(health, maxHealth);
+		}
+		int prevHealth = health;
+		if (ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10)) {
+			healthAnimationTimer = mainClock + kHealthAnimationTime;
+		};
+		vec mapSize = GaemTileMap::instance()->BoundsInWorld().BottomRight();
+		ImGui::SliderFloat2("pos", (float*)&pos, 0, std::max(mapSize.x, mapSize.y));
+		if (initialJumpY < Mates::MaxFloat) {
+			debugMaxJumpY = std::max(debugMaxJumpY, -(pos.y - initialJumpY));
+		}
+		ImGui::Text("jump height %f", debugMaxJumpY);
+		ImGui::Text("vel %f,%f", vel.x, vel.y);
+		ImGui::Text("divingRestTimer: %f", divingRestTimer);
+		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing, groundTile.isSlope());
+		ImGui::End();
+	}
+#endif
 
 	if (discreteHealth) {
 		for (int i = 0; i < maxHealth; i++) {
@@ -972,9 +985,17 @@ void Player::DrawGUI(bool discreteHealth) const {
 			.withRect(AnimLib::HEALTH_BACKGROUND);
 
 		// Health
+		int healthScale = (float(healthAnimationOldHealth) / maxHealth) * size * scale;
 		Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale, 0))
-			.withScale((float(health) / maxHealth) * size * scale, scale)
+			.withScale(healthScale, scale)
 			.withRect(AnimLib::HEALTH_FOREGROUND);
+
+		// Health variation
+		if (healthAnimationOldHealth != health) {
+			Window::Draw(Assets::spritesheetTexture, pos + vec(2 * scale + healthScale, 0))
+				.withScale((float(health - healthAnimationOldHealth) / maxHealth) * size * scale, scale)
+				.withRect(AnimLib::HEALTH_HIGHLIGHTED);
+		}
 
 		// Bar begin
 		Window::Draw(Assets::spritesheetTexture, pos + vec())

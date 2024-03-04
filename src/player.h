@@ -15,7 +15,7 @@ struct Player : Entity, SingleInstance<Player>
     Player();
     void Update(float dt);
     void Draw() const;
-    void DrawGUI(bool discreteHealth = false) const;
+    void DrawGUI(bool discreteHealth = false);
     void Reset(vec position, int maxHp);
 
     vec CenterPos() {
@@ -33,8 +33,8 @@ struct Player : Entity, SingleInstance<Player>
     }
     BoxBounds MaxBounds() const;
 
-    void Heal();
-    void HealthUp();
+    void Heal(int n = 1);
+    void HealthUp(int n = 1);
     void TakeDamageFromLava();
     void TakeDamage(vec src);
     void DealDamage(vec target);
@@ -88,6 +88,8 @@ struct Player : Entity, SingleInstance<Player>
     float bfgCooldownTimer;
     int health;
     int maxHealth;
+    float healthAnimationTimer;
+    int healthAnimationOldHealth;
     int voiceSoundChannel = -1;
 
     void UpdateMoving(float dt);
