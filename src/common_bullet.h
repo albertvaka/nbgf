@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vec.h"
+#include "assets_sounds.h"
 #include "gaemtilemap.h"
 #include "destroyedtiles.h"
 
@@ -26,6 +27,7 @@ bool BigBulletTilemapCollision(T* bullet, Tile::BreakResistance breakTilesPower 
 	return false;
 hit:
 	if (tile.isBreakable(breakTilesPower)) {
+		Assets::breakBlock.Play();
 		DestroyedTiles::instance()->Destroy(t.x, t.y);
 	}
 	return true;
@@ -47,6 +49,7 @@ bool SmallBulletTilemapCollision(T* bullet, Tile::BreakResistance breakTilesPowe
 	return false;
 hit:
 	if (tile.isBreakable(breakTilesPower)) {
+		Assets::breakBlock.Play();
 		DestroyedTiles::instance()->Destroy(t.x, t.y);
 	}
 	return true;

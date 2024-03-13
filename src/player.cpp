@@ -765,6 +765,7 @@ void Player::Update(float dt)
 			bfgCooldownTimer = kBfgCooldown;
 			vec gunDirection = vec::FromAngleDegs(bfgAngle);
 			vec tipOfTheGun = bfgPos + gunDirection*16.f;
+			Assets::shoot.Play();
 			new Bullet(tipOfTheGun, gunDirection*kBulletVel);
 			float oldVelY = vel.y;
 			vel -= gunDirection*kBfgPushBack;
@@ -833,6 +834,7 @@ bool Player::TakeDamageFallingInLava(Lava* lava) {
 	attacking = false;
 	health--;
 	healthAnimationTimer = mainClock + kHealthAnimationTime;
+	Assets::lavaBigSplash.Play();
 	return health > 0;
 
 }
