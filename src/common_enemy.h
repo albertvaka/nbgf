@@ -1,12 +1,14 @@
 #pragma once
 
 #include "player.h"
+#include "assets_sounds.h"
 #include "bullet.h"
 #include "collide.h"
 #include "health.h"
 #include "rand.h"
 #include "oneshotanim.h"
 #include "anim_lib.h"
+#include "window_conf.h"
 #include "fx.h"
 #include "bounds.h"
 #include "assets.h"
@@ -61,6 +63,7 @@ inline void DieWithSmallExplosion(Entity* e) {
 	e->alive = false;
 	DieScreenShake();
 	new BackgroundOneShotAnim(Assets::spritesheetTexture, e->pos, AnimLib::MAGIC_EXPLOSION, 1.3f);
+	Assets::enemyDies.Play(e->pos, Player::instance()->pos, Window::GAME_WIDTH);
 	RandomlySpawnHealth(e->pos);
 }
 

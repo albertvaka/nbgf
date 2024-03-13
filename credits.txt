@@ -35,3 +35,4 @@ More lava sounds by artisticdude https://opengameart.org/content/fire-evil-spell
 Even more lava soudns by Julien https://opengameart.org/content/fireball-1
 Break block sound by rubberduck https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx
 Bat sounds by polymorpheva and AntumDeluge https://opengameart.org/content/bat-screeches
+Enemy kill sound by qubodup https://opengameart.org/content/elemental-spell

@@ -26,7 +26,10 @@ void Assets::LoadAll() {
     soundRattle.Load("data/rattle1.ogg");
     
     batScreech.Load({ "data/bat1.ogg","data/bat2.ogg","data/bat3.ogg" });
+    enemyDies.Load({ "data/bathit1.ogg","data/bathit2.ogg" });
     lavaSplash.Load({ "data/fire1.ogg","data/fire2.ogg" });
+    shoot.Load({ "data/laser1.ogg","data/laser2.ogg", "data/laser3.ogg" });
+    shoot.SetVolumeForAll(0.3f);
     lavaBigSplash.Load({ "data/snd_snd_kenoh_bean_t1.ogg", "data/snd_snd_kenoh_bean_t2.ogg" });
     breakBlock.Load({ "data/bfh1_rock_breaking_01.ogg" });
     
