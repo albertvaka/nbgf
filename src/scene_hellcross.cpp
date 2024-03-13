@@ -20,6 +20,7 @@
 #include "oneshotanim.h"
 #include "drawall.h"
 #include "particles.h"
+#include "parallax.h"
 #include "enemies_by_screen.h"
 
 const float batClusterSize = 22.f;
@@ -38,10 +39,13 @@ HellCrossScene::HellCrossScene()
 {
 	Particles::Init();
 	ScreenManager::AddScreen(map.BoundsInWorld());
+
+	new Parallax(map.BoundsInWorld(), Assets::forestParallaxTextures, 0.f, 1.f, -142.1f);
 }
 
 HellCrossScene::~HellCrossScene()
 {
+	Parallax::DeleteAll();
 	ScreenManager::DeleteAllScreens();
 }
 
@@ -226,6 +230,10 @@ void HellCrossScene::Draw()
 		SimplexNoise::DebugDraw(Tile::Size, [this](int x, int y) {
 			return SimplexNoise().noise(randomSeed + x / batClusterSize, y / batClusterSize);
 		});
+	}
+
+	for (const Parallax* g : Parallax::GetAll()) {
+		g->Draw();
 	}
 
 	DrawAllInOrder(
