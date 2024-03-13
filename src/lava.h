@@ -27,17 +27,13 @@ struct Lava : SelfRegister<Lava>
 		raiseSpeed = speed;
 	}
 
+	void ClearHeight(float height);
+
 	float CurrentLevel() {
 		return bounds.top;
 	}
 
-	void Plof(float posX) {
-		lavaPartSys.pos.x = posX;
-		for (int i = 0; i < 12; i++) {
-			auto& lavaP = lavaPartSys.AddParticle();
-			lavaP.vel.y *= 1.25f;
-		}
-	}
+	void Plof(float posX);
 
 	bool IsInside(vec pos) const {
 		return bounds.Contains(pos);

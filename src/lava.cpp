@@ -1,6 +1,7 @@
 #include "lava.h"
 
 #include "assets.h"
+#include "assets_sounds.h"
 #include "debug.h"
 #include "collide.h"
 #include "camera.h"
@@ -84,32 +85,39 @@ void Lava::Update(float dt) {
 
 	// Kill the player
 	Player* player = Player::instance();
-	const float kLavaDamageAreaOffsetFromTop = 8.5f;
-	if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
-		if (!player->frozen) {
+	if (!player->sinkingInLava) {
+		const float kLavaDamageAreaOffsetFromTop = 8.5f;
+		if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
 			player->pos.y = CurrentLevel() + kLavaDamageAreaOffsetFromTop;
-			player->TakeDamageFromLava();
-		}
-		player->pos.y += 6 * dt; //sink slowly in the lava
-
-		// we don't need this because we never lower the lava level, but if we did we would have
-		// to do something like this to prevent it lowering after killing us and suddently us not being inside
-		//if (targetY > CurrentLevel()) {
-			//targetY = CurrentLevel();
-		//}
-
-		if (IsInside(player->pos - vec(0, 13.f))) {
-			player->ToSafeGround();
-			// If the lava is moving up, we want to move the lava away from the player's safe ground
-			if (targetY != bounds.top) {
-				float heightBelowPlayerPos = player->SafeGroundPos().y + 4 * Tile::Size;
-				if (heightBelowPlayerPos > CurrentLevel()) {
-					float prev_target = targetY;
-					SetLevel(heightBelowPlayerPos, true);
-					SetLevel(prev_target, false);
-				}
+			if (player->TakeDamageFallingInLava(this)) {
+				Plof(player->pos.x);
 			}
+			// we don't need this because we never lower the lava level, but if we did we would have
+			// to do something like this to prevent it lowering after killing us and suddently us not being inside
+			//if (targetY > CurrentLevel()) {
+				//targetY = CurrentLevel();
+			//}
 		}
+	}
+}
+
+void Lava::ClearHeight(float clearHeight) {
+	if (targetY != bounds.top) {
+		float heightBelowPlayerPos = clearHeight + 4 * Tile::Size;
+		if (heightBelowPlayerPos > CurrentLevel()) {
+			float prev_target = targetY;
+			SetLevel(heightBelowPlayerPos, true);
+			SetLevel(prev_target, false);
+		}
+	}
+}
+
+void Lava::Plof(float posX) {
+	Assets::lavaSplash.Play();
+	lavaPartSys.pos.x = posX;
+	for (int i = 0; i < 12; i++) {
+		auto& lavaP = lavaPartSys.AddParticle();
+		lavaP.vel.y *= 1.25f;
 	}
 }
 

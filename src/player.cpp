@@ -9,6 +9,7 @@
 #include "anim_lib.h"
 #include "fx.h"
 #include "oneshotanim.h"
+#include "lava.h"
 #include "debug.h"
 #include "savestate.h"
 #include "particles.h"
@@ -171,7 +172,7 @@ void Player::Reset(vec position, int maxHp) {
 	crouchedTime = 0.0f;
 	timeAfterBeingGrounded = Mates::MaxFloat;
 	onWall = false;
-	frozen = false;
+	sinkingInLava = nullptr;
 	alive = true;
 	groundTile = Tile::NONE;
 	canDash = true;
@@ -294,7 +295,17 @@ float debugMaxJumpY = 0;
 
 void Player::Update(float dt)
 {
-	if (frozen || !alive) return;
+	if (!alive) return;
+
+	if (sinkingInLava) {
+		pos.y += 6 * dt; //sink slowly in the lava
+		if (sinkingInLava->IsInside(pos - vec(0, 13.f))) {
+			// If the lava is moving up, we want to move the lava away from the player's safe ground
+			sinkingInLava->ClearHeight(SafeGroundPos().y);
+			ToSafeGround();
+		}
+		return;
+	}
 
 	if (voiceSoundChannel != -1 && !Sound::Playing(voiceSoundChannel)) {
 		voiceSoundChannel = -1;
@@ -786,12 +797,10 @@ void Player::Update(float dt)
 
 static float toSafeGroundLambdaTimer;
 void Player::ToSafeGround() {
-	invencibleTimer = kInvencibleTimeAfterHit;
 	initialJumpY = Mates::MaxFloat;
 	onWall = false;
 	crouched = false;
 	if (health > 0) {
-		invencibleTimer = 0.f;
 		anim.Ensure(AnimLib::WARRIOR_FALL, false);
 		vec newPos = SafeGroundPos();
 		toSafeGroundLambdaTimer = 0.f;
@@ -804,18 +813,18 @@ void Player::ToSafeGround() {
 				previousUpdateWhileFrozen(dt);
 			}
 		});
-		Fx::FreezeImage::SetUnfreezeCallback([previousUpdateWhileFrozen]() {
+		Fx::FreezeImage::SetUnfreezeCallback([this, previousUpdateWhileFrozen]() {
 			Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen(previousUpdateWhileFrozen);
+			sinkingInLava = nullptr;
 		});
 		vel = vec::Zero;
-		frozen = false;
 	}
 }
 
-void Player::TakeDamageFromLava() {
+bool Player::TakeDamageFallingInLava(Lava* lava) {
 	anim.Ensure(AnimLib::WARRIOR_HURT, false);
-	frozen = true; // disable movement
-	invencibleTimer = 1;
+	sinkingInLava = lava; // disables movement
+	invencibleTimer = kInvencibleTimeAfterHit;
 	bfgPos.y = -1000;
 	onWall = false;
 	crouched = false;
@@ -824,6 +833,7 @@ void Player::TakeDamageFromLava() {
 	attacking = false;
 	health--;
 	healthAnimationTimer = mainClock + kHealthAnimationTime;
+	return health > 0;
 
 }
 

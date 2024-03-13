@@ -25,6 +25,8 @@ void Assets::LoadAll() {
     soundRobotStep.Load({ "data/robotstep1.ogg","data/robotstep2.ogg","data/robotstep3.ogg" });
     soundRattle.Load("data/rattle1.ogg");
     
+    lavaSplash.Load({ "data/snd_snd_kenoh_bean_t1.ogg","data/snd_snd_kenoh_bean_t2.ogg" });
+
     soundLeaves.Load({ "data/leaves01.ogg","data/leaves02.ogg" });
     soundSword.Load({ "data/sword1.ogg","data/sword2.ogg" });
     soundStep.Load({ "data/step1.ogg","data/step2.ogg", "data/step3.ogg","data/step4.ogg" });

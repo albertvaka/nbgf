@@ -9,6 +9,7 @@
 #include "singleinstance.h"
 
 struct SaveState;
+struct Lava;
 
 struct Player : Entity, SingleInstance<Player>
 {
@@ -35,7 +36,7 @@ struct Player : Entity, SingleInstance<Player>
 
     void Heal(int n = 1);
     void HealthUp(int n = 1);
-    void TakeDamageFromLava();
+    bool TakeDamageFallingInLava(Lava* lava);
     void TakeDamage(vec src);
     void DealDamage(vec target);
     void ToSafeGround();
@@ -43,7 +44,7 @@ struct Player : Entity, SingleInstance<Player>
         return Tile::FromTiles(lastSafeTilePos) + vec(Tile::Size / 2, 0);
     }
     bool isInvencible() const { return invencibleTimer > 0.f /*|| dashing*/; }
-    bool isHit() const { return invencibleTimer > 0.1f; }
+    bool isHit() const { return (invencibleTimer > 0.1f) || sinkingInLava; }
 
     vec bfgOffset() {
         if (crouched) {
@@ -71,7 +72,7 @@ struct Player : Entity, SingleInstance<Player>
     float jumpFromWallTimer;
     float timeAfterBeingGrounded;
     float crouchedTime;
-    bool frozen;
+    Lava* sinkingInLava;
     bool justHit;
     float invencibleTimer;
     float divingRestTimer;
