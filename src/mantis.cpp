@@ -25,9 +25,9 @@ constexpr const float kScale = 1.5f;
 constexpr const float kMantisHealth = 5;
 
 // Square used to collide against the tilemap
-constexpr const vec kSpriteSize = vec(16 * kScale, 24* kScale);
+constexpr const vec kBoundingBoxSize = vec(16 * kScale, 24* kScale);
 // Radius used to collide against the player (a bit smaller)
-constexpr const float kSpriteRadius = 10.f* kScale;
+constexpr const float kBoundingRadius = 10.f * kScale;
 
 
 constexpr const vec kKnockbackVel(180.f, -150.f);
@@ -37,7 +37,7 @@ constexpr const float kJumpCooldown = .3f;
 constexpr const float kJumpCooldownRand = 1.6f;
 
 Mantis::Mantis(vec pos)
-	: CircleEntity(pos - vec(0, 8), kSpriteRadius)
+	: CircleEntity(pos - vec(0, 8), kBoundingRadius)
 	, anim(AnimLib::MANTIS_WALK)
 	, walkingBackwards(false)
 {
@@ -134,20 +134,20 @@ void Mantis::Update(float dt)
 			anim.Update(dt);
 		}
 
-		if (IsGoingToLeaveTheScreen(pos, kSpriteSize, vel, dt, screen)
+		if (IsGoingToLeaveTheScreen(pos, kBoundingBoxSize, vel, dt, screen)
 			|| IsBouncingAgainstAnotherMantis())
 		{
 			walkingBackwards = false;
 			vel.x = -vel.x;
 		}
 
-		Particles::DoDustRun(vec(pos.x, pos.y + kSpriteSize.y / 2), dt/2.f, vel.y < 0, false); // Half the dt so we do less dust
+		Particles::DoDustRun(vec(pos.x, pos.y + kBoundingBoxSize.y / 2), dt/2.f, vel.y < 0, false); // Half the dt so we do less dust
 
 		vec finalVel = vel;
 		if (collideInnerRadius) {
 			finalVel.x *= 1.5f;
 		}
-		auto ret = MoveAgainstTileMap(pos, kSpriteSize, finalVel, dt);
+		auto ret = MoveAgainstTileMap(pos, kBoundingBoxSize, finalVel, dt);
 		pos = ret.pos;
 		if (!ret.leftWallCollision.isEmpty() || !ret.rightWallCollision.isEmpty()) {
 			walkingBackwards = false;
@@ -180,7 +180,7 @@ void Mantis::Update(float dt)
 			//Debug::FrameByFrame = true;
 			vel = GetJumpSpeedToTarget(predictedPlayerPos);
 			state = State::JUMP;
-			Particles::DoDustJump(vec(pos.x, pos.y + kSpriteSize.y/2));
+			Particles::DoDustJump(vec(pos.x, pos.y + kBoundingBoxSize.y/2));
 		}
 	}
 	break;
@@ -190,16 +190,16 @@ void Mantis::Update(float dt)
 
 		// Bounce against other mantis
 		if (IsBouncingAgainstAnotherMantis()
-			|| IsGoingToLeaveTheScreen(pos, kSpriteSize, vel, dt, screen)) {
+			|| IsGoingToLeaveTheScreen(pos, kBoundingBoxSize, vel, dt, screen)) {
 			vel.x = -vel.x * 0.5f;
 		}
 
-		auto ret = MoveAgainstTileMap(pos, kSpriteSize, vel, dt);
+		auto ret = MoveAgainstTileMap(pos, kBoundingBoxSize, vel, dt);
 		pos = ret.pos;
 
 		if (ret.groundCollision != Tile::NONE) {
 			EnterWalkingState(dt);
-			Particles::DoDustLand(vec(pos.x, pos.y + kSpriteSize.y/2));
+			Particles::DoDustLand(vec(pos.x, pos.y + kBoundingBoxSize.y/2));
 			jumpCooldownTimer = kJumpCooldown + Rand::rollf(kJumpCooldownRand);
 		} else if (ret.ceilingCollision != Tile::NONE) {
 			vel.y = 0;
@@ -286,7 +286,7 @@ void Mantis::Draw() const
 
 	// Debug-only
 	Bounds().DebugDraw();
-	BoxBounds::FromCenter(pos, kSpriteSize).DebugDraw();
+	BoxBounds::FromCenter(pos, kBoundingBoxSize).DebugDraw();
 	CircleBounds(pos, kJumpRadius).DebugDraw(COLOR_UINT8_RGB_YELLOW);
 	CircleBounds(pos, kMeleeRadius).DebugDraw(COLOR_UINT8_RGB_RED);
 }
