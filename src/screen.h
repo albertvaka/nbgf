@@ -2,7 +2,12 @@
 
 #include "bounds.h"
 #include "singleinstance.h"
+#include "window_conf.h"
 #include "entity.h"
+#include "debug.h"
+
+#include <SDL_assert.h>
+
 #include <vector>
 
 struct ScreenManager
@@ -33,6 +38,7 @@ struct ScreenManager
 	}
 
 	static const BoxBounds& ScreenBounds(int screen) {
+		SDL_assert(screen > 0 && screen < screens.size());
 		return screens[screen];
 	}
 

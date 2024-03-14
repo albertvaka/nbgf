@@ -31,23 +31,16 @@ constexpr const float spriteRadius = 15.f;
 // Area that if intersects with the player will trigger an attack
 constexpr const vec playerNearbyArea = vec(100, 100);
 
-FlyingAlien::FlyingAlien(vec pos)
+FlyingAlien::FlyingAlien(vec pos, const BoxBounds* bounds)
 	: CircleEntity(pos - vec(0,8), spriteRadius)
 	, anim(AnimLib::FLYING_ALIEN)
+	, screen(ScreenManager::FindScreenContaining(pos))
+	, bounds(bounds? *bounds : ScreenManager::ScreenBounds(screen))
 {
-	screen = ScreenManager::FindScreenContaining(pos);
 	initialPos = this->pos;
 	initialVelX = Rand::OnceEvery(2) ? -speedInitial : speedInitial;
 	Reset();
 
-	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::alien_bounds);
-	if (bounds_index > -1) {
-		bounds = Tiled::Areas::alien_bounds[bounds_index];
-	} else if (screen > -1) {
-		bounds = ScreenManager::ScreenBounds(screen);
-	} else {
-		Debug::out << "Unbounded FlyingAlien";
-	}
 	EnemiesByScreen::Add(screen, this);
 }
 

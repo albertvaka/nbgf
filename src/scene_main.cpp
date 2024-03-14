@@ -263,7 +263,7 @@ void MainScene::TriggerPickupItem(BigItem* g, [[maybe_unused]] bool fromSave) {
 			}
 		}
 		for (auto const& [id, pos] : Tiled::Entities::initial_batawake) {
-			Bat* b = new Bat(pos, false, true);
+			Bat* b = new Bat(pos, false, true, FindEnemyBounds(pos, Tiled::Areas::bat_bounds));
 			for (EnemyDoor* d : EnemyDoor::ByScreen[b->screen]) {
 				d->AddEnemy(b);
 			}
@@ -297,19 +297,19 @@ void MainScene::EnterScene()
 	//(new ForegroundOneShotAnim(Assets::warriorTexture, Tiled::Entities::single_npc, AnimLib::NPC_IDLE, 1.2f))->anim.loopable = true;
 
 	for (auto const& [id, pos] : Tiled::Entities::bat) {
-		new Bat(pos, false, false);
+		new Bat(pos, false, false, FindEnemyBounds(pos, Tiled::Areas::bat_bounds));
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::angrybat) {
-		new Bat(pos, true, false);
+		new Bat(pos, true, false, FindEnemyBounds(pos, Tiled::Areas::bat_bounds));
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::angrybatawake) {
-		new Bat(pos, true, true);
+		new Bat(pos, true, true, FindEnemyBounds(pos, Tiled::Areas::bat_bounds));
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::batawake) {
-		new Bat(pos, false, true);
+		new Bat(pos, false, true, FindEnemyBounds(pos, Tiled::Areas::bat_bounds));
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::fireslime) {
@@ -325,7 +325,7 @@ void MainScene::EnterScene()
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::miniooy) {
-		new MiniOoy(pos);
+		new MiniOoy(pos, FindEnemyBounds(pos, Tiled::Areas::miniooy_bounds));
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::goomba) {
@@ -341,7 +341,7 @@ void MainScene::EnterScene()
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::flyingalien) {
-		new FlyingAlien(pos);
+		new FlyingAlien(pos, FindEnemyBounds(pos, Tiled::Areas::alien_bounds));
 	}
 
 	for (auto const& [id, pos] : Tiled::Entities::save) {
@@ -353,7 +353,7 @@ void MainScene::EnterScene()
 		new Mantis(pos);
 	}
 
-	boss_bipedal = new Bipedal(Tiled::Entities::single_boss_bipedal);
+	boss_bipedal = new Bipedal(Tiled::Entities::single_boss_bipedal, Tiled::Areas::single_boss_bounds.Left(), Tiled::Areas::single_boss_bounds.Right());
 
 	boss_minotaur = new Minotaur(Tiled::Entities::single_boss_minotaur);
 

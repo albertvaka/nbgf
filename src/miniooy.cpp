@@ -46,18 +46,13 @@ extern float mainClock;
 
 constexpr const GPU_Rect directions[] = { AnimLib::OOY_CHASE_SE, AnimLib::OOY_CHASE_SW, AnimLib::OOY_CHASE_NW, AnimLib::OOY_CHASE_NE };
 
-MiniOoy::MiniOoy(vec pos)
+MiniOoy::MiniOoy(vec pos, const BoxBounds* bounds)
 	: SteeringEntity(pos, kRadius, kMaxSpeed, vec(0, 0))
 	, steering(this)
 	, health(kHealth)
+	, screen(ScreenManager::FindScreenContaining(pos))
+	, bounds(bounds ? *bounds : ScreenManager::ScreenBounds(screen))
 {
-	screen = ScreenManager::FindScreenContaining(pos);
-	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::miniooy_bounds);
-	if (bounds_index > -1) {
-		bounds = Tiled::Areas::miniooy_bounds[bounds_index];
-	} else {
-		bounds = ScreenManager::ScreenBounds(screen);
-	}
 	EnemiesByScreen::Add(screen, this);
 }
 

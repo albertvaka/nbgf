@@ -28,7 +28,7 @@ struct Bipedal : Entity, SelfRegister<Bipedal>
 	int hitLegsSoundChannel = -1;
 	BoxBounds legsHitBox, headHitBox;
 
-	Bipedal(vec position);
+	Bipedal(vec position, float minX, float maxX);
 	~Bipedal();
 
 	void Update(float dt);

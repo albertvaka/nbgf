@@ -20,12 +20,13 @@ float RandomSeekingTime() {
 	return Rand::rollf(0.2f, 1.6f) + Rand::rollf(0.2f, 1.6f); // Random between 0.4 and 3.2, with values closer to 1.7 more likely
 }
 
-Bat::Bat(vec pos, bool aggresive, bool awake)
+Bat::Bat(vec pos, bool aggresive, bool awake, const BoxBounds* bounds)
 	: SteeringEntity(pos + vec(8.f, -2.f), 8.0f, 90.f, Rand::VecInRange(-10.f, 0.f, 10.f, 10.f))
 	, steering(this)
 	, state(State::SIESTA)
 	, aggresive(aggresive)
 	, anim(AnimLib::BAT_SIESTA)
+	, screen(ScreenManager::FindScreenContaining(pos))
 {
 	if (awake) {
 		state = State::FLYING;
@@ -38,8 +39,8 @@ Bat::Bat(vec pos, bool aggresive, bool awake)
 	steering.ForwardOn();
 	steering.WanderOn();
 
-	screen = ScreenManager::FindScreenContaining(pos);
-	EnableBoundsAvoidance(); //Expects screen to be set
+	BoxBounds boundsOrScreen = bounds? *bounds : ScreenManager::ScreenBounds(screen);
+	steering.BoundsAvoidanceOn(boundsOrScreen);
 
 	if (aggresive) {
 		max_speed *= 1.4f;
@@ -165,19 +166,6 @@ void Bat::AwakeNearbyBats(vec pos) {
 		if (pos.DistanceSq(bat->pos) < (awake_nearby_distance * awake_nearby_distance)) {
 			bat->awakened = true;
 		}
-	}
-}
-
-void Bat::EnableBoundsAvoidance() {
-	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, Tiled::Areas::bat_bounds);
-	if (bounds_index > -1) {
-		steering.BoundsAvoidanceOn(Tiled::Areas::bat_bounds[bounds_index]);
-	}
-	else if (screen > -1) {
-		steering.BoundsAvoidanceOn(ScreenManager::ScreenBounds(screen));
-	}
-	else {
-		Debug::out << "Unbounded bat";
 	}
 }
 

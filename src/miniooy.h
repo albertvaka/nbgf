@@ -19,13 +19,14 @@ struct MiniOoy : SteeringEntity, SelfRegister<MiniOoy>
 
 	State state = State::IDLE;
 	float timer = 0.f;
-	int screen;
 	int health;
 	float hitTimer = 0.f;
 	SteeringBehavior steering;
+
+	int screen;
 	BoxBounds bounds;
 
-	MiniOoy(vec position);
+	MiniOoy(vec position, const BoxBounds* bounds = nullptr);
 	~MiniOoy();
 
 	void Update(float dt);

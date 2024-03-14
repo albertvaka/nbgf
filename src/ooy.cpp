@@ -46,14 +46,14 @@ extern float mainClock;
 
 constexpr const GPU_Rect directions[] = { AnimLib::OOY_CHASE_SE, AnimLib::OOY_CHASE_SW, AnimLib::OOY_CHASE_NW, AnimLib::OOY_CHASE_NE };
 
-Ooy::Ooy(vec pos)
+Ooy::Ooy(vec pos, const BoxBounds* bounds)
 	: SteeringEntity(pos, kRadius, kMaxSpeed, vec(0,0))
 	, steering(this)
 	, health(kHealth)
 	, previousHealth(kHealth)
+	, screen(ScreenManager::FindScreenContaining(pos))
+	, bounds(bounds ? *bounds : ScreenManager::ScreenBounds(screen))
 {
-	screen = ScreenManager::FindScreenContaining(pos);
-	bounds = ScreenManager::ScreenBounds(screen);
 	EnemiesByScreen::Add(screen, this);
 }
 

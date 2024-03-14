@@ -19,14 +19,15 @@ struct Ooy : SteeringEntity, SelfRegister<Ooy>
 
 	State state = State::IDLE;
 	float timer = 0.f;
-	int screen;
 	int health;
 	int previousHealth;
 	float hitTimer = 0.f;
 	SteeringBehavior steering;
+
+	int screen;
 	BoxBounds bounds;
 
-	Ooy(vec position);
+	Ooy(vec position, const BoxBounds* bounds = nullptr);
 	~Ooy();
 
 	void Update(float dt);

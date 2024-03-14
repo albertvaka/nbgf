@@ -85,6 +85,15 @@ inline int FindIndexOfSmallestBoundsContaining(vec pos, const BoundsIterable& bo
 	return smallest_i;
 }
 
+template<typename BoundsIterable>
+inline const BoxBounds* FindEnemyBounds(vec pos, const BoundsIterable& bounds_array) {
+	int bounds_index = FindIndexOfSmallestBoundsContaining(pos, bounds_array);
+	if (bounds_index > -1) {
+		return &(bounds_array[bounds_index]);
+	}
+	return nullptr;
+}
+
 namespace AnimLib {
 	constexpr const GPU_Rect ENEMY_HEALTH_BACKGROUND = { 479, 260, 1, 9 };
 	constexpr const GPU_Rect ENEMY_HEALTH_FOREGROUND = { 477, 260, 1, 9 };

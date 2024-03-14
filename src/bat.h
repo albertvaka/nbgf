@@ -28,14 +28,11 @@ struct Bat : SteeringEntity, SelfRegister<Bat>
 	float seekingTimer; // Aggresive bats will start seeking when this gets to 0
 	int screen;
 
-	Bat(vec position, bool aggresive, bool awake);
+	Bat(vec position, bool aggresive, bool awake, const BoxBounds* bounds = nullptr);
 	~Bat();
 
 	void Update(float dt);
 	void Draw() const;
 	void Screech() const;
-
-private:
-	void EnableBoundsAvoidance();
 };
 
