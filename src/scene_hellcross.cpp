@@ -42,6 +42,8 @@ HellCrossScene::HellCrossScene()
 	, scoreText(Assets::font_30)
 	, bestScoreText(Assets::font_30)
 	, save("hellcross, 0")
+	, score(0)
+	, bestScore(0)
 	, parallax(map.BoundsInWorld(), Assets::forestParallaxTextures, 0.f, 1.f, -142.1f)
 {
 	MusicPlayer::SetVolume(0.3f);
@@ -53,13 +55,9 @@ HellCrossScene::HellCrossScene()
 	if (save.Has("bestscore")) {
 		save.StreamGet("bestscore") >> bestScore;
 	}
-	else {
-		bestScore = 0;
-	}
 }
 
 void HellCrossScene::UpdateScores() {
-	int oldScore = score;
 	score = std::max(int((player.pos.x - playerStartPosition.x) / 10), score);
 	if (score > bestScore) {
 		bestScore = score;
@@ -146,6 +144,7 @@ void HellCrossScene::EnterScene()
 	//skillTree.Enable(Skill::WALLJUMP);
 	skillTree.Enable(Skill::BREAK);
 
+	score = 0;
 	UpdateScores();
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
