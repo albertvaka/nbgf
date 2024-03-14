@@ -4,6 +4,8 @@
 #include "assets_sounds.h"
 #include "gaemtilemap.h"
 #include "destroyedtiles.h"
+#include "window_conf.h"
+#include "player.h"
 
 // Takes the bullet radius into account to calculate collisions,
 // use SmallBulletTilemapCollision for single-pixel collisions
@@ -27,7 +29,7 @@ bool BigBulletTilemapCollision(T* bullet, Tile::BreakResistance breakTilesPower 
 	return false;
 hit:
 	if (tile.isBreakable(breakTilesPower)) {
-		Assets::breakBlock.Play();
+		Assets::breakBlock.Play(bullet->pos, Player::instance()->pos, Window::GAME_WIDTH);
 		DestroyedTiles::instance()->Destroy(t.x, t.y);
 	}
 	return true;
@@ -49,7 +51,7 @@ bool SmallBulletTilemapCollision(T* bullet, Tile::BreakResistance breakTilesPowe
 	return false;
 hit:
 	if (tile.isBreakable(breakTilesPower)) {
-		Assets::breakBlock.Play();
+		Assets::breakBlock.Play(bullet->pos, Player::instance()->pos, Window::GAME_WIDTH);
 		DestroyedTiles::instance()->Destroy(t.x, t.y);
 	}
 	return true;

@@ -54,7 +54,7 @@ Bat::~Bat()
 }
 
 void Bat::Screech() const {
-	Assets::batScreech.Play(pos, Player::instance()->pos, Window::GAME_WIDTH*0.6);
+	Assets::batScreech.Play(pos, Player::instance()->pos, Window::GAME_WIDTH*0.6f);
 }
 
 void Bat::Update(float dt)

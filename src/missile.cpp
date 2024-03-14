@@ -24,7 +24,7 @@ Missile::Missile(vec position, float angleDegs)
 	, anim(AnimLib::MISSILE)
 {
 	vel = vec::FromAngleDegs(angleDegs, kSpeed);
-	soundChannel = Assets::soundMissile.Play();
+	soundChannel = Assets::soundMissile.Play(position, Player::instance()->pos, Window::GAME_WIDTH);
 }
 
 void Missile::Update(float dt)

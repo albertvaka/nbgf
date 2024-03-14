@@ -112,7 +112,7 @@ void FireSlime::Update(float dt)
 
 	if (ReceiveDamageFromPlayer(Bounds(), false)) {
 		DieWithSmallExplosion(this); //single hit
-		Assets::soundSlimyDead.Play();
+		Assets::soundSlimyDead.Play(pos, Player::instance()->pos);
 		return;
 	}
 
