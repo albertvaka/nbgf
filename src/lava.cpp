@@ -85,7 +85,7 @@ void Lava::Update(float dt) {
 
 	// Kill the player
 	Player* player = Player::instance();
-	if (!player->sinkingInLava) {
+	if (player && !player->sinkingInLava) {
 		const float kLavaDamageAreaOffsetFromTop = 8.5f;
 		if (IsInside(player->pos - vec(0, kLavaDamageAreaOffsetFromTop))) {
 			player->pos.y = CurrentLevel() + kLavaDamageAreaOffsetFromTop;

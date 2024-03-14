@@ -183,7 +183,9 @@ void Input::MapGameKeys()
             lastAnalogAim = joystick;
         }
         // For 2 players, lastAnalogAim needs to be turned into an array.
-        return Player::instance()->pos + lastAnalogAim;
+        Player* player = Player::instance();
+        vec playerPos = player ? player->pos : vec::Zero;
+        return playerPos + lastAnalogAim;
     };
 }
 

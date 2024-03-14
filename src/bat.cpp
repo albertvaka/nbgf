@@ -35,7 +35,8 @@ Bat::Bat(vec pos, bool aggresive, bool awake, const BoxBounds* bounds)
 
 	anim.Update(Rand::rollf(0, anim.TotalDuration())); // Start anim at different time intervals
 
-	steering.TileMapAvoidanceOn(GaemTileMap::instance());
+	GaemTileMap* map = GaemTileMap::instance();
+	if (map) steering.TileMapAvoidanceOn(map);
 	steering.ForwardOn();
 	steering.WanderOn();
 
@@ -55,7 +56,9 @@ Bat::~Bat()
 }
 
 void Bat::Screech() const {
-	Assets::batScreech.Play(pos, Player::instance()->pos, Window::GAME_WIDTH*0.6f);
+	Player* player = Player::instance();
+	if (!player) return;
+	Assets::batScreech.Play(pos, player->pos, Window::GAME_WIDTH*0.6f);
 }
 
 void Bat::Update(float dt)

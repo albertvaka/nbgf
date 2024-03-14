@@ -26,7 +26,7 @@ const vec* ReceiveDamageFromPlayer(const B& bounds, bool enemyInvulnerable) {
 	}
 
 	Player* player = Player::instance();
-	if (player->playerAttack.alive) {
+	if (player && player->playerAttack.alive) {
 		if (Collide(player->playerAttack.Bounds(), bounds)) {
 			player->DealDamage(bounds.Center());
 			if (enemyInvulnerable) return nullptr;
@@ -39,6 +39,7 @@ const vec* ReceiveDamageFromPlayer(const B& bounds, bool enemyInvulnerable) {
 template<typename B>
 bool DamagePlayerOnCollision(const B& bounds) { // returns true if collided
 	Player* player = Player::instance();
+	if (player == nullptr) return false;
 	if (Collide(player->HitBoxBounds(), bounds)) {
 		if (!player->isInvencible()) {
 			player->TakeDamage(bounds.Center());
