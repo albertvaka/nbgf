@@ -89,6 +89,7 @@
     <ClInclude Include="src\ooytear.h" />
     <ClInclude Include="src\particles.h" />
     <ClInclude Include="src\rocketlauncher.h" />
+    <ClInclude Include="src\scene_intro.h" />
     <ClInclude Include="src\tile.h" />
     <ClInclude Include="src\gaemtilemap.h" />
     <ClInclude Include="src\goomba.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="src\rocketlauncher.cpp" />
     <ClCompile Include="src\savestation.cpp" />
     <ClCompile Include="src\scene_hellcross.cpp" />
+    <ClCompile Include="src\scene_intro.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
     <ClCompile Include="src\screen.cpp" />
     <ClCompile Include="src\simplexnoise.cpp" />
