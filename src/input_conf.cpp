@@ -45,6 +45,8 @@ void Input::MapGameKeys()
                (p == keyboard_player_id) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_Z) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_P) ||
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_UP) ||
+                   Keyboard::IsKeyPressed(SDL_SCANCODE_W) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE)
                )
         );
