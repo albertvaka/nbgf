@@ -14,7 +14,9 @@ struct SaveStream;
 struct SaveState
 {
 	// Open creates a SaveState and Loads its contents from disk
-	[[nodiscard]] static SaveState Open(const std::string& gaemName, int stateNum = 0) { return SaveState(gaemName, stateNum); }
+	SaveState(const std::string& gaemName, int stateNum = 0) : gaemName(gaemName), stateNum(stateNum) {
+		Load();
+	}
 
 	[[nodiscard]] bool HasData() { return !state.empty(); }
 
@@ -42,9 +44,6 @@ struct SaveState
 	void Save();
 
 private:
-	SaveState(const std::string& gaemName, int stateNum = 0) : gaemName(gaemName), stateNum(stateNum) {
-		Load();
-	}
 	void Load();
 	std::string GetSaveFilePath();
 

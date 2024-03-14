@@ -124,7 +124,7 @@ MainScene::~MainScene() {
 }
 
 void MainScene::SaveGame(int saveStationId) const {
-	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
+	SaveState saveState = SaveState(kSaveStateGameName, saveSlot);
 	if (saveState.HasData()) {
 		Debug::out << "Overwriting data in slot " << saveSlot;
 	}
@@ -165,7 +165,7 @@ void MainScene::SaveGame(int saveStationId) const {
 }
 
 void MainScene::LoadGame() {
-	SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
+	SaveState saveState = SaveState(kSaveStateGameName, saveSlot);
 	if (!saveState.HasData()) {
 		Debug::out << "No data to load in slot " << saveSlot;
 		return;
@@ -638,7 +638,7 @@ void MainScene::Update(float dt)
 	}
 
 	if (player.health <= 0) {
-		//Assets::soundDeath.Play();
+		//Assets::soundMegazero.Play();
 		vec normalizedPlayerPos = Camera::WorldToScreen(player.CenterPos()) / Camera::InScreenCoords::Size();
 		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
 		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
@@ -789,7 +789,7 @@ void MainScene::Update(float dt)
 	if (Keyboard::IsKeyJustPressed(restart)) {
 		// actual restart is done in main.cpp, this is here only to clear the save
 		if (Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
-			SaveState saveState = SaveState::Open(kSaveStateGameName, saveSlot);
+			SaveState saveState = SaveState(kSaveStateGameName, saveSlot);
 			saveState.Clear();
 			saveState.Save();
 		}
@@ -1075,7 +1075,7 @@ void MainScene::Draw()
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Clear save")) {
-			SaveState::Open(kSaveStateGameName, saveSlot)
+			SaveState(kSaveStateGameName, saveSlot)
 				.Clear()
 				.Save();
 		}
