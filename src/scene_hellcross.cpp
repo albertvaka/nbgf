@@ -119,6 +119,8 @@ void HellCrossScene::EnterScene()
 	map.SetTile(pos.x + 1, pos.y + 4, SOLID_TILE);
 
 	// Spawn bats
+	BoxBounds batBounds = map.BoundsInWorld();
+	batBounds.height -= 28; // Bats don't swim in lava
 	SimplexNoise simplex;
 	for (int y = -1; y < map.Height() - 5; y++) { // don't spawn at the bottom rows
 		for (int x = 20; x < map.Width(); x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
@@ -127,7 +129,7 @@ void HellCrossScene::EnterScene()
 				if (y == -1) noise -= 0.66f;
 				if (noise > 0.f) {
 					bool angry = (Rand::rollf() < chanceAngryBat);
-					new Bat(Tile::FromTiles(x,y+2), angry, false);
+					new Bat(Tile::FromTiles(x,y+2), angry, false, &batBounds);
 					map.SetTile(x - 1, y + 1, Tile::NONE);
 					map.SetTile(x, y + 1, Tile::NONE);
 					map.SetTile(x + 1, y + 1, Tile::NONE);
