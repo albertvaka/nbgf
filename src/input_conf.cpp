@@ -137,6 +137,14 @@ void Input::MapGameKeys()
 //              )
             );
     };
+    action_mapping[(int)GameKeys::START] = [](int p)
+        {
+            return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) || (
+                //            (p == keyboard_player_id) && (
+                Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN) || Keyboard::IsKeyPressed(SDL_SCANCODE_KP_ENTER)
+                //              )
+                );
+        };
 
 
     // Analog

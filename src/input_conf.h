@@ -14,6 +14,7 @@ enum class GameKeys
 	ACTION,
 
 	PAUSE,
+	START,
 
 	MENU_UP,
 	MENU_DOWN,
