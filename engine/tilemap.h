@@ -30,6 +30,8 @@ struct TileMap
 
 	BoxBounds BoundsInWorld() const { return BoxBounds(0.f, 0.f, sizes.x * Tile::Size, sizes.y * Tile::Size); }
 
+	BoxBounds TileBounds(int x, int y) const { return BoxBounds(x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size); }
+
 	bool InBounds(int x, int y) const {
 		return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y);
 	}
