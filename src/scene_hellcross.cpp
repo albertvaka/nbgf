@@ -42,14 +42,13 @@ HellCrossScene::HellCrossScene()
 	, scoreText(Assets::font_30)
 	, bestScoreText(Assets::font_30)
 	, save("hellcross, 0")
+	, parallax(map.BoundsInWorld(), Assets::forestParallaxTextures, 0.f, 1.f, -142.1f)
 {
 	MusicPlayer::SetVolume(0.3f);
-	MusicPlayer::Play(Assets::musicHellcross);
+	MusicPlayer::Ensure(Assets::musicHellcross);
 
 	Particles::Init();
 	ScreenManager::AddScreen(map.BoundsInWorld());
-
-	new Parallax(map.BoundsInWorld(), Assets::forestParallaxTextures, 0.f, 1.f, -142.1f);
 
 	if (save.Has("bestscore")) {
 		save.StreamGet("bestscore") >> bestScore;
@@ -72,7 +71,6 @@ void HellCrossScene::UpdateScores() {
 
 HellCrossScene::~HellCrossScene()
 {
-	Parallax::DeleteAll();
 	ScreenManager::DeleteAllScreens();
 }
 
@@ -262,11 +260,8 @@ void HellCrossScene::Draw()
 		});
 	}
 
-	for (const Parallax* g : Parallax::GetAll()) {
-		g->Draw();
-	}
-
 	DrawAllInOrder(
+		&parallax,
 		&map,
 		&destroyedTiles,
 		BackgroundOneShotAnim::GetAll(),

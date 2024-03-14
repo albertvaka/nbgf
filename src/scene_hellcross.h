@@ -7,6 +7,7 @@
 #include "destroyedtiles.h"
 #include "text.h"
 #include "skilltree.h"
+#include "parallax.h"
 #include "screen.h"
 
 struct Text;
@@ -24,6 +25,7 @@ struct HellCrossScene : Scene
 	int score;
 	int bestScore;
 	SaveState save;
+	Parallax parallax;
 
 	HellCrossScene();
 	~HellCrossScene();
