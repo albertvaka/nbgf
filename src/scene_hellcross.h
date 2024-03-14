@@ -5,8 +5,11 @@
 #include "player.h"
 #include "lava.h"
 #include "destroyedtiles.h"
+#include "text.h"
 #include "skilltree.h"
 #include "screen.h"
+
+struct Text;
 
 struct HellCrossScene : Scene
 {
@@ -16,6 +19,11 @@ struct HellCrossScene : Scene
 	Lava lava;
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;
+	Text scoreText;
+	Text bestScoreText;
+	int score;
+	int bestScore;
+	SaveState save;
 
 	HellCrossScene();
 	~HellCrossScene();
@@ -27,4 +35,5 @@ struct HellCrossScene : Scene
 	void Update(float dt);
 	void UpdateCamera();
 	void Draw();
+	void UpdateScores();
 };

@@ -38,12 +38,33 @@ const static vec playerStartPosition = vec(160, 160);
 HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
 	, lava(BoxBounds(0, map_size.y*16 - 20, map_size.x*16, 200))
+	, scoreText(Assets::font_30)
+	, bestScoreText(Assets::font_30)
+	, save("hellcross, 0")
 {
 	Particles::Init();
 	ScreenManager::AddScreen(map.BoundsInWorld());
 
 	new Parallax(map.BoundsInWorld(), Assets::forestParallaxTextures, 0.f, 1.f, -142.1f);
+
+	if (save.Has("bestscore")) {
+		save.StreamGet("bestscore") >> bestScore;
+	}
+	else {
+		bestScore = 0;
+	}
 }
+
+void HellCrossScene::UpdateScores() {
+	int oldScore = score;
+	score = std::max(int((player.pos.x - playerStartPosition.x) / 10), score);
+	if (score > bestScore) {
+		bestScore = score;
+	}
+	scoreText.SetString("Distance: " + std::to_string(score) + "m");
+	bestScoreText.SetString("Best: " + std::to_string(bestScore) + "m");
+}
+
 
 HellCrossScene::~HellCrossScene()
 {
@@ -121,6 +142,8 @@ void HellCrossScene::EnterScene()
 	//skillTree.Enable(Skill::WALLJUMP);
 	skillTree.Enable(Skill::BREAK);
 
+	UpdateScores();
+
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
 	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
@@ -167,8 +190,12 @@ void HellCrossScene::Update(float dt)
 		return;
 	}
 
+	UpdateScores();
+
 	if (player.health <= 0) {
-		//Assets::soundDeath.Play();
+		Assets::soundMegazero.Play();
+		save.StreamPut("bestscore") << bestScore;
+		save.Save();
 		vec normalizedPlayerPos = Camera::WorldToScreen(player.CenterPos()) / Camera::InScreenCoords::Size();
 		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
 		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
@@ -258,6 +285,8 @@ void HellCrossScene::Draw()
 
 	Camera::InScreenCoords::Begin();
 	player.DrawGUI(true);
+	Window::Draw(scoreText, vec(8, 28)).withScale(0.25);
+	Window::Draw(bestScoreText, vec(8, 40)).withScale(0.25);
 	Camera::InScreenCoords::End();
 
 #ifdef _IMGUI
