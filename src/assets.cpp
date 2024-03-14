@@ -31,7 +31,7 @@ void Assets::LoadAll() {
     shoot.Load({ "data/laser1.ogg","data/laser2.ogg", "data/laser3.ogg" });
     shoot.SetVolumeForAll(0.3f);
     lavaBigSplash.Load({ "data/snd_snd_kenoh_bean_t1.ogg", "data/snd_snd_kenoh_bean_t2.ogg" });
-    breakBlock.Load({ "data/bfh1_rock_breaking_01.ogg" });
+    breakBlock.Load("data/bfh1_rock_breaking_01.ogg");
     heal.Load({ "data/health1.ogg", "data/health2.ogg" });
 
     musicHellcross = LoadMusic("data/optomisticday.ogg");

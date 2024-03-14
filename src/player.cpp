@@ -961,7 +961,6 @@ void Player::DrawGUI(bool discreteHealth)
 		if (invincible) {
 			*(const_cast<int*>(&health)) = std::max(health, maxHealth);
 		}
-		int prevHealth = health;
 		if (ImGui::SliderInt("health", const_cast<int*>(&health), 0, 10)) {
 			healthAnimationTimer = mainClock + kHealthAnimationTime;
 		};
