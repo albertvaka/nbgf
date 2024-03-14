@@ -23,7 +23,6 @@ void Health::Update(float dt)
 		alive = false;
 	}
 
-
 	Particles::health.pos = pos - drawOffset() + Rand::VecInRange(vec(-4, -1), vec(4, 3));
 	Particles::health.SpawnWithExternalTimer(particlesTimer, dt);
 }

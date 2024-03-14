@@ -15,6 +15,7 @@ namespace Assets
 	inline MultiSound<2> lavaBigSplash;
 	inline MultiSound<2> lavaSplash;
 	inline MultiSound<3> shoot;
+	inline MultiSound<2> heal;
 	inline Sound breakBlock;
 };
 

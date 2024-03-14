@@ -928,6 +928,9 @@ void Player::Draw() const {
 
 void Player::Heal(int n) {
 	health += n;
+	if (healthAnimationTimer < mainClock + kHealthAnimationTime) {
+		Assets::heal.Play();
+	}
 	healthAnimationTimer = mainClock + kHealthAnimationTime;
 	Mates::ClampMax(health, maxHealth);
 }
