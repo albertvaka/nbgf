@@ -20,7 +20,7 @@ constexpr const float kDistanceAttack = 125.0f;
 
 constexpr const vec kAttackHitbox(80, 120);
 constexpr const int kAttackDamageFramesBegin = 1;
-constexpr const int kAttackDamageFramesEnd = 5;
+constexpr const int kAttackDamageFramesEnd = 4;
 constexpr const vec kAttackHitboxOffset = vec(35,15);
 
 constexpr const vec kFlipAttackHitbox(160, 30);
