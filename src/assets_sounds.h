@@ -2,6 +2,8 @@
 
 #include "sound.h"
 
+typedef struct _Mix_Music Mix_Music;
+
 namespace Assets
 {
 	inline Sound soundSlimyDead;
@@ -17,5 +19,6 @@ namespace Assets
 	inline MultiSound<3> shoot;
 	inline MultiSound<2> heal;
 	inline Sound breakBlock;
+	inline Mix_Music* musicHellcross;
 };
 

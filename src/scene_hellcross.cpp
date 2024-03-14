@@ -10,6 +10,7 @@
 #include "input.h"
 #include "bullet.h"
 #include "assets.h"
+#include "assets_sounds.h"
 #include "simplexnoise.h"
 #include "bat.h"
 #include "health.h"
@@ -42,6 +43,9 @@ HellCrossScene::HellCrossScene()
 	, bestScoreText(Assets::font_30)
 	, save("hellcross, 0")
 {
+	MusicPlayer::SetVolume(0.3f);
+	MusicPlayer::Play(Assets::musicHellcross);
+
 	Particles::Init();
 	ScreenManager::AddScreen(map.BoundsInWorld());
 

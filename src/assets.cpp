@@ -34,6 +34,8 @@ void Assets::LoadAll() {
     breakBlock.Load({ "data/bfh1_rock_breaking_01.ogg" });
     heal.Load({ "data/health1.ogg", "data/health2.ogg" });
 
+    musicHellcross = LoadMusic("data/optomisticday.ogg");
+
     soundLeaves.Load({ "data/leaves01.ogg","data/leaves02.ogg" });
     soundSword.Load({ "data/sword1.ogg","data/sword2.ogg" });
     soundStep.Load({ "data/step1.ogg","data/step2.ogg", "data/step3.ogg","data/step4.ogg" });
