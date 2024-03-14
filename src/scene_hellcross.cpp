@@ -33,6 +33,8 @@ const Tile BREAKABLE_TILE = Tile::BREAKABLE_SIMPLE;
 
 const static vec map_size = vec(500, Window::GAME_HEIGHT/Tile::Size);
 
+const static vec playerStartPosition = vec(160, 160);
+
 HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
 	, lava(BoxBounds(0, map_size.y*16 - 20, map_size.x*16, 200))
@@ -54,8 +56,8 @@ void HellCrossScene::RandomizeMap() {
 	for (int y = 0; y < map.Height(); y++) {
 		for (int x = start_x; x < map.Width(); x++) {
 			Tile t = Tile::NONE;
-			if (y == 0 || map.GetTile(x, y - 1) == Tile::NONE) { // do not stack solid blocks
-				if (x > 0 && map.GetTile(x - 1, y) != Tile::NONE && Rand::rollf() < 0.2f) {
+			if ((y != 1) && (y == 0 || map.GetTile(x, y - 1) == Tile::NONE) && (y < 3 || map.GetTile(x, y - 3) == Tile::NONE)) { // do not stack solid blocks, do not create 2-tile-tall gaps
+				if (x > 0 && map.GetTile(x - 1, y) != Tile::NONE && Rand::rollf() < 0.33f) {
 					t = map.GetTile(x - 1, y); // continue previous block type so we create horizontal platforms
 				} else if (y != map.Height()-1 && Rand::rollf() < 0.05f) {
 					if (Rand::rollf() < 0.33f) {
@@ -75,18 +77,25 @@ void HellCrossScene::EnterScene()
 {
 	Fx::BeforeEnterScene();
 
+	ScreenManager::UpdateCurrentScreen(map.BoundsInWorld().Center());
+
 	randomSeed = Rand::roll(0, 10000);
 	srand(randomSeed);
 	RandomizeMap();
 
-	ScreenManager::UpdateCurrentScreen(map.BoundsInWorld().Center());
+	// Clear the starting area
+	veci pos = Tile::ToTiles(playerStartPosition);
+	for (int x = -2; x <= 1; x++) {
+		for (int y = -2; y <= 5; y++) {
+			map.SetTile(pos.x + x, pos.y + y, Tile::NONE);
+		}
+	}
+	map.SetTile(pos.x - 2, pos.y + 4, SOLID_TILE);
+	map.SetTile(pos.x - 1, pos.y + 4, SOLID_TILE);
+	map.SetTile(pos.x + 0, pos.y + 4, SOLID_TILE);
+	map.SetTile(pos.x + 1, pos.y + 4, SOLID_TILE);
 
-	player.Reset(vec(160, 160), kInitialPlayerHealth);
-
-	skillTree.Enable(Skill::GUN);
-	//skillTree.Enable(Skill::WALLJUMP);
-	skillTree.Enable(Skill::BREAK);
-
+	// Spawn bats
 	SimplexNoise simplex;
 	for (int y = -1; y < map.Height() - 5; y++) { // don't spawn at the bottom rows
 		for (int x = 20; x < map.Width(); x += 2) { // don't spawn at the leftmost part of the map where the player starts, don't spawn two bats together
@@ -107,20 +116,10 @@ void HellCrossScene::EnterScene()
 		}
 	}
 
-	veci pos = Tile::ToTiles(player.pos);
-	map.SetTile(pos.x - 1, pos.y + 3, Tile::NONE);
-	map.SetTile(pos.x + 0, pos.y + 3, Tile::NONE);
-	map.SetTile(pos.x + 1, pos.y + 3, Tile::NONE);
-	map.SetTile(pos.x - 1, pos.y + 2, Tile::NONE);
-	map.SetTile(pos.x + 0, pos.y + 2, Tile::NONE);
-	map.SetTile(pos.x + 1, pos.y + 2, Tile::NONE);
-	map.SetTile(pos.x - 1, pos.y + 1, Tile::NONE);
-	map.SetTile(pos.x + 0, pos.y + 1, Tile::NONE);
-	map.SetTile(pos.x + 1, pos.y + 1, Tile::NONE);
-	map.SetTile(pos.x - 1, pos.y + 4, SOLID_TILE);
-	map.SetTile(pos.x + 0, pos.y + 4, SOLID_TILE);
-	map.SetTile(pos.x + 1, pos.y + 4, SOLID_TILE);
-	map.SetTile(pos.x + 2, pos.y + 4, SOLID_TILE);
+	player.Reset(playerStartPosition, kInitialPlayerHealth);
+	skillTree.Enable(Skill::GUN);
+	//skillTree.Enable(Skill::WALLJUMP);
+	skillTree.Enable(Skill::BREAK);
 
 	Debug::out << "seed=" << randomSeed << ", bats=" << Bat::GetAll().size();
 
