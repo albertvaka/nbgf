@@ -77,7 +77,7 @@ void HellCrossScene::RandomizeMap() {
 	for (int y = 0; y < map.Height(); y++) {
 		for (int x = start_x; x < map.Width(); x++) {
 			Tile t = Tile::NONE;
-			if ((y != 1) && (y == 0 || map.GetTile(x, y - 1) == Tile::NONE) && (y < 3 || map.GetTile(x, y - 3) == Tile::NONE)) { // do not stack solid blocks, do not create 2-tile-tall gaps
+			if ((y != 2) && (y == 0 || map.GetTile(x, y - 1) == Tile::NONE) && (y < 3 || map.GetTile(x, y - 3) == Tile::NONE)) { // do not stack solid blocks, do not create 2-tile-tall gaps
 				if (x > 0 && map.GetTile(x - 1, y) != Tile::NONE && Rand::rollf() < 0.33f) {
 					t = map.GetTile(x - 1, y); // continue previous block type so we create horizontal platforms
 				} else if (y != map.Height()-1 && Rand::rollf() < 0.05f) {
