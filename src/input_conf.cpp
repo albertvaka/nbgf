@@ -41,7 +41,8 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::JUMP] = [](int p)
     {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) || (
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
+               GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) || (
                (p == keyboard_player_id) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_Z) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_P) ||
