@@ -29,10 +29,10 @@ Goomba::Goomba(vec pos, Type type)
 	, anim(type == Type::CHARGER? AnimLib::GOOMBACHARGER : (type == Type::SHIELDER ? AnimLib::GOOMBASHIELDER : AnimLib::GOOMBA))
 	, type(type)
 	, state(type == Type::DUMMY? State::TEST_DUMMY : State::WALKING)
+	, screen(ScreenManager::FindScreenContaining(pos))
 {
 	goingRight = Rand::OnceEvery(2);
-	screen = ScreenManager::FindScreenContaining(pos);
-	
+
 	this->pos = AlignWithGround(this->pos, size);
 	EnemiesByScreen::Add(screen, this);
 }

@@ -36,9 +36,9 @@ constexpr const float kBigDt = Animation::TotalDurationForFrames(AnimLib::FIRESL
 FireSlime::FireSlime(vec pos)
 	: CircleEntity(pos - vec(0, kSpriteOffsetY), 5*kSpriteScale)
 	, anim(AnimLib::FIRESLIME_WALK, false)
+	, screen(ScreenManager::FindScreenContaining(pos))
 {
 	direction = Rand::OnceEvery(2) ? 1 : -1;
-	screen = ScreenManager::FindScreenContaining(pos);
 
 	this->pos = AlignWithGround(this->pos, kGroundCollision);
 	EnemiesByScreen::Add(screen, this);

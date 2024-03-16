@@ -40,8 +40,8 @@ Mantis::Mantis(vec pos)
 	: CircleEntity(pos - vec(0, 8), kBoundingRadius)
 	, anim(AnimLib::MANTIS_WALK)
 	, walkingBackwards(false)
+	, screen(ScreenManager::FindScreenContaining(pos))
 {
-	screen = ScreenManager::FindScreenContaining(pos);
 	initialPos = this->pos;
 	initialVelX = Rand::OnceEvery(2) ? -kSpeed : kSpeed;
 	Reset();

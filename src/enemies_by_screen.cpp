@@ -19,7 +19,7 @@ void EnemiesByScreen::Add(int screen, Entity * e) {
 void EnemiesByScreen::Remove(int screen, Entity* e) {
 	auto p = maperino.find(screen);
 	SDL_assert(p != maperino.end());
-	
+
 	std::vector<Entity*>& list = p->second;
 	auto pp = std::find(list.begin(), list.end(), e);
 	SDL_assert(pp != list.end());

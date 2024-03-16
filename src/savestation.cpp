@@ -18,8 +18,8 @@ SaveStation::SaveStation(int id, vec p)
 	: BoxEntity(p, vec(32, 32)) 
 	, id(id)
 	, hidden(false)
-{ 
-	screen = ScreenManager::FindScreenContaining(pos);
+	, screen(ScreenManager::FindScreenContaining(pos))
+{
 	SaveStation::ByScreen[screen].push_back(this);
 }
 
