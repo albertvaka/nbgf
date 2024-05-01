@@ -20,7 +20,7 @@ void Player::Update(float dt)
 	vec mouseFromCenter = Mouse::GetPositionInWorld() - Camera::Center();
 	pos = Camera::Center() + mouseFromCenter.Normalized() * distance;
 	
-	if (Mouse::IsJustPressed(Mouse::Button::Left)) {
+	if (Input::IsJustPressed(0, GameKeys::SHOOT)) {
 		new Bullet(pos, mouseFromCenter.Normalized() * bulletSpeed);
 	}
 	
