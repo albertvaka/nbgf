@@ -1,11 +1,9 @@
 #include "sound.h"
 
-#include <SDL_mixer.h>
-#include <SDL_assert.h>
 #include <cassert>
 
 #include "debug.h"
-
+/*
 void Sound::Load(const char* path) {
 	if (sound) Mix_FreeChunk(sound);
 	sound = Mix_LoadWAV(path); // Can also load OGG despite the name
@@ -20,7 +18,7 @@ Sound::~Sound() {
 }
 
 void Sound::SetVolume(float v) { // between 0 and 1
-	SDL_assert(v >= 0.f && v <= 1.f);
+	//SDL_assert(v >= 0.f && v <= 1.f);
 	Mix_VolumeChunk(sound, v * 128);
 }
 
@@ -62,3 +60,4 @@ bool Sound::Playing(int channel) {
 	if (channel < 0) return false; // for sdl_mixer, -1 means all channels
 	return Mix_Playing(channel);
 }
+*/

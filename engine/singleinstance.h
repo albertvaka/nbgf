@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SDL_assert.h>
-
 template <typename T>
 class SingleInstance
 {
@@ -14,7 +12,7 @@ public:
 protected:
 		SingleInstance()
 		{
-			SDL_assert(instance() == nullptr); //Creating a second instance of a singleton
+			//SDL_assert(instance() == nullptr); //Creating a second instance of a singleton
 			instance() = (T*)this;
 		}
 		~SingleInstance()

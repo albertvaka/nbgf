@@ -8,7 +8,7 @@
 #include <math.h>
 #include <limits>
 #include <string>
-#include <SDL_assert.h>
+#include <raylib.h>
 
 namespace Mates
 {
@@ -77,7 +77,7 @@ namespace Mates
 	template <class T, class U, class V>
 	inline void Clamp(T& arg, const U& minVal, const V& maxVal)
 	{
-		SDL_assert(minVal <= maxVal);
+		//SDL_assert(minVal <= maxVal);
 
 		if (arg < (T)minVal)
 		{

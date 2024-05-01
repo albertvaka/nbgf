@@ -4,11 +4,8 @@
 
 void Assets::LoadAll() {
 
-    invadersTexture = LoadImage("data/invaders.png");
-    backgroundTexture = LoadImage("data/bg.png");
+    invadersTexture = LoadTexture("data/invaders.png");
+    backgroundTexture = LoadTexture("data/bg.png");
 
-    font_30 = LoadFont("data/PressStart2P.ttf", 30);
-    font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
-
-    tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
+    font_30 = LoadFont("data/PressStart2P.ttf");
 }

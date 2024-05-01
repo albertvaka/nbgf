@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "SDL_gpu.h"
+#include "raylib.h"
 #include "vec.h"
 #include "bounds.h"
 #include "camera.h"
@@ -10,7 +10,7 @@
 template<class Tile> // A TileSet as exported from Tiled (or a class that inherits from it)
 struct TileMap
 {
-	TileMap(int width, int height, GPU_Image* texture)
+	TileMap(int width, int height, Texture* texture)
 		: sizes(width, height)
 		, tiles(new Tile[width * height]{})
 		, tileset(texture)
@@ -23,8 +23,8 @@ struct TileMap
 	
 	template<typename TiledTileMap> // A TileMap as exported from Tiled
 	void LoadFromTiled() {
-		SDL_assert(TiledTileMap::Size.x == sizes.x);
-		SDL_assert(TiledTileMap::Size.y == sizes.y);
+		//SDL_assert(TiledTileMap::Size.x == sizes.x);
+		//SDL_assert(TiledTileMap::Size.y == sizes.y);
 		memcpy((void*)tiles, (void*)TiledTileMap::Map, TiledTileMap::Size.x * TiledTileMap::Size.y * sizeof(Tile));
 	}
 
@@ -61,7 +61,7 @@ struct TileMap
 
 	void Draw() const
 	{
-		BoxBounds screen = Camera::Bounds();
+		BoxBounds screen = GameCamera::Bounds();
 		int left = (screen.Left() / Tile::Size) - 1;
 		int right = (screen.Right() / Tile::Size) + 1;
 		int top = (screen.Top() / Tile::Size) - 1;
@@ -95,7 +95,7 @@ struct TileMap
 				if (t.isInvisible()) {
 					continue;
 				}
-				GPU_Rect rect = t.textureRect();
+				Rectangle rect = t.textureRect();
 				RectToTextureCoordinates(tileset, rect);
 				Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, rect);
 			}
@@ -106,14 +106,14 @@ struct TileMap
 	}
 
 	Tile outOfBoundsTile = Tile::NONE;
-	GPU_Image* tileset;
+	Texture* tileset;
 
 private:
 	veci sizes;
 	Tile* tiles;
 
 	void DrawOutOfBounds(int left, int right, int top, int bottom) const {
-		GPU_Rect outOfBounds = Tile::TileToTextureRect[outOfBoundsTile];
+		Rectangle outOfBounds = Tile::TileToTextureRect[outOfBoundsTile];
 		RectToTextureCoordinates(tileset, outOfBounds);
 
 		if (left < 0) {

@@ -24,7 +24,7 @@ struct debugvec {
     debugvec(vec v, uint8_t r, uint8_t g, uint8_t b) : v(v), color({ r,g,b,255 }), radius(-1) {}
     debugvec(){} // std::vector wants this
     vec v;
-    SDL_Color color;
+    Color color;
     float radius; //only used for circles
     vec from; //only used for arrows and boxes
 };

@@ -12,15 +12,14 @@ ENGINE_OBJ	= $(patsubst engine/%, obj/engine/%.o, $(ENGINE_SRC))
 GENERATED_SRC	= $(wildcard generated/*.cpp)
 GENERATED_OBJ	= $(patsubst generated/%, obj/generated/%.o, $(GENERATED_SRC))
 
-DEP_SRC = $(shell find vendor -type f -name '*.cpp' -o -name '*.c' ! -path 'vendor/glew/*')
+DEP_SRC = $(shell find vendor -type f -name '*.cpp' -o -name '*.c')
 DEP_OBJ = $(patsubst vendor/%, obj/vendor/%.o, $(DEP_SRC))
-DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include ! -path vendor/SDL2/include) $(shell find vendor -mindepth 1 -maxdepth 1 ! -path vendor/glew -type d '!' -exec test -e "{}/include" ';' -print ))
+DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include) $(shell find vendor -mindepth 1 -maxdepth 1 -type d '!' -exec test -e "{}/include" ';' -print ))
 
 OPTIM     ?= 0
 DEBUG     ?= 1
 PROFILE   ?= 0
 IMGUI     ?= $(DEBUG)
-WEBGL_VER ?= 2
 
 # Bash so we can use curly braces expansion
 SHELL = bash
@@ -34,29 +33,24 @@ endif
 #NOTE: Dynamic casts are disabled by fno-rtti
 CFLAGS = -pipe -I./engine -I./generated $(DEP_INCLUDE) -Wall -Wno-unused-parameter -Werror=return-type $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
 CXXFLAGS = $(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions -Wno-reorder
-LDFLAGS	 = $(CXXFLAGS) -lSDL2_ttf -lSDL2_mixer $(PLATFORM_LDFLAGS)
+LDFLAGS	 = $(CXXFLAGS) -lraylib $(PLATFORM_LDFLAGS)
 
 ifdef EMSCRIPTEN
 	OUT_FILE=$(EXEC).js
-	ifeq ($(strip $(WEBGL_VER)),2)
-		WEBGL_CFLAGS=-DSDL_GPU_DISABLE_GLES_2 -DIMGUI_IMPL_OPENGL_ES3
-		WEBGL_LDFLAGS=-s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2
-	else
-		WEBGL_CFLAGS=-DSDL_GPU_DISABLE_GLES_3 -DIMGUI_IMPL_OPENGL_ES2
-		WEBGL_LDFLAGS=-s MIN_WEBGL_VERSION=1 -s MAX_WEBGL_VERSION=1
-	endif
-	PLATFORM_CFLAGS=-DSDL_GPU_DISABLE_OPENGL -DSDL_GPU_DISABLE_GLES_1 -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_MIXER=2 -s USE_OGG -s USE_VORBIS --preload-file bin/data@/data --use-preload-plugins $(WEBGL_CFLAGS)
+	WEBGL_CFLAGS=-DIMGUI_IMPL_OPENGL_ES3
+	WEBGL_LDFLAGS=-s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2
+	PLATFORM_CFLAGS=-s USE_RAYLIB -s USE_GLFW=3 --preload-file bin/data@/data --use-preload-plugins $(WEBGL_CFLAGS)
 	PLATFORM_LDFLAGS=-lidbfs.js -s EXPORTED_FUNCTIONS='["_main", "_start_main_loop"]' -s EXPORTED_RUNTIME_METHODS='["ccall"]' -s ALLOW_MEMORY_GROWTH=1 $(WEBGL_LDFLAGS)
 else
 	OUT_FILE=$(EXEC)
 	ifeq ($(shell uname),Darwin) # MacOS
-		OS_CFLAGS=-I./vendor/glew -DSDL_GPU_DISABLE_OPENGL_4 -DMACOS_VER_MAJOR=$(shell sw_vers -productVersion | cut -d . -f 1) -DMACOS_VER_MINOR=$(shell sw_vers -productVersion | cut -d . -f 2)
+		OS_CFLAGS=-I./vendor/glew -DMACOS_VER_MAJOR=$(shell sw_vers -productVersion | cut -d . -f 1) -DMACOS_VER_MINOR=$(shell sw_vers -productVersion | cut -d . -f 2)
 		OS_LDFLAGS=-framework OpenGL
 	else # Linux
 		OS_CFLAGS=
 		OS_LDFLAGS=-lGL
 	endif
-	PLATFORM_CFLAGS=$(OS_CFLAGS) -DSDL_GPU_DISABLE_GLES $(shell sdl2-config --cflags)
+	PLATFORM_CFLAGS=$(OS_CFLAGS) $(shell sdl2-config --cflags)
 	PLATFORM_LDFLAGS=$(OS_LDFLAGS) -lGLEW $(shell sdl2-config --libs)
 endif
 

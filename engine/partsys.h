@@ -1,13 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <raylib.h>
 
 #include "vec.h"
-#include "SDL_gpu.h"
 
 struct PartSys {
 
-	GPU_Image* texture;
+	Texture& texture;
 
 	struct Particle {
 		Particle() {}
@@ -85,13 +85,12 @@ struct PartSys {
 
 	float time = 0.f;
 
-	PartSys(GPU_Image* t) {
-		SetTexture(t);
+	PartSys(Texture& t) : texture(t) {
 		particles.reserve(80); //~3kb memory usage
 	}
-	void SetTexture(GPU_Image* t) { texture = t; }
+	void SetTexture(Texture& t) { texture = t; }
 
-	void AddSprite(const GPU_Rect& rect) {
+	void AddSprite(const Rectangle& rect) {
 		sprites.emplace_back(rect);
 	}
 
@@ -122,6 +121,6 @@ struct PartSys {
 
 	std::vector<Particle> particles;
 private:
-	mutable std::vector<GPU_Rect> sprites;
+	mutable std::vector<Rectangle> sprites;
 };
 

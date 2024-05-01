@@ -12,6 +12,8 @@
 #endif
 #include <math.h>
 
+#include <raylib.h>
+
 #include "angles.h"
 
 struct veci {
@@ -19,13 +21,13 @@ struct veci {
 	constexpr veci(int a, int b) : x(a), y(b) {}
 };
 
-struct vec
+struct vec : Vector2
 {
-	float x, y;
-	explicit constexpr vec() : x(0.f), y(0.f) {}
-	explicit constexpr vec(float xy) : x(xy), y(xy) {}
-	constexpr vec(float x, float y) : x(x), y(y) {}
-	constexpr vec(const veci& v) : x(v.x), y(v.y) {}
+	explicit constexpr vec() : Vector2{ 0.f, 0.f }  {}
+	explicit constexpr vec(float xy) : Vector2{ xy, xy } {}
+	constexpr vec(float x, float y) : Vector2{ x, y } {}
+	constexpr vec(Vector2 v) : Vector2{ v.x, v.y } {}
+	constexpr vec(const veci& v) : Vector2{ float(v.x), float(v.y) } {}
 
 	static const vec Zero;
 
@@ -507,112 +509,4 @@ inline std::ostream& operator<<(std::ostream& os, vec rhs)
 {
 	os << rhs.x << "," << rhs.y;
 	return os;
-}
-
-struct Transform : public vec {
-	constexpr Transform(vec pos, float rotationDegs) : vec(pos), rotationDegs(rotationDegs) { Angles::KeepDegsBetween0and360(rotationDegs); }
-	constexpr Transform(float x, float y, float rotationDegs) : Transform(vec(x, y), rotationDegs) { }
-	float rotationDegs;
-
-	constexpr const Transform operator-() const
-	{
-		return Transform(-x, -y, 360-rotationDegs);
-	}
-
-	constexpr Transform operator+=(Transform rhs)
-	{
-		x += rhs.x;
-		y += rhs.y;
-		rotationDegs += rhs.rotationDegs;
-		Angles::KeepDegsBetween0and360(rotationDegs);
-		return *this;
-	}
-
-	constexpr Transform operator+=(vec rhs)
-	{
-		x += rhs.x;
-		y += rhs.y;
-		return *this;
-	}
-
-	constexpr Transform operator-=(Transform rhs)
-	{
-		x -= rhs.x;
-		y -= rhs.y;
-		rotationDegs -= rhs.rotationDegs;
-		Angles::KeepDegsBetween0and360(rotationDegs);
-		return *this;
-	}
-
-	constexpr Transform operator*=(const float& rhs)
-	{
-		x *= rhs;
-		y *= rhs;
-		rotationDegs *= rhs;
-		Angles::KeepDegsBetween0and360(rotationDegs);
-		return *this;
-	}
-
-	constexpr Transform operator/=(const float& rhs)
-	{
-		x /= rhs;
-		y /= rhs;
-		rotationDegs /= rhs;
-		Angles::KeepDegsBetween0and360(rotationDegs);
-		return *this;
-	}
-
-	constexpr bool operator==(Transform rhs) const
-	{
-		return (x == rhs.x) && (y == rhs.y) && (rotationDegs == rhs.rotationDegs);
-	}
-
-	constexpr bool operator!=(Transform rhs) const
-	{
-		return (x != rhs.x) || (y != rhs.y) || (rotationDegs == rhs.rotationDegs);
-	}
-
-};
-
-//------------------------------------------------------------------------operator overloads
-inline constexpr Transform operator*(Transform lhs, float rhs)
-{
-	Transform result(lhs);
-	result *= rhs;
-	return result;
-}
-
-inline constexpr Transform operator*(float lhs, Transform rhs)
-{
-	Transform result(rhs);
-	result *= lhs;
-	return result;
-}
-
-inline constexpr Transform operator-(Transform lhs, Transform rhs)
-{
-	Transform result(lhs);
-	result -= rhs;
-	return result;
-}
-
-inline constexpr Transform operator+(Transform lhs, Transform rhs)
-{
-	Transform result(lhs);
-	result += rhs;
-	return result;
-}
-
-inline constexpr Transform operator+(Transform lhs, vec rhs)
-{
-	Transform result(lhs);
-	result += rhs;
-	return result;
-}
-
-inline constexpr Transform operator/(Transform lhs, float rhs)
-{
-	Transform result(lhs);
-	result /= rhs;
-	return result;
 }

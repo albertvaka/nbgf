@@ -2,6 +2,7 @@
 
 #include <iosfwd>
 #include <ostream>
+#include <raylib.h>
 
 namespace Debug {
 #ifdef _DEBUG
@@ -17,8 +18,6 @@ namespace Debug {
 #endif
     extern std::ostream& _forwarded_out;
 };
-
-extern int lastTicks;
 
 // Delegate from: https://stackoverflow.com/questions/49332013/adding-a-new-line-after-stdostream-output-without-explicitly-calling-it
 struct DebugStreamDelegate
@@ -36,7 +35,7 @@ struct DebugStreamDelegate
 struct DebugStream {
     template <typename T>
     DebugStreamDelegate operator<<(T&& val) noexcept {
-        Debug::_forwarded_out << lastTicks << ": " << std::forward<T>(val);
+        Debug::_forwarded_out << GetTime() << ": " << std::forward<T>(val);
         return DebugStreamDelegate();
     }
 };

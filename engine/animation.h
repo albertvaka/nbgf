@@ -1,7 +1,5 @@
 #pragma once
 
-#include "SDL_gpu.h"
-
 #include "vec.h"
 #include "animation_frame.h"
 #include <array>
@@ -140,7 +138,7 @@ struct Animation
 		return anim_size;
 	}
 
-	const GPU_Rect& CurrentFrameRect() const
+	const Rectangle& CurrentFrameRect() const
 	{
 		return anim[current_frame].rect;
 	}
@@ -168,7 +166,7 @@ struct Animation
 	}
 
 	template<uint8_t size>
-	static const GPU_Rect& GetRectAtTime(const AnimationFrame(&animation)[size], float time)
+	static const Rectangle& GetRectAtTime(const AnimationFrame(&animation)[size], float time)
 	{
 		// This is not very efficient, but it's handy if you are too lazy to store an Animation between frames and want to use something like the global clock
 		Animation anim(animation);

@@ -6,7 +6,7 @@
 #include <math.h>
 
 #include "vec.h"
-#include "SDL_gpu.h"
+#include <raylib.h>
 
 struct CircleBounds;
 
@@ -23,14 +23,14 @@ struct BoxBounds
         left -= origin.x;
         top -= origin.y;
     }
-    template<typename T> //Works with GPU_Rect, SDL_Rect and SDL_FRect
+    template<typename T> // Works with Rectangle, SDL_Rect and SDL_FRect
     constexpr explicit BoxBounds(T rect) : BoxBounds(rect.x, rect.y, rect.w, rect.h) { }
 
 
     [[nodiscard]] static constexpr BoxBounds FromCenter(vec center, vec size) { return BoxBounds(center - size / 2, size); }
 
-    [[nodiscard]] GPU_Rect AsRect() {
-        return GPU_Rect{ left, top, width, height };
+    [[nodiscard]] Rectangle AsRect() {
+        return Rectangle{ left, top, width, height };
     }
 
     //Expands arround the center by a factor

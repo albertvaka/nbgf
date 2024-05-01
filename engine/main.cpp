@@ -2,6 +2,8 @@
 #include <filesystem>
 #include <chrono>
 
+#include <raylib.h>
+
 #include "scene_manager.h"
 #include "input.h"
 #include "mates.h"
@@ -14,32 +16,24 @@
 #include "../src/scene_entrypoint.h"
 
 #ifdef _IMGUI
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl3.h"
+#include "rlImGui.h"
 #endif
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 #define _FPS_COUNTER
-#endif
+//#endif
 
 bool mainClockPaused = false;
 float mainClock;
-int lastTicks;
 
 #ifdef _FPS_COUNTER
-#include "text.h"
-Text* fpsText;
 int fpsCounter = 0;
 float fpsClock = 0.f;
+std::string fpsText;
 #endif
 
 #ifdef _DEBUG
@@ -63,7 +57,7 @@ extern "C" void start_main_loop()
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(main_loop, 0, 1);
 #else
-	while (true) {
+	while (!WindowShouldClose()) {
 		main_loop();
 	}
 #endif
@@ -98,32 +92,7 @@ int main(int argc, char* argv[])
 
 }
 
-#if _WIN32
-#pragma comment(lib, "Shcore.lib")
-#include <ShellScalingApi.h>
-#endif
-
 void init() {
-#if _WIN32
-	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
-#endif
-
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0) {
-		Debug::out << SDL_GetError();
-		exit(1);
-	}
-
-	if (TTF_Init() != 0) {
-		Debug::out << TTF_GetError();
-	}
-
-	if (Mix_Init(MIX_INIT_OGG) == 0) {
-		Debug::out << Mix_GetError();
-	}
-	
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
-		Debug::out << Mix_GetError();
-	}
 
 	if (Window::Init() != 0) {
 		exit(1);
@@ -136,27 +105,17 @@ void init() {
 	Input::Init();
 
 #ifdef _IMGUI
-	ImGui::CreateContext();
-	ImGui_ImplSDL2_InitForOpenGL(Window::window, nullptr);
-	ImGui_ImplOpenGL3_Init(nullptr);
+	rlImGuiSetup(true);
 #endif
 
-#ifdef _FPS_COUNTER
-	fpsText = new Text(Assets::font_30);
-	fpsText->SetString("0");
-#endif
-
-	lastTicks = SDL_GetTicks();
 }
 
 void main_loop() {
 
+	BeginDrawing();
+
 #ifdef _IMGUI
-	//GPU_ActivateShaderProgram(0, NULL);
-	GPU_FlushBlitBuffer(); // IMPORTANT: run GPU_FlushBlitBuffer before ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
+	rlImGuiBegin();
 #endif
 
 	if (SceneManager::newScene != nullptr) {
@@ -174,15 +133,13 @@ void main_loop() {
 		}
 
 		SceneManager::newScene = nullptr;
-		Camera::SetZoom(1.f);
-		Camera::SetTopLeft(0,0);
+		GameCamera::SetZoom(1.f);
+		GameCamera::SetTopLeft(0,0);
 		Input::IgnoreInput(false);
 		SceneManager::currentScene->EnterScene();
 	}
 
-	int ticks = SDL_GetTicks();
-	float uncappedDt = (ticks - lastTicks) / 1000.f;
-	lastTicks = ticks;
+	float uncappedDt = GetFrameTime();
 
 	float dt = uncappedDt;
 	bool slowDown = false;
@@ -195,89 +152,89 @@ void main_loop() {
 	}
 
 	//Input
-	Mouse::scrollWheel = 0.f;
-	Window::ProcessEvents();
+	/*
 #ifdef _IMGUI
 	ImGuiIO& io = ImGui::GetIO();
 	if (!io.WantCaptureKeyboard)
 #endif
 	{
-		Keyboard::_UpdateInputState();
+		//Keyboard::_UpdateInputState();
 
 	}
 #ifdef _IMGUI
 	if (!io.WantCaptureMouse)
 #endif
 	{
-		Mouse::_UpdateInputState();
+		//Mouse::_UpdateInputState();
 	}
-	GamePad::_UpdateInputState();
+	*/
+
 	Input::Update(dt);
 
-	if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_RETURN) && Keyboard::IsKeyPressed(SDL_SCANCODE_LALT)) {
+	if (IsKeyPressed(KeyboardKey::KEY_ENTER) && IsKeyDown(KeyboardKey::KEY_LEFT_ALT)) {
 		Window::SetFullScreen(!Window::IsFullScreen());
 	}
 
 #ifdef _DEBUG
-	const SDL_Scancode DEBUG_FRAME_BY_FRAME = SDL_SCANCODE_F1;
-	const SDL_Scancode DEBUG_FRAME_BY_FRAME_NEXT = SDL_SCANCODE_E;
-	const SDL_Scancode DEBUG_MODE = SDL_SCANCODE_F2;
-	const SDL_Scancode FIXED_CAMERA = SDL_SCANCODE_F3;
-	const SDL_Scancode DEBUG_RELOAD_ASSETS = SDL_SCANCODE_F4;
-	const SDL_Scancode DEBUG_RESTART_SCENE = SDL_SCANCODE_F5;
-	const SDL_Scancode DEBUG_FAST_FORWARD = SDL_SCANCODE_F10;
+	const KeyboardKey DEBUG_FRAME_BY_FRAME = KeyboardKey::KEY_F1;
+	const KeyboardKey DEBUG_FRAME_BY_FRAME_NEXT = KeyboardKey::KEY_E;
+	const KeyboardKey DEBUG_MODE = KeyboardKey::KEY_F2;
+	const KeyboardKey FIXED_CAMERA = KeyboardKey::KEY_F3;
+	const KeyboardKey DEBUG_RELOAD_ASSETS = KeyboardKey::KEY_F4;
+	const KeyboardKey DEBUG_RESTART_SCENE = KeyboardKey::KEY_F5;
+	const KeyboardKey DEBUG_FAST_FORWARD = KeyboardKey::KEY_F10;
 
-	if (Keyboard::IsKeyJustPressed(DEBUG_RELOAD_ASSETS)) {
+	if (IsKeyPressed(DEBUG_RELOAD_ASSETS)) {
 		// Leaks all already loaded assets, but we don't care since this is just for testing
 		Assets::LoadAll();
 		Debug::out << "Assets reloaded";
 	}
 
-	if (Keyboard::IsKeyJustPressed(FIXED_CAMERA)) {
+	if (IsKeyPressed(FIXED_CAMERA)) {
 		Debug::CameraFixed = !Debug::CameraFixed;
-		fixedCamera = Camera::Center();
-		fixedZoom = Camera::Zoom();
-		fixedRotationDegs = Camera::GetRotationDegs();
+		fixedCamera = GameCamera::Center();
+		fixedZoom = GameCamera::Zoom();
+		fixedRotationDegs = GameCamera::GetRotationDegs();
 	}
 
-	if (Keyboard::IsKeyJustPressed(DEBUG_MODE)) {
+	if (IsKeyPressed(DEBUG_MODE)) {
 		Debug::Draw = !Debug::Draw;
 	}
 
-	if (Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME)) {
+	if (IsKeyPressed(DEBUG_FRAME_BY_FRAME)) {
 		Debug::FrameByFrame = !Debug::FrameByFrame;
 	}
 
-	if (Keyboard::IsKeyJustPressed(DEBUG_FAST_FORWARD) && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+	if (IsKeyPressed(DEBUG_FAST_FORWARD) && IsKeyDown(KeyboardKey::KEY_LEFT_SHIFT)) {
 		Debug::FastForward = !Debug::FastForward;
-	} else if (Keyboard::IsKeyJustReleased(DEBUG_FAST_FORWARD) && !Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
+	} else if (IsKeyReleased(DEBUG_FAST_FORWARD) && !IsKeyDown(KeyboardKey::KEY_LEFT_SHIFT)) {
 		Debug::FastForward = false;
 	}
 
-	if (Keyboard::IsKeyJustPressed(DEBUG_RESTART_SCENE)) {
+	if (IsKeyPressed(DEBUG_RESTART_SCENE)) {
 		SceneManager::RestartScene();
 	}
 
 	if (Debug::CameraFixed) {
-		 Camera::SetCenter(fixedCamera);
-		 Camera::SetZoom(fixedZoom);
-		 Camera::SetRotationDegs(fixedRotationDegs);
+		 GameCamera::SetCenter(fixedCamera);
+		 GameCamera::SetZoom(fixedZoom);
+		 GameCamera::SetRotationDegs(fixedRotationDegs);
 	}
 
 	if (Debug::FrameByFrame && Debug::Draw) {
-		float vel = Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT) ? 2.f : 1.f;
-		Camera::MoveCameraWithArrows(vel*dt);
-		Camera::ChangeZoomWithPlusAndMinus(vel* dt);
-		Camera::RotateWithPagUpDown(vel* dt);
-		fixedCamera = Camera::Center();
-		fixedZoom = Camera::Zoom();
-		fixedRotationDegs = Camera::GetRotationDegs();
+		float vel = IsKeyDown(KeyboardKey::KEY_LEFT_SHIFT) ? 2.f : 1.f;
+		GameCamera::MoveCameraWithArrows(vel*dt);
+		GameCamera::ChangeZoomWithPlusAndMinus(vel* dt);
+		GameCamera::RotateWithPagUpDown(vel* dt);
+		fixedCamera = GameCamera::Center();
+		fixedZoom = GameCamera::Zoom();
+		fixedRotationDegs = GameCamera::GetRotationDegs();
 	}
-	if (Debug::FastForward || Keyboard::IsKeyPressed(DEBUG_FAST_FORWARD)) {
+	if (Debug::FastForward || IsKeyDown(DEBUG_FAST_FORWARD)) {
 		dt = kMinDt;
 	}
 
-	if (!Debug::FrameByFrame || Keyboard::IsKeyJustPressed(DEBUG_FRAME_BY_FRAME_NEXT))
+	if (!Debug::FrameByFrame || IsKeyPressed(DEBUG_FRAME_BY_FRAME_NEXT))
 	{
 		BeforeSceneUpdate();
 #endif
@@ -288,10 +245,12 @@ void main_loop() {
 #ifdef _DEBUG
 	}
 
+	BeginMode2D(GameCamera::camera);
+
 	if (Debug::CameraFixed) {
-		Camera::SetCenter(fixedCamera);
-		Camera::SetZoom(fixedZoom);
-		Camera::SetRotationDegs(fixedRotationDegs);
+		GameCamera::SetCenter(fixedCamera);
+		GameCamera::SetZoom(fixedZoom);
+		GameCamera::SetRotationDegs(fixedRotationDegs);
 	}
 
 	BeforeSceneDraw();
@@ -302,29 +261,29 @@ void main_loop() {
 #ifdef _DEBUG
 	AfterSceneDraw();
 #endif
-
+	EndMode2D();
+	
 	//Draw GUI
-	Camera::InScreenCoords::Begin();
+	BeginMode2D(GuiCamera::gui_camera);
 	
 #ifdef _FPS_COUNTER
 	fpsCounter++;
 	fpsClock += uncappedDt;
 	if (fpsClock > 0.5f)
 	{
-		fpsText->SetString(std::to_string(int(fpsCounter / fpsClock)) + (slowDown ? "!" : ""));
+		// Raylib GetFPS starts at thousands for some reason, so I'm calculating it myself
+		fpsText = std::to_string(int(fpsCounter / fpsClock)) + (slowDown ? "!" : "");
 		slowDown = false;
 		fpsCounter = 0;
 		fpsClock = 0;
 	}
-	Window::Draw(*fpsText, Camera::InScreenCoords::Bounds().TopRight() + vec(-5, 5))
-		.withOrigin(fpsText->Size().x, 0)
-		.withScale(0.5f);
+	// Draw current FPS
+	vec pos = GuiCamera::Bounds().TopRight() + vec(-50, 5);
+	DrawText(fpsText.c_str(), pos.x, pos.y, 30, WHITE);
 #endif
 
 #ifdef _IMGUI
-	ImGui::Render();
-	SDL_GL_MakeCurrent(Window::window, Window::screenTarget->context->context);
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	rlImGuiEnd();
 #endif
 
 #ifdef _DEBUG
@@ -336,7 +295,8 @@ void main_loop() {
 	}
 #endif
 
-	Camera::InScreenCoords::End();
+	EndMode2D();
 
-	GPU_Flip(Window::screenTarget);
+	EndDrawing();
+
 }

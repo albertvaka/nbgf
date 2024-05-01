@@ -1,8 +1,6 @@
 #pragma once
 
-#include "SDL_gpu.h"
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include "raylib.h"
 #include <string>
 #include "vec.h"
 
@@ -14,11 +12,8 @@ struct Text
 		RIGHT
 	};
 
-	Text(TTF_Font* font, TTF_Font* font_outline = nullptr) : font(font), font_outline(font_outline) {}
-	~Text() {
-		if (cached) { 
-			GPU_FreeImage(cached); 
-		}
+	Text(Font& font, int fontSize, int horizontalSpacing = -1) : font(font) {
+		SetFontSize(fontSize, horizontalSpacing);
 	}
 
 	Text& SetString(const std::string& newstr) {
@@ -33,10 +28,21 @@ struct Text
 		return str;
 	}
 
-	Text& SetFont(TTF_Font* newfont, TTF_Font* newfont_outline = nullptr) {
-		if (newfont != font || font_outline != newfont_outline) {
-			font_outline = newfont_outline;
+	Text& SetFont(Font& newfont) {
+		if (&newfont != &font) {
 			font = newfont;
+			Invalidate();
+		}
+		return *this;
+	}
+
+	Text& SetFontSize(int s, int horizontalSpacing = -1) {
+		if (horizontalSpacing == -1) {
+			horizontalSpacing = s / 10;
+		}
+		if (fontSize != s || hspacing != horizontalSpacing) {
+			fontSize = s;
+			hspacing = horizontalSpacing;
 			Invalidate();
 		}
 		return *this;
@@ -66,67 +72,59 @@ struct Text
 		multilineAlignment = a;
 	}
 
+	Text& SetHorizontalSpacing(int pixels) {
+		if (pixels != vspacing) {
+			vspacing = pixels;
+			Invalidate();
+		}
+		return *this;
+	}
+
+
 	Text& SetMultilineSpacing(int pixels) {
-		if (pixels != spacing) {
-			spacing = pixels;
+		if (pixels != vspacing) {
+			vspacing = pixels;
 			Invalidate();
 		}
 		return *this;
 	}
 
 	Text& SetEmptyLinesMultilineSpacing(int pixels) {
-		if (pixels != empty_line_spacing) {
-			empty_line_spacing = pixels;
+		if (pixels != empty_line_vspacing) {
+			empty_line_vspacing = pixels;
 			Invalidate();
 		}
 		return *this;
 	}
 
-	vec Size() const {
-		GPU_Image* image = AsImage();
-		return vec(image->texture_w, image->texture_h);
-	}
-
-	operator GPU_Image* () const {
-		return AsImage();
-	}
-
-	GPU_Image* AsImage() const {
-		if (cached == nullptr) {
-			SDL_Surface* surface = const_cast<Text*>(this)->MultiLineRender();
-			cached = GPU_CopyImageFromSurface(surface);
-			GPU_SetImageFilter(cached, GPU_FILTER_NEAREST);
-			GPU_SetSnapMode(cached, GPU_SNAP_NONE);
-			SDL_FreeSurface(surface);
-			if (!cached) {
-				printf("Unable to create text texture. SDL Error: %s\n", SDL_GetError());
-			}
+	vec Size() {
+		if (cachedSize == vec::Zero) {
+			Render(vec::Zero, true);
 		}
-		return cached;
-	};
+		return cachedSize;
+	}
+
 
     bool HasChanges() {
-        return (cached == nullptr);
+		return (cachedSize == vec::Zero);
     }
+
+	void Render(vec position, bool measureOnly = false);
 
 private:
 	void Invalidate() {
-		if (cached) {
-			GPU_FreeImage(cached);
-			cached = nullptr;
-		}
+		cachedSize = vec::Zero;
 	}
 
-	SDL_Surface* Render(SDL_Color color);
-	SDL_Surface* MultiLineRender();
+	mutable vec cachedSize = vec::Zero;
 
-	TTF_Font* font;
-	TTF_Font* font_outline;
-	SDL_Color color = { 255,255,255,255 };
-	SDL_Color outline_color = { 0,0,0,255 };
-	int spacing = 0;
-	int empty_line_spacing = 12;
-	mutable GPU_Image* cached = nullptr;
+	Font& font;
+	int fontSize;
+	Color color = { 255,255,255,255 };
+	Color outline_color = { 0,0,0,255 };
+	int vspacing = 0;
+	int hspacing;
+	int empty_line_vspacing = 12;
 	MultilineAlignment multilineAlignment = MultilineAlignment::LEFT;
 	std::string str;
 };
@@ -135,14 +133,14 @@ struct TextColor {
 	const static char MagicSeparator = 0x05;
 	const static char MagicIndicator = 0x07;
 	const static char Length = 6;
-	constexpr Uint8 sanitize(Uint8 c) {
+	constexpr uint8_t sanitize(uint8_t c) {
 		// nulls shouldn't be a problem, but just in case
 		if (c == 0 || c == '\n' || c == MagicSeparator) return c + 1;
 		else return c;
 	}
-	Uint8 data[Length] = { MagicSeparator, MagicIndicator, 0,0,0, MagicSeparator };
-	constexpr TextColor(Uint8 r, Uint8 g, Uint8 b) { data[2] = sanitize(r); data[3] = sanitize(g); data[4] = sanitize(b); }
-	constexpr TextColor(SDL_Color color) : TextColor(color.r, color.g, color.b) {}
+	uint8_t data[Length] = { MagicSeparator, MagicIndicator, 0,0,0, MagicSeparator };
+	constexpr TextColor(uint8_t r, uint8_t g, uint8_t b) { data[2] = sanitize(r); data[3] = sanitize(g); data[4] = sanitize(b); }
+	constexpr TextColor(Color color) : TextColor(color.r, color.g, color.b) {}
 };
 
 inline std::string operator+(const TextColor tc, const std::string& str)

@@ -2,24 +2,16 @@
 
 #include <array>
 
+#include <raylib.h>
 #include "sound.h"
-#include "shader.h"
-
-struct GPU_Image;
-typedef struct _TTF_Font TTF_Font;
-typedef struct _Mix_Music Mix_Music;
 
 struct Assets
 {
 	static void LoadAll();
 
-	static inline GPU_Image* invadersTexture;
+	static inline Texture2D invadersTexture;
 	
-	static inline GPU_Image* backgroundTexture;
+	static inline Texture2D backgroundTexture;
 
-	static inline TTF_Font* font_30;
-	static inline TTF_Font* font_30_outline;
-
-	static inline Shader tintShader;
-
+	static inline Font font_30;
 };

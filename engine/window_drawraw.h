@@ -1,11 +1,10 @@
 #pragma once
 
-#include "SDL_gpu.h"
+#include "raylib.h"
 
 namespace Window {
 
-	extern GPU_Target* currentDrawTarget;
-
+	/*
 	namespace DrawRaw {
 
 		const unsigned short MAX_VERTICES = 60000; //From SDL_GPU's GPU_BLIT_BUFFER_ABSOLUTE_MAX_VERTICES
@@ -17,7 +16,7 @@ namespace Window {
 		extern float vertices[MAX_VERTICES * MAX_COMPONENTS_PER_VERTEX];
 		extern unsigned short indices[MAX_INDICES];
 
-		inline void FlushTexturedQuads(GPU_Image* t) {
+		inline void FlushTexturedQuads(Texture* t) {
 			//Debug::out << "vertices:" << vertex_count << " indices:" << index_count;
 			GPU_TriangleBatch(t, Window::currentDrawTarget, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_ST);
 			vertex_count = 0;
@@ -31,7 +30,7 @@ namespace Window {
 			index_count = 0;
 		}
 
-		inline void FlushColoredTexturedQuads(GPU_Image* t) {
+		inline void FlushColoredTexturedQuads(Texture* t) {
 			//Debug::out << "vertices:" << vertex_count << " indices:" << index_count;
 			GPU_TriangleBatch(t, Window::currentDrawTarget, vertex_count, vertices, index_count, indices, GPU_BATCH_XY_ST_RGBA);
 			vertex_count = 0;
@@ -39,7 +38,7 @@ namespace Window {
 		}
 
 		//Colors and texture coords between 0 and 1
-		inline void BatchColoredTexturedQuad(GPU_Image* t, float x, float y, float w, float h, const GPU_Rect& tr, float r, float g, float b, float a)
+		inline void BatchColoredTexturedQuad(Texture* t, float x, float y, float w, float h, const Rectangle& tr, float r, float g, float b, float a)
 		{
 			const int COMPONENTS_PER_VERTEX = 8; // GPU_BATCH_XY_ST_RGBA
 			unsigned int i = vertex_count * COMPONENTS_PER_VERTEX;
@@ -100,7 +99,7 @@ namespace Window {
 		}
 		
 		//Texture coords between 0 and 1
-		inline void BatchTexturedQuad(GPU_Image* t, float x, float y, float w, float h, const GPU_Rect& tr)
+		inline void BatchTexturedQuad(Texture* t, float x, float y, float w, float h, const Rectangle& tr)
 		{
 			const int COMPONENTS_PER_VERTEX = 4; // GPU_BATCH_XY_ST
 			unsigned int i = vertex_count * COMPONENTS_PER_VERTEX;
@@ -195,22 +194,13 @@ namespace Window {
 
 	}
 
-
+	*/
 }
 
-inline void FixTextureBleeding(GPU_Rect& tr) {
-	// I made a similar fix in SDL_GPU's BlitTransformX, but when drawing raw vertices it's not used so we need it here as well
-	const float e = 0.1f;
-	tr.x += e;
-	tr.y += e;
-	tr.w -= 2*e;
-	tr.h -= 2*e;
-}
 
-inline void RectToTextureCoordinates(const GPU_Image* i, GPU_Rect& tr) {
-	FixTextureBleeding(tr);
-	tr.x /= i->texture_w;
-	tr.y /= i->texture_h;
-	tr.w /= i->texture_w;
-	tr.h /= i->texture_h;
+inline void RectToTextureCoordinates(const Texture& i, Rectangle& tr) {
+	tr.x /= i.width;
+	tr.y /= i.height;
+	tr.width /= i.width;
+	tr.height /= i.height;
 }

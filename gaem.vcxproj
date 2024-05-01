@@ -35,12 +35,10 @@
     <ClInclude Include="engine\musicplayer.h" />
     <ClInclude Include="engine\partsys.h" />
     <ClInclude Include="engine\rand.h" />
-    <ClInclude Include="engine\raw_input.h" />
     <ClInclude Include="engine\savestate.h" />
     <ClInclude Include="engine\scene.h" />
     <ClInclude Include="engine\scene_manager.h" />
     <ClInclude Include="engine\selfregister.h" />
-    <ClInclude Include="engine\shader.h" />
     <ClInclude Include="engine\singleinstance.h" />
     <ClInclude Include="engine\sound.h" />
     <ClInclude Include="engine\text.h" />
@@ -63,30 +61,21 @@
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\window_conf.h" />
-    <ClInclude Include="vendor\glew\glew.h" />
-    <ClInclude Include="vendor\glew\glxew.h" />
-    <ClInclude Include="vendor\glew\wglew.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\imgui\imgui_internal.h" />
     <ClInclude Include="vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="vendor\imgui\imstb_truetype.h" />
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h" />
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h" />
+    <ClInclude Include="vendor\imgui_impl\extras\FA6FreeSolidFontData.h" />
+    <ClInclude Include="vendor\imgui_impl\extras\IconsFontAwesome6.h" />
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_raylib.h" />
+    <ClInclude Include="vendor\imgui_impl\rlImGui.h" />
+    <ClInclude Include="vendor\imgui_impl\rlImGuiColors.h" />
     <ClInclude Include="vendor\magic_enum\magic_enum.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_GLES_1.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_GLES_2.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_GLES_3.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_1.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_1_BASE.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_2.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_3.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_OpenGL_4.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_RendererImpl.h" />
-    <ClInclude Include="vendor\SDL_gpu\include\SDL_gpu_version.h" />
-    <ClInclude Include="vendor\stb_image\stb_image.h" />
+    <ClInclude Include="vendor\raylib\include\raylib.h" />
+    <ClInclude Include="vendor\raylib\include\raymath.h" />
+    <ClInclude Include="vendor\raylib\include\rlgl.h" />
     <ClInclude Include="vendor\tweeny\tweeny.h" />
   </ItemGroup>
   <ItemGroup>
@@ -98,9 +87,7 @@
     <ClCompile Include="engine\mates.cpp" />
     <ClCompile Include="engine\musicplayer.cpp" />
     <ClCompile Include="engine\partsys.cpp" />
-    <ClCompile Include="engine\raw_input.cpp" />
     <ClCompile Include="engine\savestate.cpp" />
-    <ClCompile Include="engine\shader.cpp" />
     <ClCompile Include="engine\sound.cpp" />
     <ClCompile Include="engine\text.cpp" />
     <ClCompile Include="engine\vec.cpp" />
@@ -112,26 +99,12 @@
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
-    <ClCompile Include="vendor\glew\glew.c" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp" />
-    <ClCompile Include="vendor\SDL_gpu\src\renderer_GLES_1.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\renderer_GLES_2.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\renderer_GLES_3.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_1.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_1_BASE.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_2.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_3.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\renderer_OpenGL_4.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu_matrix.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu_renderer.c" />
-    <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu_shapes.c" />
-    <ClCompile Include="vendor\stb_image\stb_image.c" />
+    <ClCompile Include="vendor\imgui_impl\rlImGui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx">
@@ -200,8 +173,6 @@ exit /b 0</Command>
     <None Include="asset_src\texturepacker2cpp.py" />
     <None Include="asset_src\tiled2cpp.py" />
     <None Include="README.md" />
-    <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl" />
-    <None Include="vendor\SDL_gpu\src\renderer_shapes_GL_common.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -286,17 +257,17 @@ exit /b 0</Command>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\raylib\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_IMGUI;SDL_MAIN_HANDLED;GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_IMGUI;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SupportJustMyCode>true</SupportJustMyCode>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;SDL2main.lib;SDL2.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\raylib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;raylib.lib;WinMM.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -328,17 +299,18 @@ exit /b 0</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\raylib\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;SDL2main.lib;SDL2.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\raylib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;raylib.lib;WinMM.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

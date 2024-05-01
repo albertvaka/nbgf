@@ -1,10 +1,7 @@
 #include "musicplayer.h"
 
-#include "raw_input.h"
 
-#include <SDL_mixer.h>
-#include <SDL_assert.h>
-
+/*
 namespace MusicPlayer
 {
 	Mix_Music* toPlayAfterIntro;
@@ -58,7 +55,7 @@ namespace MusicPlayer
 	}
 
 	void SetVolume(float v) {
-		SDL_assert(v >= 0.f && v <= 1.f);
+		//SDL_assert(v >= 0.f && v <= 1.f);
 		Mix_VolumeMusic(v * 128);
 	}
 	
@@ -67,7 +64,7 @@ namespace MusicPlayer
 	}
 
 	void ToggleMusicWithM(bool keepPausedOnChange) {
-		if (Keyboard::IsKeyJustPressed(SDL_SCANCODE_M)) {
+		if (IsKeyPressed(KeyboardKey::KEY_M)) {
 			if (IsPaused()) {
 				Resume();
 			} else {
@@ -76,3 +73,4 @@ namespace MusicPlayer
 		}
 	}
 }
+*/

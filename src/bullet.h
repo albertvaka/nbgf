@@ -24,18 +24,18 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 	{
 		pos += vel * dt;
 
-		if (!Camera::Bounds().Contains(pos)) {
+		if (!GameCamera::Bounds().Contains(pos)) {
 			alive = false;
 		}
 	}
 
 	void Draw() const
 	{
-		const GPU_Rect& rect = AnimLib::BULLET;
+		const Rectangle& rect = AnimLib::BULLET;
 		Window::Draw(Assets::invadersTexture, pos)
 			.withRect(rect)
-			.withOrigin(vec(rect.w,rect.h)/2)
-			.withRotationDegs(Camera::Center().AngleDegs(pos) + 90)
+			.withOrigin(vec(rect.width,rect.height)/2)
+			.withRotationDegs(GameCamera::Center().AngleDegs(pos) + 90)
 			.withScale(int(mainClock*4)%2 ? -1 : 1, 1);
 	}
 };

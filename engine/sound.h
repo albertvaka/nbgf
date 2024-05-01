@@ -1,12 +1,11 @@
 ﻿#pragma once
 
 #include <array>
+#include <raylib.h>
 #include "rand.h"
 #include "vec.h"
-
+/*
 struct Mix_Chunk;
-
-// Note: By default, SDL_Mixer can only play 8 sounds at once
 
 struct Sound
 {
@@ -59,3 +58,4 @@ struct MultiSound
 private:
 	std::array<Sound, Size> sounds;
 };
+*/

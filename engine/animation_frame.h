@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDL_gpu.h"
+#include <raylib.h>
 
 #include "vec.h"
 
@@ -8,9 +8,9 @@
 
 struct AnimationFrame
 {
-	const GPU_Rect rect;
+	const Rectangle rect;
 	const float duration;
-	constexpr vec GetSize() const { return vec(rect.w, rect.h); }
+	constexpr vec GetSize() const { return vec(rect.width, rect.height); }
 };
 
 // TODO: All constexpr here should be consteval in C++20
@@ -32,8 +32,8 @@ struct SheetFrameCalculator {
 	{
 		return make_array(begin, duration, std::make_index_sequence<N>{});
 	}
-	constexpr const GPU_Rect Rect(int index) const {
-		return GPU_Rect { (float) (offset_x + sprite_w * (index % columns)), (float) (offset_y + sprite_h * (index / columns)), (float)sprite_w, (float)sprite_h};
+	constexpr const Rectangle Rect(int index) const {
+		return Rectangle { (float) (offset_x + sprite_w * (index % columns)), (float) (offset_y + sprite_h * (index / columns)), (float)sprite_w, (float)sprite_h};
 	}
 	constexpr const AnimationFrame Frame(int index, float duration) const {
 		return AnimationFrame { Rect(index), duration};

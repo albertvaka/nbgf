@@ -49,14 +49,14 @@ struct Alien : CircleEntity, SelfRegister<Alien>
 			distance -= vel_vertical;
 		}
 
-		pos = Camera::Center() + vec::FromAngleDegs(angle, distance);
+		pos = GameCamera::Center() + vec::FromAngleDegs(angle, distance);
 	}
 
 	void Draw() const
 	{
-		const GPU_Rect& animRect = anim.CurrentFrameRect();
+		const Rectangle& animRect = anim.CurrentFrameRect();
 		Window::Draw(Assets::invadersTexture, pos)
-			.withOrigin(vec(animRect.w, animRect.h)/2)
+			.withOrigin(vec(animRect.width, animRect.height)/2)
 			.withRect(animRect)
 			.withRotationDegs(angle + 90)
 			.withScale(0.8f);

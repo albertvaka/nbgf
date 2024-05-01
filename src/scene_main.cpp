@@ -1,5 +1,4 @@
 #include "scene_main.h"
-#include "raw_input.h"
 #ifdef _IMGUI
 #include "imgui.h"
 #endif
@@ -8,6 +7,7 @@
 #include "alien.h"
 #include "collide.h"
 #include "debug.h"
+#include "input.h"
 
 float kAlienMinDistance = 300;
 float kAlienMaxDistance = 400;
@@ -15,11 +15,11 @@ float kAlienMaxDistance = 400;
 SceneMain::SceneMain()
 	: player(200)
 	, alienPartSys(Assets::invadersTexture)
-	, deadAliensText(Assets::font_30, Assets::font_30_outline)
+	, deadAliensText(Assets::font_30, 30, 28)
 {
 	deadAliensText.SetString("Kill the invaders");
-	deadAliensText.SetFillColor(0, 0, 0);
-	deadAliensText.SetOutlineColor(255, 255, 0);
+	deadAliensText.SetFillColor(255, 255, 0);
+	deadAliensText.SetOutlineColor(255, 0, 0);
 
 	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
 	alienPartSys.AddSprite(AnimLib::ALIEN_2[0].rect);
@@ -40,7 +40,8 @@ void SceneMain::EnterScene()
 }
 
 void SceneMain::SpawnAliens() {
-	for (int angle = 0; angle < 360; angle += 360/currentLevel) {
+	//currentLevel = 500000;
+	for (float angle = 0; angle < 360; angle += 360.f/currentLevel) {
 		new Alien(angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
 	}
 }
@@ -56,8 +57,8 @@ void SceneMain::Update(float dt)
 {
 
 #ifdef _DEBUG
-	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	if (Keyboard::IsKeyJustPressed(restart)) {
+	const KeyboardKey restart = KeyboardKey::KEY_F5;
+	if (IsKeyPressed(restart)) {
 		ExitScene();
 		EnterScene();
 		return;
@@ -104,8 +105,8 @@ void SceneMain::Draw()
 {
 	Window::Clear(0, 0, 0);
 
-	Window::Draw(Assets::backgroundTexture, Camera::Center())
-		.withOrigin(Assets::backgroundTexture->w/2, Assets::backgroundTexture->h/2);
+	Window::Draw(Assets::backgroundTexture, GameCamera::Center())
+		.withOrigin(Assets::backgroundTexture.width/2, Assets::backgroundTexture.height/2);
 
 	player.Draw();
 
@@ -121,19 +122,20 @@ void SceneMain::Draw()
 
 	alienPartSys.Draw();
 
-	Window::Draw(deadAliensText, vec(Camera::Center().x, 30))
-		.withOrigin(deadAliensText.Size()/2)
-		.withScale(0.666f);
+	deadAliensText.Render(vec(GameCamera::Center().x, 30) - deadAliensText.Size() / 2);
+//	Window::Draw(deadAliensText, vec(GameCamera::Center().x, 30))
+//		.withOrigin(deadAliensText.Size()/2)
+	//	.withScale(0.666f);
 
 	if (Debug::Draw) {
-		Window::DrawPrimitive::Circle(Camera::Center(), kAlienMinDistance, 1, 255, 255, 255);
-		Window::DrawPrimitive::Circle(Camera::Center(), kAlienMaxDistance, 1, 255, 255, 255);
+		Window::DrawPrimitive::Circle(GameCamera::Center(), kAlienMinDistance, 1, 255, 255, 255);
+		Window::DrawPrimitive::Circle(GameCamera::Center(), kAlienMaxDistance, 1, 255, 255, 255);
 	}
 
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
-		vec m = Mouse::GetPositionInWorld();
+		vec m = GetMousePositionInWorld();
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		if (ImGui::SliderInt("level", &currentLevel, 1, 20)) {
 			Alien::DeleteAll();

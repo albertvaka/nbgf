@@ -2,8 +2,8 @@
 
 #include <vector>
 #include "debug.h"
-
-SDL_Surface* Text::Render(SDL_Color fg) {
+/*
+SDL_Surface* Text::Render(Color fg) {
 	SDL_Surface* fg_surface = TTF_RenderUTF8_Blended(font, str.c_str(), fg);
 	if (!fg_surface) {
 		printf("Unable to create text surface. SDL Error: %s\n", TTF_GetError());
@@ -28,14 +28,16 @@ SDL_Surface* Text::Render(SDL_Color fg) {
 		
 	return bg_surface;
 }
+*/
 
+/*
 SDL_Surface* Text::MultiLineRender() {
 	typedef std::vector<SDL_Surface*> TextRow;
 	std::vector<TextRow> rows;
 	int totalHeight = 0;
 	int maxWidth = 0;
 	std::stringstream rowss(str);
-	SDL_Color fg = color;
+	Color fg = color;
 	while (std::getline(rowss, str, '\n')) {
 		if (str.empty()) {
 			rows.push_back(TextRow());
@@ -125,3 +127,55 @@ SDL_Surface* Text::MultiLineRender() {
 	return final;
 }
 
+*/
+void Text::Render(vec position, bool measureOnly)
+{
+	const char* text = str.c_str();
+	int size = TextLength(text);    // Total size in bytes of the text, scanned by codepoints in loop
+
+	int textOffsetY = 0;            // Offset between lines (on linebreak '\n')
+	float textOffsetX = 0.0f;       // Offset X to next character to draw
+
+	float scaleFactor = fontSize / font.baseSize;         // Character quad scaling factor
+
+	int verticalSize = 0;
+	float lineHeight = 0;
+	float maxLineLenght = 0;
+
+	for (int i = 0; i < size;)
+	{
+		// Get next codepoint from byte string and glyph index in font
+		int codepointByteCount = 0;
+		int codepoint = GetCodepointNext(&text[i], &codepointByteCount);
+		int index = GetGlyphIndex(font, codepoint);
+
+		if (codepoint == '\n')
+		{
+			// NOTE: Line spacing is a global variable, use SetTextLineSpacing() to setup
+			textOffsetY += vspacing;
+			textOffsetX = 0.0f;
+			verticalSize += vspacing + lineHeight;
+			lineHeight = 0;
+		}
+		else
+		{
+			if (!measureOnly) {
+				if ((codepoint != ' ') && (codepoint != '\t'))
+				{
+					DrawTextCodepoint(font, codepoint, Vector2 { position.x + textOffsetX, position.y + textOffsetY }, fontSize, color);
+				}
+			}
+
+			if (font.glyphs[index].advanceX == 0) textOffsetX += ((float)font.recs[index].width * scaleFactor + hspacing);
+			else textOffsetX += ((float)font.glyphs[index].advanceX * scaleFactor + hspacing);
+			lineHeight = std::max(lineHeight, font.recs[index].height);
+			maxLineLenght = std::max(maxLineLenght, textOffsetX);
+		}
+
+		i += codepointByteCount;   // Move text bytes counter to next codepoint
+	}
+
+	verticalSize += lineHeight;
+
+	cachedSize = vec(maxLineLenght, textOffsetY + verticalSize);
+}
