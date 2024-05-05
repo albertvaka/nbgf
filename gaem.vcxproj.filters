@@ -20,7 +20,7 @@
     <Filter Include="Bundled Dependencies\imgui">
       <UniqueIdentifier>{f04c1d6a-03a0-4b9a-9a0b-c44f562282ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Bundled Dependencies\imgui_imp">
+    <Filter Include="Bundled Dependencies\imgui_impl">
       <UniqueIdentifier>{169eeddb-58a8-452d-afef-d879d039e84a}</UniqueIdentifier>
     </Filter>
     <Filter Include="engine">
@@ -413,13 +413,13 @@
       <Filter>Bundled Dependencies\imgui</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+      <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3_loader.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+      <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+      <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -661,10 +661,10 @@
       <Filter>Bundled Dependencies\imgui</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+      <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+      <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
