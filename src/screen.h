@@ -38,7 +38,7 @@ struct ScreenManager
 	}
 
 	static const BoxBounds& ScreenBounds(int screen) {
-		SDL_assert(screen > 0 && screen < screens.size());
+		SDL_assert(screen >= 0 && screen < screens.size());
 		return screens[screen];
 	}
 
