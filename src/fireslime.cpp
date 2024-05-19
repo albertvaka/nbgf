@@ -12,25 +12,25 @@
 #include "common_tilemapcharacter.h"
 #include "enemies_by_screen.h"
 
-constexpr const float kSpeed = 25;
+constexpr float kSpeed = 25;
 
-constexpr const vec kShotSpeed(70, -90);
-constexpr const vec kShotAccel(0, 150);
+constexpr vec kShotSpeed(70, -90);
+constexpr vec kShotAccel(0, 150);
 
-constexpr const float kSpriteScale = 1.3f;
-constexpr const float kSpriteOffsetY = 7.f;
+constexpr float kSpriteScale = 1.3f;
+constexpr float kSpriteOffsetY = 7.f;
 
-constexpr const int kFirstFrameOnAir = 2;
-constexpr const int kFirstFrameOnGround = 6;
-constexpr const int kFrameShooting = 2;
+constexpr int kFirstFrameOnAir = 2;
+constexpr int kFirstFrameOnGround = 6;
+constexpr int kFrameShooting = 2;
 
-constexpr const float kShotsPerAttack = 4;
-constexpr const float kAttackFrameDuration = AnimLib::FIRESLIME_ATTACK[kFrameShooting].duration;
-constexpr const float kTimeBetweenShots = kAttackFrameDuration / kShotsPerAttack;
+constexpr float kShotsPerAttack = 4;
+constexpr float kAttackFrameDuration = AnimLib::FIRESLIME_ATTACK[kFrameShooting].duration;
+constexpr float kTimeBetweenShots = kAttackFrameDuration / kShotsPerAttack;
 
-constexpr const vec kGroundCollision = vec(10, 10) * kSpriteScale;
-constexpr const int kFramesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
-constexpr const float kBigDt = Animation::TotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, kFramesOnAir);
+constexpr vec kGroundCollision = vec(10, 10) * kSpriteScale;
+constexpr int kFramesOnAir = kFirstFrameOnGround - kFirstFrameOnAir;
+constexpr float kBigDt = Animation::TotalDurationForFrames(AnimLib::FIRESLIME_WALK, kFirstFrameOnAir, kFramesOnAir);
 
 
 FireSlime::FireSlime(vec pos)

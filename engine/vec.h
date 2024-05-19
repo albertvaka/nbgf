@@ -198,7 +198,7 @@ struct vec
 		return (x != rhs.x) || (y != rhs.y);
 	}
 
-	constexpr const vec operator-() const
+	constexpr vec operator-() const
 	{
 		return vec(-x, -y);
 	}
@@ -514,7 +514,7 @@ struct Transform : public vec {
 	constexpr Transform(float x, float y, float rotationDegs) : Transform(vec(x, y), rotationDegs) { }
 	float rotationDegs;
 
-	constexpr const Transform operator-() const
+	constexpr Transform operator-() const
 	{
 		return Transform(-x, -y, 360-rotationDegs);
 	}

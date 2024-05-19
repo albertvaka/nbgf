@@ -10,19 +10,19 @@
 #include "common_tilemapcharacter.h"
 #include "enemies_by_screen.h"
 
-constexpr const float speed = 25;
-constexpr const float chargeSpeed = 100;
+constexpr float speed = 25;
+constexpr float chargeSpeed = 100;
 
-constexpr const float enterChargeTime = 0.35f;
-constexpr const float exitChargeTime = 0.2f;
-constexpr const float shieldingTime = 1.1f;
+constexpr float enterChargeTime = 0.35f;
+constexpr float exitChargeTime = 0.2f;
+constexpr float shieldingTime = 1.1f;
 
 // Area in front of it that if intersects with the player will trigger a charge towards them
-constexpr const float detectDistanceInFront = Tile::Size * 11;
-constexpr const float detectDistanceBehind = Tile::Size * 4;
-constexpr const vec detectArea = vec(detectDistanceBehind + detectDistanceInFront, Tile::Size * 2);
+constexpr float detectDistanceInFront = Tile::Size * 11;
+constexpr float detectDistanceBehind = Tile::Size * 4;
+constexpr vec detectArea = vec(detectDistanceBehind + detectDistanceInFront, Tile::Size * 2);
 
-constexpr const vec size = AnimLib::GOOMBA[0].GetSize();
+constexpr vec size = AnimLib::GOOMBA[0].GetSize();
 
 Goomba::Goomba(vec pos, Type type)
 	: CircleEntity(AlignWithGround(pos, Tile::Sizes), 6)

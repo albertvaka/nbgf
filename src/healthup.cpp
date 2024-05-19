@@ -12,8 +12,8 @@
 extern float mainClock;
 
 namespace AnimLib {
-	constexpr const GPU_Rect ROCK_SHARD = { 29 * 16, 13 * 16, 16, 16 };
-	constexpr const GPU_Rect HEALTH_UP = { 6 * 16, 11 * 16, 16, 16 };
+	constexpr GPU_Rect ROCK_SHARD = { 29 * 16, 13 * 16, 16, 16 };
+	constexpr GPU_Rect HEALTH_UP = { 6 * 16, 11 * 16, 16, 16 };
 }
 
 HealthUp::HealthUp(int id, vec p)

@@ -14,20 +14,20 @@
 #include "common_enemy.h"
 #include "enemies_by_screen.h"
 
-constexpr const float walking_speed = 30.f; //per second
+constexpr float walking_speed = 30.f; //per second
 
 // Constants relatives to the sprite, assuming the origin is at ground level
-constexpr const vec kHeadHitBoxOffset = vec(-30, -105);
-constexpr const vec kHeadHitBoxSize = vec(80, 45);
-constexpr const vec kLegsHitBoxOffset = vec(-20, -64);
-constexpr const vec kLegsHitBoxSize = vec(40, 60);
-constexpr const vec kTextureOffset = vec(-10, -88);
-constexpr const vec kMissilesOriginOffset = vec(-10, -110);
-constexpr const float kLegsReceiveHitWidthIncrease = 20.f;
-constexpr const float kTimeBetweenMissiles = 0.4f;
-constexpr const float kDieAnimTime = 3.f;
-constexpr const int kHealth = 18;
-constexpr const float kHitTime = 0.3f;
+constexpr vec kHeadHitBoxOffset = vec(-30, -105);
+constexpr vec kHeadHitBoxSize = vec(80, 45);
+constexpr vec kLegsHitBoxOffset = vec(-20, -64);
+constexpr vec kLegsHitBoxSize = vec(40, 60);
+constexpr vec kTextureOffset = vec(-10, -88);
+constexpr vec kMissilesOriginOffset = vec(-10, -110);
+constexpr float kLegsReceiveHitWidthIncrease = 20.f;
+constexpr float kTimeBetweenMissiles = 0.4f;
+constexpr float kDieAnimTime = 3.f;
+constexpr int kHealth = 18;
+constexpr float kHitTime = 0.3f;
 
 Bipedal::Bipedal(vec pos, float minX, float maxX)
 	: Entity(pos)

@@ -11,13 +11,13 @@
 #include "selfregister.h"
 #include "assets.h"
 
-const constexpr float kMinTimeBirdSpawn = 4;
-const constexpr float kMaxTimeBirdSpawn = 12;
-const constexpr float kMinBirdSpeed = 120;
-const constexpr float kMaxBirdSpeed = 150;
+constexpr float kMinTimeBirdSpawn = 4;
+constexpr float kMaxTimeBirdSpawn = 12;
+constexpr float kMinBirdSpeed = 120;
+constexpr float kMaxBirdSpeed = 150;
 
 namespace AnimLib {
-	constexpr const AnimationFrame BACKGROUND_BIRD[] = {
+	constexpr AnimationFrame BACKGROUND_BIRD[] = {
 		{ { 416 + 0 * 16, 272, 16, 16 }, .1f },
 		{ { 416 + 1 * 16, 272, 16, 16 }, .1f },
 		{ { 416 + 2 * 16, 272, 16, 16 }, .1f },

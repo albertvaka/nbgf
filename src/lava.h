@@ -6,8 +6,8 @@
 
 struct Lava : SelfRegister<Lava>
 {
-	static constexpr const float kRaiseSpeed = 15.f;
-	static constexpr const float kFastRaiseSpeed = 30.f;
+	static constexpr float kRaiseSpeed = 15.f;
+	static constexpr float kFastRaiseSpeed = 30.f;
 
 	PartSys lavaPartSys;
 

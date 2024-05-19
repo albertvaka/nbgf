@@ -12,29 +12,29 @@
 #include "common_enemy.h"
 #include "enemies_by_screen.h"
 
-constexpr const float kGravityAcc = 660; // TODO: reuse from player for consistency, keep in sync meanwhile
+constexpr float kGravityAcc = 660; // TODO: reuse from player for consistency, keep in sync meanwhile
 
-constexpr const float kSpeed = 60;
-constexpr const float kJumpSpeedY = -370;
-constexpr const float kMaxJumpSpeedX = 270;
+constexpr float kSpeed = 60;
+constexpr float kJumpSpeedY = -370;
+constexpr float kMaxJumpSpeedX = 270;
 
-constexpr const float kJumpRadius = 280;
-constexpr const float kMeleeRadius = 80;
+constexpr float kJumpRadius = 280;
+constexpr float kMeleeRadius = 80;
 
-constexpr const float kScale = 1.5f;
-constexpr const float kMantisHealth = 5;
+constexpr float kScale = 1.5f;
+constexpr float kMantisHealth = 5;
 
 // Square used to collide against the tilemap
-constexpr const vec kBoundingBoxSize = vec(16 * kScale, 24* kScale);
+constexpr vec kBoundingBoxSize = vec(16 * kScale, 24* kScale);
 // Radius used to collide against the player (a bit smaller)
-constexpr const float kBoundingRadius = 10.f * kScale;
+constexpr float kBoundingRadius = 10.f * kScale;
 
 
-constexpr const vec kKnockbackVel(180.f, -150.f);
-constexpr const float kHitTime = 0.3f;
+constexpr vec kKnockbackVel(180.f, -150.f);
+constexpr float kHitTime = 0.3f;
 
-constexpr const float kJumpCooldown = .3f;
-constexpr const float kJumpCooldownRand = 1.6f;
+constexpr float kJumpCooldown = .3f;
+constexpr float kJumpCooldownRand = 1.6f;
 
 Mantis::Mantis(vec pos)
 	: CircleEntity(pos - vec(0, 8), kBoundingRadius)

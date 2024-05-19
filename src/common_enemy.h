@@ -96,12 +96,12 @@ inline const BoxBounds* FindEnemyBounds(vec pos, const BoundsIterable& bounds_ar
 }
 
 namespace AnimLib {
-	constexpr const GPU_Rect ENEMY_HEALTH_BACKGROUND = { 479, 260, 1, 9 };
-	constexpr const GPU_Rect ENEMY_HEALTH_FOREGROUND = { 477, 260, 1, 9 };
-	constexpr const GPU_Rect ENEMY_HEALTH_HIGHLIGHTED = { 499, 260, 1, 9 };
-	constexpr const GPU_Rect ENEMY_HEALTH_BEGIN = { 463, 260, 4, 9 };
-	constexpr const GPU_Rect ENEMY_HEALTH_MIDDLE = { 466, 260, 1, 9 };
-	constexpr const GPU_Rect ENEMY_HEALTH_END = { 473, 260, 4, 9 };
+	constexpr GPU_Rect ENEMY_HEALTH_BACKGROUND = { 479, 260, 1, 9 };
+	constexpr GPU_Rect ENEMY_HEALTH_FOREGROUND = { 477, 260, 1, 9 };
+	constexpr GPU_Rect ENEMY_HEALTH_HIGHLIGHTED = { 499, 260, 1, 9 };
+	constexpr GPU_Rect ENEMY_HEALTH_BEGIN = { 463, 260, 4, 9 };
+	constexpr GPU_Rect ENEMY_HEALTH_MIDDLE = { 466, 260, 1, 9 };
+	constexpr GPU_Rect ENEMY_HEALTH_END = { 473, 260, 4, 9 };
 };
 
 inline void DrawBossHealth(int current, int previous /*diff highligted for feedback*/, int max, int offset)

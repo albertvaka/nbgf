@@ -10,25 +10,25 @@
 #include "common_tilemapcharacter.h"
 #include "enemies_by_screen.h"
 
-constexpr const float kScale = 2.0f;
-constexpr const vec kMinotaurSize = vec(25, 38) * kScale;
+constexpr float kScale = 2.0f;
+constexpr vec kMinotaurSize = vec(25, 38) * kScale;
 
-constexpr const float kRunSpeed = 80;
-constexpr const int kMinotaurHealth = 9;
-constexpr const float kExitIdleDistance = 200.f;
-constexpr const float kDistanceAttack = 125.0f;
+constexpr float kRunSpeed = 80;
+constexpr int kMinotaurHealth = 9;
+constexpr float kExitIdleDistance = 200.f;
+constexpr float kDistanceAttack = 125.0f;
 
-constexpr const vec kAttackHitbox(80, 120);
-constexpr const int kAttackDamageFramesBegin = 1;
-constexpr const int kAttackDamageFramesEnd = 4;
-constexpr const vec kAttackHitboxOffset = vec(35,15);
+constexpr vec kAttackHitbox(80, 120);
+constexpr int kAttackDamageFramesBegin = 1;
+constexpr int kAttackDamageFramesEnd = 4;
+constexpr vec kAttackHitboxOffset = vec(35,15);
 
-constexpr const vec kFlipAttackHitbox(160, 30);
-constexpr const int kFlipDamageFramesBegin = 2;
-constexpr const int kFlipDamageFramesEnd = 3;
-constexpr const float kFlipAttackHitboxHeight = kMinotaurSize.y/3;
+constexpr vec kFlipAttackHitbox(160, 30);
+constexpr int kFlipDamageFramesBegin = 2;
+constexpr int kFlipDamageFramesEnd = 3;
+constexpr float kFlipAttackHitboxHeight = kMinotaurSize.y/3;
 
-constexpr const float kHitTime = 0.3f;
+constexpr float kHitTime = 0.3f;
 
 Minotaur::Minotaur(vec pos)
 	: BoxEntity(pos-vec(0,kMinotaurSize.y/2), kMinotaurSize)

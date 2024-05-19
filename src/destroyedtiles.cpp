@@ -5,8 +5,8 @@
 #include "gaemtilemap.h"
 #include "assets.h"
 
-constexpr const float kTimeToRespawn = 10.f;
-constexpr const float kTimeToRespawnHard = 4.5f;
+constexpr float kTimeToRespawn = 10.f;
+constexpr float kTimeToRespawnHard = 4.5f;
 
 DestroyedTiles::DestroyedTiles()
 	: destroyedParticles(Assets::spritesheetTexture)

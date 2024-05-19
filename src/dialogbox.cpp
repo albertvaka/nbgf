@@ -5,20 +5,20 @@
 #include "input.h"
 #include "camera.h"
 
-constexpr const static float kPadding = 12;
-constexpr const static float kSpaceBetweenTitleAndBody = 6;
-constexpr const static float kFontScale = 0.5f;
-constexpr const static float kPortraitScale = 2;
-constexpr const static float kMarginSides = 32;
-constexpr const static float kMarginBottom = 22;
-constexpr const static float kBottomRightIconMargin = 20;
-constexpr const static float kPortraitWidth = AnimLib::PORTRAIT_WARRIOR.w * kPortraitScale;
-constexpr const static float kPortraitHeight = AnimLib::PORTRAIT_WARRIOR.h * kPortraitScale;
-constexpr const static float kWidth = Window::GAME_WIDTH - 2 * kMarginSides;
-constexpr const static float kHeight = kPortraitHeight + 2 * kPadding;
-constexpr const static float kPosY = Window::GAME_HEIGHT - kHeight - kMarginBottom;
-constexpr const static float kMaxLineWidth = kWidth - 3 * kPadding - kPortraitWidth;
-constexpr const static float kTimeToOpenClose = 0.2f;
+constexpr static float kPadding = 12;
+constexpr static float kSpaceBetweenTitleAndBody = 6;
+constexpr static float kFontScale = 0.5f;
+constexpr static float kPortraitScale = 2;
+constexpr static float kMarginSides = 32;
+constexpr static float kMarginBottom = 22;
+constexpr static float kBottomRightIconMargin = 20;
+constexpr static float kPortraitWidth = AnimLib::PORTRAIT_WARRIOR.w * kPortraitScale;
+constexpr static float kPortraitHeight = AnimLib::PORTRAIT_WARRIOR.h * kPortraitScale;
+constexpr static float kWidth = Window::GAME_WIDTH - 2 * kMarginSides;
+constexpr static float kHeight = kPortraitHeight + 2 * kPadding;
+constexpr static float kPosY = Window::GAME_HEIGHT - kHeight - kMarginBottom;
+constexpr static float kMaxLineWidth = kWidth - 3 * kPadding - kPortraitWidth;
+constexpr static float kTimeToOpenClose = 0.2f;
 
 void Render9Slice(GPU_Image* s,	float x, float y, float w, float h, float top, float bottom, float left, float right, bool repeat = false);
 

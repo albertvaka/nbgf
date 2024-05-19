@@ -148,7 +148,7 @@ A common use for spritesheets are sprite animations. You can use the [`Animation
 First, create an array of [`AnimationFrame`](engine/animation.h), with the spritesheet coordinates and the duration of each frame (in seconds):
 
 ```C++
-constexpr const AnimationFrame EnemyWalkingFrames[] = {
+constexpr AnimationFrame EnemyWalkingFrames[] = {
 	{ {  0, 0, 32, 32 }, 0.1f },
 	{ { 32, 0, 32, 32 }, 0.1f },
 	{ { 64, 0, 32, 32 }, 0.1f },

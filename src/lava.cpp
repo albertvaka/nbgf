@@ -10,11 +10,11 @@
 #include "window_drawraw.h"
 #include "player.h"
 
-constexpr const float kWaveAmplitude = 1.f;
-constexpr const float kChunkSize = 5.4f;
-constexpr const float kWaveHeight = 2.8f;
-constexpr const float kSpeed = 3.0f;
-constexpr const float kDistanceBetweenParticleSpawners = 15.f;
+constexpr float kWaveAmplitude = 1.f;
+constexpr float kChunkSize = 5.4f;
+constexpr float kWaveHeight = 2.8f;
+constexpr float kSpeed = 3.0f;
+constexpr float kDistanceBetweenParticleSpawners = 15.f;
 
 
 Lava::Lava(const BoxBounds& b)

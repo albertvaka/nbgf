@@ -23,8 +23,8 @@ enum class GameKeys
 };
 
 namespace GameKeyAliases {
-	static const constexpr GameKeys DIALOG_NEXT = GameKeys::MENU_ACCEPT;
-	static const constexpr GameKeys DIALOG_SKIP = GameKeys::MENU_CANCEL;
+	static constexpr GameKeys DIALOG_NEXT = GameKeys::MENU_ACCEPT;
+	static constexpr GameKeys DIALOG_SKIP = GameKeys::MENU_CANCEL;
 };
 
 enum class AnalogInput

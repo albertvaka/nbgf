@@ -13,7 +13,7 @@ const float kTimeBetweenDrops = 0.05f;
 const int kNumDrops = 7;
 const float kTotalCycleTime = kTimeWithoutDrops + kNumDrops * kTimeBetweenDrops;
 
-constexpr const float kDropVel = 230;
+constexpr float kDropVel = 230;
 
 Drain::Drain(vec pos)
 	: pos(pos)

@@ -942,12 +942,12 @@ void Player::HealthUp(int n) {
 }
 
 namespace AnimLib {
-	constexpr const GPU_Rect HEALTH_FOREGROUND = { 495, 260, 1, 9 };
-	constexpr const GPU_Rect HEALTH_BACKGROUND = { 497, 260, 1, 9 };
-	constexpr const GPU_Rect HEALTH_HIGHLIGHTED = { 499, 260, 1, 9 };
-	constexpr const GPU_Rect HEALTH_BEGIN = { 463 + 18, 260, 4, 9 };
-	constexpr const GPU_Rect HEALTH_MIDDLE = { 466 + 18, 260, 1, 9 };
-	constexpr const GPU_Rect HEALTH_END = { 473 + 18, 260, 4, 9 };
+	constexpr GPU_Rect HEALTH_FOREGROUND = { 495, 260, 1, 9 };
+	constexpr GPU_Rect HEALTH_BACKGROUND = { 497, 260, 1, 9 };
+	constexpr GPU_Rect HEALTH_HIGHLIGHTED = { 499, 260, 1, 9 };
+	constexpr GPU_Rect HEALTH_BEGIN = { 463 + 18, 260, 4, 9 };
+	constexpr GPU_Rect HEALTH_MIDDLE = { 466 + 18, 260, 1, 9 };
+	constexpr GPU_Rect HEALTH_END = { 473 + 18, 260, 4, 9 };
 }
 
 // Duplicated from DrawBossHealth

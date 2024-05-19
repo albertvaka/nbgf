@@ -12,24 +12,24 @@
 #include "common_enemy.h"
 #include "enemies_by_screen.h"
 
-constexpr const float speedInitial = 25;
-constexpr const float speedAlert = 75;
-constexpr const float speedAttack = 100;
+constexpr float speedInitial = 25;
+constexpr float speedAlert = 75;
+constexpr float speedAttack = 100;
 
-constexpr const float overshotEndCharge = 10;
-constexpr const float overshotReturnSpeed = 50;
+constexpr float overshotEndCharge = 10;
+constexpr float overshotReturnSpeed = 50;
 
-constexpr const float flyingAlienHealth = 3;
+constexpr float flyingAlienHealth = 3;
 
-constexpr const float hitTime = 0.5f;
-constexpr const float prepareAttackTime = 0.5f;
-constexpr const float exitAttackTime = 0.2f;
+constexpr float hitTime = 0.5f;
+constexpr float prepareAttackTime = 0.5f;
+constexpr float exitAttackTime = 0.2f;
 
-constexpr const float spriteScale = .75f;
-constexpr const float spriteRadius = 15.f;
+constexpr float spriteScale = .75f;
+constexpr float spriteRadius = 15.f;
 
 // Area that if intersects with the player will trigger an attack
-constexpr const vec playerNearbyArea = vec(100, 100);
+constexpr vec playerNearbyArea = vec(100, 100);
 
 FlyingAlien::FlyingAlien(vec pos, const BoxBounds* bounds)
 	: CircleEntity(pos - vec(0,8), spriteRadius)

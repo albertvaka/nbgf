@@ -7,8 +7,8 @@
 #include "common_enemy.h"
 
 
-constexpr const float kFireShotRadius = 2.f;
-constexpr const float kFireShotScale = 1.5f;
+constexpr float kFireShotRadius = 2.f;
+constexpr float kFireShotScale = 1.5f;
 
 FireShot::FireShot(vec pos, vec vel, vec accel)
 	: CircleEntity(pos, kFireShotRadius * kFireShotScale, vel)

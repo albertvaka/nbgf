@@ -9,11 +9,11 @@ namespace Tiled {
 
 struct Tile {
 	
-	static constexpr const int Size = {{tilesize}};
-	static constexpr const vec Sizes = vec({{tilesize}},{{tilesize}});
+	static constexpr int Size = {{tilesize}};
+	static constexpr vec Sizes = vec({{tilesize}},{{tilesize}});
 
 	static const GPU_Rect TileToTextureRect[];
-	constexpr const GPU_Rect& textureRect() const { return TileToTextureRect[int(value)]; }
+	const GPU_Rect constexpr& textureRect() const { return TileToTextureRect[int(value)]; }
 
 	// Coordinate conversion functions
 

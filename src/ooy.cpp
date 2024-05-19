@@ -15,36 +15,36 @@
 #include "common_tilemapcharacter.h"
 #include "enemies_by_screen.h"
 
-constexpr const float kIntervalShoot = 0.07f;
-constexpr const float kStartChasingRadius = 200.f;
-constexpr const float kStopChasingRadius = 300.f;
-constexpr const float kHorizontalDistanceToShoot = 72.f;
-constexpr const float kTargetVerticalDistance = 90.f;
-constexpr const float kVerticalDistanceToShoot = 60.f;
-constexpr const float kTimeToChangeState = 1.2f;
-constexpr const float kScale = 2.f;
-constexpr const float kRadius = 12.f*kScale;
-constexpr const float kMaxSpeed = 105.f;
+constexpr float kIntervalShoot = 0.07f;
+constexpr float kStartChasingRadius = 200.f;
+constexpr float kStopChasingRadius = 300.f;
+constexpr float kHorizontalDistanceToShoot = 72.f;
+constexpr float kTargetVerticalDistance = 90.f;
+constexpr float kVerticalDistanceToShoot = 60.f;
+constexpr float kTimeToChangeState = 1.2f;
+constexpr float kScale = 2.f;
+constexpr float kRadius = 12.f*kScale;
+constexpr float kMaxSpeed = 105.f;
 
-constexpr const float kTearVel = 110;
-constexpr const float kRandomTearVel = 10;
+constexpr float kTearVel = 110;
+constexpr float kRandomTearVel = 10;
 
-constexpr const float kSteeringSeekWeightChasing = 300.f;
-constexpr const float kSteeringSeekWeightIdle = 150.f;
-constexpr const float kSteeringWanderWeight = 150.f;
-constexpr const float kSteeringBoundsAvoidanceWeight = 600.f;
-constexpr const float kSteeringTileMapAvoidanceWeight = 600.f;
+constexpr float kSteeringSeekWeightChasing = 300.f;
+constexpr float kSteeringSeekWeightIdle = 150.f;
+constexpr float kSteeringWanderWeight = 150.f;
+constexpr float kSteeringBoundsAvoidanceWeight = 600.f;
+constexpr float kSteeringTileMapAvoidanceWeight = 600.f;
 
-constexpr const float kSteeringWanderRad = 4.8f; //Ganes que te de posar-se a fer cercles (the radius of the constraining circle for the wander behavior)
-constexpr const static float kSteeringWanderDist = 6.5f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
-constexpr const static float kSteeringWanderJitterPerSec = 175; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
+constexpr float kSteeringWanderRad = 4.8f; //Ganes que te de posar-se a fer cercles (the radius of the constraining circle for the wander behavior)
+constexpr static float kSteeringWanderDist = 6.5f; //Velocitat a la que va (distance the wander circle is projected in front of the agent)
+constexpr static float kSteeringWanderJitterPerSec = 175; //Trompicones que dona (the maximum amount of displacement along the circle each frame)
 
-constexpr const int kHealth = 8;
-constexpr const float kHitTime = 0.3f;
+constexpr int kHealth = 8;
+constexpr float kHitTime = 0.3f;
 
 extern float mainClock;
 
-constexpr const GPU_Rect directions[] = { AnimLib::OOY_CHASE_SE, AnimLib::OOY_CHASE_SW, AnimLib::OOY_CHASE_NW, AnimLib::OOY_CHASE_NE };
+constexpr GPU_Rect directions[] = { AnimLib::OOY_CHASE_SE, AnimLib::OOY_CHASE_SW, AnimLib::OOY_CHASE_NW, AnimLib::OOY_CHASE_NE };
 
 Ooy::Ooy(vec pos, const BoxBounds* bounds)
 	: SteeringEntity(pos, kRadius, kMaxSpeed, vec(0,0))
