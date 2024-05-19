@@ -28,19 +28,19 @@ struct SheetFrameCalculator {
 		, offset_y(offset.y)
 	{}
 	template<int N>
-	constexpr const std::array<AnimationFrame, N> Frames(int begin, float duration) const
+	constexpr std::array<AnimationFrame, N> Frames(int begin, float duration) const
 	{
 		return make_array(begin, duration, std::make_index_sequence<N>{});
 	}
-	constexpr const Rectangle Rect(int index) const {
+	constexpr Rectangle Rect(int index) const {
 		return Rectangle { (float) (offset_x + sprite_w * (index % columns)), (float) (offset_y + sprite_h * (index / columns)), (float)sprite_w, (float)sprite_h};
 	}
-	constexpr const AnimationFrame Frame(int index, float duration) const {
+	constexpr AnimationFrame Frame(int index, float duration) const {
 		return AnimationFrame { Rect(index), duration};
 	}
 private:
 	template<std::size_t... indices>
-	constexpr const std::array<AnimationFrame, sizeof...(indices)> make_array(int begin, float duration, std::index_sequence<indices...>) const
+	constexpr std::array<AnimationFrame, sizeof...(indices)> make_array(int begin, float duration, std::index_sequence<indices...>) const
 	{
 		return {{ Frame(begin+indices, duration)... }};
 	}

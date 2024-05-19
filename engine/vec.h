@@ -201,7 +201,7 @@ struct vec : Vector2
 		return (x != rhs.x) || (y != rhs.y);
 	}
 
-	constexpr const vec operator-() const
+	constexpr vec operator-() const
 	{
 		return vec(-x, -y);
 	}

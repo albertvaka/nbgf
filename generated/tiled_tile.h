@@ -7,12 +7,12 @@
 namespace Tiled {
 
 struct Tile {
-	
-	static constexpr const int Size = 74;
-	static constexpr const vec Sizes = vec(74,74);
+
+	static constexpr int Size = 74;
+	static constexpr vec Sizes = vec(74,74);
 
 	static const Rectangle TileToTextureRect[];
-	constexpr const Rectangle& textureRect() const { return TileToTextureRect[int(value)]; }
+	const Rectangle constexpr& textureRect() const { return TileToTextureRect[int(value)]; }
 
 	// Coordinate conversion functions
 

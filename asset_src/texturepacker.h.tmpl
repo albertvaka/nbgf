@@ -5,7 +5,7 @@
 namespace TexturePackerRects {
 
 {% for k, v in rects.items() -%}
-	constexpr const GPU_Rect {{k}} =	{ {{v[0]}}.f,	{{v[1]}}.f,	{{v[2]}}.f,	{{v[3]}}.f };
-{% endfor %}	
+	constexpr GPU_Rect {{k}} =	{ {{v[0]}}.f,	{{v[1]}}.f,	{{v[2]}}.f,	{{v[3]}}.f };
+{% endfor %}
 
 }
