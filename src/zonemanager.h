@@ -10,19 +10,18 @@ struct ZoneManager {
 	const SDL_Color caveBg = { 18, 25, 26, 255 };
 	const SDL_Color pinkCaveBg = { 59, 17, 88, 255 };
 	const SDL_Color sewerBg = { 0, 0, 0, 255 };
-	const float maxChangeDeltaPerSecond = 150;
 
 	SDL_Color currentBgColor;
 	SDL_Color targetBgColor;
 	int currentScreen;
-
 
 	void Reset() {
 		currentScreen = ScreenManager::CurrentScreen();
 		currentBgColor = targetBgColor = FindColorForScreen(currentScreen);
 	}
 
-	void UpdateColor(uint8_t& current, uint8_t target, float dt) {
+	static void UpdateColor(uint8_t& current, uint8_t target, float dt) {
+		const float maxChangeDeltaPerSecond = 150;
 		if (current != target) {
 			uint8_t delta = maxChangeDeltaPerSecond * dt;
 			if (delta == 0) delta = 1;
@@ -55,7 +54,7 @@ struct ZoneManager {
 		UpdateColor(currentBgColor.b, targetBgColor.b, dt);
 	}
 
-	const SDL_Color& GetBgColor() {
+	const SDL_Color& GetBgColor() const {
 		return currentBgColor;
 	}
 
