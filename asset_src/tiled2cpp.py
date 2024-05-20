@@ -128,7 +128,7 @@ print("Width: {}, height: {}, total tiles: {}".format(out_width, out_height, len
 for type_ in ordered_tiletypes:
     all_gids += gids_by_type[type_]
 
-tm = Template(Path('tiled_tilemap.h.tmpl').read_text())
+tm = Template(Path('tiled_tilemap.h.tmpl').read_text(), keep_trailing_newline=True)
 out_content = tm.render(
     name=tiles.name,
     width = out_width,
@@ -137,17 +137,17 @@ out_content = tm.render(
 
 fname = '../generated/tiled_tilemap.h'
 try:
-    current = Path(fname).read_text()
+    current = Path(fname).read_text().replace('\r','')
 except FileNotFoundError:
     current = ""
 if out_content == current:
     print("NO CHANGES: {}".format(os.path.basename(fname)))
 else:
     print("UPDATING: {}".format(os.path.basename(fname)))
-    Path(fname).write_text(out_content)
+    Path(fname).write_text(out_content, newline='\n')
 
 
-tm = Template(Path('tiled_tilemap.cpp.tmpl').read_text())
+tm = Template(Path('tiled_tilemap.cpp.tmpl').read_text(), keep_trailing_newline=True)
 #template.globals['custom_function'] = custom_function
 out_content = tm.render(
     name=tiles.name,
@@ -159,14 +159,14 @@ out_content = tm.render(
 
 fname = '../generated/tiled_tilemap.cpp'
 try:
-    current = Path(fname).read_text()
+    current = Path(fname).read_text().replace('\r','')
 except FileNotFoundError:
     current = ""
 if out_content == current:
     print("NO CHANGES: {}".format(os.path.basename(fname)))
 else:
     print("UPDATING: {}".format(os.path.basename(fname)))
-    Path(fname).write_text(out_content)
+    Path(fname).write_text(out_content, newline='\n')
 
 
 
@@ -198,7 +198,7 @@ for objects in object_layers:
     for t in types_with_rotation:
         transforms_by_type[t] = entities_by_type.pop(t)
 
-    tm = Template(Path('tiled_objects.h.tmpl').read_text())
+    tm = Template(Path('tiled_objects.h.tmpl').read_text(), keep_trailing_newline=True)
     out_content = tm.render(
         name=objects.name,
         entities_by_type=sorted(entities_by_type.items()),
@@ -208,16 +208,16 @@ for objects in object_layers:
 
     fname = '../generated/tiled_objects_{}.h'.format(objects.name.lower())
     try:
-        current = Path(fname).read_text()
+        current = Path(fname).read_text().replace('\r','')
     except FileNotFoundError:
         current = ""
     if out_content == current:
         print("NO CHANGES: {}".format(os.path.basename(fname)))
     else:
         print("UPDATING: {}".format(os.path.basename(fname)))
-        Path(fname).write_text(out_content)
+        Path(fname).write_text(out_content, newline='\n')
 
-    tm = Template(Path('tiled_objects.cpp.tmpl').read_text())
+    tm = Template(Path('tiled_objects.cpp.tmpl').read_text(), keep_trailing_newline=True)
     #template.globals['custom_function'] = custom_function
     out_content = tm.render(
         name=objects.name,
@@ -229,14 +229,14 @@ for objects in object_layers:
 
     fname = '../generated/tiled_objects_{}.cpp'.format(objects.name.lower())
     try:
-        current = Path(fname).read_text()
+        current = Path(fname).read_text().replace('\r','')
     except FileNotFoundError:
         current = ""
     if out_content == current:
         print("NO CHANGES: {}".format(os.path.basename(fname)))
     else:
         print("UPDATING: {}".format(os.path.basename(fname)))
-        Path(fname).write_text(out_content)
+        Path(fname).write_text(out_content, newline='\n')
 
 
 
@@ -246,7 +246,7 @@ print("Total different tiles used:", len(gids_used))
 #    print("Warning: There are more than 255 tiles used, but we try to represent them as a uint8!")
 
 # Tileset
-tm = Template(Path('tiled_tile.h.tmpl').read_text())
+tm = Template(Path('tiled_tile.h.tmpl').read_text(), keep_trailing_newline=True)
 out_content = tm.render(
     name=ts.name,
     gids=all_gids,
@@ -257,16 +257,16 @@ out_content = tm.render(
 
 fname = '../generated/tiled_tile.h'
 try:
-    current = Path(fname).read_text()
+    current = Path(fname).read_text().replace('\r','')
 except FileNotFoundError:
     current = ""
 if out_content == current:
     print("NO CHANGES: {}".format(os.path.basename(fname)))
 else:
     print("UPDATING: {}".format(os.path.basename(fname)))
-    Path(fname).write_text(out_content)
+    Path(fname).write_text(out_content, newline='\n')
 
-tm = Template(Path('tiled_tile.cpp.tmpl').read_text())
+tm = Template(Path('tiled_tile.cpp.tmpl').read_text(), keep_trailing_newline=True)
 #template.globals['custom_function'] = custom_function
 out_content = tm.render(
     name=ts.name,
@@ -280,14 +280,14 @@ out_content = tm.render(
 
 fname = '../generated/tiled_tile.cpp'
 try:
-    current = Path(fname).read_text()
+    current = Path(fname).read_text().replace('\r','')
 except FileNotFoundError:
     current = ""
 if out_content == current:
     print("NO CHANGES: {}".format(os.path.basename(fname)))
 else:
     print("UPDATING: {}".format(os.path.basename(fname)))
-    Path(fname).write_text(out_content)
+    Path(fname).write_text(out_content, newline='\n')
 
 # VS compares the dates from this and tiled.tmx to know if it needs to re-trigger this script.
 # We can't use the dates from the generated files themselves because we don't change the files

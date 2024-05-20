@@ -14,17 +14,17 @@ for file in glob.glob("*.json"):
             rects[name] = (rect['x'], rect['y'], rect['w'], rect['h'])        
 
 
-tm = Template(Path('texturepacker.h.tmpl').read_text())
+tm = Template(Path('texturepacker.h.tmpl').read_text(), keep_trailing_newline=True)
 out_h = tm.render(
     rects=rects,
 )
 
 try:
-    current = Path('../generated/texturepackerexport.h').read_text()
+    current = Path('../generated/texturepackerexport.h').read_text().replace('\r','')
 except FileNotFoundError:
     current = ""
 if out_h == current:
     print("Skipping header generation, no changes detected")
 else:
-    Path('../generated/texturepackerexport.h').write_text(out_h)
+    Path('../generated/texturepackerexport.h').write_text(out_h, newline='\n')
 
