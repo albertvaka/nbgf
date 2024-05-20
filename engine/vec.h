@@ -44,22 +44,22 @@ struct vec : Vector2
 
 
 	//returns the length of the vector
-	[[nodiscard]] inline float    Length()const;
+	[[nodiscard]] inline float Length() const;
 
 	//returns the squared length of the vector (thereby avoiding the sqrt)
-	[[nodiscard]] inline float    LengthSq()const;
+	[[nodiscard]] inline float LengthSq() const;
 
-	inline void      Normalize();
-	[[nodiscard]] inline vec      Normalized() const;
+	inline void Normalize();
+	[[nodiscard]] inline vec Normalized() const;
 
 	// Dot product: returns the length of the projection of one vector onto the other (order doesn't matter, it's symmetrical)
 	// It can be used to know how alligned the directions of both vectors are, assuming they are normalized:
 	// Perpendicular -> dot product = 0
 	// Parallel, same direction -> dot product = 1
 	// Parallel, opposite direction -> dot product = -1
-	[[nodiscard]] inline float    Dot(vec v2) const;
+	[[nodiscard]] inline float Dot(vec v2) const;
 
-	[[nodiscard]] inline float    Cross(vec v2) const;
+	[[nodiscard]] inline float Cross(vec v2) const;
 
 	void Clamp(vec minv, vec maxv)
 	{
@@ -89,7 +89,7 @@ struct vec : Vector2
 	//returns positive if v2 is clockwise of this vector,
 	//negative if anticlockwise (assuming the Y axis is pointing down,
 	//X axis to right like a Window app)
-	[[nodiscard]] inline int       Sign(vec v2) const;
+	[[nodiscard]] inline int Sign(vec v2) const;
 
 	// Angle in Rads between the lines (origin to point a) and (origin to point b)
 	// In range [-Pi,Pi]
@@ -114,7 +114,7 @@ struct vec : Vector2
 		return vec(x * cs - y * sn, x * sn + y * cs);
 	}
 
-	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees)  const
+	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees) const
 	{
 		return RotatedAroundOriginRads(Angles::DegsToRads(degrees));
 	}
@@ -128,17 +128,17 @@ struct vec : Vector2
 		return RotatedToFacePositionRads(target, Angles::DegsToRads(maxTurnRateDegs));
 	}
 	//returns the vector that is perpendicular to this one.
-	[[nodiscard]] inline vec  Perp() const;
+	[[nodiscard]] inline vec Perp() const;
 
 	//adjusts x and y so that the length of the vector does not exceed max
-	inline bool      Truncate(const float max); // affects in-place
-	[[nodiscard]] inline vec      Truncated(const float max); // returns a new vec
+	inline bool Truncate(const float max); // affects in-place
+	[[nodiscard]] inline vec Truncated(const float max); // returns a new vec
 
 	//returns the distance between this vector and th one passed as a parameter
-	[[nodiscard]] inline float    Distance(vec v2) const;
+	[[nodiscard]] inline float Distance(vec v2) const;
 
 	//squared version of above.
-	[[nodiscard]] inline float    DistanceSq(vec v2) const;
+	[[nodiscard]] inline float DistanceSq(vec v2) const;
 
 	[[nodiscard]] inline vec ManhattanDistance(vec v2) const;
 
