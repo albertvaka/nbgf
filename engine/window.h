@@ -25,6 +25,7 @@ namespace Window {
 	inline void Clear(const Color& c) {
 		ClearBackground(c);
 	}
+
 	/*
 	inline float GetViewportScale() {
 		return Window::screenTarget->viewport.w / Window::GAME_WIDTH;

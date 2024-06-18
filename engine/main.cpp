@@ -110,9 +110,9 @@ void init() {
 
 }
 
-void main_loop() {
-
-	BeginDrawing();
+void main_loop()
+{
+	BeginTextureMode(Window::windowRenderTexture);
 
 #ifdef _IMGUI
 	rlImGuiBegin();
@@ -282,10 +282,6 @@ void main_loop() {
 	DrawText(fpsText.c_str(), pos.x, pos.y, 30, WHITE);
 #endif
 
-#ifdef _IMGUI
-	rlImGuiEnd();
-#endif
-
 #ifdef _DEBUG
 	if (Debug::CameraFixed) {
 		Window::DrawPrimitive::Rectangle(5.f, 5.f, 10.f, 10.f, -1, 0, 255, 0);
@@ -294,8 +290,23 @@ void main_loop() {
 		Window::DrawPrimitive::Circle(5, 5, 3, -1, 255, 0, 0);
 	}
 #endif
-
 	EndMode2D();
+
+	EndTextureMode();
+
+	BeginDrawing();
+	ClearBackground(BLACK);
+
+	float scale = Window::GetScaleFactor();
+	float scaledWidth = Window::GAME_WIDTH*scale;
+	float scaledHeight = Window::GAME_HEIGHT*scale;
+	Rectangle src = { 0.0f, 0.0f, (float)Window::windowRenderTexture.texture.width, (float)-Window::windowRenderTexture.texture.height };
+	Rectangle dst = { (GetScreenWidth() - scaledWidth)*0.5f, (GetScreenHeight() - scaledHeight)*0.5f, scaledWidth, scaledHeight };
+	DrawTexturePro(Window::windowRenderTexture.texture, src, dst, { 0, 0 }, 0.0f, WHITE);
+
+#ifdef _IMGUI
+	rlImGuiEnd();
+#endif
 
 	EndDrawing();
 

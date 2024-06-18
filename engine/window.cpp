@@ -16,6 +16,7 @@
 
 namespace Window
 {
+    RenderTexture2D windowRenderTexture;
 
     int Init() {
         SetTraceLogLevel(TraceLogLevel::LOG_WARNING);
@@ -24,23 +25,22 @@ namespace Window
 
         // HACK: Raylib doesn't support getting the monitor size until a window is created
         InitWindow(200, 200, NULL);
-        int m = GetCurrentMonitor();
-        veci dm = { GetMonitorWidth(m), GetMonitorHeight(m) };
-        CloseWindow();
-
 #ifdef __EMSCRIPTEN__
         int scale = 1;
 #else
-        int scale = std::min(dm.x / GAME_WIDTH, dm.y / GAME_HEIGHT);
+        int scale = (int)GetScaleFactor();
         if (scale <= 0) {
-            Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the window resolution (" << dm.x << "*" << dm.y << ")";
+            Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the window resolution";
             scale = 1;
         }
         Debug::out << "Scaling to x" << scale;
  #endif
+        CloseWindow();
 
-        // TODO: Scale the Window size without scaling the virtual game size
-        InitWindow(GAME_WIDTH, GAME_HEIGHT, WINDOW_TITLE);
+        InitWindow(GAME_WIDTH*scale, GAME_HEIGHT*scale, WINDOW_TITLE);
+
+        windowRenderTexture = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
+        SetTextureFilter(windowRenderTexture.texture, TEXTURE_FILTER_BILINEAR);
 
         SetExitKey(KeyboardKey::KEY_NULL);
 

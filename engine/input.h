@@ -85,11 +85,11 @@ struct Input {
 		action_times[player][int(k)] += 1000.f;
 	}
 
+	static void IgnoreInput(bool enable);
+
 	// Called from main.cpp
 	static void Update(float dt);
 	static void Init();
-
-	static void IgnoreInput(bool enable);
 
 private:
 	static void MapGameKeys();
