@@ -12,9 +12,10 @@ ENGINE_OBJ	= $(patsubst engine/%, obj/engine/%.o, $(ENGINE_SRC))
 GENERATED_SRC	= $(wildcard generated/*.cpp)
 GENERATED_OBJ	= $(patsubst generated/%, obj/generated/%.o, $(GENERATED_SRC))
 
-DEP_SRC = $(shell find vendor -type f -name '*.cpp' -o -name '*.c' ! -path 'vendor/glew/*')
+#SDL and GLEW are vendored in Windows but not in MacOS/Linux
+DEP_SRC = $(shell find vendor -type f \( -name '*.cpp' -o -name '*.c' \) -not -path 'vendor/glew/*')
 DEP_OBJ = $(patsubst vendor/%, obj/vendor/%.o, $(DEP_SRC))
-DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include ! -path vendor/SDL2/include) $(shell find vendor -mindepth 1 -maxdepth 1 ! -path vendor/glew -type d '!' -exec test -e "{}/include" ';' -print ))
+DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include -not -path vendor/SDL2/include) $(shell find vendor -mindepth 1 -maxdepth 1 -not -path vendor/glew -type d -not -exec test -e "{}/include" ';' -print ))
 
 OPTIM     ?= 0
 DEBUG     ?= 1
@@ -50,14 +51,14 @@ ifdef EMSCRIPTEN
 else
 	OUT_FILE=$(EXEC)
 	ifeq ($(shell uname),Darwin) # MacOS
-		OS_CFLAGS=-I./vendor/glew -DSDL_GPU_DISABLE_OPENGL_4 -DMACOS_VER_MAJOR=$(shell sw_vers -productVersion | cut -d . -f 1) -DMACOS_VER_MINOR=$(shell sw_vers -productVersion | cut -d . -f 2)
+		OS_CFLAGS=-DSDL_GPU_DISABLE_OPENGL_4 -DMACOS_VER_MAJOR=$(shell sw_vers -productVersion | cut -d . -f 1) -DMACOS_VER_MINOR=$(shell sw_vers -productVersion | cut -d . -f 2)
 		OS_LDFLAGS=-framework OpenGL
 	else # Linux
 		OS_CFLAGS=
 		OS_LDFLAGS=-lGL
 	endif
-	PLATFORM_CFLAGS=$(OS_CFLAGS) -DSDL_GPU_DISABLE_GLES $(shell sdl2-config --cflags)
-	PLATFORM_LDFLAGS=$(OS_LDFLAGS) -lGLEW $(shell sdl2-config --libs)
+	PLATFORM_CFLAGS=$(OS_CFLAGS) -DSDL_GPU_DISABLE_GLES $(shell sdl2-config --cflags) $(shell pkg-config --cflags glew)
+	PLATFORM_LDFLAGS=$(OS_LDFLAGS) $(shell sdl2-config --libs) $(shell pkg-config --libs glew)
 endif
 
 ifeq ($(strip $(PROFILE)),1)
