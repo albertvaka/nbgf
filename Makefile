@@ -12,9 +12,9 @@ ENGINE_OBJ	= $(patsubst engine/%, obj/engine/%.o, $(ENGINE_SRC))
 GENERATED_SRC	= $(wildcard generated/*.cpp)
 GENERATED_OBJ	= $(patsubst generated/%, obj/generated/%.o, $(GENERATED_SRC))
 
-DEP_SRC = $(shell find vendor -type f -name '*.cpp' -o -name '*.c' ! -path 'vendor/glfw/*')
+DEP_SRC = $(shell find vendor -type f \( -name '*.cpp' -o -name '*.c' \) -not -path 'vendor/raylib/src/external/*' -not -path 'vendor/raylib/src/platforms/*')
 DEP_OBJ = $(patsubst vendor/%, obj/vendor/%.o, $(DEP_SRC))
-DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include ! -path vendor/SDL2/include) $(shell find vendor -mindepth 1 -maxdepth 1 ! -path vendor/glfw -type d '!' -exec test -e "{}/include" ';' -print ))
+DEP_INCLUDE = -I vendor/raylib/src $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include) $(shell find vendor -mindepth 1 -maxdepth 1 -not -path 'vendor/glfw/*' -type d -not -exec test -e "{}/include" ';' -print ))
 
 OPTIM     ?= 0
 DEBUG     ?= 1
@@ -30,10 +30,12 @@ else
 	date=date
 endif
 
+#TODO: pass -flto to both linker and compiler to enable link-time optimization
+
 #NOTE: Dynamic casts are disabled by fno-rtti
-CFLAGS = -pipe -I./engine -I./generated $(DEP_INCLUDE) -Wall -Wno-unused-parameter -Werror=return-type $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
+CFLAGS = -pipe -I engine -I generated $(DEP_INCLUDE) -Wall -Wno-unused-parameter -Werror=return-type -std=c99 $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS) -D_DEFAULT_SOURCE -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33
 CXXFLAGS = $(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions -Wno-reorder
-LDFLAGS	 = $(CXXFLAGS) -lglfw $(PLATFORM_LDFLAGS)
+LDFLAGS	 = $(CXXFLAGS) $(PLATFORM_LDFLAGS)
 
 ifdef EMSCRIPTEN
 	OUT_FILE=$(EXEC).js
@@ -44,14 +46,16 @@ ifdef EMSCRIPTEN
 else
 	OUT_FILE=$(EXEC)
 	ifeq ($(shell uname),Darwin) # MacOS
-		OS_CFLAGS=-I./vendor/glew -DMACOS_VER_MAJOR=$(shell sw_vers -productVersion | cut -d . -f 1) -DMACOS_VER_MINOR=$(shell sw_vers -productVersion | cut -d . -f 2)
-		OS_LDFLAGS=-framework OpenGL
+		OS_CFLAGS=-DMACOS_VER_MAJOR=$(shell sw_vers -productVersion | cut -d . -f 1) -DMACOS_VER_MINOR=$(shell sw_vers -productVersion | cut -d . -f 2)
+# Hack because raylib includes objective-C code in MacOS
+		C_ONLY_FLAGS=-x objective-c
+		OS_LDFLAGS=-framework OpenGL -framework OpenAL -framework IOKit -framework CoreVideo -framework Cocoa
 	else # Linux
 		OS_CFLAGS=
 		OS_LDFLAGS=-lGL
 	endif
-	PLATFORM_CFLAGS=$(OS_CFLAGS) $(shell sdl2-config --cflags)
-	PLATFORM_LDFLAGS=$(OS_LDFLAGS) -lGLEW $(shell sdl2-config --libs)
+	PLATFORM_CFLAGS=$(OS_CFLAGS) $(pkg-config --cflags glfw3)
+	PLATFORM_LDFLAGS=$(OS_LDFLAGS) $(pkg-config --libs glfw3)
 endif
 
 ifeq ($(strip $(PROFILE)),1)
@@ -89,7 +93,7 @@ obj/%.cpp.o: src/%.cpp engine/*.h $(wildcard generated/*.h) src/*.h Makefile
 obj/vendor/%.c.o: vendor/%.c $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
 	@mkdir -p $(shell dirname $@)
 	$(call time_begin,$@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(C_ONLY_FLAGS) -c $< -o $@
 	$(call time_end,$@)
 
 obj/vendor/%.cpp.o: vendor/%.cpp $(shell find vendor/ -name '*.h' -o -name '*.inl') Makefile
