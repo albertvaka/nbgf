@@ -12,9 +12,9 @@ ENGINE_OBJ	= $(patsubst engine/%, obj/engine/%.o, $(ENGINE_SRC))
 GENERATED_SRC	= $(wildcard generated/*.cpp)
 GENERATED_OBJ	= $(patsubst generated/%, obj/generated/%.o, $(GENERATED_SRC))
 
-DEP_SRC = $(shell find vendor -type f -name '*.cpp' -o -name '*.c')
+DEP_SRC = $(shell find vendor -type f -name '*.cpp' -o -name '*.c' ! -path 'vendor/glfw/*')
 DEP_OBJ = $(patsubst vendor/%, obj/vendor/%.o, $(DEP_SRC))
-DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include) $(shell find vendor -mindepth 1 -maxdepth 1 -type d '!' -exec test -e "{}/include" ';' -print ))
+DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include ! -path vendor/SDL2/include) $(shell find vendor -mindepth 1 -maxdepth 1 ! -path vendor/glfw -type d '!' -exec test -e "{}/include" ';' -print ))
 
 OPTIM     ?= 0
 DEBUG     ?= 1
@@ -33,13 +33,13 @@ endif
 #NOTE: Dynamic casts are disabled by fno-rtti
 CFLAGS = -pipe -I./engine -I./generated $(DEP_INCLUDE) -Wall -Wno-unused-parameter -Werror=return-type $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
 CXXFLAGS = $(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions -Wno-reorder
-LDFLAGS	 = $(CXXFLAGS) -lraylib $(PLATFORM_LDFLAGS)
+LDFLAGS	 = $(CXXFLAGS) -lglfw $(PLATFORM_LDFLAGS)
 
 ifdef EMSCRIPTEN
 	OUT_FILE=$(EXEC).js
 	WEBGL_CFLAGS=-DIMGUI_IMPL_OPENGL_ES3
 	WEBGL_LDFLAGS=-s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2
-	PLATFORM_CFLAGS=-s USE_RAYLIB -s USE_GLFW=3 --preload-file bin/data@/data --use-preload-plugins $(WEBGL_CFLAGS)
+	PLATFORM_CFLAGS=-s USE_GLFW=3 --preload-file bin/data@/data --use-preload-plugins $(WEBGL_CFLAGS)
 	PLATFORM_LDFLAGS=-lidbfs.js -s EXPORTED_FUNCTIONS='["_main", "_start_main_loop"]' -s EXPORTED_RUNTIME_METHODS='["ccall"]' -s ALLOW_MEMORY_GROWTH=1 $(WEBGL_LDFLAGS)
 else
 	OUT_FILE=$(EXEC)

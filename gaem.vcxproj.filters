@@ -156,15 +156,6 @@
     <ClInclude Include="src\scene_main.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\raylib\include\raylib.h">
-      <Filter>Bundled Dependencies\raylib</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\raylib\include\raymath.h">
-      <Filter>Bundled Dependencies\raylib</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\raylib\include\rlgl.h">
-      <Filter>Bundled Dependencies\raylib</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\imgui_impl\extras\FA6FreeSolidFontData.h">
       <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClInclude>
@@ -200,6 +191,27 @@
     </ClInclude>
     <ClInclude Include="vendor\imgui\imgui.h">
       <Filter>Bundled Dependencies\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\raylib\src\raymath.h">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\raylib\src\rcamera.h">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\raylib\src\rgestures.h">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\raylib\src\rlgl.h">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\raylib\src\utils.h">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\raylib\src\config.h">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\raylib\src\raylib.h">
+      <Filter>Bundled Dependencies\raylib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +293,30 @@
     <ClCompile Include="vendor\imgui\imgui_draw.cpp">
       <Filter>Bundled Dependencies\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="vendor\raylib\src\rcore.c">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\raylib\src\rglfw.c">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\raylib\src\rmodels.c">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\raylib\src\rshapes.c">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\raylib\src\rtext.c">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\raylib\src\rtextures.c">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\raylib\src\utils.c">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\raylib\src\raudio.c">
+      <Filter>Bundled Dependencies\raylib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -289,6 +325,9 @@
     </None>
     <None Include="asset_src\texturepacker2cpp.py">
       <Filter>generated\scripts</Filter>
+    </None>
+    <None Include="vendor\raylib\src\Makefile">
+      <Filter>Bundled Dependencies\raylib</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

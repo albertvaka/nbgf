@@ -73,9 +73,13 @@
     <ClInclude Include="vendor\imgui_impl\rlImGui.h" />
     <ClInclude Include="vendor\imgui_impl\rlImGuiColors.h" />
     <ClInclude Include="vendor\magic_enum\magic_enum.h" />
-    <ClInclude Include="vendor\raylib\include\raylib.h" />
-    <ClInclude Include="vendor\raylib\include\raymath.h" />
-    <ClInclude Include="vendor\raylib\include\rlgl.h" />
+    <ClInclude Include="vendor\raylib\src\config.h" />
+    <ClInclude Include="vendor\raylib\src\raylib.h" />
+    <ClInclude Include="vendor\raylib\src\raymath.h" />
+    <ClInclude Include="vendor\raylib\src\rcamera.h" />
+    <ClInclude Include="vendor\raylib\src\rgestures.h" />
+    <ClInclude Include="vendor\raylib\src\rlgl.h" />
+    <ClInclude Include="vendor\raylib\src\utils.h" />
     <ClInclude Include="vendor\tweeny\tweeny.h" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +109,14 @@
     <ClCompile Include="vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="vendor\imgui_impl\rlImGui.cpp" />
+    <ClCompile Include="vendor\raylib\src\raudio.c" />
+    <ClCompile Include="vendor\raylib\src\rcore.c" />
+    <ClCompile Include="vendor\raylib\src\rglfw.c" />
+    <ClCompile Include="vendor\raylib\src\rmodels.c" />
+    <ClCompile Include="vendor\raylib\src\rshapes.c" />
+    <ClCompile Include="vendor\raylib\src\rtext.c" />
+    <ClCompile Include="vendor\raylib\src\rtextures.c" />
+    <ClCompile Include="vendor\raylib\src\utils.c" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx">
@@ -173,6 +185,7 @@ exit /b 0</Command>
     <None Include="asset_src\texturepacker2cpp.py" />
     <None Include="asset_src\tiled2cpp.py" />
     <None Include="README.md" />
+    <None Include="vendor\raylib\src\Makefile" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -257,17 +270,18 @@ exit /b 0</Command>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\raylib\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\raylib\src;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;$(SolutionDir)\vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_IMGUI;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_IMGUI;_CRT_SECURE_NO_WARNINGS;PLATFORM_DESKTOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SupportJustMyCode>true</SupportJustMyCode>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\raylib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;raylib.lib;WinMM.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;WinMM.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -299,16 +313,17 @@ exit /b 0</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\raylib\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\raylib\src;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;$(SolutionDir)\vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_DESKTOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\raylib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;raylib.lib;WinMM.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\vendor\glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;WinMM.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
