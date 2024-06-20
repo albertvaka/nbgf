@@ -115,8 +115,23 @@ void main_loop()
 	BeginTextureMode(Window::windowRenderTexture);
 
 #ifdef _IMGUI
+	SetMouseScale(1, 1); // HACK: ImGUI isn't scaled so keep the mouse scale at 1, the correct scale will be set in Input::Update
 	rlImGuiBegin();
 #endif
+
+	float uncappedDt = GetFrameTime();
+
+	float dt = uncappedDt;
+	bool slowDown = false;
+	constexpr float kMinDt = 0.06f; // less than 17 FPS
+	if (uncappedDt > kMinDt)
+	{
+		//Slow game down instead of epic jumps
+		dt = kMinDt;
+		slowDown = true;
+	}
+
+	Input::Update(dt);
 
 	if (SceneManager::newScene != nullptr) {
 		if (SceneManager::currentScene == nullptr) {
@@ -134,42 +149,10 @@ void main_loop()
 
 		SceneManager::newScene = nullptr;
 		GameCamera::SetZoom(1.f);
-		GameCamera::SetTopLeft(0,0);
+		GameCamera::SetTopLeft(0, 0);
 		Input::IgnoreInput(false);
 		SceneManager::currentScene->EnterScene();
 	}
-
-	float uncappedDt = GetFrameTime();
-
-	float dt = uncappedDt;
-	bool slowDown = false;
-	constexpr float kMinDt = 0.06f; // less than 17 FPS
-	if (uncappedDt > kMinDt)
-	{
-		//Slow game down instead of epic jumps
-		dt = kMinDt;
-		slowDown = true;
-	}
-
-	//Input
-	/*
-#ifdef _IMGUI
-	ImGuiIO& io = ImGui::GetIO();
-	if (!io.WantCaptureKeyboard)
-#endif
-	{
-		//Keyboard::_UpdateInputState();
-
-	}
-#ifdef _IMGUI
-	if (!io.WantCaptureMouse)
-#endif
-	{
-		//Mouse::_UpdateInputState();
-	}
-	*/
-
-	Input::Update(dt);
 
 	if (IsKeyPressed(KeyboardKey::KEY_ENTER) && IsKeyDown(KeyboardKey::KEY_LEFT_ALT)) {
 		Window::SetFullScreen(!Window::IsFullScreen());
