@@ -21,16 +21,18 @@ namespace Window
     int Init() {
         SetTraceLogLevel(TraceLogLevel::LOG_WARNING);
 
-        SetConfigFlags(FLAG_WINDOW_HIDDEN | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_HIGHDPI);
+        SetConfigFlags(FLAG_WINDOW_HIDDEN | FLAG_WINDOW_RESIZABLE);
 
         // HACK: Raylib doesn't support getting the monitor size until a window is created
         InitWindow(200, 200, NULL);
+        veci monitorSize = GetMonitorSize();
+        Debug::out << monitorSize;
 #ifdef __EMSCRIPTEN__
         int scale = 1;
 #else
-        int scale = (int)GetScaleFactor();
+        int scale = (int)std::min((float)monitorSize.x / GAME_WIDTH, (float)monitorSize.y / GAME_HEIGHT);
         if (scale <= 0) {
-            Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the window resolution";
+            Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the monitor resolution (" << monitorSize.x << "*" << monitorSize.y << ")";
             scale = 1;
         }
         Debug::out << "Scaling to x" << scale;
@@ -40,7 +42,7 @@ namespace Window
         InitWindow(GAME_WIDTH*scale, GAME_HEIGHT*scale, WINDOW_TITLE);
 
         windowRenderTexture = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
-        SetTextureFilter(windowRenderTexture.texture, TEXTURE_FILTER_BILINEAR);
+        //SetTextureFilter(windowRenderTexture.texture, TEXTURE_FILTER_BILINEAR);
 
         SetExitKey(KeyboardKey::KEY_NULL);
 
