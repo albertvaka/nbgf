@@ -106,7 +106,7 @@ void SceneMain::Draw()
 	Window::Clear(0, 0, 0);
 
 	Window::Draw(Assets::backgroundTexture, GameCamera::Center())
-		.withOrigin(Assets::backgroundTexture.width/2, Assets::backgroundTexture.height/2);
+		.withOrigin(Assets::backgroundTexture.width/2.f, Assets::backgroundTexture.height/2.f);
 
 	player.Draw();
 
