@@ -12,16 +12,16 @@ struct CircleBounds;
 
 struct BoxBounds
 {
-    float left, top;
+    float left, bottom;
     float width, height;
 
-    constexpr BoxBounds(float x, float y, float w, float h) : left(x), top(y), width(w), height(h) { }
+    constexpr BoxBounds(float x, float y, float w, float h) : left(x), bottom(y), width(w), height(h) { }
     constexpr BoxBounds() : BoxBounds(-1, -1, 0, 0) { }
-    constexpr BoxBounds(vec topleft, vec size) : BoxBounds(topleft.x, topleft.y, size.x, size.y) {}
+    constexpr BoxBounds(vec bottomleft, vec size) : BoxBounds(bottomleft.x, bottomleft.y, size.x, size.y) {}
     constexpr explicit BoxBounds(vec size) : BoxBounds(0, 0, size.x, size.y) { }
     constexpr explicit BoxBounds(vec pos, vec size, vec origin) : BoxBounds(pos.x, pos.y, size.x, size.y) {
         left -= origin.x;
-        top -= origin.y;
+        bottom -= origin.y;
     }
     template<typename T> //Works with GPU_Rect, SDL_Rect and SDL_FRect
     constexpr explicit BoxBounds(T rect) : BoxBounds(rect.x, rect.y, rect.w, rect.h) { }
@@ -30,7 +30,7 @@ struct BoxBounds
     [[nodiscard]] static constexpr BoxBounds FromCenter(vec center, vec size) { return BoxBounds(center - size / 2, size); }
 
     [[nodiscard]] GPU_Rect AsRect() {
-        return GPU_Rect{ left, top, width, height };
+        return GPU_Rect{ left, bottom, width, height };
     }
 
     //Expands arround the center by a factor
@@ -48,7 +48,7 @@ struct BoxBounds
     void Grow(float x, float y)
     {
         left -= x / 2;
-        top -= y / 2;
+        bottom -= y / 2;
         width += x;
         height += y;
     }
@@ -62,7 +62,7 @@ struct BoxBounds
 
     [[nodiscard]] constexpr vec Center() const
 	{
-		return vec(left + width/2, top + height/2);
+		return vec(left + width/2, bottom + height/2);
 	}
 
     [[nodiscard]] constexpr float Area() const
@@ -73,13 +73,13 @@ struct BoxBounds
     void SetCenter(float x, float y)
 	{
         left = x - width/2;
-        top = y - height/2;
+        bottom = y - height/2;
     }
 
     void SetTopAndBottom(float newTop, float newBottom)
     {
-        top = newTop;
-        height = newBottom - newTop;
+        bottom = newBottom;
+        height = newTop - newBottom;
     }
 
     void SetCenter(vec center)
@@ -87,15 +87,15 @@ struct BoxBounds
         SetCenter(center.x, center.y);
     }
 
-    void SetTopLeft(float x, float y)
+    void SetBottomLeft(float x, float y)
     {
         left = x;
-        top = y;
+        bottom = y;
     }
 
-    void SetTopLeft(vec pos)
+    void SetBottomLeft(vec pos)
     {
-        SetTopLeft(pos.x, pos.y);
+        SetBottomLeft(pos.x, pos.y);
     }
 
     void DebugDraw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const
@@ -107,12 +107,12 @@ struct BoxBounds
 
     [[nodiscard]] constexpr float Top() const
 	{
-        return top;
+        return bottom + height;
     }
 
     [[nodiscard]] constexpr float Bottom() const
 	{
-        return top + height;
+        return bottom;
     }
 
     [[nodiscard]] constexpr float Left() const
@@ -145,8 +145,8 @@ struct BoxBounds
     {
         if (x < left) return false;
         if (x >= left + width) return false;
-        if (y < top) return false;
-        if (y >= top + height) return false;
+        if (y < bottom) return false;
+        if (y >= bottom + height) return false;
         return true;
     }
 
@@ -158,9 +158,9 @@ struct BoxBounds
     [[nodiscard]] bool Contains(const BoxBounds& b) const
     {
         if (b.left < left) return false;
-        if (b.left+b.width >= left + width) return false;
-        if (b.top < top) return false;
-        if (b.top+ b.height >= top + height) return false;
+        if (b.left + b.width >= left + width) return false;
+        if (b.bottom < bottom) return false;
+        if (b.bottom + b.height >= bottom + height) return false;
         return true;
     }
 
@@ -216,12 +216,12 @@ inline float BoxBounds::DistanceSq(const BoxBounds& a) const {
         float d = a.left - this->Right();
         sqrDist += d * d;
     }
-    if (a.Bottom() < this->top) {
-        float d = a.Bottom() - this->top;
+    if (a.Bottom() < this->bottom) {
+        float d = a.Bottom() - this->bottom;
         sqrDist += d * d;
     }
-    else if (a.top > this->Bottom()) {
-        float d = a.top - this->Bottom();
+    else if (a.bottom > this->Bottom()) {
+        float d = a.bottom - this->Bottom();
         sqrDist += d * d;
     }
     return sqrDist;
@@ -252,7 +252,7 @@ inline float BoxBounds::Distance(const CircleBounds& a) const
 
 inline std::ostream& operator<<(std::ostream& os, const BoxBounds& rhs)
 {
-    os << rhs.left << " " << rhs.top << " " << rhs.width << " " << rhs.height;
+    os << rhs.left << " " << rhs.bottom << " " << rhs.width << " " << rhs.height;
     return os;
 }
 

@@ -40,7 +40,7 @@ int debugbounds_before_draw = -1;
 void BoxBounds::DebugDraw(uint8_t r, uint8_t g, uint8_t b) const
 {
     if (inSceneDraw && !Debug::Draw) return; // we still need to queue draws done in the Update because they might not happen again if we enter frame-to-frame
-    debugbounds.emplace_back(TopLeft(), r, g, b).from = BottomRight();
+    debugbounds.emplace_back(BottomLeft(), r, g, b).from = BottomRight();
 }
 
 void CircleBounds::DebugDraw(uint8_t r, uint8_t g, uint8_t b) const

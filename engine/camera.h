@@ -19,7 +19,32 @@ namespace Camera
 		return vec(camera.x, camera.y)-screenshake_offset;
 	}
 
-	inline vec TopLeft()
+	inline float Bottom()
+	{
+		return Center().y - Size().y / 2.f;
+	}
+
+	inline float Top()
+	{
+		return Center().y + Size().y / 2.f;
+	}
+
+	inline float Left()
+	{
+		return Center().x - Size().y / 2.f;
+	}
+
+	inline float Right()
+	{
+		return Center().x + Size().y / 2.f;
+	}
+
+	inline vec TopRight()
+	{
+		return Center() + Size() / 2.f;
+	}
+
+	inline vec BottomLeft()
 	{
 		return Center() - Size() / 2.f;
 	}
@@ -36,20 +61,20 @@ namespace Camera
 		SetCenter(pos.x, pos.y);
 	}
 
-	inline void SetTopLeft(vec pos)
+	inline void SetBottomLeft(vec pos)
 	{
 		SetCenter(pos + Size() / 2.f);
 	}
 
-	inline void SetTopLeft(float x, float y)
+	inline void SetBottomLeft(float x, float y)
 	{
-		SetTopLeft(vec(x, y));
+		SetBottomLeft(vec(x, y));
 	}
 
 	inline BoxBounds Bounds()
 	{
 		//return BoxBounds::FromCenter(Center(), Size());
-		return BoxBounds(TopLeft(), Size());
+		return BoxBounds(BottomLeft(), Size());
 	}
 
 	inline void ClampCameraTo(const BoxBounds& limit)
@@ -75,10 +100,10 @@ namespace Camera
 			camera.zoom_x = z;
 			camera.zoom_y = z;
 		} else {
-			vec p = TopLeft();
+			vec p = BottomLeft();
 			camera.zoom_x = z;
 			camera.zoom_y = z;
-			SetTopLeft(p);
+			SetBottomLeft(p);
 		}
 		GPU_SetCamera(Window::currentDrawTarget, &camera);
 	}
@@ -109,11 +134,11 @@ namespace Camera
 	}
 
 	inline vec WorldToScreen(vec world) { // Note: Doesn't handle rotation
-		return (world - Camera::TopLeft()) * Camera::camera.zoom_x;
+		return (world - Camera::BottomLeft()) * Camera::camera.zoom_x;
 	}
 
 	inline vec ScreenToWorld(vec screen) { // Note: Doesn't handle rotation
-		return (screen / Camera::camera.zoom_x) + Camera::TopLeft();
+		return (screen / Camera::camera.zoom_x) + Camera::BottomLeft();
 	}
 
 	namespace InScreenCoords
@@ -128,7 +153,7 @@ namespace Camera
 			GPU_SetCamera(Window::currentDrawTarget, &camera);
 		}
 
-		inline constexpr vec TopLeft()
+		inline constexpr vec BottomLeft()
 		{
 			return vec::Zero;
 		}

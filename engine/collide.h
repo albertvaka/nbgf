@@ -10,8 +10,8 @@
 inline bool Collide(const BoxBounds& a, const BoxBounds& b) {
     return (a.left < b.left + b.width &&
         a.left + a.width > b.left &&
-        a.top < b.top + b.height &&
-        a.top + a.height > b.top);
+        a.bottom < b.bottom + b.height &&
+        a.bottom + a.height > b.bottom);
 }
 // Circle with circle
 inline bool Collide(const CircleBounds& a, const CircleBounds& b)

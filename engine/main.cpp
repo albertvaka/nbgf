@@ -175,7 +175,7 @@ void main_loop() {
 
 		SceneManager::newScene = nullptr;
 		Camera::SetZoom(1.f);
-		Camera::SetTopLeft(0,0);
+		Camera::SetBottomLeft(0,0);
 		Input::IgnoreInput(false);
 		SceneManager::currentScene->EnterScene();
 	}
@@ -316,8 +316,8 @@ void main_loop() {
 		fpsCounter = 0;
 		fpsClock = 0;
 	}
-	Window::Draw(*fpsText, Camera::InScreenCoords::Bounds().TopRight() + vec(-5, 5))
-		.withOrigin(fpsText->Size().x, 0)
+	Window::Draw(*fpsText, Camera::InScreenCoords::Bounds().TopRight() - vec(5, 5))
+		.withOrigin(fpsText->Size())
 		.withScale(0.5f);
 #endif
 

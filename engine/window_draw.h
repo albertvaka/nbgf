@@ -19,7 +19,7 @@ namespace Window {
 			withRect(0,0,t->w,t->h);
 		}
 		constexpr DeferredDraw(GPU_Image* t, const BoxBounds& destRect) // sets scale
-			: t(t), dest(destRect.TopLeft())
+			: t(t), dest(destRect.BottomLeft())
 			, scale(destRect.width/float(t->w), destRect.height/float(t->h))
 		{
 			withRect(0,0,t->w,t->h);
