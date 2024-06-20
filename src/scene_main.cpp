@@ -121,7 +121,7 @@ void SceneMain::Draw()
 
 	alienPartSys.Draw();
 
-	Window::Draw(deadAliensText, vec(Camera::Center().x, 30))
+	Window::Draw(deadAliensText, vec(Camera::Center().x, Camera::Top() - 30))
 		.withOrigin(deadAliensText.Size()/2)
 		.withScale(0.666f);
 

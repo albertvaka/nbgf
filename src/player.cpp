@@ -31,6 +31,6 @@ void Player::Draw() const
 	const GPU_Rect& animRect = AnimLib::PLAYER;
 	Window::Draw(Assets::invadersTexture, pos)
 		.withRect(animRect)
-		.withOrigin(vec(animRect.w, 0)/2)
-		.withRotationDegs(Camera::Center().AngleDegs(pos) + 90);
+		.withOrigin(vec(animRect.w/2, animRect.h))
+		.withRotationDegs(Camera::Center().AngleDegs(pos) - 90);
 }

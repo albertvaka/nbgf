@@ -58,7 +58,7 @@ struct Alien : CircleEntity, SelfRegister<Alien>
 		Window::Draw(Assets::invadersTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)
-			.withRotationDegs(angle + 90)
+			.withRotationDegs(angle - 90)
 			.withScale(0.8f);
 	}
 };

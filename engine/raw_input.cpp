@@ -148,6 +148,7 @@ void Mouse::_UpdateInputState()
     pos.x *= Window::GAME_WIDTH;
     pos.y *= Window::GAME_HEIGHT;
 
+    pos.y = Window::GAME_HEIGHT - pos.y;
 
     // Update mouse button states
     // --------------------------

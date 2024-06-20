@@ -204,7 +204,7 @@ Unless you are going to draw to every single pixel in you scene's `Draw` method,
 
 The default camera has the top left corner at `(0,0)`.
 
-To move it arround, use the `Camera::SetCenter()` and  `Camera::SetTopLeft()` functions, defined in [`engine/camera.h`](engine/camera.h).
+To move it arround, use the `Camera::SetCenter()` and  `Camera::SetBottomLeft()` functions, defined in [`engine/camera.h`](engine/camera.h).
 
 The [`Camera`](engine/camera.h) class also provides functions to zoom in and out, rotate the camera, as well as getting the current position, zoom and rotation.
 
@@ -429,7 +429,7 @@ The following examples assume you want your render-to-texture texture be the siz
 * Set the texture you created as the render target with `Window::BeginRenderToTexture(myTexture)`.
 * Use `Window::Draw` calls as normal. They will be rendered to `myTexture`.
 * When done, use `Window::EndRenderToTexture()` to resume drawing to the screen.
-* Finally, draw your generated texture normally like `Window::Draw(myTexture, Camera::TopLeft())`.
+* Finally, draw your generated texture normally like `Window::Draw(myTexture, Camera::BottomLeft())`.
 
 Note: Since `Window::CreateTexture` takes sizes in virtual pixels, you should recreate your base texture everytime `Window::GetViewportScale()` changes. Remember to free the previous texture with `Window::DestroyTexture(myTexture)` when creating a new one.
 
