@@ -51,7 +51,7 @@ ifdef EMSCRIPTEN
 else
 	OUT_FILE=$(EXEC)
 	ifeq ($(shell uname),Darwin) # MacOS
-		OS_CFLAGS=-DSDL_GPU_DISABLE_OPENGL_4 -DMACOS_VER_MAJOR=$(shell sw_vers -productVersion | cut -d . -f 1) -DMACOS_VER_MINOR=$(shell sw_vers -productVersion | cut -d . -f 2)
+		OS_CFLAGS=-DSDL_GPU_DISABLE_OPENGL_4
 		OS_LDFLAGS=-framework OpenGL
 	else # Linux
 		OS_CFLAGS=
