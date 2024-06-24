@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <cstdint>
 #ifndef _USE_MATH_DEFINES 
 #define _USE_MATH_DEFINES
 #endif

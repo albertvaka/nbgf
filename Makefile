@@ -51,7 +51,7 @@ else
 		C_ONLY_FLAGS=-x objective-c
 		OS_LDFLAGS=-framework OpenGL -framework OpenAL -framework IOKit -framework CoreVideo -framework Cocoa
 	else # Linux
-		OS_CFLAGS=
+		OS_CFLAGS=-D_GLFW_X11
 		OS_LDFLAGS=-lGL
 	endif
 	PLATFORM_CFLAGS=$(OS_CFLAGS) $(pkg-config --cflags glfw3)

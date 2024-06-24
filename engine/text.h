@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include <string>
 #include "vec.h"
+#include <cstdint>
 
 struct Text
 {
