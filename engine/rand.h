@@ -13,8 +13,8 @@
 
 namespace Rand
 {
-	[[nodiscard]] inline float rollf(float min, float max) { return min + (rand() / (float(RAND_MAX) / (max - min))); } // Range [min, max) most of the time (except when rand() == RAND_MAX, then its [min, max])
-	[[nodiscard]] inline float rollf(float max = 1.f) { return rollf(0.f, max); } // Range [0, max)
+	[[nodiscard]] inline float rollf(float min, float max) { return min + (rand() / (float(RAND_MAX) / (max - min))); } // Range [min, max]
+	[[nodiscard]] inline float rollf(float max = 1.f) { return rollf(0.f, max); } // Range [0, max]
 
 	[[nodiscard]] inline int roll(int min, int max) { return min + (rand() % (max - min)); } // Range [min, max)
 	[[nodiscard]] inline int roll(int max) { return roll(0, max); } // Range [0, max)
