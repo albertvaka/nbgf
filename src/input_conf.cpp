@@ -8,8 +8,6 @@
 const int Input::kMaxPlayers = 2;
 
 static int keyboard_player_id = 0; // Keyboard controls player one
-static bool aimingWithMouse = true;
-static vec lastAnalogAim;
 
 std::function<bool(int)> Input::action_mapping[magic_enum::enum_count<GameKeys>()];
 std::function<vec(int)> Input::analog_mapping[magic_enum::enum_count<AnalogInput>()];
