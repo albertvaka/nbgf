@@ -73,6 +73,10 @@ namespace Window
         GPU_Flip(screenTarget);
         Clear(0, 0, 0);
 
+        // Disable drag&drop events
+        SDL_EventState(SDL_DROPFILE,  SDL_DISABLE);
+        SDL_EventState(SDL_DROPTEXT, SDL_DISABLE);
+
         return 0;
     }
 
