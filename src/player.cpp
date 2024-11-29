@@ -12,7 +12,8 @@
 
 const vec playerSize = vec(110.f, 120.f);
 const float playerDisplacementY = 65.f;
-const vec noozleDisplacement = vec(10.f, -30.f);
+const float playerSimmetryOffsetX = 20.f;
+const vec noozleDisplacement = vec(0.f, -30.f);
 const float playerAccel = 5500.f;
 const float friction = 31.f;
 const float maxVel = 600.f;
@@ -24,7 +25,7 @@ const float shakeHorizontalDegrees = 2.f;
 const float gasCooldownTime = 0.01f;
 const float gasSpeed = 550.f;
 const float gasAngleVariationRads = 0.08f*Angles::Tau;
-const float gasOriginOffset = 25.f;
+const float gasOriginOffset = 5.f;
 
 extern float mainClock;
 
@@ -92,7 +93,7 @@ void Player::Draw() const
 	float shakeMagnitude = vel.Normalized().Length();
 	auto a = Window::Draw(Assets::playerTexture, pos)
 		.withRotationDegs(sin(mainClock* shakeHorizontalSpeed *shakeMagnitude)*shakeHorizontalDegrees)
-		.withOrigin(Assets::playerTexture->base_w/2, Assets::playerTexture->base_h / 2 + playerDisplacementY + sin(mainClock*shakeVerticalSpeed)*shakeMagnitude* shakeHeight)
+		.withOrigin(Assets::playerTexture->base_w/2 + playerSimmetryOffsetX, Assets::playerTexture->base_h / 2 + playerDisplacementY + sin(mainClock*shakeVerticalSpeed)*shakeMagnitude* shakeHeight)
 		.withScale(lookingLeft ? -imageScale : imageScale, imageScale);
 
 	Bounds().DebugDraw();
