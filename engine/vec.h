@@ -25,7 +25,7 @@ struct vec
 	explicit constexpr vec() : x(0.f), y(0.f) {}
 	explicit constexpr vec(float xy) : x(xy), y(xy) {}
 	constexpr vec(float x, float y) : x(x), y(y) {}
-	constexpr vec(const veci& v) : x(v.x), y(v.y) {}
+	constexpr vec(veci v) : x(v.x), y(v.y) {}
 
 	static const vec Zero;
 
@@ -128,8 +128,8 @@ struct vec
 	[[nodiscard]] inline vec Perp() const;
 
 	//adjusts x and y so that the length of the vector does not exceed max
-	inline bool Truncate(const float max); // affects in-place
-	[[nodiscard]] inline vec Truncated(const float max); // returns a new vec
+	inline bool Truncate(float max); // affects in-place
+	[[nodiscard]] inline vec Truncated(float max); // returns a new vec
 
 	//returns the distance between this vector and th one passed as a parameter
 	[[nodiscard]] inline float Distance(vec v2) const;
