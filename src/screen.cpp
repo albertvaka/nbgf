@@ -19,7 +19,7 @@ int ScreenManager::FindScreenContaining(vec pos) {
 	return FindIndexOfSmallestBoundsContaining(pos, screens);
 }
 
-const void ScreenManager::ClampCameraToScreen(vec& camPos) {
+void ScreenManager::ClampCameraToScreen(vec& camPos) {
 	if (currentScreen < 0) return;
 
 	const BoxBounds& screenBounds = CurrentBounds();

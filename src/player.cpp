@@ -23,77 +23,77 @@
 extern float mainClock;
 
 // input
-const float kIsJustPressedIntervalTime = 0.15f;
-const float kJumpTimeAfterBeingGrounded = 0.07f; //~4 frames
+constexpr float kIsJustPressedIntervalTime = 0.15f;
+constexpr float kJumpTimeAfterBeingGrounded = 0.07f; //~4 frames
 
 // accel
-const float kRunAcc = 1400;
-const float kRunAcc_OnAir = 1000;
-const float kGravityAcc = 660;
-const float kDiveHorizontalAcc = 10;
+constexpr float kRunAcc = 1400;
+constexpr float kRunAcc_OnAir = 1000;
+constexpr float kGravityAcc = 660;
+constexpr float kDiveHorizontalAcc = 10;
 
 // friction X
-const float kFrictAccFloor = 1000;
-const float kFrictAccFloor_Crouched = 450;
-const float kFrictAcc_OnAir = 500;
+constexpr float kFrictAccFloor = 1000;
+constexpr float kFrictAccFloor_Crouched = 450;
+constexpr float kFrictAcc_OnAir = 500;
 
 // friction Y
-const float kFrictAccVert_WallUp = 400;
-const float kFrictAccVert_WallDown = 540;
+constexpr float kFrictAccVert_WallUp = 400;
+constexpr float kFrictAccVert_WallDown = 540;
 
 // jump
-const float kVelJump = -200; // Y axis
-const float kVelWalljump = 140; // X axis
-const float kVelSlopejump = 140; // X axis
-const float kJumpHeightDiff = 72.f; // vertical pixels (note: this is the height at wich we stop adding vertical velocity, but we jump slightly higher thant his, ~8px more;
-const float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
-const float kTimeToJumpFromWallAfterLettingGo = 0.2f;
+constexpr float kVelJump = -200; // Y axis
+constexpr float kVelWalljump = 140; // X axis
+constexpr float kVelSlopejump = 140; // X axis
+constexpr float kJumpHeightDiff = 72.f; // vertical pixels (note: this is the height at wich we stop adding vertical velocity, but we jump slightly higher thant his, ~8px more;
+constexpr float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
+constexpr float kTimeToJumpFromWallAfterLettingGo = 0.2f;
 
 // dash
-const float kVelDash = 400;
-const float kDashCooldown = 1.5f;
-const float kDashDuration = 0.22f;
+constexpr float kVelDash = 400;
+constexpr float kDashCooldown = 1.5f;
+constexpr float kDashDuration = 0.22f;
 
 // dive
-const float kVelDive = 400;
-const float kDiveRestTime = 0.4f; // time you can't move after touching ground
-const float kDiveRestTimeAfterHitting = 0.3f;
+constexpr float kVelDive = 400;
+constexpr float kDiveRestTime = 0.4f; // time you can't move after touching ground
+constexpr float kDiveRestTimeAfterHitting = 0.3f;
 
 // limits
-const vec kVelMax(220, 350);
+constexpr vec kVelMax(220, 350);
 
 // bfg
-const float kBulletVel = 400.f;
-const float kBfgCooldown = 0.2f;
-const float kBfgPushBack = 150.f;
+constexpr float kBulletVel = 400.f;
+constexpr float kBfgCooldown = 0.2f;
+constexpr float kBfgPushBack = 150.f;
 
 // knockback
-const float kDoDamageKnockbackVel = 100.f;
-const float kDoDamageKnockbackVelGrounded = 140.f;
-const float kDoDamageUpKnockbackVel = 180.f;
-const float kDoDamageDownKnockbackVel = -220.f;
-const vec kTakeDamageKnockbackVel(180.f, -150.f);
-const float kInvencibleTimeAfterHit = 1.0f;
+constexpr float kDoDamageKnockbackVel = 100.f;
+constexpr float kDoDamageKnockbackVelGrounded = 140.f;
+constexpr float kDoDamageUpKnockbackVel = 180.f;
+constexpr float kDoDamageDownKnockbackVel = -220.f;
+constexpr vec kTakeDamageKnockbackVel(180.f, -150.f);
+constexpr float kInvencibleTimeAfterHit = 1.0f;
 
 // sword attack
-const float kSwordAttackRadius = 23.3f;
-const vec kSwordAttackOffset = vec(16.f,-17.f);
+constexpr float kSwordAttackRadius = 23.3f;
+constexpr vec kSwordAttackOffset = vec(16.f,-17.f);
 
-const float kSwordAttackDownRadius = 13.f;
-const vec kSwordAttackDownOffset = vec(2.f,3.f);
+constexpr float kSwordAttackDownRadius = 13.f;
+constexpr vec kSwordAttackDownOffset = vec(2.f,3.f);
 
-const float kSwordAttackUpRadius = 21.3f;
-const vec kSwordAttackUpOffset = vec(0.f, -30.f);
+constexpr float kSwordAttackUpRadius = 21.3f;
+constexpr vec kSwordAttackUpOffset = vec(0.f, -30.f);
 
-const float kSwordAttackWallSlideRadius = 23.f;
-const vec kSwordAttackWallSlideOffset = vec(-16.f, -15.5f);
+constexpr float kSwordAttackWallSlideRadius = 23.f;
+constexpr vec kSwordAttackWallSlideOffset = vec(-16.f, -15.5f);
 
 // Sprite
-const vec kStandingSize = vec(13, 32);
-const vec kCrouchedSize = vec(13, 22);
-const int kOffsetSwordlessSpritesheet = 413;
+constexpr vec kStandingSize = vec(13, 32);
+constexpr vec kCrouchedSize = vec(13, 22);
+constexpr int kOffsetSwordlessSpritesheet = 413;
 
-const float kHealthAnimationTime = 0.3f;
+constexpr float kHealthAnimationTime = 0.3f;
 
 void DestroyTilesWithSword(const CircleBounds& e) {
 	GaemTileMap* map = GaemTileMap::instance();
@@ -990,7 +990,7 @@ void Player::DrawGUI(bool discreteHealth)
 	}
 	else {
 		float scale = 1.5f;
-		const vec pos(6, 28 - 19);
+		constexpr vec pos(6, 28 - 19);
 		const int size = 8 * maxHealth;
 
 		// Background

@@ -100,7 +100,7 @@ public:
 	void ObstacleAvoidanceOn() { m_iFlags |= obstacle_avoidance; }
 	void BoundsAvoidanceOn(const BoxBounds& bounds) { m_bounds = bounds; m_iFlags |= bounds_avoidance; }
 	void HideOn(Entity* v) { m_iFlags |= hide; hideTarget = v; }
-	void OffsetPursuitOn(Entity* v1, const float offset) { m_iFlags |= offset_pursuit; m_vOffset = offset; pursuitTarget = v1; }
+	void OffsetPursuitOn(Entity* v1, float offset) { m_iFlags |= offset_pursuit; m_vOffset = offset; pursuitTarget = v1; }
 	void TileMapAvoidanceOn(GaemTileMap* tilemap) { m_iFlags |= tilemap_avoidance; m_tilemap = tilemap; }
 
 	void ForwardOff() { if (On(forward)) m_iFlags ^= forward; }

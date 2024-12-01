@@ -98,7 +98,7 @@ void Bipedal::Update(float dt)
 		}
 	}
 
-	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(headHitBox, hitTimer > 0.f);
+	std::optional<vec> damageFromPlayerPos = ReceiveDamageFromPlayer(headHitBox, hitTimer > 0.f);
 	if (damageFromPlayerPos) {
 		TakeDamage();
 		if (alive == false) return;

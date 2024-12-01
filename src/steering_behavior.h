@@ -37,7 +37,7 @@ struct SteeringBehavior
 
     //this behavior maintains a position, in the direction of offset
     //from the target SteeringEntity
-    vec OffsetPursuit(const Entity* leader, const float offset);
+    vec OffsetPursuit(const Entity* leader, float offset);
 
     //this behavior makes the agent wander about randomly
 	vec Wander(float WanderRad, float WanderDist, float WanderJitterPerSec, float dt);
@@ -62,7 +62,7 @@ struct SteeringBehavior
 
     //helper method for Hide. Returns a position located on the other
     //side of an obstacle to the pursuer
-    vec GetHidingPosition(vec posOb, const float radiusOb, vec posHunter);
+    vec GetHidingPosition(vec posOb, float radiusOb, vec posHunter);
 
 	bool avoidingTileMap = false;
 	bool avoidingBounds = false;
@@ -70,11 +70,11 @@ struct SteeringBehavior
 //protected:
 
   //a pointer to the owner of this instance
-  SteeringEntity* steeringEntity;   
+  SteeringEntity* steeringEntity;
       
   //the current position on the wander circle the agent is
   //attempting to steer towards
-  vec m_vWanderTarget; 
+  vec m_vWanderTarget;
 
 };
 
@@ -210,7 +210,7 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
 
 		//apply a braking force proportional to the obstacles distance from
 		//the SteeringEntity. 
-		const float BrakingWeight = 0.2f;
+		constexpr float BrakingWeight = 0.2f;
 
 		SteeringForce.x = (ClosestIntersectingObstacle->radius - LocalPosOfClosestObstacle.x) * BrakingWeight;
 	}

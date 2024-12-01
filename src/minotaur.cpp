@@ -98,7 +98,7 @@ void Minotaur::Update(float dt)
 		}
 	}
 
-	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
+	std::optional<vec> damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
 	if (damageFromPlayerPos) {
 		wasAttacked = true;
 		TakeDamage();

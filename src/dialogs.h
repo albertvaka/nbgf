@@ -6,10 +6,10 @@ const inline DialogCharacter protaChar = { "Warrior", AnimLib::PORTRAIT_WARRIOR,
 const inline DialogCharacter randomNpcChar = { "Random NPC", AnimLib::PORTRAIT_RANDOM_NPC, Assets::aiVoice };
 
 namespace Color {
-	static const TextColor BLACK(0, 0, 0);
-	static const TextColor WHITE(255, 255, 255);
-	static const TextColor PINK(250, 10, 250);
-	static const TextColor YELLOW(250, 250, 10);
+	static constexpr TextColor BLACK(0, 0, 0);
+	static constexpr TextColor WHITE(255, 255, 255);
+	static constexpr TextColor PINK(250, 10, 250);
+	static constexpr TextColor YELLOW(250, 250, 10);
 }
 
 inline Dialog dialogWithRandomNpcWithChoices = {{

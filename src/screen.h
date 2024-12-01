@@ -42,7 +42,7 @@ struct ScreenManager
 		return screens[screen];
 	}
 
-	static const void ClampCameraToScreen(vec& camPos);
+	static void ClampCameraToScreen(vec& camPos);
 
 	static void UpdateCurrentScreen(vec pos);
 

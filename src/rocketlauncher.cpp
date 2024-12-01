@@ -12,9 +12,9 @@
 #include "common_tilemapcharacter.h"
 
 const float kTimeBetweenMissiles = 3.5f;
-const vec kCanonOrigin = vec(0, -4);
-const vec kCanonLength = vec(10, 0);
-const vec kAwokenLedOffset = vec(-3, -7);
+constexpr vec kCanonOrigin = vec(0, -4);
+constexpr vec kCanonLength = vec(10, 0);
+constexpr vec kAwokenLedOffset = vec(-3, -7);
 
 extern float mainClock;
 

@@ -329,7 +329,7 @@ vec SteeringBehavior::FollowPath()
 //  Produces a steering force that keeps a SteeringEntity at a specified offset
 //  from a leader SteeringEntity
 //------------------------------------------------------------------------
-vec SteeringBehavior::OffsetPursuit(const Entity*  leader, const float offset)
+vec SteeringBehavior::OffsetPursuit(const Entity*  leader, float offset)
 {
 	vec leaderHeading = leader->vel.Normalized();
 	vec displacement = leaderHeading * - offset;

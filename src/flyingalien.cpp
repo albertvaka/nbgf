@@ -79,7 +79,7 @@ void FlyingAlien::Update(float dt)
 	}
 
 	hitTimer -= dt;
-	const vec* damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
+	std::optional<vec> damageFromPlayerPos = ReceiveDamageFromPlayer(Bounds(), hitTimer > 0.f);
 	if (damageFromPlayerPos) {
 		TakeDamage(*damageFromPlayerPos);
 		if (alive == false) return;

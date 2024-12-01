@@ -140,7 +140,7 @@ void Goomba::Update(float dt)
 		break;
 	}
 
-	const vec* hitPos = ReceiveDamageFromPlayer(Bounds(), false);
+	std::optional<vec> hitPos = ReceiveDamageFromPlayer(Bounds(), false);
 	if (hitPos) {
 		if (type == Type::SHIELDER) {
 			bool hitFromRight = (player->pos.x > pos.x);
