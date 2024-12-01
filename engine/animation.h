@@ -145,12 +145,12 @@ struct Animation
 		return anim[current_frame].rect;
 	}
 
-	const float CurrentFrameDuration() const
+	float CurrentFrameDuration() const
 	{
 		return anim[current_frame].duration;
 	}
 
-	const float TotalDuration() const
+	float TotalDuration() const
 	{
 		return SumDuration(anim, anim_size);
 	}
