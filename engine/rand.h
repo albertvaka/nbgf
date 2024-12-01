@@ -31,8 +31,8 @@ namespace Rand
 	// Randoms-sized vector in a random direction
 	[[nodiscard]] inline vec PosInsideCircle(float radius)
 	{
-		// Rejection sampling is the fastest way I found to implement this
-		// Doing DirInCircle()*radius is wrong because the point distribution is more dense in the center
+		// Rejection sampling is the fastest way to implement this
+		// Doing DirInCircle()*rollf(radius) is wrong because the point distribution is more dense in the center
 		while (true) {
 			float x = rollf(-1.f, 1.f);
 			float y = rollf(-1.f, 1.f);
