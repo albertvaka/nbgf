@@ -16,7 +16,7 @@ struct BoxBounds
     float width, height;
 
     constexpr BoxBounds(float x, float y, float w, float h) : left(x), top(y), width(w), height(h) { }
-    constexpr BoxBounds() : BoxBounds(-1, -1, 0, 0) { }
+    consteval BoxBounds() : BoxBounds(-1, -1, 0, 0) { }
     constexpr BoxBounds(vec topleft, vec size) : BoxBounds(topleft.x, topleft.y, size.x, size.y) {}
     constexpr explicit BoxBounds(vec size) : BoxBounds(0, 0, size.x, size.y) { }
     constexpr explicit BoxBounds(vec pos, vec size, vec origin) : BoxBounds(pos.x, pos.y, size.x, size.y) {
