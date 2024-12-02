@@ -128,22 +128,22 @@ namespace Camera
 			GPU_SetCamera(Window::currentDrawTarget, &camera);
 		}
 
-		inline constexpr vec TopLeft()
+		inline consteval vec TopLeft()
 		{
 			return vec::Zero;
 		}
 
-		inline constexpr vec Size()
+		inline consteval vec Size()
 		{
 			return vec(Window::GAME_WIDTH, Window::GAME_HEIGHT);
 		}
 
-		inline constexpr BoxBounds Bounds()
+		inline consteval BoxBounds Bounds()
 		{
 			return BoxBounds(vec::Zero, Size());
 		}
 
-		inline constexpr vec Center()
+		inline consteval vec Center()
 		{
 			return Size() / 2.f;
 		}

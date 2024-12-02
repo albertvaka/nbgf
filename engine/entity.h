@@ -5,7 +5,7 @@
 
 struct Entity
 {
-	constexpr Entity() : pos(0.f,0.f) {}
+	consteval Entity() : pos(0.f,0.f) {}
 	constexpr Entity(vec pos) : pos(pos) {}
 	constexpr Entity(vec pos, vec vel) : pos(pos), vel(vel) {}
 	vec pos;
