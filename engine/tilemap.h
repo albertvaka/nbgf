@@ -34,9 +34,9 @@ struct TileMap
 		return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y);
 	}
 
-	void SetTile(int x, int y, Tile col) {
+	void SetTile(int x, int y, Tile t) {
 		if (!InBounds(x, y)) return;
-		SetTileUnsafe(x, y, col);
+		SetTileUnsafe(x, y, t);
 	}
 
 	Tile GetTile(int x, int y) const {
@@ -45,13 +45,13 @@ struct TileMap
 	}
 
 	Tile GetTileUnsafe(int x, int y) const { return tiles[y * sizes.x + x]; }
-	void SetTileUnsafe(int x, int y, Tile col) { tiles[y * sizes.x + x] = col; }
+	void SetTileUnsafe(int x, int y, Tile t) { tiles[y * sizes.x + x] = t; }
 
 	void SetTile(veci pos, Tile tile) { return SetTile(pos.x, pos.y, tile); }
 	Tile GetTile(veci pos) const { return GetTile(pos.x, pos.y); }
 
 	Tile GetTileUnsafe(veci pos) const { return GetTileUnsafe(pos.x, pos.y); }
-	void SetTileUnsafe(veci pos, Tile col) { SetTileUnsafe(pos.x, pos.y, col); }
+	void SetTileUnsafe(veci pos, Tile t) { SetTileUnsafe(pos.x, pos.y, t); }
 
 	int Width() const { return sizes.x; }
 	int Height() const { return sizes.y; }
