@@ -16,7 +16,7 @@ struct Entity
 struct BoxEntity : Entity {
 	constexpr BoxEntity(vec size) : size(size) {}
 	constexpr BoxEntity(vec pos, vec size) : Entity(pos), size(size) {}
-	constexpr BoxEntity(const BoxBounds& b) : Entity(b.Center()), size(b.Size()) {} //note that entities position is on their center
+	constexpr BoxEntity(const BoxBounds& b) : Entity(b.Center()), size(b.Size()) {} // note that entities position is on their center
 
 	vec size;
 
