@@ -22,7 +22,7 @@ struct veci {
 struct vec
 {
 	float x, y;
-	explicit consteval vec() : x(0.f), y(0.f) {}
+	explicit constexpr vec() : x(0.f), y(0.f) {}
 	explicit constexpr vec(float xy) : x(xy), y(xy) {}
 	constexpr vec(float x, float y) : x(x), y(y) {}
 	constexpr vec(veci v) : x(v.x), y(v.y) {}
