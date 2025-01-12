@@ -113,7 +113,7 @@ private:
 	Tile* tiles;
 
 	void DrawOutOfBounds(int left, int right, int top, int bottom) const {
-		GPU_Rect outOfBounds = Tile::TileToTextureRect[outOfBoundsTile];
+		GPU_Rect outOfBounds = outOfBoundsTile.textureRect();
 		RectToTextureCoordinates(tileset, outOfBounds);
 
 		if (left < 0) {
