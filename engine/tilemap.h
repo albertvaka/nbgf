@@ -113,7 +113,7 @@ private:
 	Tile* tiles;
 
 	void DrawOutOfBounds(int left, int right, int top, int bottom) const {
-		Rectangle outOfBounds = Tile::TileToTextureRect[outOfBoundsTile];
+		Rectangle outOfBounds = outOfBoundsTile.textureRect();
 		RectToTextureCoordinates(tileset, outOfBounds);
 
 		if (left < 0) {
