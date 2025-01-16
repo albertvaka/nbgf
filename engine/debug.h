@@ -2,6 +2,7 @@
 
 #include <iosfwd>
 #include <ostream>
+#include <functional>
 
 namespace Debug {
 #ifdef _DEBUG
@@ -16,6 +17,7 @@ namespace Debug {
     static const bool CameraFixed = false;
 #endif
     extern std::ostream& _forwarded_out;
+    extern void timed(std::function<void()> f);
 };
 
 extern int lastTicks;
