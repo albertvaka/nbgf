@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <algorithm>
 
+#include "std_utils.h"
+
 static std::vector<Entity*> emptyVec;
 static std::unordered_map<int, std::vector<Entity*>> maperino;
 
@@ -24,7 +26,7 @@ void EnemiesByScreen::Remove(int screen, Entity* e) {
 	auto pp = std::find(list.begin(), list.end(), e);
 	SDL_assert(pp != list.end());
 
-	list.erase(pp);
+	removeBySwapAndShrink(list, pp);
 
 	if (list.empty()) {
 		maperino.erase(p);
