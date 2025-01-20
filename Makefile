@@ -41,8 +41,8 @@ ifdef EMSCRIPTEN
 	OUT_FILE=$(EXEC).js
 	WEBGL_CFLAGS=-DIMGUI_IMPL_OPENGL_ES3
 	WEBGL_LDFLAGS=-s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2
-	PLATFORM_CFLAGS=-s USE_GLFW=3 --preload-file bin/data@/data --use-preload-plugins $(WEBGL_CFLAGS)
-	PLATFORM_LDFLAGS=-lidbfs.js -s EXPORTED_FUNCTIONS='["_main", "_start_main_loop"]' -s EXPORTED_RUNTIME_METHODS='["ccall"]' -s ALLOW_MEMORY_GROWTH=1 $(WEBGL_LDFLAGS)
+	PLATFORM_CFLAGS=-s USE_GLFW=3 $(WEBGL_CFLAGS)
+	PLATFORM_LDFLAGS=-lidbfs.js -s EXPORTED_FUNCTIONS='["_main", "_start_main_loop"]' -s EXPORTED_RUNTIME_METHODS='["ccall"]' -s ALLOW_MEMORY_GROWTH=1 $(WEBGL_LDFLAGS) --preload-file bin/data@/data --use-preload-plugins
 else
 	OUT_FILE=$(EXEC)
 	ifeq ($(shell uname),Darwin) # MacOS
