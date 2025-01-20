@@ -2,6 +2,7 @@
 
 #include "raylib.h"
 
+//TODO: Port to raylib, or assess performance of tilemap without this
 namespace Window {
 
 	/*

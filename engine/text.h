@@ -59,6 +59,7 @@ struct Text
 		return *this;
 	}
 
+	// TODO: Port to raylib
 	Text& SetOutlineColor(uint8_t r, uint8_t g, uint8_t b) {
 		if (r != outline_color.r || g != outline_color.g || b != outline_color.b) {
 			outline_color.r = r;
