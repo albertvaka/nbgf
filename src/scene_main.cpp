@@ -137,6 +137,7 @@ void SceneMain::Draw()
 		ImGui::Begin("scene");
 		vec m = GetMousePositionInWorld();
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
+		ImGui::Text("Angle: %s", Angles::RadsToStr(GameCamera::Center().AngleRads(player.pos), true).c_str());
 		if (ImGui::SliderInt("level", &currentLevel, 1, 20)) {
 			Alien::DeleteAll();
 			SpawnAliens();
