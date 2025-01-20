@@ -46,7 +46,7 @@ ifdef EMSCRIPTEN
 else
 	OUT_FILE=$(EXEC)
 	ifeq ($(shell uname),Darwin) # MacOS
-		OS_CFLAGS=-DMACOS_VER_MAJOR=$(shell sw_vers -productVersion | cut -d . -f 1) -DMACOS_VER_MINOR=$(shell sw_vers -productVersion | cut -d . -f 2)
+		OS_CFLAGS=
 # Hack because raylib includes objective-C code in MacOS
 		C_ONLY_FLAGS=-x objective-c
 		OS_LDFLAGS=-framework OpenGL -framework OpenAL -framework IOKit -framework CoreVideo -framework Cocoa
