@@ -3,6 +3,7 @@
 #include <iosfwd>
 #include <ostream>
 #include <raylib.h>
+#include <functional>
 
 namespace Debug {
 #ifdef _DEBUG
@@ -17,6 +18,7 @@ namespace Debug {
     static const bool CameraFixed = false;
 #endif
     extern std::ostream& _forwarded_out;
+    extern void timed(std::function<void()> f);
 };
 
 // Delegate from: https://stackoverflow.com/questions/49332013/adding-a-new-line-after-stdostream-output-without-explicitly-calling-it

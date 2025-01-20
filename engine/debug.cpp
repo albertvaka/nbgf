@@ -107,3 +107,18 @@ void AfterSceneDraw()
 }
 
 #endif
+
+namespace Debug {
+    void timed(std::function<void()> f) {
+        auto startTime = std::chrono::system_clock::now().time_since_epoch();
+        f();
+        auto elapsedTime = std::chrono::system_clock::now().time_since_epoch() - startTime;
+        int elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+        if (elapsedMs != 0) {
+            Debug::out << "Time: " << elapsedMs << "ms";
+        } else {
+            int elapsedNs = std::chrono::duration_cast<std::chrono::microseconds>(elapsedTime).count();
+            Debug::out << "Time: " << (elapsedNs/1000.0) << "ms";
+        }
+    }
+}
