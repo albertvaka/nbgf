@@ -33,10 +33,9 @@ inline std::string osConfigDir()
 #if _WIN32
 	return getenv("LOCALAPPDATA");
 #elif defined(__APPLE__)
-	return "~/Library/Preferences";
-	return getenv("XDG_CONFIG_HOME");
+	return std::filesystem::path(getenv("HOME")) / "Library" / "Preferences";
 #else
-	return "~/.config/";
+	return getenv("XDG_CONFIG_HOME");
 #endif
 }
 
@@ -56,6 +55,7 @@ std::string SaveState::GetSaveFilePath()
 void SaveState::Save()
 {
 	std::string path = GetSaveFilePath();
+	Debug::out << "Saving to " << path;
 	std::ofstream file(path, std::ofstream::out | std::ofstream::trunc);
 	if (file.fail()) {
 		Debug::out << "Could not open " << path << " for writing: " << strerror(errno);
