@@ -6,15 +6,15 @@
 #include "shader.h"
 
 struct GPU_Image;
-typedef struct _TTF_Font TTF_Font;
-typedef struct _Mix_Music Mix_Music;
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 struct Assets
 {
 	static void LoadAll();
 
 	static inline GPU_Image* invadersTexture;
-	
+
 	static inline GPU_Image* backgroundTexture;
 
 	static inline TTF_Font* font_30;
