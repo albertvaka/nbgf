@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
 
 #include "vec.h"
 #include "bounds.h"
