@@ -38,6 +38,8 @@ CXXFLAGS = $(CFLAGS) -std=c++20 -fno-rtti -fno-exceptions -Wno-reorder
 LDFLAGS	 = $(CXXFLAGS) $(PLATFORM_LDFLAGS)
 
 ifdef EMSCRIPTEN
+#TODO: Fix emscripten build with raylib
+#TODO: Fix github workflows with raylib
 	OUT_FILE=$(EXEC).js
 	WEBGL_CFLAGS=-DIMGUI_IMPL_OPENGL_ES3
 	WEBGL_LDFLAGS=-s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2
