@@ -2,7 +2,7 @@
 
 #include "sound.h"
 
-typedef struct _Mix_Music Mix_Music;
+#include <SDL_mixer.h>
 
 namespace Assets
 {

@@ -6,7 +6,8 @@
 #include "sound.h"
 #include "musicplayer.h"
 #include "shader.h"
-typedef struct _TTF_Font TTF_Font;
+
+#include <SDL_ttf.h>
 
 struct Voice {
 	Sound speak;

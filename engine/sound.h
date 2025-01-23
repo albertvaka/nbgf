@@ -4,7 +4,7 @@
 #include "rand.h"
 #include "vec.h"
 
-struct Mix_Chunk;
+#include <SDL_mixer.h>
 
 // Note: By default, SDL_Mixer can only play 8 sounds at once
 
