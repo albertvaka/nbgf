@@ -6,8 +6,8 @@
 #include "shader.h"
 
 struct GPU_Image;
-typedef struct _TTF_Font TTF_Font;
-typedef struct _Mix_Music Mix_Music;
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 struct Assets
 {
