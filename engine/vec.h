@@ -510,7 +510,7 @@ inline std::ostream& operator<<(std::ostream& os, vec rhs)
 }
 
 struct Transform : public vec {
-	constexpr Transform(vec pos, float rotationDegs) : vec(pos), rotationDegs(rotationDegs) { Angles::KeepDegsBetween0and360(rotationDegs); }
+	constexpr Transform(vec pos, float rotationDegs) : vec(pos), rotationDegs(rotationDegs) { Angles::ClampDegsBetween0and360(rotationDegs); }
 	constexpr Transform(float x, float y, float rotationDegs) : Transform(vec(x, y), rotationDegs) { }
 	float rotationDegs;
 
@@ -524,7 +524,7 @@ struct Transform : public vec {
 		x += rhs.x;
 		y += rhs.y;
 		rotationDegs += rhs.rotationDegs;
-		Angles::KeepDegsBetween0and360(rotationDegs);
+		Angles::ClampDegsBetween0and360(rotationDegs);
 		return *this;
 	}
 
@@ -540,7 +540,7 @@ struct Transform : public vec {
 		x -= rhs.x;
 		y -= rhs.y;
 		rotationDegs -= rhs.rotationDegs;
-		Angles::KeepDegsBetween0and360(rotationDegs);
+		Angles::ClampDegsBetween0and360(rotationDegs);
 		return *this;
 	}
 
@@ -549,7 +549,7 @@ struct Transform : public vec {
 		x *= rhs;
 		y *= rhs;
 		rotationDegs *= rhs;
-		Angles::KeepDegsBetween0and360(rotationDegs);
+		Angles::ClampDegsBetween0and360(rotationDegs);
 		return *this;
 	}
 
@@ -558,7 +558,7 @@ struct Transform : public vec {
 		x /= rhs;
 		y /= rhs;
 		rotationDegs /= rhs;
-		Angles::KeepDegsBetween0and360(rotationDegs);
+		Angles::ClampDegsBetween0and360(rotationDegs);
 		return *this;
 	}
 
