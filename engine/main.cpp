@@ -6,7 +6,6 @@
 #include "input.h"
 #include "mates.h"
 #include "debug.h"
-#include "debug.h"
 #include "camera.h"
 #include "window.h"
 
