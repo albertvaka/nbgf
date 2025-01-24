@@ -5,7 +5,7 @@
 
 namespace Mates {
 
-std::string to_string_with_precision(const float a_value, const int n)
+std::string to_string_with_precision(float a_value, int n)
 {
 	std::ostringstream out;
 	out.precision(n);

@@ -29,7 +29,7 @@ namespace Window {
 			return withRect({ x, y, w, h });
 		}
 
-		constexpr Draw& withRect(const vec pos, const vec size) {
+		constexpr Draw& withRect(vec pos, vec size) {
 			return withRect({ pos.x, pos.y, size.x, size.y });
 		}
 

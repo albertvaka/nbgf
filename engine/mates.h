@@ -47,7 +47,7 @@ namespace Mates
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 
-	[[nodiscard]] std::string to_string_with_precision(const float a_value, const int n = 2);
+	[[nodiscard]] std::string to_string_with_precision(float a_value, int n = 2);
 
 	[[nodiscard]] std::string to_hexa(int a_value);
 
@@ -214,7 +214,7 @@ namespace Mates
 		return sqrt(sd);
 	}
 
-	[[nodiscard]] inline int fastfloor(const float x) { return x > 0 ? (int)x : (int)x - 1; }
+	[[nodiscard]] inline int fastfloor(float x) { return x > 0 ? (int)x : (int)x - 1; }
 
 	struct Range {
 		float min;
