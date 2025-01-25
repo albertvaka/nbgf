@@ -58,6 +58,10 @@ namespace Window {
 			return withOrigin(o.x, o.y);
 		}
 
+		constexpr Draw& withOriginCentered() {
+			return withOrigin(t->w / 2, t->h / 2);
+		}
+
 		constexpr Draw& withRotationDegs(float degrees) {
 			rotation = degrees;
 			return *this;

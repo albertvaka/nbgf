@@ -190,6 +190,10 @@ struct CircleBounds
 #endif
 
     [[nodiscard]] vec Center() const { return pos; }
+    [[nodiscard]] float Top() const { return pos.y - radius; }
+    [[nodiscard]] float Bottom() const { return pos.y + radius; }
+    [[nodiscard]] float Left() const { return pos.x - radius; }
+    [[nodiscard]] float Right() const { return pos.x + radius; }
 
     [[nodiscard]] float DistanceSq(const BoxBounds& a) const { return a.DistanceSq(*this); }
     [[nodiscard]] float Distance(const BoxBounds& a) const { return a.Distance(*this); }
