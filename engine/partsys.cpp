@@ -108,7 +108,7 @@ void PartSys::DrawImGUI(const char* title) {
 			min_ttl = max_ttl;
 		}
 	}
-	if (ImGui::SliderFloat2("min_vel", &min_vel.x, -50.f, 50.f)) {
+	if (ImGui::SliderFloat2("min_vel", &min_vel.x, -500.f, 500.f)) {
 		if (min_vel.x > max_vel.x) {
 			max_vel.x = min_vel.x;
 		}
@@ -116,7 +116,7 @@ void PartSys::DrawImGUI(const char* title) {
 			max_vel.y = min_vel.y;
 		}
 	}
-	if (ImGui::SliderFloat2("max_vel", &max_vel.x, -50.f, 50.f)) {
+	if (ImGui::SliderFloat2("max_vel", &max_vel.x, -500.f, 500.f)) {
 		if (min_vel.x > max_vel.x) {
 			min_vel.x = max_vel.x;
 		}
