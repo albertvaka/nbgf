@@ -33,6 +33,10 @@ struct Assets
 	static inline GPU_Image* fish1mouth;
 	static inline GPU_Image* fish1mic;
 	static inline GPU_Image* fish1arm;
+	static inline GPU_Image* fish2;
+	static inline GPU_Image* fish2mouth;
+	static inline GPU_Image* fish2mic;
+	static inline GPU_Image* fish2arm;
 
 	static inline GPU_Image* bubble1;
 	static inline GPU_Image* bubble2;

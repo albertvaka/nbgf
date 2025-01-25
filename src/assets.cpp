@@ -18,6 +18,11 @@ void Assets::LoadAll() {
     fish1mouth = LoadImage("data/mouth.png");
     fish1mic = LoadImage("data/arm_mic.png");
     fish1arm = LoadImage("data/arm_move.png");
+    
+    fish2 = LoadImage("data/fish2_body.png");
+    fish2mouth = LoadImage("data/mouth2.png");
+    fish2mic = LoadImage("data/arm_mic2.png");
+    fish2arm = LoadImage("data/arm_move2.png");
 
     emojiSuprised = LoadImage("data/emoji_surprised.png");
     emojiDead = LoadImage("data/emoji_dead.png");
