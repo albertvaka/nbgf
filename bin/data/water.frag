@@ -11,7 +11,7 @@ void main() {
     vec2 uv = texCoord.xy;
 
     // Simulate water distortion using a sine wave
-    float wave = sin(uv.y * 10.0 + time) * 0.004;
+    float wave = sin(uv.y * 10.0 + time) * 0.0025;
     uv.x += wave;
 
     // Sample the texture with distortion
