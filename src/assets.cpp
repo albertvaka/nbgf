@@ -14,6 +14,11 @@ void Assets::LoadAll() {
 
     spritesheetTexture = LoadImage("data/spritesheet.png");
 
+    fish1 = LoadImage("data/body_fish1.png");
+    fish1mouth = LoadImage("data/mouth.png");
+    fish1mic = LoadImage("data/arm_mic.png");
+    fish1arm = LoadImage("data/arm_move.png");
+
     emojiSuprised = LoadImage("data/emoji_surprised.png");
     emojiDead = LoadImage("data/emoji_dead.png");
     emojiHappy = LoadImage("data/emoji_happy.png");

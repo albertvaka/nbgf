@@ -29,6 +29,11 @@ struct Assets
 	static inline GPU_Image* emojiLove;
 	static inline GPU_Image* emojiNeutral;
 
+	static inline GPU_Image* fish1;
+	static inline GPU_Image* fish1mouth;
+	static inline GPU_Image* fish1mic;
+	static inline GPU_Image* fish1arm;
+
 	static inline GPU_Image* bubble1;
 	static inline GPU_Image* bubble2;
 	static inline GPU_Image* bubble3;
