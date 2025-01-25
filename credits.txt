@@ -37,3 +37,4 @@ Break block sound by rubberduck https://opengameart.org/content/75-cc0-breaking-
 Bat sounds by polymorpheva and AntumDeluge https://opengameart.org/content/bat-screeches
 Enemy kill sound by qubodup https://opengameart.org/content/elemental-spell
 Hellcross background music by Pro Sensory https://opengameart.org/content/optomistic-day-mastered-loopable
+Dialog voices by ChrisLSound https://chrislsound.itch.io/text-dialogue-sfx-pack
