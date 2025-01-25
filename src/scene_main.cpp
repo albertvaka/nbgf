@@ -20,8 +20,10 @@ const float SECONDS_PER_BEAT = 0.5f; // song is 120 bpm
 const float MARGIN = 0.1f;
 int combo[2];
 int score[2];
-vec playerTextPos(250, 270);
+vec playerTextPos(550, 150);
+float rotoArea = 120;
 BoxBounds collider = BoxBounds(400, 287, 800, 20);
+float rotoScale = 0.85f;
 
 void LoadSong() {
 	std::ifstream file("data/score.txt", std::ifstream::in);
@@ -117,7 +119,8 @@ void SceneMain::ExitScene()
 }
 
 void SceneMain::updateScore(int player) {
-	scoreText[player].SetString("Score: " + std::to_string(score[player]) + "\n\nCombo: " + std::to_string(combo[player]));
+	// TODO: Combo increase animation
+	scoreText[player].SetString("Score: " + std::to_string(score[player]) + "\n\nCombo: x" + std::to_string(combo[player]));
 }
 
 void playerFloatingText(int player, std::string text) {
@@ -125,7 +128,7 @@ void playerFloatingText(int player, std::string text) {
 	if (player == 1) {
 		pos.x = Window::GAME_WIDTH - pos.x;
 	}
-	auto roto = new RotoText(pos + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
+	auto roto = new RotoText(pos + Rand::PosInsideCircle(rotoArea), Assets::funk_30, Assets::funk_30_outline);
 	roto->ShowMessage(text);
 }
 
@@ -231,20 +234,37 @@ void SceneMain::Note(int player, int note) {
 
 }
 
+float triangle(float x) {
+	return acos(sin(x)) / 1.5708;
+}
+
 void SceneMain::Draw()
 {
 	Fx::FullscreenShader::Begin();
 	Window::Clear(100, 100, 230, 255);
 	Window::Draw(Assets::seaBgTexture, vec::Zero);
 	Window::Draw(Assets::air, vec(715, 0)).withRect(0, mainClock*500.f, Assets::air->w, Window::GAME_HEIGHT);
-	Window::Draw(Assets::window, vec(Window::GAME_WIDTH/2, 280)).withOriginCentered();
+	Window::Draw(Assets::window, vec(Window::GAME_WIDTH / 2, 280)).withOriginCentered();
+
+	float fishScaleX = 0.25f;
+	float fishScaleY = 0.25f + sin(2*mainClock*Angles::Pi) / 100;
+	Window::Draw(Assets::fish1mic, vec(351, 329)).withScale(fishScaleX, fishScaleY);
+	Window::Draw(Assets::fish1, vec(17, 211+ Assets::fish1->h*0.25)).withOrigin(0,Assets::fish1->h).withScale(fishScaleX, fishScaleY);
+	Window::Draw(Assets::fish1mouth, vec(314, 932 + fishScaleY * Assets::fish1mouth->h - 2420 * fishScaleY))
+		.withOrigin(0, Assets::fish1mouth->h)
+		.withScale(fishScaleX, fishScaleY*0.9 - 0.07 * abs(sin(mainClock * 6.2 - 2)));
+		// ;
+	Window::Draw(Assets::fish1arm, vec(204, 516)).withScale(fishScaleX, fishScaleY);
+
 	for (const Bullet* b : Bullet::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
 	}
+
 	for (RotoText* b : RotoText::GetAll()) {
-		b->Draw();
+		b->Draw(rotoScale);
 	}
+
 	Window::Draw(Assets::vent, vec(508, 797));
 	collider.DebugDraw(0, 255, 0);
 
