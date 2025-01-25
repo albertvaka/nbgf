@@ -1,7 +1,6 @@
 #include "input_conf.h"
 
 #include "input.h"
-#include "player.h"
 
 #include "magic_enum.h"
 #include <functional>
@@ -61,6 +60,31 @@ void Input::MapGameKeys()
                 (p == keyboard_player_id) && Mouse::IsPressed()
                 );
     };
+
+    action_mapping[(int)GameKeys::NOTE_1] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
+            (p == 0 && Keyboard::IsKeyPressed(SDL_SCANCODE_A)) ||
+            (p == 1 && Keyboard::IsKeyPressed(SDL_SCANCODE_H));
+    };
+
+    action_mapping[(int)GameKeys::NOTE_2] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
+            (p == 0 && Keyboard::IsKeyPressed(SDL_SCANCODE_S)) ||
+            (p == 1 && Keyboard::IsKeyPressed(SDL_SCANCODE_J));
+    };
+
+    action_mapping[(int)GameKeys::NOTE_3] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
+            (p == 0 && Keyboard::IsKeyPressed(SDL_SCANCODE_D)) ||
+            (p == 1 && Keyboard::IsKeyPressed(SDL_SCANCODE_K));
+    };
+
+    action_mapping[(int)GameKeys::NOTE_4] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) ||
+            (p == 0 && Keyboard::IsKeyPressed(SDL_SCANCODE_F)) ||
+            (p == 1 && Keyboard::IsKeyPressed(SDL_SCANCODE_L));
+    };
+
     action_mapping[(int)GameKeys::START] = [](int p)
     {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) || (
@@ -108,6 +132,6 @@ void Input::MapGameKeys()
         if (joystick != vec::Zero) {
             lastAnalogAim = joystick;
         }
-        return Player::instance()->pos + lastAnalogAim;
+        return /*Player::instance()->pos + */ lastAnalogAim;
     };
 }

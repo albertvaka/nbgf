@@ -15,7 +15,7 @@ void Sound::Load(const char* path) {
 }
 
 Sound::~Sound() {
-	if (sound) Mix_FreeChunk(sound);
+	//if (sound) Mix_FreeChunk(sound);
 }
 
 void Sound::SetVolume(float v) { //from 0 to 100

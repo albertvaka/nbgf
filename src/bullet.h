@@ -51,6 +51,8 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 			vel.x += abs(prevVelY + vel.y) * sign;
 		}
 		pos = res.pos;
+		vel.y -= (90 + fabs(vel.x)) * dt;
+
 		anim.Update(dt);
 		if (anim.IsComplete()) {
 			alive = false;

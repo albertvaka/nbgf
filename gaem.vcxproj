@@ -58,11 +58,9 @@
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\common_tilemapcharacter.h" />
-    <ClInclude Include="src\doctor.h" />
+    <ClInclude Include="src\fx.h" />
     <ClInclude Include="src\gaemtilemap.h" />
     <ClInclude Include="src\input_conf.h" />
-    <ClInclude Include="src\patient.h" />
-    <ClInclude Include="src\player.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\scene_title.h" />
@@ -114,10 +112,8 @@
     <ClCompile Include="generated\tiled_tile.cpp" />
     <ClCompile Include="generated\tiled_tilemap.cpp" />
     <ClCompile Include="src\assets.cpp" />
-    <ClCompile Include="src\doctor.cpp" />
+    <ClCompile Include="src\fx.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
-    <ClCompile Include="src\patient.cpp" />
-    <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />

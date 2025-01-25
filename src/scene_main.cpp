@@ -4,37 +4,28 @@
 #include "imgui.h"
 #endif
 #include "assets.h"
+#include "fx.h"
 #include "bullet.h"
-#include "doctor.h"
-#include "patient.h"
 #include "collide.h"
 #include "debug.h"
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
 
-const float timeBetweenPatientIncrease = 6.f;
-const int maxMaxPatients = 5;
-const float minDelaySpawnPatient = 0.5f;
-const float maxDelaySpawnPatient = 6.f;
-
-int SceneMain::maxPatients = 1;
-int SceneMain::deadPatients = 99;
-int SceneMain::savedPatients = 99;
-
-void SpawnPatient() {
-	const float offset = 200;
-	vec targetPos = Patient::FindEmptySpot();
-	float marginX = targetPos.x < Tiled::Entities::single_waiting.Center().x ? Tiled::Entities::single_waiting.Left()-offset : Tiled::Entities::single_waiting.Right()+offset;
-	new Patient(vec(marginX, targetPos.y), targetPos);
-}
-
 SceneMain::SceneMain()
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
-	, player()
 	//, alienPartSys(Assets::invadersTexture)
 	, scoreText(Assets::font_30, Assets::font_30_outline)
 {
-	map.LoadFromTiled<Tiled::TileMap>();
+	//map.LoadFromTiled<Tiled::TileMap>();
+
+	notePlaying[0][0].sound = &Assets::note1p1;
+	notePlaying[0][1].sound = &Assets::note2p1;
+	notePlaying[0][2].sound = &Assets::note3p1;
+	notePlaying[0][3].sound = &Assets::note4p1;
+	notePlaying[1][0].sound = &Assets::note1p2;
+	notePlaying[1][1].sound = &Assets::note2p2;
+	notePlaying[1][2].sound = &Assets::note3p2;
+	notePlaying[1][3].sound = &Assets::note4p2;
 
 	scoreText.SetFillColor(0, 0, 0);
 	scoreText.SetOutlineColor(255, 255, 0);
@@ -54,25 +45,17 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
-	timerSpawnPatients = 0.f;
-	savedPatients = 0;
-	deadPatients = 0;
-	patientIncreaseTimer = timeBetweenPatientIncrease;
-	maxPatients = 1;
-	Camera::SetZoom(0.5f, false);
-	for (const BoxBounds& room : Tiled::Entities::room) {
-		new Doctor(Rand::VecInRange(room*0.7f));
-	}
-	new Doctor(Tiled::Entities::single_waiting.Center());
-	SpawnPatient();
+	Fx::BeforeEnterScene();
+	Fx::FullscreenShader::SetShader([]() {
+		Assets::underwaterShader.Activate();
+		Assets::underwaterShader.SetUniform("time", mainClock);
+	});
 }
 
 
 void SceneMain::ExitScene()
 {
 	Bullet::DeleteAll();
-	Doctor::DeleteAll();
-	Patient::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
@@ -85,73 +68,43 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
-	if (maxPatients < maxMaxPatients) {
-		patientIncreaseTimer -= dt;
-		if (patientIncreaseTimer < 0) {
-			maxPatients++;
-			patientIncreaseTimer = timeBetweenPatientIncrease*maxPatients;
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 4; j++) {
+			notePlaying[i][j].Update(dt);
 		}
 	}
 
-	if (Patient::GetAll().size() < maxPatients) {
-		timerSpawnPatients -= dt;
-		if (timerSpawnPatients <= 0) {
-			timerSpawnPatients += Rand::rollf(minDelaySpawnPatient, maxDelaySpawnPatient);
-			SpawnPatient();
-		}
-	}
-
-	player.Update(dt);
+	if (Input::IsJustPressed(0, GameKeys::NOTE_1)) { Note(0, 0); }
+	if (Input::IsJustPressed(1, GameKeys::NOTE_1)) { Note(1, 0); }
+	if (Input::IsJustPressed(0, GameKeys::NOTE_2)) { Note(0, 1); }
+	if (Input::IsJustPressed(1, GameKeys::NOTE_2)) { Note(1, 1); }
+	if (Input::IsJustPressed(0, GameKeys::NOTE_3)) { Note(0, 2); }
+	if (Input::IsJustPressed(1, GameKeys::NOTE_3)) { Note(1, 2); }
+	if (Input::IsJustPressed(0, GameKeys::NOTE_4)) { Note(0, 3); }
+	if (Input::IsJustPressed(1, GameKeys::NOTE_4)) { Note(1, 3); }
 
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
 	}
-
-	for (Patient* a : Patient::GetAll()) {
-		a->Update(dt);
-	}
-
-	for (Doctor* a : Doctor::GetAll()) {
-		a->Update(dt);
-	}
-
 	Bullet::DeleteNotAlive();
-	Doctor::DeleteNotAlive();
-	Patient::DeleteNotAlive();
+}
+
+void SceneMain::Note(int player, int num) {
+	notePlaying[player][num].Play();
 }
 
 void SceneMain::Draw()
 {
-	Window::Clear(0, 0, 0);
-
-	Window::Draw(Assets::bgTexture, vec(0,0));
-
-	if (Debug::Draw) {
-		map.Draw();
-	}
-
-	std::vector<BoxEntity*> draws;
-	draws.reserve(Doctor::GetAll().size() + Patient::GetAll().size() + 1);
-	draws.push_back(&player);
-	draws.insert(draws.end(), Doctor::GetAll().begin(), Doctor::GetAll().end());
-	draws.insert(draws.end(), Patient::GetAll().begin(), Patient::GetAll().end());
-	std::sort(draws.begin(), draws.end(), [](const BoxEntity* a, const BoxEntity* b)
-	{
-		return a->sortY < b->sortY;
-	});
-	for (const BoxEntity* a : draws) {
-		a->Draw();
-		a->Bounds().DebugDraw(255, 0, 0);
-	}
-
+	Fx::FullscreenShader::Begin();
+	Window::Clear(0, 0, 0, 255);
 	for (const Bullet* b : Bullet::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
 	}
+	Fx::FullscreenShader::End();
 
 	//Draw GUI
 	Camera::InScreenCoords::Begin();
-	scoreText.SetString("Patients saved: " + std::to_string(savedPatients) + " killed: " + std::to_string(deadPatients));
 	Window::Draw(scoreText, vec(Camera::InScreenCoords::Center().x, 20))
 		.withOrigin(scoreText.Size()/2)
 		.withScale(0.666f);
@@ -160,27 +113,11 @@ void SceneMain::Draw()
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
-		ImGui::Text("Max patients: %i", maxPatients);
-		ImGui::Text("Patient increase timer %f", patientIncreaseTimer);
-		ImGui::Text("Player vel: %f %f", player.vel.x, player.vel.y);
-		if (ImGui::Button("Spawn patient")) {
-			SpawnPatient();
-		};
-		int i = 0;
-		for (Doctor* d : Doctor::GetAll()) {
-			auto ms = magic_enum::enum_name(d->state);
-			ImGui::Text("Doctor %d: %f %s", i++, d->highness, ms.data());
-		}
-		i = 0;
-		for (Patient* d : Patient::GetAll()) {
-			auto ms = magic_enum::enum_name(d->movementState);
-			auto gs = magic_enum::enum_name(d->gasState);
-			ImGui::Text("Patient %d: %f %s %s", i++, d->highness, ms.data(), gs.data());
-		}
 		ImGui::End();
 	}
 
 	//alienPartSys.DrawImGUI();
 #endif
 
+	Fx::AfterDraw();
 }

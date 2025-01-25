@@ -4,27 +4,19 @@
 
 void Assets::LoadAll() {
 
-    bgTexture = LoadImage("data/background.png");
     titleTexture = LoadImage("data/title.png");
 
-    spritesheetTexture = LoadImage("data/spritesheet.png");
-    playerTexture = LoadImage("data/player.png");
-    doctorTexture = LoadImage("data/doctor.png");
-    doctorHighTexture = LoadImage("data/doctor_high.png");
-    patientIdleTexture = LoadImage("data/patient_idle.png");
-    patientOverdoseTexture = LoadImage("data/patient_overdose.png");
-    patientDeadTexture = LoadImage("data/patient_dead.png");
-    patientNarcosisTexture = LoadImage("data/patient_narcosis.png");
-    patientScreamTexture = LoadImage("data/patient_scream.png");
+    seaBgTexture = LoadImage("data/background.png");
 
-    screenBg = LoadImage("data/screen_bg.png");
-    screenBgDamage = LoadImage("data/screen_bg_damage.png");
-    screenBgDamageBlink = LoadImage("data/screen_bg_damage_blink.png");
-    
+    spritesheetTexture = LoadImage("data/spritesheet.png");
+
+    emojiSuprised = LoadImage("data/emoji_surprised.png");
     emojiDead = LoadImage("data/emoji_dead.png");
-    emojiAwake = LoadImage("data/emoji_awake.png");
-    emojiHigh = LoadImage("data/emoji_high.png");
-    
+    emojiHappy = LoadImage("data/emoji_happy.png");
+    emojiConfused = LoadImage("data/emoji_confused.png");
+    emojiLove = LoadImage("data/emoji_love.png");
+    emojiNeutral = LoadImage("data/emoji_neutral.png");
+
     greenTick = LoadImage("data/tick.png");
     heart = LoadImage("data/heart.png");
 
@@ -35,10 +27,17 @@ void Assets::LoadAll() {
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
+    underwaterShader.Load("data/default.vert", nullptr, "data/water.frag");
 
     menuMusic = LoadMusic("data/jaunty.ogg");
 
-    doctorLaughing.Load({ "data/laughing1.ogg","data/laughing2.ogg","data/laughing3.ogg","data/laughing4.ogg" });
-    patientScreaming.Load({ "data/damage1.ogg","data/damage2.ogg","data/damage3.ogg","data/damage4.ogg" });
-    //patientAsleep.Load({ "data/asleep1.ogg","data/asleep2.ogg","data/asleep3.ogg" });
+    note1p1.LoadAsParts("data/fish/squirty_1b.ogg");
+    note2p1.LoadAsParts("data/fish/squirty_2b.ogg");
+    note3p1.LoadAsParts("data/fish/squirty_3b.ogg");
+    note4p1.LoadAsParts("data/fish/squirty_4b.ogg");
+
+    note1p2.LoadAsParts("data/fish/squirty_1a.ogg");
+    note2p2.LoadAsParts("data/fish/squirty_2a.ogg");
+    note3p2.LoadAsParts("data/fish/squirty_3a.ogg");
+    note4p2.LoadAsParts("data/fish/squirty_4a.ogg");
 }
