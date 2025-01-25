@@ -243,10 +243,10 @@ void SceneMain::Note(int player, int note) {
 
 }
 
-float arg1 = 855;
-float arg2 = 1370;
-float arg3 = 150;
-float arg4 = 2;
+float arg1 = 1470;
+float arg2 = 920;
+float arg3 = 2900;
+float arg4 = -10.f;
 
 float triangle(float x) {
 	return acos(sin(x)) / 1.5708;
@@ -261,18 +261,45 @@ void SceneMain::Draw()
 	alienPartSys.Draw();
 	Window::Draw(Assets::window, vec(Window::GAME_WIDTH / 2, 280)).withOriginCentered();
 
-	float fishScaleX = 0.25f;
-	float fishScaleY = 0.25f + sin(2*mainClock*Angles::Pi) / 100;
-	Window::Draw(Assets::fish1mic, vec(280, 830 - 2000 * fishScaleY))
-		.withScale(0.25f * 1.1, fishScaleY*1.1);
-	Window::Draw(Assets::fish1, vec(17, 211+ Assets::fish1->h*0.25)).withOrigin(0,Assets::fish1->h).withScale(fishScaleX, fishScaleY);
-	Window::Draw(Assets::fish1mouth, vec(314, 932 + fishScaleY * Assets::fish1mouth->h - 2420 * fishScaleY))
-		.withOrigin(0, Assets::fish1mouth->h)
-		.withScale(fishScaleX, fishScaleY*0.9 - 0.07 * abs(sin(mainClock * 6.2 - 2)));
-	Window::Draw(Assets::fish1arm, vec(175, 950 - 2000 * fishScaleY))
-		.withOrigin(30, 25)
-		.withScale(fishScaleX, fishScaleY)
-		.withRotationDegs(15*triangle(Angles::Pi/2 + 2*mainClock * Angles::Pi));
+	// FISH 1
+	{
+		float fishScaleX = 0.25f;
+		float baseFishScaleY = 0.25f;
+		float fishScaleY = baseFishScaleY  + sin(2 * mainClock * Angles::Pi) / 100;
+		Window::Draw(Assets::fish1mic, vec(270, 820 - 2000 * fishScaleY))
+			.withScale(fishScaleX * 1.1, fishScaleY * 1.1)
+			.withRotationDegs(5 * cos(2 * mainClock * Angles::Pi));
+		Window::Draw(Assets::fish1, vec(17, 211 + Assets::fish1->h * baseFishScaleY))
+			.withOrigin(0, Assets::fish1->h)
+			.withScale(fishScaleX, fishScaleY);
+		Window::Draw(Assets::fish1mouth, vec(314, 932 + fishScaleY * Assets::fish1mouth->h - 2420 * fishScaleY))
+			.withOrigin(0, Assets::fish1mouth->h)
+			.withScale(fishScaleX, fishScaleY * 0.9 - 0.07 * abs(sin(mainClock * 6.2 - 2)));
+		Window::Draw(Assets::fish1arm, vec(175, 950 - 2000 * fishScaleY))
+			.withOrigin(30, 25)
+			.withScale(fishScaleX, fishScaleY)
+			.withRotationDegs(15 * triangle(Angles::Pi / 2 + 2 * mainClock * Angles::Pi));
+	}
+
+	// FISH 2
+	{
+		float fish2ScaleX = 0.155f;
+		float baseFish2ScaleY = 0.155f;
+		float fish2ScaleY = baseFish2ScaleY  + sin(Angles::Pi + 2 * mainClock * Angles::Pi) / 160;
+		Window::Draw(Assets::fish2mic, vec(1200, 950 - 4000 * fish2ScaleY -8 * sin(Angles::Pi /2 + Angles::Pi + 2 * mainClock * Angles::Pi)))
+			.withScale(fish2ScaleX, fish2ScaleY);
+		Window::Draw(Assets::fish2, vec(1360, 200 + Assets::fish2->h * baseFish2ScaleY))
+			.withOrigin(0, Assets::fish2->h)
+			.withScale(fish2ScaleX, fish2ScaleY);
+		Window::Draw(Assets::fish2mouth, vec(1431, 870 + fish2ScaleY * Assets::fish2mouth->h - 4000 * fish2ScaleY))
+			.withOrigin(Assets::fish2mouth->w-120, 0)
+			.withScale(fish2ScaleX * 0.75, fish2ScaleY * 0.75)
+			.withRotationDegs(10 * sin(Angles::Pi + 2 * mainClock * Angles::Pi));
+		Window::Draw(Assets::fish2arm, vec(1470, 920 - 2900 * fish2ScaleY))
+			.withOrigin(1430, 190)
+			.withScale(fish2ScaleX*1.1, fish2ScaleY)
+			.withRotationDegs(-10 + 15 * triangle(Angles::Pi / 2 + 2 * mainClock * Angles::Pi));
+	}
 
 	for (const Bullet* b : Bullet::GetAll()) {
 		b->Draw();
@@ -303,9 +330,9 @@ void SceneMain::Draw()
 		ImGui::Begin("scene");
 		ImGui::Text(Mouse::GetPositionInWorld().ToString().c_str());
 		ImGui::SliderFloat("Arg1", &arg1, 0, 2000);
-		ImGui::SliderFloat("Arg2", &arg2, 500, 3000);
-		ImGui::SliderFloat("Arg3", &arg3, 0, 1000);
-		ImGui::SliderFloat("Arg4", &arg4, 0, 8);
+		ImGui::SliderFloat("Arg2", &arg2, 0, 3000);
+		ImGui::SliderFloat("Arg3", &arg3, 0, 5000);
+		ImGui::SliderFloat("Arg4", &arg4, -30.f, 30.f);
 		ImGui::End();
 	}
 
