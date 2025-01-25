@@ -19,6 +19,7 @@ const float elasticGasBounceRatio = 0.3f;
 
 struct Bullet : CircleEntity, SelfRegister<Bullet>
 {
+	bool hit = false;
 	//Animation anim;
 
 	Bullet(int player, int note)
@@ -27,7 +28,8 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 		pos.y = Window::GAME_HEIGHT;
 		if (player == 0) {
 			pos.x = 100;
-		} else {
+		}
+		else {
 			pos.x = 600;
 		}
 		while (note--) {
@@ -37,7 +39,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 
 	void Update(float dt)
 	{
-		pos.y -= 50 * dt;
+		pos.y -= 150 * dt;
 
 		/*
 		anim.Update(dt);
@@ -45,6 +47,10 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 			alive = false;
 		}
 		*/
+	}
+
+	void Explode() {
+	
 	}
 
 	void Draw() const

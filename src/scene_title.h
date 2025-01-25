@@ -31,8 +31,6 @@ struct SceneTitle : Scene {
 	void EnterScene() override
 	{
 		Camera::SetZoom(0.5f, false);
-		MusicPlayer::SetVolume(20);
-		MusicPlayer::Play(Assets::menuMusic);
 	}
 
 	void ExitScene() override

@@ -74,7 +74,7 @@ void Input::MapGameKeys()
     };
 
     action_mapping[(int)GameKeys::NOTE_3] = [](int p) {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_Y) ||
             (p == 0 && Keyboard::IsKeyPressed(SDL_SCANCODE_D)) ||
             (p == 1 && Keyboard::IsKeyPressed(SDL_SCANCODE_K));
     };

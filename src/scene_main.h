@@ -8,8 +8,8 @@
 #include "gaemtilemap.h"
 
 
-const float MIN_TEMPS_NOTA = 0.1;
-const float MAX_TEMPS_NOTA = 0.2;
+const float MIN_TEMPS_NOTA = 0.15;
+const float MAX_TEMPS_NOTA = 0.25;
 
 struct NotePlaying {
 	MultiSound<4>* sound;

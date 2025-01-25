@@ -31,10 +31,13 @@ void Assets::LoadAll() {
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 
+    funk_30 = LoadFont("data/funk.ttf", 30);
+    funk_30_outline = LoadFontOutline("data/funk.ttf", 30, 3);
+
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
     underwaterShader.Load("data/default.vert", nullptr, "data/water.frag");
 
-    menuMusic = LoadMusic("data/jaunty.ogg");
+    menuMusic = LoadMusic("data/funkyone.ogg");
 
     note1p1.LoadAsParts("data/fish/squirty_1b.ogg");
     note2p1.LoadAsParts("data/fish/squirty_2b.ogg");

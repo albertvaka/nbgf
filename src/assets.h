@@ -40,6 +40,9 @@ struct Assets
 	static inline TTF_Font* font_30;
 	static inline TTF_Font* font_30_outline;
 
+	static inline TTF_Font* funk_30;
+	static inline TTF_Font* funk_30_outline;
+
 	static inline Shader tintShader;
 	static inline Shader underwaterShader;
 

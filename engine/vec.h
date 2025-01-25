@@ -12,6 +12,7 @@
 #endif
 #include <math.h>
 
+#include "SDL_gpu.h"
 #include "angles.h"
 
 struct veci {
@@ -26,6 +27,10 @@ struct vec
 	explicit constexpr vec(float xy) : x(xy), y(xy) {}
 	constexpr vec(float x, float y) : x(x), y(y) {}
 	constexpr vec(veci v) : x(v.x), y(v.y) {}
+	
+	static vec GetSize(GPU_Image* i) {
+		return vec(i->w, i->h);
+	}
 
 	static const vec Zero;
 

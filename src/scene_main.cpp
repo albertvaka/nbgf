@@ -6,15 +6,20 @@
 #include "assets.h"
 #include "fx.h"
 #include "bullet.h"
+#include "musicplayer.h"
 #include "collide.h"
 #include "debug.h"
+#include "rototext.h"
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
 
 std::vector<int> notes;
 float currentTime = 0;
 int currentNote = 0;
-const float SECONDS_PER_BEAT = 0.2f;
+const float SECONDS_PER_BEAT = 0.5f; // song is 120 bpm
+const float MARGIN = 0.1f;
+int combo[2];
+BoxBounds collider = BoxBounds(200, 287, 800, 20);
 
 void LoadSong() {
 	std::ifstream file("data/score.txt", std::ifstream::in);
@@ -51,7 +56,6 @@ SceneMain::SceneMain()
 	//, alienPartSys(Assets::invadersTexture)
 	, scoreText(Assets::font_30, Assets::font_30_outline)
 {
-	//map.LoadFromTiled<Tiled::TileMap>();
 
 	notePlaying[0][0].sound = &Assets::note1p1;
 	notePlaying[0][1].sound = &Assets::note2p1;
@@ -64,6 +68,7 @@ SceneMain::SceneMain()
 
 	scoreText.SetFillColor(0, 0, 0);
 	scoreText.SetOutlineColor(255, 255, 0);
+
 	/*
 	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
 	alienPartSys.AddSprite(AnimLib::ALIEN_2[0].rect);
@@ -77,21 +82,29 @@ SceneMain::SceneMain()
 	alienPartSys.min_rotation_vel = 100.f;
 	alienPartSys.scale_vel = -0.2f;*/
 	LoadSong();
+
 }
 
 void SceneMain::EnterScene() 
 {
 	Fx::BeforeEnterScene();
-	Fx::FullscreenShader::SetShader([]() {
-		Assets::underwaterShader.Activate();
-		Assets::underwaterShader.SetUniform("time", mainClock);
-	});
-}
+	//Fx::FullscreenShader::SetShader([]() {
+	//	Assets::underwaterShader.Activate();
+	//	Assets::underwaterShader.SetUniform("time", mainClock);
+	//});
 
+	MusicPlayer::SetVolume(20);
+	MusicPlayer::Play(Assets::menuMusic);
+	currentTime = 0;
+	currentNote = 0;
+	combo[0] = 0;
+	combo[1] = 0;
+}
 
 void SceneMain::ExitScene()
 {
 	Bullet::DeleteAll();
+	RotoText::DeleteAll();
 }
 
 
@@ -106,7 +119,7 @@ void SceneMain::Update(float dt)
 #endif
 
 	currentTime += dt;
-	if (currentTime > SECONDS_PER_BEAT) {
+	while (currentTime > SECONDS_PER_BEAT) {
 		currentTime -= SECONDS_PER_BEAT;
 		currentNote++;
 		if (currentNote >= notes.size()) {
@@ -149,24 +162,53 @@ void SceneMain::Update(float dt)
 	if (Input::IsJustPressed(0, GameKeys::NOTE_4)) { Note(0, 3); }
 	if (Input::IsJustPressed(1, GameKeys::NOTE_4)) { Note(1, 3); }
 
+	for (RotoText* b : RotoText::GetAll()) {
+		b->Update(dt);
+	}
+	RotoText::DeleteNotAlive();
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
+		if (b->pos.y < collider.Top()) {
+			b->Explode();
+		}
 	}
 	Bullet::DeleteNotAlive();
 }
 
+
 void SceneMain::Note(int player, int num) {
 	notePlaying[player][num].Play();
+	bool collide = false;
+	for (Bullet* b : Bullet::GetAll()) {
+		if (!b->hit && Collide(collider, b->Bounds())) {
+			collide = true;
+			b->hit = true;
+		}
+	}
+	if (collide) {
+		combo[player]++;
+		(new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline))->ShowMessage("Yo!");
+	}
+	else {
+		combo[player] = 0;
+	}
+
 }
 
 void SceneMain::Draw()
 {
 	Fx::FullscreenShader::Begin();
-	Window::Clear(0, 0, 0, 255);
+	Window::Clear(100, 100, 230, 255);
 	for (const Bullet* b : Bullet::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
 	}
+	for (RotoText* b : RotoText::GetAll()) {
+		b->Draw();
+	}
+
+	collider.DebugDraw(0, 255, 0);
+
 	Fx::FullscreenShader::End();
 
 	//Draw GUI
@@ -179,7 +221,7 @@ void SceneMain::Draw()
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
-		ImGui::Text("potato");
+		ImGui::Text(Mouse::GetPositionInWorld().ToString().c_str());
 		ImGui::End();
 	}
 
