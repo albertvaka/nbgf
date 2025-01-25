@@ -7,6 +7,10 @@ void Assets::LoadAll() {
     titleTexture = LoadImage("data/title.png");
 
     seaBgTexture = LoadImage("data/background.png");
+    air = LoadImage("data/air.png");
+	GPU_SetWrapMode(air, GPU_WRAP_REPEAT, GPU_WRAP_REPEAT);
+    vent = LoadImage("data/vent.png");
+    window = LoadImage("data/window.png");
 
     spritesheetTexture = LoadImage("data/spritesheet.png");
 

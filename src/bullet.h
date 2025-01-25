@@ -19,21 +19,19 @@ const float elasticGasBounceRatio = 0.3f;
 
 struct Bullet : CircleEntity, SelfRegister<Bullet>
 {
-	bool hit = false;
+	bool hit[2] = { false ,false };
+	int note;
+	bool active = false;
 	//Animation anim;
 
 	Bullet(int player, int note)
 		: CircleEntity(pos, gasSize* gasScale)
+		, note(note)
 	{
 		pos.y = Window::GAME_HEIGHT;
-		if (player == 0) {
-			pos.x = 100;
-		}
-		else {
-			pos.x = 600;
-		}
+		pos.x = 718;
 		while (note--) {
-			pos.x += 50;
+			pos.x += 803-718;
 		}
 	}
 

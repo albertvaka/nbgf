@@ -19,7 +19,8 @@ int currentNote = 0;
 const float SECONDS_PER_BEAT = 0.5f; // song is 120 bpm
 const float MARGIN = 0.1f;
 int combo[2];
-BoxBounds collider = BoxBounds(200, 287, 800, 20);
+int score[2];
+BoxBounds collider = BoxBounds(400, 287, 800, 20);
 
 void LoadSong() {
 	std::ifstream file("data/score.txt", std::ifstream::in);
@@ -88,15 +89,17 @@ SceneMain::SceneMain()
 void SceneMain::EnterScene() 
 {
 	Fx::BeforeEnterScene();
-	//Fx::FullscreenShader::SetShader([]() {
-	//	Assets::underwaterShader.Activate();
-	//	Assets::underwaterShader.SetUniform("time", mainClock);
-	//});
+	Fx::FullscreenShader::SetShader([]() {
+		//Assets::underwaterShader.Activate();
+		//Assets::underwaterShader.SetUniform("time", mainClock);
+	});
 
 	MusicPlayer::SetVolume(20);
 	MusicPlayer::Play(Assets::menuMusic);
 	currentTime = 0;
 	currentNote = 0;
+	score[0] = 0;
+	score[1] = 0;
 	combo[0] = 0;
 	combo[1] = 0;
 }
@@ -127,22 +130,18 @@ void SceneMain::Update(float dt)
 		}
 		if (notes[currentNote] & 1) {
 			new Bullet(0, 0);
-			new Bullet(1, 0);
 		}
 
 		if (notes[currentNote] & 2) {
 			new Bullet(0, 1);
-			new Bullet(1, 1);
 		}
 
 		if (notes[currentNote] & 4) {
 			new Bullet(0, 2);
-			new Bullet(1, 2);
 		}
 
 		if (notes[currentNote] & 8) {
 			new Bullet(0, 3);
-			new Bullet(1, 3);
 		}
 	}
 
@@ -168,29 +167,50 @@ void SceneMain::Update(float dt)
 	RotoText::DeleteNotAlive();
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
+		b->active = Collide(collider, b->Bounds());
 		if (b->pos.y < collider.Top()) {
-			b->Explode();
+			b->alive = false;
+			if (!b->hit[0]) {
+				combo[0] = 0;
+				auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
+				text->ShowMessage("Miss");
+			}
+			if (!b->hit[1]) {
+				combo[1] = 0;
+				auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
+				text->ShowMessage("Miss");
+			}
 		}
 	}
 	Bullet::DeleteNotAlive();
 }
 
 
-void SceneMain::Note(int player, int num) {
-	notePlaying[player][num].Play();
+void SceneMain::Note(int player, int note) {
+	notePlaying[player][note].Play();
 	bool collide = false;
 	for (Bullet* b : Bullet::GetAll()) {
-		if (!b->hit && Collide(collider, b->Bounds())) {
+		if (!b->hit[player] && b->note == note && Collide(collider, b->Bounds())) {
 			collide = true;
-			b->hit = true;
+			b->hit[player] = true;
 		}
+		collide = true;
+		b->hit[player] = true;
 	}
 	if (collide) {
 		combo[player]++;
-		(new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline))->ShowMessage("Yo!");
+		auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
+		switch (Rand::roll(3)) {
+			case 0: text->ShowMessage("yo!"); break;
+			case 1: text->ShowMessage("c'mon"); break;
+			case 2: text->ShowMessage("yeah"); break;
+			default: text->ShowMessage("Yo!!!!!!!"); break;
+		}
 	}
 	else {
 		combo[player] = 0;
+		auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
+		text->ShowMessage("Oops!");
 	}
 
 }
@@ -199,6 +219,9 @@ void SceneMain::Draw()
 {
 	Fx::FullscreenShader::Begin();
 	Window::Clear(100, 100, 230, 255);
+	Window::Draw(Assets::seaBgTexture, vec::Zero);
+	Window::Draw(Assets::air, vec(715, 0)).withRect(0, mainClock*500.f, Assets::air->w, Window::GAME_HEIGHT);
+	Window::Draw(Assets::window, vec(656, 250)).withScale(0.9, 0.9);
 	for (const Bullet* b : Bullet::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
@@ -206,7 +229,7 @@ void SceneMain::Draw()
 	for (RotoText* b : RotoText::GetAll()) {
 		b->Draw();
 	}
-
+	Window::Draw(Assets::vent, vec(508, 797));
 	collider.DebugDraw(0, 255, 0);
 
 	Fx::FullscreenShader::End();

@@ -61,6 +61,7 @@
     <ClInclude Include="src\fx.h" />
     <ClInclude Include="src\gaemtilemap.h" />
     <ClInclude Include="src\input_conf.h" />
+    <ClInclude Include="src\oneshotanims.h" />
     <ClInclude Include="src\rototext.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
