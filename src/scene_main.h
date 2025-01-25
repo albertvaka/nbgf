@@ -37,7 +37,7 @@ struct NotePlaying {
 struct SceneMain : Scene {
 
 	GaemTileMap map;
-	Text scoreText;
+	Text scoreText[2];
 
 	NotePlaying notePlaying[2][4];
 
@@ -48,5 +48,6 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 	void Note(int player, int num);
+	void updateScore(int player);
 
 };
