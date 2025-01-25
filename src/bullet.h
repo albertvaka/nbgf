@@ -21,6 +21,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 {
 	bool hit[2] = { false ,false };
 	int note;
+	bool active = false;
 	//Animation anim;
 
 	Bullet(int player, int note)

@@ -19,6 +19,7 @@ int currentNote = 0;
 const float SECONDS_PER_BEAT = 0.5f; // song is 120 bpm
 const float MARGIN = 0.1f;
 int combo[2];
+int score[2];
 BoxBounds collider = BoxBounds(400, 287, 800, 20);
 
 void LoadSong() {
@@ -88,15 +89,17 @@ SceneMain::SceneMain()
 void SceneMain::EnterScene() 
 {
 	Fx::BeforeEnterScene();
-	//Fx::FullscreenShader::SetShader([]() {
-	//	Assets::underwaterShader.Activate();
-	//	Assets::underwaterShader.SetUniform("time", mainClock);
-	//});
+	Fx::FullscreenShader::SetShader([]() {
+		//Assets::underwaterShader.Activate();
+		//Assets::underwaterShader.SetUniform("time", mainClock);
+	});
 
 	MusicPlayer::SetVolume(20);
 	MusicPlayer::Play(Assets::menuMusic);
 	currentTime = 0;
 	currentNote = 0;
+	score[0] = 0;
+	score[1] = 0;
 	combo[0] = 0;
 	combo[1] = 0;
 }
@@ -164,8 +167,19 @@ void SceneMain::Update(float dt)
 	RotoText::DeleteNotAlive();
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
+		b->active = Collide(collider, b->Bounds());
 		if (b->pos.y < collider.Top()) {
-			b->Explode();
+			b->alive = false;
+			if (!b->hit[0]) {
+				combo[0] = 0;
+				auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
+				text->ShowMessage("Miss");
+			}
+			if (!b->hit[1]) {
+				combo[1] = 0;
+				auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
+				text->ShowMessage("Miss");
+			}
 		}
 	}
 	Bullet::DeleteNotAlive();
@@ -180,6 +194,8 @@ void SceneMain::Note(int player, int note) {
 			collide = true;
 			b->hit[player] = true;
 		}
+		collide = true;
+		b->hit[player] = true;
 	}
 	if (collide) {
 		combo[player]++;
@@ -205,7 +221,7 @@ void SceneMain::Draw()
 	Window::Clear(100, 100, 230, 255);
 	Window::Draw(Assets::seaBgTexture, vec::Zero);
 	Window::Draw(Assets::air, vec(715, 0)).withRect(0, mainClock*500.f, Assets::air->w, Window::GAME_HEIGHT);
-	Window::Draw(Assets::window, vec(641, 222));
+	Window::Draw(Assets::window, vec(656, 250)).withScale(0.9, 0.9);
 	for (const Bullet* b : Bullet::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
