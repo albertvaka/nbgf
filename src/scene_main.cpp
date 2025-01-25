@@ -11,6 +11,41 @@
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
 
+std::vector<int> notes;
+float currentTime = 0;
+int currentNote = 0;
+const float SECONDS_PER_BEAT = 0.2f;
+
+void LoadSong() {
+	std::ifstream file("data/score.txt", std::ifstream::in);
+	if (file.fail()) {
+		Debug::out << "Could not open score.txt for reading: " << strerror(errno);
+		return;
+	}
+	std::string data;
+	while (file >> data) {
+		data.erase(std::remove_if(data.begin(), data.end(), [](unsigned char c) {
+			return std::isspace(c);
+		}), data.end());
+		if (data.empty()) continue;
+		int note = 0;
+		if (data[0] != '-') {
+			note += 1;
+		}
+		if (data[1] != '-') {
+			note += 2;
+		}
+		if (data[2] != '-') {
+			note += 4;
+		}
+		if (data[3] != '-') {
+			note += 8;
+		}
+		notes.push_back(note);
+	}
+	file.close();
+}
+
 SceneMain::SceneMain()
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	//, alienPartSys(Assets::invadersTexture)
@@ -41,6 +76,7 @@ SceneMain::SceneMain()
 	alienPartSys.max_rotation_vel = 100.f;
 	alienPartSys.min_rotation_vel = 100.f;
 	alienPartSys.scale_vel = -0.2f;*/
+	LoadSong();
 }
 
 void SceneMain::EnterScene() 
@@ -58,6 +94,7 @@ void SceneMain::ExitScene()
 	Bullet::DeleteAll();
 }
 
+
 void SceneMain::Update(float dt)
 {
 #ifdef _DEBUG
@@ -67,6 +104,35 @@ void SceneMain::Update(float dt)
 		return;
 	}
 #endif
+
+	currentTime += dt;
+	if (currentTime > SECONDS_PER_BEAT) {
+		currentTime -= SECONDS_PER_BEAT;
+		currentNote++;
+		if (currentNote >= notes.size()) {
+			currentNote = 0;
+		}
+		if (notes[currentNote] & 1) {
+			new Bullet(0, 0);
+			new Bullet(1, 0);
+		}
+
+		if (notes[currentNote] & 2) {
+			new Bullet(0, 1);
+			new Bullet(1, 1);
+		}
+
+		if (notes[currentNote] & 4) {
+			new Bullet(0, 2);
+			new Bullet(1, 2);
+		}
+
+		if (notes[currentNote] & 8) {
+			new Bullet(0, 3);
+			new Bullet(1, 3);
+		}
+	}
+
 
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -113,6 +179,7 @@ void SceneMain::Draw()
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
+		ImGui::Text("potato");
 		ImGui::End();
 	}
 

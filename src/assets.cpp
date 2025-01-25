@@ -17,6 +17,11 @@ void Assets::LoadAll() {
     emojiLove = LoadImage("data/emoji_love.png");
     emojiNeutral = LoadImage("data/emoji_neutral.png");
 
+    bubble1 = LoadImage("data/emoji_surprised.png");
+    bubble2 = LoadImage("data/emoji_dead.png");
+    bubble3 = LoadImage("data/emoji_happy.png");
+    bubble4 = LoadImage("data/emoji_love.png");
+
     greenTick = LoadImage("data/tick.png");
     heart = LoadImage("data/heart.png");
 

@@ -19,60 +19,43 @@ const float elasticGasBounceRatio = 0.3f;
 
 struct Bullet : CircleEntity, SelfRegister<Bullet>
 {
-	vec vel;
-	Animation anim;
-	float roationOffset;
-	float rotationSpeed;
+	//Animation anim;
 
-	Bullet(const vec& position, const vec& velocity)
+	Bullet(int player, int note)
 		: CircleEntity(pos, gasSize* gasScale)
-		, anim(AnimLib::GAS, false)
-		, roationOffset(Rand::rollf(360.f))
-		, rotationSpeed(Rand::rollf(minRotationSpeed, maxRotationSpeed))
 	{
-		pos = position;
-		vel = velocity;
+		pos.y = Window::GAME_HEIGHT;
+		if (player == 0) {
+			pos.x = 100;
+		} else {
+			pos.x = 600;
+		}
+		while (note--) {
+			pos.x += 50;
+		}
 	}
 
 	void Update(float dt)
 	{
+		pos.y -= 50 * dt;
 
-		MoveResult res = MoveAgainstTileMap(pos, vec(gasSize *gasScale*2, gasSize * gasScale * 2), vel, dt);
-		if (res.leftWallCollision != Tile::NONE || res.rightWallCollision != Tile::NONE) {
-			float prevVelX = vel.x;
-			vel.x *= -elasticGasBounceRatio;
-			float sign = vel.y > 0 ? 1.f : -1.f;
-			vel.y += abs(prevVelX + vel.x) * sign;
-		}
-		if (res.ceilingCollision != Tile::NONE || res.groundCollision != Tile::NONE) {
-			float prevVelY = vel.y;
-			vel.y *= -elasticGasBounceRatio;
-			float sign = vel.x > 0? 1.f : -1.f;
-			vel.x += abs(prevVelY + vel.y) * sign;
-		}
-		pos = res.pos;
-		vel.y -= (90 + fabs(vel.x)) * dt;
-
+		/*
 		anim.Update(dt);
 		if (anim.IsComplete()) {
 			alive = false;
 		}
-
-		//if (!Camera::Bounds().Contains(pos)) {
-//			alive = false;
-//		}
+		*/
 	}
 
 	void Draw() const
 	{
-		Assets::tintShader.Activate();
-		Assets::tintShader.SetUniform("flashColor", 0.8f, 0.8f, 0.f, 0.3f);
-		const GPU_Rect& animRect = anim.CurrentFrameRect();
+		//Assets::tintShader.Activate();
+		//Assets::tintShader.SetUniform("flashColor", 0.8f, 0.8f, 0.f, 0.3f);
+		GPU_Rect animRect = { 16 * 16,17 * 16,16, 16 };
 		Window::Draw(Assets::spritesheetTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)
-			.withRotationDegs(roationOffset + mainClock*rotationSpeed)
 			.withScale(gasScale);
-		Shader::Deactivate();
+		//Shader::Deactivate();
 	}
 };
