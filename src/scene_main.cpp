@@ -56,8 +56,7 @@ void LoadSong() {
 }
 
 SceneMain::SceneMain()
-	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
-	//, alienPartSys(Assets::invadersTexture)
+	: alienPartSys(Assets::spritesheetTexture)
 	, scoreText { Text(Assets::funk_30, Assets::funk_30_outline),Text(Assets::funk_30, Assets::funk_30_outline) }
 {
 
@@ -76,18 +75,22 @@ SceneMain::SceneMain()
 	scoreText[1].SetOutlineColor(0, 0, 0);
 	scoreText[1].SetFillColor(255, 255, 255);
 
-	/*
-	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
-	alienPartSys.AddSprite(AnimLib::ALIEN_2[0].rect);
-	alienPartSys.min_scale = 0.15f;
-	alienPartSys.max_scale = 0.4f;
-	alienPartSys.max_vel = vec(50,50);
-	alienPartSys.min_vel = vec(-50,-50);
+	alienPartSys.AddSprite({ 16 * 16,17 * 16,16, 16 });
+	alienPartSys.min_interval = 0.3f;
+	alienPartSys.max_interval = 1.0f;
+	alienPartSys.min_ttl = 5.0f;
+	alienPartSys.max_ttl = 5.0f;
+	alienPartSys.min_scale = 1.0f;
+	alienPartSys.max_scale = 1.6f;
+	alienPartSys.max_vel = vec(0,-250);
+	alienPartSys.min_vel = vec(0,-450);
 	alienPartSys.min_rotation = 0;
 	alienPartSys.max_rotation = 360;
 	alienPartSys.max_rotation_vel = 100.f;
 	alienPartSys.min_rotation_vel = 100.f;
-	alienPartSys.scale_vel = -0.2f;*/
+	alienPartSys.alpha = 0.45f;
+	alienPartSys.alpha_vel = -0.4f;
+	alienPartSys.pos.y = Window::GAME_HEIGHT;
 	LoadSong();
 
 }
@@ -96,8 +99,8 @@ void SceneMain::EnterScene()
 {
 	Fx::BeforeEnterScene();
 	Fx::FullscreenShader::SetShader([]() {
-		//Assets::underwaterShader.Activate();
-		//Assets::underwaterShader.SetUniform("time", mainClock);
+		Assets::underwaterShader.Activate();
+		Assets::underwaterShader.SetUniform("time", mainClock*4);
 	});
 
 	MusicPlayer::SetVolume(20);
@@ -141,6 +144,12 @@ void SceneMain::Update(float dt)
 		return;
 	}
 #endif
+
+	for (float x = 610; x < 1060; x += 15.f) {
+		alienPartSys.pos.x = x;
+		alienPartSys.Spawn(dt);
+	}
+	alienPartSys.UpdateParticles(dt);
 
 	currentTime += dt;
 	while (currentTime > SECONDS_PER_BEAT) {
@@ -249,6 +258,7 @@ void SceneMain::Draw()
 	Window::Clear(100, 100, 230, 255);
 	Window::Draw(Assets::seaBgTexture, vec::Zero);
 	Window::Draw(Assets::air, vec(715, 0)).withRect(0, mainClock*500.f, Assets::air->w, Window::GAME_HEIGHT);
+	alienPartSys.Draw();
 	Window::Draw(Assets::window, vec(Window::GAME_WIDTH / 2, 280)).withOriginCentered();
 
 	float fishScaleX = 0.25f;
@@ -289,6 +299,7 @@ void SceneMain::Draw()
 
 #ifdef _IMGUI
 	{
+		alienPartSys.DrawImGUI();
 		ImGui::Begin("scene");
 		ImGui::Text(Mouse::GetPositionInWorld().ToString().c_str());
 		ImGui::SliderFloat("Arg1", &arg1, 0, 2000);
@@ -298,8 +309,6 @@ void SceneMain::Draw()
 		ImGui::End();
 	}
 
-	//alienPartSys.DrawImGUI();
 #endif
-
 	Fx::AfterDraw();
 }

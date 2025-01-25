@@ -36,8 +36,8 @@ struct NotePlaying {
 
 struct SceneMain : Scene {
 
-	GaemTileMap map;
 	Text scoreText[2];
+	PartSys alienPartSys;
 
 	NotePlaying notePlaying[2][4];
 
