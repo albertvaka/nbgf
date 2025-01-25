@@ -49,7 +49,7 @@ namespace Fx {
 			screenshakeTime = -1.f;
 		}
 
-		static void DrawImgui();
+		static void DrawImGUI();
 
 		static inline bool shaking = false;
 		static inline float screenshakeTime;

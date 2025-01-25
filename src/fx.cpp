@@ -75,7 +75,7 @@ void Update(float dt)
 	}
 }
 
-void Screenshake::DrawImgui()
+void Screenshake::DrawImGUI()
 {
 #ifdef _IMGUI
 	ImGui::Begin("Screenshake");
