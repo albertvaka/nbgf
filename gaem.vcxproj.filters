@@ -394,6 +394,7 @@
     <None Include="asset_src\texturepacker2cpp.py">
       <Filter>generated\scripts</Filter>
     </None>
+    <None Include="bin\data\water.frag" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx" />
