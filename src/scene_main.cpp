@@ -20,6 +20,7 @@ const float SECONDS_PER_BEAT = 0.5f; // song is 120 bpm
 const float MARGIN = 0.1f;
 int combo[2];
 int score[2];
+vec playerTextPos(250, 270);
 BoxBounds collider = BoxBounds(400, 287, 800, 20);
 
 void LoadSong() {
@@ -55,7 +56,7 @@ void LoadSong() {
 SceneMain::SceneMain()
 	: map(Tiled::TileMap::Size.x, Tiled::TileMap::Size.y, Assets::spritesheetTexture)
 	//, alienPartSys(Assets::invadersTexture)
-	, scoreText(Assets::font_30, Assets::font_30_outline)
+	, scoreText { Text(Assets::funk_30, Assets::funk_30_outline),Text(Assets::funk_30, Assets::funk_30_outline) }
 {
 
 	notePlaying[0][0].sound = &Assets::note1p1;
@@ -67,8 +68,11 @@ SceneMain::SceneMain()
 	notePlaying[1][2].sound = &Assets::note3p2;
 	notePlaying[1][3].sound = &Assets::note4p2;
 
-	scoreText.SetFillColor(0, 0, 0);
-	scoreText.SetOutlineColor(255, 255, 0);
+	scoreText[0].SetOutlineColor(0, 0, 0);
+	scoreText[0].SetFillColor(255, 255, 255);
+
+	scoreText[1].SetOutlineColor(0, 0, 0);
+	scoreText[1].SetFillColor(255, 255, 255);
 
 	/*
 	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
@@ -102,6 +106,8 @@ void SceneMain::EnterScene()
 	score[1] = 0;
 	combo[0] = 0;
 	combo[1] = 0;
+	updateScore(0);
+	updateScore(1);
 }
 
 void SceneMain::ExitScene()
@@ -110,6 +116,18 @@ void SceneMain::ExitScene()
 	RotoText::DeleteAll();
 }
 
+void SceneMain::updateScore(int player) {
+	scoreText[player].SetString("Score: " + std::to_string(score[player]) + "\n\nCombo: " + std::to_string(combo[player]));
+}
+
+void playerFloatingText(int player, std::string text) {
+	vec pos = playerTextPos;
+	if (player == 1) {
+		pos.x = Window::GAME_WIDTH - pos.x;
+	}
+	auto roto = new RotoText(pos + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
+	roto->ShowMessage(text);
+}
 
 void SceneMain::Update(float dt)
 {
@@ -168,17 +186,17 @@ void SceneMain::Update(float dt)
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
 		b->active = Collide(collider, b->Bounds());
-		if (b->pos.y < collider.Top()) {
+		if (b->Bounds().Bottom() < collider.Top()) {
 			b->alive = false;
 			if (!b->hit[0]) {
 				combo[0] = 0;
-				auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
-				text->ShowMessage("Miss");
+				playerFloatingText(0, "Miss");
+				updateScore(0);
 			}
 			if (!b->hit[1]) {
 				combo[1] = 0;
-				auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
-				text->ShowMessage("Miss");
+				playerFloatingText(1, "Miss");
+				updateScore(1);
 			}
 		}
 	}
@@ -194,23 +212,21 @@ void SceneMain::Note(int player, int note) {
 			collide = true;
 			b->hit[player] = true;
 		}
-		collide = true;
-		b->hit[player] = true;
 	}
 	if (collide) {
 		combo[player]++;
-		auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
 		switch (Rand::roll(3)) {
-			case 0: text->ShowMessage("yo!"); break;
-			case 1: text->ShowMessage("c'mon"); break;
-			case 2: text->ShowMessage("yeah"); break;
-			default: text->ShowMessage("Yo!!!!!!!"); break;
+			case 0: playerFloatingText(player, "yo!"); break;
+			case 1: playerFloatingText(player, "c'mon"); break;
+			case 2: playerFloatingText(player, "yeah"); break;
+			default: playerFloatingText(player, "Yo!!!!!!!"); break;
 		}
+		score[player] += 100 * sqrt(combo[player]);
+		updateScore(player);
 	}
 	else {
 		combo[player] = 0;
-		auto text = new RotoText(vec(400, 300) + Rand::PosInsideCircle(200), Assets::funk_30, Assets::funk_30_outline);
-		text->ShowMessage("Oops!");
+		playerFloatingText(player, "Oops!");
 	}
 
 }
@@ -221,7 +237,7 @@ void SceneMain::Draw()
 	Window::Clear(100, 100, 230, 255);
 	Window::Draw(Assets::seaBgTexture, vec::Zero);
 	Window::Draw(Assets::air, vec(715, 0)).withRect(0, mainClock*500.f, Assets::air->w, Window::GAME_HEIGHT);
-	Window::Draw(Assets::window, vec(656, 250)).withScale(0.9, 0.9);
+	Window::Draw(Assets::window, vec(Window::GAME_WIDTH/2, 280)).withOriginCentered();
 	for (const Bullet* b : Bullet::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
@@ -236,9 +252,11 @@ void SceneMain::Draw()
 
 	//Draw GUI
 	Camera::InScreenCoords::Begin();
-	Window::Draw(scoreText, vec(Camera::InScreenCoords::Center().x, 20))
-		.withOrigin(scoreText.Size()/2)
-		.withScale(0.666f);
+	Window::Draw(scoreText[0], vec(270, 56))
+		.withOrigin(scoreText[0].Size() / 2);
+	Window::Draw(scoreText[1], vec(Window::GAME_WIDTH - 270, 56))
+		.withOrigin(scoreText[1].Size() / 2);
+
 	Camera::InScreenCoords::End();
 
 #ifdef _IMGUI
