@@ -16,7 +16,9 @@ struct Assets
 	static inline GPU_Image* titleTexture;
 
 	static inline GPU_Image* seaBgTexture;
-	static inline GPU_Image* shipBgTexture;
+	static inline GPU_Image* vent;
+	static inline GPU_Image* window;
+	static inline GPU_Image* air;
 
 	static inline GPU_Image* spritesheetTexture;
 
