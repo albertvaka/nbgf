@@ -37,6 +37,7 @@ struct NotePlaying {
 struct SceneMain : Scene {
 
 	Text scoreText[2];
+	Text comboText[2];
 	PartSys alienPartSys;
 
 	NotePlaying notePlaying[2][4];

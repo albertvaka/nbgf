@@ -57,7 +57,8 @@ void LoadSong() {
 
 SceneMain::SceneMain()
 	: alienPartSys(Assets::spritesheetTexture)
-	, scoreText { Text(Assets::funk_30, Assets::funk_30_outline),Text(Assets::funk_30, Assets::funk_30_outline) }
+	, scoreText{ Text(Assets::funk_30, Assets::funk_30_outline),Text(Assets::funk_30, Assets::funk_30_outline) }
+	, comboText{ Text(Assets::funk_30, Assets::funk_30_outline),Text(Assets::funk_30, Assets::funk_30_outline) }
 {
 
 	notePlaying[0][0].sound = &Assets::note1p1;
@@ -71,9 +72,13 @@ SceneMain::SceneMain()
 
 	scoreText[0].SetOutlineColor(0, 0, 0);
 	scoreText[0].SetFillColor(255, 255, 255);
-
 	scoreText[1].SetOutlineColor(0, 0, 0);
 	scoreText[1].SetFillColor(255, 255, 255);
+
+	comboText[0].SetOutlineColor(0, 0, 0);
+	comboText[0].SetFillColor(255, 255, 255);
+	comboText[1].SetOutlineColor(0, 0, 0);
+	comboText[1].SetFillColor(255, 255, 255);
 
 	alienPartSys.AddSprite({ 16 * 16,17 * 16,16, 16 });
 	alienPartSys.min_interval = 0.3f;
@@ -123,7 +128,8 @@ void SceneMain::ExitScene()
 
 void SceneMain::updateScore(int player) {
 	// TODO: Combo increase animation
-	scoreText[player].SetString("Score: " + std::to_string(score[player]) + "\n\nCombo: x" + std::to_string(combo[player]));
+	scoreText[player].SetString("Score: " + std::to_string(score[player]));
+	comboText[player].SetString("Combo: x" + std::to_string(combo[player]));
 }
 
 void playerFloatingText(int player, std::string text) {
@@ -262,13 +268,14 @@ void SceneMain::Draw()
 	Window::Draw(Assets::window, vec(Window::GAME_WIDTH / 2, 280)).withOriginCentered();
 
 	// FISH 1
+	float flow = 2 * mainClock * Angles::Pi;
 	{
 		float fishScaleX = 0.25f;
 		float baseFishScaleY = 0.25f;
-		float fishScaleY = baseFishScaleY  + sin(2 * mainClock * Angles::Pi) / 100;
+		float fishScaleY = baseFishScaleY  + sin(flow) / 100;
 		Window::Draw(Assets::fish1mic, vec(270, 820 - 2000 * fishScaleY))
 			.withScale(fishScaleX * 1.1, fishScaleY * 1.1)
-			.withRotationDegs(5 * cos(2 * mainClock * Angles::Pi));
+			.withRotationDegs(5 * cos(flow));
 		Window::Draw(Assets::fish1, vec(17, 211 + Assets::fish1->h * baseFishScaleY))
 			.withOrigin(0, Assets::fish1->h)
 			.withScale(fishScaleX, fishScaleY);
@@ -278,15 +285,15 @@ void SceneMain::Draw()
 		Window::Draw(Assets::fish1arm, vec(175, 950 - 2000 * fishScaleY))
 			.withOrigin(30, 25)
 			.withScale(fishScaleX, fishScaleY)
-			.withRotationDegs(15 * triangle(Angles::Pi / 2 + 2 * mainClock * Angles::Pi));
+			.withRotationDegs(15 * triangle(Angles::Pi / 2 + flow));
 	}
 
 	// FISH 2
 	{
 		float fish2ScaleX = 0.155f;
 		float baseFish2ScaleY = 0.155f;
-		float fish2ScaleY = baseFish2ScaleY  + sin(Angles::Pi + 2 * mainClock * Angles::Pi) / 160;
-		Window::Draw(Assets::fish2mic, vec(1200, 950 - 4000 * fish2ScaleY -8 * sin(Angles::Pi /2 + Angles::Pi + 2 * mainClock * Angles::Pi)))
+		float fish2ScaleY = baseFish2ScaleY  + sin(Angles::Pi + flow) / 160;
+		Window::Draw(Assets::fish2mic, vec(1200, 950 - 4000 * fish2ScaleY -8 * sin(Angles::Pi /2 + Angles::Pi + flow)))
 			.withScale(fish2ScaleX, fish2ScaleY);
 		Window::Draw(Assets::fish2, vec(1360, 200 + Assets::fish2->h * baseFish2ScaleY))
 			.withOrigin(0, Assets::fish2->h)
@@ -294,11 +301,11 @@ void SceneMain::Draw()
 		Window::Draw(Assets::fish2mouth, vec(1431, 870 + fish2ScaleY * Assets::fish2mouth->h - 4000 * fish2ScaleY))
 			.withOrigin(Assets::fish2mouth->w-120, 0)
 			.withScale(fish2ScaleX * 0.75, fish2ScaleY * 0.75)
-			.withRotationDegs(10 * sin(Angles::Pi + 2 * mainClock * Angles::Pi));
+			.withRotationDegs(10 * sin(Angles::Pi + flow));
 		Window::Draw(Assets::fish2arm, vec(1470, 920 - 2900 * fish2ScaleY))
 			.withOrigin(1430, 190)
 			.withScale(fish2ScaleX*1.1, fish2ScaleY)
-			.withRotationDegs(-10 + 15 * triangle(Angles::Pi / 2 + 2 * mainClock * Angles::Pi));
+			.withRotationDegs(-10 + 15 * triangle(Angles::Pi / 2 + flow));
 	}
 
 	for (const Bullet* b : Bullet::GetAll()) {
@@ -321,6 +328,30 @@ void SceneMain::Draw()
 		.withOrigin(scoreText[0].Size() / 2);
 	Window::Draw(scoreText[1], vec(Window::GAME_WIDTH - 270, 56))
 		.withOrigin(scoreText[1].Size() / 2);
+	{
+		int rotationNumber = combo[0];
+		float scaleNumber = 0;
+		if (combo[0] > 15) {
+			rotationNumber = 20;
+			scaleNumber = combo[0] - 10;
+		}
+		Window::Draw(comboText[0], vec(270, 106))
+			.withRotationDegs(10 * sin(mainClock * rotationNumber))
+			.withScale(1 + 0.5 * abs(sin(mainClock * scaleNumber)))
+			.withOrigin(comboText[0].Size() / 2);
+	}
+	{
+		int rotationNumber = combo[1];
+		float scaleNumber = 0;
+		if (combo[1] > 15) {
+			rotationNumber = 20;
+			scaleNumber = combo[1] - 10;
+		}
+		Window::Draw(comboText[1], vec(Window::GAME_WIDTH - 270, 106))
+			.withRotationDegs(10 * sin(mainClock * rotationNumber))
+			.withScale(1 + 0.5 * abs(sin(mainClock * scaleNumber)))
+			.withOrigin(comboText[1].Size() / 2);
+	}
 
 	Camera::InScreenCoords::End();
 
@@ -329,7 +360,7 @@ void SceneMain::Draw()
 		alienPartSys.DrawImGUI();
 		ImGui::Begin("scene");
 		ImGui::Text(Mouse::GetPositionInWorld().ToString().c_str());
-		ImGui::SliderFloat("Arg1", &arg1, 0, 2000);
+		ImGui::SliderInt("Arg1", &(combo[1]), 0, 50);
 		ImGui::SliderFloat("Arg2", &arg2, 0, 3000);
 		ImGui::SliderFloat("Arg3", &arg3, 0, 5000);
 		ImGui::SliderFloat("Arg4", &arg4, -30.f, 30.f);
