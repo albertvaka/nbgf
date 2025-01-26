@@ -10,7 +10,8 @@ struct RotoText : Text, SelfRegister<RotoText>
 	bool alive = true;
 	float timer = -1;
 
-	const float DURATION = 0.6f;
+	float secretScale = 1;
+	float DURATION = 0.6f;
 	const float INTRO_DURATION = 0.25;
 	vec pos;
 
@@ -64,7 +65,7 @@ struct RotoText : Text, SelfRegister<RotoText>
 
 		Window::Draw(*this, pos)
 			.withOrigin(Size() / 2.f)
-			.withScale(sc*scale)
+			.withScale(sc*scale* secretScale)
 			.withRotationDegs(ang);
 	}
 };

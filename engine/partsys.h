@@ -33,6 +33,7 @@ struct PartSys {
 					scale = 0.0001f;
 				}
 			}
+			vel.x = vel.x * 0.99;
 			rotation += rotation_vel * dt;
 			alpha += system.alpha_vel * dt;
 			if (alpha < 0.f) {

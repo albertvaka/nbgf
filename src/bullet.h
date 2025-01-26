@@ -15,7 +15,7 @@ extern float mainClock;
 const float gasScale = 0.11f;
 const float minRotationSpeed = 60.f;
 const float maxRotationSpeed = 130.f;
-const float gasSize = 6.f;
+const float colliderSize = 10.f;
 const float elasticGasBounceRatio = 0.3f;
 
 struct Bullet : CircleEntity, SelfRegister<Bullet>
@@ -28,7 +28,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 	GPU_Rect tex;
 
 	Bullet(int player, int note)
-		: CircleEntity(pos, gasSize* gasScale)
+		: CircleEntity(pos, colliderSize)
 		, tex(AnimLib::BUBBLE1[0].rect)
 		, note(note)
 	{
