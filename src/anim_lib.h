@@ -4,22 +4,28 @@
 
 namespace AnimLib {
 
-	constexpr float const gasFrameTime = 0.15f;
-	constexpr const AnimationFrame GAS[] = {
-		// Fade in
-		{ {22 * 16,17 * 16,16, 16},gasFrameTime / 2 },
-		{ {21 * 16,17 * 16,16, 16},gasFrameTime / 2 },
-		{ {19 * 16,17 * 16,16, 16},gasFrameTime / 2 },
-		// Stay
-		{ {16 * 16,17 * 16,16, 16},gasFrameTime },
-		{ {17 * 16,17 * 16,16, 16},gasFrameTime },
-		{ {18 * 16,17 * 16,16, 16},gasFrameTime },
-		{ {19 * 16,17 * 16,16, 16},gasFrameTime },
-		{ {20 * 16,17 * 16,16, 16},gasFrameTime },
-		// Fade out
-		{ {21 * 16,17 * 16,16, 16},gasFrameTime / 2 },
-		{ {22 * 16,17 * 16,16, 16},gasFrameTime / 2 },
-		{ {23 * 16,17 * 16,16, 16},gasFrameTime / 2 },
+	const float frameTime = 0.1;
+	const int grid = 856;
+	constexpr const AnimationFrame BUBBLE1[] = {
+		{ {grid * 0, grid * 0, grid, grid}, 0.f },
+		{ {grid * 1, grid * 0, grid, grid}, frameTime  },
+		{ {grid * 2, grid * 0, grid, grid}, frameTime  },
 	};
+	constexpr const AnimationFrame BUBBLE2[] = {
+		{ {grid * 0, grid * 1, grid, grid}, 0.f },
+		{ {grid * 1, grid * 1, grid, grid},frameTime  },
+		{ {grid * 2, grid * 1, grid, grid},frameTime  },
+	};
+	constexpr const AnimationFrame BUBBLE3[] = {
+		{ {grid * 0, grid * 2, grid, grid}, 0.f },
+		{ {grid * 1, grid * 2, grid, grid}, frameTime },
+		{ {grid * 2, grid * 2, grid, grid}, frameTime  },
+	};
+	constexpr const AnimationFrame BUBBLE4[] = {
+		{ {grid * 0, grid * 3, grid, grid}, 0.f },
+		{ {grid * 1, grid * 3, grid, grid}, frameTime },
+		{ {grid * 2, grid * 3, grid, grid}, frameTime  },
+	};
+
 
 }

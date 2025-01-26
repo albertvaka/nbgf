@@ -21,6 +21,7 @@ struct Assets
 	static inline GPU_Image* air;
 
 	static inline GPU_Image* spritesheetTexture;
+	static inline GPU_Image* bubbleTexture;
 
 	static inline GPU_Image* emojiSuprised;
 	static inline GPU_Image* emojiDead;
@@ -37,11 +38,6 @@ struct Assets
 	static inline GPU_Image* fish2mouth;
 	static inline GPU_Image* fish2mic;
 	static inline GPU_Image* fish2arm;
-
-	static inline GPU_Image* bubble1;
-	static inline GPU_Image* bubble2;
-	static inline GPU_Image* bubble3;
-	static inline GPU_Image* bubble4;
 
 	static inline GPU_Image* greenTick;
 	static inline GPU_Image* heart;
