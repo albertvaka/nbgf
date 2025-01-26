@@ -13,23 +13,11 @@
 #include "input.h"
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
+#include "scene_title.h"
 
-std::vector<int> notes;
-int loop = 0;
-float currentTime = 0;
-int currentNote = 0;
-const float SECONDS_PER_BEAT = 0.5f; // song is 120 bpm
-const float MARGIN = 0.1f;
-int combo[2];
-int score[2];
-vec playerTextPos(550, 150);
-float rotoArea = 120;
-BoxBounds collider = BoxBounds(400, 270, 800, 30);
-float rotoScale = 0.85f;
-float sceneClock = 0;
-float timeToFinish = 0;
 
-void LoadSong() {
+void SceneMain::LoadSong() {
+	notes.clear();
 	std::ifstream file("data/score.txt", std::ifstream::in);
 	if (file.fail()) {
 		Debug::out << "Could not open score.txt for reading: " << strerror(errno);
@@ -141,7 +129,7 @@ void SceneMain::updateScore(int player) {
 	comboText[player].SetString("x" + std::to_string(combo[player]));
 }
 
-void playerFloatingText(int player, std::string text, bool bad = false) {
+void SceneMain::playerFloatingText(int player, std::string text, bool bad) {
 	vec pos = playerTextPos;
 	if (player == 1) {
 		pos.x = Window::GAME_WIDTH - pos.x;
@@ -155,8 +143,6 @@ void playerFloatingText(int player, std::string text, bool bad = false) {
 		roto->SetFillColor(50, 255, 50);
 	}
 }
-
-#include "scene_title.h"
 
 void SceneMain::Update(float dt)
 {

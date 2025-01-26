@@ -50,5 +50,22 @@ struct SceneMain : Scene {
 	void Draw() override;
 	void Note(int player, int num);
 	void updateScore(int player);
+	std::vector<int> notes;
+	void LoadSong();
+	void playerFloatingText(int player, std::string text, bool bad = false);
+
+	int loop = 0;
+	float currentTime = 0;
+	int currentNote = 0;
+	const float SECONDS_PER_BEAT = 0.5f; // song is 120 bpm
+	const float MARGIN = 0.1f;
+	int combo[2];
+	int score[2];
+	vec playerTextPos = { 550, 150 };
+	float rotoArea = 120;
+	BoxBounds collider = BoxBounds(400, 270, 800, 30);
+	float rotoScale = 0.85f;
+	float sceneClock = 0;
+	float timeToFinish = 0;
 
 };
