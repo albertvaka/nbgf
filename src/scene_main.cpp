@@ -10,6 +10,7 @@
 #include "collide.h"
 #include "debug.h"
 #include "rototext.h"
+#include "input.h"
 #include "tiled_tilemap.h"
 #include "tiled_objects_entities.h"
 
@@ -128,6 +129,7 @@ void SceneMain::ExitScene()
 {
 	Bullet::DeleteAll();
 	RotoText::DeleteAll();
+	OneShotAnim::DeleteAll();
 }
 
 void SceneMain::updateScore(int player) {
@@ -135,14 +137,21 @@ void SceneMain::updateScore(int player) {
 	comboText[player].SetString("Combo: x" + std::to_string(combo[player]));
 }
 
-void playerFloatingText(int player, std::string text) {
+void playerFloatingText(int player, std::string text, bool bad = false) {
 	vec pos = playerTextPos;
 	if (player == 1) {
 		pos.x = Window::GAME_WIDTH - pos.x;
 	}
 	auto roto = new RotoText(pos + Rand::PosInsideCircle(rotoArea), Assets::funk_30, Assets::funk_30_outline);
 	roto->ShowMessage(text);
+	if (bad) {	
+		roto->SetFillColor(250, 50, 50);
+	}
+	else {
+		roto->SetFillColor(50, 255, 50);
+	}
 }
+
 
 void SceneMain::Update(float dt)
 {
@@ -203,7 +212,10 @@ void SceneMain::Update(float dt)
 	if (Input::IsJustPressed(1, GameKeys::NOTE_3)) { Note(1, 2); }
 	if (Input::IsJustPressed(0, GameKeys::NOTE_4)) { Note(0, 3); }
 	if (Input::IsJustPressed(1, GameKeys::NOTE_4)) { Note(1, 3); }
-
+	for (OneShotAnim* b : OneShotAnim::GetAll()) {
+		b->Update(dt);
+	}
+	OneShotAnim::DeleteNotAlive();
 	for (RotoText* b : RotoText::GetAll()) {
 		b->Update(dt);
 	}
@@ -213,14 +225,15 @@ void SceneMain::Update(float dt)
 		b->active = Collide(collider, b->Bounds());
 		if (b->Bounds().Bottom() < collider.Top()) {
 			b->alive = false;
+			b->Explode();
 			if (!b->hit[0]) {
 				combo[0] = 0;
-				playerFloatingText(0, "Miss");
+				playerFloatingText(0, "Miss", true);
 				updateScore(0);
 			}
 			if (!b->hit[1]) {
 				combo[1] = 0;
-				playerFloatingText(1, "Miss");
+				playerFloatingText(1, "Miss", true);
 				updateScore(1);
 			}
 		}
@@ -251,7 +264,7 @@ void SceneMain::Note(int player, int note) {
 	}
 	else {
 		combo[player] = 0;
-		playerFloatingText(player, "Oops!");
+		playerFloatingText(player, "Oops!", true);
 	}
 
 }
@@ -320,7 +333,9 @@ void SceneMain::Draw()
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
 	}
-
+	for (const OneShotAnim* b : OneShotAnim::GetAll()) {
+		b->Draw();
+	}
 	for (RotoText* b : RotoText::GetAll()) {
 		b->Draw(rotoScale);
 	}

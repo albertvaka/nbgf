@@ -13,6 +13,7 @@ void Assets::LoadAll() {
     window = LoadImage("data/window.png");
 
     spritesheetTexture = LoadImage("data/spritesheet.png");
+    bubbleTexture = LoadImage("data/bubbles.png");
 
     fish1 = LoadImage("data/body_fish1.png");
     fish1mouth = LoadImage("data/mouth.png");
@@ -30,11 +31,6 @@ void Assets::LoadAll() {
     emojiConfused = LoadImage("data/emoji_confused.png");
     emojiLove = LoadImage("data/emoji_love.png");
     emojiNeutral = LoadImage("data/emoji_neutral.png");
-
-    bubble1 = LoadImage("data/emoji_surprised.png");
-    bubble2 = LoadImage("data/emoji_dead.png");
-    bubble3 = LoadImage("data/emoji_happy.png");
-    bubble4 = LoadImage("data/emoji_love.png");
 
     greenTick = LoadImage("data/tick.png");
     heart = LoadImage("data/heart.png");

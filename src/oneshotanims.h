@@ -27,6 +27,7 @@ struct OneShotAnim : SelfRegister<OneShotAnim>
 
 	void Update(float dt) {
 		anim.Update(dt);
+		pos.y -= 150 * dt;
 		if (anim.IsComplete()) {
 			alive = false;
 		}
