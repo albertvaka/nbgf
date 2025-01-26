@@ -4,8 +4,8 @@
 
 namespace AnimLib {
 
-	const float frameTime = 0.1;
-	const int grid = 856;
+	const constexpr float frameTime = 0.1;
+	const constexpr int grid = 856;
 	constexpr const AnimationFrame BUBBLE1[] = {
 		{ {grid * 0, grid * 0, grid, grid}, 0.f },
 		{ {grid * 1, grid * 0, grid, grid}, frameTime  },
