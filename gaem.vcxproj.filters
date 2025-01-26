@@ -246,11 +246,13 @@
     <ClInclude Include="src\scene_title.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\fx.h" />
     <ClInclude Include="src\rototext.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\oneshotanims.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fx.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -378,7 +380,9 @@
     <ClCompile Include="src\scene_main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\fx.cpp" />
+    <ClCompile Include="src\fx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">
