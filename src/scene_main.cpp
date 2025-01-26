@@ -15,6 +15,7 @@
 #include "tiled_objects_entities.h"
 
 std::vector<int> notes;
+int loop = 0;
 float currentTime = 0;
 int currentNote = 0;
 const float SECONDS_PER_BEAT = 0.5f; // song is 120 bpm
@@ -23,9 +24,10 @@ int combo[2];
 int score[2];
 vec playerTextPos(550, 150);
 float rotoArea = 120;
-BoxBounds collider = BoxBounds(400, 287, 800, 20);
+BoxBounds collider = BoxBounds(400, 270, 800, 30);
 float rotoScale = 0.85f;
 float sceneClock = 0;
+float timeToFinish = 0;
 
 void LoadSong() {
 	std::ifstream file("data/score.txt", std::ifstream::in);
@@ -110,7 +112,7 @@ void SceneMain::EnterScene()
 		Assets::underwaterShader.SetUniform("time", mainClock*4);
 	});
 
-	MusicPlayer::SetVolume(20);
+	MusicPlayer::SetVolume(100);
 	MusicPlayer::Play(Assets::menuMusic);
 	currentTime = 0;
 	currentNote = 0;
@@ -121,6 +123,8 @@ void SceneMain::EnterScene()
 	updateScore(0);
 	updateScore(1);
 	sceneClock = 0;
+	timeToFinish = 0;
+	loop = 0;
 
 	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 }
@@ -152,11 +156,53 @@ void playerFloatingText(int player, std::string text, bool bad = false) {
 	}
 }
 
+#include "scene_title.h"
 
 void SceneMain::Update(float dt)
 {
 	Fx::Update(dt);
 
+	for (float x = 610; x < 1060; x += 15.f) {
+		alienPartSys.max_vel.x = 0;
+		alienPartSys.min_vel.x = 0;
+		alienPartSys.pos.x = x;
+		alienPartSys.pos.y = Window::GAME_HEIGHT;
+		alienPartSys.Spawn(dt);
+	}
+	alienPartSys.UpdateParticles(dt);
+	
+	for (RotoText* b : RotoText::GetAll()) {
+		b->Update(dt);
+	}
+	RotoText::DeleteNotAlive();
+
+	if (loop >= 2) {
+		if (timeToFinish != 42) {
+			timeToFinish += dt;
+		}
+		else {
+			if (Input::IsJustPressedAnyPlayer(GameKeys::START)) {
+				MusicPlayer::Stop();
+				MusicPlayer::SetVolume(100);
+				SceneManager::ChangeScene(new SceneTitle());
+			}
+		}
+		if (timeToFinish > 2) {
+			MusicPlayer::SetVolume(255-((timeToFinish-2)/6)*255);
+			if (MusicPlayer::Volume() <= 1) {
+				Debug::out << "GAME FINISHED";
+
+				if (timeToFinish != 42) {
+					auto a = new RotoText(vec(score[0] > score[1]? 520 : 1200, 190), Assets::funk_30, Assets::funk_30_outline);
+					a->ShowMessage("Winner!");
+					a->secretScale = 2;
+					a->DURATION = 100000;
+					timeToFinish = 42;
+				}
+				return;
+			}
+		}
+	}
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F6;
 	if (Keyboard::IsKeyJustPressed(restart)) {
@@ -167,18 +213,16 @@ void SceneMain::Update(float dt)
 
 	sceneClock += dt;
 
-	for (float x = 610; x < 1060; x += 15.f) {
-		alienPartSys.pos.x = x;
-		alienPartSys.Spawn(dt);
-	}
-	alienPartSys.UpdateParticles(dt);
 
 	currentTime += dt;
 	while (currentTime > SECONDS_PER_BEAT) {
 		currentTime -= SECONDS_PER_BEAT;
-		currentNote++;
+		if (loop < 2) {
+			currentNote++;
+		}
 		if (currentNote >= notes.size()) {
 			currentNote = 0;
+			loop++;
 		}
 		if (notes[currentNote] & 1) {
 			new Bullet(0, 0);
@@ -216,14 +260,11 @@ void SceneMain::Update(float dt)
 		b->Update(dt);
 	}
 	OneShotAnim::DeleteNotAlive();
-	for (RotoText* b : RotoText::GetAll()) {
-		b->Update(dt);
-	}
-	RotoText::DeleteNotAlive();
+
 	for (Bullet* b : Bullet::GetAll()) {
 		b->Update(dt);
 		b->active = Collide(collider, b->Bounds());
-		if (b->Bounds().Bottom() < collider.Top()) {
+		if (b->Bounds().Bottom() < collider.Top()-20) {
 			b->alive = false;
 			b->Explode();
 			if (!b->hit[0]) {
@@ -267,6 +308,32 @@ void SceneMain::Note(int player, int note) {
 		playerFloatingText(player, "Oops!", true);
 	}
 
+	float flow = 2 * sceneClock * Angles::Pi;
+	float fishScaleX = 0.25f;
+	float baseFishScaleY = 0.25f;
+	float fishScaleY = baseFishScaleY + sin(flow) / 100;
+	float fish2ScaleX = 0.155f;
+	float baseFish2ScaleY = 0.155f;
+	float fish2ScaleY = baseFish2ScaleY + sin(Angles::Pi + flow) / 160;
+	vec mouth(334, 900 + fishScaleY * Assets::fish1mouth->h - 2420 * fishScaleY);
+	vec fish2Mouth(1431, 900 + fish2ScaleY * Assets::fish2mouth->h - 4000 * fish2ScaleY);
+	mouth.DebugDraw();
+	fish2Mouth.DebugDraw();
+	float playerVel = 650;
+	float vel = (player == 0) ? playerVel : -playerVel;
+	float oldMin = alienPartSys.min_vel.y;
+	float oldMax = alienPartSys.max_vel.y;
+	if (player == 2) {
+		alienPartSys.min_vel.y = -450;
+		alienPartSys.max_vel.y = -350;
+	}
+	alienPartSys.max_vel.x = vel*1.1;
+	alienPartSys.min_vel.x = vel*0.9;
+	alienPartSys.pos = (player == 0)? mouth : fish2Mouth;
+	alienPartSys.Spawn(5);
+	alienPartSys.min_vel.y = oldMin;
+	alienPartSys.max_vel.y = oldMax;
+
 }
 
 float arg1 = 1470;
@@ -302,7 +369,7 @@ void SceneMain::Draw()
 			.withScale(fishScaleX, fishScaleY);
 		Window::Draw(Assets::fish1mouth, vec(334, 932 + fishScaleY * Assets::fish1mouth->h - 2420 * fishScaleY))
 			.withOrigin(0, Assets::fish1mouth->h)
-			.withScale(fishScaleX, fishScaleY * 0.9 - 0.07 * abs(sin(mainClock * 6.2 - 2)));
+			.withScale(fishScaleX, fishScaleY * 0.9 - 0.07 * abs(sin(sceneClock * 6.2 - 2)));
 		Window::Draw(Assets::fish1arm, vec(195, 950 - 2000 * fishScaleY))
 			.withOrigin(30, 25)
 			.withScale(fishScaleX, fishScaleY)
