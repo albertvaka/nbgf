@@ -62,4 +62,9 @@ void Assets::LoadAll() {
     note2p2.LoadAsParts("data/fish/squirty_2a.ogg");
     note3p2.LoadAsParts("data/fish/squirty_3a.ogg");
     note4p2.LoadAsParts("data/fish/squirty_4a.ogg");
+
+
+    fadeInDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadein_diamonds.frag");
+    fadeOutDiamondsShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_diamonds.frag");
+    fadeOutCircleShader.Load("data/vertex_out.vert", nullptr, "data/fadeout_circle.frag");
 }
