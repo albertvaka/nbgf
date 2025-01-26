@@ -138,7 +138,7 @@ void SceneMain::ExitScene()
 
 void SceneMain::updateScore(int player) {
 	scoreText[player].SetString("Score: " + std::to_string(score[player]));
-	comboText[player].SetString("Combo: x" + std::to_string(combo[player]));
+	comboText[player].SetString("x" + std::to_string(combo[player]));
 }
 
 void playerFloatingText(int player, std::string text, bool bad = false) {
