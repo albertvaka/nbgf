@@ -16,6 +16,7 @@ void Assets::LoadAll() {
     bubbleTexture = LoadImage("data/bubbles.png");
 
     fish1 = LoadImage("data/body_fish1.png");
+    fish1Blink = LoadImage("data/blink.png");
     fish1mouth = LoadImage("data/mouth.png");
     fish1mic = LoadImage("data/arm_mic.png");
     fish1arm = LoadImage("data/arm_move.png");
