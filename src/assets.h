@@ -56,6 +56,10 @@ struct Assets
 
 	static inline Shader tintShader;
 	static inline Shader underwaterShader;
+	
+	static inline Shader fadeInDiamondsShader;
+	static inline Shader fadeOutDiamondsShader;
+	static inline Shader fadeOutCircleShader;
 
 	static inline Mix_Music* menuMusic;
 

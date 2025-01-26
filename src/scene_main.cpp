@@ -24,6 +24,7 @@ vec playerTextPos(550, 150);
 float rotoArea = 120;
 BoxBounds collider = BoxBounds(400, 287, 800, 20);
 float rotoScale = 0.85f;
+float sceneClock = 0;
 
 void LoadSong() {
 	std::ifstream file("data/score.txt", std::ifstream::in);
@@ -118,6 +119,9 @@ void SceneMain::EnterScene()
 	combo[1] = 0;
 	updateScore(0);
 	updateScore(1);
+	sceneClock = 0;
+
+	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 }
 
 void SceneMain::ExitScene()
@@ -127,7 +131,6 @@ void SceneMain::ExitScene()
 }
 
 void SceneMain::updateScore(int player) {
-	// TODO: Combo increase animation
 	scoreText[player].SetString("Score: " + std::to_string(score[player]));
 	comboText[player].SetString("Combo: x" + std::to_string(combo[player]));
 }
@@ -143,6 +146,8 @@ void playerFloatingText(int player, std::string text) {
 
 void SceneMain::Update(float dt)
 {
+	Fx::Update(dt);
+
 #ifdef _DEBUG
 	const SDL_Scancode restart = SDL_SCANCODE_F6;
 	if (Keyboard::IsKeyJustPressed(restart)) {
@@ -150,6 +155,8 @@ void SceneMain::Update(float dt)
 		return;
 	}
 #endif
+
+	sceneClock += dt;
 
 	for (float x = 610; x < 1060; x += 15.f) {
 		alienPartSys.pos.x = x;
@@ -260,6 +267,7 @@ float triangle(float x) {
 
 void SceneMain::Draw()
 {
+	Window::Clear(255, 255, 255, 255);
 	Fx::FullscreenShader::Begin();
 	Window::Clear(100, 100, 230, 255);
 	Window::Draw(Assets::seaBgTexture, vec::Zero);
@@ -268,21 +276,21 @@ void SceneMain::Draw()
 	Window::Draw(Assets::window, vec(Window::GAME_WIDTH / 2, 280)).withOriginCentered();
 
 	// FISH 1
-	float flow = 2 * mainClock * Angles::Pi;
+	float flow = 2 * sceneClock * Angles::Pi;
 	{
 		float fishScaleX = 0.25f;
 		float baseFishScaleY = 0.25f;
 		float fishScaleY = baseFishScaleY  + sin(flow) / 100;
-		Window::Draw(Assets::fish1mic, vec(270, 820 - 2000 * fishScaleY))
+		Window::Draw(Assets::fish1mic, vec(300, 820 - 2000 * fishScaleY))
 			.withScale(fishScaleX * 1.1, fishScaleY * 1.1)
 			.withRotationDegs(5 * cos(flow));
-		Window::Draw(Assets::fish1, vec(17, 211 + Assets::fish1->h * baseFishScaleY))
+		Window::Draw(Assets::fish1, vec(37, 211 + Assets::fish1->h * baseFishScaleY))
 			.withOrigin(0, Assets::fish1->h)
 			.withScale(fishScaleX, fishScaleY);
-		Window::Draw(Assets::fish1mouth, vec(314, 932 + fishScaleY * Assets::fish1mouth->h - 2420 * fishScaleY))
+		Window::Draw(Assets::fish1mouth, vec(334, 932 + fishScaleY * Assets::fish1mouth->h - 2420 * fishScaleY))
 			.withOrigin(0, Assets::fish1mouth->h)
 			.withScale(fishScaleX, fishScaleY * 0.9 - 0.07 * abs(sin(mainClock * 6.2 - 2)));
-		Window::Draw(Assets::fish1arm, vec(175, 950 - 2000 * fishScaleY))
+		Window::Draw(Assets::fish1arm, vec(195, 950 - 2000 * fishScaleY))
 			.withOrigin(30, 25)
 			.withScale(fishScaleX, fishScaleY)
 			.withRotationDegs(15 * triangle(Angles::Pi / 2 + flow));
@@ -295,13 +303,13 @@ void SceneMain::Draw()
 		float fish2ScaleY = baseFish2ScaleY  + sin(Angles::Pi + flow) / 160;
 		Window::Draw(Assets::fish2mic, vec(1200, 950 - 4000 * fish2ScaleY -8 * sin(Angles::Pi /2 + Angles::Pi + flow)))
 			.withScale(fish2ScaleX, fish2ScaleY);
+		Window::Draw(Assets::fish2mouth, vec(1431, 870 + fish2ScaleY * Assets::fish2mouth->h - 4000 * fish2ScaleY))
+			.withOrigin(Assets::fish2mouth->w - 120, 0)
+			.withScale(fish2ScaleX * 0.75, fish2ScaleY * 0.75)
+			.withRotationDegs(10 * sin(Angles::Pi + flow));
 		Window::Draw(Assets::fish2, vec(1360, 200 + Assets::fish2->h * baseFish2ScaleY))
 			.withOrigin(0, Assets::fish2->h)
 			.withScale(fish2ScaleX, fish2ScaleY);
-		Window::Draw(Assets::fish2mouth, vec(1431, 870 + fish2ScaleY * Assets::fish2mouth->h - 4000 * fish2ScaleY))
-			.withOrigin(Assets::fish2mouth->w-120, 0)
-			.withScale(fish2ScaleX * 0.75, fish2ScaleY * 0.75)
-			.withRotationDegs(10 * sin(Angles::Pi + flow));
 		Window::Draw(Assets::fish2arm, vec(1470, 920 - 2900 * fish2ScaleY))
 			.withOrigin(1430, 190)
 			.withScale(fish2ScaleX*1.1, fish2ScaleY)
