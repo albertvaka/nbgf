@@ -350,9 +350,17 @@ void SceneMain::Draw()
 		Window::Draw(Assets::fish1mic, vec(300, 820 - 2000 * fishScaleY))
 			.withScale(fishScaleX * 1.1, fishScaleY * 1.1)
 			.withRotationDegs(5 * cos(flow));
-		Window::Draw(Assets::fish1, vec(37, 211 + Assets::fish1->h * baseFishScaleY))
-			.withOrigin(0, Assets::fish1->h)
-			.withScale(fishScaleX, fishScaleY);
+		int blinkCounter = int(mainClock*5) % 100;
+		if (blinkCounter == 40 || blinkCounter == 15 || blinkCounter == 50 || blinkCounter == 75 || blinkCounter == 90) {
+			Window::Draw(Assets::fish1Blink, vec(37, 211 + Assets::fish1->h * baseFishScaleY))
+				.withOrigin(0, Assets::fish1->h)
+				.withScale(fishScaleX, fishScaleY);
+		}
+		else {
+			Window::Draw(Assets::fish1, vec(37, 211 + Assets::fish1->h * baseFishScaleY))
+				.withOrigin(0, Assets::fish1->h)
+				.withScale(fishScaleX, fishScaleY);
+		}
 		Window::Draw(Assets::fish1mouth, vec(334, 932 + fishScaleY * Assets::fish1mouth->h - 2420 * fishScaleY))
 			.withOrigin(0, Assets::fish1mouth->h)
 			.withScale(fishScaleX, fishScaleY * 0.9 - 0.07 * abs(sin(sceneClock * 6.2 - 2)));
