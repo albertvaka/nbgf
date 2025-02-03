@@ -10,13 +10,14 @@
 #include "input.h"
 #endif
 
-struct GaemTileMap : TileMap<Tile>, SingleInstance<GaemTileMap>
+struct GaemTileMap : TileMap<Tile, Tile::SOLID_OUT_OF_BOUNDS>, SingleInstance<GaemTileMap>
 {
-	GaemTileMap(int width, int height, GPU_Image* texture) : TileMap(width, height, texture) {
-		outOfBoundsTile = Tile::SOLID_OUT_OF_BOUNDS;
+	GaemTileMap(int width, int height, GPU_Image* texture) : TileMap(width, height, texture)
+	{
 	}
 
-	bool IsPosBelowSlope(veci tilePos) const {
+	bool IsPosBelowSlope(veci tilePos) const
+	{
 		veci aboveTilePos = veci(tilePos.x, tilePos.y - 1);
 		Tile aboveTile = GetTile(aboveTilePos);
 		if (aboveTile.isRightSlope()) {
@@ -33,7 +34,8 @@ struct GaemTileMap : TileMap<Tile>, SingleInstance<GaemTileMap>
 	}
 
 	bool IsPosOnSlope(vec v) const { return IsPosOnSlope(v.x, v.y); }
-	bool IsPosOnSlope(float x, float y) const {
+	bool IsPosOnSlope(float x, float y) const
+	{
 		veci tilePos = Tile::ToTiles(x, y);
 		if (IsPosBelowSlope(tilePos)) {
 			return true;
@@ -41,7 +43,8 @@ struct GaemTileMap : TileMap<Tile>, SingleInstance<GaemTileMap>
 		return GetTile(tilePos).IsInSolidPartOfSlope(x, y);
 	}
 
-	bool CollidesWithSlope(vec pos, float velY, float dt) {
+	bool CollidesWithSlope(vec pos, float velY, float dt)
+	{
 		float finalY = pos.y + velY * dt;
 		while (pos.y <= finalY) {
 			if (IsPosOnSlope(pos.x, pos.y)) {

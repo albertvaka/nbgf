@@ -7,7 +7,7 @@
 #include "camera.h"
 #include "window_drawraw.h"
 
-template<class Tile> // A TileSet as exported from Tiled (or a class that inherits from it)
+template<class Tile, Tile::Value outOfBoundsTile> // A TileSet as exported from Tiled (or a class that inherits from it)
 struct TileMap
 {
 	TileMap(int width, int height, GPU_Image* texture)
@@ -17,10 +17,11 @@ struct TileMap
 	{
 	}
 
-	~TileMap() {
+	~TileMap()
+	{
 		delete[] tiles;
 	}
-	
+
 	template<typename TiledTileMap> // A TileMap as exported from Tiled
 	void LoadFromTiled() {
 		SDL_assert(TiledTileMap::Size.x == sizes.x);
@@ -32,16 +33,16 @@ struct TileMap
 
 	BoxBounds TileBounds(int x, int y) const { return BoxBounds(x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size); }
 
-	bool InBounds(int x, int y) const {
-		return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y);
-	}
+	bool InBounds(int x, int y) const { return !(x < 0 || x >= sizes.x || y < 0 || y >= sizes.y); }
 
-	void SetTile(int x, int y, Tile t) {
+	void SetTile(int x, int y, Tile t)
+	{
 		if (!InBounds(x, y)) return;
 		SetTileUnsafe(x, y, t);
 	}
 
-	Tile GetTile(int x, int y) const {
+	Tile GetTile(int x, int y) const
+	{
 		if (!InBounds(x, y)) return outOfBoundsTile;
 		return GetTileUnsafe(x,y);
 	}
@@ -66,10 +67,6 @@ struct TileMap
 		int right = (screen.Right() / Tile::Size) + 1;
 		int top = (screen.Top() / Tile::Size) - 1;
 		int bottom = (screen.Bottom() / Tile::Size) + 1;
-
-		if (outOfBoundsTile != Tile::NONE) {
-			DrawOutOfBounds(left, right, top, bottom);
-		}
 
 		if (left < 0) {
 			left = 0;
@@ -105,14 +102,8 @@ struct TileMap
 
 	}
 
-	Tile outOfBoundsTile = Tile::NONE;
-	GPU_Image* tileset;
-
-private:
-	veci sizes;
-	Tile* tiles;
-
-	void DrawOutOfBounds(int left, int right, int top, int bottom) const {
+	void DrawOutOfBounds(int left, int right, int top, int bottom) const
+	{
 		GPU_Rect outOfBounds = outOfBoundsTile.textureRect();
 		RectToTextureCoordinates(tileset, outOfBounds);
 
@@ -155,4 +146,9 @@ private:
 		Window::DrawRaw::FlushTexturedQuads(tileset);
 	}
 
+	GPU_Image* tileset;
+
+private:
+	veci sizes;
+	Tile* tiles;
 };
