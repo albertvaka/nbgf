@@ -48,7 +48,7 @@ void IntroScene::ExitScene()
 void IntroScene::Update(float dt)
 {
 	MusicPlayer::ToggleMusicWithM();
-	if (Input::IsJustPressedAnyPlayer(GameKeys::START)) {
+	if (Input::IsJustPressedAnyPlayer(GameKeys::START) && !Keyboard::IsKeyPressed(SDL_SCANCODE_LALT)) {
 		if (Keyboard::IsKeyPressed(SDL_SCANCODE_RSHIFT) && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 			SceneManager::ChangeScene(new MainScene());
 		}
