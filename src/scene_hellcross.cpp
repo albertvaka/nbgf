@@ -176,6 +176,8 @@ void HellCrossScene::UpdateCamera() {
 
 void HellCrossScene::Update(float dt)
 {
+	MusicPlayer::ToggleMusicWithM();
+
 	Fx::Update(dt);
 	if (Fx::FreezeImage::IsFrozen()) {
 		// Fx::FreezeImage's alternate update function has already run at this point
