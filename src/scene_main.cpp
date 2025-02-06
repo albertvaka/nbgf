@@ -1099,7 +1099,6 @@ void MainScene::Draw()
 	Fx::FullscreenShader::End(); // Does nothing if no shader was active
 
 	Camera::InScreenCoords::Begin();
-	player.DrawGUI();
 	int numBars = 0;
 	for (const Bipedal* g : Bipedal::GetAll()) {
 		numBars += g->DrawHealth(numBars);
