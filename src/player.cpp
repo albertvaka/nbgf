@@ -22,32 +22,34 @@
 
 extern float mainClock;
 
-// input
+// coyote time
 constexpr float kIsJustPressedIntervalTime = 0.15f;
 constexpr float kJumpTimeAfterBeingGrounded = 0.07f; //~4 frames
 
-// accel
+// run accel
 constexpr float kRunAcc = 1400;
 constexpr float kRunAcc_OnAir = 1000;
-constexpr float kGravityAcc = 660;
 constexpr float kDiveHorizontalAcc = 10;
 
-// friction X
+// run friction
 constexpr float kFrictAccFloor = 1000;
 constexpr float kFrictAccFloor_Crouched = 450;
 constexpr float kFrictAcc_OnAir = 500;
 
-// friction Y
+// wall friction
 constexpr float kFrictAccVert_WallUp = 400;
 constexpr float kFrictAccVert_WallDown = 540;
 
 // jump
-constexpr float kVelJump = -200; // Y axis
+constexpr float kGravityAcc = 600;
+constexpr float kGravityAccFalling = 900;
+constexpr float kVelJump = -340; // Y axis
 constexpr float kVelWalljump = 140; // X axis
 constexpr float kVelSlopejump = 140; // X axis
-constexpr float kJumpHeightDiff = 72.f; // vertical pixels (note: this is the height at wich we stop adding vertical velocity, but we jump slightly higher thant his, ~8px more;
+constexpr float kJumpHeightDiff = 70.f; // vertical pixels (note: this is the height at wich we start decelerating faster, but we jump ~15px more than this)
 constexpr float kTimeCrouchedToJumpDownOneWayTile = 0.2f;
 constexpr float kTimeToJumpFromWallAfterLettingGo = 0.2f;
+constexpr float kJumpCancelFactor = 0.55f;
 
 // dash
 constexpr float kVelDash = 400;
@@ -66,6 +68,7 @@ constexpr vec kVelMax(220, 350);
 constexpr float kBulletVel = 400.f;
 constexpr float kBfgCooldown = 0.2f;
 constexpr float kBfgPushBack = 150.f;
+constexpr float kBfgPushDownFactor = 1.5f;
 
 // knockback
 constexpr float kDoDamageKnockbackVel = 100.f;
@@ -201,7 +204,7 @@ void Player::UpdateMoving(float dt)
 		crouchedTime = 0.f;
 	}
 
-	vec acc = vec(0, 0);
+	acc = vec(0, 0);
 	if (Input::IsPressed(0,GameKeys::LEFT)) {
 		if (!attacking) lookingLeft = true;
 		if (groundTile != Tile::NONE) {
@@ -223,12 +226,15 @@ void Player::UpdateMoving(float dt)
 
 	if (pos.y > initialJumpY - kJumpHeightDiff && Input::IsPressed(0, GameKeys::JUMP))
 	{
-		vel.y = kVelJump;
+		acc.y = kGravityAcc;
 	}
-	else
-	{
-		initialJumpY = Mates::MaxFloat;
-		acc.y += kGravityAcc;
+	else {
+		acc.y = kGravityAccFalling;
+		if (vel.y < 0 && Input::IsJustReleased(0, GameKeys::JUMP))
+		{
+			//cancel jump
+			vel.y *= kJumpCancelFactor;
+		}
 	}
 
 	// Calculate friction
@@ -513,6 +519,7 @@ void Player::Update(float dt)
 				voiceSoundChannel = Assets::soundVoiceJump.Play();
 				// Start to jump
 				initialJumpY = pos.y;
+				vel.y = kVelJump;
 				float halfWidth = kStandingSize.x / 2;
 				Tile topLeft = map->GetTile(Tile::ToTiles(pos.x - halfWidth + 1.f, pos.y - size.y - 1.f));
 				Tile topRight = map->GetTile(Tile::ToTiles(pos.x + halfWidth - 1.f, pos.y - size.y - 1.f));
@@ -546,13 +553,6 @@ void Player::Update(float dt)
 	if (vel.y < -kVelMax.y) vel.y = -kVelMax.y;
 	float maxVelDown = diving ? kVelDive : kVelMax.y;
 	if (vel.y > maxVelDown) vel.y = kVelMax.y;
-	if (initialJumpY < Mates::MaxFloat && vel.y < 0) {
-		// Do not allow to jump higher than kJumpHeightDiff
-		float targetY = initialJumpY - kJumpHeightDiff;
-		if (pos.y + vel.y * dt < targetY) {
-			vel.y = (targetY - pos.y) / dt;
-		};
-	}
 
 	// Do move
 	MoveResult moved = MoveAgainstTileMap(pos - vec(0, size.y/2), size, vel, dt);
@@ -768,7 +768,11 @@ void Player::Update(float dt)
 			Assets::shoot.Play();
 			new Bullet(tipOfTheGun, gunDirection*kBulletVel);
 			float oldVelY = vel.y;
-			vel -= gunDirection*kBfgPushBack;
+			vec recoil = -kBfgPushBack*gunDirection;
+			if (recoil.y < 0 && groundTile == Tile::NONE) {
+				recoil.y *= kBfgPushDownFactor; // make it a bit stronger on the negative y axis
+			}
+			vel += recoil;
 			initialJumpY = Mates::MaxFloat; // Overrides jump impulse
 			if (onWall) {
 				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
@@ -971,6 +975,7 @@ void Player::DrawGUI(bool discreteHealth)
 		}
 		ImGui::Text("jump height %f", debugMaxJumpY);
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
+		ImGui::Text("acc %f,%f", acc.x, acc.y);
 		ImGui::Text("divingRestTimer: %f", divingRestTimer);
 		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing, groundTile.isSlope());
 		ImGui::End();

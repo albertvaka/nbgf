@@ -63,6 +63,7 @@ struct Player : Entity, SingleInstance<Player>
 
     Animation anim;
     vec size;
+    vec acc;
     bool lookingLeft;
     CircleEntity playerAttack;
     Tile groundTile;
