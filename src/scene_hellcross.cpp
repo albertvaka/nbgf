@@ -40,6 +40,7 @@ HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
 	, lava(BoxBounds(0, map_size.y*16 - 20, map_size.x*16, 200))
 	, scoreText(Assets::font_30)
+	, lastScoreText(Assets::font_30)
 	, bestScoreText(Assets::font_30)
 	, save("hellcross")
 	, score(0)
@@ -55,6 +56,8 @@ HellCrossScene::HellCrossScene()
 	if (save.Has("bestscore")) {
 		save.StreamGet("bestscore") >> bestScore;
 	}
+
+	lastScoreText.SetString("Last: 0m");
 }
 
 void HellCrossScene::UpdateScores() {
@@ -94,7 +97,7 @@ void HellCrossScene::RandomizeMap() {
 	}
 }
 
-void HellCrossScene::EnterScene() 
+void HellCrossScene::EnterScene()
 {
 	Fx::BeforeEnterScene();
 
@@ -190,6 +193,7 @@ void HellCrossScene::Update(float dt)
 	if (Fx::ScreenTransition::IsJustFinished()) {
 		if (Fx::ScreenTransition::Current() != &Assets::fadeInDiamondsShader) {
 			// This was a death or outro transition: restart scene
+			lastScoreText.SetString("Last: " + std::to_string(score) + "m");
 			SceneManager::RestartScene();
 		}
 		return;
@@ -288,7 +292,8 @@ void HellCrossScene::Draw()
 	Camera::InScreenCoords::Begin();
 	player.DrawGUI(true);
 	Window::Draw(scoreText, vec(8, 28)).withScale(0.25);
-	Window::Draw(bestScoreText, vec(8, 40)).withScale(0.25);
+	Window::Draw(lastScoreText, vec(8, 28+12)).withScale(0.25);
+	Window::Draw(bestScoreText, vec(8, 28+24)).withScale(0.25);
 	Camera::InScreenCoords::End();
 
 #ifdef _IMGUI

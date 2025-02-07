@@ -21,6 +21,7 @@ struct HellCrossScene : Scene
 	SkillTree skillTree;
 	DestroyedTiles destroyedTiles;
 	Text scoreText;
+	Text lastScoreText;
 	Text bestScoreText;
 	int score;
 	int bestScore;
