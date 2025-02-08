@@ -104,8 +104,8 @@ void InitHealth(PartSys& ps)
 	ps.max_ttl = 0.6f;
 	ps.min_interval = 0.1f;
 	ps.max_interval = 0.1f;
-	ps.min_scale = 0.5f;
-	ps.max_scale = 0.7f;
+	ps.min_scale = 0.6f;
+	ps.max_scale = 0.8f;
 	ps.scale_vel = -0.5f;
 	ps.min_rotation = 0.f;
 	ps.max_rotation = 360.f;

@@ -31,7 +31,7 @@ void Health::Draw() const
 {
 	Window::Draw(Assets::spritesheetTexture, pos - drawOffset())
 		.withOrigin(4, 3)
-		.withScale(0.7f)
+		.withScale(0.8f)
 		.withRotationDegs(16.f*sin(pos.y+pos.x+mainClock*5))
 		.withRect(340, 21, 8, 6);
 
