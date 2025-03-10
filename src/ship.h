@@ -6,7 +6,7 @@
 #include "debug.h"
 #include "input.h"
 #include "steering_behavior.h"
-//#include "Stroke.hpp"
+#include "stroke.h"
 
 const float deceleration_coef = 0.3;
 const float max_speed = 220.f;
@@ -15,12 +15,9 @@ class Ship : public Entity {
 public:
 
     Ship() {
-		/*stroke = new Stroke();
-		stroke->SetMaxJoints(20);
-		stroke->SetInnerColor(sf::Color(25,255,255,0));
-		stroke->SetEndThickness(0.0f);
-		timer = 0;
-		*/
+		stroke.SetMaxJoints(20);
+		stroke.SetInnerColor({ 255,255,255,0 });
+		stroke.SetEndThickness(0.0f);
 	}
 
 	void Update(float dt) {
@@ -45,24 +42,22 @@ public:
 			heading.Normalize();
 		}
 
-		Debug::out << speed;
-
 		vel = speed*heading;
 		vel.Truncate(max_speed);
 		pos += vel * dt;
 
-		//stroke->Calculate(dt);
+		stroke.Calculate(dt);
 
 		timer += dt;
 		if (timer > 0.15) {
 			timer -= 0.15;
-			//stroke->AddJoint(pos ,9.f);
+			stroke.AddJoint(pos ,9.f);
 		}
 
 	}
 
 	void Draw() {
-		float angle = vec(0, 0).AngleDegs(heading);
+		float angle = AngleDegs(heading);
 		Window::Draw(Assets::shipTexture, pos)
 			.withOrigin(Assets::shipTexture->w / 2, Assets::shipTexture->h / 2)
 			.withRotationDegs(angle)
@@ -70,11 +65,11 @@ public:
 	}
 	
 	void DrawStroke() {
-		//rt.draw(*stroke);
+		stroke.Draw();
 	}
 
 private:
-	//Stroke* stroke;
 	float timer = 0;
 	vec heading = vec(1,0);
+	Stroke stroke;
 };
