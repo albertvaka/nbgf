@@ -31,7 +31,7 @@ struct vec
 
 	//Angle to direction
 	[[nodiscard]] static vec FromAngleRads(float rads, float len=1.0f) {
-		return vec(cos(rads)*len,sin(rads)*len);
+		return vec(cos(rads)*len, sin(rads)*len);
 	}
 
 	//Angle to direction
@@ -90,18 +90,16 @@ struct vec
 
 	// Angle in Rads between the lines (origin to point a) and (origin to point b)
 	// In range [-Pi,Pi]
-	[[nodiscard]] float AngleRads(vec other = vec::Zero) const
+	[[nodiscard]] float AngleRads(vec from = vec::Zero) const
 	{
-		float deltaY = other.y - y;
-		float deltaX = other.x - x;
-		return atan2(deltaY, deltaX);
+		return atan2(y - from.y, x - from.x);
 	}
 
 	// Angle in Degrees between the lines (origin to point a) and (origin to point b)
 	// In range [-180,180]
-	[[nodiscard]] float AngleDegs(vec other = vec::Zero) const
+	[[nodiscard]] float AngleDegs(vec from = vec::Zero) const
 	{
-		return Angles::RadsToDegs(AngleRads(other));
+		return Angles::RadsToDegs(AngleRads(from));
 	}
 
 	[[nodiscard]] vec RotatedAroundOriginRads(float rads) const
@@ -342,7 +340,7 @@ inline vec vec::Normalized() const
 
 //------------------------------------------------------------------------non member functions
 
-inline float Distance(vec v1, vec v2)
+[[nodiscard]] inline float Distance(vec v1, vec v2)
 {
 	float ySeparation = v2.y - v1.y;
 	float xSeparation = v2.x - v1.x;
@@ -350,7 +348,7 @@ inline float Distance(vec v1, vec v2)
 	return sqrt(ySeparation*ySeparation + xSeparation*xSeparation);
 }
 
-inline float DistanceSq(vec v1, vec v2)
+[[nodiscard]] inline float DistanceSq(vec v1, vec v2)
 {
 	float ySeparation = v2.y - v1.y;
 	float xSeparation = v2.x - v1.x;
@@ -358,6 +356,15 @@ inline float DistanceSq(vec v1, vec v2)
 	return ySeparation*ySeparation + xSeparation*xSeparation;
 }
 
+[[nodiscard]] inline float AngleRads(vec v1, vec v2 = vec::Zero)
+{
+	return atan2(v1.y - v2.y, v1.x - v2.x);
+}
+
+[[nodiscard]] inline float AngleDegs(vec v1, vec v2 = vec::Zero)
+{
+	return Angles::RadsToDegs(AngleRads(v1, v2));
+}
 
 //------------------------------------------------------------------------operator overloads
 inline constexpr vec operator*(vec lhs, float rhs)
