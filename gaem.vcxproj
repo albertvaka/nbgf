@@ -62,6 +62,10 @@
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
+    <ClInclude Include="src\ship.h" />
+    <ClInclude Include="src\steering_behavior.h" />
+    <ClInclude Include="src\steering_behavior_applier.h" />
+    <ClInclude Include="src\steering_entity.h" />
     <ClInclude Include="src\window_conf.h" />
     <ClInclude Include="vendor\glew\GL\glew.h" />
     <ClInclude Include="vendor\glew\GL\glxew.h" />
@@ -113,6 +117,7 @@
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
+    <ClCompile Include="src\steering_behavior.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
