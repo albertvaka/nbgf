@@ -102,9 +102,6 @@
     <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\tweeny\tweeny.h">
       <Filter>Bundled Dependencies</Filter>
     </ClInclude>
@@ -240,6 +237,27 @@
     <ClInclude Include="src\scene_main.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\ship.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_behavior.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_behavior_applier.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\steering_entity.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stroke.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3_loader.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl2.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -297,9 +315,6 @@
       <Filter>Bundled Dependencies\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
     <ClCompile Include="generated\tiled_objects_entities.cpp">
@@ -367,6 +382,18 @@
     </ClCompile>
     <ClCompile Include="src\scene_main.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\steering_behavior.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stroke.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl2.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
