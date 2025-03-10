@@ -23,7 +23,7 @@ namespace Mates
 	//returns true if the parameter is equal to zero
 	[[nodiscard]] inline bool IsZero(float val)
 	{
-		return ((-MinFloat < val) && (val < MinFloat));
+		return (-MinFloat < val) && (val < MinFloat);
 	}
 
 	//returns true is the third parameter is in the range described by the first two
@@ -34,7 +34,6 @@ namespace Mates
 			if ((val > start) && (val < end)) return true;
 			else return false;
 		}
-
 		else
 		{
 			if ((val < start) && (val > end)) return true;
@@ -61,17 +60,10 @@ namespace Mates
 		return ((value + multiple - 1) / multiple) * multiple;
 	}
 
-	//-----------------------------------------------------------------------
-	//
-	//  some handy little functions
-	//-----------------------------------------------------------------------
-
-
 	[[nodiscard]] inline float Sigmoid(float input, float response = 1.0)
 	{
 		return (1.0f / (1.0f + exp(-input / response)));
 	}
-
 
 	//clamps the first argument between the second two
 	template <class T, class U, class V>
@@ -135,7 +127,6 @@ namespace Mates
 		{
 			return integral;
 		}
-
 		else
 		{
 			return integral + 1;
@@ -153,7 +144,6 @@ namespace Mates
 		{
 			return integral;
 		}
-
 		else
 		{
 			return integral + 1;
@@ -163,22 +153,12 @@ namespace Mates
 	//compares two real numbers. Returns true if they are equal
 	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12f)
 	{
-		if (fabs(a - b) < margin)
-		{
-			return true;
-		}
-
-		return false;
+		return (fabs(a - b) < margin);
 	}
 
 	[[nodiscard]] inline bool IsNearlyEqual(double a, double b, double margin = 1E-12)
 	{
-		if (fabs(a - b) < margin)
-		{
-			return true;
-		}
-
-		return false;
+		return (fabs(a - b) < margin);
 	}
 
 
@@ -194,7 +174,6 @@ namespace Mates
 
 		return average / (double)v.size();
 	}
-
 
 	[[nodiscard]] inline double StandardDeviation(const std::vector<double>& v)
 	{
@@ -219,11 +198,24 @@ namespace Mates
 	};
 
 	[[nodiscard]] inline Range SortTwo(float a, float b) {
-		if (a > b) {
+		if (a > b)
+		{
 			return Range{ b, a };
 		}
-		else {
+		else
+		{
 			return Range{ a, b };
 		}
 	}
+
+	[[nodiscard]] inline float Sign(float value)
+	{
+		return value >= 0? 1.f : -1.f;
+	}
+
+	[[nodiscard]] inline float Norm(float value)
+	{
+		return value * Sign(value);
+	}
+
 }
