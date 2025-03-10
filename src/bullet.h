@@ -35,7 +35,7 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 		Window::Draw(Assets::invadersTexture, pos)
 			.withRect(rect)
 			.withOrigin(vec(rect.w,rect.h)/2)
-			.withRotationDegs(Camera::Center().AngleDegs(pos) + 90)
+			.withRotationDegs(pos.AngleDegs(Camera::Center()) + 90)
 			.withScale(int(mainClock*4)%2 ? -1 : 1, 1);
 	}
 };

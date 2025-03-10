@@ -32,5 +32,5 @@ void Player::Draw() const
 	Window::Draw(Assets::invadersTexture, pos)
 		.withRect(animRect)
 		.withOrigin(vec(animRect.w, 0)/2)
-		.withRotationDegs(Camera::Center().AngleDegs(pos) + 90);
+		.withRotationDegs(pos.AngleDegs(Camera::Center()) + 90);
 }
