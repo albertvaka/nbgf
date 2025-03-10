@@ -4,6 +4,7 @@
 
 void Assets::LoadAll() {
 
+    shipTexture = LoadImage("data/ship.png");
     invadersTexture = LoadImage("data/invaders.png");
     backgroundTexture = LoadImage("data/bg.png");
 
