@@ -12,4 +12,5 @@ void Assets::LoadAll() {
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
+    seaShader.Load("data/vertex_out.vert", nullptr, "data/sea.frag");
 }
