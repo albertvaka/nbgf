@@ -14,6 +14,11 @@ namespace Camera
 		return vec(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
 	}
 
+	inline float AspectRatio()
+	{
+		return float(Window::GAME_WIDTH)/Window::GAME_HEIGHT;
+	}
+
 	inline vec Center()
 	{
 		return vec(camera.x, camera.y)-screenshake_offset;

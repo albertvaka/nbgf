@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "raw_input.h"
+#include "debug.h"
 
 namespace Camera {
     GPU_Camera camera;
@@ -38,11 +39,13 @@ namespace Camera {
         {
             zoom += zoomVel * dt;
             SetZoom(zoom);
+            Debug::out << "Zoom: " << zoom;
         }
         if (Keyboard::IsKeyPressed(SDL_SCANCODE_MINUS) || Keyboard::IsKeyPressed(SDL_SCANCODE_KP_MINUS)) {
             zoom -= zoomVel * dt;
             if (zoom < 0.01f) zoom = 0.01f;
             SetZoom(zoom);
+            Debug::out << "Zoom: " << zoom;
         }
     }
 
