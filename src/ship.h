@@ -16,8 +16,17 @@ public:
 
     Ship() {
 		stroke.SetMaxJoints(20);
-		stroke.SetInnerColor({ 255,255,255,0 });
+		stroke.SetInnerColor({ Uint8(0.1*255), Uint8(0.45*255), Uint8(0.73*255), 255});
+		stroke.SetOuterColor({ Uint8(0.7*255), Uint8(0.8*255), Uint8(0.9*255), 255});
 		stroke.SetEndThickness(0.0f);
+	}
+
+	void Reset() {
+		pos = vec::Zero;
+		vel = vec::Zero;
+		heading = vec(1,0);
+		timer = 0.f;
+		stroke.Clear();
 	}
 
 	void Update(float dt) {
@@ -51,7 +60,7 @@ public:
 		timer += dt;
 		if (timer > 0.15) {
 			timer -= 0.15;
-			stroke.AddJoint(pos ,9.f);
+			stroke.AddJoint(pos ,10.f);
 		}
 
 	}
@@ -69,7 +78,7 @@ public:
 	}
 
 private:
-	float timer = 0;
-	vec heading = vec(1,0);
+	float timer;
+	vec heading;
 	Stroke stroke;
 };

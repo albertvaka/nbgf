@@ -19,6 +19,8 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
+	ship.Reset();
+	Camera::SetZoom(0.7);
 }
 
 void SceneMain::ExitScene()
@@ -46,8 +48,12 @@ void SceneMain::Draw()
 {
 	Window::Clear(0, 162, 232);
 
-	Window::Draw(Assets::backgroundTexture, vec(0,0))
-		.withOrigin(Assets::backgroundTexture->w / 2, Assets::backgroundTexture->h / 2);
+	Assets::seaShader.Activate();
+	Assets::seaShader.SetUniform("offset", Camera::Center());
+	Assets::seaShader.SetUniform("cameraSize", Camera::Size());
+	Assets::seaShader.SetUniform("iTime", mainClock);
+	Window::Draw(Assets::backgroundTexture, Camera::Bounds());
+	Assets::seaShader.Deactivate();
 
 	ship.DrawStroke();
 	ship.Draw();
