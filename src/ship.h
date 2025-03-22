@@ -27,7 +27,8 @@ public:
 		outerStroke.SetStartOuterColor(foamColor);
 		outerStroke.SetEndInnerColor(alphaSurfaceColor);
 		outerStroke.SetEndOuterColor(alphaSurfaceColor);
-		outerStroke.SetStartThickness(0.1f);
+		outerStroke.SetStartThickness(0.2f);
+		outerStroke.SetOffset(-0.9f);
 		outerStroke.SetColorOffset(25.f);
 
 		innerStroke.SetMaxJoints(100);
@@ -35,9 +36,9 @@ public:
 		innerStroke.SetStartOuterColor(surfaceColor);
 		innerStroke.SetEndInnerColor(alphaSurfaceColor);
 		innerStroke.SetEndOuterColor(alphaSurfaceColor);
-		innerStroke.SetStartThickness(0.1f);
+		innerStroke.SetStartThickness(0.2f);
+		innerStroke.SetOffset(-0.9f);
 		innerStroke.SetColorOffset(25.0f);
-
 	}
 
 	void Reset() {
@@ -84,8 +85,8 @@ public:
 		timer += dt;
 		if (timer > timeBetweenStrokeSegments) {
 			timer -= timeBetweenStrokeSegments;
-			innerStroke.AddJoint(pos, std::max(speed / max_speed, 0.3f) * 3.5f * 10.f + sin(distanceSailed * 0.008f) * 2.f);
-			outerStroke.AddJoint(pos, std::max(speed / max_speed, 0.3f) * 3.5f * 14.f + sin(distanceSailed * 0.008f) * 2.f);
+			innerStroke.AddJoint(pos, std::max(speed / max_speed, 0.3f) * 3.5f * 15.f + sin(distanceSailed * 0.008f) * 2.f);
+			outerStroke.AddJoint(pos, std::max(speed / max_speed, 0.3f) * 3.5f * 20.f + sin(distanceSailed * 0.008f) * 2.f);
 		}
 
 	}
