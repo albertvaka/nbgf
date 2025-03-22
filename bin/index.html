@@ -26,7 +26,6 @@
           flex: 1;
           width: 100%;
           min-height: 0;
-          background-color: black; // See: https://webglfundamentals.org/webgl/lessons/webgl-and-alpha.html
       }
       #status {
           background-color: hsl(60,20%,90%);
@@ -41,16 +40,21 @@
     <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1 onmouseenter="window.focus()" onclick="window.focus()"></canvas>
 
     <script type='text/javascript'>
+      let canvas = document.getElementById('canvas');
+      let gl = canvas.getContext("webgl2", {
+         alpha: false, // See: https://webglfundamentals.org/webgl/lessons/webgl-and-alpha.html
+      });
       var Module = {
           // List of all callbacks here: https://emscripten.org/docs/api_reference/module.html
           print: console.log,
           printErr: console.error,
+          canvas: canvas,
+          preinitializedWebGLContext: gl,
           setStatus: (function(text) {
               var element = document.getElementById('status');
               if (element) element.textContent = ''; // clear browser cache
               return function(text) { element.textContent = text; };
           })(),
-          canvas: document.getElementById('canvas'),
       };
       if ('wakeLock' in navigator) {
         let wakeLock = null;
