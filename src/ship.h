@@ -99,8 +99,8 @@ public:
 	}
 	
 	void DrawStroke() {
-		outerStroke.Draw();
 		innerStroke.Draw();
+		outerStroke.DrawExcluding(innerStroke);
 	}
 
 private:
