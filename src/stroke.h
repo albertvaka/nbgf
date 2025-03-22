@@ -127,6 +127,7 @@ class Stroke
 		/// the stroke is composed with gradient polygons.
 		////////////////////////////////////////////////////////////
 		void DrawSolid() const;
+		void DrawSolidExcluding(const Stroke& other) const;
 
 		////////////////////////////////////////////////////////////
 		/// Draw a bloc in the DrawSolid function
@@ -137,6 +138,7 @@ class Stroke
 		/// \param previous_joint Identifier of the previous joint
 		////////////////////////////////////////////////////////////
 		void DrawSolidBloc(unsigned int current_joint, unsigned int previous_joint) const;
+		void DrawSolidBlocExcluding(const Stroke& other, unsigned int current_joint, unsigned int previous_joint) const;
 
 		////////////////////////////////////////////////////////////
 		/// Compile the stroke
@@ -217,6 +219,7 @@ class Stroke
 		/// The function will compile the stroke and its length if needed.
 		////////////////////////////////////////////////////////////
 		void Draw() const;
+		void DrawExcluding(const Stroke& other) const;
 
 		////////////////////////////////////////////////////////////
 		/// Get the linear speed applied to the points

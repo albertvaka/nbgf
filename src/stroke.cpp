@@ -393,6 +393,25 @@ void Stroke::Draw() const
 	DrawSolid();
 }
 
+void Stroke::DrawExcluding(const Stroke& other) const
+{
+	if (!is_compiled)
+		if (!const_cast<Stroke*>(this)->Compile())
+			return;
+
+	if (!other.is_compiled)
+		if (!const_cast<Stroke*>(&other)->Compile())
+			return;
+
+	if (shaking)
+		const_cast<Stroke*>(this)->ComputeOffset();
+
+	if (other.shaking)
+		const_cast<Stroke*>(this)->ComputeOffset();
+
+	DrawSolidExcluding(other);
+}
+
 void Stroke::DrawSolid() const
 {
 	for (unsigned int i = 1; i < joints.size(); i++)
@@ -400,6 +419,15 @@ void Stroke::DrawSolid() const
 
 	if (loop)
 		DrawSolidBloc(0, joints.size() - 1);
+}
+
+void Stroke::DrawSolidExcluding(const Stroke& other) const
+{
+	for (unsigned int i = 1; i < joints.size(); i++)
+		DrawSolidBlocExcluding(other, i, i - 1);
+
+	if (loop)
+		DrawSolidBlocExcluding(other, 0, joints.size() - 1);
 }
 
 void Stroke::DrawSolidBloc(unsigned int current_joint, unsigned int previous_joint) const
@@ -451,6 +479,77 @@ void Stroke::DrawSolidBloc(unsigned int current_joint, unsigned int previous_joi
 		joints[previous_joint].inner_color.a / 255.f,
 		center_next.x,
 		center_next.y,
+		joints[current_joint].inner_color.r / 255.f,
+		joints[current_joint].inner_color.g / 255.f,
+		joints[current_joint].inner_color.b / 255.f,
+		joints[current_joint].inner_color.a / 255.f,
+		lower_previous.x,
+		lower_previous.y,
+		joints[previous_joint].outer_color.r / 255.f,
+		joints[previous_joint].outer_color.g / 255.f,
+		joints[previous_joint].outer_color.b / 255.f,
+		joints[previous_joint].outer_color.a / 255.f,
+		lower_next.x,
+		lower_next.y,
+		joints[current_joint].outer_color.r / 255.f,
+		joints[current_joint].outer_color.g / 255.f,
+		joints[current_joint].outer_color.b / 255.f,
+		joints[current_joint].outer_color.a / 255.f
+	};
+	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, second, 4, indices, GPU_BATCH_XY_RGBA);
+}
+
+void Stroke::DrawSolidBlocExcluding(const Stroke& other, unsigned int current_joint, unsigned int previous_joint) const
+{
+	vec upper_previous = ((stippling) ? joints[previous_joint].upper_point * (1.f - stippling / 2.f) + joints[current_joint].upper_point * (stippling / 2.f) : joints[previous_joint].upper_point) + joints[previous_joint].offset;
+	vec upper_next = ((stippling) ? joints[current_joint].upper_point * (1.f - stippling / 2.f) + joints[previous_joint].upper_point * (stippling / 2.f) : joints[current_joint].upper_point) + joints[current_joint].offset;
+	vec lower_previous = ((stippling) ? joints[previous_joint].lower_point * (1.f - stippling / 2.f) + joints[current_joint].lower_point * (stippling / 2.f) : joints[previous_joint].lower_point) + joints[previous_joint].offset;
+	vec lower_next = ((stippling) ? joints[current_joint].lower_point * (1.f - stippling / 2.f) + joints[previous_joint].lower_point * (stippling / 2.f) : joints[current_joint].lower_point) + joints[current_joint].offset;
+
+	vec other_upper_previous = ((other.stippling) ? other.joints[previous_joint].upper_point * (1.f - other.stippling / 2.f) + other.joints[current_joint].upper_point * (other.stippling / 2.f) : other.joints[previous_joint].upper_point) + other.joints[previous_joint].offset;
+	vec other_upper_next = ((other.stippling) ? other.joints[current_joint].upper_point * (1.f - other.stippling / 2.f) + other.joints[previous_joint].upper_point * (other.stippling / 2.f) : other.joints[current_joint].upper_point) + other.joints[current_joint].offset;
+	vec other_lower_previous = ((other.stippling) ? other.joints[previous_joint].lower_point * (1.f - other.stippling / 2.f) + other.joints[current_joint].lower_point * (other.stippling / 2.f) : other.joints[previous_joint].lower_point) + other.joints[previous_joint].offset;
+	vec other_lower_next = ((other.stippling) ? other.joints[current_joint].lower_point * (1.f - other.stippling / 2.f) + other.joints[previous_joint].lower_point * (other.stippling / 2.f) : other.joints[current_joint].lower_point) + other.joints[current_joint].offset;
+
+	unsigned short indices[] = { 0, 1, 2, 3 };
+
+	float first[] = {
+		other_upper_previous.x,
+		other_upper_previous.y,
+		joints[previous_joint].inner_color.r / 255.f,
+		joints[previous_joint].inner_color.g / 255.f,
+		joints[previous_joint].inner_color.b / 255.f,
+		joints[previous_joint].inner_color.a / 255.f,
+		other_upper_next.x,
+		other_upper_next.y,
+		joints[current_joint].inner_color.r / 255.f,
+		joints[current_joint].inner_color.g / 255.f,
+		joints[current_joint].inner_color.b / 255.f,
+		joints[current_joint].inner_color.a / 255.f,
+		upper_previous.x,
+		upper_previous.y,
+		joints[previous_joint].outer_color.r / 255.f,
+		joints[previous_joint].outer_color.g / 255.f,
+		joints[previous_joint].outer_color.b / 255.f,
+		joints[previous_joint].outer_color.a / 255.f,
+		upper_next.x,
+		upper_next.y,
+		joints[current_joint].outer_color.r / 255.f,
+		joints[current_joint].outer_color.g / 255.f,
+		joints[current_joint].outer_color.b / 255.f,
+		joints[current_joint].outer_color.a / 255.f
+	};
+	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, first, 4, indices, GPU_BATCH_XY_RGBA);
+
+	float second[] = {
+		other_lower_previous.x,
+		other_lower_previous.y,
+		joints[previous_joint].inner_color.r / 255.f,
+		joints[previous_joint].inner_color.g / 255.f,
+		joints[previous_joint].inner_color.b / 255.f,
+		joints[previous_joint].inner_color.a / 255.f,
+		other_lower_next.x,
+		other_lower_next.y,
 		joints[current_joint].inner_color.r / 255.f,
 		joints[current_joint].inner_color.g / 255.f,
 		joints[current_joint].inner_color.b / 255.f,
