@@ -72,7 +72,7 @@ void sea(out vec4 fragColor, in vec2 coord) {
 void main(void)
 {
     vec2 coord = vertex*cameraSize + offset;
-    coord /= 300000;
+    coord /= 300000.0;
     coord.y *= cameraSize.x/cameraSize.y;
     sea(fragColor, coord);
 }
