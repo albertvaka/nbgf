@@ -10,7 +10,7 @@
 
 const float deceleration_coef = 0.3;
 const float max_speed = 220.f;
-const float timeBetweenStrokeSegments = 0.06f;
+const float timeBetweenStrokeSegments = 0.05f;
 
 extern float mainClock;
 
@@ -18,11 +18,26 @@ class Ship : public Entity {
 public:
 
     Ship() {
-		stroke.SetMaxJoints(50);
 		SDL_Color foamColor = { Uint8(0.7 * 255), Uint8(0.8 * 255), Uint8(0.9 * 255), 255 };
-		stroke.SetInnerColor(foamColor);
-		stroke.SetOuterColor(foamColor);
-		stroke.SetEndThickness(0.0f);
+		SDL_Color surfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 255 };
+		SDL_Color alphaSurfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 0 };
+
+		outerStroke.SetMaxJoints(100);
+		outerStroke.SetStartInnerColor(foamColor);
+		outerStroke.SetStartOuterColor(foamColor);
+		outerStroke.SetEndInnerColor(alphaSurfaceColor);
+		outerStroke.SetEndOuterColor(alphaSurfaceColor);
+		outerStroke.SetStartThickness(0.1f);
+		outerStroke.SetColorOffset(25.f);
+
+		innerStroke.SetMaxJoints(100);
+		innerStroke.SetStartInnerColor(surfaceColor);
+		innerStroke.SetStartOuterColor(surfaceColor);
+		innerStroke.SetEndInnerColor(alphaSurfaceColor);
+		innerStroke.SetEndOuterColor(alphaSurfaceColor);
+		innerStroke.SetStartThickness(0.1f);
+		innerStroke.SetColorOffset(25.0f);
+
 	}
 
 	void Reset() {
@@ -30,7 +45,9 @@ public:
 		vel = vec::Zero;
 		heading = vec(1,0);
 		timer = 0.f;
-		stroke.Clear();
+		distanceSailed = 0.f;
+		innerStroke.Clear();
+		outerStroke.Clear();
 	}
 
 	void Update(float dt) {
@@ -59,12 +76,16 @@ public:
 		vel.Truncate(max_speed);
 		pos += vel * dt;
 
-		stroke.Calculate(dt);
+		distanceSailed += vel.Length();
+
+		innerStroke.Calculate(dt);
+		outerStroke.Calculate(dt);
 
 		timer += dt;
 		if (timer > timeBetweenStrokeSegments) {
 			timer -= timeBetweenStrokeSegments;
-			stroke.AddJoint(pos, 10.f + sin(mainClock * 8.f) * 2.f);
+			innerStroke.AddJoint(pos, std::max(speed / max_speed, 0.3f) * 3.5f * 10.f + sin(distanceSailed * 0.008f) * 2.f);
+			outerStroke.AddJoint(pos, std::max(speed / max_speed, 0.3f) * 3.5f * 14.f + sin(distanceSailed * 0.008f) * 2.f);
 		}
 
 	}
@@ -78,11 +99,14 @@ public:
 	}
 	
 	void DrawStroke() {
-		stroke.Draw();
+		outerStroke.Draw();
+		innerStroke.Draw();
 	}
 
 private:
 	float timer;
 	vec heading;
-	Stroke stroke;
+	Stroke innerStroke;
+	Stroke outerStroke;
+	float distanceSailed;
 };
