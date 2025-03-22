@@ -31,6 +31,9 @@
     <Filter Include="generated\scripts">
       <UniqueIdentifier>{d6e4d2bd-646e-4331-b6ee-a4bfa2c9f6ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{99825771-5cf7-4d04-a963-3ae6147b6034}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\imgui\imconfig.h">
@@ -409,6 +412,21 @@
     </None>
     <None Include="asset_src\texturepacker2cpp.py">
       <Filter>generated\scripts</Filter>
+    </None>
+    <None Include="bin\data\default.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\data\sea.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\data\tint.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\data\vertex_out.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\data\default.vert">
+      <Filter>shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
