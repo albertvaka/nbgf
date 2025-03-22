@@ -432,4 +432,7 @@
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Credits.txt" />
+  </ItemGroup>
 </Project>
