@@ -1,0 +1,2 @@
+Pirate ship by Bleed - http://remusprites.carbonmade.com/
+Perlin Noise GLSL implementation by XorDev - https://mini.gmshaders.com/p/gm-shaders-mini-noise-1437243
