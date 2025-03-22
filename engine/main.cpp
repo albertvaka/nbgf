@@ -24,7 +24,6 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
-#include "GL/glew.h"
 #endif
 
 #ifdef _DEBUG
@@ -120,7 +119,7 @@ void init() {
 	if (Mix_Init(MIX_INIT_OGG) == 0) {
 		Debug::out << Mix_GetError();
 	}
-	
+
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
 		Debug::out << Mix_GetError();
 	}
@@ -128,10 +127,6 @@ void init() {
 	if (Window::Init() != 0) {
 		exit(1);
 	}
-	
-#ifdef __EMSCRIPTEN__
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-#endif
 
 	srand(std::chrono::system_clock::now().time_since_epoch().count());
 
