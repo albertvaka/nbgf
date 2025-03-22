@@ -98,6 +98,7 @@ class Stroke
 		float						start_thickness;	///< Thickness at the start of the stroke
 		float						end_thickness;		///< Thickness at the end of the stroke
 		float						stroke_offset;		///< Position of the separation between start and end
+		float						color_offset;		///< Position of the separation between start and end for color interpolation
 		float						start_sweep;		///< Amplitude of the sweep effect at the start
 		float						end_sweep;			///< Amplitude of the sweep effect at the end
 		SweepStyle					start_sweep_style;	///< Effect used at the start of the stroke
@@ -338,6 +339,17 @@ class Stroke
 		////////////////////////////////////////////////////////////
 		float GetOffset() const {
 			return stroke_offset;
+		}
+
+		////////////////////////////////////////////////////////////
+		/// Get the offset separating the start from the end of the stroke for color interpolation.
+		///
+		/// \return	The offset
+		///
+		/// \see SetColorOffset
+		////////////////////////////////////////////////////////////
+		float GetColorOffset() const {
+			return color_offset;
 		}
 
 		////////////////////////////////////////////////////////////
@@ -696,7 +708,7 @@ class Stroke
 		///
 		/// Having a stroke with tapered start and end give it a more
 		/// organic look. The offset allow you to move the separation
-		/// between each part of the stroke (start and end) along the strok.
+		/// between each part of the stroke (start and end) along the stroke.
 		/// An offset of 1 will move it to the start of the stroke,
 		/// an offset of -1 will move it at the end and an offset of
 		/// 0 keep it at midway of the stroke.
@@ -710,6 +722,20 @@ class Stroke
 		/// \see GetOffset
 		////////////////////////////////////////////////////////////
 		void SetOffset(float stroke_offset);
+
+		////////////////////////////////////////////////////////////
+		/// Set the color offset of the stroke
+		///
+		/// Defines when the color will change between start and end.
+		///
+		/// Default value : 0
+		///
+		///	\param color_offset Color offset of the stroke. Higher values 
+		///                     make the gradient change more towards the end.
+		///
+		/// \see GetOffset
+		////////////////////////////////////////////////////////////
+		void SetColorOffset(float color_offset);
 
 		////////////////////////////////////////////////////////////
 		/// Set the sweep of the stroke

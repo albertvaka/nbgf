@@ -32,6 +32,7 @@ Stroke::Stroke() :
 	start_thickness(1),
 	end_thickness(1),
 	stroke_offset(0),
+	color_offset(0.f),
 	start_sweep(0),
 	end_sweep(0),
 	start_sweep_style(SweepStyle::Soft),
@@ -123,6 +124,13 @@ void Stroke::SetOffset(float stroke_offset)
 {
 	SDL_assert(stroke_offset >= -1.f && stroke_offset <= 1.f);
 	this->stroke_offset = stroke_offset;
+	is_compiled = false;
+}
+
+void Stroke::SetColorOffset(float color_offset)
+{
+	SDL_assert(color_offset >= 0.f);
+	this->color_offset = color_offset;
 	is_compiled = false;
 }
 
@@ -560,6 +568,9 @@ bool Stroke::Compile()
 		joints[i].thickness = ComputeThickness(alpha, off, t);
 		joints[i].upper_point = joints[i].position + vec::FromAngleDegs(joints[i].angle + 90, joints[i].thickness);
 		joints[i].lower_point = joints[i].position + vec::FromAngleDegs(joints[i].angle - 90, joints[i].thickness);
+		if (color_offset > 0) {
+			alpha = 1.0 - std::exp(-color_offset * (l / total_length));
+		}
 		joints[i].inner_color = ColorInterpolation(start_inner_color, end_inner_color, alpha);
 		joints[i].outer_color = ColorInterpolation(start_outer_color, end_outer_color, alpha);
 	}
