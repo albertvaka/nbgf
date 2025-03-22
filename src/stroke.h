@@ -124,9 +124,6 @@ class Stroke
 		///
 		/// DrawSolid draw the stroke with a solid style, meaning
 		/// the stroke is composed with gradient polygons.
-		///
-		/// \param target   Render target
-		/// \param renderer Renderer providing low-level rendering commands
 		////////////////////////////////////////////////////////////
 		void DrawSolid() const;
 
@@ -135,8 +132,6 @@ class Stroke
 		///
 		/// A 'bloc' is one of the polygons drawn to form the final stroke.
 		///
-		/// \param target   Render target
-		/// \param renderer Renderer providing low-level rendering commands
 		/// \param current_joint Identifier of the current joint
 		/// \param previous_joint Identifier of the previous joint
 		////////////////////////////////////////////////////////////
@@ -216,13 +211,9 @@ class Stroke
 		Stroke();
 
 		////////////////////////////////////////////////////////////
-		/// 3 the object to a render target
-		///
 		/// Render the stroke.
-		/// The function will compile the stroke and its length if needed.
 		///
-		/// \param target   Render target
-		/// \param renderer Renderer providing low-level rendering commands
+		/// The function will compile the stroke and its length if needed.
 		////////////////////////////////////////////////////////////
 		void Draw() const;
 
@@ -779,16 +770,11 @@ class Stroke
 		/// The sweep style is the shape the tapered stroke will take
 		/// with a sweep greater than 0.
 		///
-		/// The sweep style allow the following style :
-		///	- Sin: the stroke will be lightly rounded
-		///	- Sin2: the stroke will be more rounded,
-		///	- Sin3: the stroke will be even more rounded,
-		///	- SquareSin : the stroke will have a piercing look, rounding
-		///				  the more it get closer to the offset position
+		/// The sweep style can be Soft, Softer or Sharp.
 		///
 		/// SetSweepStyle set the sweep style for both start and end of the stroke.
 		///
-		/// Default value : e_Sin for both side
+		/// Default value: Soft
 		///
 		///	\param sweep_style Sweep style of the stroke
 		///
@@ -802,14 +788,9 @@ class Stroke
 		/// The sweep style is the shape the tapered stroke will take
 		/// with a sweep greater than 0.
 		///
-		/// The sweep style allow the following style :
-		///	- Sin: the stroke will be lightly rounded
-		///	- Sin2: the stroke will be more rounded,
-		///	- Sin3: the stroke will be even more rounded,
-		///	- SquareSin : the stroke will have a piercing look, rounding
-		///				  the more it get closer to the offset position
+		/// The sweep style can be Soft, Softer or Sharp.
 		///
-		/// Default value : e_Sin
+		/// Default value: Soft
 		///
 		///	\param start_sweep_style Sweep style at the start of the stroke
 		///
@@ -823,14 +804,9 @@ class Stroke
 		/// The sweep style is the shape the tapered stroke will take
 		/// with a sweep greater than 0.
 		///
-		/// The sweep style allow the following style :
-		///	- Sin: the stroke will be lightly rounded
-		///	- Sin2: the stroke will be more rounded,
-		///	- Sin3: the stroke will be even more rounded,
-		///	- SquareSin : the stroke will have a piercing look, rounding
-		///				  the more it get closer to the offset position
+		/// The sweep style can be Soft, Softer or Sharp.
 		///
-		/// Default value : e_Sin
+		/// Default value : Soft
 		///
 		///	\param end_sweep_style Sweep style at the end of the stroke
 		///

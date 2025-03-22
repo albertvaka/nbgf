@@ -121,7 +121,7 @@ void Stroke::SetEndThickness(float end_thickness)
 
 void Stroke::SetOffset(float stroke_offset)
 {
-	SDL_assert(stroke_offset >= 0.f && stroke_offset <= 1.f);
+	SDL_assert(stroke_offset >= -1.f && stroke_offset <= 1.f);
 	this->stroke_offset = stroke_offset;
 	is_compiled = false;
 }
