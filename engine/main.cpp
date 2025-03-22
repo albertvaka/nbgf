@@ -24,6 +24,7 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
+#include "GL/glew.h"
 #endif
 
 #ifdef _DEBUG
@@ -127,6 +128,10 @@ void init() {
 	if (Window::Init() != 0) {
 		exit(1);
 	}
+	
+#ifdef __EMSCRIPTEN__
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
 
 	srand(std::chrono::system_clock::now().time_since_epoch().count());
 
