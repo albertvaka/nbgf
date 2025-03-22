@@ -33,15 +33,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="vendor\glew\glew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\glew\glxew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\glew\wglew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\imgui\imconfig.h">
       <Filter>Bundled Dependencies\imgui</Filter>
     </ClInclude>
@@ -100,9 +91,6 @@
       <Filter>Bundled Dependencies\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
     <ClInclude Include="vendor\tweeny\tweeny.h">
@@ -240,6 +228,21 @@
     <ClInclude Include="src\scene_main.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\glew\GL\wglew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\glew\GL\glew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\glew\GL\glxew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3_loader.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl2.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -297,9 +300,6 @@
       <Filter>Bundled Dependencies\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
-    </ClCompile>
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
     <ClCompile Include="generated\tiled_objects_entities.cpp">
@@ -367,6 +367,12 @@
     </ClCompile>
     <ClCompile Include="src\scene_main.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl2.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp">
+      <Filter>Bundled Dependencies\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
