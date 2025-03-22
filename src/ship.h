@@ -10,14 +10,18 @@
 
 const float deceleration_coef = 0.3;
 const float max_speed = 220.f;
+const float timeBetweenStrokeSegments = 0.06f;
+
+extern float mainClock;
 
 class Ship : public Entity {
 public:
 
     Ship() {
-		stroke.SetMaxJoints(20);
-		stroke.SetInnerColor({ Uint8(0.1*255), Uint8(0.45*255), Uint8(0.73*255), 255});
-		stroke.SetOuterColor({ Uint8(0.7*255), Uint8(0.8*255), Uint8(0.9*255), 255});
+		stroke.SetMaxJoints(50);
+		SDL_Color foamColor = { Uint8(0.7 * 255), Uint8(0.8 * 255), Uint8(0.9 * 255), 255 };
+		stroke.SetInnerColor(foamColor);
+		stroke.SetOuterColor(foamColor);
 		stroke.SetEndThickness(0.0f);
 	}
 
@@ -58,9 +62,9 @@ public:
 		stroke.Calculate(dt);
 
 		timer += dt;
-		if (timer > 0.15) {
-			timer -= 0.15;
-			stroke.AddJoint(pos ,10.f);
+		if (timer > timeBetweenStrokeSegments) {
+			timer -= timeBetweenStrokeSegments;
+			stroke.AddJoint(pos, 10.f + sin(mainClock * 8.f) * 2.f);
 		}
 
 	}
