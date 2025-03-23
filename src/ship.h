@@ -7,6 +7,7 @@
 #include "input.h"
 #include "steering_behavior.h"
 #include "stroke.h"
+#include "particles.h"
 
 const float deceleration_coef = 0.3;
 const float max_speed = 220.f;
@@ -91,6 +92,10 @@ public:
 			outerStroke.AddJoint(pos, thickness * 20.f + wobblyness);
 		}
 
+		Particles::waterTrail.pos = pos;
+		if (speed/max_speed > 0.5) {
+			Particles::waterTrail.Spawn(dt);
+		}
 	}
 
 	void Draw() {

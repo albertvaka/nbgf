@@ -7,6 +7,7 @@
 #include "bullet.h"
 #include "alien.h"
 #include "collide.h"
+#include "particles.h"
 #include "debug.h"
 
 float kAlienMinDistance = 300;
@@ -15,6 +16,7 @@ float kAlienMaxDistance = 400;
 SceneMain::SceneMain()
 	: ship()
 {
+	Particles::Init();
 }
 
 void SceneMain::EnterScene() 
@@ -25,6 +27,7 @@ void SceneMain::EnterScene()
 
 void SceneMain::ExitScene()
 {
+	Particles::ClearAll();
 }
 
 void SceneMain::Update(float dt)
@@ -42,6 +45,7 @@ void SceneMain::Update(float dt)
 	Camera::SetCenter(ship.pos);
 
 	ship.Update(dt);
+	Particles::UpdateAll(dt);
 }
 
 void SceneMain::Draw()
@@ -58,7 +62,10 @@ void SceneMain::Draw()
 	Assets::seaShader.Deactivate();
 
 	ship.DrawStroke();
+	Particles::waterTrail.Draw();
 	ship.Draw();
+
+	Particles::waterTrail.DrawImGUI();
 
 #ifdef _IMGUI
 	{
