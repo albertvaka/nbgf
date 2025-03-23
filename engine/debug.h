@@ -16,6 +16,7 @@ namespace Debug {
     static const bool FastForward = false;
     static const bool CameraFixed = false;
 #endif
+    inline float DebugDrawScale = 1.f;
     extern std::ostream& _forwarded_out;
     extern void timed(std::function<void()> f);
 };
