@@ -30,8 +30,8 @@ struct vec
 	static const vec Zero;
 
 	//Angle to direction
-	[[nodiscard]] static vec FromAngleRads(float rads, float len=1.0f) {
-		return vec(cos(rads)*len, sin(rads)*len);
+	[[nodiscard]] static vec FromAngleRads(float rads, float len = 1.0f) {
+		return vec(cos(rads) * len, sin(rads) * len);
 	}
 
 	//Angle to direction
@@ -208,12 +208,20 @@ struct vec
 	{}
 #endif
 
+	template<typename T> void DebugDrawAsArrow(vec from, T c) const { 
+		DebugDrawAsArrow(from, c.r, c.g, c.b); 
+	}
+
 	void DebugDraw(uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const
 #ifdef _DEBUG
 	;
 #else
 	{}
 #endif
+
+	template<typename T> void DebugDraw(T c) const {
+		DebugDraw(c.r, c.g, c.b); 
+	}
 };
 
 inline constexpr vec vec::Zero = vec(0,0);
