@@ -21,6 +21,7 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
+	Debug::DebugDrawScale = 3.f;
 	ship.Reset();
 	Camera::SetZoom(0.7);
 }
@@ -41,8 +42,6 @@ void SceneMain::Update(float dt)
 		return;
 	}
 #endif
-
-	Camera::SetCenter(ship.pos);
 
 	ship.Update(dt);
 	Particles::UpdateAll(dt);
