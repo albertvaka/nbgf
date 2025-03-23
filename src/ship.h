@@ -4,12 +4,14 @@
 #include "assets.h"
 #include "window_draw.h"
 #include "debug.h"
+#include "camera.h"
+#include "tweeny.h"
 #include "input.h"
 #include "steering_behavior.h"
 #include "stroke.h"
 #include "particles.h"
 
-const float deceleration_coef = 0.3;
+const float deceleration_coef = 0.3f;
 const float max_speed = 220.f;
 const float timeBetweenStrokeSegments = 0.05f;
 
@@ -50,6 +52,7 @@ public:
 		distanceSailed = 0.f;
 		innerStroke.Clear();
 		outerStroke.Clear();
+		Camera::SetCenter(pos);
 	}
 
 	void Update(float dt) {
@@ -74,11 +77,11 @@ public:
 			heading.Normalize();
 		}
 
+		Mates::Clamp(speed, 0.f, max_speed);
 		vel = speed*heading;
-		vel.Truncate(max_speed);
 		pos += vel * dt;
 
-		distanceSailed += vel.Length();
+		distanceSailed += speed;
 
 		innerStroke.Calculate(dt);
 		outerStroke.Calculate(dt);
@@ -96,6 +99,15 @@ public:
 		if (speed/max_speed > 0.5) {
 			Particles::waterTrail.Spawn(dt);
 		}
+
+		float camZoomChangeThreshold = max_speed / 2.f;
+		float zoomChange = tweeny::easing::quadraticInOut.run(std::max(0.f, speed - camZoomChangeThreshold) / (max_speed - camZoomChangeThreshold), 0.f, 0.3f);
+		Camera::SetZoom(0.9 - zoomChange); // TODO: Make it smooth transition if you were accelerating and stop half-way or the other way around (maybe by keeping a zoom speed variable?)
+		vec camTarget = pos + heading * 300.f * speed / max_speed;
+		vec camPos = Camera::Center();
+		vec camDiff = camTarget - camPos;
+		vec camMovement = camDiff / 20.f;
+		Camera::SetCenter(camPos + camMovement);
 	}
 
 	void Draw() {
