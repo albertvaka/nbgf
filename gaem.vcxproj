@@ -59,6 +59,7 @@
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\input_conf.h" />
+    <ClInclude Include="src\particles.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
@@ -116,6 +117,7 @@
     <ClCompile Include="generated\tiled_tilemap.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
+    <ClCompile Include="src\particles.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
     <ClCompile Include="src\steering_behavior.cpp" />
