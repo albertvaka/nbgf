@@ -49,6 +49,7 @@ void SceneMain::Draw()
 	Window::Draw(Assets::backgroundTexture, vec(0,0))
 		.withOrigin(Assets::backgroundTexture->w / 2, Assets::backgroundTexture->h / 2);
 
+	ship.DrawStroke();
 	ship.Draw();
 
 #ifdef _IMGUI
