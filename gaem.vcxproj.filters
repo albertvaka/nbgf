@@ -261,6 +261,9 @@
     <ClInclude Include="vendor\glew\GL\glew.h">
       <Filter>Bundled Dependencies\glew</Filter>
     </ClInclude>
+    <ClInclude Include="src\particles.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -397,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl2.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particles.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
