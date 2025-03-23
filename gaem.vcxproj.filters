@@ -52,15 +52,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="vendor\glew\glew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\glew\glxew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\glew\wglew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\magic_enum\magic_enum.h">
       <Filter>Bundled Dependencies</Filter>
     </ClInclude>
@@ -418,7 +409,19 @@
     <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3_loader.h">
       <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
+    <ClInclude Include="src\scene_intro.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\glew\GL\glew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\glew\GL\glxew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\glew\GL\wglew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl2.h">
       <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClInclude>
   </ItemGroup>
@@ -663,7 +666,10 @@
     <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp">
       <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
+    <ClCompile Include="src\scene_intro.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl2.cpp">
       <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClCompile>
   </ItemGroup>

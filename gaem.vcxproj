@@ -117,9 +117,9 @@
     <ClInclude Include="src\trigger.h" />
     <ClInclude Include="src\window_conf.h" />
     <ClInclude Include="src\zonemanager.h" />
-    <ClInclude Include="vendor\glew\glew.h" />
-    <ClInclude Include="vendor\glew\glxew.h" />
-    <ClInclude Include="vendor\glew\wglew.h" />
+    <ClInclude Include="vendor\glew\GL\glew.h" />
+    <ClInclude Include="vendor\glew\GL\glxew.h" />
+    <ClInclude Include="vendor\glew\GL\wglew.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\imgui\imgui_internal.h" />
