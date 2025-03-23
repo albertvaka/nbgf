@@ -50,7 +50,7 @@ void CircleBounds::DebugDraw(uint8_t r, uint8_t g, uint8_t b) const
     debugbounds.emplace_back(Center(), r, g, b).radius = radius;
 }
 
-void vec::DebugDrawAsArrow(vec from, uint8_t r, uint8_t g, uint8_t b) const 
+void vec::DebugDrawAsArrow(vec from, uint8_t r, uint8_t g, uint8_t b) const
 {
     if (inSceneDraw && !Debug::Draw) return;
     debugarrows.emplace_back(*this, r, g, b).from = from;
@@ -86,17 +86,17 @@ void AfterSceneDraw()
     if (Debug::Draw) {
 
         for (const debugvec& v : debugvecs) {
-            Window::DrawPrimitive::Rectangle(v.v - vec(2, 2), v.v + vec(2, 2), 1, v.color);
+            Window::DrawPrimitive::Rectangle(v.v - vec(2, 2) * Debug::DebugDrawScale, v.v + vec(2, 2) * Debug::DebugDrawScale, 1*Debug::DebugDrawScale, v.color);
         }
         for (const debugvec& v : debugarrows) {
-            Window::DrawPrimitive::Arrow(v.from, v.from + v.v, 1, 3, v.color);
+            Window::DrawPrimitive::Arrow(v.from, v.from + v.v, 1 * Debug::DebugDrawScale, 3 * Debug::DebugDrawScale, v.color);
         }
         for (const debugvec& v : debugbounds) {
             if (v.radius < 0) {
-                Window::DrawPrimitive::Rectangle(v.v, v.from, 1, v.color);
+                Window::DrawPrimitive::Rectangle(v.v, v.from, 1 * Debug::DebugDrawScale, v.color);
             }
             else {
-                Window::DrawPrimitive::Circle(v.v, v.radius, 1, v.color);
+                Window::DrawPrimitive::Circle(v.v, v.radius, 1 * Debug::DebugDrawScale, v.color);
             }
         }
     }
