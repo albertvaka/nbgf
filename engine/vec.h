@@ -210,12 +210,20 @@ struct vec
 	{}
 #endif
 
+	template<typename T> void DebugDrawAsArrow(vec from, T c) const { 
+		DebugDrawAsArrow(from, c.r, c.g, c.b); 
+	}
+
 	void DebugDraw(uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const
 #ifdef _DEBUG
 	;
 #else
 	{}
 #endif
+
+	template<typename T> void DebugDraw(T c) const {
+		DebugDraw(c.r, c.g, c.b); 
+	}
 };
 
 inline constexpr vec vec::Zero = vec(0,0);
