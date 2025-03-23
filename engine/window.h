@@ -39,6 +39,10 @@ namespace Window {
 		return Window::screenTarget->viewport.w / Window::GAME_WIDTH;
 	}
 
+	inline vec GetViewportScaledResolution() {
+		return vec(Window::screenTarget->viewport.w, Window::screenTarget->viewport.h);
+	}
+
 	inline GPU_Image* CreateTexture(int w, int h) { // To match the Window scaling, textures should be recreated whenever Window::GetViewportScale() changes
 		float scale = Window::screenTarget->base_w/ Window::GAME_WIDTH;
 		GPU_Image* texture = GPU_CreateImage(w*scale, h*scale, GPU_FORMAT_RGBA);
