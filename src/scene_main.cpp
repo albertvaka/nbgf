@@ -17,6 +17,7 @@ SceneMain::SceneMain()
 	: ship()
 {
 	Particles::Init();
+	outlinedSprites = Window::CreateTexture(Window::GetGameResolution());
 }
 
 void SceneMain::EnterScene() 
@@ -61,6 +62,21 @@ void SceneMain::Draw()
 	Assets::seaShader.Deactivate();
 
 	ship.DrawStroke();
+
+	Window::BeginRenderToTexture(outlinedSprites, true);
+	Window::Clear(0,0,0,0);
+	Window::Draw(Assets::rockTexture, vec::Zero).withScale(0.5);
+	Window::EndRenderToTexture();
+
+	Assets::outlineShader.Activate();
+	Assets::outlineShader.SetUniform("offset", Camera::Center());
+	Assets::outlineShader.SetUniform("iResolution", Window::GetViewportScaledResolution());
+	Assets::outlineShader.SetUniform("windowScale", Window::GetViewportScale());
+	Assets::outlineShader.SetUniform("zoom", Camera::Zoom());
+	Assets::outlineShader.SetUniform("iTime", mainClock);
+	Window::Draw(outlinedSprites, Camera::Bounds());
+	Assets::outlineShader.Deactivate();
+
 	Particles::waterTrail.Draw();
 	ship.Draw();
 

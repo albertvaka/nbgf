@@ -6,6 +6,7 @@ void Assets::LoadAll() {
 
     shipTexture = LoadImage("data/ship.png");
     invadersTexture = LoadImage("data/invaders.png");
+    rockTexture = LoadImage("data/rock.png");
     backgroundTexture = LoadImage("data/bg.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
@@ -13,4 +14,6 @@ void Assets::LoadAll() {
 
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
     seaShader.Load("data/vertex_out.vert", nullptr, "data/sea.frag");
+    outlineShader.Load("data/vertex_out.vert", nullptr, "data/outline.frag");
+
 }
