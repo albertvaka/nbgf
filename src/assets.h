@@ -15,6 +15,7 @@ struct Assets
 
 	static inline GPU_Image* shipTexture;
 	static inline GPU_Image* invadersTexture;
+	static inline GPU_Image* rockTexture;
 
 	static inline GPU_Image* backgroundTexture;
 
@@ -23,4 +24,5 @@ struct Assets
 
 	static inline Shader tintShader;
 	static inline Shader seaShader;
+	static inline Shader outlineShader;
 };
