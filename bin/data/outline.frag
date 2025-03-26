@@ -3,15 +3,18 @@ out vec4 fragColor;
 in vec2 vertex;
 in vec2 texCoord;
 
+uniform sampler2D tex;
 uniform vec2 offset;
 uniform vec2 iResolution;
 uniform float iTime;
 uniform float zoom;
 uniform float windowScale;
 
-#define SURFACE_COL vec3(0.1, 0.45, 0.73)
-#define UNDERWATER_COL vec3(0.0, 0.37, 0.66)
-#define FOAM_COL vec3(0.7, 0.8, 0.9)
+const float minThickness = 5.0;
+const float wobbleThickness = 40.0;
+const float alphaThreshold = 0.8;
+
+#define FOAM_COL vec4(0.7, 0.8, 0.9, 1.0)
 
 // Perlin noise by @XorDev
 // https://mini.gmshaders.com/p/gm-shaders-mini-noise-1437243
@@ -57,25 +60,44 @@ float perlin_layer(vec2 coord, float from, float to) {
     return noise;
 }
 
-void sea(out vec4 fragColor, in vec2 coord) {
-    // Those noise functions could be replaced by sampling a texture if this is too slow
-    float wobble = 0.2*perlin_noise(coord*3.1); // make the lines wobble
-    wobble += 0.2*perlin_noise(coord/10.0 + vec2(iTime*0.4, iTime*0.55)); // make the whole image wobble
 
-    float from = 0.45 + 0.05*cos(iTime*0.5);
-    float to = from + 0.03;
-    fragColor.rgb = mix(SURFACE_COL, UNDERWATER_COL, perlin_layer(coord/1.7 + wobble, from, to));
-
-    from = 0.5 + 0.05*sin(iTime*0.5);
-    to = from + 0.04 + 0.01*sin(iTime*0.2);
-    fragColor.rgb = mix(fragColor.rgb, FOAM_COL, perlin_layer(coord + wobble, from, to));
-    fragColor.a = 1.0;
-}
-
-void main(void)
+void main()
 {
+	// If the current pixel is not transparent, show it as is
+	vec4 pixel_color = texture(tex, texCoord);
+	if (pixel_color.a > alphaThreshold) {
+		fragColor = pixel_color;
+		return;
+	}
+
+	// If we get here, the current pixel is transparent
+	// Check surrounding pixels for non-transparent pixels
+
     vec2 coord = vertex*iResolution + offset*zoom;
     coord /= 250000.0 * windowScale;
-    coord.y *= iResolution.x/iResolution.y;
-    sea(fragColor, coord);
+
+    // Those noise functions could be replaced by sampling a texture if this is too slow
+    float wobble = 0.25*perlin_noise(coord*3.1*3); // make the lines wobble
+    wobble += 0.25*perlin_noise(coord*10.0 + vec2(iTime*0.7, iTime*0.55)); // make the whole image wobble
+
+	//fragColor = vec4(wobble,wobble,wobble,255);
+    //return;
+
+	int i,j;
+    int thickness = int(max(minThickness, wobbleThickness*wobble));
+	for (i = -thickness; i <= thickness; i++) {
+		for (j = -thickness; j <= thickness; j++) {
+			// Convert pixel offset to normalized texture coordinates
+			vec2 offset = vec2(i,j) / iResolution;
+			vec4 neighbor_color = texture(tex, texCoord + offset);
+			if (neighbor_color.a > alphaThreshold) {
+				// Found a non-transparent neighbor, show outline
+				fragColor = FOAM_COL;
+				return;
+			}
+		}
+	}
+
+	// If we get here, no non-transparent neighbors found
+	fragColor = vec4(0,0,0,0);
 }

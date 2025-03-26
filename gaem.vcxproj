@@ -212,6 +212,7 @@ exit /b 0</Command>
     <None Include="asset_src\tiled2cpp.py" />
     <None Include="bin\data\default.frag" />
     <None Include="bin\data\default.vert" />
+    <None Include="bin\data\outline.frag" />
     <None Include="bin\data\sea.frag" />
     <None Include="bin\data\tint.frag" />
     <None Include="bin\data\vertex_out.vert" />

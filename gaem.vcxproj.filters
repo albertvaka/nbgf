@@ -434,6 +434,9 @@
     <None Include="bin\data\default.vert">
       <Filter>shaders</Filter>
     </None>
+    <None Include="bin\data\outline.frag">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx" />
