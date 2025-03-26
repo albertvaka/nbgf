@@ -27,12 +27,16 @@ namespace Window {
 		SDL_ShowCursor(b);
 	}
 
-	inline void Clear(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0) {
-		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, 255);
+	inline void Clear(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 255) {
+		GPU_ClearRGBA(Window::currentDrawTarget, r, g, b, a);
 	}
 
 	inline void Clear(const SDL_Color& c) {
-		Clear(c.r, c.g, c.b);
+		Clear(c.r, c.g, c.b, c.a);
+	}
+
+	inline vec GetGameResolution() {
+		return vec(Window::GAME_WIDTH, Window::GAME_HEIGHT);
 	}
 
 	inline float GetViewportScale() {
@@ -44,7 +48,7 @@ namespace Window {
 	}
 
 	inline GPU_Image* CreateTexture(int w, int h) { // To match the Window scaling, textures should be recreated whenever Window::GetViewportScale() changes
-		float scale = Window::screenTarget->base_w/ Window::GAME_WIDTH;
+		float scale = GetViewportScale();
 		GPU_Image* texture = GPU_CreateImage(w*scale, h*scale, GPU_FORMAT_RGBA);
 		GPU_SetImageFilter(texture, GPU_FILTER_NEAREST);
 		GPU_SetSnapMode(texture, GPU_SNAP_NONE);
@@ -52,6 +56,10 @@ namespace Window {
 		GPU_SetVirtualResolution(target, w, h);
 		GPU_SetImageVirtualResolution(texture, w, h); // this must go after setting the target virtual res
 		return texture;
+	}
+
+	inline GPU_Image* CreateTexture(vec size) {
+		return CreateTexture(size.x, size.y);
 	}
 
 	inline void DestroyTexture(GPU_Image* texture) {
