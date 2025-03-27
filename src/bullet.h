@@ -14,10 +14,9 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 	vec vel;
 
 	Bullet(const vec& position, const vec& velocity)
-		: CircleEntity(pos, 10)
+		: CircleEntity(position, 10)
+		, vel(velocity)
 	{
-		pos = position;
-		vel = velocity;
 	}
 
 	void Update(float dt)
