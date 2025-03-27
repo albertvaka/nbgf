@@ -10,10 +10,6 @@ uniform float iTime;
 uniform float zoom;
 uniform float windowScale;
 
-const float minThickness = 5.0;
-const float wobbleThickness = 40.0;
-const float alphaThreshold = 0.8;
-
 #define FOAM_COL vec4(0.7, 0.8, 0.9, 1.0)
 
 // Perlin noise by @XorDev
@@ -54,50 +50,27 @@ float perlin_noise(vec2 p)
                mix(grad_corner01, grad_corner11, quint.x), quint.y) * 0.7 + 0.5;
 }
 
-float perlin_layer(vec2 coord, float from, float to) {
-    float noise = perlin_noise(coord);
-    if (noise > from && noise < to) noise = 1.0; else noise = 0.0;
-    return noise;
-}
-
-
 void main()
 {
-	// If the current pixel is not transparent, show it as is
-	vec4 pixel_color = texture(tex, texCoord);
-	if (pixel_color.a > alphaThreshold) {
-		fragColor = pixel_color;
-		return;
-	}
-
-	// If we get here, the current pixel is transparent
-	// Check surrounding pixels for non-transparent pixels
-
-    vec2 coord = vertex*iResolution + offset*zoom;
+    vec2 coord = vertex * iResolution + offset*zoom;
     coord /= 250000.0 * windowScale;
 
     // Those noise functions could be replaced by sampling a texture if this is too slow
-    float wobble = 0.25*perlin_noise(coord*3.1*3); // make the lines wobble
-    wobble += 0.25*perlin_noise(coord*10.0 + vec2(iTime*0.7, iTime*0.55)); // make the whole image wobble
+    float wobble = 0.2*perlin_noise(coord*3.1*3); // make the lines wobble
+    wobble += 0.3*perlin_noise(coord*3 + vec2(iTime*0.4, iTime*0.55)); // make the whole image wobble
+    float maxWobble = 0.5;
 
 	//fragColor = vec4(wobble,wobble,wobble,255);
     //return;
 
-	int i,j;
-    int thickness = int(max(minThickness, wobbleThickness*wobble));
-	for (i = -thickness; i <= thickness; i++) {
-		for (j = -thickness; j <= thickness; j++) {
-			// Convert pixel offset to normalized texture coordinates
-			vec2 offset = vec2(i,j) / iResolution;
-			vec4 neighbor_color = texture(tex, texCoord + offset);
-			if (neighbor_color.a > alphaThreshold) {
-				// Found a non-transparent neighbor, show outline
-				fragColor = FOAM_COL;
-				return;
-			}
-		}
-	}
+    const float factor = 40.0;
+    vec4 neighbor_color = texture(tex, texCoord + maxWobble/(2.0*factor) - wobble/factor);
 
-	// If we get here, no non-transparent neighbors found
-	fragColor = vec4(0,0,0,0);
+    bool isFoam = (neighbor_color.a > alphaThreshold);
+
+    if (isFoam) {
+        fragColor = FOAM_COL;
+    } else {
+        fragColor = vec4(0,0,0,0);
+    }
 }
