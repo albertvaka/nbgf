@@ -1,2 +1,3 @@
 Pirate ship by Bleed - http://remusprites.carbonmade.com/
 Perlin Noise GLSL implementation by XorDev - https://mini.gmshaders.com/p/gm-shaders-mini-noise-1437243
+Rocks by Freepik - https://www.freepik.com/free-vector/flat-design-low-poly-nature-elements_46998137.htm
