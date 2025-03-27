@@ -7,6 +7,7 @@
 #include "bullet.h"
 #include "alien.h"
 #include "collide.h"
+#include "rock.h"
 #include "particles.h"
 #include "debug.h"
 
@@ -25,11 +26,15 @@ void SceneMain::EnterScene()
 	Debug::DebugDrawScale = 3.f;
 	ship.Reset();
 	Camera::SetZoom(0.7);
+	for (int i = 0; i < 10; i++) {
+		new Rock(vec(Rand::roll(Window::GAME_WIDTH)-Window::GAME_WIDTH/2, Rand::roll(Window::GAME_HEIGHT)-Window::GAME_HEIGHT/2));
+	}
 }
 
 void SceneMain::ExitScene()
 {
 	Particles::ClearAll();
+	Rock::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
@@ -50,7 +55,14 @@ void SceneMain::Update(float dt)
 
 void SceneMain::Draw()
 {
-	Window::Clear(0, 162, 232);
+	Window::Clear(0, 0, 0);
+
+	Window::BeginRenderToTexture(outlinedSprites, true);
+	Window::Clear(0,0,0,0);
+	for (Rock* rock : Rock::GetAll()) {
+		rock->DrawFoam();
+	}
+	Window::EndRenderToTexture();
 
 	Assets::seaShader.Activate();
 	Assets::seaShader.SetUniform("offset", Camera::Center());
@@ -58,15 +70,10 @@ void SceneMain::Draw()
 	Assets::seaShader.SetUniform("windowScale", Window::GetViewportScale());
 	Assets::seaShader.SetUniform("zoom", Camera::Zoom());
 	Assets::seaShader.SetUniform("iTime", mainClock);
-	Window::Draw(Assets::backgroundTexture, Camera::Bounds());
+	Window::Draw(outlinedSprites, Camera::Bounds());
 	Assets::seaShader.Deactivate();
 
 	ship.DrawStroke();
-
-	Window::BeginRenderToTexture(outlinedSprites, true);
-	Window::Clear(0,0,0,0);
-	Window::Draw(Assets::rockTexture, vec::Zero).withScale(0.5);
-	Window::EndRenderToTexture();
 
 	Assets::outlineShader.Activate();
 	Assets::outlineShader.SetUniform("offset", Camera::Center());
@@ -77,10 +84,14 @@ void SceneMain::Draw()
 	Window::Draw(outlinedSprites, Camera::Bounds());
 	Assets::outlineShader.Deactivate();
 
-	Particles::waterTrail.Draw();
-	ship.Draw();
+	for (Rock* rock : Rock::GetAll()) {
+		rock->Draw();
+	}
 
-	Particles::waterTrail.DrawImGUI();
+	Particles::waterTrail.Draw();
+
+
+	ship.Draw();
 
 #ifdef _IMGUI
 	{
@@ -89,6 +100,7 @@ void SceneMain::Draw()
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
 		ImGui::End();
 	}
-#endif
 
+	Particles::waterTrail.DrawImGUI();
+#endif
 }

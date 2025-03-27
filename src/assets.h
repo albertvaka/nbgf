@@ -16,7 +16,7 @@ struct Assets
 	static inline GPU_Image* shipTexture;
 	static inline GPU_Image* invadersTexture;
 	static inline GPU_Image* rockTexture;
-
+	static inline GPU_Image* rockFoamTexture;
 	static inline GPU_Image* backgroundTexture;
 
 	static inline TTF_Font* font_30;
