@@ -6,7 +6,8 @@ void Assets::LoadAll() {
 
     shipTexture = LoadImage("data/ship.png");
     invadersTexture = LoadImage("data/invaders.png");
-    rockTexture = LoadImage("data/rock.png");
+    rockTexture = LoadImage("data/rocks.png");
+    rockFoamTexture = LoadImage("data/rocks_foam.png");
     backgroundTexture = LoadImage("data/bg.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
