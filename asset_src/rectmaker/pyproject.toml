@@ -1,0 +1,9 @@
+[tool.poetry]
+name = "rectmaker"
+version = "0.1.0"
+description = "A simple application to draw squares on images and export their coordinates"
+authors = ["Vibe Coded <vibe@example.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.11.11"
+PyQt6 = ">=6.8.1"
