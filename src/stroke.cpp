@@ -326,7 +326,7 @@ bool Stroke::AddJoint(const vec& position, float thickness_scale, bool precompil
 	}
 	else
 	{
-		if (joints[joints.size() - 1].position != position)
+		if (joints[joints.size() - 1].position.Distance(position) > 0.0001f)
 		{
 			joints.push_back(joint);
 			is_compiled = false;

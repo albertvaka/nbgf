@@ -244,6 +244,17 @@ class Stroke
 		}
 
 		////////////////////////////////////////////////////////////
+		/// Get the current joints the stroke has
+		///
+		/// \return	Current joints of the stroke
+		///
+		/// \see SetMaxJoints
+		////////////////////////////////////////////////////////////
+		unsigned int GetJointsCount() const {
+			return joints.size();
+		}
+
+		////////////////////////////////////////////////////////////
 		/// Get the maximum length the stroke can have
 		///
 		/// \return	Maximum length of the stroke, in pixels
