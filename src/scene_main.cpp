@@ -57,13 +57,6 @@ void SceneMain::Draw()
 {
 	Window::Clear(0, 0, 0);
 
-	Window::BeginRenderToTexture(outlinedSprites, true);
-	Window::Clear(0,0,0,0);
-	for (Rock* rock : Rock::GetAll()) {
-		rock->DrawFoam();
-	}
-	Window::EndRenderToTexture();
-
 	Assets::seaShader.Activate();
 	Assets::seaShader.SetUniform("offset", Camera::Center());
 	Assets::seaShader.SetUniform("iResolution", Window::GetViewportScaledResolution());
@@ -75,18 +68,20 @@ void SceneMain::Draw()
 
 	ship.DrawStroke();
 
+	for (Rock* rock : Rock::GetAll()) {
+		rock->Draw();
+	}
+
 	Assets::outlineShader.Activate();
 	Assets::outlineShader.SetUniform("offset", Camera::Center());
 	Assets::outlineShader.SetUniform("iResolution", Window::GetViewportScaledResolution());
 	Assets::outlineShader.SetUniform("windowScale", Window::GetViewportScale());
 	Assets::outlineShader.SetUniform("zoom", Camera::Zoom());
 	Assets::outlineShader.SetUniform("iTime", mainClock);
-	Window::Draw(outlinedSprites, Camera::Bounds());
-	Assets::outlineShader.Deactivate();
-
 	for (Rock* rock : Rock::GetAll()) {
-		rock->Draw();
+		rock->DrawFoam();
 	}
+	Assets::outlineShader.Deactivate();
 
 	Particles::waterTrail.Draw();
 
