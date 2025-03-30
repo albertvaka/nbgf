@@ -26,6 +26,7 @@ public:
 		SDL_Color alphaSurfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 0 };
 
 		outerStroke.SetMaxJoints(100);
+		outerStroke.SetJointLifetime(4.5f);
 		outerStroke.SetStartInnerColor(foamColor);
 		outerStroke.SetStartOuterColor(foamColor);
 		outerStroke.SetEndInnerColor(alphaSurfaceColor);
@@ -35,6 +36,7 @@ public:
 		outerStroke.SetColorOffset(25.f);
 
 		innerStroke.SetMaxJoints(100);
+		innerStroke.SetJointLifetime(4.5f);
 		innerStroke.SetStartInnerColor(surfaceColor);
 		innerStroke.SetStartOuterColor(surfaceColor);
 		innerStroke.SetEndInnerColor(alphaSurfaceColor);
