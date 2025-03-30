@@ -9,6 +9,19 @@
 
 extern float mainClock;
 
+const GPU_Rect ROCKS_FOAM_RECTS[] = {
+    { 36, 82, 331, 260 },
+    { 396, 54, 411, 292 },
+    { 870, 68, 280, 277 },
+    { 25, 416, 348, 362 },
+    { 432, 423, 334, 356 },
+    { 869, 430, 280, 325 },
+    { 834, 866, 357, 297 },
+    { 446, 845, 334, 341 },
+    { 44, 857, 324, 300 },
+};
+const int ROCKS_FOAM_RECTS_COUNT = 9;
+
 const int spriteSize = 400;
 
 struct Rock : CircleEntity, SelfRegister<Rock>
@@ -17,7 +30,7 @@ struct Rock : CircleEntity, SelfRegister<Rock>
 	Rock(const vec& position)
 		: CircleEntity(position, 30)
 	{
-		sprite = GPU_Rect { float(Rand::roll(3)*spriteSize), float(Rand::roll(3)*spriteSize), float(spriteSize), float(spriteSize) } ;
+		sprite = ROCKS_FOAM_RECTS[Rand::roll(ROCKS_FOAM_RECTS_COUNT)];
 	}
 
 	void Update(float dt)
