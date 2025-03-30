@@ -58,8 +58,8 @@ void main()
     coord /= 250000.0 * windowScale;
 
     // Those noise functions could be replaced by sampling a texture if this is too slow
-    float wobble = perlin_noise(coord*10.0 + vec2(iTime*0.4, iTime*0.55)); // make the whole image wobble
-    float wobleAmount = 0.008*zoom;
+    float wobble = perlin_noise(texCoord*10.0 + vec2(iTime*0.4, iTime*0.55)); // make the whole image wobble
+    float wobleAmount = 0.03;
 
 	//fragColor = vec4(wobble,wobble,wobble,255);
     //return;
