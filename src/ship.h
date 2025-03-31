@@ -47,7 +47,7 @@ public:
 	}
 
 	void Reset() {
-		pos = vec::Zero;
+		pos = vec(200, 200);
 		vel = vec::Zero;
 		heading = vec(1,0);
 		timer = 0.f;

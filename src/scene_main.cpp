@@ -5,20 +5,18 @@
 #endif
 #include "assets.h"
 #include "bullet.h"
-#include "alien.h"
 #include "collide.h"
 #include "rock.h"
 #include "particles.h"
 #include "debug.h"
-
-float kAlienMinDistance = 300;
-float kAlienMaxDistance = 400;
+#include <cmath>
 
 SceneMain::SceneMain()
 	: ship()
 {
 	Particles::Init();
 	outlinedSprites = Window::CreateTexture(Window::GetGameResolution());
+
 }
 
 void SceneMain::EnterScene() 
@@ -26,8 +24,10 @@ void SceneMain::EnterScene()
 	Debug::DebugDrawScale = 3.f;
 	ship.Reset();
 	Camera::SetZoom(0.7);
-	for (int i = 0; i < 10; i++) {
-		new Rock(vec(Rand::roll(Window::GAME_WIDTH)-Window::GAME_WIDTH/2, Rand::roll(Window::GAME_HEIGHT)-Window::GAME_HEIGHT/2));
+	for (int i = -1; i <= 1; i++) {
+		for (int j = -1; j <= 1; j++) {
+			Rock::SpawnInChunk(i, j);
+		}
 	}
 }
 
@@ -49,7 +49,12 @@ void SceneMain::Update(float dt)
 	}
 #endif
 
+	veci lastChunk = Rock::GetChunk(ship.pos);
 	ship.Update(dt);
+	veci currentChunk = Rock::GetChunk(ship.pos);
+	Rock::DebugDrawChunks(currentChunk);
+	Rock::Spawn(currentChunk, lastChunk);
+
 	Particles::UpdateAll(dt);
 }
 
@@ -84,7 +89,6 @@ void SceneMain::Draw()
 	Assets::outlineShader.Deactivate();
 
 	Particles::waterTrail.Draw();
-
 
 	ship.Draw();
 

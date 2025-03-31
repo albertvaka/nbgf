@@ -22,20 +22,15 @@ const GPU_Rect ROCKS_FOAM_RECTS[] = {
 };
 const int ROCKS_FOAM_RECTS_COUNT = 9;
 
-const int spriteSize = 400;
+const int rockRadius = 30;
 
 struct Rock : CircleEntity, SelfRegister<Rock>
 {
 	GPU_Rect sprite;
 	Rock(const vec& position)
-		: CircleEntity(position, 30)
+		: CircleEntity(position, rockRadius)
 	{
 		sprite = ROCKS_FOAM_RECTS[Rand::roll(ROCKS_FOAM_RECTS_COUNT)];
-	}
-
-	void Update(float dt)
-	{
-
 	}
 
 	void Draw() const
@@ -57,4 +52,9 @@ struct Rock : CircleEntity, SelfRegister<Rock>
 
 		Bounds().DebugDraw();
 	}
+
+	static veci GetChunk(vec pos);
+	static void DebugDrawChunks(veci currentChunk);
+	static void Spawn(veci currentChunk, veci lastChunk);
+	static void SpawnInChunk(int chunkX, int chunkY);
 };
