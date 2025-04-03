@@ -11,16 +11,18 @@
 #include "debug.h"
 #include <cmath>
 
+const float kImmunityTime = 2.5f;
+const int kInitialLives = 3;
 SceneMain::SceneMain()
 	: ship()
 {
 	Particles::Init();
-	outlinedSprites = Window::CreateTexture(Window::GetGameResolution());
-
 }
 
 void SceneMain::EnterScene() 
 {
+	lives = kInitialLives;
+	immunityTimer = 0.f;
 	Debug::DebugDrawScale = 3.f;
 	ship.Reset();
 	Camera::SetZoom(0.7);
@@ -55,6 +57,19 @@ void SceneMain::Update(float dt)
 	Rock::DebugDrawChunks(currentChunk);
 	Rock::Spawn(currentChunk, lastChunk);
 
+
+    if (immunityTimer <= 0) {
+		for (Rock* rock : Rock::GetAll()) {
+			if (Collide(ship.Bounds(), rock->Bounds())) {
+				lives--;
+				immunityTimer = kImmunityTime;
+			}
+		}
+	} else {
+		immunityTimer -= dt;
+	}
+
+
 	Particles::UpdateAll(dt);
 }
 
@@ -68,7 +83,7 @@ void SceneMain::Draw()
 	Assets::seaShader.SetUniform("windowScale", Window::GetViewportScale());
 	Assets::seaShader.SetUniform("zoom", Camera::Zoom());
 	Assets::seaShader.SetUniform("iTime", mainClock);
-	Window::Draw(outlinedSprites, Camera::Bounds());
+	Window::Draw(Assets::rockTexture, Camera::Bounds()); // Texture unused by the shader
 	Assets::seaShader.Deactivate();
 
 	ship.DrawStroke();
@@ -90,7 +105,24 @@ void SceneMain::Draw()
 
 	Particles::waterTrail.Draw();
 
+	ship.Bounds().DebugDraw();
+
+	if (immunityTimer > 0) {
+		if (((int)((immunityTimer)*12))%3) {
+			Assets::tintShader.Activate();
+			Assets::tintShader.SetUniform("flashColor", 1.f, 0.5f, 0.5f, 0.5f);
+		}
+	}
 	ship.Draw();
+	Assets::tintShader.Deactivate();
+
+	Camera::InScreenCoords::Begin();
+	for (int i = 0; i < lives; i++) {
+		Window::Draw(Assets::heartTexture, Window::GAME_WIDTH - 80 - i*70, 20)
+		.withScale(0.3f, 0.3f);
+	}
+	Camera::InScreenCoords::End();
+
 
 #ifdef _IMGUI
 	{

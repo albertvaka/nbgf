@@ -14,7 +14,7 @@ struct Assets
 	static void LoadAll();
 
 	static inline GPU_Image* shipTexture;
-	static inline GPU_Image* invadersTexture;
+	static inline GPU_Image* heartTexture;
 	static inline GPU_Image* rockTexture;
 	static inline GPU_Image* rockFoamTexture;
 	static inline GPU_Image* backgroundTexture;
