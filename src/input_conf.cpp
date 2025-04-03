@@ -1,7 +1,6 @@
 #include "input_conf.h"
 
 #include "input.h"
-#include "player.h"
 
 #include <functional>
 

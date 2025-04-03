@@ -55,12 +55,10 @@
     <ClInclude Include="generated\tiled_tile.h" />
     <ClInclude Include="generated\tiled_tilemap.h" />
     <ClInclude Include="src\alien.h" />
-    <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\particles.h" />
-    <ClInclude Include="src\player.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\ship.h" />

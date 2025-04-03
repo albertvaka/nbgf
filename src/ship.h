@@ -11,16 +11,17 @@
 #include "stroke.h"
 #include "particles.h"
 
-const float deceleration_coef = 0.3f;
-const float max_speed = 220.f;
-const float timeBetweenStrokeSegments = 0.05f;
+const float kShipRadius = 30.f;
+const float kDecelerationCoef = 0.3f;
+const float kMaxSpeed = 220.f;
+const float kTimeBetweenStrokeSegments = 0.05f;
 
 extern float mainClock;
 
-class Ship : public Entity {
+class Ship : public CircleEntity {
 public:
 
-    Ship() {
+    Ship() : CircleEntity(kShipRadius) {
 		SDL_Color foamColor = { Uint8(0.7 * 255), Uint8(0.8 * 255), Uint8(0.9 * 255), 255 };
 		SDL_Color surfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 255 };
 		SDL_Color alphaSurfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 0 };
@@ -61,7 +62,7 @@ public:
 		float speed = vel.Length();
 
 		// The correct way to add friction
-		float frictionImpulse = speed * deceleration_coef;
+		float frictionImpulse = speed * kDecelerationCoef;
 		speed -= frictionImpulse * dt;
 
 		if (Input::IsPressed(0, GameKeys::UP)) {
@@ -79,7 +80,7 @@ public:
 			heading.Normalize();
 		}
 
-		Mates::Clamp(speed, 0.f, max_speed);
+		Mates::Clamp(speed, 0.f, kMaxSpeed);
 		vel = speed*heading;
 		pos += vel * dt;
 
@@ -89,23 +90,23 @@ public:
 		outerStroke.Calculate(dt);
 
 		timer += dt;
-		if (timer > timeBetweenStrokeSegments) {
-			timer -= timeBetweenStrokeSegments;
-			float thickness = std::max(speed / max_speed, 0.3f) * 3.5f;
+		if (timer > kTimeBetweenStrokeSegments) {
+			timer -= kTimeBetweenStrokeSegments;
+			float thickness = std::max(speed / kMaxSpeed, 0.3f) * 3.5f;
 			float wobblyness = sin(distanceSailed * 0.008f) * 2.f;
 			innerStroke.AddJoint(pos, thickness * 15.f + wobblyness);
 			outerStroke.AddJoint(pos, thickness * 20.f + wobblyness);
 		}
 
 		Particles::waterTrail.pos = pos;
-		if (speed/max_speed > 0.5) {
+		if (speed/kMaxSpeed > 0.5) {
 			Particles::waterTrail.Spawn(dt);
 		}
 
-		float camZoomChangeThreshold = max_speed / 2.f;
-		float zoomChange = tweeny::easing::quadraticInOut.run(std::max(0.f, speed - camZoomChangeThreshold) / (max_speed - camZoomChangeThreshold), 0.f, 0.3f);
+		float camZoomChangeThreshold = kMaxSpeed / 2.f;
+		float zoomChange = tweeny::easing::quadraticInOut.run(std::max(0.f, speed - camZoomChangeThreshold) / (kMaxSpeed - camZoomChangeThreshold), 0.f, 0.3f);
 		Camera::SetZoom(0.9 - zoomChange); // TODO: Make it smooth transition if you were accelerating and stop half-way or the other way around (maybe by keeping a zoom speed variable?)
-		vec camTarget = pos + heading * 300.f * speed / max_speed;
+		vec camTarget = pos + heading * 300.f * speed / kMaxSpeed;
 		vec camPos = Camera::Center();
 		vec camDiff = camTarget - camPos;
 		vec camMovement = camDiff / 20.f;
