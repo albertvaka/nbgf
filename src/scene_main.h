@@ -16,5 +16,6 @@ struct SceneMain : Scene {
 	void Update(float dt) override;
 	void Draw() override;
 
-	GPU_Image* outlinedSprites;
+	int lives;
+	float immunityTimer;
 };

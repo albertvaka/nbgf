@@ -1,7 +1,6 @@
 #pragma once
 
 #include "entity.h"
-#include "anim_lib.h"
 #include "selfregister.h"
 #include "assets.h"
 #include "window.h"

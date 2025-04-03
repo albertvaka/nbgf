@@ -210,9 +210,6 @@
     <ClInclude Include="src\alien.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\anim_lib.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\assets.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -220,9 +217,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\input_conf.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\player.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_entrypoint.h">

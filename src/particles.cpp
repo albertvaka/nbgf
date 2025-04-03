@@ -1,6 +1,5 @@
 #include "particles.h"
 #include "assets.h"
-#include "anim_lib.h"
 
 namespace Particles {
 
