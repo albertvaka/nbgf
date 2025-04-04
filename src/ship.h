@@ -11,17 +11,19 @@
 #include "stroke.h"
 #include "particles.h"
 
-const float kShipRadius = 30.f;
+const float kShipFrontRadius = 15.f;
+const float kShipBackRadius = 25.f;
+const float kShipFrontBoundsOffset = 45.f;
+const float kShipBackBoundsOffset = 50.f;
 const float kDecelerationCoef = 0.3f;
 const float kMaxSpeed = 220.f;
 const float kTimeBetweenStrokeSegments = 0.05f;
 
 extern float mainClock;
 
-class Ship : public CircleEntity {
+class Ship : public Entity {
 public:
-
-    Ship() : CircleEntity(kShipRadius) {
+    Ship() {
 		SDL_Color foamColor = { Uint8(0.7 * 255), Uint8(0.8 * 255), Uint8(0.9 * 255), 255 };
 		SDL_Color surfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 255 };
 		SDL_Color alphaSurfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 0 };
@@ -124,6 +126,14 @@ public:
 	void DrawStroke() {
 		innerStroke.Draw();
 		outerStroke.DrawExcluding(innerStroke);
+	}
+
+	std::tuple<CircleBounds, CircleBounds, CircleBounds> Bounds() const {
+		return std::make_tuple(
+			CircleBounds(pos + heading * kShipFrontBoundsOffset, kShipFrontRadius),
+			CircleBounds(pos, kShipBackRadius),
+			CircleBounds(pos - heading * kShipBackBoundsOffset, kShipBackRadius)
+		);
 	}
 
 private:

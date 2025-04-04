@@ -60,7 +60,8 @@ void SceneMain::Update(float dt)
 
     if (immunityTimer <= 0) {
 		for (Rock* rock : Rock::GetAll()) {
-			if (Collide(ship.Bounds(), rock->Bounds())) {
+			auto [frontBounds, middleBounds, backBounds] = ship.Bounds();
+			if (Collide(frontBounds, rock->Bounds()) || Collide(backBounds, rock->Bounds()) || Collide(middleBounds, rock->Bounds())) {
 				lives--;
 				immunityTimer = kImmunityTime;
 			}
@@ -105,7 +106,10 @@ void SceneMain::Draw()
 
 	Particles::waterTrail.Draw();
 
-	ship.Bounds().DebugDraw();
+	auto [frontBounds, middleBounds, backBounds] = ship.Bounds();
+	frontBounds.DebugDraw();
+	middleBounds.DebugDraw();
+	backBounds.DebugDraw();
 
 	if (immunityTimer > 0) {
 		if (((int)((immunityTimer)*12))%3) {
