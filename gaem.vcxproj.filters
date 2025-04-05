@@ -204,23 +204,20 @@
     <ClInclude Include="engine\window_drawraw.h">
       <Filter>engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\window_conf.h">
-      <Filter>src</Filter>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3_loader.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
-    <ClInclude Include="src\alien.h">
-      <Filter>src</Filter>
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl2.h">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
-    <ClInclude Include="src\assets.h">
-      <Filter>src</Filter>
+    <ClInclude Include="vendor\glew\GL\wglew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
     </ClInclude>
-    <ClInclude Include="src\bullet.h">
-      <Filter>src</Filter>
+    <ClInclude Include="vendor\glew\GL\glxew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
     </ClInclude>
-    <ClInclude Include="src\input_conf.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene_entrypoint.h">
-      <Filter>src</Filter>
+    <ClInclude Include="vendor\glew\GL\glew.h">
+      <Filter>Bundled Dependencies\glew</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_main.h">
       <Filter>src</Filter>
@@ -240,22 +237,25 @@
     <ClInclude Include="src\stroke.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3_loader.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    <ClInclude Include="src\window_conf.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl2.h">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    <ClInclude Include="src\assets.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\glew\GL\wglew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
+    <ClInclude Include="src\bullet.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\glew\GL\glxew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\glew\GL\glew.h">
-      <Filter>Bundled Dependencies\glew</Filter>
+    <ClInclude Include="src\input_conf.h">
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\particles.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rock.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene_entrypoint.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -371,16 +371,13 @@
     <ClCompile Include="engine\window.cpp">
       <Filter>engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\assets.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
-    <ClCompile Include="src\input_conf.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl2.cpp">
+      <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
-    <ClCompile Include="src\player.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene_main.cpp">
+    <ClCompile Include="src\ship.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\steering_behavior.cpp">
@@ -389,13 +386,19 @@
     <ClCompile Include="src\stroke.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\imgui\imgui_tables.cpp">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    <ClCompile Include="src\assets.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl2.cpp">
-      <Filter>Bundled Dependencies\imgui_imp</Filter>
+    <ClCompile Include="src\input_conf.cpp">
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\particles.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rock.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_main.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

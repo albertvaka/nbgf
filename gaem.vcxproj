@@ -54,11 +54,11 @@
     <ClInclude Include="generated\tiled_objects_entities.h" />
     <ClInclude Include="generated\tiled_tile.h" />
     <ClInclude Include="generated\tiled_tilemap.h" />
-    <ClInclude Include="src\alien.h" />
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\particles.h" />
+    <ClInclude Include="src\rock.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\ship.h" />
@@ -116,8 +116,9 @@
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\particles.cpp" />
-    <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\rock.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
+    <ClCompile Include="src\ship.cpp" />
     <ClCompile Include="src\steering_behavior.cpp" />
     <ClCompile Include="src\stroke.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />
