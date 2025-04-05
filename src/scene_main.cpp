@@ -94,10 +94,6 @@ void SceneMain::Draw()
 	}
 
 	Assets::outlineShader.Activate();
-	Assets::outlineShader.SetUniform("offset", Camera::Center());
-	Assets::outlineShader.SetUniform("iResolution", Window::GetViewportScaledResolution());
-	Assets::outlineShader.SetUniform("windowScale", Window::GetViewportScale());
-	Assets::outlineShader.SetUniform("zoom", Camera::Zoom());
 	Assets::outlineShader.SetUniform("iTime", mainClock);
 	for (Rock* rock : Rock::GetAll()) {
 		rock->DrawFoam();
@@ -111,14 +107,8 @@ void SceneMain::Draw()
 	middleBounds.DebugDraw();
 	backBounds.DebugDraw();
 
-	if (immunityTimer > 0) {
-		if (((int)((immunityTimer)*12))%3) {
-			Assets::tintShader.Activate();
-			Assets::tintShader.SetUniform("flashColor", 1.f, 0.5f, 0.5f, 0.5f);
-		}
-	}
-	ship.Draw();
-	Assets::tintShader.Deactivate();
+	bool hitAnim = (immunityTimer > 0 && ((int)((immunityTimer)*12))%3);
+	ship.Draw(hitAnim);
 
 	Camera::InScreenCoords::Begin();
 	for (int i = 0; i < lives; i++) {
