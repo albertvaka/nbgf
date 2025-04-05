@@ -8,7 +8,6 @@
 #include "oneshotanims.h"
 #include "window.h"
 #include "camera.h"
-#include "common_tilemapcharacter.h"
 
 extern float mainClock;
 
