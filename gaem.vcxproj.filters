@@ -225,7 +225,19 @@
     <ClInclude Include="src\bullet.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\fx.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gaemtilemap.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\input_conf.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\oneshotanims.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rototext.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_entrypoint.h">
@@ -234,25 +246,10 @@
     <ClInclude Include="src\scene_main.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\gaemtilemap.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\tile.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\common_tilemapcharacter.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene_title.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\rototext.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\oneshotanims.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fx.h">
+    <ClInclude Include="src\tile.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -374,13 +371,13 @@
     <ClCompile Include="src\assets.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\fx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\input_conf.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\scene_main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\fx.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
