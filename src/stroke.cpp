@@ -582,11 +582,11 @@ bool Stroke::Compile()
 	{
 		{
 			// First joint
-			joints[0].angle = AngleDegs(joints[0].position, joints[1].position);
+			joints[0].angle = joints[0].position.AngleDegs(joints[1].position);
 
 			// Calculating in and out angles
-			float angle1 = AngleDegs(joints[joints.size() - 1].position, joints[0].position);
-			float angle2 = AngleDegs(joints[0].position, joints[1].position);
+			float angle1 = joints[joints.size() - 1].position.AngleDegs(joints[0].position);
+			float angle2 = joints[0].position.AngleDegs(joints[1].position);
 
 			// Calculating joint angle
 			joints[0].angle = (angle1 + angle2) / 2.f;
@@ -603,11 +603,11 @@ bool Stroke::Compile()
 
 		{
 			// Last joint
-			joints[joints.size() - 1].angle = AngleDegs(joints[joints.size() - 2].position, joints[joints.size() - 1].position);
+			joints[joints.size() - 1].angle = joints[joints.size() - 2].position.AngleDegs(joints[joints.size() - 1].position);
 
 			// Calculating in and out angles
-			float angle1 = AngleDegs(joints[joints.size() - 2].position, joints[joints.size() - 1].position);
-			float angle2 = AngleDegs(joints[joints.size() - 1].position, joints[0].position);
+			float angle1 = joints[joints.size() - 2].position.AngleDegs(joints[joints.size() - 1].position);
+			float angle2 = joints[joints.size() - 1].position.AngleDegs(joints[0].position);
 
 			// Calculating joint angle
 			joints[joints.size() - 1].angle = (angle1 + angle2) / 2.f;
@@ -625,18 +625,18 @@ bool Stroke::Compile()
 	else
 	{
 		// First joint
-		joints[0].angle = AngleDegs(joints[0].position, joints[1].position);
+		joints[0].angle = joints[0].position.AngleDegs(joints[1].position);
 
 		// Last joint
-		joints[joints.size() - 1].angle = AngleDegs(joints[joints.size() - 2].position, joints[joints.size() - 1].position);
+		joints[joints.size() - 1].angle = joints[joints.size() - 2].position.AngleDegs(joints[joints.size() - 1].position);
 	}
 
 	// other joints
 	for (unsigned int i = 1; i < joints.size() - 1; i++)
 	{
 		// Calculating in and out angles
-		float angle1 = AngleDegs(joints[i - 1].position, joints[i].position);
-		float angle2 = AngleDegs(joints[i].position, joints[i + 1].position);
+		float angle1 = joints[i - 1].position.AngleDegs(joints[i].position);
+		float angle2 = joints[i].position.AngleDegs(joints[i + 1].position);
 
 		// Calculating joint angle
 		joints[i].angle = (angle1 + angle2) / 2.f;

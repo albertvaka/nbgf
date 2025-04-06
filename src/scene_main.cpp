@@ -11,8 +11,6 @@
 #include "debug.h"
 #include <cmath>
 
-const float kImmunityTime = 2.5f;
-const int kInitialLives = 3;
 SceneMain::SceneMain()
 	: ship()
 {
@@ -21,8 +19,6 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
-	lives = kInitialLives;
-	immunityTimer = 0.f;
 	Debug::DebugDrawScale = 3.f;
 	ship.Reset();
 	for (int i = -1; i <= 1; i++) {
@@ -55,20 +51,6 @@ void SceneMain::Update(float dt)
 	veci currentChunk = Rock::GetChunk(ship.pos);
 	Rock::DebugDrawChunks(currentChunk);
 	Rock::Spawn(currentChunk, lastChunk);
-
-
-    if (immunityTimer <= 0) {
-		for (Rock* rock : Rock::GetAll()) {
-			auto [frontBounds, middleBounds, backBounds] = ship.Bounds();
-			if (Collide(frontBounds, rock->Bounds()) || Collide(backBounds, rock->Bounds()) || Collide(middleBounds, rock->Bounds())) {
-				lives--;
-				immunityTimer = kImmunityTime;
-			}
-		}
-	} else {
-		immunityTimer -= dt;
-	}
-
 
 	Particles::UpdateAll(dt);
 }
@@ -106,11 +88,10 @@ void SceneMain::Draw()
 	middleBounds.DebugDraw();
 	backBounds.DebugDraw();
 
-	bool hitAnim = (immunityTimer > 0 && ((int)((immunityTimer)*12))%3);
-	ship.Draw(hitAnim);
+	ship.Draw();
 
 	Camera::InScreenCoords::Begin();
-	for (int i = 0; i < lives; i++) {
+	for (int i = 0; i < ship.lives; i++) {
 		Window::Draw(Assets::heartTexture, Window::GAME_WIDTH - 80 - i*70, 20)
 		.withScale(0.3f, 0.3f);
 	}

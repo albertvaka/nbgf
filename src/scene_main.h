@@ -15,7 +15,4 @@ struct SceneMain : Scene {
 	void ExitScene() override;
 	void Update(float dt) override;
 	void Draw() override;
-
-	int lives;
-	float immunityTimer;
 };

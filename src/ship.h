@@ -13,12 +13,15 @@
 
 class Ship : public Entity {
 public:
+	int lives;
 	vec heading;
+	float immunityTimer;
+	float ignoreCollisionTimer;
 
     Ship();
 	void Reset();
 	void Update(float dt);
-	void Draw(bool hit);
+	void Draw();
 	void DrawStroke() {
 		innerStroke.Draw();
 		outerStroke.DrawExcluding(innerStroke);
