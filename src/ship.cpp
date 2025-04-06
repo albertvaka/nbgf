@@ -19,6 +19,9 @@ const float kDecelerationCoef = 0.3f;
 const float kMaxSpeed = 220.f;
 const float kTimeBetweenStrokeSegments = 0.05f;
 
+const float zoomSailingFast = 0.6;
+const float zoomSailingSlow = 0.9;
+
 extern float mainClock;
 
 Ship::Ship() {
@@ -46,6 +49,20 @@ Ship::Ship() {
 	innerStroke.SetOffset(-0.9f);
 	innerStroke.SetColorOffset(25.0f);
 }
+
+void Ship::Reset() {
+	pos = vec(200, 200);
+	vel = vec::Zero;
+	heading = vec(1,0);
+	timer = 0.f;
+	Camera::SetZoom(zoomSailingSlow);
+	previousZoomDiff = 0;
+	distanceSailed = 0.f;
+	innerStroke.Clear();
+	outerStroke.Clear();
+	Camera::SetCenter(pos);
+}
+
 
 void Ship::Update(float dt) {
 	float speed = vel.Length();
@@ -93,13 +110,12 @@ void Ship::Update(float dt) {
 	}
 
 	float camZoomChangeThreshold = kMaxSpeed / 2.f;
-	float zoomChange = tweeny::easing::quadraticInOut.run(std::max(0.f, speed - camZoomChangeThreshold) / (kMaxSpeed - camZoomChangeThreshold), 0.f, 0.3f);
-	float targetZoom = 0.9 - zoomChange; // Between 0.6 (sailing fast) and 0.9 (sailing slow)
+	float targetZoom = tweeny::easing::quadraticInOut.run(std::max(0.f, speed - camZoomChangeThreshold) / (kMaxSpeed - camZoomChangeThreshold), zoomSailingSlow, zoomSailingFast);
 	float currentZoom = Camera::Zoom();
 	float zoomDiff = targetZoom - currentZoom;
 	float smoothenedZoomDiff = (zoomDiff + previousZoomDiff) / 2.f;
 	previousZoomDiff = smoothenedZoomDiff;
-	float newZoom = currentZoom + smoothenedZoomDiff;
+	float newZoom = currentZoom + smoothenedZoomDiff * 0.7 * dt;
 	Camera::SetZoom(newZoom);
 
 	vec camTarget = pos + heading * 300.f * speed / kMaxSpeed;
