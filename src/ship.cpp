@@ -6,11 +6,16 @@
 #include "debug.h"
 #include "camera.h"
 #include "tweeny.h"
+#include "collide.h"
+#include "rock.h"
 #include "input.h"
 #include "steering_behavior.h"
 #include "stroke.h"
 #include "particles.h"
 
+const int kInitialLives = 3;
+const float kImmunityTime = 2.0f;
+const float kIgnoreCollisionTimer = 0.2f;
 const float kShipFrontRadius = 15.f;
 const float kShipBackRadius = 25.f;
 const float kShipFrontBoundsOffset = 45.f;
@@ -18,9 +23,11 @@ const float kShipBackBoundsOffset = 50.f;
 const float kDecelerationCoef = 0.3f;
 const float kMaxSpeed = 220.f;
 const float kTimeBetweenStrokeSegments = 0.05f;
-
-const float zoomSailingFast = 0.6;
-const float zoomSailingSlow = 0.9;
+const float kRotationWhenCrashingDegs = 45.f;
+const float kMinColisionAngleToDamageDegs = 10.f;
+const float kSlowDownWhenHit = 0.9f;
+const float zoomSailingFast = 0.6f;
+const float zoomSailingSlow = 0.9f;
 
 extern float mainClock;
 
@@ -51,6 +58,9 @@ Ship::Ship() {
 }
 
 void Ship::Reset() {
+	lives = kInitialLives;
+	immunityTimer = 0.f;
+	ignoreCollisionTimer = 0.f;
 	pos = vec(200, 200);
 	vel = vec::Zero;
 	heading = vec(1,0);
@@ -84,6 +94,36 @@ void Ship::Update(float dt) {
 	if (Input::IsPressed(0, GameKeys::RIGHT)) {
 		heading = heading.RotatedAroundOriginRads(0.0035*dt*(speed+25));
 		heading.Normalize();
+	}
+
+	pos.DebugDraw();
+
+	if (immunityTimer > 0) {
+		immunityTimer -= dt;
+	}
+
+	if (ignoreCollisionTimer > 0) {
+		ignoreCollisionTimer -= dt;
+	} else {
+		for (Rock* rock : Rock::GetAll()) {
+			rock->pos.DebugDraw();
+			auto [frontBounds, middleBounds, backBounds] = Bounds();
+			if (Collide(frontBounds, rock->Bounds()) || Collide(backBounds, rock->Bounds()) || Collide(middleBounds, rock->Bounds())) {
+				vec rockFromShip = rock->pos-pos;
+				float angle = heading.AngleRadsBetween(rockFromShip.Normalized()); // Always between 0 and 180
+				float mag = Angles::DegsToRads(kRotationWhenCrashingDegs) - fabs(angle);
+				if (mag > 0.f) { // Ignores hits on the sides or the back
+					int sign = angle > 0 ? -1 : 1;
+					heading.RotateAroundOriginRads(mag * sign);
+					ignoreCollisionTimer = kIgnoreCollisionTimer;
+					if (immunityTimer <= 0.f && mag > Angles::DegsToRads(kMinColisionAngleToDamageDegs)) {
+						immunityTimer = kImmunityTime;
+						lives--;
+						speed *= kSlowDownWhenHit;
+					}
+				}
+			}
+		}
 	}
 
 	Mates::Clamp(speed, 0.f, kMaxSpeed);
@@ -125,17 +165,22 @@ void Ship::Update(float dt) {
 	Camera::SetCenter(camPos + camMovement);
 }
 
-void Ship::Draw(bool hit) {
-	if (hit) {
-		//Assets::tintShader.Activate();
-		//Assets::tintShader.SetUniform("flashColor", 1.f, 0.5f, 0.5f, 0.5f);
+void Ship::Draw() {
+	bool hitAnim = (immunityTimer > 0 && ((int)((immunityTimer)*12))%3);
+
+	if (hitAnim) {
+		Assets::tintShader.Activate();
+		Assets::tintShader.SetUniform("flashColor", 1.f, 0.5f, 0.5f, 0.5f);
 	}
 
-	float angle = AngleDegs(heading);
+	float angle = heading.AngleDegs();
 	Window::Draw(Assets::shipTexture, pos)
 		.withOrigin(Assets::shipTexture->w / 2, Assets::shipTexture->h / 2)
 		.withRotationDegs(angle)
 		.withScale(0.5f);
+
+	Assets::tintShader.Deactivate();
+
 }
 
 std::tuple<CircleBounds, CircleBounds, CircleBounds> Ship::Bounds() const {
