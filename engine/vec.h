@@ -33,31 +33,31 @@ struct vec
 
 	static const vec Zero;
 
-	//Angle to direction
+	// Angle to direction
 	[[nodiscard]] static vec FromAngleRads(float rads, float len = 1.0f) {
 		return vec(cos(rads) * len, sin(rads) * len);
 	}
 
-	//Angle to direction
+	// Angle to direction
 	[[nodiscard]] static vec FromAngleDegs(float degs, float len = 1.0f) {
 		return FromAngleRads(Angles::DegsToRads(degs), len);
 	}
 
-
-	//returns the length of the vector
+	// Returns the length of the vector
 	[[nodiscard]] inline float Length() const;
 
-	//returns the squared length of the vector (thereby avoiding the sqrt)
+	// Returns the squared length of the vector (thereby avoiding the sqrt)
 	[[nodiscard]] inline float LengthSq() const;
 
 	inline void Normalize();
 	[[nodiscard]] inline vec Normalized() const;
 
-	// Dot product: returns the length of the projection of one vector onto the other (order doesn't matter, it's symmetrical)
-	// It can be used to know how alligned the directions of both vectors are, assuming they are normalized:
+	// Returns the length of the projection of one vector onto the other (order doesn't matter, it's symmetrical).
+	// For normalize vectors, it can be used to know how alligned the directions of both vectors are:
 	// Perpendicular -> dot product = 0
 	// Parallel, same direction -> dot product = 1
 	// Parallel, opposite direction -> dot product = -1
+	// The result is the cosine of the angle between the two vectors, but to get the angle prefer using AngleRadsBetween than the more expensive acos.
 	[[nodiscard]] inline float Dot(vec v2) const;
 
 	[[nodiscard]] inline float Cross(vec v2) const;
@@ -77,33 +77,40 @@ struct vec
 		return ret;
 	}
 
-	[[nodiscard]] std::string ToString() const {
-		std::stringstream stream;
-		stream << std::fixed << std::setprecision(2) << x << "," << y;
-		return stream.str();
-	}
-
 	[[nodiscard]] vec Mirrored(bool mirror_x, bool mirror_y) const {
 		return vec(mirror_x ? -x : x, mirror_y ? -y : y);
 	}
 
-	//returns positive if v2 is clockwise of this vector,
-	//negative if anticlockwise (assuming the Y axis is pointing down,
-	//X axis to right like a Window app)
-	[[nodiscard]] inline int Sign(vec v2) const;
-
-	// Angle in Rads between the lines (origin to point a) and (origin to point b)
-	// In range [-Pi,Pi]
-	[[nodiscard]] float AngleRads(vec from = vec::Zero) const
-	{
-		return atan2(y - from.y, x - from.x);
+	void Mirror(bool mirror_x, bool mirror_y) {
+		*this = Mirrored(mirror_x, mirror_y);
 	}
 
-	// Angle in Degrees between the lines (origin to point a) and (origin to point b)
-	// In range [-180,180]
-	[[nodiscard]] float AngleDegs(vec from = vec::Zero) const
+	// Returns positive if v2 is clockwise of this vector,
+	// minus if anticlockwise (Y axis pointing down, X axis to right)
+	[[nodiscard]] inline int Sign(vec v2) const;
+
+	// Angle in radians between bettween this and the positive X axis from the specified origin, in the range [-180, 180]. Doesn't need normalized vectors.
+	[[nodiscard]] float AngleRads(vec origin = vec::Zero) const
 	{
-		return Angles::RadsToDegs(AngleRads(from));
+		return std::atan2(y - origin.y, x - origin.x);
+	}
+
+	// Angle in degrees between bettween this and the positive X axis from the specified origin, in the range [-Tau/2, Tau/2]. Doesn't need normalized vectors.
+	[[nodiscard]] float AngleDegs(vec origin = vec::Zero) const
+	{
+		return Angles::RadsToDegs(AngleRads(origin));
+	}
+
+	// Smallest angle between the two vectors, in radians. Signed, in range [-Tau/2, Tau/2]. Needs normalized vectors or vectors of the same length.
+	[[nodiscard]] float AngleRadsBetween(vec other) const
+	{
+		return std::atan2(x * other.y - y * other.x, x * other.x + y * other.y);
+	}
+
+	// Smallest angle between the two vectors, in degrees, always positive in range [-180, 180]. Needs normalized vectors or vectors of the same length.
+	[[nodiscard]] float AngleDegsBetween(vec other) const
+	{
+		return Angles::RadsToDegs(AngleRadsBetween(other));
 	}
 
 	[[nodiscard]] vec RotatedAroundOriginRads(float rads) const
@@ -116,6 +123,16 @@ struct vec
 	[[nodiscard]] vec RotatedAroundOriginDegs(float degrees) const
 	{
 		return RotatedAroundOriginRads(Angles::DegsToRads(degrees));
+	}
+
+	void RotateAroundOriginRads(float rads)
+	{
+		*this = RotatedAroundOriginRads(rads);
+	}
+
+	void RotateAroundOriginDegs(float degrees)
+	{
+		*this = RotatedAroundOriginDegs(degrees);
 	}
 
 	// Note: If specified, maxTurnRate should to be multiplied by dt
@@ -250,8 +267,6 @@ inline float vec::Cross(vec v2) const
 	return x*v2.y - y*v2.x;
 }
 
-//  returns positive if v2 is clockwise of this vector,
-//  minus if anticlockwise (Y axis pointing down, X axis to right)
 enum {clockwise = 1, anticlockwise = -1};
 inline int vec::Sign(vec v2) const
 {
@@ -368,14 +383,14 @@ inline vec vec::Normalized() const
 	return ySeparation*ySeparation + xSeparation*xSeparation;
 }
 
-[[nodiscard]] inline float AngleRads(vec v1, vec v2 = vec::Zero)
+[[nodiscard]] inline float AngleRadsBetween(vec v1, vec v2)
 {
-	return atan2(v1.y - v2.y, v1.x - v2.x);
+	return v1.AngleRadsBetween(v2);
 }
 
-[[nodiscard]] inline float AngleDegs(vec v1, vec v2 = vec::Zero)
+[[nodiscard]] inline float AngleDegsBetween(vec v1, vec v2)
 {
-	return Angles::RadsToDegs(AngleRads(v1, v2));
+	return v1.AngleDegsBetween(v2);
 }
 
 //------------------------------------------------------------------------operator overloads
