@@ -53,6 +53,11 @@ float perlin_noise(vec2 p)
 
 float perlin_layer(vec2 coord, float from, float to) {
     float noise = perlin_noise(coord);
+    /*
+    if (noise  > from && noise < to) {
+        float lol = abs((((noise - from) / (to - from))) - 0.5);
+        return 1.0 - (lol * lol * 2.5);
+    }*/
     if (noise > from && noise < to) noise = 1.0; else noise = 0.0;
     return noise;
 }
