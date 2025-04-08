@@ -1,8 +1,12 @@
 #pragma once
 
-#include <deque>
-#include <cmath>
+#ifndef _USE_MATH_DEFINES 
+#define _USE_MATH_DEFINES
+#endif
+#include <math.h>
 #include <SDL.h>
+#include <deque>
+
 #include "vec.h"
 #include "bounds.h"
 

@@ -439,8 +439,6 @@ void Stroke::DrawSolidBloc(unsigned int current_joint, unsigned int previous_joi
 	vec lower_previous = ((stippling) ? joints[previous_joint].lower_point * (1.f - stippling / 2.f) + joints[current_joint].lower_point * (stippling / 2.f) : joints[previous_joint].lower_point) + joints[previous_joint].offset;
 	vec lower_next = ((stippling) ? joints[current_joint].lower_point * (1.f - stippling / 2.f) + joints[previous_joint].lower_point * (stippling / 2.f) : joints[current_joint].lower_point) + joints[current_joint].offset;
 
-	unsigned short indices[] = { 0, 1, 2, 3 };
-
 	float first[] = {
 		center_previous.x,
 		center_previous.y,
@@ -468,7 +466,7 @@ void Stroke::DrawSolidBloc(unsigned int current_joint, unsigned int previous_joi
 		joints[current_joint].outer_color.a / 255.f
 
 	};
-	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, first, 4, indices, GPU_BATCH_XY_RGBA);
+	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, first, 4, NULL, GPU_BATCH_XY_RGBA);
 
 	float second[] = {
 		center_previous.x,
@@ -496,7 +494,7 @@ void Stroke::DrawSolidBloc(unsigned int current_joint, unsigned int previous_joi
 		joints[current_joint].outer_color.b / 255.f,
 		joints[current_joint].outer_color.a / 255.f
 	};
-	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, second, 4, indices, GPU_BATCH_XY_RGBA);
+	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, second, 4, NULL, GPU_BATCH_XY_RGBA);
 }
 
 void Stroke::DrawSolidBlocExcluding(const Stroke& other, unsigned int current_joint, unsigned int previous_joint) const
@@ -510,8 +508,6 @@ void Stroke::DrawSolidBlocExcluding(const Stroke& other, unsigned int current_jo
 	vec other_upper_next = ((other.stippling) ? other.joints[current_joint].upper_point * (1.f - other.stippling / 2.f) + other.joints[previous_joint].upper_point * (other.stippling / 2.f) : other.joints[current_joint].upper_point) + other.joints[current_joint].offset;
 	vec other_lower_previous = ((other.stippling) ? other.joints[previous_joint].lower_point * (1.f - other.stippling / 2.f) + other.joints[current_joint].lower_point * (other.stippling / 2.f) : other.joints[previous_joint].lower_point) + other.joints[previous_joint].offset;
 	vec other_lower_next = ((other.stippling) ? other.joints[current_joint].lower_point * (1.f - other.stippling / 2.f) + other.joints[previous_joint].lower_point * (other.stippling / 2.f) : other.joints[current_joint].lower_point) + other.joints[current_joint].offset;
-
-	unsigned short indices[] = { 0, 1, 2, 3 };
 
 	float first[] = {
 		other_upper_previous.x,
@@ -539,7 +535,7 @@ void Stroke::DrawSolidBlocExcluding(const Stroke& other, unsigned int current_jo
 		joints[current_joint].outer_color.b / 255.f,
 		joints[current_joint].outer_color.a / 255.f
 	};
-	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, first, 4, indices, GPU_BATCH_XY_RGBA);
+	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, first, 4, NULL, GPU_BATCH_XY_RGBA);
 
 	float second[] = {
 		other_lower_previous.x,
@@ -567,7 +563,7 @@ void Stroke::DrawSolidBlocExcluding(const Stroke& other, unsigned int current_jo
 		joints[current_joint].outer_color.b / 255.f,
 		joints[current_joint].outer_color.a / 255.f
 	};
-	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, second, 4, indices, GPU_BATCH_XY_RGBA);
+	GPU_PrimitiveBatch(nullptr, Window::currentDrawTarget, GPU_TRIANGLE_STRIP, 4, second, 4, NULL, GPU_BATCH_XY_RGBA);
 }
 
 bool Stroke::Compile()
