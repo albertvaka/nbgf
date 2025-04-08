@@ -752,7 +752,7 @@ void Player::Update(float dt)
 
 	if (SkillTree::instance()->IsEnabled(Skill::GUN)) {
 		bfgPos = pos + bfgOffset();
-		bfgAngle = bfgPos.AngleDegs(Input::GetAnalog(0, AnalogInput::AIM));
+		bfgAngle = Input::GetAnalog(0, AnalogInput::AIM).AngleDegs(bfgPos); //origin=bfgPos
 		// Discretize to 8 directions
 		//bfgAngle = (int(bfgAngle + (45.f / 2)) / 45) * 45.f;
 		if (bfgCooldownTimer > 0.f) {

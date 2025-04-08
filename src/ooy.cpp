@@ -218,7 +218,7 @@ void Ooy::Draw() const
 		break;
 	}
 	case State::CHASING:
-		float degs = Player::instance()->pos.AngleDegs(pos)+180;
+		float degs = Player::instance()->pos.AngleDegs(pos);
 		rect = directions[(int)(degs / 90)];
 		CircleBounds(pos, kStopChasingRadius).DebugDraw(255, 0, 255);
 		break;

@@ -35,7 +35,7 @@ RocketLauncher::RocketLauncher(vec pos)
 
 void RocketLauncher::Update(float dt)
 {
-	angle = pos.AngleDegs(Player::instance()->pos);
+	angle = Player::instance()->pos.AngleDegs(pos);
 	Mates::Clamp(angle, 30, 150);
 
 	awoken = false;
