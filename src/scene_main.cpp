@@ -36,16 +36,6 @@ void SceneMain::ExitScene()
 
 void SceneMain::Update(float dt)
 {
-
-#ifdef _DEBUG
-	const SDL_Scancode restart = SDL_SCANCODE_F5;
-	if (Keyboard::IsKeyJustPressed(restart)) {
-		ExitScene();
-		EnterScene();
-		return;
-	}
-#endif
-
 	veci lastChunk = Rock::GetChunk(ship.pos);
 	ship.Update(dt);
 	veci currentChunk = Rock::GetChunk(ship.pos);
