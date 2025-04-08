@@ -63,10 +63,7 @@ void Missile::Update(float dt)
 	smokeTimer += dt;
 	if (smokeTimer > 1.f/kSmokePerSecond) {
 		smokeTimer = 0;
-		const GPU_Rect& sprite = anim.CurrentFrameRect();
-		vec rear = pos-(vel.Normalized()*sprite.w);
-		rear.DebugDraw(0,255,0);
-		Particles::missile.pos = rear;
+		Particles::missile.pos = pos;
 		Particles::missile.AddParticle();
 	}
 
