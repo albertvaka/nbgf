@@ -86,6 +86,10 @@ struct Input {
 
 	static void IgnoreInput(bool enable);
 
+	static bool IsTouchScreenPrimaryInput();
+
+	static bool LastInputIsTouch;
+
 private:
 	static void MapGameKeys();
 	static std::function<bool(int)> action_mapping[magic_enum::enum_count<GameKeys>()];
