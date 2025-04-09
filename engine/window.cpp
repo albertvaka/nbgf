@@ -12,6 +12,7 @@
 
 #include "debug.h"
 #include "raw_input.h"
+#include "input.h"
 #include "camera.h"
 
 namespace Window
@@ -137,6 +138,7 @@ namespace Window
                 break;
             case SDL_CONTROLLERDEVICEADDED:
                 GamePad::_Added(SDL_GameControllerOpen(event.jdevice.which));
+                Input::PreferredUserInputDevice = Input::InputDevice::GamePad;
                 break;
             case SDL_CONTROLLERDEVICEREMOVED:
                 GamePad::_Removed(SDL_GameControllerFromInstanceID(event.jdevice.which));
@@ -149,6 +151,31 @@ namespace Window
                 }
 #endif
                 Mouse::scrollWheel += wheel;
+                Input::PreferredUserInputDevice = event.wheel.which == SDL_TOUCH_MOUSEID ? Input::InputDevice::Touch : Input::InputDevice::Keyboard;
+            }
+            break;
+            case SDL_FINGERDOWN:
+            case SDL_FINGERMOTION: {
+                Input::PreferredUserInputDevice = Input::InputDevice::Touch;
+            }
+            break;
+            case SDL_KEYDOWN: {
+                Input::PreferredUserInputDevice = Input::InputDevice::Keyboard;
+            }
+            break;
+            case SDL_MOUSEMOTION: {
+                Input::PreferredUserInputDevice = event.motion.which == SDL_TOUCH_MOUSEID ? Input::InputDevice::Touch : Input::InputDevice::Keyboard;
+            }
+            break;
+            case SDL_MOUSEBUTTONDOWN: {
+                // SDL emulates clicks for touch events (unless disabled),
+                // so we need to check it's not an emulated click.
+                Input::PreferredUserInputDevice = event.button.which == SDL_TOUCH_MOUSEID ? Input::InputDevice::Touch : Input::InputDevice::Keyboard;
+            }
+            break;
+            case SDL_JOYBUTTONDOWN:
+            case SDL_JOYAXISMOTION: {
+                Input::PreferredUserInputDevice = Input::InputDevice::GamePad;
             }
             break;
             case SDL_QUIT:
