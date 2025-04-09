@@ -57,9 +57,14 @@ struct vec
 	// Perpendicular -> dot product = 0
 	// Parallel, same direction -> dot product = 1
 	// Parallel, opposite direction -> dot product = -1
-	// The result is the cosine of the angle between the two vectors, but to get the angle prefer using AngleRadsBetween than the more expensive acos.
+	// For normalized vectors, the result is the cosine of the angle between the two vectors,
+	// but to get the angle prefer using AngleRadsBetween than the more expensive acos.
 	[[nodiscard]] inline float Dot(vec v2) const;
 
+	// In 2d the cross product is a scalar, not a perpendicular vector like in 3d.
+	// For normalized vectors, the result is the sine of the angle between the two vectors,
+	// but to get the angle prefer using AngleRadsBetween than the more expensive asin.
+	// The sign of the cross product tells the direction of rotation from a vector to another.
 	[[nodiscard]] inline float Cross(vec v2) const;
 
 	void Clamp(vec minv, vec maxv)
@@ -104,7 +109,8 @@ struct vec
 	// Smallest angle between the two vectors, in radians. Signed, in range [-Tau/2, Tau/2]. Needs normalized vectors or vectors of the same length.
 	[[nodiscard]] float AngleRadsBetween(vec other) const
 	{
-		return std::atan2(x * other.y - y * other.x, x * other.x + y * other.y);
+		// works because atan2(sin(angle), cos(angle)) = angle
+		return std::atan2(Cross(other), Dot(other));
 	}
 
 	// Smallest angle between the two vectors, in degrees, always positive in range [-180, 180]. Needs normalized vectors or vectors of the same length.
@@ -182,7 +188,7 @@ struct vec
 		return *this;
 	}
 
-	// Component-wise product (like in GLSL)
+	// Component-wise (aka dot) product, like in GLSL
 	constexpr vec operator*=(const vec& rhs)
 	{
 		x *= rhs.x;
@@ -338,7 +344,6 @@ inline vec vec::Truncated(float max)
 	return *this;
 }
 
-//  normalizes a 2D Vector
 inline void vec::Normalize()
 {
 	float vector_length = this->Length();
@@ -366,6 +371,15 @@ inline vec vec::Normalized() const
 
 
 //------------------------------------------------------------------------non member functions
+
+[[nodiscard]] inline float Dot(vec v1, vec v2)
+{
+	return v1.x*v2.x + v1.y*v2.y;
+}
+[[nodiscard]] inline float Cross(vec v1, vec v2)
+{
+	return v1.x*v2.y - v1.y*v2.x;
+}
 
 [[nodiscard]] inline float Distance(vec v1, vec v2)
 {
@@ -446,20 +460,20 @@ inline constexpr vec operator/(vec lhs, vec rhs)
 
 inline constexpr veci operator+(veci lhs, veci rhs)
 {
-    veci result(lhs);
-    result.x += rhs.x;
-    result.y += rhs.y;
+	veci result(lhs);
+	result.x += rhs.x;
+	result.y += rhs.y;
 
-    return result;
+	return result;
 }
 
 inline constexpr veci operator-(veci lhs, veci rhs)
 {
-    veci result(lhs);
-    result.x -= rhs.x;
-    result.y -= rhs.y;
+	veci result(lhs);
+	result.x -= rhs.x;
+	result.y -= rhs.y;
 
-    return result;
+	return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -477,9 +491,9 @@ inline void WrapAround(vec &pos, float MaxX, float MaxY)
 //  returns true if the target position is in the field of view of the entity
 //  positioned at posFirst facing in facingFirst
 inline bool IsSecondInFOVOfFirst(vec posFirst,
-                                 vec facingFirst,
-                                 vec posSecond,
-                                 float    fov)
+								 vec facingFirst,
+								 vec posSecond,
+								 float	fov)
 {
 	vec toTarget = (posSecond - posFirst);
 	toTarget.Normalize();
@@ -542,6 +556,10 @@ inline std::ostream& operator<<(std::ostream& os, vec rhs)
 	os << rhs.x << "," << rhs.y;
 	return os;
 }
+
+//-----------------------------------------------------------------------------
+//  Transform used for Tiled imports
+//-----------------------------------------------------------------------------
 
 struct Transform : public vec {
 	constexpr Transform(vec pos, float rotationDegs) : vec(pos), rotationDegs(rotationDegs) { Angles::ClampDegsBetween0and360(rotationDegs); }
