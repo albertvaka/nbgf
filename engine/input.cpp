@@ -3,6 +3,12 @@
 #include "magic_enum.h"
 #include <functional>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
+bool Input::LastInputIsTouch = Input::IsTouchScreenPrimaryInput();
+
 //int player_to_joystick[Input::kMaxPlayers] = { nullptr };
 bool ignoreInput = false;
 
@@ -51,3 +57,26 @@ void Input::Init()
 	Input::MapGameKeys();
 }
 
+
+#ifdef __EMSCRIPTEN__
+EM_JS(bool, JavaScriptIsTouchScreenPrimaryInput, (), {
+    // Check if the device has touch capability
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        // Check if the device is likely a mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        // Check if the device has a keyboard
+        const hasKeyboard = navigator.keyboard && navigator.keyboard.getLayoutMap;
+        return isMobile && !hasKeyboard;
+    }
+    return false;
+});
+#endif
+
+
+bool Input::IsTouchScreenPrimaryInput() {
+#ifdef __EMSCRIPTEN__
+	return JavaScriptIsTouchScreenPrimaryInput();
+#else
+	return false;
+#endif
+}

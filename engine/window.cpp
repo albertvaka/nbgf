@@ -12,6 +12,7 @@
 
 #include "debug.h"
 #include "raw_input.h"
+#include "input.h"
 #include "camera.h"
 
 namespace Window
@@ -149,6 +150,25 @@ namespace Window
                 }
 #endif
                 Mouse::scrollWheel += wheel;
+                Input::LastInputIsTouch = event.wheel.which == SDL_TOUCH_MOUSEID;
+            }
+            break;
+            case SDL_FINGERDOWN | SDL_FINGERMOTION: {
+                Input::LastInputIsTouch = true;
+            }
+            break;
+            case SDL_KEYDOWN: {
+                Input::LastInputIsTouch = false;
+            }
+            break;
+            case SDL_MOUSEMOTION: {
+                Input::LastInputIsTouch = event.motion.which == SDL_TOUCH_MOUSEID;
+            }
+            break;
+            case SDL_MOUSEBUTTONDOWN: {
+                // SDL emulates clicks for touch events (unless disabled),
+                // so we need to check it's not an emulated click.
+                Input::LastInputIsTouch = event.button.which == SDL_TOUCH_MOUSEID;
             }
             break;
             case SDL_QUIT:
