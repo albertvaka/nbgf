@@ -81,6 +81,6 @@ void main(void)
 {
     vec2 coord = vertex*iResolution + offset*zoom;
     coord /= 250000.0 * windowScale;
-    coord.y *= iResolution.x/iResolution.y;
+    coord.x *= iResolution.y/iResolution.x;
     sea(fragColor, coord);
 }
