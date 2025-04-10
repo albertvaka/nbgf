@@ -10,9 +10,6 @@
 #include "vec.h"
 #include "bounds.h"
 
-float myRand(float low, float high);
-
-
 ////////////////////////////////////////////////////////////
 ///	The Stroke class allow to draw real-time animated strokes.
 ///
