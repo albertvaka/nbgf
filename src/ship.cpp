@@ -100,25 +100,16 @@ void Ship::Update(float dt) {
 	}
 
 	if (isDrifting) {
-		if (Input::IsPressed(0, GameKeys::UP)) {
-			vel += heading * kAcceleration * dt;
-			speed = vel.Length();
-		}
-		if (Input::IsPressed(0, GameKeys::DOWN)) {
-			vel -= heading * kAcceleration * dt;
-			speed = vel.Length();
-		}
-
-		// When not turning, gradually align velocity with heading
-		if (!isTurning && speed > 0) {
-			float alignmentAngle = velDir.AngleRadsBetween(heading);
-			float maxRotation = kDriftRecoveryRate * dt;
-			float rotationAmount = std::min(fabs(alignmentAngle), maxRotation);
-			if (alignmentAngle != 0) {
-				rotationAmount *= alignmentAngle > 0 ? 1 : -1;
-				velDir = velDir.RotatedAroundOriginRads(rotationAmount);
+		bool allowAccelWhenDrifting = true;
+		if (allowAccelWhenDrifting) {
+			if (Input::IsPressed(0, GameKeys::UP)) {
+				vel += heading * kAcceleration * dt;
+				speed = vel.Length();
 			}
-			vel = velDir * speed;
+			if (Input::IsPressed(0, GameKeys::DOWN)) {
+				vel -= heading * kAcceleration * dt;
+				speed = vel.Length();
+			}
 		}
 	} else {
 		if (Input::IsPressed(0, GameKeys::UP)) {
@@ -127,7 +118,20 @@ void Ship::Update(float dt) {
 		if (Input::IsPressed(0, GameKeys::DOWN)) {
 			speed -= kAcceleration * dt;
 		}
-		velDir = heading; // Always use heading as velocity direction when not drifting
+	}
+
+	bool graduallyAlign = isDrifting ? (!isTurning) : (velDir.Dot(heading) < 0.99f);
+	if (graduallyAlign) {
+		// Gradually align velocity with heading
+		float alignmentAngle = velDir.AngleRadsBetween(heading);
+		float maxRotation = kDriftRecoveryRate * dt;
+		float rotationAmount = std::min(fabs(alignmentAngle), maxRotation);
+		if (alignmentAngle != 0) {
+			rotationAmount *= alignmentAngle > 0 ? 1 : -1;
+			velDir = velDir.RotatedAroundOriginRads(rotationAmount);
+		}
+	} else if (!isDrifting) {
+		velDir = heading;
 	}
 
 	pos.DebugDraw();
