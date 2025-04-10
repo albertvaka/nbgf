@@ -12,18 +12,22 @@
 #include "steering_behavior.h"
 #include "stroke.h"
 #include "particles.h"
+#include "imgui.h"
 
 const int kInitialLives = 3;
 const float kImmunityTime = 2.0f;
-const float kAcceleration = 90.f;
-const float kIgnoreCollisionTimer = 0.2f;
+float kAcceleration = 90.f;
+float kMaxSpeed = 220.f;
+float kRotationSpeedCoef = 0.0035f;
+float kRotationSpeed = 25.f;
+float kIgnoreCollisionTimer = 0.2f;
 const float kShipFrontRadius = 15.f;
 const float kShipBackRadius = 25.f;
 const float kShipFrontBoundsOffset = 45.f;
 const float kShipBackBoundsOffset = 50.f;
-const float kDecelerationCoef = 0.3f;
-const float kDecelerationCoefDrifting = 0.1f;
-const float kMaxSpeed = 220.f;
+float kDecelerationCoef = 0.3f;
+float kDecelerationCoefDrifting = 0.1f;
+const float kParticlesSpeed = 110.f;
 const float kTimeBetweenStrokeSegments = 0.05f;
 const float kRotationWhenCrashingDegs = 45.f;
 const float kMinColisionAngleToDamageDegs = 10.f;
@@ -86,12 +90,12 @@ void Ship::Update(float dt) {
 
 	bool isTurning = false;
 	if (Input::IsPressed(0, GameKeys::LEFT)) {
-		heading = heading.RotatedAroundOriginRads(-0.0035*dt*(speed+25));
+		heading = heading.RotatedAroundOriginRads(-kRotationSpeedCoef*dt*(speed+kRotationSpeed));
 		heading.Normalize();
 		isTurning = true;
 	}
 	if (Input::IsPressed(0, GameKeys::RIGHT)) {
-		heading = heading.RotatedAroundOriginRads(0.0035*dt*(speed+25));
+		heading = heading.RotatedAroundOriginRads(kRotationSpeedCoef*dt*(speed+kRotationSpeed));
 		heading.Normalize();
 		isTurning = true;
 	}
@@ -172,8 +176,8 @@ void Ship::Update(float dt) {
 		outerStroke.AddJoint(pos, thickness * 20.f + wobblyness);
 	}
 
-	Particles::waterTrail.pos = pos;
-	if (speed/kMaxSpeed > 0.5) {
+	if (speed > kParticlesSpeed) {
+		Particles::waterTrail.pos = pos;
 		Particles::waterTrail.Spawn(dt);
 	}
 
@@ -209,6 +213,21 @@ void Ship::Draw() {
 
 	Assets::tintShader.Deactivate();
 
+#ifdef _IMGUI
+	{
+		ImGui::Begin("ship");
+		ImGui::SliderFloat("kAcceleration", &kAcceleration, 0.f, 500.f);
+		ImGui::SliderFloat("kMaxSpeed", &kMaxSpeed, 0.f, 1000.f);
+		ImGui::SliderFloat("kRotationSpeed", &kRotationSpeed, 0.f, 100.f);
+		ImGui::SliderFloat("kRotationSpeedCoef", &kRotationSpeedCoef, 0.f, 0.01f);
+		ImGui::SliderFloat("kDecelerationCoef", &kDecelerationCoef, 0.f, 1.f);
+		ImGui::SliderFloat("kDecelerationCoefDrifting", &kDecelerationCoefDrifting, 0.f, 1.f);
+		ImGui::SliderFloat("kIgnoreCollisionTimer", &kIgnoreCollisionTimer, 0.f, 10.f);
+		ImGui::End();
+	}
+
+	//Particles::waterTrail.DrawImGUI();
+#endif
 }
 
 std::tuple<CircleBounds, CircleBounds, CircleBounds> Ship::Bounds() const {

@@ -96,6 +96,6 @@ void SceneMain::Draw()
 		ImGui::End();
 	}
 
-	Particles::waterTrail.DrawImGUI();
+	//Particles::waterTrail.DrawImGUI();
 #endif
 }
