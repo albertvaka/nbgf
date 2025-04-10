@@ -15,6 +15,7 @@
 
 const int kInitialLives = 3;
 const float kImmunityTime = 2.0f;
+const float kAcceleration = 90.f;
 const float kIgnoreCollisionTimer = 0.2f;
 const float kShipFrontRadius = 15.f;
 const float kShipBackRadius = 25.f;
@@ -26,8 +27,9 @@ const float kTimeBetweenStrokeSegments = 0.05f;
 const float kRotationWhenCrashingDegs = 45.f;
 const float kMinColisionAngleToDamageDegs = 10.f;
 const float kSlowDownWhenHit = 0.9f;
-const float zoomSailingFast = 0.6f;
-const float zoomSailingSlow = 0.9f;
+const float kZoomSailingFast = 0.6f;
+const float kZoomSailingSlow = 0.9f;
+const float kDriftRecoveryRate = 2.0f; // How quickly velocity aligns with heading when not turning
 
 extern float mainClock;
 
@@ -65,7 +67,7 @@ void Ship::Reset() {
 	vel = vec::Zero;
 	heading = vec(1,0);
 	timer = 0.f;
-	Camera::SetZoom(zoomSailingSlow);
+	Camera::SetZoom(kZoomSailingSlow);
 	previousZoomDiff = 0;
 	distanceSailed = 0.f;
 	innerStroke.Clear();
@@ -76,24 +78,56 @@ void Ship::Reset() {
 
 void Ship::Update(float dt) {
 	float speed = vel.Length();
+	// The actual direction in which the ship is moving, can be different from heading if drifting
+	vec velDir = speed > 0 ? vel.Normalized() : heading;
 
 	// The correct way to add friction
 	float frictionImpulse = speed * kDecelerationCoef;
 	speed -= frictionImpulse * dt;
 
-	if (Input::IsPressed(0, GameKeys::UP)) {
-		speed += 90*dt;
-	}
-	if (Input::IsPressed(0, GameKeys::DOWN)) {
-		speed -= 90*dt;
-	}
+	bool isTurning = false;
+	bool isDrifting = Input::IsPressed(0, GameKeys::DRIFT);
+
 	if (Input::IsPressed(0, GameKeys::LEFT)) {
 		heading = heading.RotatedAroundOriginRads(-0.0035*dt*(speed+25));
 		heading.Normalize();
+		isTurning = true;
 	}
 	if (Input::IsPressed(0, GameKeys::RIGHT)) {
 		heading = heading.RotatedAroundOriginRads(0.0035*dt*(speed+25));
 		heading.Normalize();
+		isTurning = true;
+	}
+
+	if (isDrifting) {
+		if (Input::IsPressed(0, GameKeys::UP)) {
+			vel += heading * kAcceleration * dt;
+			speed = vel.Length();
+		}
+		if (Input::IsPressed(0, GameKeys::DOWN)) {
+			vel -= heading * kAcceleration * dt;
+			speed = vel.Length();
+		}
+
+		// When not turning, gradually align velocity with heading
+		if (!isTurning && speed > 0) {
+			float alignmentAngle = velDir.AngleRadsBetween(heading);
+			float maxRotation = kDriftRecoveryRate * dt;
+			float rotationAmount = std::min(fabs(alignmentAngle), maxRotation);
+			if (alignmentAngle != 0) {
+				rotationAmount *= alignmentAngle > 0 ? 1 : -1;
+				velDir = velDir.RotatedAroundOriginRads(rotationAmount);
+			}
+			vel = velDir * speed;
+		}
+	} else {
+		if (Input::IsPressed(0, GameKeys::UP)) {
+			speed += kAcceleration * dt;
+		}
+		if (Input::IsPressed(0, GameKeys::DOWN)) {
+			speed -= kAcceleration * dt;
+		}
+		velDir = heading; // Always use heading as velocity direction when not drifting
 	}
 
 	pos.DebugDraw();
@@ -127,7 +161,8 @@ void Ship::Update(float dt) {
 	}
 
 	Mates::Clamp(speed, 0.f, kMaxSpeed);
-	vel = speed*heading;
+	vel = velDir * speed;
+
 	pos += vel * dt;
 
 	distanceSailed += speed;
@@ -150,7 +185,7 @@ void Ship::Update(float dt) {
 	}
 
 	float camZoomChangeThreshold = kMaxSpeed / 2.f;
-	float targetZoom = tweeny::easing::quadraticInOut.run(std::max(0.f, speed - camZoomChangeThreshold) / (kMaxSpeed - camZoomChangeThreshold), zoomSailingSlow, zoomSailingFast);
+	float targetZoom = tweeny::easing::quadraticInOut.run(std::max(0.f, speed - camZoomChangeThreshold) / (kMaxSpeed - camZoomChangeThreshold), kZoomSailingSlow, kZoomSailingFast);
 	float currentZoom = Camera::Zoom();
 	float zoomDiff = targetZoom - currentZoom;
 	float smoothenedZoomDiff = (zoomDiff + previousZoomDiff) / 2.f;

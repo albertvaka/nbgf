@@ -56,14 +56,11 @@ void Input::MapGameKeys()
                     )
                 );
     };
-    action_mapping[(int)GameKeys::SHOOT] = [](int p) {
+    action_mapping[(int)GameKeys::DRIFT] = [](int p) {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
             GamePad::Trigger::Right.IsPressed(p) || (
-                (p == keyboard_player_id) && (
-                        Mouse::IsPressed() ||
-                        Keyboard::IsKeyJustPressed(SDL_SCANCODE_SPACE)
-                        )
-                );
+                (p == keyboard_player_id) && (Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE))
+            );
     };
     action_mapping[(int)GameKeys::START] = [](int p)
     {
