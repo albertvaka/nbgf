@@ -22,6 +22,7 @@ const float kShipBackRadius = 25.f;
 const float kShipFrontBoundsOffset = 45.f;
 const float kShipBackBoundsOffset = 50.f;
 const float kDecelerationCoef = 0.3f;
+const float kDecelerationCoefDrifting = 0.1f;
 const float kMaxSpeed = 220.f;
 const float kTimeBetweenStrokeSegments = 0.05f;
 const float kRotationWhenCrashingDegs = 45.f;
@@ -77,17 +78,13 @@ void Ship::Reset() {
 
 
 void Ship::Update(float dt) {
+	bool isDrifting = Input::IsPressed(0, GameKeys::DRIFT);
+
 	float speed = vel.Length();
 	// The actual direction in which the ship is moving, can be different from heading if drifting
 	vec velDir = speed > 0 ? vel.Normalized() : heading;
 
-	// The correct way to add friction
-	float frictionImpulse = speed * kDecelerationCoef;
-	speed -= frictionImpulse * dt;
-
 	bool isTurning = false;
-	bool isDrifting = Input::IsPressed(0, GameKeys::DRIFT);
-
 	if (Input::IsPressed(0, GameKeys::LEFT)) {
 		heading = heading.RotatedAroundOriginRads(-0.0035*dt*(speed+25));
 		heading.Normalize();
@@ -99,19 +96,11 @@ void Ship::Update(float dt) {
 		isTurning = true;
 	}
 
-	if (isDrifting) {
-		bool allowAccelWhenDrifting = true;
-		if (allowAccelWhenDrifting) {
-			if (Input::IsPressed(0, GameKeys::UP)) {
-				vel += heading * kAcceleration * dt;
-				speed = vel.Length();
-			}
-			if (Input::IsPressed(0, GameKeys::DOWN)) {
-				vel -= heading * kAcceleration * dt;
-				speed = vel.Length();
-			}
-		}
-	} else {
+	// The correct way to add friction
+	float frictionImpulse = (isDrifting && isTurning) ? speed * kDecelerationCoefDrifting : speed * kDecelerationCoef;
+	speed -= frictionImpulse * dt;
+
+	if (!isDrifting) {
 		if (Input::IsPressed(0, GameKeys::UP)) {
 			speed += kAcceleration * dt;
 		}
