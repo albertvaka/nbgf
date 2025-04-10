@@ -158,7 +158,7 @@ namespace Window
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
                     int width = event.window.data1;
                     int height = event.window.data2;
-                    Debug::out << "Window size changed" << width << " " << height;
+                    Debug::out << "Window size changed to " << width << " " << height;
 
                     GPU_SetWindowResolution(width, height);
 

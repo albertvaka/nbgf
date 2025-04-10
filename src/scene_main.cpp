@@ -93,6 +93,10 @@ void SceneMain::Draw()
 		ImGui::Begin("scene");
 		vec m = Mouse::GetPositionInWorld();
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
+		if (ImGui::Button("Fullscreen")) {
+			Debug::out << "Fullscreen" << Window::IsFullScreen();
+			Window::SetFullScreen(!Window::IsFullScreen());
+		}
 		ImGui::End();
 	}
 

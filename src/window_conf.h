@@ -1,6 +1,6 @@
 #pragma once
 
-//#define GROW_TO_FILL_SCREEN
+#define GROW_TO_FILL_SCREEN
 
 namespace Window
 {
