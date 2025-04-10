@@ -16,7 +16,7 @@ namespace Window {
 
 	int Init();
 	void ProcessEvents();
-	
+
 	inline bool IsFullScreen() {
 		return SDL_GetWindowFlags(Window::window) & SDL_WINDOW_FULLSCREEN;
 	}
@@ -40,7 +40,7 @@ namespace Window {
 	}
 
 	inline float GetViewportScale() {
-		return Window::screenTarget->viewport.w / Window::GAME_WIDTH;
+		return Window::screenTarget->viewport.h / Window::GAME_HEIGHT;
 	}
 
 	inline vec GetViewportScaledResolution() {
@@ -75,6 +75,7 @@ namespace Window {
 		Window::currentDrawTarget = Window::screenTarget;
 	}
 
+	vec GetUsableScreenSize();
 }
 
 inline std::ostream& operator<<(std::ostream& os, const SDL_Point& rhs)
