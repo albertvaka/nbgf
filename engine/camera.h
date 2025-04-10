@@ -3,6 +3,12 @@
 #include "window_conf.h"
 #include "bounds.h"
 
+#ifdef GROW_TO_FILL_SCREEN
+#define CONSTEVAL_WHEN_FIXED_SIZE
+#else
+#define CONSTEVAL_WHEN_FIXED_SIZE consteval
+#endif
+
 namespace Camera
 {
 	extern GPU_Camera camera;
@@ -14,7 +20,7 @@ namespace Camera
 		return vec(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
 	}
 
-	inline float AspectRatio()
+	inline CONSTEVAL_WHEN_FIXED_SIZE float AspectRatio()
 	{
 		return float(Window::GAME_WIDTH)/Window::GAME_HEIGHT;
 	}
@@ -138,17 +144,17 @@ namespace Camera
 			return vec::Zero;
 		}
 
-		inline consteval vec Size()
+		inline CONSTEVAL_WHEN_FIXED_SIZE vec Size()
 		{
 			return vec(Window::GAME_WIDTH, Window::GAME_HEIGHT);
 		}
 
-		inline consteval BoxBounds Bounds()
+		inline CONSTEVAL_WHEN_FIXED_SIZE BoxBounds Bounds()
 		{
 			return BoxBounds(vec::Zero, Size());
 		}
 
-		inline consteval vec Center()
+		inline CONSTEVAL_WHEN_FIXED_SIZE vec Center()
 		{
 			return Size() / 2.f;
 		}

@@ -20,24 +20,48 @@ namespace Window
     GPU_Target* screenTarget;
     GPU_Target* currentDrawTarget;
 
-    int Init() {
-        GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
-
 #ifdef __EMSCRIPTEN__
-        int scale = 1;
+	EM_JS(int, GetWindowWidth, (), {
+		return window.innerWidth;
+	});
+	EM_JS(int, GetWindowHeight, (), {
+		return window.innerHeight;
+	});
+#endif
+
+    vec GetUsableScreenSize() {
+#ifdef __EMSCRIPTEN__
+        return vec(GetWindowWidth(), GetWindowHeight());
 #else
         SDL_DisplayMode dm;
         SDL_GetDesktopDisplayMode(0, &dm);
-        dm.h -= 64; // Account for some pixels used by the window decorations
-        int scale = std::min(dm.w / GAME_WIDTH, dm.h / GAME_HEIGHT);
+        dm.h -= 64; // Account for some pixels used by the window decorations (FIXME: this isn't very precise and not true in fullscreen mode)
+        return vec(dm.w, dm.h);
+#endif
+    }
+
+
+    int Init() {
+        GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
+
+        vec screenSize = GetUsableScreenSize();
+
+#ifdef GROW_TO_FILL_SCREEN
+        float scale = screenSize.y / float(GAME_HEIGHT);
+        GAME_WIDTH = screenSize.x / scale;
+        Debug::out << "Scaling to x" << scale;
+#else
+    #ifdef __EMSCRIPTEN__
+        int scale = 1;
+    #else
+        int scale = std::min(screenSize.x / GAME_WIDTH, screenSize.y / GAME_HEIGHT);
         if (scale <= 0) {
-            Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the window resolution (" << dm.w << "*" << dm.h << ")";
+            Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the window resolution (" << screenSize.x << "*" << screenSize.y << ")";
             scale = 1;
         }
         Debug::out << "Scaling to x" << scale;
-        //Debug::out << dm.w << " " << dm.h;
- #endif
-
+    #endif
+#endif
         GPU_SetPreInitFlags(GPU_INIT_DISABLE_AUTO_VIRTUAL_RESOLUTION);
 
         auto sdl_create_window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_HIDDEN;
@@ -134,6 +158,8 @@ namespace Window
                 if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
                     int width = event.window.data1;
                     int height = event.window.data2;
+                    Debug::out << "Window size changed to " << width << " " << height;
+
                     GPU_SetWindowResolution(width, height);
 
                     // Workaround: Re-read the width and height for scaling instead of using the data fields in the event.
@@ -141,9 +167,20 @@ namespace Window
                     // See: https://github.com/grimfang4/sdl-gpu/issues/188
                     SDL_GL_GetDrawableSize(window, &width, &height);
 
+#ifdef GROW_TO_FILL_SCREEN
+                    // Adjust GAME_WIDTH to maintain aspect ratio with the window
+                    GAME_WIDTH = width / GetViewportScale();
+
+                    // Set viewport to fill the entire window
+                    GPU_Rect rect;
+                    rect.x = 0;
+                    rect.y = 0;
+                    rect.w = width;
+                    rect.h = height;
+#else
+                    const float aspect = Window::GAME_WIDTH/float(Window::GAME_HEIGHT);
                     const float scaleW = width/float(Window::GAME_WIDTH);
                     const float scaleH = height/float(Window::GAME_HEIGHT);
-                    const float aspect = Window::GAME_WIDTH/float(Window::GAME_HEIGHT);
                     GPU_Rect rect;
                     if (scaleW < scaleH) {
                         rect.w = width;
@@ -156,7 +193,8 @@ namespace Window
                         rect.x = (width - rect.w)/2;
                         rect.y = 0;
                     }
-                    GPU_SetViewport(Window::screenTarget,rect);
+#endif
+                    GPU_SetViewport(Window::screenTarget, rect);
                     GPU_SetVirtualResolution(Window::screenTarget, Window::GAME_WIDTH, Window::GAME_HEIGHT);
                 }
                 break;
