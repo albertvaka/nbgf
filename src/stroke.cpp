@@ -7,11 +7,7 @@
 #include "vec.h"
 #include <SDL.h>
 #include "window_drawraw.h"
-
-float myRand(float low, float high)
-{
-	return static_cast<float>(std::rand()) / RAND_MAX * (high - low) + low;
-}
+#include "rand.h"
 
 Stroke::Joint::Joint() :
 	birth_time(0),
@@ -249,7 +245,7 @@ bool Stroke::AddJoint(const vec& position, bool precompile)
 	Joint joint;
 	joint.position = position;
 	joint.birth_time = time;
-	joint.thickness_scale = myRand(random_thickness.x, random_thickness.y);
+	joint.thickness_scale = Rand::rollf(random_thickness.x, random_thickness.y);
 
 	if (joints.empty())
 	{
@@ -270,7 +266,7 @@ bool Stroke::AddJoint(const vec& position, bool precompile)
 		{
 			
 			joint.position = last_point_position + vec::FromAngleRads(angle, (i + 1) * min_segment_length);
-			joint.thickness_scale = myRand(random_thickness.x, random_thickness.y);
+			joint.thickness_scale = Rand::rollf(random_thickness.x, random_thickness.y);
 			joints.push_back(joint);
 			is_compiled = false;
 			is_length_compiled = false;
@@ -689,7 +685,7 @@ void Stroke::ComputeOffset()
 {
 	for (unsigned int i = 0; i < joints.size(); i++)
 	{
-		float offset = myRand(-shaking, shaking);
+		float offset = Rand::rollf(-shaking, shaking);
 		joints[i].offset = vec::FromAngleDegs(joints[i].angle + 90, offset);
 	}
 }
