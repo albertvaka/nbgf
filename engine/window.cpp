@@ -94,7 +94,7 @@ namespace Window
             SDL_SetWindowFullscreen(Window::window, 0);
         }
 #else
-        SDL_SetWindowFullscreen(Window::window, b ? SDL_WINDOW_FULLSCREEN : 0);
+        SDL_SetWindowFullscreen(Window::window, b ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 #endif
     }
 
