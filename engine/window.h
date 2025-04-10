@@ -40,7 +40,7 @@ namespace Window {
 	}
 
 	inline float GetViewportScale() {
-		return Window::screenTarget->viewport.w / Window::GAME_WIDTH;
+		return Window::screenTarget->viewport.h / Window::GAME_HEIGHT;
 	}
 
 	inline vec GetViewportScaledResolution() {
@@ -75,6 +75,7 @@ namespace Window {
 		Window::currentDrawTarget = Window::screenTarget;
 	}
 
+	vec GetUsableScreenSize();
 }
 
 inline std::ostream& operator<<(std::ostream& os, const SDL_Point& rhs)
