@@ -34,6 +34,7 @@ mono_crash.*
 bld/
 [Bb]in/*.exe
 [Oo]bj/
+emobj/
 [Ll]og/
 [Ll]ogs/
 
