@@ -19,6 +19,7 @@ const float kImmunityTime = 2.0f;
 float kAcceleration = 90.f;
 float kMaxSpeed = 220.f;
 float kRotationSpeedCoef = 0.0035f;
+float kRotationSpeedCoefDrifting = kRotationSpeedCoef * 1.1f;
 float kRotationSpeed = 25.f;
 float kIgnoreCollisionTimer = 0.2f;
 const float kShipFrontRadius = 15.f;
@@ -90,12 +91,14 @@ void Ship::Update(float dt) {
 
 	bool isTurning = false;
 	if (Input::IsPressed(0, GameKeys::LEFT)) {
-		heading = heading.RotatedAroundOriginRads(-kRotationSpeedCoef*dt*(speed+kRotationSpeed));
+		float coef = isDrifting? kRotationSpeedCoefDrifting : kRotationSpeedCoef;
+		heading = heading.RotatedAroundOriginRads(-coef*(speed+kRotationSpeed)*dt);
 		heading.Normalize();
 		isTurning = true;
 	}
 	if (Input::IsPressed(0, GameKeys::RIGHT)) {
-		heading = heading.RotatedAroundOriginRads(kRotationSpeedCoef*dt*(speed+kRotationSpeed));
+		float coef = isDrifting? kRotationSpeedCoefDrifting : kRotationSpeedCoef;
+		heading = heading.RotatedAroundOriginRads(coef*(speed+kRotationSpeed)*dt);
 		heading.Normalize();
 		isTurning = true;
 	}
@@ -216,6 +219,7 @@ void Ship::Draw() {
 #ifdef _IMGUI
 	{
 		ImGui::Begin("ship");
+		ImGui::Text("Speed: %f", vel.Length());
 		ImGui::SliderFloat("kAcceleration", &kAcceleration, 0.f, 500.f);
 		ImGui::SliderFloat("kMaxSpeed", &kMaxSpeed, 0.f, 1000.f);
 		ImGui::SliderFloat("kRotationSpeed", &kRotationSpeed, 0.f, 100.f);
