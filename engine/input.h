@@ -13,55 +13,55 @@ struct Input {
 
 	static const int kMaxPlayers;
 
-	static vec GetAnalog(int player, AnalogInput k) {
+	[[nodiscard]] static vec GetAnalog(int player, AnalogInput k) {
 		SDL_assert(player < kMaxPlayers);
 		return analog_states[player][int(k)];
 	}
 
-	static bool IsPressed(int player, GameKeys k) {
+	[[nodiscard]] static bool IsPressed(int player, GameKeys k) {
 		SDL_assert(player < kMaxPlayers);
 		return (action_states[player][int(k)] == PRESSED || action_states[player][int(k)] == JUST_PRESSED);
 	}
 
-	static bool IsPressedAnyPlayer(GameKeys k) {
+	[[nodiscard]] static bool IsPressedAnyPlayer(GameKeys k) {
 		for (int i = 0; i < kMaxPlayers; i++) {
 			if (IsPressed(i, k)) return true;
 		}
 		return false;
 	}
 
-	static bool IsJustPressedAnyPlayer(GameKeys k) {
+	[[nodiscard]] static bool IsJustPressedAnyPlayer(GameKeys k) {
 		for (int i = 0; i < kMaxPlayers; i++) {
 			if (IsJustPressed(i, k)) return true;
 		}
 		return false;
 	}
 
-	static bool IsReleased(int player, GameKeys k) {
+	[[nodiscard]] static bool IsReleased(int player, GameKeys k) {
 		SDL_assert(player < kMaxPlayers);
 		return (action_states[player][int(k)] == RELEASED || action_states[player][int(k)] == JUST_RELEASED);
 	}
 
 	// True for one frame after the action is pressed
-	static bool IsJustPressed(int player, GameKeys k) {
+	[[nodiscard]] static bool IsJustPressed(int player, GameKeys k) {
 		SDL_assert(player < kMaxPlayers);
 		return (action_states[player][int(k)] == JUST_PRESSED);
 	}
 
 	// True for `interval` time after the key is pressed
-	static bool IsJustPressed(int player, GameKeys k, float interval) {
+	[[nodiscard]] static bool IsJustPressed(int player, GameKeys k, float interval) {
 		SDL_assert(player < kMaxPlayers);
 		return action_states[player][int(k)] == JUST_PRESSED || (action_states[player][int(k)] == PRESSED && action_times[player][int(k)] < interval);
 	}
 
 	// True for one frame after the action is pressed
-	static bool IsJustReleased(int player, GameKeys k) {
+	[[nodiscard]] static bool IsJustReleased(int player, GameKeys k) {
 		SDL_assert(player < kMaxPlayers);
 		return (action_states[player][int(k)] == JUST_RELEASED);
 	}
 
 	// True for `interval` time after the key is pressed
-	static bool IsJustReleased(int player, GameKeys k, float interval) {
+	[[nodiscard]] static bool IsJustReleased(int player, GameKeys k, float interval) {
 		SDL_assert(player < kMaxPlayers);
 		return action_states[player][int(k)] == JUST_RELEASED || (action_states[player][int(k)] == RELEASED && action_times[player][int(k)] < interval);
 	}
