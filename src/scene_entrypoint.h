@@ -1,5 +1,6 @@
 #pragma once
 
 #include "scene_main.h"
+#include "scene_intro.h"
 
-typedef SceneMain EntryPointScene;
+#define EntryPointScene SceneMain

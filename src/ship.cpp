@@ -34,7 +34,8 @@ const float kRotationWhenCrashingDegs = 45.f;
 const float kMinColisionAngleToDamageDegs = 10.f;
 const float kSlowDownWhenHit = 0.9f;
 const float kZoomSailingFast = 0.6f;
-const float kZoomSailingSlow = 0.9f;
+float kZoomSailingSlow = 0.9f;
+vec kShipSpawnPos = vec(200, 200);
 const float kDriftRecoveryRate = 2.0f; // How quickly velocity aligns with heading when not turning
 
 extern float mainClock;
@@ -69,7 +70,7 @@ void Ship::Reset() {
 	lives = kInitialLives;
 	immunityTimer = 0.f;
 	ignoreCollisionTimer = 0.f;
-	pos = vec(200, 200);
+	pos = kShipSpawnPos;
 	vel = vec::Zero;
 	heading = vec(1,0);
 	timer = 0.f;

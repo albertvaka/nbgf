@@ -6,10 +6,14 @@
 #include "assets.h"
 #include "bullet.h"
 #include "collide.h"
+#include "window.h"
+#include "camera.h"
 #include "rock.h"
 #include "particles.h"
 #include "debug.h"
 #include <cmath>
+
+extern float mainClock;
 
 SceneMain::SceneMain()
 	: ship()
@@ -93,6 +97,7 @@ void SceneMain::Draw()
 		ImGui::Begin("scene");
 		vec m = Mouse::GetPositionInWorld();
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
+		ImGui::Text("Input device: %s", magic_enum::enum_name(Input::PreferredUserInputDevice).data());
 		if (ImGui::Button("Fullscreen")) {
 			Debug::out << "Fullscreen" << Window::IsFullScreen();
 			Window::SetFullScreen(!Window::IsFullScreen());
