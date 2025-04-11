@@ -41,14 +41,14 @@ namespace Mates
 		}
 	}
 
-	[[nodiscard]] inline float map(float x, float in_min, float in_max, float out_min, float out_max)
+	[[nodiscard]] inline float Map(float x, float in_min, float in_max, float out_min, float out_max)
 	{
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 
-	[[nodiscard]] std::string to_string_with_precision(float a_value, int n = 2);
+	[[nodiscard]] std::string ToStringWithPrecision(float a_value, int n = 2);
 
-	[[nodiscard]] std::string to_hexa(int a_value);
+	[[nodiscard]] std::string ToHexa(int a_value);
 
 	[[nodiscard]] inline bool EachPeriod(float period_sec, float total_time_before_dt_increment, float dt) {
 		return int((total_time_before_dt_increment + dt) / period_sec) != int((total_time_before_dt_increment) / period_sec);
@@ -151,7 +151,7 @@ namespace Mates
 	}
 
 	//compares two real numbers. Returns true if they are equal
-	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-12f)
+	[[nodiscard]] inline bool IsNearlyEqual(float a, float b, float margin = 1E-6f)
 	{
 		return (fabs(a - b) < margin);
 	}

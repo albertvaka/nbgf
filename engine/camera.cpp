@@ -9,7 +9,7 @@ namespace Camera {
 
 namespace Camera {
 
-    //Useful for debug pourposes
+    //Useful for debug purposes
     void MoveCameraWithArrows(float dt, float velocity) {
         vec c = Center();
         float zoom = Zoom();

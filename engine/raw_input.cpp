@@ -83,9 +83,10 @@ void GamePad::_Added(SDL_GameController* joystick) {
     for (int player = 0; player < MAX_GAMEPADS; player++) {
         if (!joysticks[player]) {
             joysticks[player] = joystick;
-            break;
+            return;
         }
     }
+    Debug::out << "Warning: Maximum number of gamepads reached, ignoring new gamepad";
 }
 
 void GamePad::_Removed(SDL_GameController* joystick) {
