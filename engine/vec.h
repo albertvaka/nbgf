@@ -213,17 +213,17 @@ struct vec
 		return *this;
 	}
 
-	constexpr bool operator==(vec rhs) const
+	[[nodiscard]] constexpr bool operator==(vec rhs) const
 	{
 		return (x == rhs.x) && (y == rhs.y);
 	}
 
-	constexpr bool operator!=(vec rhs) const
+	[[nodiscard]] constexpr bool operator!=(vec rhs) const
 	{
 		return (x != rhs.x) || (y != rhs.y);
 	}
 
-	constexpr vec operator-() const
+	[[nodiscard]] constexpr vec operator-() const
 	{
 		return vec(-x, -y);
 	}
@@ -408,14 +408,14 @@ inline vec vec::Normalized() const
 }
 
 //------------------------------------------------------------------------operator overloads
-inline constexpr vec operator*(vec lhs, float rhs)
+[[nodiscard]] inline constexpr vec operator*(vec lhs, float rhs)
 {
 	vec result(lhs);
 	result *= rhs;
 	return result;
 }
 
-inline constexpr vec operator*(float lhs, vec rhs)
+[[nodiscard]] inline constexpr vec operator*(float lhs, vec rhs)
 {
 	vec result(rhs);
 	result *= lhs;
@@ -423,33 +423,33 @@ inline constexpr vec operator*(float lhs, vec rhs)
 }
 
 // Component-wise product (like in GLSL)
-inline constexpr vec operator*(vec lhs, vec rhs)
+[[nodiscard]] inline constexpr vec operator*(vec lhs, vec rhs)
 {
 	return vec(lhs.x * rhs.x, lhs.y * rhs.y);
 }
 
-inline constexpr vec operator-(vec lhs, vec rhs)
+[[nodiscard]] inline constexpr vec operator-(vec lhs, vec rhs)
 {
 	vec result(lhs);
 	result -= rhs;
 	return result;
 }
 
-inline constexpr vec operator+(vec lhs, vec rhs)
+[[nodiscard]] inline constexpr vec operator+(vec lhs, vec rhs)
 {
 	vec result(lhs);
 	result += rhs;
 	return result;
 }
 
-inline constexpr vec operator/(vec lhs, float rhs)
+[[nodiscard]] inline constexpr vec operator/(vec lhs, float rhs)
 {
 	vec result(lhs);
 	result /= rhs;
 	return result;
 }
 
-inline constexpr vec operator/(vec lhs, vec rhs)
+[[nodiscard]] inline constexpr vec operator/(vec lhs, vec rhs)
 {
 	vec result(lhs);
 	result /= rhs;
@@ -458,7 +458,7 @@ inline constexpr vec operator/(vec lhs, vec rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline constexpr veci operator+(veci lhs, veci rhs)
+[[nodiscard]] inline constexpr veci operator+(veci lhs, veci rhs)
 {
 	veci result(lhs);
 	result.x += rhs.x;
@@ -467,7 +467,7 @@ inline constexpr veci operator+(veci lhs, veci rhs)
 	return result;
 }
 
-inline constexpr veci operator-(veci lhs, veci rhs)
+[[nodiscard]] inline constexpr veci operator-(veci lhs, veci rhs)
 {
 	veci result(lhs);
 	result.x -= rhs.x;

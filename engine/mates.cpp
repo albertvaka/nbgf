@@ -5,7 +5,7 @@
 
 namespace Mates {
 
-std::string to_string_with_precision(float a_value, int n)
+std::string ToStringWithPrecision(float a_value, int n)
 {
 	std::ostringstream out;
 	out.precision(n);
@@ -13,7 +13,7 @@ std::string to_string_with_precision(float a_value, int n)
 	return out.str();
 }
 
-std::string to_hexa(int a_value)
+std::string ToHexa(int a_value)
 {
 	std::ostringstream out;
 	out << std::hex << a_value;

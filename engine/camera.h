@@ -9,22 +9,22 @@ namespace Camera
 	extern GPU_Camera gui_camera;
 	inline vec screenshake_offset = vec::Zero;
 
-	inline vec Size()
+	[[nodiscard]] inline vec Size()
 	{
 		return vec(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
 	}
 
-	inline float AspectRatio()
+	[[nodiscard]] inline float AspectRatio()
 	{
 		return float(Window::GAME_WIDTH)/Window::GAME_HEIGHT;
 	}
 
-	inline vec Center()
+	[[nodiscard]] inline vec Center()
 	{
 		return vec(camera.x, camera.y)-screenshake_offset;
 	}
 
-	inline vec TopLeft()
+	[[nodiscard]] inline vec TopLeft()
 	{
 		return Center() - Size() / 2.f;
 	}
@@ -51,7 +51,7 @@ namespace Camera
 		SetTopLeft(vec(x, y));
 	}
 
-	inline BoxBounds Bounds()
+	[[nodiscard]] inline BoxBounds Bounds()
 	{
 		//return BoxBounds::FromCenter(Center(), Size());
 		return BoxBounds(TopLeft(), Size());
@@ -88,7 +88,7 @@ namespace Camera
 		GPU_SetCamera(Window::currentDrawTarget, &camera);
 	}
 
-	inline float Zoom()
+	[[nodiscard]] inline float Zoom()
 	{
 		return camera.zoom_x;
 	}
@@ -103,21 +103,21 @@ namespace Camera
 		camera.angle = Angles::RadsToDegs(angle);
 	}
 
-	inline float GetRotationDegs()
+	[[nodiscard]] inline float GetRotationDegs()
 	{
 		return camera.angle;
 	}
 
-	inline float GetRotationRads()
+	[[nodiscard]] inline float GetRotationRads()
 	{
 		return Angles::DegsToRads(camera.angle);
 	}
 
-	inline vec WorldToScreen(vec world) { // Note: Doesn't handle rotation
+	[[nodiscard]] inline vec WorldToScreen(vec world) { // Note: Doesn't handle rotation
 		return (world - Camera::TopLeft()) * Camera::camera.zoom_x;
 	}
 
-	inline vec ScreenToWorld(vec screen) { // Note: Doesn't handle rotation
+	[[nodiscard]] inline vec ScreenToWorld(vec screen) { // Note: Doesn't handle rotation
 		return (screen / Camera::camera.zoom_x) + Camera::TopLeft();
 	}
 
@@ -133,22 +133,22 @@ namespace Camera
 			GPU_SetCamera(Window::currentDrawTarget, &camera);
 		}
 
-		inline consteval vec TopLeft()
+		[[nodiscard]] inline consteval vec TopLeft()
 		{
 			return vec::Zero;
 		}
 
-		inline consteval vec Size()
+		[[nodiscard]] inline consteval vec Size()
 		{
 			return vec(Window::GAME_WIDTH, Window::GAME_HEIGHT);
 		}
 
-		inline consteval BoxBounds Bounds()
+		[[nodiscard]] inline consteval BoxBounds Bounds()
 		{
 			return BoxBounds(vec::Zero, Size());
 		}
 
-		inline consteval vec Center()
+		[[nodiscard]] inline consteval vec Center()
 		{
 			return Size() / 2.f;
 		}
