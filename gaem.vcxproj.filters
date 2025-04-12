@@ -424,6 +424,9 @@
     <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl2.h">
       <Filter>Bundled Dependencies\imgui_impl</Filter>
     </ClInclude>
+    <ClInclude Include="engine\transform.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
