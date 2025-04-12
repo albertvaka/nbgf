@@ -32,10 +32,12 @@ struct debugvec {
 
 std::vector<debugvec> debugvecs;
 std::vector<debugvec> debugarrows;
+std::vector<debugvec> debugsegments;
 std::vector<debugvec> debugbounds;
 bool inSceneDraw = false;
 int debugvecs_before_draw = -1;
 int debugarrows_before_draw = -1;
+int debugsegments_before_draw = -1;
 int debugbounds_before_draw = -1;
 
 void BoxBounds::DebugDraw(uint8_t r, uint8_t g, uint8_t b) const
@@ -54,6 +56,12 @@ void vec::DebugDrawAsArrow(vec from, uint8_t r, uint8_t g, uint8_t b) const
 {
     if (inSceneDraw && !Debug::Draw) return;
     debugarrows.emplace_back(*this, r, g, b).from = from;
+}
+
+void vec::DebugDrawAsSegment(vec from, uint8_t r, uint8_t g, uint8_t b) const
+{
+    if (inSceneDraw && !Debug::Draw) return;
+    debugsegments.emplace_back(*this, r, g, b).from = from;
 }
 
 void vec::DebugDraw(uint8_t r, uint8_t g, uint8_t b) const 
@@ -75,6 +83,7 @@ void BeforeSceneDraw()
     debugvecs_before_draw = debugvecs.size();
     debugarrows_before_draw = debugarrows.size();
     debugbounds_before_draw = debugbounds.size();
+    debugsegments_before_draw = debugsegments.size();
 }
 
 void AfterSceneDraw()
@@ -87,6 +96,9 @@ void AfterSceneDraw()
 
         for (const debugvec& v : debugvecs) {
             Window::DrawPrimitive::Rectangle(v.v - vec(2, 2) * Debug::DebugDrawScale, v.v + vec(2, 2) * Debug::DebugDrawScale, 1*Debug::DebugDrawScale, v.color);
+        }
+        for (const debugvec& v : debugsegments) {
+            Window::DrawPrimitive::Line(v.from, v.v, 3 * Debug::DebugDrawScale, v.color);
         }
         for (const debugvec& v : debugarrows) {
             Window::DrawPrimitive::Arrow(v.from, v.from + v.v, 1 * Debug::DebugDrawScale, 3 * Debug::DebugDrawScale, v.color);
@@ -104,6 +116,7 @@ void AfterSceneDraw()
     // shrink to erase draws added after the Update, since they will be added again next frame
     debugvecs.resize(debugvecs_before_draw);
     debugarrows.resize(debugarrows_before_draw);
+    debugsegments.resize(debugsegments_before_draw);
     debugbounds.resize(debugbounds_before_draw);
 }
 
