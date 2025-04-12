@@ -45,6 +45,7 @@
     <ClInclude Include="engine\sound.h" />
     <ClInclude Include="engine\text.h" />
     <ClInclude Include="engine\tilemap.h" />
+    <ClInclude Include="engine\transform.h" />
     <ClInclude Include="engine\vec.h" />
     <ClInclude Include="engine\window.h" />
     <ClInclude Include="engine\window_conf.h" />
