@@ -53,58 +53,6 @@ namespace Rand
 	[[nodiscard]] inline vec VecInRange(const BoxBounds& bounds) {
 		return VecInRange(bounds.Left(), bounds.Top(), bounds.Right(), bounds.Bottom());
 	}
-}
-
-namespace GoodRand
-{
-	typedef unsigned int uint;
-
-	inline struct RndEngine
-	{
-		std::mt19937 gen;
-
-		// note: uniform_real_distribution interval is [a, b) but uniform_int_distribution is [a, b].
-		std::uniform_real_distribution<float> uniform   = std::uniform_real_distribution<float>(0.f, 1.f);
-		std::uniform_int_distribution<uint> distr_coin  = std::uniform_int_distribution<uint>(0, 1);
-		std::uniform_int_distribution<uint> distr_1d3   = std::uniform_int_distribution<uint>(0, 2);
-		std::uniform_int_distribution<uint> distr_1d4   = std::uniform_int_distribution<uint>(0, 3);
-		std::uniform_int_distribution<uint> distr_1d6   = std::uniform_int_distribution<uint>(0, 5);
-		std::uniform_int_distribution<uint> distr_1d10  = std::uniform_int_distribution<uint>(0, 9);
-		std::uniform_int_distribution<uint> distr_1d20  = std::uniform_int_distribution<uint>(0, 19);
-		std::uniform_int_distribution<uint> distr_1d100 = std::uniform_int_distribution<uint>(0, 99);
-		std::uniform_int_distribution<uint> distr_1d360 = std::uniform_int_distribution<uint>(0, 359);
-
-		unsigned int seed;
-
-		RndEngine()
-		{
-			init();
-		}
-
-		void init()
-		{
-			std::random_device rd;
-			init(rd());
-		}
-
-		void init(unsigned int _seed)
-		{
-			seed = _seed;
-			gen = std::mt19937(seed);
-		}
-	} r;
-
-	//Pre-defined distributions are faster than asking for an arbitrary range
-	[[nodiscard]] inline uint roll_flipcoin() { return r.distr_coin(r.gen); } // [0,1]
-	[[nodiscard]] inline uint roll_1d3() { return r.distr_1d3(r.gen); } // [0,2]
-	[[nodiscard]] inline uint roll_1d4() { return r.distr_1d4(r.gen); } // [0,3]
-	[[nodiscard]] inline uint roll_1d6() { return r.distr_1d6(r.gen); } // ...
-	[[nodiscard]] inline uint roll_1d10() { return r.distr_1d10(r.gen); }
-	[[nodiscard]] inline uint roll_1d20() { return r.distr_1d20(r.gen); }
-	[[nodiscard]] inline uint roll_1d100() { return r.distr_1d100(r.gen); }
-	[[nodiscard]] inline uint roll_1d360() { return r.distr_1d360(r.gen); }
-
-	[[nodiscard]] inline float rollf() { return r.uniform(r.gen); } // [0.f,1.f)
 
 	//returns a random number with a normal distribution. See method at
 	//http://www.taygeta.com/random/gaussian.html
@@ -138,3 +86,57 @@ namespace GoodRand
 	}
 
 }
+
+struct SeededRand
+{
+	std::mt19937 eng;
+
+	explicit SeededRand(unsigned int seed) : eng(seed) { }
+
+	// Use a distribution instead of these functions to avoid bias
+	[[nodiscard]] inline float rollf(float min, float max) { return min + (eng() / (float(rand_max()) / (max - min))); } // Range [min, max]
+	[[nodiscard]] inline float rollf(float max = 1.f) { return rollf(0.f, max); } // Range [0, max]
+
+	[[nodiscard]] inline int roll(int min, int max) { return min + ((unsigned int)(eng()) % (max - min)); } // Range [min, max)
+	[[nodiscard]] inline int roll(int max) { return roll(0, max); } // Range [0, max)
+	[[nodiscard]] inline bool OnceEvery(int n) { return roll(0, n) == 0; }
+	[[nodiscard]] inline bool PercentChance(int percent) { return roll(0, 100) < percent; }
+
+	[[nodiscard]] inline unsigned int rand_max() { return eng.max(); }
+
+	// note: uniform_int_distribution is [a, b].
+	struct Distribution {
+		SeededRand* seedRand;
+		std::uniform_int_distribution<unsigned int> distr;
+		Distribution(SeededRand* seedRand, int from, int to) : seedRand(seedRand), distr(from, to) {}
+		int operator()() { return distr(seedRand->eng); }
+	};
+
+	// note: uniform_real_distribution interval is [a, b)
+	struct Distributionf {
+		SeededRand* seedRand;
+		std::uniform_real_distribution<float> distr;
+		Distributionf(SeededRand* seedRand, float from, float to) : seedRand(seedRand), distr(from, to) {}
+		int operator()() { return distr(seedRand->eng); }
+	};
+
+	Distribution distribution(int from, int to)
+	{
+		return Distribution(this, from, to);
+	}
+
+	Distribution distribution(int to)
+	{
+		return Distribution(this, 0, to);
+	}
+
+	Distributionf distributionf(float from, float to)
+	{
+		return Distributionf(this, from, to);
+	}
+
+	Distributionf distributionf(float to = 1.f)
+	{
+		return Distributionf(this, 0.f, to);
+	}
+};
