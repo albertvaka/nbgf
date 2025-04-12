@@ -42,6 +42,10 @@ struct DebugStream {
         Debug::_forwarded_out << lastTicks << ": " << std::forward<T>(val);
         return DebugStreamDelegate();
     }
+    DebugStreamDelegate operator<<(char&& val) noexcept {
+        Debug::_forwarded_out << lastTicks << ": " << std::forward<char>(val);
+        return DebugStreamDelegate();
+    }
 };
 
 namespace Debug {

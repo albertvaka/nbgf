@@ -181,7 +181,6 @@ struct CircleBounds
     vec pos;
     float radius;
 
-
     void DebugDraw(uint8_t r = 255, uint8_t g = 0, uint8_t b = 0) const
 #ifdef _DEBUG
     ;

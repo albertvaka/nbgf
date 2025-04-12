@@ -261,6 +261,12 @@
     <ClInclude Include="engine\transform.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="engine\polygon.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\triangle.h">
+      <Filter>engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -403,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="src\scene_main.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\polygon.cpp">
+      <Filter>engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

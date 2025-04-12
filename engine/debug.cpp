@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "vec.h"
+#include "triangle.h"
 #include "bounds.h"
 #include "window_drawprimitive.h"
 
@@ -22,12 +23,13 @@ DebugStreamDelegate::~DebugStreamDelegate() {
 // DebugDraw stuff  ------------------------------
 
 struct debugvec {
-    debugvec(vec v, uint8_t r, uint8_t g, uint8_t b) : v(v), color({ r,g,b,255 }), radius(-1) {}
+    debugvec(vec v, uint8_t r, uint8_t g, uint8_t b) : v(v), color({ r,g,b,255 }) {}
     debugvec(){} // std::vector wants this
     vec v;
     SDL_Color color;
-    float radius; //only used for circles
+    float radius = -1; //only used for circles
     vec from; //only used for arrows and boxes
+    Triangle t = Triangle(vec(0,0), vec(0,0), vec(0,0)); // only used for triangles
 };
 
 std::vector<debugvec> debugvecs;
@@ -50,6 +52,12 @@ void CircleBounds::DebugDraw(uint8_t r, uint8_t g, uint8_t b) const
 {
     if (inSceneDraw && !Debug::Draw) return;
     debugbounds.emplace_back(Center(), r, g, b).radius = radius;
+}
+
+void Triangle::DebugDraw(uint8_t r, uint8_t g, uint8_t b) const
+{
+    if (inSceneDraw && !Debug::Draw) return;
+    debugbounds.emplace_back(vec::Zero, r, g, b).t = *this;
 }
 
 void vec::DebugDrawAsArrow(vec from, uint8_t r, uint8_t g, uint8_t b) const
@@ -104,11 +112,14 @@ void AfterSceneDraw()
             Window::DrawPrimitive::Arrow(v.from, v.from + v.v, 1 * Debug::DebugDrawScale, 3 * Debug::DebugDrawScale, v.color);
         }
         for (const debugvec& v : debugbounds) {
-            if (v.radius < 0) {
-                Window::DrawPrimitive::Rectangle(v.v, v.from, 1 * Debug::DebugDrawScale, v.color);
-            }
-            else {
+            if (v.radius > 0) {
                 Window::DrawPrimitive::Circle(v.v, v.radius, 1 * Debug::DebugDrawScale, v.color);
+            } else if (v.t.Area() > 0) {
+                Window::DrawPrimitive::Line(v.t.a, v.t.b, 1 * Debug::DebugDrawScale, v.color);
+                Window::DrawPrimitive::Line(v.t.b, v.t.c, 1 * Debug::DebugDrawScale, v.color);
+                Window::DrawPrimitive::Line(v.t.c, v.t.a, 1 * Debug::DebugDrawScale, v.color);
+            } else {
+                Window::DrawPrimitive::Rectangle(v.v, v.from, 1 * Debug::DebugDrawScale, v.color);
             }
         }
     }
