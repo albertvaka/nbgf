@@ -1,8 +1,9 @@
 #include "rock.h"
 
+#include "chunks.h"
+
 const float rockSpacing = 15.0f;
 const float rockProbability = 0.000001f;
-const float chunkSize = 1500.0f;
 
 const GPU_Rect ROCKS_FOAM_RECTS[] = {
     { 36, 82, 331, 260 },
@@ -38,33 +39,12 @@ bool CanSpawn(float x, float y)
     return true;
 }
 
-void Rock::DebugDrawChunks(veci currentChunk)
-{
-	for (int dy = -1; dy <= 1; dy++) {
-		for (int dx = -1; dx <= 1; dx++) {
-			BoxBounds chunkBounds(
-				currentChunk.x * chunkSize + dx * chunkSize,
-				currentChunk.y * chunkSize + dy * chunkSize,
-				chunkSize,
-				chunkSize
-			);
-			chunkBounds.DebugDraw();
-		}
-	}
-}
-
-veci Rock::GetChunk(vec pos) {
-	int x = Mates::fastfloor(pos.x / chunkSize);
-	int y  = Mates::fastfloor(pos.y / chunkSize);
-    return veci(x, y);
-}
-
 void Rock::SpawnInChunk(int chunkX, int chunkY)
 {
-    float left = chunkX * chunkSize;
-    float top = chunkY * chunkSize;
-    float right = left + chunkSize;
-    float bottom = top + chunkSize;
+    float left = chunkX * Chunks::chunkSize;
+    float top = chunkY * Chunks::chunkSize;
+    float right = left + Chunks::chunkSize;
+    float bottom = top + Chunks::chunkSize;
     for (float x = left; x < right; x += rockSpacing) {
         for (float y = top; y < bottom; y += rockSpacing) {
             if (hash(x, y) < rockProbability && CanSpawn(x, y)) {
@@ -82,7 +62,7 @@ void Rock::Spawn(veci currentChunk, veci lastChunk) {
 
     // Mark rocks outside the 3x3 grid around current chunk as not alive
     for (Rock* rock : Rock::GetAll()) {
-        veci rockChunk = GetChunk(rock->pos);
+        veci rockChunk = Chunks::GetChunk(rock->pos);
         if (std::abs(rockChunk.x - currentChunk.x) > 1 || std::abs(rockChunk.y - currentChunk.y) > 1) {
             rock->alive = false;
         }

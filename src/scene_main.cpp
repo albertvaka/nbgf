@@ -11,6 +11,7 @@
 #include "rock.h"
 #include "particles.h"
 #include "debug.h"
+#include "chunks.h"
 #include <cmath>
 
 extern float mainClock;
@@ -25,11 +26,8 @@ void SceneMain::EnterScene()
 {
 	Debug::DebugDrawScale = 3.f;
 	ship.Reset();
-	for (int i = -1; i <= 1; i++) {
-		for (int j = -1; j <= 1; j++) {
-			Rock::SpawnInChunk(i, j);
-		}
-	}
+
+	Chunks::SpawnInitial(veci(0, 0));
 }
 
 void SceneMain::ExitScene()
@@ -40,13 +38,13 @@ void SceneMain::ExitScene()
 
 void SceneMain::Update(float dt)
 {
-	veci lastChunk = Rock::GetChunk(ship.pos);
+	veci lastChunk = Chunks::GetChunk(ship.pos);
 	ship.Update(dt);
-	veci currentChunk = Rock::GetChunk(ship.pos);
-	Rock::DebugDrawChunks(currentChunk);
-	Rock::Spawn(currentChunk, lastChunk);
 
 	Particles::UpdateAll(dt);
+
+	veci currentChunk = Chunks::GetChunk(ship.pos);
+	Chunks::Update(lastChunk, currentChunk);
 }
 
 void SceneMain::Draw()
