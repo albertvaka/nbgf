@@ -41,7 +41,8 @@ namespace Mates
 		}
 	}
 
-	[[nodiscard]] inline float Map(float x, float in_min, float in_max, float out_min, float out_max)
+	template <class T>
+	[[nodiscard]] inline T Map(T x, T in_min, T in_max, T out_min, T out_max)
 	{
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
