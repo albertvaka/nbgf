@@ -228,9 +228,6 @@
     <ClInclude Include="src\steering_behavior.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\steering_behavior_applier.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\steering_entity.h">
       <Filter>src</Filter>
     </ClInclude>

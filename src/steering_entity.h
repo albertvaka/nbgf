@@ -18,6 +18,8 @@ struct SteeringEntity : public CircleEntity
         vel = velocity;
     }
 
-    vec Heading() const { return vel.Normalized(); } // Optimization: compute once per frame and store
+    // Potential optimization: compute those once per frame and store
+    vec Heading() const { return vel.Normalized(); }
+    float Speed() const { return vel.Length(); }
 
 };

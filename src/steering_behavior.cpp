@@ -6,7 +6,7 @@
 #include "mates.h"
 #include "rand.h"
 #include "steering_entity.h"
-
+//#include "gaemtilemap.h"
 
 SteeringBehavior::SteeringBehavior(SteeringEntity* agent) : steeringEntity(agent)
 {
@@ -19,7 +19,7 @@ SteeringBehavior::SteeringBehavior(SteeringEntity* agent) : steeringEntity(agent
 //------------------------------- Forward -----------------------------------
 vec SteeringBehavior::Forward()
 {
-	vec force = steeringEntity->Heading()*steeringEntity->max_speed;
+	vec force = steeringEntity->Heading() * steeringEntity->max_speed;
 	return force;
 }
 
@@ -32,8 +32,8 @@ vec SteeringBehavior::Seek(vec TargetPos)
 {
 	vec DesiredVelocity = (TargetPos - steeringEntity->pos).Normalized() * steeringEntity->max_speed;
 
-	//return (DesiredVelocity - steeringEntity->vel);
-	return DesiredVelocity; // FIXME: Since we are overriding the velocity, we can't use the calculation above
+	// Note: gaem2020 returns DesiredVelocity here (needed for Bat)
+	return (DesiredVelocity - steeringEntity->vel);
 }
 
 //----------------------------- Flee -------------------------------------
@@ -44,10 +44,10 @@ vec SteeringBehavior::Flee(vec TargetPos)
 {
 	//only flee if the target is within 'panic distance'. Work in distance
 	//squared space.
-	/* const float PanicDistanceSq = 100.0f * 100.0;
-	if (Vec2DDistanceSq(steeringEntity->pos, target) > PanicDistanceSq)
+	/* const float PanicDistanceSq = 100.0f * 100.0f;
+	if (DistanceSq(steeringEntity->pos, target) > PanicDistanceSq)
 	{
-	return vec(0,0);
+		return vec(0,0);
 	}
 	*/
 
@@ -69,28 +69,28 @@ vec SteeringBehavior::Arrive(vec TargetPos, Deceleration deceleration)
 	//calculate the distance to the target
 	float dist = ToTarget.Length();
 
-	if (dist > 5.f)
+	if (dist > 5.f) // FIXME: Hardcoded
 	{
 		//because Deceleration is enumerated as an int, this value is required
-		//to provide fine tweaking of the deceleration..
+		//to provide fine tweaking of the deceleration.
 		const float DecelerationTweaker = 0.3f;
 
 		//calculate the vel required to reach the target given the desired
 		//deceleration
-		float vel =  dist / ((float)deceleration * DecelerationTweaker);     
+		float vel = dist / ((float)deceleration * DecelerationTweaker);
 
 		//make sure the velocity does not exceed the max
-        vel = std::min(vel, steeringEntity->max_speed);
+		vel = std::min(vel, steeringEntity->max_speed);
 
 		//from here proceed just like Seek except we don't need to normalize 
 		//the ToTarget vector because we have already gone to the trouble
 		//of calculating its length: dist. 
-		vec DesiredVelocity =  ToTarget * vel / dist;
+		vec DesiredVelocity = ToTarget * vel / dist;
 
 		return (DesiredVelocity - steeringEntity->vel);
 	}
 
-	return vec(0,0);
+	return vec(0, 0);
 }
 
 //------------------------------ Pursuit ---------------------------------
@@ -108,7 +108,7 @@ vec SteeringBehavior::Pursuit(const Entity* evader)
 
 	float RelativeHeading = heading.Dot(evader->vel.Normalized());
 
-	if ( (ToEvader.Dot(heading) > 0) && (RelativeHeading < -0.95f))  //acos(0.95)=18 degs
+	if ((ToEvader.Dot(heading) > 0) && (RelativeHeading < -0.95f))  //acos(0.95)=18 degs
 	{
 		return Seek(evader->pos);
 	}
@@ -118,11 +118,37 @@ vec SteeringBehavior::Pursuit(const Entity* evader)
 	//the lookahead time is propotional to the distance between the evader
 	//and the pursuer; and is inversely proportional to the sum of the
 	//agent's velocities
-	float LookAheadTime = ToEvader.Length() / 
+	float LookAheadTime = ToEvader.Length() /
 		(steeringEntity->max_speed + evader->vel.Length());
 
 	//now seek to the predicted future position of the evader
 	return Seek(evader->pos + evader->vel * LookAheadTime);
+}
+
+//----------------------------- Evade ------------------------------------
+//
+//  similar to pursuit except the agent Flees from the estimated future
+//  position of the pursuer
+//------------------------------------------------------------------------
+vec SteeringBehavior::Evade(const SteeringEntity* pursuer)
+{
+	/* Not necessary to include the check for facing direction this time */
+
+	vec ToPursuer = pursuer->pos - steeringEntity->pos;
+
+	//uncomment the following two lines to have Evade only consider pursuers 
+	//within a 'threat range'
+	const double ThreatRange = 100.0;
+	if (ToPursuer.LengthSq() > ThreatRange * ThreatRange) return vec::Zero;
+
+	//the lookahead time is propotional to the distance between the pursuer
+	//and the pursuer; and is inversely proportional to the sum of the
+	//agents' velocities
+	double LookAheadTime = ToPursuer.Length() /
+		(steeringEntity->max_speed + pursuer->vel.Length());
+
+	//now flee away from predicted future position of the pursuer
+	return Flee(pursuer->pos + pursuer->vel * LookAheadTime);
 }
 
 //--------------------------- Wander -------------------------------------
@@ -133,7 +159,7 @@ vec SteeringBehavior::Pursuit(const Entity* evader)
 //  @WanderJitterPerSec: Trompicones que dona (the maximum amount of displacement along the circle each frame)
 //------------------------------------------------------------------------
 vec SteeringBehavior::Wander(float WanderRad, float WanderDist, float WanderJitterPerSec, float dt)
-{ 
+{
 	//this behavior is dependent on the update rate, so this line must
 	//be included when using time independent framerate.
 	float JitterThisTimeSlice = WanderJitterPerSec * dt;
@@ -207,7 +233,7 @@ vec SteeringBehavior::BoundsAvoidance(const BoxBounds& m_bounds, float frontFeel
 
 	vec SteeringForce = vec::Zero;
 
-	for (unsigned int feeler=0; feeler < 3; ++feeler) {
+	for (unsigned int feeler = 0; feeler < 3; ++feeler) {
 
 		for (int i = 0; i < 4; i++) {
 
@@ -217,7 +243,7 @@ vec SteeringBehavior::BoundsAvoidance(const BoxBounds& m_bounds, float frontFeel
 			vec ClosestPoint;
 			if (LineIntersection2D(steeringEntity->pos,
 				m_Feelers[feeler],
-				wallsv[i], wallsv[i+1],
+				wallsv[i], wallsv[i + 1],
 				DistToThisIP, ClosestPoint))
 			{
 				if (i == 0 || i == 2) {
@@ -227,7 +253,8 @@ vec SteeringBehavior::BoundsAvoidance(const BoxBounds& m_bounds, float frontFeel
 						ClosestVerticalWall = i;
 						ClosestVerticalPoint = ClosestPoint;
 					}
-				} else {
+				}
+				else {
 					if (DistToThisIP < DistToClosestHorizontalIP)
 					{
 						DistToClosestHorizontalIP = DistToThisIP;
@@ -246,8 +273,8 @@ vec SteeringBehavior::BoundsAvoidance(const BoxBounds& m_bounds, float frontFeel
 
 			//(wallsv[ClosestVerticalWall + 1] - wallsv[ClosestVerticalWall]).DebugDrawAsArrow(wallsv[ClosestVerticalWall], 255, 0, 0);
 
-			vec temp = (wallsv[ClosestVerticalWall] - wallsv[ClosestVerticalWall+1]).Normalized();
-			vec normal (-temp.y,temp.x);
+			vec temp = (wallsv[ClosestVerticalWall] - wallsv[ClosestVerticalWall + 1]).Normalized();
+			vec normal(-temp.y, temp.x);
 
 			//create a force in the direction of the wall normal, with a magnitude of the overshoot
 			SteeringForce += normal * OverShoot.Length();
@@ -305,7 +332,7 @@ vec SteeringBehavior::GetHidingPosition(vec posOb,
 //  waypoint, in which case it 'Arrives'
 //------------------------------------------------------------------------
 vec SteeringBehavior::FollowPath()
-{ 
+{
 	//move to next target if close enough to current target (working in distance squared space)
 	if(Vec2DDistanceSq(m_pPath->CurrentWaypoint(), steeringEntity->pos) < m_dWaypointSeekDistSq)
 	{
@@ -328,10 +355,10 @@ vec SteeringBehavior::FollowPath()
 //  Produces a steering force that keeps a SteeringEntity at a specified offset
 //  from a leader SteeringEntity
 //------------------------------------------------------------------------
-vec SteeringBehavior::OffsetPursuit(const Entity*  leader, float offset)
+vec SteeringBehavior::OffsetPursuit(const Entity* leader, float offset)
 {
 	vec leaderHeading = leader->vel.Normalized();
-	vec displacement = leaderHeading * - offset;
+	vec displacement = leaderHeading * -offset;
 
 	//calculate the offset's position in world space
 	vec WorldOffsetPos = PointToWorldSpace(displacement,
@@ -343,10 +370,64 @@ vec SteeringBehavior::OffsetPursuit(const Entity*  leader, float offset)
 	//the lookahead time is propotional to the distance between the leader
 	//and the pursuer; and is inversely proportional to the sum of both
 	//agent's velocities
-	float LookAheadTime = ToOffset.Length() / 
+	float LookAheadTime = ToOffset.Length() /
 		(steeringEntity->max_speed + leader->vel.Length());
 
 	//now Arrive at the predicted future position of the offset
 	return Arrive(WorldOffsetPos + leader->vel * LookAheadTime, fast);
 }
 
+/*
+vec SteeringBehavior::TileMapAvoidance(GaemTileMap* map)
+{
+	float minDistToCenterSq = Mates::MaxFloat;
+	vec closestObstacle;
+
+	int xLeft = Tile::ToTiles(steeringEntity->pos.x - steeringEntity->radius - Tile::Size / 2);
+	int xRight = Tile::ToTiles(steeringEntity->pos.x + steeringEntity->radius + Tile::Size / 2);
+	int yTop = Tile::ToTiles(steeringEntity->pos.y - steeringEntity->radius - Tile::Size / 2);
+	int yBottom = Tile::ToTiles(steeringEntity->pos.y + steeringEntity->radius + Tile::Size / 2);
+	CircleBounds me = steeringEntity->Bounds();
+	for (int y = yTop; y <= yBottom; y++) {
+		for (int x = xLeft; x <= xRight; x++) {
+			//vec(x * 16 + 8, y * 16 + 8).DebugDraw();
+			if (map->GetTile(x, y).isSolid()) {
+				BoxBounds tile = Tile::Bounds(x, y);
+				if (tile.Contains(me.pos)) {
+					minDistToCenterSq = 0;
+					closestObstacle = tile.Center();
+					goto im_inside; //exit early
+				}
+				vec closestPoint = tile.ClosestPointInBounds(me.pos);
+				float distSq = closestPoint.DistanceSq(me.pos);
+				if (distSq < minDistToCenterSq) {
+					minDistToCenterSq = distSq;
+					closestObstacle = closestPoint;
+				}
+			}
+		}
+	}
+
+im_inside:
+
+	//closestObstacle.DebugDraw();
+
+	vec steeringForce;
+	avoidingTileMap = (minDistToCenterSq < Mates::MaxFloat);
+	if (avoidingTileMap) {
+		float dist = sqrt(minDistToCenterSq) - me.radius;
+		float multiplier;
+		if (dist < 0) { //touching
+			multiplier = steeringEntity->max_speed;
+		}
+		else {
+			multiplier = (2.0f + (me.radius - dist) / dist);
+		}
+
+		steeringForce = (steeringEntity->pos - closestObstacle).Normalized() * multiplier;
+		//std::cout << "dist=" << dist << " force=" << steeringForce.Length() << std::endl;
+	}
+
+	return steeringForce;
+}
+*/

@@ -9,6 +9,8 @@
 #include "steering_entity.h"
 #include "matrix2d.h"
 
+//struct GaemTileMap;
+
 struct SteeringBehavior
 {
     //Arrive makes use of these to determine how quickly a SteeringEntity should decelerate to its target
@@ -33,44 +35,65 @@ struct SteeringBehavior
     //towards that point to intercept it.
     vec Pursuit(const Entity* evader);
 
+    //this behavior attempts to evade a pursuer
+    vec Evade(const SteeringEntity* pursuer);
+
     //this behavior maintains a position, in the direction of offset
-    //from the target SteeringEntity
+    //from the target Entity
     vec OffsetPursuit(const Entity* leader, float offset);
 
     //this behavior makes the agent wander about randomly
-	vec Wander(float WanderRad, float WanderDist, float WanderJitterPerSec, float dt);
+    vec Wander(float WanderRad, float WanderDist, float WanderJitterPerSec, float dt);
+
+    //this calculates a force repelling from the other neighbors
+    //neighbors must be Entitys
+    template<typename T>
+    vec Separation(const std::vector<T*>& neighbors);
+
+    //returns a force that attempts to align this agents heading with that
+    //of its neighbors
+    //neighbors must be Entitys
+    template<typename T>
+    vec Alignment(const std::vector<T*>& neighbors);
+
+    //neighbors must be Entitys
+    template<typename T>
+    vec Cohesion(const std::vector<T*>& neighbors);
 
     //this returns a steering force which will attempt to keep the agent 
     //away from any obstacles it may encounter
+    //obstacles must be CircleEntitys
     template<typename T>
     vec ObstacleAvoidance(const std::vector<T*>& obstacles, float margin = 0.f);
 
+    //vec TileMapAvoidance(GaemTileMap* map);
+
     //this returns a steering force which will keep the agent in its bounds
     vec BoundsAvoidance(const BoxBounds& m_bounds, float frontFeelerLength, float sideFeelerLength);
-	vec BoundsAvoidance(const BoxBounds& m_bounds, float feelerLength) {
-		return BoundsAvoidance(m_bounds, feelerLength*2.f, feelerLength);
-	}
+    vec BoundsAvoidance(const BoxBounds& m_bounds, float feelerLength) {
+        return BoundsAvoidance(m_bounds, feelerLength * 2.f, feelerLength);
+    }
 
     //given another agent position to hide from and a list of Entitys this
     //method attempts to put an obstacle between itself and its opponent
-	template<typename T>
-	vec Hide(Entity* hideTarget, const std::vector<T*>& obstacles);
+    template<typename T>
+    vec Hide(Entity* hideTarget, const std::vector<T*>& obstacles);
 
     //helper method for Hide. Returns a position located on the other
     //side of an obstacle to the pursuer
     vec GetHidingPosition(vec posOb, float radiusOb, vec posHunter);
 
-	bool avoidingBounds = false;
-
 //protected:
 
-  //a pointer to the owner of this instance
-  SteeringEntity* steeringEntity;
-      
-  //the current position on the wander circle the agent is
-  //attempting to steer towards
-  vec m_vWanderTarget;
+    //a pointer to the owner of this instance
+    SteeringEntity* steeringEntity;
 
+    //the current position on the wander circle the agent is
+    //attempting to steer towards
+    vec m_vWanderTarget;
+
+    //bool avoidingTileMap = false;
+    bool avoidingBounds = false;
 };
 
 
@@ -80,33 +103,33 @@ struct SteeringBehavior
 template<typename T>
 vec SteeringBehavior::Hide(Entity* hideTarget, const std::vector<T*>& obstacles)
 {
-	float DistToClosest = Mates::MaxFloat;
-	vec   BestHidingSpot;
+    float DistToClosest = Mates::MaxFloat;
+    vec   BestHidingSpot;
 
-	for (const CircleEntity* ob : obstacles)
-	{
-		//calculate the position of the hiding spot for this obstacle
-		vec HidingSpot = GetHidingPosition(ob->pos, ob->radius, hideTarget->pos);
+    for (const CircleEntity* ob : obstacles)
+    {
+        //calculate the position of the hiding spot for this obstacle
+        vec HidingSpot = GetHidingPosition(ob->pos, ob->radius, hideTarget->pos);
 
-		//work in distance-squared space to find the closest hiding
-		//spot to the agent
-		float dist = HidingSpot.DistanceSq(steeringEntity->pos);
+        //work in distance-squared space to find the closest hiding
+        //spot to the agent
+        float dist = HidingSpot.DistanceSq(steeringEntity->pos);
 
-		if (dist < DistToClosest)
-		{
-			DistToClosest = dist;
-			BestHidingSpot = HidingSpot;
-		}
-	}
+        if (dist < DistToClosest)
+        {
+            DistToClosest = dist;
+            BestHidingSpot = HidingSpot;
+        }
+    }
 
-	//if no suitable obstacles found then Evade the hunter
-	if (DistToClosest == Mates::MaxFloat)
-	{
-		return Flee(hideTarget->pos);
-	}
+    //if no suitable obstacles found then Evade the hunter
+    if (DistToClosest == Mates::MaxFloat)
+    {
+        return Flee(hideTarget->pos);
+    }
 
-	//else use Arrive on the hiding spot
-	return Arrive(BestHidingSpot, fast);
+    //else use Arrive on the hiding spot
+    return Arrive(BestHidingSpot, fast);
 }
 
 
@@ -118,99 +141,207 @@ vec SteeringBehavior::Hide(Entity* hideTarget, const std::vector<T*>& obstacles)
 template<typename T>
 vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float margin)
 {
-	//the detection box length is proportional to the agent's velocity
-	float realBoxLength = steeringEntity->radius + margin; //FIXME: Take into account current speed
+    //the detection box length is proportional to the agent's velocity
+    float realBoxLength = steeringEntity->radius + margin; //FIXME: Take into account current speed
 
-	//this will keep track of the closest intersecting obstacle (CIB)
-	const CircleEntity* ClosestIntersectingObstacle = nullptr;
+    //this will keep track of the closest intersecting obstacle (CIB)
+    const CircleEntity* ClosestIntersectingObstacle = nullptr;
 
-	//this will be used to track the distance to the CIB
-	float DistToClosestIP = Mates::MaxFloat;
+    //this will be used to track the distance to the CIB
+    float DistToClosestIP = Mates::MaxFloat;
 
-	//this will record the transformed local coordinates of the CIB
-	vec LocalPosOfClosestObstacle;
+    //this will record the transformed local coordinates of the CIB
+    vec LocalPosOfClosestObstacle;
 
-	for (const CircleEntity* obst : obstacles)
-	{
-		if (obst == steeringEntity) continue;
+    for (const CircleEntity* obst : obstacles)
+    {
+        if (obst == steeringEntity) continue;
 
-		vec to = obst->pos - steeringEntity->pos;
+        vec to = obst->pos - steeringEntity->pos;
 
-		//the bounding radius of the other is taken into account by adding it 
-		//to the range
-		float range = realBoxLength + obst->radius;
+        //the bounding radius of the other is taken into account by adding it 
+        //to the range
+        float range = realBoxLength + obst->radius;
 
-		//if entity within range, tag for further consideration. (working in
-		//distance-squared space to avoid sqrts)
-		if ((to.LengthSq() < range * range))
-		{
+        //if entity within range, tag for further consideration. (working in
+        //distance-squared space to avoid sqrts)
+        if ((to.LengthSq() < range * range))
+        {
 
-			//calculate this obstacle's position in local space
-			vec LocalPos = PointToLocalSpace(obst->pos, steeringEntity->Heading(), steeringEntity->pos);
+            //calculate this obstacle's position in local space
+            vec LocalPos = PointToLocalSpace(obst->pos, steeringEntity->Heading(), steeringEntity->pos);
 
-			//if the local position has a negative x value then it must lay
-			//behind the agent. (in which case it can be ignored)
-			if (LocalPos.x >= 0)
-			{
-				//if the distance from the x axis to the object's position is less
-				//than its radius + half the width of the detection box then there
-				//is a potential intersection.
-				float ExpandedRadius = obst->radius + steeringEntity->radius;
+            //if the local position has a negative x value then it must lay
+            //behind the agent. (in which case it can be ignored)
+            if (LocalPos.x >= 0)
+            {
+                //if the distance from the x axis to the object's position is less
+                //than its radius + half the width of the detection box then there
+                //is a potential intersection.
+                float ExpandedRadius = obst->radius + steeringEntity->radius;
 
-				/*if (fabs(LocalPos.y) < ExpandedRadius)
-				{*/
-				//now to do a line/circle intersection test. The center of the 
-				//circle is represented by (cX, cY). The intersection points are 
-				//given by the formula x = cX +/-sqrt(r^2-cY^2) for y=0. 
-				//We only need to look at the smallest positive value of x because
-				//that will be the closest point of intersection.
-				float cX = LocalPos.x;
-				float cY = LocalPos.y;
+                /*if (fabs(LocalPos.y) < ExpandedRadius)
+                {*/
+                //now to do a line/circle intersection test. The center of the 
+                //circle is represented by (cX, cY). The intersection points are 
+                //given by the formula x = cX +/-sqrt(r^2-cY^2) for y=0. 
+                //We only need to look at the smallest positive value of x because
+                //that will be the closest point of intersection.
+                float cX = LocalPos.x;
+                float cY = LocalPos.y;
 
-				//we only need to calculate the sqrt part of the above equation once
-				float SqrtPart = sqrt(ExpandedRadius * ExpandedRadius - cY * cY);
+                //we only need to calculate the sqrt part of the above equation once
+                float SqrtPart = sqrt(ExpandedRadius * ExpandedRadius - cY * cY);
 
-				float ip = cX - SqrtPart;
+                float ip = cX - SqrtPart;
 
-				if (ip <= 0.f)
-				{
-					ip = cX + SqrtPart;
-				}
+                if (ip <= 0.f)
+                {
+                    ip = cX + SqrtPart;
+                }
 
-				//test to see if this is the closest so far. If it is keep a
-				//record of the obstacle and its local coordinates
-				if (ip < DistToClosestIP)
-				{
-					DistToClosestIP = ip;
-					ClosestIntersectingObstacle = obst;
-					LocalPosOfClosestObstacle = LocalPos;
-				}
-			}
-			//}
-		}
-	}
+                //test to see if this is the closest so far. If it is keep a
+                //record of the obstacle and its local coordinates
+                if (ip < DistToClosestIP)
+                {
+                    DistToClosestIP = ip;
+                    ClosestIntersectingObstacle = obst;
+                    LocalPosOfClosestObstacle = LocalPos;
+                }
+            }
+            //}
+        }
+    }
 
-	//if we have found an intersecting obstacle, calculate a steering 
-	//force away from it
-	vec SteeringForce;
+    //if we have found an intersecting obstacle, calculate a steering 
+    //force away from it
+    vec SteeringForce;
 
-	if (ClosestIntersectingObstacle)
-	{
-		//the closer the agent is to an object, the stronger the 
-		//steering force should be
-		float multiplier = 1.0f + (realBoxLength - LocalPosOfClosestObstacle.x) / realBoxLength;
+    if (ClosestIntersectingObstacle)
+    {
+        //the closer the agent is to an object, the stronger the 
+        //steering force should be
+        float multiplier = 1.0f + (realBoxLength - LocalPosOfClosestObstacle.x) / realBoxLength;
 
-		//calculate the lateral force
-		SteeringForce.y = (ClosestIntersectingObstacle->radius - LocalPosOfClosestObstacle.y) * multiplier;
+        //calculate the lateral force
+        SteeringForce.y = (ClosestIntersectingObstacle->radius - LocalPosOfClosestObstacle.y) * multiplier;
 
-		//apply a braking force proportional to the obstacles distance from
-		//the SteeringEntity. 
-		constexpr float BrakingWeight = 0.2f;
+        //apply a braking force proportional to the obstacles distance from
+        //the SteeringEntity. 
+        constexpr float BrakingWeight = 0.2f;
 
-		SteeringForce.x = (ClosestIntersectingObstacle->radius - LocalPosOfClosestObstacle.x) * BrakingWeight;
-	}
+        SteeringForce.x = (ClosestIntersectingObstacle->radius - LocalPosOfClosestObstacle.x) * BrakingWeight;
+    }
 
-	//finally, convert the steering vector from local to world space
-	return VectorToWorldSpace(SteeringForce, steeringEntity->Heading());
+    //finally, convert the steering vector from local to world space
+    return VectorToWorldSpace(SteeringForce, steeringEntity->Heading());
 }
 
+
+//---------------------------- Separation --------------------------------
+//
+//  this calculates a force repelling from the other neighbors
+//------------------------------------------------------------------------
+template<typename T>
+vec SteeringBehavior::Separation(const std::vector<T*>& neighbors)
+{
+    vec SteeringForce;
+
+    for (Entity* entity : neighbors)
+    {
+        //make sure this agent isn't included in the calculations and that
+        //the agent being examined is close enough. ***also make sure it doesn't
+        //include the evade target ***
+        if (entity != steeringEntity)
+        {
+            vec ToAgent = steeringEntity->pos - entity->pos;
+
+            //scale the force inversely proportional to the agents distance  
+            //from its neighbor.
+            SteeringForce += ToAgent.Normalized() / ToAgent.Length();
+        }
+    }
+
+    return SteeringForce;
+}
+
+//---------------------------- Alignment ---------------------------------
+//
+//  returns a force that attempts to align this agents heading with that
+//  of its neighbors
+//------------------------------------------------------------------------
+template<typename T>
+vec SteeringBehavior::Alignment(const std::vector<T*>& neighbors)
+{
+    //used to record the average heading of the neighbors
+    vec AverageHeading;
+
+    //used to count the number of vehicles in the neighborhood
+    int    NeighborCount = 0;
+
+    //iterate through all the tagged vehicles and sum their heading vectors  
+    for (SteeringEntity* entity : neighbors)
+    {
+        //make sure *this* agent isn't included in the calculations and that
+        //the agent being examined  is close enough ***also make sure it doesn't
+        //include any evade target ***
+        if (entity != steeringEntity)
+        {
+            AverageHeading += entity->vel.Normalized();
+
+            ++NeighborCount;
+        }
+    }
+
+    //if the neighborhood contained one or more vehicles, average their
+    //heading vectors.
+    if (NeighborCount > 0)
+    {
+        AverageHeading /= (double)NeighborCount;
+
+        AverageHeading -= steeringEntity->Heading();
+    }
+
+    return AverageHeading;
+}
+
+//-------------------------------- Cohesion ------------------------------
+//
+//  returns a steering force that attempts to move the agent towards the
+//  center of mass of the agents in its immediate area
+//------------------------------------------------------------------------
+template<typename T>
+vec SteeringBehavior::Cohesion(const std::vector<T*>& neighbors)
+{
+    //first find the center of mass of all the agents
+    vec CenterOfMass, SteeringForce;
+
+    int NeighborCount = 0;
+
+    //iterate through the neighbors and sum up all the position vectors
+    for (Entity* entity : neighbors)
+    {
+        //make sure *this* agent isn't included in the calculations and that
+        //the agent being examined is close enough ***also make sure it doesn't
+        //include the evade target ***
+        if (entity != steeringEntity)
+        {
+            CenterOfMass += entity.pos;
+
+            ++NeighborCount;
+        }
+    }
+
+    if (NeighborCount > 0)
+    {
+        //the center of mass is the average of the sum of positions
+        CenterOfMass /= (double)NeighborCount;
+
+        //now seek towards that position
+        SteeringForce = Seek(CenterOfMass);
+    }
+
+    //the magnitude of cohesion is usually much larger than separation or
+    //allignment so it usually helps to normalize it.
+    return SteeringForce.Normalized();
+}
