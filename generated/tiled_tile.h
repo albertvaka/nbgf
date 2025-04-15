@@ -19,7 +19,7 @@ struct Tile {
 
 	static veci ToTiles(vec pos) { return ToTiles(pos.x, pos.y); }
 	static veci ToTiles(float x, float y) { return veci(ToTiles(x), ToTiles(y)); }
-	static int ToTiles(float x) { return Mates::fastfloor(x / Tile::Size); } // floor could be just a cast to int if we know we will never get < 0
+	static int ToTiles(float x) { return Mates::FastFloor(x / Tile::Size); } // floor could be just a cast to int if we know we will never get < 0
 
 	static vec FromTiles(int x, int y) { return vec(x * Tile::Size, y * Tile::Size); }
 	static vec FromTiles(veci pos) { return FromTiles(pos.x, pos.y);  }
