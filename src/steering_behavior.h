@@ -43,7 +43,7 @@ struct SteeringBehavior
     vec OffsetPursuit(const Entity* leader, float offset);
 
     //this behavior makes the agent wander about randomly
-    vec Wander(float WanderRad, float WanderDist, float WanderJitterPerSec, float dt);
+    vec Wander(float WanderJitterPerSec, float dt);
 
     //this calculates a force repelling from the other neighbors
     //neighbors must be Entitys
@@ -58,7 +58,8 @@ struct SteeringBehavior
 
     //neighbors must be Entitys
     template<typename T>
-    vec Cohesion(const std::vector<T*>& neighbors);
+    vec GetCenterOfMass(const std::vector<T*>& neighbors);
+    vec Cohesion(vec CenterOfMass);
 
     //this returns a steering force which will attempt to keep the agent 
     //away from any obstacles it may encounter
@@ -249,16 +250,13 @@ vec SteeringBehavior::Separation(const std::vector<T*>& neighbors)
 
     for (Entity* entity : neighbors)
     {
-        //make sure this agent isn't included in the calculations and that
-        //the agent being examined is close enough. ***also make sure it doesn't
-        //include the evade target ***
+        //make sure this agent isn't included in the calculations
         if (entity != steeringEntity)
         {
             vec ToAgent = steeringEntity->pos - entity->pos;
-
-            //scale the force inversely proportional to the agents distance  
-            //from its neighbor.
-            SteeringForce += ToAgent.Normalized() / ToAgent.Length();
+            float dist = ToAgent.Length();
+            
+            SteeringForce += ToAgent.Normalized() / dist;
         }
     }
 
@@ -311,37 +309,29 @@ vec SteeringBehavior::Alignment(const std::vector<T*>& neighbors)
 //  center of mass of the agents in its immediate area
 //------------------------------------------------------------------------
 template<typename T>
-vec SteeringBehavior::Cohesion(const std::vector<T*>& neighbors)
-{
-    //first find the center of mass of all the agents
-    vec CenterOfMass, SteeringForce;
-
-    int NeighborCount = 0;
-
+vec SteeringBehavior::GetCenterOfMass(const std::vector<T*>& neighbors) {
     //iterate through the neighbors and sum up all the position vectors
+    int NeighborCount = 0;
+    vec CenterOfMass = vec::Zero;
     for (Entity* entity : neighbors)
     {
-        //make sure *this* agent isn't included in the calculations and that
-        //the agent being examined is close enough ***also make sure it doesn't
-        //include the evade target ***
-        if (entity != steeringEntity)
+        //make sure *this* agent isn't included in the calculation
+        //if (entity != steeringEntity)
         {
-            CenterOfMass += entity.pos;
+            CenterOfMass += entity->pos;
 
             ++NeighborCount;
         }
     }
-
     if (NeighborCount > 0)
     {
-        //the center of mass is the average of the sum of positions
-        CenterOfMass /= (double)NeighborCount;
-
-        //now seek towards that position
-        SteeringForce = Seek(CenterOfMass);
+        return CenterOfMass / (float)NeighborCount;
     }
+    return vec::Zero;
+}
 
-    //the magnitude of cohesion is usually much larger than separation or
-    //allignment so it usually helps to normalize it.
-    return SteeringForce.Normalized();
+inline vec SteeringBehavior::Cohesion(vec CenterOfMass)
+{
+    //now seek towards that position
+    return Seek(CenterOfMass);
 }

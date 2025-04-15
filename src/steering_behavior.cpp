@@ -32,8 +32,7 @@ vec SteeringBehavior::Seek(vec TargetPos)
 {
 	vec DesiredVelocity = (TargetPos - steeringEntity->pos).Normalized() * steeringEntity->max_speed;
 
-	// Note: gaem2020 returns DesiredVelocity here (needed for Bat)
-	return (DesiredVelocity - steeringEntity->vel);
+	return DesiredVelocity;
 }
 
 //----------------------------- Flee -------------------------------------
@@ -42,19 +41,21 @@ vec SteeringBehavior::Seek(vec TargetPos)
 //------------------------------------------------------------------------
 vec SteeringBehavior::Flee(vec TargetPos)
 {
-	//only flee if the target is within 'panic distance'. Work in distance
-	//squared space.
-	/* const float PanicDistanceSq = 100.0f * 100.0f;
-	if (DistanceSq(steeringEntity->pos, target) > PanicDistanceSq)
+	vec ToTarget = steeringEntity->pos - TargetPos;
+	float distance = ToTarget.Length();
+
+	// Avoid division by zero
+	if (distance == 0.0f)
 	{
-		return vec(0,0);
+		return vec::Zero;
 	}
-	*/
 
-	vec DesiredVelocity = (steeringEntity->pos - TargetPos).Normalized() * steeringEntity->max_speed;
+	// Scale the fleeing force based on max_speed and inversely proportional to distance
+	float scale = std::clamp(steeringEntity->max_speed / distance, 0.1f, steeringEntity->max_speed);
 
-	//return (DesiredVelocity - steeringEntity->vel);
-	return DesiredVelocity; // FIXME: Since we are overriding the velocity, we can't use the calculation above
+	vec DesiredVelocity = ToTarget.Normalized() * scale;
+
+	return DesiredVelocity;
 }
 
 //--------------------------- Arrive -------------------------------------
@@ -158,37 +159,23 @@ vec SteeringBehavior::Evade(const SteeringEntity* pursuer)
 //  @WanderDist: Velocitat a la que va (distance the wander circle is projected in front of the agent)
 //  @WanderJitterPerSec: Trompicones que dona (the maximum amount of displacement along the circle each frame)
 //------------------------------------------------------------------------
-vec SteeringBehavior::Wander(float WanderRad, float WanderDist, float WanderJitterPerSec, float dt)
+vec SteeringBehavior::Wander(float WanderJitterPerSec, float dt)
 {
-	//this behavior is dependent on the update rate, so this line must
-	//be included when using time independent framerate.
-	float JitterThisTimeSlice = WanderJitterPerSec * dt;
-
-	//Random between -1 and 1 with more weight at 0.
-	float x = (Rand::rollf() - Rand::rollf());
-	float y = (Rand::rollf() - Rand::rollf());
-
 	//first, add a small random vector to the target's position
-	m_vWanderTarget += vec(x * JitterThisTimeSlice, y * JitterThisTimeSlice);
-
-	//reproject this new vector back on to a unit circle
+	//Random between -1 and 1 with more weight at 0.
+	float angleChange = (Rand::rollf() - Rand::rollf());
+	m_vWanderTarget.RotateAroundOriginRads(angleChange * WanderJitterPerSec * dt);
 	m_vWanderTarget.Normalize();
 
-	//increase the length of the vector to the same as the radius
-	//of the wander circle
-	m_vWanderTarget *= WanderRad;
-
 	//move the target into a position WanderDist in front of the agent
-	vec target = m_vWanderTarget + vec(WanderDist, 0);
+	vec Target = steeringEntity->pos + m_vWanderTarget;
 
 	//project the target into world space
-	vec Target = PointToWorldSpace(target, steeringEntity->Heading(), steeringEntity->pos);
+	//vec Target = PointToWorldSpace(target, steeringEntity->Heading(), steeringEntity->pos);
 
 	//and steer towards it
 	vec Origin = steeringEntity->pos;
 	vec Ret = Target - Origin;
-
-	//(m_vWanderTarget * 30).DebugDrawAsArrow(steeringEntity->pos, 0,255,0);
 
 	return Ret;
 }
