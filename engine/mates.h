@@ -13,18 +13,11 @@
 namespace Mates
 {
 	//a few useful constants
-	constexpr int     MaxInt = (std::numeric_limits<int>::max)();
-	constexpr int     MinInt = (std::numeric_limits<int>::min)();
-	constexpr double  MaxDouble = (std::numeric_limits<double>::max)();
-	constexpr double  MinDouble = (std::numeric_limits<double>::min)();
-	constexpr float   MaxFloat = (std::numeric_limits<float>::max)();
-	constexpr float   MinFloat = (std::numeric_limits<float>::min)();
-
-	//returns true if the parameter is equal to zero
-	[[nodiscard]] inline bool IsZero(float val)
-	{
-		return (-MinFloat < val) && (val < MinFloat);
-	}
+	constexpr int     MaxInt = std::numeric_limits<int>::max();
+	constexpr int     MinInt = std::numeric_limits<int>::min();
+	constexpr float   MaxFloat = std::numeric_limits<float>::max();
+	constexpr float   MinFloat = std::numeric_limits<float>::lowest();
+	constexpr float   SmallestFloat = std::numeric_limits<float>::min(); // footgun: min returns the smallest *positive* value
 
 	//returns true is the third parameter is in the range described by the first two
 	[[nodiscard]] inline bool InRange(float start, float end, float val)
@@ -51,6 +44,8 @@ namespace Mates
 
 	[[nodiscard]] std::string ToHexa(int a_value);
 
+	// checks if adding the time delta dt to the current time causes the total time to cross a multiple boundary of period_sec,
+	// used to trigger events at regular intervals
 	[[nodiscard]] inline bool EachPeriod(float period_sec, float total_time_before_dt_increment, float dt) {
 		return int((total_time_before_dt_increment + dt) / period_sec) != int((total_time_before_dt_increment) / period_sec);
 	}
@@ -67,45 +62,59 @@ namespace Mates
 	}
 
 	//clamps the first argument between the second two
-	template <class T, class U, class V>
-	inline void Clamp(T& arg, const U& minVal, const V& maxVal)
+	template <class T>
+	inline void Clamp(T& arg, const T& minVal, const T& maxVal)
 	{
 		SDL_assert(minVal <= maxVal);
 
-		if (arg < (T)minVal)
+		if (arg < minVal)
 		{
-			arg = (T)minVal;
+			arg = minVal;
 		}
 
-		if (arg > (T)maxVal)
+		if (arg > maxVal)
 		{
-			arg = (T)maxVal;
+			arg = maxVal;
 		}
 	}
 
-	template <class T, class U, class V>
-	T Clamped(T arg, const U& minVal, const V& maxVal)
+	template <class T>
+	T Clamped(T arg, const T& minVal, const T& maxVal)
 	{
 		Clamp(arg, minVal, maxVal);
 		return arg;
 	}
 
-	template <class T, class V>
-	inline void ClampMax(T& arg, const V& maxVal)
+	template <class T>
+	inline void ClampMax(T& arg, const T& maxVal)
 	{
-		if (arg > (T)maxVal)
+		if (arg > maxVal)
 		{
-			arg = (T)maxVal;
+			arg = maxVal;
 		}
 	}
 
-	template <class T, class V>
-	inline void ClampMin(T& arg, const V& minVal)
+	template <class T>
+	T ClampedMax(T arg, const T& maxVal)
 	{
-		if (arg < (T)minVal)
+		ClampMax(arg, maxVal);
+		return arg;
+	}
+
+	template <class T>
+	inline void ClampMin(T& arg, const T& minVal)
+	{
+		if (arg < minVal)
 		{
-			arg = (T)minVal;
+			arg = minVal;
 		}
+	}
+
+	template <class T>
+	T ClampedMin(T arg, const T& minVal)
+	{
+		ClampMin(arg, minVal);
+		return arg;
 	}
 
 	[[nodiscard]] inline float Lerp(float from, float to, float t)
@@ -118,7 +127,6 @@ namespace Mates
 		return ((current * (dampening - 1)) + target) / dampening; //weighted average formula
 	}
 
-	//rounds a float up or down depending on its value
 	[[nodiscard]] inline int Rounded(float val)
 	{
 		int    integral = (int)val;
@@ -134,9 +142,8 @@ namespace Mates
 		}
 	}
 
-	//rounds a double up or down depending on whether its
-	//mantissa is higher or lower than offset
-	[[nodiscard]] inline int RoundUnderOffset(float val, float offset)
+	//rounds up/down at the specified offset instead of 0.5
+	[[nodiscard]] inline int RoundedUnderOffset(float val, float offset)
 	{
 		int    integral = (int)val;
 		float mantissa = val - integral;
@@ -157,29 +164,23 @@ namespace Mates
 		return (fabs(a - b) < margin);
 	}
 
-	[[nodiscard]] inline bool IsNearlyEqual(double a, double b, double margin = 1E-12)
-	{
-		return (fabs(a - b) < margin);
-	}
-
-
 	template <class T>
-	[[nodiscard]] inline double Average(const std::vector<T>& v)
+	[[nodiscard]] inline float Average(const std::vector<T>& v)
 	{
-		double average = 0.0;
+		float average = 0.0;
 
 		for (unsigned int i = 0; i < v.size(); ++i)
 		{
-			average += (double)v[i];
+			average += (float)v[i];
 		}
 
-		return average / (double)v.size();
+		return average / (float)v.size();
 	}
 
-	[[nodiscard]] inline double StandardDeviation(const std::vector<double>& v)
+	[[nodiscard]] inline float StandardDeviation(const std::vector<float>& v)
 	{
-		double sd = 0.0;
-		double average = Average(v);
+		float sd = 0.0;
+		float average = Average(v);
 
 		for (unsigned int i = 0; i < v.size(); ++i)
 		{
@@ -191,32 +192,11 @@ namespace Mates
 		return sqrt(sd);
 	}
 
-	[[nodiscard]] inline int fastfloor(float x) { return x > 0 ? (int)x : (int)x - 1; }
-
-	struct Range {
-		float min;
-		float max;
-	};
-
-	[[nodiscard]] inline Range SortTwo(float a, float b) {
-		if (a > b)
-		{
-			return Range{ b, a };
-		}
-		else
-		{
-			return Range{ a, b };
-		}
-	}
+	[[nodiscard]] inline int FastFloor(float x) { return x > 0 ? (int)x : (int)x - 1; }
 
 	[[nodiscard]] inline float Sign(float value)
 	{
 		return value >= 0? 1.f : -1.f;
-	}
-
-	[[nodiscard]] inline float Norm(float value)
-	{
-		return value * Sign(value);
 	}
 
 	[[nodiscard]] inline int DivCeil(int a, int b)

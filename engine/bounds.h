@@ -16,7 +16,6 @@ struct BoxBounds
     float width, height;
 
     constexpr BoxBounds(float x, float y, float w, float h) : left(x), top(y), width(w), height(h) { }
-    constexpr BoxBounds() : BoxBounds(-1, -1, 0, 0) { }
     constexpr BoxBounds(vec topleft, vec size) : BoxBounds(topleft.x, topleft.y, size.x, size.y) {}
     constexpr explicit BoxBounds(vec size) : BoxBounds(0, 0, size.x, size.y) { }
     constexpr explicit BoxBounds(vec pos, vec size, vec origin) : BoxBounds(pos.x, pos.y, size.x, size.y) {
@@ -61,9 +60,9 @@ struct BoxBounds
     }
 
     [[nodiscard]] constexpr vec Center() const
-	{
-		return vec(left + width/2, top + height/2);
-	}
+    {
+        return vec(left + width/2, top + height/2);
+    }
 
     [[nodiscard]] constexpr float Area() const
     {
@@ -71,7 +70,7 @@ struct BoxBounds
     }
 
     void SetCenter(float x, float y)
-	{
+    {
         left = x - width/2;
         top = y - height/2;
     }
@@ -83,7 +82,7 @@ struct BoxBounds
     }
 
     void SetCenter(vec center)
-	{
+    {
         SetCenter(center.x, center.y);
     }
 
@@ -106,22 +105,22 @@ struct BoxBounds
 #endif
 
     [[nodiscard]] constexpr float Top() const
-	{
+    {
         return top;
     }
 
     [[nodiscard]] constexpr float Bottom() const
-	{
+    {
         return top + height;
     }
 
     [[nodiscard]] constexpr float Left() const
-	{
+    {
         return left;
     }
 
     [[nodiscard]] constexpr float Right() const
-	{
+    {
         return left + width;
     }
 
@@ -151,7 +150,7 @@ struct BoxBounds
     }
 
     [[nodiscard]] bool Contains(vec point) const
-	{
+    {
         return Contains(point.x, point.y);
     }
 
@@ -168,11 +167,20 @@ struct BoxBounds
         return vec(width, height);
     }
 
-    [[nodiscard]] vec ClosestPointInBounds(vec target) const;
+    [[nodiscard]] vec ClosestPointInBounds(vec target) const {
+        return target.Clamped(TopLeft(), BottomRight());
+    }
+
+    [[nodiscard]] float Distance(vec point) const {
+        vec closest = ClosestPointInBounds(point);
+        return closest.Distance(point);
+    }
+
     [[nodiscard]] float DistanceSq(const BoxBounds& a) const;
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
     [[nodiscard]] float Distance(const BoxBounds& a) const;
     [[nodiscard]] float Distance(const CircleBounds& a) const;
+
 };
 
 struct CircleBounds
@@ -196,16 +204,27 @@ struct CircleBounds
 
     [[nodiscard]] float DistanceSq(const BoxBounds& a) const { return a.DistanceSq(*this); }
     [[nodiscard]] float Distance(const BoxBounds& a) const { return a.Distance(*this); }
-    
+
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const {
         return a.pos.DistanceSq(this->pos) - (a.radius + this->radius) * (a.radius + this->radius);
     }
     [[nodiscard]] float Distance(const CircleBounds& a) const { 
         return a.pos.Distance(this->pos) - (a.radius + this->radius);
     }
+    [[nodiscard]] float Distance(vec a) const {
+        return a.Distance(this->pos) - (this->radius);
+    }
 
     [[nodiscard]] bool Contains(float x, float y) const { return Contains(vec(x, y)); }
-    [[nodiscard]] bool Contains(vec v) const { return (pos.DistanceSq(v) < radius*radius); }
+    [[nodiscard]] bool Contains(vec v) const { return (pos.DistanceSq(v) <= radius*radius); }
+
+    [[nodiscard]] vec ClosestPointInBounds(vec target) const {
+        vec direction = target - pos;
+        if (direction.LengthSq() <= radius * radius) {
+            return target;
+        }
+        return pos + direction.Normalized() * radius;
+    }
 
     [[nodiscard]] BoxBounds EnclosingBoxBounds() const { return BoxBounds::FromCenter(Center(), vec(radius*2)); }
 };
@@ -230,16 +249,8 @@ inline float BoxBounds::DistanceSq(const BoxBounds& a) const {
     return sqrDist;
 }
 
-inline vec BoxBounds::ClosestPointInBounds(vec target) const {
-    vec distance = this->Center() - target;
-    distance.Clamp(-this->Size() / 2, this->Size() / 2);
-    vec closestPoint = this->Center() - distance;
-    return closestPoint;
-}
-
 inline float BoxBounds::DistanceSq(const CircleBounds& a) const {
     vec closestPoint = ClosestPointInBounds(a.pos);
-    //closestPoint.DebugDraw();
     return closestPoint.DistanceSq(a.pos) - (a.radius * a.radius);
 }
 

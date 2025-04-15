@@ -142,10 +142,7 @@ struct vec
 	}
 
 	// Note: If specified, maxTurnRate should to be multiplied by dt
-	[[nodiscard]] vec RotatedToFacePositionRads(vec target, float maxTurnRateRads = std::numeric_limits<float>::max()) const;
-	[[nodiscard]] inline vec RotatedToFacePositionDegs(vec target) const {
-		return RotatedToFacePositionRads(target);
-	}
+	[[nodiscard]] vec RotatedToFacePositionRads(vec target, float maxTurnRateRads) const;
 	[[nodiscard]] inline vec RotatedToFacePositionDegs(vec target, float maxTurnRateDegs) const {
 		return RotatedToFacePositionRads(target, Angles::DegsToRads(maxTurnRateDegs));
 	}
@@ -162,9 +159,7 @@ struct vec
 	//squared version of above.
 	[[nodiscard]] inline float DistanceSq(vec v2) const;
 
-	[[nodiscard]] inline vec ManhattanDistance(vec v2) const;
-
-	constexpr vec operator+=(vec rhs)
+	constexpr vec& operator+=(vec rhs)
 	{
 		x += rhs.x;
 		y += rhs.y;
@@ -172,7 +167,7 @@ struct vec
 		return *this;
 	}
 
-	constexpr vec operator-=(vec rhs)
+	constexpr vec& operator-=(vec rhs)
 	{
 		x -= rhs.x;
 		y -= rhs.y;
@@ -180,7 +175,7 @@ struct vec
 		return *this;
 	}
 
-	constexpr vec operator*=(const float& rhs)
+	constexpr vec& operator*=(float rhs)
 	{
 		x *= rhs;
 		y *= rhs;
@@ -189,7 +184,7 @@ struct vec
 	}
 
 	// Component-wise (aka dot) product, like in GLSL
-	constexpr vec operator*=(const vec& rhs)
+	constexpr vec& operator*=(vec rhs)
 	{
 		x *= rhs.x;
 		y *= rhs.y;
@@ -197,7 +192,7 @@ struct vec
 		return *this;
 	}
 
-	constexpr vec operator/=(const float& rhs)
+	constexpr vec& operator/=(float rhs)
 	{
 		x /= rhs;
 		y /= rhs;
@@ -205,7 +200,7 @@ struct vec
 		return *this;
 	}
 
-	constexpr vec operator/=(const vec& rhs)
+	constexpr vec& operator/=(vec rhs)
 	{
 		x /= rhs.x;
 		y /= rhs.y;
@@ -322,14 +317,6 @@ inline float vec::DistanceSq(vec v2) const
 	return ySeparation*ySeparation + xSeparation*xSeparation;
 }
 
-inline vec vec::ManhattanDistance(vec v2) const
-{
-	return vec(
-		fabs(v2.x - x),
-		fabs(v2.y - y)
-	);
-}
-
 //  truncates a vector so that its length does not exceed max
 inline bool vec::Truncate(float max)
 {
@@ -416,6 +403,16 @@ inline vec vec::Normalized() const
 [[nodiscard]] inline float AngleDegsBetween(vec v1, vec v2)
 {
 	return v1.AngleDegsBetween(v2);
+}
+
+[[nodiscard]] inline vec sqrt(vec v)
+{
+	return vec(sqrt(v.x), sqrt(v.y));
+}
+
+[[nodiscard]] inline vec fabs(vec v)
+{
+	return vec(fabs(v.x), fabs(v.y));
 }
 
 //------------------------------------------------------------------------operator overloads

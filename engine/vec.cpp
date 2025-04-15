@@ -1,34 +1,36 @@
 #include "vec.h"
 
+#include "mates.h"
+
 vec vec::RotatedToFacePositionRads(vec target, float maxTurnRateRads) const
 {
-	vec toTarget = (target - *this).Normalized();
+	vec toTarget = target.Normalized();
 	vec heading = Normalized();
 
 	//first determine the angle between the heading vector and the target
-	float angle = acos(heading.Dot(toTarget));
+	float angle = heading.AngleRadsBetween(toTarget);
 
 	//return true if already facing the target
-	if (angle < 0.00001f || isnan(angle)) {
+	if (fabs(angle) < 0.00001f || isnan(angle)) {
 		return *this;
 	}
 
 	//clamp the amount to turn to the max turn rate
-	if (fabs(angle) > maxTurnRateRads) angle = maxTurnRateRads;
+	Mates::Clamp(angle, -maxTurnRateRads, maxTurnRateRads);
 
-	return RotatedAroundOriginRads(angle * heading.Sign(toTarget));
+	return RotatedAroundOriginRads(angle);
 }
 
 #include "debug.h"
 
-void test(int line, float computed, float expected) {
+static void test(int line, float computed, float expected) {
 	float diff = fabs(expected-computed);
 	if (diff > 0.001) {
 		Debug::out << "Line " << line << ": Expected: " << expected << ", computed: " << computed;
 	}
 }
 
-void TestAngles() {
+static void TestAngles() {
 	vec unitX = vec(1, 0);
 	vec unitY = vec(0, 1);
 	vec unitNegX = vec(-1, 0);
