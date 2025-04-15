@@ -8,10 +8,11 @@
 #include "tweeny.h"
 #include "input.h"
 #include "steering_behavior.h"
+#include "singleinstance.h"
 #include "stroke.h"
 #include "particles.h"
 
-class Ship : public Entity {
+class Ship : public Entity, public SingleInstance<Ship> {
 public:
 	int lives;
 	vec heading;

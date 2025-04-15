@@ -9,9 +9,9 @@ uniform float iTime;
 uniform float zoom;
 uniform float windowScale;
 
-#define SURFACE_COL vec3(0.1, 0.45, 0.73)
-#define UNDERWATER_COL vec3(0.0, 0.37, 0.66)
-#define FOAM_COL vec3(0.7, 0.8, 0.9)
+#define SURFACE_COL vec4(0.1, 0.45, 0.73, 0.0)
+#define UNDERWATER_COL vec4(0.0, 0.37, 0.66, 1.0)
+#define FOAM_COL vec4(0.7, 0.8, 0.9, 1.0)
 
 // Perlin noise by @XorDev
 // https://mini.gmshaders.com/p/gm-shaders-mini-noise-1437243
@@ -69,12 +69,17 @@ void sea(out vec4 fragColor, in vec2 coord) {
 
     float from = 0.45 + 0.05*cos(iTime*0.5);
     float to = from + 0.03;
-    fragColor.rgb = mix(SURFACE_COL, UNDERWATER_COL, perlin_layer(coord/1.7 + wobble, from, to));
+    vec4 color = mix(SURFACE_COL, UNDERWATER_COL, perlin_layer(coord/1.7 + wobble, from, to));
 
     from = 0.5 + 0.05*sin(iTime*0.5);
     to = from + 0.04 + 0.01*sin(iTime*0.2);
-    fragColor.rgb = mix(fragColor.rgb, FOAM_COL, perlin_layer(coord + wobble, from, to));
-    fragColor.a = 1.0;
+    color = mix(color, FOAM_COL, perlin_layer(coord + wobble, from, to));
+
+    if (color.a == 0.0) {
+        discard;
+    } else {
+        fragColor.rgba = color;
+    }
 }
 
 void main(void)

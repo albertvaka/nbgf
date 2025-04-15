@@ -8,6 +8,7 @@
 #include "collide.h"
 #include "window.h"
 #include "camera.h"
+#include "fish.h"
 #include "rock.h"
 #include "particles.h"
 #include "debug.h"
@@ -28,18 +29,30 @@ void SceneMain::EnterScene()
 	ship.Reset();
 
 	Chunks::SpawnInitial(veci(0, 0));
+
+	new Fish(vec(100, 100));
+	new Fish(vec(400, 10));
+	new Fish(vec(100, 50));
+	new Fish(vec(200, 10));
+	new Fish(vec(100, 40));
+	new Fish(vec(600, 10));
 }
 
 void SceneMain::ExitScene()
 {
 	Particles::ClearAll();
 	Rock::DeleteAll();
+	Fish::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
 {
 	veci lastChunk = Chunks::GetChunk(ship.pos);
 	ship.Update(dt);
+
+	for (Fish* e: Fish::GetAll()) {
+		e->Update(dt);
+	}
 
 	Particles::UpdateAll(dt);
 
@@ -49,7 +62,11 @@ void SceneMain::Update(float dt)
 
 void SceneMain::Draw()
 {
-	Window::Clear(0, 0, 0);
+	Window::Clear(0.1 * 255, 0.45 * 255, 0.73 * 255);
+
+	for (Fish* e : Fish::GetAll()) {
+		e->Draw();
+	}
 
 	Assets::seaShader.Activate();
 	Assets::seaShader.SetUniform("offset", Camera::Center());
