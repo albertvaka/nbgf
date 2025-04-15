@@ -60,6 +60,7 @@
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\chunks.h" />
+    <ClInclude Include="src\fish.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\particles.h" />
     <ClInclude Include="src\rock.h" />
@@ -67,7 +68,6 @@
     <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\ship.h" />
     <ClInclude Include="src\steering_behavior.h" />
-    <ClInclude Include="src\steering_behavior_applier.h" />
     <ClInclude Include="src\steering_entity.h" />
     <ClInclude Include="src\stroke.h" />
     <ClInclude Include="src\window_conf.h" />
@@ -120,6 +120,7 @@
     <ClCompile Include="generated\tiled_tilemap.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\chunks.cpp" />
+    <ClCompile Include="src\fish.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\particles.cpp" />
     <ClCompile Include="src\rock.cpp" />

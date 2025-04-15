@@ -57,7 +57,7 @@ void SceneIntro::Update(float dt)
 
 void SceneIntro::Draw()
 {
-	Window::Clear(0, 0, 0);
+	Window::Clear(0.1 * 255, 0.45 * 255, 0.73 * 255);
 
 	Assets::seaShader.Activate();
 	Assets::seaShader.SetUniform("offset", Camera::Center());

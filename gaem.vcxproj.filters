@@ -267,6 +267,9 @@
     <ClInclude Include="src\chunks.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\fish.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -414,6 +417,9 @@
       <Filter>engine</Filter>
     </ClCompile>
     <ClCompile Include="src\chunks.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fish.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
