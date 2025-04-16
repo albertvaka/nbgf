@@ -2,6 +2,7 @@
 //Based on the work of: Mat Buckland (fup@ai-junkie.com)
 
 #include <vector>
+#include <span>
 
 #include "entity.h"
 #include "vec.h"
@@ -48,17 +49,23 @@ struct SteeringBehavior
     //this calculates a force repelling from the other neighbors
     //neighbors must be Entitys
     template<typename T>
-    vec Separation(const std::vector<T*>& neighbors);
+    vec Separation(std::span<T * const> neighbors);
+    template<typename T>
+    vec Separation(const std::vector<T*>& neighbors) { return Separation(std::span(neighbors.cbegin(), neighbors.cend())); }
 
     //returns a force that attempts to align this agents heading with that
     //of its neighbors
     //neighbors must be Entitys
     template<typename T>
-    vec Alignment(const std::vector<T*>& neighbors);
+    vec Alignment(std::span<T * const> neighbors);
+    template<typename T>
+    vec Alignment(const std::vector<T*>& neighbors) { return Alignment(std::span(neighbors.cbegin(), neighbors.cend())); }
 
     //neighbors must be Entitys
     template<typename T>
-    vec GetCenterOfMass(const std::vector<T*>& neighbors);
+    static vec GetCenterOfMass(std::span<T* const> neighbors);
+    template<typename T>
+    static vec GetCenterOfMass(const std::vector<T*>& neighbors) { return GetCenterOfMass(std::span(neighbors.cbegin(), neighbors.cend())); }
     vec Cohesion(vec CenterOfMass);
 
     //this returns a steering force which will attempt to keep the agent 
@@ -244,7 +251,7 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
 //  this calculates a force repelling from the other neighbors
 //------------------------------------------------------------------------
 template<typename T>
-vec SteeringBehavior::Separation(const std::vector<T*>& neighbors)
+vec SteeringBehavior::Separation(std::span<T* const> neighbors)
 {
     vec SteeringForce;
 
@@ -255,7 +262,7 @@ vec SteeringBehavior::Separation(const std::vector<T*>& neighbors)
         {
             vec ToAgent = steeringEntity->pos - entity->pos;
             float dist = ToAgent.Length();
-            
+
             SteeringForce += ToAgent.Normalized() / dist;
         }
     }
@@ -269,7 +276,7 @@ vec SteeringBehavior::Separation(const std::vector<T*>& neighbors)
 //  of its neighbors
 //------------------------------------------------------------------------
 template<typename T>
-vec SteeringBehavior::Alignment(const std::vector<T*>& neighbors)
+vec SteeringBehavior::Alignment(std::span<T* const> neighbors)
 {
     //used to record the average heading of the neighbors
     vec AverageHeading;
@@ -296,8 +303,6 @@ vec SteeringBehavior::Alignment(const std::vector<T*>& neighbors)
     if (NeighborCount > 0)
     {
         AverageHeading /= (double)NeighborCount;
-
-        AverageHeading -= steeringEntity->Heading();
     }
 
     return AverageHeading;
@@ -309,7 +314,7 @@ vec SteeringBehavior::Alignment(const std::vector<T*>& neighbors)
 //  center of mass of the agents in its immediate area
 //------------------------------------------------------------------------
 template<typename T>
-vec SteeringBehavior::GetCenterOfMass(const std::vector<T*>& neighbors) {
+vec SteeringBehavior::GetCenterOfMass(std::span<T* const> neighbors) {
     //iterate through the neighbors and sum up all the position vectors
     int NeighborCount = 0;
     vec CenterOfMass = vec::Zero;

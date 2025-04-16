@@ -2,6 +2,7 @@
 
 #include "chunks.h"
 
+const float rockRadius = 30.f;
 const float rockSpacing = 15.0f;
 const float rockProbability = 0.000001f;
 
@@ -39,14 +40,10 @@ bool CanSpawn(float x, float y)
     return true;
 }
 
-void Rock::SpawnInChunk(int chunkX, int chunkY)
+void Rock::SpawnInChunk(const BoxBounds& bounds)
 {
-    float left = chunkX * Chunks::chunkSize;
-    float top = chunkY * Chunks::chunkSize;
-    float right = left + Chunks::chunkSize;
-    float bottom = top + Chunks::chunkSize;
-    for (float x = left; x < right; x += rockSpacing) {
-        for (float y = top; y < bottom; y += rockSpacing) {
+    for (float x = bounds.Left(); x < bounds.Right(); x += rockSpacing) {
+        for (float y = bounds.Top(); y < bounds.Bottom(); y += rockSpacing) {
             if (hash(x, y) < rockProbability && CanSpawn(x, y)) {
                 new Rock(vec(x, y));
             }
@@ -54,56 +51,16 @@ void Rock::SpawnInChunk(int chunkX, int chunkY)
     }
 }
 
-void Rock::Spawn(veci currentChunk, veci lastChunk) {
-
-    if (currentChunk == lastChunk) {
-        return;
-    }
-
-    // Mark rocks outside the 3x3 grid around current chunk as not alive
-    for (Rock* rock : Rock::GetAll()) {
+void Rock::DespawnFarFromChunk(veci currentChunk, int distance)
+{
+    std::vector<Rock*>& rocks = Rock::GetAll();
+    for (int i = rocks.size() - 1; i >= 0; i--) {
+        Rock* rock = rocks[i];
         veci rockChunk = Chunks::GetChunk(rock->pos);
-        if (std::abs(rockChunk.x - currentChunk.x) > 1 || std::abs(rockChunk.y - currentChunk.y) > 1) {
-            rock->alive = false;
+        if (std::abs(rockChunk.x - currentChunk.x) >= distance || std::abs(rockChunk.y - currentChunk.y) >= distance) {
+            delete rock;
         }
-    }
-    Rock::DeleteNotAlive();
-
-    Debug::out << "Chunk changed: " << currentChunk.x << "," << currentChunk.y;
-
-    if (currentChunk.x > lastChunk.x) {
-        // Moving right
-        for (int dy = -1; dy <= 1; dy++) {
-            SpawnInChunk(currentChunk.x + 1, lastChunk.y + dy);
-        }
-    } else if (currentChunk.x < lastChunk.x) {
-        // Moving left
-        for (int dy = -1; dy <= 1; dy++) {
-            SpawnInChunk(currentChunk.x - 1, lastChunk.y + dy);
-        }
-    }
-    if (currentChunk.y > lastChunk.y) {
-        // Moving down
-        for (int dx = -1; dx <= 1; dx++) {
-            SpawnInChunk(lastChunk.x + dx, currentChunk.y + 1);
-        }
-    } else if (currentChunk.y < lastChunk.y) {
-        // Moving up
-        for (int dx = -1; dx <= 1; dx++) {
-            SpawnInChunk(lastChunk.x + dx, currentChunk.y - 1);
-        }
-    }
-    if (currentChunk.x > lastChunk.x && currentChunk.y > lastChunk.y) {
-        // Moving right and down
-        SpawnInChunk(currentChunk.x + 1, currentChunk.y + 1);
-    } else if (currentChunk.x < lastChunk.x && currentChunk.y > lastChunk.y) {
-        // Moving left and down
-        SpawnInChunk(currentChunk.x - 1, currentChunk.y + 1);
-    } else if (currentChunk.x > lastChunk.x && currentChunk.y < lastChunk.y) {
-        // Moving right and up
-        SpawnInChunk(currentChunk.x + 1, currentChunk.y - 1);
-    } else if (currentChunk.x < lastChunk.x && currentChunk.y < lastChunk.y) {
-        // Moving left and up
-        SpawnInChunk(currentChunk.x - 1, currentChunk.y - 1);
     }
 }
+
+

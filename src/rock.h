@@ -8,8 +8,6 @@
 
 extern float mainClock;
 
-const int rockRadius = 30;
-
 struct Rock : CircleEntity, SelfRegister<Rock>
 {
 	GPU_Rect sprite;
@@ -35,8 +33,6 @@ struct Rock : CircleEntity, SelfRegister<Rock>
 		Bounds().DebugDraw();
 	}
 
-	static veci GetChunk(vec pos);
-	static void DebugDrawChunks(veci currentChunk);
-	static void Spawn(veci currentChunk, veci lastChunk);
-	static void SpawnInChunk(int chunkX, int chunkY);
+	static void SpawnInChunk(const BoxBounds& b);
+	static void DespawnFarFromChunk(veci currentChunk, int distance);
 };
