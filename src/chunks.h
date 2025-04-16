@@ -1,18 +1,11 @@
 #pragma once
 
-#include "entity.h"
-#include "selfregister.h"
-#include "assets.h"
-#include "window.h"
-#include "camera.h"
-
-extern float mainClock;
+#include "vec.h"
 
 namespace Chunks {
-	const float chunkSize = 2000.0f;
-
 	veci GetChunk(vec pos);
 	void DebugDrawChunks(veci currentChunk);
 	void SpawnInitial(veci centralChunk);
+	void SpawnChunk(int chunkX, int chunkY);
 	void Update(veci previousChunk, veci currentChunk);
 };

@@ -9,13 +9,19 @@ struct Fish : SteeringEntity, SelfRegister<Fish>
 {
 	SteeringBehavior steering;
 
-	Fish(vec position);
+	Fish(vec position, veci homeChunk);
 	~Fish();
 
-	void Update(float dt);
+	void Update(float dt, vec centerOfMass, std::span<Fish* const> neighbours);
 	void Draw() const;
-	vec CalculateFlocking(float dt);
 
+	static void UpdateAll(float dt);
+	static void SpawnInChunk(const BoxBounds& bounds);
+	static void SpawnGroup(vec pos);
+	static void DespawnFarFromChunk(veci currentChunk, int distance);
+
+	float scale;
 	int sprite;
+	veci homeChunk;
 };
 

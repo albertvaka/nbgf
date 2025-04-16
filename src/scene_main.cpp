@@ -30,12 +30,6 @@ void SceneMain::EnterScene()
 
 	Chunks::SpawnInitial(veci(0, 0));
 
-	new Fish(vec(100, 100));
-	new Fish(vec(400, 10));
-	new Fish(vec(100, 50));
-	new Fish(vec(200, 10));
-	new Fish(vec(100, 40));
-	new Fish(vec(600, 10));
 }
 
 void SceneMain::ExitScene()
@@ -48,11 +42,10 @@ void SceneMain::ExitScene()
 void SceneMain::Update(float dt)
 {
 	veci lastChunk = Chunks::GetChunk(ship.pos);
+	
 	ship.Update(dt);
 
-	for (Fish* e: Fish::GetAll()) {
-		e->Update(dt);
-	}
+	Fish::UpdateAll(dt);
 
 	Particles::UpdateAll(dt);
 
