@@ -17,7 +17,7 @@ struct Transform : public vec {
 		return Transform(-x, -y, 360 - rotationDegs);
 	}
 
-	constexpr Transform operator+=(Transform rhs)
+	constexpr Transform& operator+=(Transform rhs)
 	{
 		x += rhs.x;
 		y += rhs.y;
@@ -26,14 +26,14 @@ struct Transform : public vec {
 		return *this;
 	}
 
-	constexpr Transform operator+=(vec rhs)
+	constexpr Transform& operator+=(vec rhs)
 	{
 		x += rhs.x;
 		y += rhs.y;
 		return *this;
 	}
 
-	constexpr Transform operator-=(Transform rhs)
+	constexpr Transform& operator-=(Transform rhs)
 	{
 		x -= rhs.x;
 		y -= rhs.y;
@@ -42,7 +42,7 @@ struct Transform : public vec {
 		return *this;
 	}
 
-	constexpr Transform operator*=(const float& rhs)
+	constexpr Transform& operator*=(const float& rhs)
 	{
 		x *= rhs;
 		y *= rhs;
@@ -51,7 +51,7 @@ struct Transform : public vec {
 		return *this;
 	}
 
-	constexpr Transform operator/=(const float& rhs)
+	constexpr Transform& operator/=(const float& rhs)
 	{
 		x /= rhs;
 		y /= rhs;
@@ -67,7 +67,7 @@ struct Transform : public vec {
 
 	constexpr bool operator!=(Transform rhs) const
 	{
-		return (x != rhs.x) || (y != rhs.y) || (rotationDegs == rhs.rotationDegs);
+		return (x != rhs.x) || (y != rhs.y) || (rotationDegs != rhs.rotationDegs);
 	}
 
 };

@@ -4,6 +4,8 @@
 #include <functional>
 #include <algorithm>
 
+#include "noncopyable.h"
+
 #define SUPPORT_MULTIPLE_SELFREGISTER_INHERITANCE false
 #define ENABLE_OPTIMIZATION_BULK_DELETE_ALL false
 
@@ -12,18 +14,10 @@
  * that returns a set with all the current instances of the class.
  */
 template <typename T>
-class SelfRegister
+class SelfRegister : NonCopyable
 {
 public:
 	SelfRegister()
-	{
-		GetAll().push_back((T*)this);
-	}
-	SelfRegister(const SelfRegister& other)
-	{
-		GetAll().push_back((T*)this);
-	}
-	void operator=(const SelfRegister& other)
 	{
 		GetAll().push_back((T*)this);
 	}
