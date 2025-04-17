@@ -23,8 +23,8 @@ namespace Chunks {
 	}
 
 	veci GetChunk(vec pos) {
-		int x = Mates::fastfloor(pos.x / chunkSize);
-		int y = Mates::fastfloor(pos.y / chunkSize);
+		int x = Mates::FastFloor(pos.x / chunkSize);
+		int y = Mates::FastFloor(pos.y / chunkSize);
 		return veci(x, y);
 	}
 
