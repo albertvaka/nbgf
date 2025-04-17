@@ -72,8 +72,8 @@ struct PartSys {
 
 	float scale_vel = 0.f;
 
-	float min_rotation = 0.f;
-	float max_rotation = 0.f;
+	float min_rotation = 0.f; // degrees
+	float max_rotation = 0.f; // degrees
 
 	float min_rotation_vel = 0.f;
 	float max_rotation_vel = 0.f;
@@ -84,6 +84,8 @@ struct PartSys {
 	float bounce_alpha = -1.f; //max alpha, at which it starts going back to 0
 
 	float time = 0.f;
+
+	SDL_Color color; // alpha is ignored
 
 	PartSys(GPU_Image* t) {
 		SetTexture(t);
