@@ -43,10 +43,10 @@ void PartSys::Draw() const {
 		float h = rect.h * p.scale;
 		//vec pos = p.pos - (vec(w, h) * 0.5f);
 		RectToTextureCoordinates(texture, rect);
-		Window::DrawRaw::BatchColoredTexturedQuad(texture, p.pos.x, p.pos.y, w, h, rect, 1.f,1.f,1.f,p.alpha);
+		Window::DrawRaw::BatchColoredTexturedQuad(texture, p.pos.x, p.pos.y, w, h, rect, color.r/255.f, color.g/255.f, color.b/255.f, p.alpha);
 #else
 		Window::Draw(texture, p.pos)
-			.withColor(255, 255, 255, 255 * alpha)
+			.withColor(color.r, color.g, color.b, 255 * alpha)
 			.withScale(p.scale)
 			.withOrigin(rect.w/2, rect.h/2)
 			.withRect(rect)
@@ -103,7 +103,7 @@ void PartSys::DrawImGUI(const char* title) {
 			max_ttl = min_ttl;
 		}
 	}
-	if (ImGui::SliderFloat("maxttl", &max_ttl, 0.f, 8.)) {
+	if (ImGui::SliderFloat("max_ttl", &max_ttl, 0.f, 8.)) {
 		if (min_ttl > max_ttl) {
 			min_ttl = max_ttl;
 		}
@@ -137,8 +137,16 @@ void PartSys::DrawImGUI(const char* title) {
 			min_rotation = max_rotation;
 		}
 	}
-	ImGui::SliderFloat("min_rotation_vel", &min_rotation_vel, -360.f, 360.f);
-	ImGui::SliderFloat("max_rotation_vel", &max_rotation_vel, -360.f, 360.f);
+	if (ImGui::SliderFloat("min_rotation_vel", &min_rotation_vel, -360.f, 360.f)) {
+		if (min_rotation_vel > max_rotation_vel) {
+			max_rotation_vel = min_rotation_vel;
+		}
+	}
+	if (ImGui::SliderFloat("max_rotation_vel", &max_rotation_vel, -360.f, 360.f)) {
+		if (min_rotation_vel > max_rotation_vel) {
+			min_rotation_vel = max_rotation_vel;
+		}
+	}
 	ImGui::SliderFloat2("accel", &acc.x, -50.f, 50.f);
 	ImGui::Text("Count: %lu", particles.size());
 	ImGui::End();
