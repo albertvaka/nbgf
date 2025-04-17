@@ -8,7 +8,7 @@ void Assets::LoadAll() {
     heartTexture = LoadImage("data/heart.png");
     rockTexture = LoadImage("data/rocks.png");
     rockFoamTexture = LoadImage("data/rocks_foam.png");
-    backgroundTexture = LoadImage("data/bg.png");
+    particlesTexture = LoadImage("data/particles.png");
     fishTexture = LoadImage("data/fish.png");
 
     font_30 = LoadFont("data/PressStart2P.ttf", 30);
