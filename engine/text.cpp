@@ -6,7 +6,7 @@
 SDL_Surface* Text::Render(SDL_Color fg) {
 	SDL_Surface* fg_surface = TTF_RenderUTF8_Blended(font, str.c_str(), fg);
 	if (!fg_surface) {
-		printf("Unable to create text surface. SDL Error: %s\n", TTF_GetError());
+		Debug::out << "Unable to create fg text surface. SDL Error:" << TTF_GetError();
 		return nullptr; // Note this will crash the program
 	}
 	if (!font_outline) {
@@ -15,7 +15,8 @@ SDL_Surface* Text::Render(SDL_Color fg) {
 
 	SDL_Surface* bg_surface = TTF_RenderUTF8_Blended(font_outline, str.c_str(), outline_color);
 	if (!bg_surface) {
-		printf("Unable to create text surface. SDL Error: %s\n", TTF_GetError());
+		Debug::out << "Unable to create bg text surface. SDL Error:" << TTF_GetError();
+		return nullptr; // Note this will crash the program
 	}
 
 	int outline = TTF_GetFontOutline(font_outline);
@@ -25,7 +26,7 @@ SDL_Surface* Text::Render(SDL_Color fg) {
 	SDL_SetSurfaceBlendMode(fg_surface, SDL_BLENDMODE_BLEND);
 	SDL_BlitSurface(fg_surface, NULL, bg_surface, &rect);
 	SDL_FreeSurface(fg_surface);
-		
+
 	return bg_surface;
 }
 

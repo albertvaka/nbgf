@@ -204,4 +204,8 @@ namespace Mates
 		return (a + b - 1) / b;
 	}
 
+	struct Range {
+		float min;
+		float max;
+	};
 }

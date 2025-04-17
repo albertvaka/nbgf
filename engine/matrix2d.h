@@ -53,11 +53,11 @@ struct Matrix
 	float _31, _32, _33;
 
 	//multiplies with mIn
-	inline void  MatrixMultiply(Matrix& mIn);
+	inline void  MatrixMultiply(const Matrix& mIn);
 };
 
 //multiply two matrices together
-inline void Matrix::MatrixMultiply(Matrix &mIn)
+inline void Matrix::MatrixMultiply(const Matrix &mIn)
 {
 	Matrix aux = *this;
   
@@ -136,7 +136,7 @@ inline void Matrix::Rotate(float rot)
   
   mat._11 = Cos;  mat._12 = Sin; mat._13 = 0;
   mat._21 = -Sin; mat._22 = Cos; mat._23 = 0;
-  mat._31 = 0; mat._32 = 0;mat._33 = 1;
+  mat._31 = 0; mat._32 = 0; mat._33 = 1;
   
   //and multiply
   MatrixMultiply(mat);
@@ -162,8 +162,7 @@ inline void Matrix::Rotate(vec fwd, vec side)
 //------------------------------------------------------------------------
 inline vec PointToWorldSpace(vec point, vec AgentHeading, vec AgentPosition)
 {
-	
-	vec AgentSide = AgentHeading.Perp();
+	vec AgentSide = AgentHeading.Normalized().Perp();
 
 	//make a copy of the point
 	vec TransPoint = point;
@@ -225,7 +224,7 @@ inline vec PointToLocalSpace(vec point, vec AgentHeading, vec AgentPosition)
 	//create the transformation matrix
 	matTransform._11 = AgentHeading.x; matTransform._12 = AgentSide.x;
 	matTransform._21 = AgentHeading.y; matTransform._22 = AgentSide.y;
-	matTransform._31 = Tx;           matTransform._32 = Ty;
+	matTransform._31 = Tx;             matTransform._32 = Ty;
 
 	//now transform the vertices
 	matTransform.TransformVec(TransPoint);
@@ -236,8 +235,10 @@ inline vec PointToLocalSpace(vec point, vec AgentHeading, vec AgentPosition)
 //--------------------- VectorToLocalSpace --------------------------------
 //
 //------------------------------------------------------------------------
-inline vec VectorToLocalSpace(vec  point, vec AgentHeading, vec AgentSide)
+inline vec VectorToLocalSpace(vec point, vec AgentHeading)
 { 
+	vec AgentSide = AgentHeading.Normalized().Perp();
+
 	//make a copy of the point
 	vec TransPoint = point;
 

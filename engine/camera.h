@@ -61,7 +61,7 @@ namespace Camera
 	{
 		vec c = Center();
 
-		vec screenSize(Window::GAME_WIDTH / camera.zoom_x, Window::GAME_HEIGHT / camera.zoom_y);
+		vec screenSize = Size();
 		float halfScreenWidth = std::min(limit.width, screenSize.x) / 2.f;
 		float halfScreenHeight = std::min(limit.height, screenSize.y) / 2.f;
 
