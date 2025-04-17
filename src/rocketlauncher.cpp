@@ -36,7 +36,7 @@ RocketLauncher::RocketLauncher(vec pos)
 void RocketLauncher::Update(float dt)
 {
 	angle = Player::instance()->pos.AngleDegs(pos);
-	Mates::Clamp(angle, 30, 150);
+	Mates::Clamp(angle, 30.f, 150.f);
 
 	awoken = false;
 	for (const BoxBounds& e : awakeArea) {

@@ -9,7 +9,7 @@
 // Only use this if you are super lazy and don't want to use SteeringBehavior directly 
 struct SteeringBehaviorApplier : SteeringBehavior {
 public:
-	SteeringBehaviorApplier(SteeringEntity* agent, float max_force = 10.f) : SteeringBehavior(agent), max_force(max_force){ }
+	SteeringBehaviorApplier(SteeringEntity* agent, float max_force = 10.f) : SteeringBehavior(agent), max_force(max_force), m_bounds(-1, -1, 0, 0) { }
 
 	bool AccumulateForce(vec& sf, vec ForceToAdd);
 

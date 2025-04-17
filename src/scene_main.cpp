@@ -396,7 +396,7 @@ void MainScene::EnterScene()
 	for (auto const& [screen, stations] : SaveStation::ByScreen) {
 		for (SaveStation* station : stations) {
 			for (Entity* enemy : EnemiesByScreen::Get(screen)) {
-				vec dist = enemy->pos.ManhattanDistance(station->pos);
+				vec dist = fabs(enemy->pos - station->pos);
 				if (dist.x < Window::GAME_WIDTH / 2 && dist.y < Window::GAME_HEIGHT / 2) {
 					station->AddEnemy(enemy);
 				}

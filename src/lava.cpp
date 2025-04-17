@@ -40,10 +40,10 @@ Lava::Lava(const BoxBounds& b)
 
 Mates::Range Lava::GetChunksOnScreen() const {
 	BoxBounds screen = Camera::Bounds();
-	float screenChunkLeft = (Mates::fastfloor(screen.Left() / kChunkSize)) * kChunkSize;
-	float screenChunkRight = (Mates::fastfloor(screen.Right() / kChunkSize)) * kChunkSize;
-	float boundsChunkLeft = (Mates::fastfloor(bounds.Left() / kChunkSize)) * kChunkSize;
-	float boundsChunkRight = (Mates::fastfloor(bounds.Right() / kChunkSize)) * kChunkSize;
+	float screenChunkLeft = (Mates::FastFloor(screen.Left() / kChunkSize)) * kChunkSize;
+	float screenChunkRight = (Mates::FastFloor(screen.Right() / kChunkSize)) * kChunkSize;
+	float boundsChunkLeft = (Mates::FastFloor(bounds.Left() / kChunkSize)) * kChunkSize;
+	float boundsChunkRight = (Mates::FastFloor(bounds.Right() / kChunkSize)) * kChunkSize;
 	float chunkLeft = std::max(screenChunkLeft, boundsChunkLeft);
 	float chunkRight = std::min(screenChunkRight, boundsChunkRight);
 	return Mates::Range{ chunkLeft,chunkRight };
