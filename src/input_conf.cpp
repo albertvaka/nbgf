@@ -7,7 +7,7 @@
 
 const int Input::kMaxPlayers = 2;
 
-static int keyboard_player_id = 0; // Keyboard controls player one
+static int keyboardPlayerId = 0; // Keyboard controls player one
 static bool aimingWithMouse = true;
 static vec lastAnalogAim;
 
@@ -23,7 +23,7 @@ void Input::MapGameKeys()
     {
         return GamePad::AnalogStick::Left.get(p).y < -50.0f ||
                GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_UP) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_W) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_UP)
                )
@@ -33,7 +33,7 @@ void Input::MapGameKeys()
     {
         return GamePad::AnalogStick::Left.get(p).y > -50.0f ||
                GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_DOWN) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_S) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_DOWN)
                )
@@ -43,7 +43,7 @@ void Input::MapGameKeys()
     {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
                GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_Z) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_P) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_UP) ||
@@ -56,7 +56,7 @@ void Input::MapGameKeys()
     {
         return GamePad::AnalogStick::Left.get(p).y > 50.0f ||
                GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_DOWN) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_S) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_DOWN)
                )
@@ -66,7 +66,7 @@ void Input::MapGameKeys()
     {
         return GamePad::AnalogStick::Left.get(p).x < 0.0f ||
                GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_LEFT) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_A) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_LEFT)
                )
@@ -76,7 +76,7 @@ void Input::MapGameKeys()
     {
         return GamePad::AnalogStick::Left.get(p).x > 0.0f ||
                GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                     Keyboard::IsKeyPressed(SDL_SCANCODE_D) ||
                     Keyboard::IsKeyPressed(SDL_SCANCODE_RIGHT)
                )
@@ -84,7 +84,7 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::ACTION] = [](int p) {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_E) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE)
                )
@@ -92,12 +92,12 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::SHOOT] = [](int p) {
         return GamePad::Trigger::Right.IsPressed(p) || (
-               (p == keyboard_player_id) && Mouse::IsPressed()
+               (p == keyboardPlayerId) && Mouse::IsPressed()
         );
     };
     action_mapping[(int)GameKeys::ATTACK] = [](int p) {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_O) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_X)
                )
@@ -105,7 +105,7 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::DASH] = [](int p) {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) || (
-               (p == keyboard_player_id) && (
+               (p == keyboardPlayerId) && (
                    Keyboard::IsKeyPressed(SDL_SCANCODE_C) ||
                    Keyboard::IsKeyPressed(SDL_SCANCODE_I)
                )
@@ -115,7 +115,7 @@ void Input::MapGameKeys()
     action_mapping[(int)GameKeys::MENU_ACCEPT] = [](int p)
     {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) || (
-                (p == keyboard_player_id) && (
+                (p == keyboardPlayerId) && (
                     Keyboard::IsKeyPressed(SDL_SCANCODE_O)
                     || Keyboard::IsKeyPressed(SDL_SCANCODE_X)
                     || Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN)
@@ -127,7 +127,7 @@ void Input::MapGameKeys()
     action_mapping[(int)GameKeys::MENU_CANCEL] = [](int p)
     {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) || (
-                (p == keyboard_player_id) && (
+                (p == keyboardPlayerId) && (
                     Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE)
                     )
                 );
@@ -135,7 +135,7 @@ void Input::MapGameKeys()
     action_mapping[(int)GameKeys::PAUSE] = [](int p)
     {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) || (
-//            (p == keyboard_player_id) && (
+//            (p == keyboardPlayerId) && (
                 Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE)
 //              )
             );
@@ -143,7 +143,7 @@ void Input::MapGameKeys()
     action_mapping[(int)GameKeys::START] = [](int p)
         {
             return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) || (
-                //            (p == keyboard_player_id) && (
+                //            (p == keyboardPlayerId) && (
                 Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN) || Keyboard::IsKeyPressed(SDL_SCANCODE_KP_ENTER)
                 //              )
                 );
@@ -155,7 +155,7 @@ void Input::MapGameKeys()
     analog_mapping[(int)AnalogInput::MOVE] = [](int p)
     {
         vec ret = vec::Zero;
-        if (p == keyboard_player_id) {
+        if (p == keyboardPlayerId) {
             if (Keyboard::IsKeyPressed(SDL_SCANCODE_W) ||
                 Keyboard::IsKeyPressed(SDL_SCANCODE_UP)) {
                    ret.y = -1;
@@ -179,7 +179,7 @@ void Input::MapGameKeys()
     analog_mapping[(int)AnalogInput::AIM] = [](int p)
     {
         vec joystick = GamePad::AnalogStick::Right.get(p);
-        if (p == keyboard_player_id) {
+        if (p == keyboardPlayerId) {
             if (joystick != vec::Zero) {
                 aimingWithMouse = false;
             }
