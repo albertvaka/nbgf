@@ -140,52 +140,83 @@ struct BoxBounds
         return vec(Right(), Bottom());
     }
 
-    [[nodiscard]] bool Contains(float x, float y) const
-    {
+    [[nodiscard]] constexpr vec Size() const {
+        return vec(width, height);
+    }
+
+    [[nodiscard]] bool Contains(float x, float y) const {
         if (x < left) return false;
         if (x >= left + width) return false;
         if (y < top) return false;
         if (y >= top + height) return false;
         return true;
     }
-
-    [[nodiscard]] bool Contains(vec point) const
-    {
+    [[nodiscard]] bool Contains(vec point) const {
         return Contains(point.x, point.y);
+    }
+
+    // When they overlap, returns 0
+    [[nodiscard]] float DistanceSq(const BoxBounds& a) const;
+    // When they overlap, returns 0
+    [[nodiscard]] float Distance(const BoxBounds& a) const;
+
+    // When they overlap, returns a negative distance
+    [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
+    // When they overlap, returns 0
+    [[nodiscard]] float Distance(const CircleBounds& a) const;
+
+    // When they overlap, returns 0
+    [[nodiscard]] float DistanceSq(vec point) const {
+		vec clamped = ClosestPointInBounds(point);
+        vec d = point - clamped;
+        return d.x * d.x + d.y * d.y;
+    }
+    // When they overlap, returns 0
+    [[nodiscard]] float Distance(vec point) const {
+		return sqrt(DistanceSq(point));
     }
 
     [[nodiscard]] bool Contains(const BoxBounds& b) const
     {
         if (b.left < left) return false;
-        if (b.left+b.width >= left + width) return false;
+        if (b.left + b.width >= left + width) return false;
         if (b.top < top) return false;
-        if (b.top+ b.height >= top + height) return false;
+        if (b.top + b.height >= top + height) return false;
         return true;
     }
 
-    [[nodiscard]] constexpr vec Size() const {
-        return vec(width, height);
-    }
-
+    // When they overlap, returns the target point unmodified. See also ClosestPointInBoundsEdge.
     [[nodiscard]] vec ClosestPointInBounds(vec target) const {
         return target.Clamped(TopLeft(), BottomRight());
     }
 
-    [[nodiscard]] float Distance(vec point) const {
-        vec closest = ClosestPointInBounds(point);
-        return closest.Distance(point);
+    [[nodiscard]] vec ClosestPointInBoundsEdge(vec target) const {
+        vec v = target.Clamped(TopLeft(), BottomRight());
+        float distLeft = fabs(v.x - Left());
+        float distRight = fabs(v.x - Right());
+        float distTop = fabs(v.y - Top());
+        float distBottom = fabs(v.y - Bottom());
+        if (distLeft < distRight && distLeft < distTop && distLeft < distBottom) {
+            v.x = Left();
+        }
+        else if (distRight < distTop && distRight < distBottom) {
+            v.x = Right();
+        }
+        else if (distTop < distBottom) {
+            v.y = Top();
+        }
+        else {
+            v.y = Bottom();
+        }
+        return v;
     }
-
-    [[nodiscard]] float DistanceSq(const BoxBounds& a) const;
-    [[nodiscard]] float DistanceSq(const CircleBounds& a) const;
-    [[nodiscard]] float Distance(const BoxBounds& a) const;
-    [[nodiscard]] float Distance(const CircleBounds& a) const;
 
 };
 
 struct CircleBounds
 {
     constexpr CircleBounds(vec pos, float radius) : pos(pos), radius(radius) {}
+    constexpr CircleBounds(float x, float y, float radius) : pos(x, y), radius(radius) {}
     vec pos;
     float radius;
 
@@ -202,15 +233,24 @@ struct CircleBounds
     [[nodiscard]] float Left() const { return pos.x - radius; }
     [[nodiscard]] float Right() const { return pos.x + radius; }
 
+    // When they overlap, returns a negative distance
     [[nodiscard]] float DistanceSq(const BoxBounds& a) const { return a.DistanceSq(*this); }
+    // When they overlap, returns 0
     [[nodiscard]] float Distance(const BoxBounds& a) const { return a.Distance(*this); }
 
+    // When they overlap, returns a negative distance
     [[nodiscard]] float DistanceSq(const CircleBounds& a) const {
         return a.pos.DistanceSq(this->pos) - (a.radius + this->radius) * (a.radius + this->radius);
     }
+    // When they overlap, returns a negative distance
     [[nodiscard]] float Distance(const CircleBounds& a) const { 
         return a.pos.Distance(this->pos) - (a.radius + this->radius);
     }
+    // When they overlap, returns a negative distance
+    [[nodiscard]] float DistanceSq(vec a) const {
+        return a.DistanceSq(this->pos) - (this->radius * this->radius);
+    }
+    // When they overlap, returns a negative distance
     [[nodiscard]] float Distance(vec a) const {
         return a.Distance(this->pos) - (this->radius);
     }
@@ -218,11 +258,17 @@ struct CircleBounds
     [[nodiscard]] bool Contains(float x, float y) const { return Contains(vec(x, y)); }
     [[nodiscard]] bool Contains(vec v) const { return (pos.DistanceSq(v) <= radius*radius); }
 
+    // When they overlap, returns the target point unmodified. See also ClosestPointInBoundsEdge.
     [[nodiscard]] vec ClosestPointInBounds(vec target) const {
         vec direction = target - pos;
         if (direction.LengthSq() <= radius * radius) {
             return target;
         }
+        return pos + direction.Normalized() * radius;
+    }
+
+    [[nodiscard]] vec ClosestPointInBoundsEdge(vec target) const {
+        vec direction = target - pos;
         return pos + direction.Normalized() * radius;
     }
 
@@ -261,7 +307,11 @@ inline float BoxBounds::Distance(const BoxBounds& a) const
 
 inline float BoxBounds::Distance(const CircleBounds& a) const
 {
-    return sqrt(DistanceSq(a));
+    float distSq = DistanceSq(a);
+	if (distSq <= 0) {
+		return 0;
+	}
+    return sqrt(distSq);
 }
 
 inline std::ostream& operator<<(std::ostream& os, const BoxBounds& rhs)
