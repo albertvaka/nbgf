@@ -136,7 +136,7 @@ struct Mouse
 		return (button_states[b] == RELEASED || button_states[b] == JUST_RELEASED);
 	}
 
-	static bool IsJustReleased(Button b = Left)
+	static bool IsJustReleased(Button b = Button::Left)
 	{
 		//if (!Window::HasFocus()) return false;
 		return (button_states[b] == JUST_RELEASED);
@@ -145,7 +145,7 @@ struct Mouse
 	static float GetScrollWheelMovement() { return scrollWheel; }
 
 	static vec GetPositionInWindow() { return pos; }
-	static vec GetDeltaMovement() { return oldPos-pos; }
+	static vec GetDeltaMovement() { return pos - oldPos; }
 
 	static vec GetPositionInWorld();
 

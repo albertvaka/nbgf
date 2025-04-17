@@ -52,10 +52,13 @@ struct MultiSound
 		return sounds[Rand::roll(Size)].Play(source, listener, silenceDistance);
 	}
 
-	const Sound& operator[](int i) {
+	const Sound& operator[](int i) const {
 		return sounds[i];
 	}
 
+	constexpr size_t size() const {
+		return Size;
+	}
 private:
 	std::array<Sound, Size> sounds;
 };

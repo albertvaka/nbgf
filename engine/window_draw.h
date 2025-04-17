@@ -45,7 +45,7 @@ namespace Window {
 		constexpr DeferredDraw& withRectWithOriginCentered(const GPU_Rect& r) {
 			origin.x = r.w / 2;
 			origin.y = r.h / 2;
-			return withRect(r);;
+			return withRect(r);
 		}
 
 		constexpr DeferredDraw& withOrigin(float x, float y) {

@@ -10,8 +10,8 @@ namespace Window {
 	namespace DrawPrimitive {
 
 		// pass thickness = 1 to draw one pixel (virtual, after scaling)
-		void Point(float x, float y, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a=255);
-		inline void Point(vec v, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a=255) { Point(v.x, v.y, thickness, r, g, b, a); }
+		void Point(float x, float y, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a =255);
+		inline void Point(vec v, float thickness, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) { Point(v.x, v.y, thickness, r, g, b, a); }
 		inline void Point(float x, float y, float thickness, const SDL_Color& c) { Point(x, y, thickness, c.r, c.g, c.b, c.a); }
 		inline void Point(vec v, float thickness, const SDL_Color & c) { Point(v.x, v.y, thickness, c.r, c.g, c.b, c.a); }
 
@@ -44,9 +44,9 @@ namespace Window {
 			Line(v1.x, v1.y, v2.x, v2.y, thickness, c.r, c.g, c.b, c.a);
 		}
 
-		inline void Arrow(vec from, vec to, float thickness, float head_lenght, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+		inline void Arrow(vec from, vec to, float thickness, float head_length, uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
 			Window::DrawPrimitive::Line(from, to, thickness, r,g,b,a);
-			vec toTheSide = (to-from).Perp().Normalized() * head_lenght;
+			vec toTheSide = (to-from).Perp().Normalized() * head_length;
 			Window::DrawPrimitive::Line(to, to - toTheSide.RotatedAroundOriginDegs(-45), thickness, r, g, b, a);
 			Window::DrawPrimitive::Line(to, to + toTheSide.RotatedAroundOriginDegs(45), thickness, r, g, b, a);
 		}

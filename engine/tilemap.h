@@ -94,7 +94,7 @@ struct TileMap
 				}
 				GPU_Rect rect = t.textureRect();
 				RectToTextureCoordinates(tileset, rect);
-				Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, rect);
+				Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size, rect);
 			}
 		}
 
@@ -110,7 +110,7 @@ struct TileMap
 		if (left < 0) {
 			for (int y = top; y < bottom; y++) {
 				for (int x = left; x < std::min(0, right); x++) {
-					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, outOfBounds);
+					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size, outOfBounds);
 				}
 			}
 			left = 0;
@@ -119,7 +119,7 @@ struct TileMap
 		if (right >= sizes.x) {
 			for (int y = top; y < bottom; y++) {
 				for (int x = std::max(left, sizes.x); x < right; x++) {
-					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, outOfBounds);
+					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size, outOfBounds);
 				}
 			}
 			right = sizes.x;
@@ -128,7 +128,7 @@ struct TileMap
 		if (top < 0) {
 			for (int y = top; y < std::min(0, bottom); y++) {
 				for (int x = left; x < right; x++) {
-					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, outOfBounds);
+					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size, outOfBounds);
 				}
 			}
 			top = 0;
@@ -137,7 +137,7 @@ struct TileMap
 		if (bottom >= sizes.y) {
 			for (int y = std::max(top, sizes.y); y < bottom; y++) {
 				for (int x = left; x < right; x++) {
-					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, 16, 16, outOfBounds);
+					Window::DrawRaw::BatchTexturedQuad(tileset, x * Tile::Size, y * Tile::Size, Tile::Size, Tile::Size, outOfBounds);
 				}
 			}
 			bottom = sizes.y;

@@ -7,9 +7,9 @@
 
 namespace MusicPlayer
 {
-	Mix_Music* toPlayAfterIntro;
-	Mix_Music* current;
-	bool stayPaused;
+	Mix_Music* toPlayAfterIntro = nullptr;
+	Mix_Music* current = nullptr;
+	bool stayPaused = false;
 	void introFinishedHook() { Mix_PlayMusic(toPlayAfterIntro, -1); }
 
 	void Play(Mix_Music* music) {
@@ -19,7 +19,7 @@ namespace MusicPlayer
 			Pause();
 		}
 	}
-	
+
 	void PlayWithIntro(Mix_Music* music, Mix_Music* intro) {
 		Mix_PlayMusic(intro, 1);
 		toPlayAfterIntro = music;
@@ -61,7 +61,7 @@ namespace MusicPlayer
 		SDL_assert(v >= 0.f && v <= 1.f);
 		Mix_VolumeMusic(v * 128);
 	}
-	
+
 	float Volume() {
 		return Mix_VolumeMusic(-1) / 128.f;
 	}

@@ -98,7 +98,7 @@ namespace Window {
 				FlushColoredTexturedQuads(t);
 			};
 		}
-		
+
 		//Texture coords between 0 and 1
 		inline void BatchTexturedQuad(GPU_Image* t, float x, float y, float w, float h, const GPU_Rect& tr)
 		{
@@ -145,14 +145,14 @@ namespace Window {
 		}
 
 		//Colors between 0 and 1
-		inline void BatchRGBQuad(float x, float y, float width, float height, float r, float g, float b)
+		inline void BatchRGBQuad(float x, float y, float w, float h, float r, float g, float b)
 		{
 			const int COMPONENTS_PER_VERTEX = 5; // GPU_BATCH_XY_RGB
 			unsigned int i = vertex_count * COMPONENTS_PER_VERTEX;
 
 			//bottom left
 			vertices[i++] = x;
-			vertices[i++] = y + height;
+			vertices[i++] = y + h;
 			vertices[i++] = r;
 			vertices[i++] = g;
 			vertices[i++] = b;
@@ -165,15 +165,15 @@ namespace Window {
 			vertices[i++] = b;
 
 			//top right
-			vertices[i++] = x + width;
+			vertices[i++] = x + w;
 			vertices[i++] = y;
 			vertices[i++] = r;
 			vertices[i++] = g;
 			vertices[i++] = b;
 
 			//bottom right
-			vertices[i++] = x + width;
-			vertices[i++] = y + height;
+			vertices[i++] = x + w;
+			vertices[i++] = y + h;
 			vertices[i++] = r;
 			vertices[i++] = g;
 			vertices[i++] = b;

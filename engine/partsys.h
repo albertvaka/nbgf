@@ -85,7 +85,7 @@ struct PartSys {
 
 	float time = 0.f;
 
-	SDL_Color color; // alpha is ignored
+	SDL_Color color = {255,255,255,255}; // alpha is ignored
 
 	PartSys(GPU_Image* t) {
 		SetTexture(t);

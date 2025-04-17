@@ -66,9 +66,11 @@ struct Shader {
 private:
 	void loadAndAttach(GPU_ShaderEnum type, const char* path);
 	void assertActive() {
+#ifdef _DEBUG
 		if (GPU_GetCurrentShaderProgram() != program) {
 			Debug::out << "Can't set uniform on inactive shader";
 		}
+#endif
 	}
 	std::map<std::string, int> uniforms;
 };
