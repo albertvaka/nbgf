@@ -85,13 +85,13 @@ void Fish::Update(float dt, vec centerOfMass, std::span<Fish* const> neighbours)
 {
 	vec ship = Ship::instance()->pos;
 
-	vec flee = steering.Flee(ship);
+	vec flee = steering.Flee(ship) * 15.f;
 	vec separation = steering.Separation(neighbours) * 300.0f;
 	vec alignment = steering.Alignment(neighbours) * 0.5f;
 	vec cohesion = steering.Cohesion(centerOfMass) * 0.08f;
 
 	vec flockingForce;
-	flockingForce += flee * 20.f;
+	flockingForce += flee;
 	flockingForce += separation;
 	flockingForce += alignment;
 	flockingForce += cohesion;
@@ -105,7 +105,7 @@ void Fish::Update(float dt, vec centerOfMass, std::span<Fish* const> neighbours)
 
 	float maxTurnRate = Angles::Tau / 8 * dt;
 	vel = vel.RotatedToFacePositionRads(flockingForce, maxTurnRate);
-	vel = vel.Normalized() * (max_speed + 20*flee.Length());
+	vel = vel.Normalized() * (max_speed + 3.f * flee.Length());
 	pos += vel * dt;
 }
 
