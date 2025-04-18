@@ -17,6 +17,7 @@ struct Assets
 	static inline GPU_Image* heartTexture;
 	static inline GPU_Image* rockTexture;
 	static inline GPU_Image* rockFoamTexture;
+	static inline GPU_Image* arrowTexture;
 	static inline GPU_Image* particlesTexture;
 	static inline GPU_Image* fishTexture;
 

@@ -3,11 +3,13 @@
 #include "scene.h"
 #include "partsys.h"
 #include "text.h"
+#include "goals.h"
 #include "ship.h"
 
 struct SceneMain : Scene {
 
 	Ship ship;
+	Goals goals;
 
 	SceneMain();
 

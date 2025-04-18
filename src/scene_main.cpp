@@ -4,15 +4,18 @@
 #include "imgui.h"
 #endif
 #include "assets.h"
-#include "bullet.h"
 #include "collide.h"
 #include "window.h"
 #include "camera.h"
-#include "fish.h"
-#include "rock.h"
 #include "particles.h"
 #include "debug.h"
+
+#include "goals.h"
+#include "fish.h"
+#include "rock.h"
 #include "chunks.h"
+#include "bullet.h"
+
 #include <cmath>
 
 extern float mainClock;
@@ -30,6 +33,7 @@ void SceneMain::EnterScene()
 
 	Chunks::SpawnInitial(veci(0, 0));
 
+	goals.Reset();
 }
 
 void SceneMain::ExitScene()
@@ -46,6 +50,8 @@ void SceneMain::Update(float dt)
 	ship.Update(dt);
 
 	Fish::UpdateAll(dt);
+
+	goals.Update(dt);
 
 	Particles::UpdateAll(dt);
 
@@ -72,23 +78,20 @@ void SceneMain::Draw()
 
 	ship.DrawStroke();
 
-	for (Rock* rock : Rock::GetAll()) {
-		rock->Draw();
+	for (Rock* e : Rock::GetAll()) {
+		e->Draw();
 	}
 
 	Assets::outlineShader.Activate();
 	Assets::outlineShader.SetUniform("iTime", mainClock);
-	for (Rock* rock : Rock::GetAll()) {
-		rock->DrawFoam();
+	for (Rock* e : Rock::GetAll()) {
+		e->DrawFoam();
 	}
 	Assets::outlineShader.Deactivate();
 
 	Particles::waterTrail.Draw();
 
-	auto [frontBounds, middleBounds, backBounds] = ship.Bounds();
-	frontBounds.DebugDraw();
-	middleBounds.DebugDraw();
-	backBounds.DebugDraw();
+	goals.Draw();
 
 	ship.Draw();
 
@@ -98,7 +101,6 @@ void SceneMain::Draw()
 		.withScale(0.3f, 0.3f);
 	}
 	Camera::InScreenCoords::End();
-
 
 #ifdef _IMGUI
 	{
@@ -113,6 +115,6 @@ void SceneMain::Draw()
 		ImGui::End();
 	}
 
-	//Particles::waterTrail.DrawImGUI();
+	//Particles::waterTrail.DrawImGUI("water trail");
 #endif
 }
