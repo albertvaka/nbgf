@@ -54,7 +54,7 @@ struct PartSys {
 	};
 
 	vec pos = vec();
-	//float spawn_radius = 0.f; // TODO: Implement
+	float spawn_radius = 0.f;
 
 	vec max_vel = vec();
 	vec min_vel = vec();
@@ -85,7 +85,7 @@ struct PartSys {
 
 	float time = 0.f;
 
-	SDL_Color color = {255,255,255,255}; // alpha is ignored
+	SDL_Color color = {255,255,255,255};
 
 	PartSys(GPU_Image* t) {
 		SetTexture(t);

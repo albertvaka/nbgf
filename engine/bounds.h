@@ -35,12 +35,17 @@ struct BoxBounds
     //Expands arround the center by a factor
     [[nodiscard]] BoxBounds operator*(float f) const
     {
-        vec center = Center();
         BoxBounds ret = *this;
-        ret.width *= f;
-        ret.height *= f;
-        ret.SetCenter(center);
+        ret *= f;
         return ret;
+    }
+    BoxBounds& operator*=(float f)
+    {
+        vec center = Center();
+        width *= f;
+        height *= f;
+        SetCenter(center);
+        return *this;
     }
 
     //Expands arround the center by a value
@@ -233,6 +238,19 @@ struct CircleBounds
     [[nodiscard]] float Bottom() const { return pos.y + radius; }
     [[nodiscard]] float Left() const { return pos.x - radius; }
     [[nodiscard]] float Right() const { return pos.x + radius; }
+
+    //Expands arround the center by a factor
+    [[nodiscard]] CircleBounds operator*(float f) const
+    {
+        CircleBounds ret = *this;
+        ret *= f;
+        return ret;
+    }
+    CircleBounds& operator*=(float f)
+    {
+        radius *= f;
+        return *this;
+    }
 
     // When they overlap, returns a negative distance
     [[nodiscard]] float DistanceSq(const BoxBounds& a) const { return a.DistanceSq(*this); }

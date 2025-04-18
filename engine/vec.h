@@ -301,12 +301,8 @@ inline vec vec::Perp() const
 //  calculates the euclidean distance between two vectors
 inline float vec::Distance(vec v2) const
 {
-	float ySeparation = v2.y - y;
-	float xSeparation = v2.x - x;
-
-	return sqrt(ySeparation*ySeparation + xSeparation*xSeparation);
+	return sqrt(DistanceSq(v2));
 }
-
 
 //  calculates the euclidean distance squared between two vectors
 inline float vec::DistanceSq(vec v2) const
