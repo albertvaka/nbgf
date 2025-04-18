@@ -43,7 +43,7 @@ void PartSys::Draw() const {
 		float h = rect.h * p.scale;
 		//vec pos = p.pos - (vec(w, h) * 0.5f);
 		RectToTextureCoordinates(texture, rect);
-		Window::DrawRaw::BatchColoredTexturedQuad(texture, p.pos.x, p.pos.y, w, h, rect, color.r/255.f, color.g/255.f, color.b/255.f, p.alpha);
+		Window::DrawRaw::BatchColoredTexturedQuad(texture, p.pos.x, p.pos.y, w, h, rect, color.r/255.f, color.g/255.f, color.b/255.f, (color.a/255.f) * p.alpha);
 #else
 		Window::Draw(texture, p.pos)
 			.withColor(color.r, color.g, color.b, 255 * alpha)
@@ -64,6 +64,9 @@ PartSys::Particle& PartSys::AddParticle() {
 	Particle& p = particles.back();
 	p.ttl = Rand::rollf(min_ttl, max_ttl);
 	p.pos = pos;
+	if (spawn_radius != 0) {
+		p.pos += Rand::PosInsideCircle(spawn_radius);
+	}
 	p.vel = Rand::VecInRange(min_vel, max_vel);
 	p.sprite = Rand::roll(sprites.size());
 	p.rotation = Rand::rollf(min_rotation, max_rotation);
