@@ -42,16 +42,16 @@ vec SteeringBehavior::Seek(vec TargetPos)
 vec SteeringBehavior::Flee(vec TargetPos)
 {
 	vec ToTarget = steeringEntity->pos - TargetPos;
-	float distance = ToTarget.Length();
+	float distanceSq = ToTarget.LengthSq();
 
 	// Avoid division by zero
-	if (distance == 0.0f)
+	if (distanceSq == 0.0f)
 	{
 		return vec::Zero;
 	}
 
 	// Scale the fleeing force based on max_speed and inversely proportional to distance
-	float scale = std::clamp(steeringEntity->max_speed / distance, 0.1f, steeringEntity->max_speed);
+	float scale = std::clamp((steeringEntity->max_speed * steeringEntity->max_speed) / distanceSq, 0.01f, steeringEntity->max_speed);
 
 	vec DesiredVelocity = ToTarget.Normalized() * scale;
 
