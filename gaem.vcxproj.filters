@@ -270,6 +270,9 @@
     <ClInclude Include="src\fish.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\goals.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -420,6 +423,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\fish.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\goals.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

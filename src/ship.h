@@ -15,7 +15,7 @@
 class Ship : public Entity, public SingleInstance<Ship> {
 public:
 	int lives;
-	vec heading;
+	vec heading; // it's always normalized
 	float immunityTimer;
 	float ignoreCollisionTimer;
 
@@ -28,7 +28,8 @@ public:
 		outerStroke.DrawExcluding(innerStroke);
 	}
 
-	std::tuple<CircleBounds, CircleBounds, CircleBounds> Bounds() const;
+	CircleBounds ApproxBounds() const;
+	std::tuple<CircleBounds, CircleBounds, CircleBounds> AccurateBounds() const;
 
 private:
 	float previousZoomDiff;

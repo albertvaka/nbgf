@@ -61,6 +61,7 @@
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\chunks.h" />
     <ClInclude Include="src\fish.h" />
+    <ClInclude Include="src\goals.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\particles.h" />
     <ClInclude Include="src\rock.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\chunks.cpp" />
     <ClCompile Include="src\fish.cpp" />
+    <ClCompile Include="src\goals.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\particles.cpp" />
     <ClCompile Include="src\rock.cpp" />

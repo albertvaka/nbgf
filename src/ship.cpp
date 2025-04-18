@@ -9,7 +9,6 @@
 #include "collide.h"
 #include "rock.h"
 #include "input.h"
-#include "steering_behavior.h"
 #include "stroke.h"
 #include "particles.h"
 #include "imgui.h"
@@ -131,8 +130,6 @@ void Ship::Update(float dt) {
 		velDir = heading;
 	}
 
-	pos.DebugDraw();
-
 	if (immunityTimer > 0) {
 		immunityTimer -= dt;
 	}
@@ -142,7 +139,7 @@ void Ship::Update(float dt) {
 	} else {
 		for (Rock* rock : Rock::GetAll()) {
 			rock->pos.DebugDraw();
-			auto [frontBounds, middleBounds, backBounds] = Bounds();
+			auto [frontBounds, middleBounds, backBounds] = AccurateBounds();
 			if (Collide(frontBounds, rock->Bounds()) || Collide(backBounds, rock->Bounds()) || Collide(middleBounds, rock->Bounds())) {
 				vec rockFromShip = rock->pos-pos;
 				float angle = heading.AngleRadsBetween(rockFromShip.Normalized()); // Always between 0 and 180
@@ -217,6 +214,13 @@ void Ship::Draw() {
 
 	Assets::tintShader.Deactivate();
 
+	ApproxBounds().DebugDraw();
+
+	auto [frontBounds, middleBounds, backBounds] = AccurateBounds();
+	frontBounds.DebugDraw();
+	middleBounds.DebugDraw();
+	backBounds.DebugDraw();
+
 #ifdef _IMGUI
 	{
 		ImGui::Begin("ship");
@@ -235,7 +239,12 @@ void Ship::Draw() {
 #endif
 }
 
-std::tuple<CircleBounds, CircleBounds, CircleBounds> Ship::Bounds() const {
+CircleBounds Ship::ApproxBounds() const 
+{
+	return CircleBounds(pos, kShipBackRadius * 2);
+}
+
+std::tuple<CircleBounds, CircleBounds, CircleBounds> Ship::AccurateBounds() const {
 	return std::make_tuple(
 		CircleBounds(pos + heading * kShipFrontBoundsOffset, kShipFrontRadius),
 		CircleBounds(pos, kShipBackRadius),
