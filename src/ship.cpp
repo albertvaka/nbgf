@@ -13,6 +13,10 @@
 #include "particles.h"
 #include "imgui.h"
 
+SDL_Color foamColor = { Uint8(0.7 * 255), Uint8(0.8 * 255), Uint8(0.9 * 255), 255 };
+SDL_Color surfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 255 };
+SDL_Color alphaSurfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 0 };
+
 const int kInitialLives = 3;
 const float kImmunityTime = 2.0f;
 float kAcceleration = 90.f;
@@ -40,10 +44,6 @@ const float kDriftRecoveryRate = 2.0f; // How quickly velocity aligns with headi
 extern float mainClock;
 
 Ship::Ship() {
-	SDL_Color foamColor = { Uint8(0.7 * 255), Uint8(0.8 * 255), Uint8(0.9 * 255), 255 };
-	SDL_Color surfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 255 };
-	SDL_Color alphaSurfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 0 };
-
 	outerStroke.SetMaxJoints(100);
 	outerStroke.SetJointLifetime(4.5f);
 	outerStroke.SetStartInnerColor(foamColor);

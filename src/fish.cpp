@@ -18,11 +18,16 @@ const GPU_Rect FISHES_RECTS[] = {
 const int FISHES_RECTS_COUNT = 3;
 
 const float kShipRepulsionRadius = 150.f;
+const float kMaxTurnRate = Angles::Tau / 8;
+const float kMinSpeed = 60.f;
+const float kMaxSpeed = 100.f;
+const float kMinScale = 0.6f;
+const float kMaxScale = 0.9f;
 
 Fish::Fish(vec pos, veci homeChunk)
-	: SteeringEntity(pos, 90.0f, 60 + Rand::rollf(50), vec(0, 100.f))
+	: SteeringEntity(pos, 90.0f, Rand::rollf(kMinSpeed, kMaxSpeed), vec(0, 100.f))
 	, steering(this)
-	, scale(Rand::rollf(0.6f, 0.9f))
+	, scale(Rand::rollf(kMinScale, kMaxScale))
 	, sprite(Rand::roll(FISHES_RECTS_COUNT))
 	, homeChunk(homeChunk)
 {
@@ -103,8 +108,7 @@ void Fish::Update(float dt, vec centerOfMass, std::span<Fish* const> neighbours)
 */
 	flockingForce.DebugDrawAsArrow(pos, 255, 255, 255);
 
-	float maxTurnRate = Angles::Tau / 8 * dt;
-	vel = vel.RotatedToFacePositionRads(flockingForce, maxTurnRate);
+	vel = vel.RotatedToFacePositionRads(flockingForce, kMaxTurnRate * dt);
 	vel = vel.Normalized() * (max_speed + 3.f * flee.Length());
 	pos += vel * dt;
 }
