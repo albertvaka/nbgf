@@ -111,14 +111,15 @@ void Goals::Update(float dt)
 {
 	Ship* ship = Ship::instance();
 	CircleBounds shipBounds = ship->ApproxBounds();
-	bool goalReached = false;
-	
+
 	UpdateParticles(activeGoal, dt);
 	UpdateParticles(inactiveGoal, dt);
 
 	CircleBounds activeBounds(activeGoal.pos, kGoalRadius);
 	if (Collide(shipBounds, activeBounds)) {
-		activeGoal.Clear();
+		for (auto& p : activeGoal.particles) {
+			p.alpha_vel = -10.f;
+		}
 		activeGoal.pos = inactiveGoal.pos;
 		inactiveGoal.pos = FindNextPos(activeGoal.pos, (activeGoal.pos-ship->pos).Normalized());
 	}

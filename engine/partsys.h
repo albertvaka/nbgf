@@ -19,6 +19,7 @@ struct PartSys {
 		float rotation;
 		float rotation_vel;
 		float alpha;
+		float alpha_vel;
 		inline bool Update(float dt, const PartSys& system) {
 			ttl -= dt;
 			if (ttl < 0) return true;
@@ -34,9 +35,9 @@ struct PartSys {
 				}
 			}
 			rotation += rotation_vel * dt;
-			alpha += system.alpha_vel * dt;
+			alpha += alpha_vel * dt;
 			if (alpha < 0.f) {
-				if (system.alpha_vel < 0.f) {
+				if (alpha_vel < 0.f) {
 					return true;
 				} else {
 					alpha = 0.f;
