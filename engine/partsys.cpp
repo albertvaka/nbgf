@@ -73,6 +73,7 @@ PartSys::Particle& PartSys::AddParticle() {
 	p.rotation_vel = Rand::rollf(min_rotation_vel, max_rotation_vel); ;
 	p.scale = Rand::rollf(min_scale, max_scale);
 	p.alpha = alpha;
+	p.alpha_vel = alpha_vel;
 	return p;
 }
 
