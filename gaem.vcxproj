@@ -61,6 +61,7 @@
     <ClInclude Include="src\assets.h" />
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\chunks.h" />
+    <ClInclude Include="src\enemy.h" />
     <ClInclude Include="src\fish.h" />
     <ClInclude Include="src\fx.h" />
     <ClInclude Include="src\goals.h" />
@@ -124,6 +125,7 @@
     <ClCompile Include="generated\tiled_tilemap.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\chunks.cpp" />
+    <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\fish.cpp" />
     <ClCompile Include="src\fx.cpp" />
     <ClCompile Include="src\goals.cpp" />

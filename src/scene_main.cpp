@@ -7,6 +7,7 @@
 #include "collide.h"
 #include "window.h"
 #include "camera.h"
+#include "enemy.h"
 #include "particles.h"
 #include "scene_manager.h"
 #include "musicplayer.h"
@@ -48,6 +49,8 @@ void SceneMain::EnterScene()
 	Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
 
 	});
+
+	//new Enemy(vec(100, 100));
 }
 
 void SceneMain::ExitScene()
@@ -55,6 +58,7 @@ void SceneMain::ExitScene()
 	Particles::ClearAll();
 	Rock::DeleteAll();
 	Fish::DeleteAll();
+	Enemy::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
@@ -90,6 +94,10 @@ void SceneMain::Update(float dt)
 
 	Fish::UpdateAll(dt);
 
+	for (Enemy* e : Enemy::GetAll()) {
+		e->Update(dt);
+	}
+
 	if (goals.Update(dt)) {
 		// Will restart the scene
 		vec normalizedPlayerPos = Camera::WorldToScreen(ship.pos) / Camera::InScreenCoords::Size();
@@ -122,6 +130,10 @@ void SceneMain::Draw()
 	Window::Draw(Assets::rockTexture, Camera::Bounds()); // Texture unused by the shader
 	Assets::seaShader.Deactivate();
 
+	// TODO: Sort from old to new
+	for (Enemy* e : Enemy::GetAll()) {
+		e->DrawStroke();
+	}
 	ship.DrawStroke();
 
 	for (Rock* e : Rock::GetAll()) {
@@ -138,6 +150,10 @@ void SceneMain::Draw()
 	Particles::waterTrail.Draw();
 
 	goals.Draw();
+
+	for (Enemy* e : Enemy::GetAll()) {
+		e->Draw();
+	}
 
 	ship.Draw();
 
