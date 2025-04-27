@@ -61,6 +61,7 @@
     <ClInclude Include="src\bullet.h" />
     <ClInclude Include="src\chunks.h" />
     <ClInclude Include="src\fish.h" />
+    <ClInclude Include="src\fx.h" />
     <ClInclude Include="src\goals.h" />
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\particles.h" />
@@ -123,6 +124,7 @@
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\chunks.cpp" />
     <ClCompile Include="src\fish.cpp" />
+    <ClCompile Include="src\fx.cpp" />
     <ClCompile Include="src\goals.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
     <ClCompile Include="src\particles.cpp" />
@@ -221,6 +223,9 @@ exit /b 0</Command>
     <None Include="asset_src\tiled2cpp.py" />
     <None Include="bin\data\default.frag" />
     <None Include="bin\data\default.vert" />
+    <None Include="bin\data\fadein_diamonds.frag" />
+    <None Include="bin\data\fadeout_circle.frag" />
+    <None Include="bin\data\fadeout_diamonds.frag" />
     <None Include="bin\data\outline.frag" />
     <None Include="bin\data\sea.frag" />
     <None Include="bin\data\tint.frag" />

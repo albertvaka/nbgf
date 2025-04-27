@@ -145,8 +145,10 @@ void Goals::GotGoal() {
 	}
 }
 
-void Goals::Update(float dt)
+bool Goals::Update(float dt)
 {
+	bool retWantsRestart = false;
+
 	Ship* ship = Ship::instance();
 	CircleBounds shipBounds = ship->ApproxBounds();
 
@@ -172,10 +174,12 @@ void Goals::Update(float dt)
 			restartTimer -= dt;
 		} else {
 			if (Input::IsJustPressedAnyPlayer(GameKeys::START)) {
-				SceneManager::RestartScene();
+				retWantsRestart = true;
 			}
 		}
 	}
+
+	return retWantsRestart;
 }
 
 void Goals::Draw() const

@@ -8,6 +8,9 @@
 #include "window.h"
 #include "camera.h"
 #include "particles.h"
+#include "scene_manager.h"
+#include "musicplayer.h"
+#include "fx.h"
 #include "debug.h"
 
 #include "goals.h"
@@ -30,6 +33,8 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
+	Fx::BeforeEnterScene();
+
 	lives = kInitialLives;
 
 	Debug::DebugDrawScale = 3.f;
@@ -38,6 +43,11 @@ void SceneMain::EnterScene()
 	Chunks::SpawnInitial(veci(0, 0));
 
 	goals.Reset();
+
+	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
+	Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {
+
+	});
 }
 
 void SceneMain::ExitScene()
@@ -49,6 +59,24 @@ void SceneMain::ExitScene()
 
 void SceneMain::Update(float dt)
 {
+	MusicPlayer::ToggleMusicWithM();
+
+	Fx::Update(dt);
+	if (Fx::FreezeImage::IsFrozen()) {
+		// Fx::FreezeImage's alternate update function has already run at this point
+		return;
+	}
+	if (Fx::ScreenTransition::IsActive()) {
+		return;
+	}
+
+	if (Fx::ScreenTransition::IsJustFinished()) {
+		if (Fx::ScreenTransition::Current() != &Assets::fadeInDiamondsShader) {
+			SceneManager::RestartScene();
+		}
+		return;
+	}
+
 	veci lastChunk = Chunks::GetChunk(ship.pos);
 	
 	bool hitRock = ship.Update(dt);
@@ -62,7 +90,14 @@ void SceneMain::Update(float dt)
 
 	Fish::UpdateAll(dt);
 
-	goals.Update(dt);
+	if (goals.Update(dt)) {
+		// Will restart the scene
+		vec normalizedPlayerPos = Camera::WorldToScreen(ship.pos) / Camera::InScreenCoords::Size();
+		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
+		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
+		Assets::fadeOutDiamondsShader.Deactivate();
+		Fx::ScreenTransition::Start(Assets::fadeOutCircleShader);
+	}
 
 	Particles::UpdateAll(dt);
 
@@ -133,4 +168,6 @@ void SceneMain::Draw()
 
 	//Particles::waterTrail.DrawImGUI("water trail");
 #endif
+
+	Fx::AfterDraw();
 }
