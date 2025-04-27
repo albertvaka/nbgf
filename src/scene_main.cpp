@@ -110,7 +110,7 @@ MainScene::MainScene(int saveSlot)
 
 	for (const auto& screen : Tiled::Screens::screen) {
 		int id = ScreenManager::AddScreen(screen);
-		for (const BoxBounds& b : Tiled::Areas::lava_bg) {
+		for (const BoxBounds& b : Tiled::Areas::lava) {
 			if (Collide(screen, b)) {
 				waveShaderScreens.push_back(id);
 			}
