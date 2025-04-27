@@ -18,6 +18,8 @@
 
 #include <cmath>
 
+const int kInitialLives = 3;
+
 extern float mainClock;
 
 SceneMain::SceneMain()
@@ -28,6 +30,8 @@ SceneMain::SceneMain()
 
 void SceneMain::EnterScene() 
 {
+	lives = kInitialLives;
+
 	Debug::DebugDrawScale = 3.f;
 	ship.Reset();
 
@@ -47,7 +51,14 @@ void SceneMain::Update(float dt)
 {
 	veci lastChunk = Chunks::GetChunk(ship.pos);
 	
-	ship.Update(dt);
+	bool hitRock = ship.Update(dt);
+
+	if (hitRock) {
+		lives--;
+		if (lives == 0) {
+			goals.GameOver();
+		}
+	}
 
 	Fish::UpdateAll(dt);
 
@@ -96,17 +107,22 @@ void SceneMain::Draw()
 	ship.Draw();
 
 	Camera::InScreenCoords::Begin();
-	for (int i = 0; i < ship.lives; i++) {
+	for (int i = 0; i < lives; i++) {
 		Window::Draw(Assets::heartTexture, Window::GAME_WIDTH - 80 - i*70, 20)
 		.withScale(0.3f, 0.3f);
 	}
 	Camera::InScreenCoords::End();
+
+	goals.DrawGui();
 
 #ifdef _IMGUI
 	{
 		ImGui::Begin("scene");
 		vec m = Mouse::GetPositionInWorld();
 		ImGui::Text("Mouse: %f,%f", m.x, m.y);
+		if (ImGui::Button("Goal")) {
+			goals.GotGoal();
+		}
 		ImGui::Text("Input device: %s", magic_enum::enum_name(Input::PreferredUserInputDevice).data());
 		if (ImGui::Button("Fullscreen")) {
 			Debug::out << "Fullscreen" << Window::IsFullScreen();

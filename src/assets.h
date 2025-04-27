@@ -21,8 +21,10 @@ struct Assets
 	static inline GPU_Image* particlesTexture;
 	static inline GPU_Image* fishTexture;
 
-	static inline TTF_Font* font_30;
-	static inline TTF_Font* font_30_outline;
+	static inline TTF_Font* font_small;
+	static inline TTF_Font* font_small_outline;
+	static inline TTF_Font* font_large;
+	static inline TTF_Font* font_large_outline;
 
 	static inline Shader tintShader;
 	static inline Shader seaShader;

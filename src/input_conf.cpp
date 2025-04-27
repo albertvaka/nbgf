@@ -18,6 +18,7 @@ void Input::MapGameKeys()
 {
     action_mapping[(int)GameKeys::UP] = [](int p) // p is the player id
     {
+        if (!movementEnabled) return false;
         return GamePad::AnalogStick::Left.get(p).y < 0.0f ||
             GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_UP) || (
                 (p == kKeyboardPlayerId) && (
@@ -28,6 +29,7 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::DOWN] = [](int p)
     {
+        if (!movementEnabled) return false;
         return GamePad::AnalogStick::Left.get(p).y > 0.0f ||
             GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_DOWN) || (
                 (p == kKeyboardPlayerId) && (
@@ -38,6 +40,7 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::LEFT] = [](int p)
     {
+        if (!movementEnabled) return false;
         return GamePad::AnalogStick::Left.get(p).x < 0.0f ||
             GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_LEFT) || (
                 (p == kKeyboardPlayerId) && (
@@ -48,6 +51,7 @@ void Input::MapGameKeys()
     };
     action_mapping[(int)GameKeys::RIGHT] = [](int p)
     {
+        if (!movementEnabled) return false;
         return GamePad::AnalogStick::Left.get(p).x > 0.0f ||
             GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || (
                 (p == kKeyboardPlayerId) && (
@@ -57,6 +61,7 @@ void Input::MapGameKeys()
                 );
     };
     action_mapping[(int)GameKeys::DRIFT] = [](int p) {
+        if (!movementEnabled) return false;
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
             GamePad::Trigger::Right.IsPressed(p) || (
                 (p == kKeyboardPlayerId) && (Keyboard::IsKeyPressed(SDL_SCANCODE_SPACE))
@@ -73,6 +78,7 @@ void Input::MapGameKeys()
     };
     analog_mapping[(int)AnalogInput::MOVE] = [](int p)
     {
+        if (!movementEnabled) return vec::Zero;
         vec ret = vec::Zero;
         if (p == kKeyboardPlayerId) {
             if (Keyboard::IsKeyPressed(SDL_SCANCODE_W) ||

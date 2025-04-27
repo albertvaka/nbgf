@@ -19,11 +19,10 @@ extern float kZoomSailingSlow;
 extern vec kShipSpawnPos;
 
 SceneIntro::SceneIntro()
-	: titleText(Assets::font_30, Assets::font_30_outline)
-	, startText(Assets::font_30)
-	, creditsText(Assets::font_30)
+	: titleText(Assets::font_small, Assets::font_small_outline)
+	, startText(Assets::font_small)
+	, creditsText(Assets::font_small)
 {
-
 	titleText.SetFillColor(0, 0, 0);
 	titleText.SetOutlineColor(255, 255, 255);
 	titleText.SetString("SHIP GAEM");

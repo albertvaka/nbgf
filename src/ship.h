@@ -14,14 +14,13 @@
 
 class Ship : public Entity, public SingleInstance<Ship> {
 public:
-	int lives;
 	vec heading; // it's always normalized
 	float immunityTimer;
 	float ignoreCollisionTimer;
 
     Ship();
 	void Reset();
-	void Update(float dt);
+	bool Update(float dt);
 	void Draw();
 	void DrawStroke() {
 		innerStroke.Draw();

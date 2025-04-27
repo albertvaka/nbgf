@@ -65,6 +65,7 @@
     <ClInclude Include="src\input_conf.h" />
     <ClInclude Include="src\particles.h" />
     <ClInclude Include="src\rock.h" />
+    <ClInclude Include="src\rototext.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\ship.h" />

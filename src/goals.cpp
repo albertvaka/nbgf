@@ -2,29 +2,25 @@
 
 #include "ship.h"
 #include "rock.h"
+#include "input.h"
+#include "scene_manager.h"
 #include "collide.h"
+#include "window_draw.h"
 
 const float kGoalRadius = 90.f;
 const float kMinDistanceToNewGoal = 1000.f;
 const float kMaxDistanceToNewGoal = 1800.f;
+
+const float kCountdownGoalIncrease = 7.f;
+const float kCountdownInitialTime = 20.f;
+
+const float kTimeUntilRestartEnabled = 2.f;
 
 // Particles
 const float kRotationSpeed = 50.f;
 const float kSegmentLength = 15.f;
 const SDL_Color kActiveColor = { 255,238,140, 255 };
 const SDL_Color kInactiveColor = { 238,238,238, 128};
-
-vec FindNextPos(vec pos, vec direction) {
-retry:
-	vec newSpawnPosition = pos + direction.RotatedAroundOriginRads(Rand::rollf(-Angles::Tau / 4, Angles::Tau / 4)) * Rand::rollf(kMinDistanceToNewGoal, kMaxDistanceToNewGoal);
-	CircleBounds b = CircleBounds(newSpawnPosition, kGoalRadius);
-	for (Rock* rock : Rock::GetAll()) {
-		if (b.Contains(rock->pos)) {
-			goto retry;
-		}
-	}
-	return newSpawnPosition;
-}
 
 void InitPartSys(PartSys& ps) {
 	ps.AddSprite({ 64,0,32,32 });
@@ -73,15 +69,40 @@ void UpdateParticles(PartSys& ps, float dt)
 	ps.pos = pos;
 }
 
+vec FindNextPos(vec pos, vec direction) {
+retry:
+	vec newSpawnPosition = pos + direction.RotatedAroundOriginRads(Rand::rollf(-Angles::Tau / 4, Angles::Tau / 4)) * Rand::rollf(kMinDistanceToNewGoal, kMaxDistanceToNewGoal);
+	CircleBounds b = CircleBounds(newSpawnPosition, kGoalRadius);
+	for (Rock* rock : Rock::GetAll()) {
+		if (b.Contains(rock->pos)) {
+			goto retry;
+		}
+	}
+	return newSpawnPosition;
+}
+
 Goals::Goals()
 	: CircleEntity(pos, kGoalRadius) 
 	, activeGoal(Assets::particlesTexture)
 	, inactiveGoal(Assets::particlesTexture)
+	, countdownText(Assets::font_large, Assets::font_large_outline)
+	, restartText(Assets::font_small, Assets::font_small_outline)
+	, gameOverRotoText(Assets::font_large, Assets::font_large_outline)
 {
 	InitPartSys(activeGoal);
 	InitPartSys(inactiveGoal);
 	activeGoal.color = kActiveColor;
 	inactiveGoal.color = kInactiveColor;
+	restartText.SetString("Press start to try again");
+}
+
+void Goals::Reset() {
+	Ship* ship = Ship::instance();
+	activeGoal.color = kActiveColor;
+	activeGoal.pos = FindNextPos(ship->pos, ship->heading);
+	inactiveGoal.pos = FindNextPos(activeGoal.pos, ship->heading);
+	movementEnabled = true;
+	state = State::NOT_ACTIVE;
 }
 
 void DrawScreenEdgeArrow(BoxBounds& cameraBounds, vec pos, SDL_Color color) {
@@ -94,16 +115,33 @@ void DrawScreenEdgeArrow(BoxBounds& cameraBounds, vec pos, SDL_Color color) {
 		.withRotationRads(edge.AngleRads(cameraBounds.Center()));
 }
 
-void Goals::Draw() const
-{
-	activeGoal.Draw();
-	inactiveGoal.Draw();
+void Goals::GameOver() {
+	movementEnabled = false;
+	gameOverRotoText.ShowMessage("Game Over");
+	restartTimer = kTimeUntilRestartEnabled;
+	activeGoal.color = kInactiveColor;
+	state = State::GAME_OVER;
+}
 
-	BoxBounds cameraBounds = Camera::Bounds();
-	if (!cameraBounds.Contains(activeGoal.pos)) {
-		DrawScreenEdgeArrow(cameraBounds, activeGoal.pos, kActiveColor);
-	} else if (!cameraBounds.Contains(inactiveGoal.pos)) {
-		DrawScreenEdgeArrow(cameraBounds, inactiveGoal.pos, kInactiveColor);
+void Goals::GotGoal() {
+	for (auto& p : activeGoal.particles) {
+		p.alpha_vel = -10.f;
+	}
+	activeGoal.pos = inactiveGoal.pos;
+	Ship* ship = Ship::instance();
+	inactiveGoal.pos = FindNextPos(activeGoal.pos, (activeGoal.pos - ship->pos).Normalized());
+	switch (state) {
+	case State::NOT_ACTIVE:
+		countdown = kCountdownInitialTime;
+		state = State::ACTIVE;
+		break;
+	case State::ACTIVE:
+		countdown += kCountdownGoalIncrease;
+		countdown = (int)countdown + 1; // round up
+		break;
+	case State::GAME_OVER:
+		SDL_assert(false);
+		break;
 	}
 }
 
@@ -115,18 +153,63 @@ void Goals::Update(float dt)
 	UpdateParticles(activeGoal, dt);
 	UpdateParticles(inactiveGoal, dt);
 
-	CircleBounds activeBounds(activeGoal.pos, kGoalRadius);
-	if (Collide(shipBounds, activeBounds)) {
-		for (auto& p : activeGoal.particles) {
-			p.alpha_vel = -10.f;
+	if (state != State::GAME_OVER) {
+		CircleBounds activeBounds(activeGoal.pos, kGoalRadius);
+		if (Collide(shipBounds, activeBounds)) {
+			GotGoal();
 		}
-		activeGoal.pos = inactiveGoal.pos;
-		inactiveGoal.pos = FindNextPos(activeGoal.pos, (activeGoal.pos-ship->pos).Normalized());
+		if (state == State::ACTIVE) {
+			countdown -= dt;
+			if (countdown <= 0.f) {
+				countdown = 0.f;
+				GameOver();
+			}
+			countdownText.SetString(Mates::ToStringWithPrecision(countdown, 1));
+		}
+	} else { // game over
+		gameOverRotoText.Update(dt);
+		if (restartTimer > 0.f) {
+			restartTimer -= dt;
+		} else {
+			if (Input::IsJustPressedAnyPlayer(GameKeys::START)) {
+				SceneManager::RestartScene();
+			}
+		}
 	}
 }
 
-void Goals::Reset() {
-	Ship* ship = Ship::instance();
-	activeGoal.pos = FindNextPos(ship->pos, ship->heading);
-	inactiveGoal.pos = FindNextPos(activeGoal.pos, ship->heading);
+void Goals::Draw() const
+{
+	activeGoal.Draw();
+	if (state != State::GAME_OVER) {
+		inactiveGoal.Draw();
+
+		BoxBounds cameraBounds = Camera::Bounds();
+		if (!cameraBounds.Contains(activeGoal.pos)) {
+			DrawScreenEdgeArrow(cameraBounds, activeGoal.pos, kActiveColor);
+		}
+		else if (!cameraBounds.Contains(inactiveGoal.pos)) {
+			DrawScreenEdgeArrow(cameraBounds, inactiveGoal.pos, kInactiveColor);
+		}
+	}
+}
+
+void Goals::DrawGui() const {
+	Camera::InScreenCoords::Begin();
+	if (state == State::ACTIVE) {
+		Window::Draw(countdownText, vec(30, 50))
+			.withOrigin(0.f, countdownText.Size().y/2)
+			.withScale(0.5f);
+	} else if (state == State::GAME_OVER) {
+		gameOverRotoText.Draw(Camera::InScreenCoords::Center() - vec(0, 100), 0.7f);
+		if (restartTimer <= 0.f) {
+			bool blink = static_cast<int>(std::floor(mainClock / 0.5f)) % 2 == 0;
+			if (blink) {
+				Window::Draw(restartText, Camera::InScreenCoords::Center() + vec(0, 100))
+					.withOrigin(restartText.Size() / 2)
+					.withScale(0.5f);
+			}
+		}
+	}
+	Camera::InScreenCoords::End();
 }

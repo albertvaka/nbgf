@@ -17,7 +17,6 @@ SDL_Color foamColor = { Uint8(0.7 * 255), Uint8(0.8 * 255), Uint8(0.9 * 255), 25
 SDL_Color surfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 255 };
 SDL_Color alphaSurfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 0 };
 
-const int kInitialLives = 3;
 const float kImmunityTime = 2.0f;
 float kAcceleration = 90.f;
 float kMaxSpeed = 220.f;
@@ -66,7 +65,6 @@ Ship::Ship() {
 }
 
 void Ship::Reset() {
-	lives = kInitialLives;
 	immunityTimer = 0.f;
 	ignoreCollisionTimer = 0.f;
 	pos = kShipSpawnPos;
@@ -82,7 +80,9 @@ void Ship::Reset() {
 }
 
 
-void Ship::Update(float dt) {
+bool Ship::Update(float dt) {
+	bool retHitRock = false;
+
 	bool isDrifting = Input::IsPressed(0, GameKeys::DRIFT);
 
 	float speed = vel.Length();
@@ -90,6 +90,7 @@ void Ship::Update(float dt) {
 	vec velDir = speed > 0 ? vel.Normalized() : heading;
 
 	bool isTurning = false;
+	// TODO: Use Input::GetAnalog to support diagonals in gamepad? or decide this is a mobile game and replace with touch controls.
 	if (Input::IsPressed(0, GameKeys::LEFT)) {
 		float coef = isDrifting? kRotationSpeedCoefDrifting : kRotationSpeedCoef;
 		heading = heading.RotatedAroundOriginRads(-coef*(speed+kRotationSpeed)*dt);
@@ -150,8 +151,8 @@ void Ship::Update(float dt) {
 					ignoreCollisionTimer = kIgnoreCollisionTimer;
 					if (immunityTimer <= 0.f && mag > Angles::DegsToRads(kMinColisionAngleToDamageDegs)) {
 						immunityTimer = kImmunityTime;
-						lives--;
 						speed *= kSlowDownWhenHit;
+						retHitRock = true;
 					}
 				}
 			}
@@ -196,6 +197,8 @@ void Ship::Update(float dt) {
 	vec camDiff = camTarget - camPos;
 	vec camMovement = camDiff / 20.f;
 	Camera::SetCenter(camPos + camMovement);
+	
+	return retHitRock;
 }
 
 void Ship::Draw() {

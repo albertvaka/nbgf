@@ -1,5 +1,7 @@
 #pragma once
 
+inline bool movementEnabled = true;
+
 enum class GameKeys
 {
 	NONE = 0,
