@@ -273,6 +273,9 @@
     <ClInclude Include="src\goals.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\enemy.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\rototext.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -435,6 +438,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\fx.cpp">
+          <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
