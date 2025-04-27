@@ -10,6 +10,7 @@ struct SceneMain : Scene {
 
 	Ship ship;
 	Goals goals;
+	int lives;
 
 	SceneMain();
 

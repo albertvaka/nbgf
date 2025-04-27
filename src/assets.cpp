@@ -12,8 +12,10 @@ void Assets::LoadAll() {
     particlesTexture = LoadImage("data/particles.png");
     fishTexture = LoadImage("data/fish.png");
 
-    font_30 = LoadFont("data/PressStart2P.ttf", 30);
-    font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
+    font_small = LoadFont("data/CherryBombOne-Regular.ttf", 80);
+    font_small_outline = LoadFontOutline("data/CherryBombOne-Regular.ttf", 80, 4);
+    font_large = LoadFont("data/CherryBombOne-Regular.ttf", 160);
+    font_large_outline = LoadFontOutline("data/CherryBombOne-Regular.ttf", 160, 6);
 
     tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
     seaShader.Load("data/vertex_out.vert", nullptr, "data/sea.frag");

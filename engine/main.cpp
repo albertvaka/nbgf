@@ -141,7 +141,7 @@ void init() {
 #endif
 
 #ifdef _FPS_COUNTER
-	fpsText = new Text(Assets::font_30);
+	fpsText = new Text(Assets::font_small);
 	fpsText->SetString("0");
 #endif
 
