@@ -21,7 +21,7 @@ struct Goals : CircleEntity {
 	State state;
 
 	void Reset();
-	void Update(float dt);
+	bool Update(float dt);
 	void Draw() const;
 	void DrawGui() const;
 

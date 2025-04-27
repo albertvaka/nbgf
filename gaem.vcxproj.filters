@@ -276,6 +276,9 @@
     <ClInclude Include="src\rototext.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\fx.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -431,6 +434,9 @@
     <ClCompile Include="src\goals.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\fx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vendor\SDL_gpu\src\renderer_GL_common.inl">
@@ -462,6 +468,15 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="bin\data\outline.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\data\fadein_diamonds.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\data\fadeout_circle.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="bin\data\fadeout_diamonds.frag">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

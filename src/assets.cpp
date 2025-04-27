@@ -21,4 +21,7 @@ void Assets::LoadAll() {
     seaShader.Load("data/vertex_out.vert", nullptr, "data/sea.frag");
     outlineShader.Load("data/vertex_out.vert", nullptr, "data/outline.frag");
 
+    fadeInDiamondsShader.Load("data/color_vertex_out.vert", nullptr, "data/fadein_diamonds.frag");
+    fadeOutDiamondsShader.Load("data/color_vertex_out.vert", nullptr, "data/fadeout_diamonds.frag");
+    fadeOutCircleShader.Load("data/color_vertex_out.vert", nullptr, "data/fadeout_circle.frag");
 }
