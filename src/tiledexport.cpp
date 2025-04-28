@@ -1,8 +1,18 @@
-#include "tiled_tilemap.h"
+#include "tiledexport.h"
 
-namespace Tiled {
+const GPU_Rect TiledTiles::tileToTextureRect[] = {
+	{},	//NONE
+	{ 32 * 16, 19 * 16, 16, 16 }, //=1, ONEWAY_1, gid=1039
+	{ 36 * 16, 11 * 16, 16, 16 }, //=2, RSLOPE_1, gid=619
+	{ 16 * 16, 17 * 16, 16, 16 }, //=3, LSLOPE_1, gid=917
+	{ 10 * 16, 21 * 16, 16, 16 }, //=4, SOLID_1, gid=1123
+	{ 52 * 16, 0 * 16, 16, 16 }, //=5, BREAKABLE_1, gid=52
+	{},	//SOLID_TRANSPARENT
+};
 
-const uint16_t TileMap::Map[] = {
+const vec TiledMap::map_size = vec(64, 32);
+
+const unsigned short TiledMap::map[] = {
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,4,0,0,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,
@@ -38,4 +48,27 @@ const uint16_t TileMap::Map[] = {
 	
 };
 
-}
+const vec TiledEntities::spawn = vec(288.0f, 239.0f);
+
+const std::array<vec, 8> TiledEntities::waypoint = {
+	vec(160.5f, 256.5f),
+	vec(320.182f, 255.818f),
+	vec(480.0f, 256.364f),
+	vec(592.364f, 160.182f),
+	vec(480.364f, 256.182f),
+	vec(255.818f, 256.0f),
+	vec(368.182f, 352.182f),
+	vec(544.182f, 352.364f),
+};
+
+const vec TiledEntities::doggo_begin = vec(-16.0f, 256.333f);
+
+const vec TiledEntities::doggo_end = vec(864.333f, 353.0f);
+
+
+
+const BoxBounds TiledAreas::sun = BoxBounds(236.5f,84.0f,379.5f,86.6818f);
+const BoxBounds TiledAreas::water = BoxBounds(389.75f,321.417f,78.6667f,47.1667f);
+const BoxBounds TiledAreas::truck = BoxBounds(651.0f,257.417f,211.0f,114.167f);
+const BoxBounds TiledAreas::npc = BoxBounds(18.6668f,177.417f,106.666f,88.5f);
+

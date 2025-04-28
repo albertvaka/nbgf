@@ -6,7 +6,7 @@ namespace Tiled {
 
 struct TileMap {
 	static const uint16_t Map[];
-	static constexpr veci Size = veci(80, 16);
+	static constexpr veci Size = veci(64, 32);
 };
 
 }

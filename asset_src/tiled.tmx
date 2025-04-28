@@ -1,18 +1,290 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#321f2432" nextlayerid="12" nextobjectid="501">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="16" tileheight="16" infinite="1" backgroundcolor="#371f2432" nextlayerid="16" nextobjectid="156">
  <editorsettings>
-  <export format="json"/>
+  <export target="." format="tmx"/>
  </editorsettings>
- <tileset firstgid="1" name="invaders" tilewidth="74" tileheight="58" tilecount="18" columns="3">
-  <image source="../bin/data/invaders.png" width="293" height="360"/>
-  <tile id="0" type="solid"/>
+ <tileset firstgid="1" name="mario" tilewidth="16" tileheight="16" tilecount="1272" columns="53">
+  <image source="../bin/data/bg.png" width="853" height="391"/>
+  <tile id="0" type="spawn"/>
   <tile id="1" type="breakable"/>
-  <tile id="2" type="bg"/>
-  <tile id="3" type="alien"/>
+  <tile id="10" type="solid"/>
+  <tile id="11" type="solid"/>
+  <tile id="23" type="solid"/>
+  <tile id="25" type="rslope"/>
+  <tile id="26" type="lslope"/>
+  <tile id="28" type="oneway"/>
+  <tile id="39" type="rslope"/>
+  <tile id="40" type="lslope"/>
+  <tile id="41" type="lslope"/>
+  <tile id="42" type="rslope"/>
+  <tile id="52" type="breakable"/>
+  <tile id="57" type="oneway"/>
+  <tile id="70" type="solid"/>
+  <tile id="71" type="solid"/>
+  <tile id="72" type="solid"/>
+  <tile id="73" type="solid"/>
+  <tile id="74" type="solid"/>
+  <tile id="75" type="solid"/>
+  <tile id="76" type="solid"/>
+  <tile id="77" type="solid"/>
+  <tile id="78" type="solid"/>
+  <tile id="86" type="oneway"/>
+  <tile id="88" type="gun"/>
+  <tile id="95" type="solid"/>
+  <tile id="96" type="solid"/>
+  <tile id="97" type="solid"/>
+  <tile id="98" type="solid"/>
+  <tile id="99" type="solid"/>
+  <tile id="100" type="solid"/>
+  <tile id="106" type="oneway"/>
+  <tile id="107" type="oneway"/>
+  <tile id="115" type="oneway"/>
+  <tile id="116" type="bat"/>
+  <tile id="131" type="solid"/>
+  <tile id="132" type="oneway"/>
+  <tile id="133" type="oneway"/>
+  <tile id="134" type="oneway"/>
+  <tile id="136" type="oneway"/>
+  <tile id="144" type="oneway"/>
+  <tile id="167" type="oneway"/>
+  <tile id="168" type="oneway"/>
+  <tile id="169" type="oneway"/>
+  <tile id="170" type="oneway"/>
+  <tile id="180" type="solid"/>
+  <tile id="181" type="enemy_door"/>
+  <tile id="198" type="oneway"/>
+  <tile id="199" type="oneway"/>
+  <tile id="226" type="rslope"/>
+  <tile id="227" type="solid"/>
+  <tile id="228" type="solid"/>
+  <tile id="229" type="solid"/>
+  <tile id="230" type="lslope"/>
+  <tile id="236" type="walljump"/>
+  <tile id="238" type="solid"/>
+  <tile id="254" type="rslope"/>
+  <tile id="255" type="solid"/>
+  <tile id="259" type="solid"/>
+  <tile id="260" type="lslope"/>
+  <tile id="265" type="solid"/>
+  <tile id="283" type="solid"/>
+  <tile id="289" type="solid"/>
+  <tile id="312" type="solid"/>
+  <tile id="318" type="solid"/>
+  <tile id="324" type="gunup"/>
+  <tile id="325" type="healthup"/>
+  <tile id="346" type="oneway"/>
+  <tile id="353" type="save"/>
+  <tile id="369" type="oneway"/>
+  <tile id="370" type="oneway"/>
+  <tile id="371" type="oneway"/>
+  <tile id="372" type="oneway"/>
+  <tile id="373" type="oneway"/>
+  <tile id="374" type="oneway"/>
+  <tile id="375" type="oneway"/>
+  <tile id="376" type="oneway"/>
+  <tile id="401" type="solid"/>
+  <tile id="402" type="solid"/>
+  <tile id="430" type="solid"/>
+  <tile id="431" type="solid"/>
+  <tile id="461" type="solid"/>
+  <tile id="462" type="solid"/>
+  <tile id="619" type="rslope"/>
+  <tile id="630" type="rslope"/>
+  <tile id="917" type="lslope"/>
+  <tile id="934" type="lslope"/>
+  <tile id="1008" type="solid"/>
+  <tile id="1009" type="solid"/>
+  <tile id="1010" type="solid"/>
+  <tile id="1011" type="solid"/>
+  <tile id="1012" type="solid"/>
+  <tile id="1013" type="solid"/>
+  <tile id="1014" type="solid"/>
+  <tile id="1015" type="solid"/>
+  <tile id="1016" type="solid"/>
+  <tile id="1017" type="solid"/>
+  <tile id="1018" type="solid"/>
+  <tile id="1019" type="solid"/>
+  <tile id="1020" type="solid"/>
+  <tile id="1021" type="solid"/>
+  <tile id="1029" type="solid"/>
+  <tile id="1030" type="solid"/>
+  <tile id="1031" type="solid"/>
+  <tile id="1032" type="solid"/>
+  <tile id="1033" type="solid"/>
+  <tile id="1034" type="solid"/>
+  <tile id="1035" type="solid"/>
+  <tile id="1036" type="solid"/>
+  <tile id="1037" type="solid"/>
+  <tile id="1038" type="solid"/>
+  <tile id="1039" type="oneway"/>
+  <tile id="1058" type="oneway"/>
+  <tile id="1061" type="solid"/>
+  <tile id="1062" type="solid"/>
+  <tile id="1063" type="solid"/>
+  <tile id="1064" type="solid"/>
+  <tile id="1065" type="solid"/>
+  <tile id="1066" type="solid"/>
+  <tile id="1067" type="solid"/>
+  <tile id="1068" type="solid"/>
+  <tile id="1069" type="solid"/>
+  <tile id="1070" type="solid"/>
+  <tile id="1071" type="solid"/>
+  <tile id="1072" type="solid"/>
+  <tile id="1073" type="solid"/>
+  <tile id="1074" type="solid"/>
+  <tile id="1083" type="solid"/>
+  <tile id="1084" type="solid"/>
+  <tile id="1085" type="solid"/>
+  <tile id="1086" type="solid"/>
+  <tile id="1087" type="solid"/>
+  <tile id="1088" type="solid"/>
+  <tile id="1089" type="solid"/>
+  <tile id="1090" type="solid"/>
+  <tile id="1091" type="solid"/>
+  <tile id="1092" type="solid"/>
+  <tile id="1093" type="solid"/>
+  <tile id="1114" type="solid"/>
+  <tile id="1115" type="solid"/>
+  <tile id="1116" type="solid"/>
+  <tile id="1117" type="solid"/>
+  <tile id="1118" type="solid"/>
+  <tile id="1119" type="solid"/>
+  <tile id="1120" type="solid"/>
+  <tile id="1121" type="solid"/>
+  <tile id="1122" type="solid"/>
+  <tile id="1123" type="solid"/>
+  <tile id="1124" type="solid"/>
+  <tile id="1125" type="solid"/>
+  <tile id="1126" type="solid"/>
+  <tile id="1127" type="solid"/>
+  <tile id="1137" type="solid"/>
+  <tile id="1138" type="solid"/>
+  <tile id="1139" type="solid"/>
+  <tile id="1140" type="solid"/>
+  <tile id="1141" type="solid"/>
+  <tile id="1142" type="solid"/>
+  <tile id="1143" type="solid"/>
+  <tile id="1144" type="solid"/>
+  <tile id="1145" type="solid"/>
+  <tile id="1146" type="solid"/>
+  <tile id="1147" type="solid"/>
+  <tile id="1167" type="solid"/>
+  <tile id="1168" type="solid"/>
+  <tile id="1169" type="solid"/>
+  <tile id="1170" type="solid"/>
+  <tile id="1171" type="solid"/>
+  <tile id="1172" type="solid"/>
+  <tile id="1173" type="solid"/>
+  <tile id="1174" type="solid"/>
+  <tile id="1175" type="solid"/>
+  <tile id="1176" type="solid"/>
+  <tile id="1177" type="solid"/>
+  <tile id="1178" type="solid"/>
+  <tile id="1179" type="solid"/>
+  <tile id="1180" type="solid"/>
+  <tile id="1191" type="solid"/>
+  <tile id="1192" type="solid"/>
+  <tile id="1193" type="solid"/>
+  <tile id="1194" type="solid"/>
+  <tile id="1195" type="solid"/>
+  <tile id="1196" type="solid"/>
+  <tile id="1197" type="solid"/>
+  <tile id="1198" type="solid"/>
+  <tile id="1199" type="solid"/>
+  <tile id="1200" type="solid"/>
+  <tile id="1201" type="solid"/>
+  <tile id="1245" type="solid"/>
+  <tile id="1246" type="solid"/>
+  <tile id="1247" type="solid"/>
+  <tile id="1248" type="solid"/>
+  <tile id="1249" type="solid"/>
+  <tile id="1250" type="solid"/>
+  <tile id="1251" type="solid"/>
+  <tile id="1252" type="solid"/>
+  <tile id="1253" type="solid"/>
+  <tile id="1254" type="solid"/>
+  <tile id="1255" type="solid"/>
  </tileset>
- <layer id="1" name="World" width="480" height="112">
+ <imagelayer id="11" name="Bg">
+  <image source="../bin/data/bg.png" width="853" height="391"/>
+ </imagelayer>
+ <layer id="10" name="World" width="100" height="100">
   <data encoding="csv">
+   <chunk x="0" y="0" width="16" height="16">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,620,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1124,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1124,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1124,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</chunk>
+   <chunk x="16" y="0" width="16" height="16">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+620,1124,1124,1124,1124,1124,1124,1124,1124,1124,918,0,0,0,0,0,
+1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,918,0,0,0,0,
+1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1040,1040,1040,1040,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</chunk>
+   <chunk x="32" y="0" width="16" height="16">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1040,1040,1040,1040,620,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,620,1124,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,620,1124,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,620,1124,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+620,1124,0,0,0,1124,0,0,0,0,0,0,0,0,0,0
+</chunk>
    <chunk x="48" y="0" width="16" height="16">
+0,0,0,0,53,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0
+</chunk>
+   <chunk x="0" y="16" width="16" height="16">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -22,15 +294,21 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </chunk>
-   <chunk x="64" y="0" width="16" height="16">
+   <chunk x="16" y="16" width="16" height="16">
+0,0,0,0,0,0,0,1040,1040,1040,1040,0,0,0,0,620,
+918,1040,1040,1040,1040,1040,1040,1040,1040,1040,1040,1040,1040,1040,1040,1040,
+1124,918,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,1124,918,0,0,0,0,0,0,0,0,0,0,0,1040,1040,
+0,0,1124,918,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,1124,918,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,1124,918,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -38,10 +316,38 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</chunk>
+   <chunk x="32" y="16" width="16" height="16">
+1124,1124,1124,1124,1124,1124,0,0,0,0,0,0,0,0,0,0,
+1040,1040,1040,1040,1040,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+1040,1040,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1124,1124,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1124,1124,1124,1124,
+0,0,0,0,0,0,0,0,0,0,0,0,1124,1124,1124,1124,
+1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,1124,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</chunk>
+   <chunk x="48" y="16" width="16" height="16">
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,1124,1124,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,1124,1124,1124,0,0,0,0,0,0,0,0,0,0,
+1124,1124,1124,1124,1124,1124,0,0,0,0,0,0,0,0,0,0,
+1124,1124,1124,1124,1124,1124,0,0,0,0,0,0,0,0,0,0,
+1124,1124,1124,1124,1124,1124,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -50,9 +356,24 @@
 </chunk>
   </data>
  </layer>
- <objectgroup id="4" name="Entities" opacity="0.9">
-  <object id="498" gid="4" x="1160.33" y="95" width="74" height="58"/>
-  <object id="499" gid="4" x="1223" y="145.667" width="74" height="58"/>
-  <object id="500" name="area" type="area" x="1138.67" y="245.334" width="242" height="158.667"/>
+ <objectgroup id="12" name="Areas">
+  <object id="140" type="sun" x="236.5" y="84" width="379.5" height="86.6818"/>
+  <object id="141" type="water" x="389.75" y="321.417" width="78.6667" height="47.1667"/>
+  <object id="142" type="truck" x="651" y="257.417" width="211" height="114.167"/>
+  <object id="143" type="npc" x="18.6668" y="177.417" width="106.666" height="88.5"/>
  </objectgroup>
+ <objectgroup id="13" name="Entities">
+  <object id="138" type="spawn" gid="767" x="288" y="239" width="16" height="16"/>
+  <object id="144" type="waypoint" gid="767" x="160.5" y="256.5" width="16" height="16"/>
+  <object id="146" type="waypoint" gid="767" x="320.182" y="255.818" width="16" height="16"/>
+  <object id="147" type="waypoint" gid="767" x="480" y="256.364" width="16" height="16"/>
+  <object id="148" type="waypoint" gid="767" x="592.364" y="160.182" width="16" height="16"/>
+  <object id="149" type="waypoint" gid="767" x="480.364" y="256.182" width="16" height="16"/>
+  <object id="150" type="waypoint" gid="767" x="255.818" y="256" width="16" height="16"/>
+  <object id="151" type="waypoint" gid="767" x="368.182" y="352.182" width="16" height="16"/>
+  <object id="152" type="waypoint" gid="767" x="544.182" y="352.364" width="16" height="16"/>
+  <object id="154" type="doggo_begin" gid="767" x="-16" y="256.333" width="16" height="16"/>
+  <object id="155" type="doggo_end" gid="767" x="864.333" y="353" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="15" name="Screens"/>
 </map>

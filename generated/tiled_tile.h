@@ -9,8 +9,8 @@ namespace Tiled {
 
 struct Tile {
 	
-	static constexpr int Size = 74;
-	static constexpr vec Sizes = vec(74,74);
+	static constexpr int Size = 16;
+	static constexpr vec Sizes = vec(16,16);
 
 	static const GPU_Rect TileToTextureRect[];
 	const GPU_Rect constexpr& textureRect() const { return TileToTextureRect[int(value)]; }
@@ -41,7 +41,11 @@ struct Tile {
 	enum Value : uint16_t
 	{
 		NONE = 0,
+		ONEWAY_1,
+		RSLOPE_1,
+		LSLOPE_1,
 		SOLID_1,
+		BREAKABLE_1,
 		SOLID_TRANSPARENT,
 	};
 

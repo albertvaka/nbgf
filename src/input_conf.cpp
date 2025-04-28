@@ -1,11 +1,8 @@
 #include "input_conf.h"
 
 #include "input.h"
-#include "player.h"
 
 #include <functional>
-
-const int Input::kMaxPlayers = 2;
 
 const int kKeyboardPlayerId = 0; // Keyboard controls player one
 
@@ -57,12 +54,13 @@ void Input::MapGameKeys()
                     )
                 );
     };
-    action_mapping[(int)GameKeys::SHOOT] = [](int p) {
-        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
+    action_mapping[(int)GameKeys::ACTIVATE] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
             GamePad::Trigger::Right.IsPressed(p) || (
                 (p == kKeyboardPlayerId) && (
                         Mouse::IsPressed() ||
-                        Keyboard::IsKeyJustPressed(SDL_SCANCODE_SPACE)
+                        Keyboard::IsKeyJustPressed(SDL_SCANCODE_SPACE) ||
+                        Keyboard::IsKeyJustPressed(SDL_SCANCODE_E)
                         )
                 );
     };

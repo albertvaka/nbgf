@@ -1,11 +1,14 @@
 #pragma once
 
-enum class GameKeys
+enum GameKeys
 {
 	NONE = 0,
 	UP, DOWN, LEFT, RIGHT,
 	START,
-	SHOOT,
+	ACTIVATE,
+	MUTE,
+	NEXT_TRACK,
+	RESTART,
 };
 
 enum class AnalogInput

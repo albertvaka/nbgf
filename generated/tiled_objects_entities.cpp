@@ -3,16 +3,34 @@
 namespace Tiled {
 
 
-const std::unordered_map<int, vec> Entities::alien = {
-	{ 498, vec(1160.33f, 95.0f) },
-	{ 499, vec(1223.0f, 145.667f) },
+const std::unordered_map<int, vec> Entities::doggo_begin = {
+	{ 154, vec(-16.0f, 256.333f) },
 };
+const vec Entities::single_doggo_begin = vec(-16.0f, 256.333f);
 
-const std::array<BoxBounds, 1> Entities::area = {
-	BoxBounds(1138.67f,245.334f,242.0f,158.667f),
+
+const std::unordered_map<int, vec> Entities::doggo_end = {
+	{ 155, vec(864.333f, 353.0f) },
 };
-const BoxBounds Entities::single_area = BoxBounds(1138.67f,245.334f,242.0f,158.667f);
+const vec Entities::single_doggo_end = vec(864.333f, 353.0f);
 
+
+const std::unordered_map<int, vec> Entities::spawn = {
+	{ 138, vec(288.0f, 239.0f) },
+};
+const vec Entities::single_spawn = vec(288.0f, 239.0f);
+
+
+const std::unordered_map<int, vec> Entities::waypoint = {
+	{ 144, vec(160.5f, 256.5f) },
+	{ 146, vec(320.182f, 255.818f) },
+	{ 147, vec(480.0f, 256.364f) },
+	{ 148, vec(592.364f, 160.182f) },
+	{ 149, vec(480.364f, 256.182f) },
+	{ 150, vec(255.818f, 256.0f) },
+	{ 151, vec(368.182f, 352.182f) },
+	{ 152, vec(544.182f, 352.364f) },
+};
 
 
 }

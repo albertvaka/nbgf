@@ -11,7 +11,7 @@
 // Action-based input
 struct Input {
 
-	static const int kMaxPlayers;
+	static constexpr const int kMaxPlayers = 4;
 
 	[[nodiscard]] static vec GetAnalog(int player, AnalogInput k) {
 		SDL_assert(player < kMaxPlayers);
