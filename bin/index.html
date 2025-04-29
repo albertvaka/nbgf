@@ -25,7 +25,7 @@
           -webkit-flex: 1;
           flex: 1;
           width: 100%;
-          min-height: 10%;
+          min-height: 0;
       }
       #status {
           background-color: hsl(60,20%,90%);
@@ -40,17 +40,46 @@
     <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1 onmouseenter="window.focus()" onclick="window.focus()"></canvas>
 
     <script type='text/javascript'>
+      let canvas = document.getElementById('canvas');
+      let gl = canvas.getContext("webgl2", {
+         alpha: false, // See: https://webglfundamentals.org/webgl/lessons/webgl-and-alpha.html
+      });
       var Module = {
           // List of all callbacks here: https://emscripten.org/docs/api_reference/module.html
           print: console.log,
           printErr: console.error,
+          canvas: canvas,
+          preinitializedWebGLContext: gl,
           setStatus: (function(text) {
               var element = document.getElementById('status');
               if (element) element.textContent = ''; // clear browser cache
               return function(text) { element.textContent = text; };
           })(),
-          canvas: document.getElementById('canvas'),
       };
+      if ('wakeLock' in navigator) {
+        let wakeLock = null;
+        async function requestWakeLock() {
+          if (document.visibilityState !== 'visible') {
+                return;
+          }
+          console.log('Requesting wake lock...');
+          try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake lock is active');
+                wakeLock.addEventListener('release', () => {
+                    console.log('Wake lock was released');
+                    requestWakeLock();
+                });
+            } catch (err) {
+                console.error(`${err.name}, ${err.message}`);
+            }
+        }
+        requestWakeLock();
+        document.addEventListener('visibilitychange', () => {
+          // Re-request on visibility change, since we lose it when the page is hidden
+          requestWakeLock();
+        });
+      }
     </script>
     <script async type="text/javascript" src="gaem.js"></script>
   </body>
