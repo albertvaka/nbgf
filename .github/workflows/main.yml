@@ -7,17 +7,17 @@ jobs:
     name: Windows debug build
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.3
+      uses: microsoft/setup-msbuild@v1
 
     - name: Builderino
       run: |
         msbuild /p:Configuration=Debug /p:Platform=x64
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: WindowsDebug
         path: |
@@ -29,17 +29,17 @@ jobs:
     name: Windows release build
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.3
+      uses: microsoft/setup-msbuild@v1
 
     - name: Builderino
       run: |
         msbuild /p:Configuration=Release /p:Platform=x64
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: WindowsRelease
         path: |
@@ -51,10 +51,10 @@ jobs:
     name: Emscripten release build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Find and define GITHUB_REF_SLUG
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4
 
       - name: Cache
         uses: actions/cache@v3
@@ -79,7 +79,7 @@ jobs:
           echo "https://albertvaka.github.io/nbgf/${{ env.GITHUB_REF_SLUG }}" >> www-release/README.md
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: EmscriptenRelease
           path: www-release
@@ -89,13 +89,13 @@ jobs:
     name: Emscripten debug build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Find and define GITHUB_REF_SLUG
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4
 
       - name: Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           # use branch name for cache invalidation (Linux-build-name-of-branch)
           key: ${{ runner.os }}-build-debug-${{ env.GITHUB_REF_SLUG }}
@@ -117,7 +117,7 @@ jobs:
           echo "https://albertvaka.github.io/nbgf/${{ env.GITHUB_REF_SLUG }}/debug" >> www-debug/README.md
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: EmscriptenDebug
           path: www-debug
@@ -129,23 +129,23 @@ jobs:
     name: Publish emscripten builds
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Find and define GITHUB_REF_SLUG
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: EmscriptenRelease
           path: www
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: EmscriptenDebug
           path: www/debug
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.3.2
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           repository-name: albertvaka/albertvaka.github.io
           ssh-key: ${{ secrets.DEPLOY_KEY }}
