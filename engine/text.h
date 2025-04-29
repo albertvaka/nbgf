@@ -52,6 +52,10 @@ struct Text
 		return *this;
 	}
 
+	Text& SetFillColor(SDL_Color c) {
+		return SetFillColor(c.r, c.g, c.b);
+	}
+
 	Text& SetOutlineColor(uint8_t r, uint8_t g, uint8_t b) {
 		if (r != outline_color.r || g != outline_color.g || b != outline_color.b) {
 			outline_color.r = r;
@@ -60,6 +64,10 @@ struct Text
 			Invalidate();
 		}
 		return *this;
+	}
+
+	Text& SetOutlineColor(SDL_Color c) {
+		return SetOutlineColor(c.r, c.g, c.b);
 	}
 
 	void SetMultilineAlignment(MultilineAlignment a) {
@@ -84,7 +92,7 @@ struct Text
 
 	vec Size() const {
 		GPU_Image* image = AsImage();
-		return vec(image->texture_w, image->texture_h);
+		return vec(image->w, image->h);
 	}
 
 	operator GPU_Image* () const {
