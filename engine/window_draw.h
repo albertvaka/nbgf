@@ -48,6 +48,12 @@ namespace Window {
 			return withRect(r);
 		}
 
+		constexpr DeferredDraw& withOriginAtSpriteCenter() {
+			origin.x = t->w/2;
+			origin.y = t->h/2;
+			return *this;
+		}
+
 		constexpr DeferredDraw& withOrigin(float x, float y) {
 			origin.x = x;
 			origin.y = y;
