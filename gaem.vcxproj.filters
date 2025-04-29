@@ -121,7 +121,7 @@
     <ClInclude Include="vendor\imgui_impl\imgui_impl_opengl3.h">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl.h">
+    <ClInclude Include="vendor\imgui_impl\imgui_impl_sdl2.h">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
     <ClInclude Include="engine\animation.h">
@@ -477,7 +477,7 @@
     <ClCompile Include="vendor\imgui_impl\imgui_impl_opengl3.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl.cpp">
+    <ClCompile Include="vendor\imgui_impl\imgui_impl_sdl2.cpp">
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClCompile>
     <ClCompile Include="engine\debug.cpp">
