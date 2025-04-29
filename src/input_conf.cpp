@@ -1,7 +1,6 @@
 #include "input_conf.h"
 
 #include "input.h"
-#include "player.h"
 
 #include <functional>
 
@@ -61,17 +60,33 @@ void Input::MapGameKeys()
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_X) ||
             GamePad::Trigger::Right.IsPressed(p) || (
                 (p == kKeyboardPlayerId) && (
-                        Mouse::IsPressed() ||
                         Keyboard::IsKeyJustPressed(SDL_SCANCODE_SPACE)
                         )
                 );
     };
+    action_mapping[(int)GameKeys::ACCEPT] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_A) ||
+            GamePad::Trigger::Right.IsPressed(p) || (
+                (p == kKeyboardPlayerId) && (
+                    Keyboard::IsKeyJustPressed(SDL_SCANCODE_E) ||
+                    Keyboard::IsKeyJustPressed(SDL_SCANCODE_RETURN)
+                    )
+                );
+        };
+    action_mapping[(int)GameKeys::CANCEL] = [](int p) {
+        return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_B) ||
+            GamePad::Trigger::Right.IsPressed(p) || (
+                (p == kKeyboardPlayerId) && (
+                    Keyboard::IsKeyJustPressed(SDL_SCANCODE_BACKSPACE) || 
+                    Keyboard::IsKeyJustPressed(SDL_SCANCODE_ESCAPE)
+                    )
+                );
+        };
     action_mapping[(int)GameKeys::START] = [](int p)
     {
         return GamePad::IsButtonPressed(p, SDL_CONTROLLER_BUTTON_START) || (
             (p == kKeyboardPlayerId) && (
-                Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN) ||
-                Keyboard::IsKeyPressed(SDL_SCANCODE_ESCAPE)
+                Keyboard::IsKeyPressed(SDL_SCANCODE_RETURN)
                 )
             );
     };

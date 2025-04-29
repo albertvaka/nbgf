@@ -56,12 +56,12 @@
     <ClInclude Include="generated\tiled_objects_entities.h" />
     <ClInclude Include="generated\tiled_tile.h" />
     <ClInclude Include="generated\tiled_tilemap.h" />
-    <ClInclude Include="src\alien.h" />
+    <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\anim_lib.h" />
     <ClInclude Include="src\assets.h" />
-    <ClInclude Include="src\bullet.h" />
+    <ClInclude Include="src\gaem_constants.h" />
     <ClInclude Include="src\input_conf.h" />
-    <ClInclude Include="src\player.h" />
+    <ClInclude Include="src\minion.h" />
     <ClInclude Include="src\scene_entrypoint.h" />
     <ClInclude Include="src\scene_main.h" />
     <ClInclude Include="src\window_conf.h" />
@@ -113,7 +113,6 @@
     <ClCompile Include="generated\tiled_tilemap.cpp" />
     <ClCompile Include="src\assets.cpp" />
     <ClCompile Include="src\input_conf.cpp" />
-    <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\scene_main.cpp" />
     <ClCompile Include="vendor\glew\glew.c" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
@@ -335,7 +334,7 @@ exit /b 0</Command>
       <AdditionalIncludeDirectories>$(SolutionDir)\vendor\imgui;$(SolutionDir)\vendor\SDL2\include;$(SolutionDir)\vendor\imgui_impl;$(SolutionDir)\vendor\SDL_gpu\include;$(SolutionDir)\vendor\glew;$(SolutionDir)\vendor\stb_image;$(SolutionDir)\vendor\tweeny;$(SolutionDir)\vendor\magic_enum;$(SolutionDir)\engine;$(SolutionDir)\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_IMGUI;GLEW_STATIC;SDL_GPU_DISABLE_GLES;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

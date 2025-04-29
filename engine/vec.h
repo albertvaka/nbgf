@@ -16,6 +16,7 @@
 
 struct veci {
 	int x, y;
+	constexpr veci() : x(0), y(0) {}
 	constexpr veci(int a, int b) : x(a), y(b) {}
 	constexpr bool operator==(veci rhs) const
 	{

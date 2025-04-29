@@ -2,13 +2,19 @@
 
 #include "asset_load.h"
 
-void Assets::LoadAll() {
+void Assets::LoadAll()
+{
 
-    invadersTexture = LoadImage("data/invaders.png");
-    backgroundTexture = LoadImage("data/bg.png");
+	spr = LoadImage("data/spritesheet.png");
+	mapspr = LoadImage("data/le_map.png");
+	titleSpr = LoadImage("data/Start1.png");
+	titleSpr2 = LoadImage("data/Start2.png");
+	creditsSpr = LoadImage("data/title.png");
 
-    font_30 = LoadFont("data/PressStart2P.ttf", 30);
-    font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
+	music = LoadMusic("data/transmission.ogg");
 
-    tintShader.Load("data/default.vert", nullptr, "data/tint.frag");
+    font_30 = LoadFont("data/8bitmadness.ttf", 40);
+    font_30_outline_2 = LoadFontOutline("data/8bitmadness.ttf", 40, 2);
+	
+
 }
