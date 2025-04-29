@@ -204,22 +204,13 @@
     <ClInclude Include="src\window_conf.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\alien.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\anim_lib.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\assets.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\bullet.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\input_conf.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\player.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\scene_entrypoint.h">
@@ -244,6 +235,12 @@
       <Filter>Bundled Dependencies\imgui_imp</Filter>
     </ClInclude>
     <ClInclude Include="engine\transform.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_constants.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\imgui_convert.h">
       <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
@@ -363,9 +360,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\input_conf.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\player.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\scene_main.cpp">

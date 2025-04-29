@@ -20,7 +20,7 @@ DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 
 OPTIM     ?= 0
 DEBUG     ?= 1
 PROFILE   ?= 0
-IMGUI     ?= $(DEBUG)
+IMGUI     ?= 1
 
 # Bash so we can use curly braces expansion
 SHELL = bash
