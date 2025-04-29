@@ -28,6 +28,7 @@
     <ClInclude Include="engine\collide.h" />
     <ClInclude Include="engine\debug.h" />
     <ClInclude Include="engine\entity.h" />
+    <ClInclude Include="engine\imgui_convert.h" />
     <ClInclude Include="engine\input.h" />
     <ClInclude Include="engine\mates.h" />
     <ClInclude Include="engine\matrix2d.h" />
