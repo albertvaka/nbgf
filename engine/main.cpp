@@ -6,7 +6,6 @@
 #include "input.h"
 #include "mates.h"
 #include "debug.h"
-#include "debug.h"
 #include "camera.h"
 #include "window.h"
 
@@ -120,7 +119,7 @@ void init() {
 	if (Mix_Init(MIX_INIT_OGG) == 0) {
 		Debug::out << Mix_GetError();
 	}
-	
+
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
 		Debug::out << Mix_GetError();
 	}
@@ -223,7 +222,7 @@ void main_loop() {
 	const SDL_Scancode DEBUG_FRAME_BY_FRAME_NEXT = SDL_SCANCODE_E;
 	const SDL_Scancode DEBUG_MODE = SDL_SCANCODE_F2;
 	const SDL_Scancode FIXED_CAMERA = SDL_SCANCODE_F3;
-	const SDL_Scancode DEBUG_RELOAD_ASSETS = SDL_SCANCODE_F4;
+	const SDL_Scancode DEBUG_RELOAD_ASSETS = SDL_SCANCODE_F6;
 	const SDL_Scancode DEBUG_RESTART_SCENE = SDL_SCANCODE_F5;
 	const SDL_Scancode DEBUG_FAST_FORWARD = SDL_SCANCODE_F10;
 
@@ -264,7 +263,7 @@ void main_loop() {
 		 Camera::SetRotationDegs(fixedRotationDegs);
 	}
 
-	if (Debug::FrameByFrame && Debug::Draw) {
+	if (Debug::CameraFixed) {
 		float vel = Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT) ? 2.f : 1.f;
 		Camera::MoveCameraWithArrows(vel*dt);
 		Camera::ChangeZoomWithPlusAndMinus(vel* dt);
@@ -329,7 +328,8 @@ void main_loop() {
 
 #ifdef _DEBUG
 	if (Debug::CameraFixed) {
-		Window::DrawPrimitive::Rectangle(5.f, 5.f, 10.f, 10.f, -1, 0, 255, 0);
+		Window::DrawPrimitive::Rectangle(5.f, 5.f, 10.f, 20.f, -1, 0, 255, 0);
+		Window::DrawPrimitive::Rectangle(13.f, 5.f, 18.f, 20.f, -1, 0, 255, 0);
 	}
 	if (mainClockPaused) {
 		Window::DrawPrimitive::Circle(5, 5, 3, -1, 255, 0, 0);
