@@ -38,7 +38,7 @@ const float kSlowDownWhenHit = 0.9f;
 const float kZoomSailingFast = 0.6f;
 float kZoomSailingSlow = 0.9f;
 vec kShipSpawnPos = vec(200, 200);
-const float kDriftRecoveryRate = 2.0f; // How quickly velocity aligns with heading when not turning
+float kDriftRecoveryRate = 2.0f; // How quickly velocity aligns with heading when not turning
 
 extern float mainClock;
 
@@ -235,6 +235,7 @@ void Ship::Draw() {
 		ImGui::SliderFloat("kDecelerationCoef", &kDecelerationCoef, 0.f, 1.f);
 		ImGui::SliderFloat("kDecelerationCoefDrifting", &kDecelerationCoefDrifting, 0.f, 1.f);
 		ImGui::SliderFloat("kIgnoreCollisionTimer", &kIgnoreCollisionTimer, 0.f, 10.f);
+		ImGui::SliderFloat("kDriftRecoveryRate", &kDriftRecoveryRate, 0.f, 10.f);
 		ImGui::End();
 	}
 
