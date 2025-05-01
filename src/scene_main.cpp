@@ -158,6 +158,11 @@ void SceneMain::Draw()
 		if (ImGui::Button("Goal")) {
 			goals.GotGoal();
 		}
+		static bool invincible = false;
+		ImGui::Checkbox("Invincible", &invincible);
+		if (invincible) {
+			lives = 3;
+		}
 		ImGui::Text("Input device: %s", magic_enum::enum_name(Input::PreferredUserInputDevice).data());
 		if (ImGui::Button("Fullscreen")) {
 			Debug::out << "Fullscreen" << Window::IsFullScreen();
