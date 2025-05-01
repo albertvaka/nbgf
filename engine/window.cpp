@@ -4,6 +4,7 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
+#include <emscripten/html5.h>
 #endif
 
 #ifdef _IMGUI
@@ -21,18 +22,12 @@ namespace Window
     GPU_Target* screenTarget;
     GPU_Target* currentDrawTarget;
 
-#ifdef __EMSCRIPTEN__
-	EM_JS(int, GetWindowWidth, (), {
-		return window.innerWidth;
-	});
-	EM_JS(int, GetWindowHeight, (), {
-		return window.innerHeight;
-	});
-#endif
-
     vec GetUsableScreenSize() {
 #ifdef __EMSCRIPTEN__
-        return vec(GetWindowWidth(), GetWindowHeight());
+        int width, height;
+        const char* canvas_id = "#canvas"; // Default ID
+        emscripten_get_canvas_element_size(canvas_id, &width, &height);
+        return vec(width, height);
 #else
         SDL_DisplayMode dm;
         SDL_GetDesktopDisplayMode(0, &dm);
@@ -46,22 +41,17 @@ namespace Window
         GPU_SetDebugLevel(GPU_DEBUG_LEVEL_1);
 
         vec screenSize = GetUsableScreenSize();
-
 #ifdef GROW_TO_FILL_SCREEN
         float scale = screenSize.y / float(GAME_HEIGHT);
         GAME_WIDTH = screenSize.x / scale;
         Debug::out << "Scaling to x" << scale;
 #else
-    #ifdef __EMSCRIPTEN__
-        int scale = 1;
-    #else
         int scale = std::min(screenSize.x / GAME_WIDTH, screenSize.y / GAME_HEIGHT);
         if (scale <= 0) {
             Debug::out << "Warning: Game resolution (" << GAME_WIDTH << "*" << GAME_HEIGHT << ") is larger than the window resolution (" << screenSize.x << "*" << screenSize.y << ")";
             scale = 1;
         }
         Debug::out << "Scaling to x" << scale;
-    #endif
 #endif
         GPU_SetPreInitFlags(GPU_INIT_DISABLE_AUTO_VIRTUAL_RESOLUTION);
 
