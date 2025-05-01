@@ -465,7 +465,7 @@ void UpdatePlayer(GameData* gd, float dt, int id)
 		std::string name = "hq" + std::to_string(num_player);
 		ImGui::Begin(name.c_str(), 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 		ImGui::SetWindowFontScale(2.f);
-		ImGui::Image(im(Assets::buttonA), ImVec2(Assets::buttonA->w, Assets::buttonA->h));
+		ImGui::Image(im(Assets::buttonB), ImVec2(Assets::buttonB->w, Assets::buttonB->h));
 		ImGui::SameLine();
 		ImGui::Text("Soldier ");
 		ImGui::SameLine();
@@ -474,7 +474,7 @@ void UpdatePlayer(GameData* gd, float dt, int id)
 		ImGui::SameLine();
 		ImGui::Text(soldier_price.c_str());
 
-		ImGui::Image(im(Assets::buttonB), ImVec2(Assets::buttonB->w, Assets::buttonB->h));
+		ImGui::Image(im(Assets::buttonA), ImVec2(Assets::buttonA->w, Assets::buttonA->h));
 		ImGui::SameLine();
 		ImGui::Text("Worker  ");
 		ImGui::SameLine();
@@ -1178,6 +1178,7 @@ void RenderEntities() {
 			case EntityType::SOLDIER:
 			case EntityType::WORKER:
 				scale = 0.3f;
+				break;
 			}
 			Window::Draw(sprite, spritePos)
 				.withOriginAtSpriteCenter()
@@ -1191,6 +1192,10 @@ void RenderEntities() {
 
 		// Draw players last so they are on top
 		for (int i : gd->id_player) {
+			if (gd->ent_type[i] != PLAYER) {
+				// in case the player is dead
+				continue;
+			}
 			if (gd->is_moving[i])
 			{
 				vec spr_ship_fire_pos = vec(gd->ent_x[i], gd->ent_y[i]);
