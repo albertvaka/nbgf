@@ -15,6 +15,9 @@ float messageTime = 0;
 
 const float mineralsizesmall = 24.f;
 
+Text* bluePlusFive;
+Text* greenPlusFive;
+
 enum EntityType
 {
 	NONE = 0,
@@ -1047,22 +1050,57 @@ void InitGame(GameData* gd)
 	gd->tutorial_falso_step[1] = 0;
 }
 
+void RenderHealthBar(int i) {
+	if (gd->ent_hp[i] < 1000)
+	{
+		BoxBounds b(gd->ent_x[i] - gd->ent_size[i].x * 0.5f, gd->ent_y[i] - gd->ent_size[i].y - 5, (gd->ent_hp[i] / 1000.0f) * gd->ent_size[i].x * 1.2f, 3.0f);
+		Window::DrawPrimitive::Rectangle(b, 1, { 255,255,255,255 });
+		Window::DrawPrimitive::Rectangle(b, -1, { 255,0,0,255 });
+	}
+}
+void RenderCarry(int i) {
+	if (gd->ent_carry[i] == EntityType::MINERAL)
+	{
+		float scale = GameConstants::MINERAL_CARRY_SCALE;
+		float a = 1.0f;
+		if (gd->ent_timer_last_carry[i] < 0.4f)
+		{
+			float t = gd->ent_timer_last_carry[i] / 0.4f;
+			scale = GameConstants::MINERAL_CARRY_SCALE * 2.5f - t * GameConstants::MINERAL_CARRY_SCALE * 1.5f;
+			a = gd->ent_timer_last_carry[i] / 0.2f;
+			if (a > 1.0f) a = 1.0f;
+		}
+		vec spr_mineral_carry_pos = vec(
+			gd->ent_x[i] + gd->ent_size[i].x * 0.5f * cos(Angles::DegsToRads(gd->ent_rot[i] - 90.0f)),
+			gd->ent_y[i] + gd->ent_size[i].y * 0.5f * sin(Angles::DegsToRads(gd->ent_rot[i] - 90.0f))
+		);
+
+		//if ((gd->gameTime* 1000)%400 < 200)
+		{
+			Window::Draw(Assets::spr_mineral_carry, spr_mineral_carry_pos)
+				.withColor(255, 255, 255, 255 * a)
+				.withOriginAtSpriteCenter()
+				.withScale(scale);
+		}
+	}
+}
+
 //DrawEntities
 void RenderEntities() {
 
 	for (int p = 0; p < 2; p++) {
 		if (gd->player_respawn_time[p] > 0.f) {
 
-			Text txt_money(Assets::font_80, Assets::font_80_outline_2);
+			static Text txt_money(Assets::font_80, Assets::font_80_outline_2);
 			txt_money.SetString(std::to_string((int)ceil(gd->player_respawn_time[p])));
 			txt_money.SetFillColor(p ? ColorGreen : ColorBlue);
 			txt_money.SetOutlineColor(255,255,255);
 
-			float x = 400;
+			float offsetCountdown = 400;
 			if (p == 1) {
-				x = Window::GAME_WIDTH - x;
+				offsetCountdown = Window::GAME_WIDTH - offsetCountdown;
 			}
-			vec textPos(x, Window::GAME_HEIGHT / 2);
+			vec textPos(offsetCountdown, Window::GAME_HEIGHT / 2);
 			vec textSize = txt_money.Size();
 			float scale = 0.6 + 2 * (ceil(gd->player_respawn_time[p]) - gd->player_respawn_time[p]);
 
@@ -1071,7 +1109,6 @@ void RenderEntities() {
 				.withScale(scale);
 		}
 	}
-
 
 	for (int i = 0; i < GameConstants::MAX_ENTITIES; ++i)
 	{
@@ -1085,24 +1122,26 @@ void RenderEntities() {
 
 			vec spr_mineral_carry_pos = vec(gd->ent_x[i], gd->ent_y[i]);
 
-			Text txt(Assets::font_30, Assets::font_30_outline_2);
-			txt.SetString("+5");
-			SDL_Color color = (gd->ent_player[i] == 0) ? ColorBlue : ColorGreen;
-			txt.SetFillColor(color);
-			txt.SetOutlineColor(255, 255, 255);
+			Text* plusFive = (gd->ent_player[i] == 0) ? bluePlusFive : greenPlusFive;
+
+			Window::Draw(*plusFive, spr_mineral_carry_pos + vec(10, -20))
+				.withOrigin(0, -plusFive->Size().y / 2)
+				.withScale(0.8f)
+				.withColor(255, 255, 255, alpha);
 
 			Window::Draw(Assets::spr_mineral_carry, spr_mineral_carry_pos)
 				.withScale(GameConstants::MINERAL_CARRY_SCALE)
 				.withOriginAtSpriteCenter()
 				.withColor(255, 255, 255, alpha);
-
-			Window::Draw(txt, spr_mineral_carry_pos + vec(10, -20))
-				.withOrigin(0, -txt.Size().y/2)
-				.withScale(0.8f)
-				.withColor(255, 255, 255, alpha);
 		}
 		else if (gd->ent_type[i] != EntityType::NONE)
 		{
+			if (gd->ent_type[i] == EntityType::PLAYER)
+			{
+				// Renders last so they are on top
+				continue;
+			}
+
 			int num_player = gd->ent_player[i];
 
 			if (gd->ent_type[i] == EntityType::MINERAL && gd->tutorial_falso_step[num_player] == 0)
@@ -1110,7 +1149,7 @@ void RenderEntities() {
 				vec spr_arrow_down_pos(gd->ent_x[i], gd->ent_y[i] - gd->ent_size[i].y * 1.2f + sin(gd->gameTime * 4.0f) * 10.0f);
 				Window::Draw(Assets::spr_arrow_down, spr_arrow_down_pos)
 					.withOriginAtSpriteCenter()
-					.withColor(255,255,255,192)
+					.withColor(255, 255, 255, 192)
 					.withScale(2);
 			}
 
@@ -1123,17 +1162,6 @@ void RenderEntities() {
 					.withScale(2);
 			}
 
-			if (gd->ent_type[i] == EntityType::PLAYER)
-			{
-				if (gd->is_moving[i])
-				{
-					vec spr_ship_fire_pos = vec(gd->ent_x[i], gd->ent_y[i]);
-					Window::Draw(Assets::spr_ship_fire, spr_ship_fire_pos)
-						.withRotationDegs(gd->ent_rot[i])
-						.withOriginAtSpriteCenter();
-				}
-			}
-
 			GPU_Image* sprite = GetSpriteForType(gd->ent_type[i], gd->ent_player[i]);
 			if (gd->ent_type[i] == EntityType::EXPLOSION_MINION)
 			{
@@ -1143,27 +1171,41 @@ void RenderEntities() {
 			vec spritePos = vec(gd->ent_x[i], gd->ent_y[i]);
 
 			float scale = 1.f;
-			switch(gd->ent_type[i]) {
-				case EntityType::SHOT:
-					scale = gd->ent_scale[i];
-					break;
-				case EntityType::SOLDIER:
-				case EntityType::WORKER:
-					scale = 0.3f;
+			switch (gd->ent_type[i]) {
+			case EntityType::SHOT:
+				scale = gd->ent_scale[i];
+				break;
+			case EntityType::SOLDIER:
+			case EntityType::WORKER:
+				scale = 0.3f;
 			}
 			Window::Draw(sprite, spritePos)
 				.withOriginAtSpriteCenter()
 				.withRotationDegs(gd->ent_rot[i])
 				.withScale(scale);
 
-			if (gd->ent_hp[i] < 1000)
+			RenderHealthBar(i);
+			RenderCarry(i);
+
+		}
+
+		// Draw players last so they are on top
+		for (int i : gd->id_player) {
+			if (gd->is_moving[i])
 			{
-				BoxBounds b(gd->ent_x[i] - gd->ent_size[i].x * 0.5f, gd->ent_y[i] - gd->ent_size[i].y - 5, (gd->ent_hp[i] / 1000.0f) * gd->ent_size[i].x * 1.2f, 3.0f);
-				Window::DrawPrimitive::Rectangle(b, 1, { 255,255,255,255 });
-				Window::DrawPrimitive::Rectangle(b, -1, { 255,0,0,255 });
+				vec spr_ship_fire_pos = vec(gd->ent_x[i], gd->ent_y[i]);
+				Window::Draw(Assets::spr_ship_fire, spr_ship_fire_pos)
+					.withRotationDegs(gd->ent_rot[i])
+					.withOriginAtSpriteCenter();
 			}
 
-			if (gd->ent_type[i] == EntityType::PLAYER && gd->ent_timer_mining[i] > 0)
+			GPU_Image* sprite = GetSpriteForType(gd->ent_type[i], gd->ent_player[i]);
+			vec spritePos = vec(gd->ent_x[i], gd->ent_y[i]);
+			Window::Draw(sprite, spritePos)
+				.withOriginAtSpriteCenter()
+				.withRotationDegs(gd->ent_rot[i]);
+
+			if (gd->ent_timer_mining[i] > 0)
 			{
 				float angle = 360 * (gd->ent_timer_mining[i] / GameConstants::TIME_TO_MINE);
 				if (angle > 3) {
@@ -1173,31 +1215,8 @@ void RenderEntities() {
 				}
 			}
 
-			if (gd->ent_carry[i] == EntityType::MINERAL)
-			{
-				float scale = GameConstants::MINERAL_CARRY_SCALE;
-				float a = 1.0f;
-				if (gd->ent_timer_last_carry[i] < 0.4f)
-				{
-					float t = gd->ent_timer_last_carry[i] / 0.4f;
-					scale = GameConstants::MINERAL_CARRY_SCALE * 2.5f - t * GameConstants::MINERAL_CARRY_SCALE * 1.5f;
-					a = gd->ent_timer_last_carry[i] / 0.2f;
-					if (a > 1.0f) a = 1.0f;
-				}
-				vec spr_mineral_carry_pos = vec(
-					gd->ent_x[i] + gd->ent_size[i].x * 0.5f * cos(Angles::DegsToRads(gd->ent_rot[i] - 90.0f)),
-					gd->ent_y[i] + gd->ent_size[i].y * 0.5f * sin(Angles::DegsToRads(gd->ent_rot[i] - 90.0f))
-				);
-
-				//if ((gd->gameTime* 1000)%400 < 200)
-				{
-					Window::Draw(Assets::spr_mineral_carry, spr_mineral_carry_pos)
-						.withColor(255, 255, 255, 255 * a)
-						.withOriginAtSpriteCenter()
-						.withScale(scale);
-				}
-			}
-
+			RenderHealthBar(i);
+			RenderCarry(i);
 		}
 	}
 
@@ -1211,7 +1230,7 @@ void RenderEntities() {
 			ang -= (0.2 - messageTime) * 600;
 		}
 
-		Text txt_money(Assets::font_80, Assets::font_80_outline_2);
+		static Text txt_money(Assets::font_80, Assets::font_80_outline_2);
 
 		txt_money.SetString("PLAYER " + std::to_string(gd->winner + 1) + " WINS");
 		
@@ -1235,6 +1254,14 @@ void RenderEntities() {
 SceneMain::SceneMain()
 {
 	ImGui::GetStyle().WindowRounding = 7.0;
+
+	bluePlusFive = new Text("+5", Assets::font_30, Assets::font_30_outline_2);
+	bluePlusFive->SetOutlineColor(255, 255, 255);
+	bluePlusFive->SetFillColor(ColorBlue);
+
+	greenPlusFive = new Text("+5", Assets::font_30, Assets::font_30_outline_2);
+	greenPlusFive->SetOutlineColor(255, 255, 255);
+	greenPlusFive->SetFillColor(ColorGreen);
 }
 
 void SceneMain::EnterScene() 
@@ -1332,8 +1359,7 @@ void SceneMain::Draw()
 
 		if (int(gd->gameTime * 2) % 2 < 1)
 		{
-			Text txt_start(Assets::font_160, Assets::font_160_outline_4);
-			txt_start.SetString("PRESS START");
+			static Text txt_start("PRESS START", Assets::font_160, Assets::font_160_outline_4);
 			txt_start.SetFillColor(236, 223, 202);
 			txt_start.SetOutlineColor(0, 0, 0);
 
