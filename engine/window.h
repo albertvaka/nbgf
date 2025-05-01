@@ -66,8 +66,12 @@ namespace Window {
 		GPU_FreeImage(texture); // frees the target if needed
 	}
 
-	inline vec GetViewportMargins() {
-		return vec(Window::screenTarget->viewport.x, Window::screenTarget->viewport.y) / GetViewportScale();
+	inline vec GetViewportMarginsScaled() {
+		return vec(Window::screenTarget->viewport.x, Window::screenTarget->viewport.y);
+	}
+
+	inline vec GetViewportMargins() { // In game units
+		return GetViewportMarginsScaled() / GetViewportScale();
 	}
 
 	void BeginRenderToTexture(GPU_Image* targetTexture, bool useCamera);
