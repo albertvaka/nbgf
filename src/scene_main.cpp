@@ -453,6 +453,12 @@ void UpdatePlayer(GameData* gd, float dt, int id)
 	// Player on HQ ...
 	if (gd->ent_collision_matrix[id][gd->id_hq[gd->ent_player[id]]])
 	{
+		if (num_player) {
+			ImGui::SetNextWindowPosInGameCoords(vec(gd->ent_x[id], gd->ent_y[id]), vec(5, -110));
+		}
+		else {
+			ImGui::SetNextWindowPosInGameCoords(vec(gd->ent_x[id], gd->ent_y[id]), vec(-230, -110));
+		}
 		std::string name = "hq" + std::to_string(num_player);
 		ImGui::Begin(name.c_str(), 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 		ImGui::SetWindowFontScale(2.f);
@@ -473,13 +479,6 @@ void UpdatePlayer(GameData* gd, float dt, int id)
 		static std::string worker_price = std::to_string(GameConstants::PRICE_WORKER);
 		ImGui::SameLine();
 		ImGui::Text(worker_price.c_str());
-
-		if (num_player) {
-			ImGui::SetWindowPos(im(Window::GetViewportMargins() + vec(gd->ent_x[id] * Window::GetViewportScale() + 5, gd->ent_y[id] * Window::GetViewportScale() - 110)));
-		}
-		else {
-			ImGui::SetWindowPos(im(Window::GetViewportMargins() + vec(gd->ent_x[id] * Window::GetViewportScale() - 230, gd->ent_y[id] * Window::GetViewportScale() - 110)));
-		}
 		ImGui::End();
 
 
@@ -1350,36 +1349,30 @@ void SceneMain::Draw()
 		RenderEntities();
 
 		{
+			int id_hq0 = gd->id_hq[0];
+			vec size = vec(gd->ent_size[id_hq0].x + 1, 42);
+			ImGui::SetNextWindowPosInGameCoords(vec(gd->ent_x[id_hq0] - gd->ent_size[id_hq0].x * 0.65, gd->ent_y[id_hq0]), vec(-size.x, -16));
 			ImGui::Begin("hud_money_p1", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-
 			ImGui::SetWindowFontScale(2.f);
 			ImGui::Image(im(Assets::spr_mineral), ImVec2(mineralsizesmall, mineralsizesmall));
 			ImGui::SameLine();
 			std::string txt_money = std::to_string(gd->money[0]);
 			ImGui::Text(txt_money.c_str());
-
-			int id_hq0 = gd->id_hq[0];
-			vec size = vec(gd->ent_size[id_hq0].x + 1, 42);
-			ImGui::SetWindowPos(im(Window::GetViewportMargins() * Window::GetViewportScale() + vec(gd->ent_x[id_hq0] * Window::GetViewportScale() - gd->ent_size[id_hq0].x * Window::GetViewportScale() * 0.65 - size.x, gd->ent_y[id_hq0] * Window::GetViewportScale() - 16)));// + gd->ent_size[id_hq0].y * 0.5f + 12));
 			ImGui::SetWindowSize(im(size));
-
 			ImGui::End();
 		}
 
 		{
+			int id_hq1 = gd->id_hq[1];
+			vec size = vec(gd->ent_size[id_hq1].x + 1, 42);
+			ImGui::SetNextWindowPosInGameCoords(vec(gd->ent_x[id_hq1] + gd->ent_size[id_hq1].x * 0.65, gd->ent_y[id_hq1]), vec(0, -16));
 			ImGui::Begin("hud_money_p2", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-
 			ImGui::SetWindowFontScale(2.f);
 			ImGui::Image(im(Assets::spr_mineral), ImVec2(mineralsizesmall, mineralsizesmall));
 			ImGui::SameLine();
 			std::string txt_money = std::to_string(gd->money[1]);
 			ImGui::Text(txt_money.c_str());
-
-			int id_hq1 = gd->id_hq[1];
-			vec size = vec(gd->ent_size[id_hq1].x + 1, 42);
-			ImGui::SetWindowPos(im(Window::GetViewportMargins() * Window::GetViewportScale() + vec(gd->ent_x[id_hq1] * Window::GetViewportScale() + gd->ent_size[id_hq1].x * Window::GetViewportScale() * 0.65, gd->ent_y[id_hq1] * Window::GetViewportScale() - 16)));// + gd->ent_size[id_hq1].y * 0.5f + 12));
 			ImGui::SetWindowSize(im(size));
-
 			ImGui::End();
 		}
 
