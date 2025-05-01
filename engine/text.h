@@ -15,6 +15,9 @@ struct Text
 	};
 
 	Text(TTF_Font* font, TTF_Font* font_outline = nullptr) : font(font), font_outline(font_outline) {}
+	Text(std::string s, TTF_Font* font, TTF_Font* font_outline = nullptr) : font(font), font_outline(font_outline) {
+		SetString(s);
+	}
 	~Text() {
 		if (cached) { 
 			GPU_FreeImage(cached); 
@@ -101,6 +104,7 @@ struct Text
 
 	GPU_Image* AsImage() const {
 		if (cached == nullptr) {
+			//Debug::out << "Rendering text";
 			SDL_Surface* surface = const_cast<Text*>(this)->MultiLineRender();
 			cached = GPU_CopyImageFromSurface(surface);
 			GPU_SetImageFilter(cached, GPU_FILTER_NEAREST);
