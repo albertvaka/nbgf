@@ -272,6 +272,14 @@ struct CircleBounds
     [[nodiscard]] float Distance(vec a) const {
         return a.Distance(this->pos) - (this->radius);
     }
+    // When they overlap, returns a negative distance
+    [[nodiscard]] float DistanceSq(vec segmentFrom, vec segmentTo) const {
+        return this->pos.DistanceSq(segmentFrom, segmentTo) - (this->radius * this->radius);
+    }
+    // When they overlap, returns a negative distance
+    [[nodiscard]] float Distance(vec segmentFrom, vec segmentTo) const {
+        return this->pos.Distance(segmentFrom, segmentTo) - (this->radius);
+    }
 
     [[nodiscard]] bool Contains(float x, float y) const { return Contains(vec(x, y)); }
     [[nodiscard]] bool Contains(vec v) const { return (pos.DistanceSq(v) <= radius*radius); }

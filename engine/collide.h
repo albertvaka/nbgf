@@ -22,11 +22,15 @@ inline bool Collide(const CircleBounds& a, const CircleBounds& b)
 // Circle with box
 inline bool Collide(const CircleBounds& a, const BoxBounds& b)
 {
-    return b.DistanceSq(a) <= 0;
+    return a.DistanceSq(b) <= 0;
 }
 inline bool Collide(const BoxBounds& a, const CircleBounds& b)
 {
-    return b.DistanceSq(a) <= 0;
+    return a.DistanceSq(b) <= 0;
+}
+inline bool Collide(const CircleBounds& a, vec segmentFrom, vec segmentTo)
+{
+    return a.DistanceSq(segmentFrom, segmentTo) <= 0;
 }
 
 

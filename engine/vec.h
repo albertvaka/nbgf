@@ -153,11 +153,20 @@ struct vec
 	inline bool Truncate(float max); // affects in-place
 	[[nodiscard]] inline vec Truncated(float max); // returns a new vec
 
-	//returns the distance between this vector and th one passed as a parameter
+	//returns the distance between this vector and the one passed as a parameter
 	[[nodiscard]] inline float Distance(vec v2) const;
-
-	//squared version of above.
 	[[nodiscard]] inline float DistanceSq(vec v2) const;
+
+	//returns the distance between this vector and the segment between the two vectors
+	[[nodiscard]] inline float Distance(vec segmentFrom, vec segmentTo) const {
+		return Distance(ClosestPointInSegment(segmentFrom, segmentTo));
+	}
+	[[nodiscard]] inline float DistanceSq(vec segmentFrom, vec segmentTo) const {
+		return DistanceSq(ClosestPointInSegment(segmentFrom, segmentTo));
+	}
+	
+	// Closest point to this in the segment
+	[[nodiscard]] inline vec ClosestPointInSegment(vec segmentFrom, vec segmentTo) const;
 
 	constexpr vec& operator+=(vec rhs)
 	{
@@ -257,6 +266,55 @@ struct vec
 	}
 };
 
+//------------------------------------------------------------------------operator overloads
+[[nodiscard]] inline constexpr vec operator*(vec lhs, float rhs)
+{
+	vec result(lhs);
+	result *= rhs;
+	return result;
+}
+
+[[nodiscard]] inline constexpr vec operator*(float lhs, vec rhs)
+{
+	vec result(rhs);
+	result *= lhs;
+	return result;
+}
+
+// Component-wise product (like in GLSL)
+[[nodiscard]] inline constexpr vec operator*(vec lhs, vec rhs)
+{
+	return vec(lhs.x * rhs.x, lhs.y * rhs.y);
+}
+
+[[nodiscard]] inline constexpr vec operator-(vec lhs, vec rhs)
+{
+	vec result(lhs);
+	result -= rhs;
+	return result;
+}
+
+[[nodiscard]] inline constexpr vec operator+(vec lhs, vec rhs)
+{
+	vec result(lhs);
+	result += rhs;
+	return result;
+}
+
+[[nodiscard]] inline constexpr vec operator/(vec lhs, float rhs)
+{
+	vec result(lhs);
+	result /= rhs;
+	return result;
+}
+
+[[nodiscard]] inline constexpr vec operator/(vec lhs, vec rhs)
+{
+	vec result(lhs);
+	result /= rhs;
+	return result;
+}
+
 inline constexpr vec vec::Zero = vec(0,0);
 
 inline float vec::Length() const
@@ -302,6 +360,18 @@ inline vec vec::Perp() const
 inline float vec::Distance(vec v2) const
 {
 	return sqrt(DistanceSq(v2));
+}
+
+inline vec vec::ClosestPointInSegment(vec segmentFrom, vec segmentTo) const {
+	vec segmentVector = segmentTo - segmentFrom;
+	vec circleVector = *this - segmentFrom;
+	float t = circleVector.Dot(segmentVector) / segmentVector.LengthSq();
+
+	// Clamp to [0, 1] to ensure the closest point lies on the segment
+	if (t < 0.f) t = 0.f;
+	else if (t > 1.0f) t = 1.0f;
+
+	return segmentFrom + segmentVector * t;
 }
 
 //  calculates the euclidean distance squared between two vectors
@@ -411,56 +481,7 @@ inline vec vec::Normalized() const
 	return vec(fabs(v.x), fabs(v.y));
 }
 
-//------------------------------------------------------------------------operator overloads
-[[nodiscard]] inline constexpr vec operator*(vec lhs, float rhs)
-{
-	vec result(lhs);
-	result *= rhs;
-	return result;
-}
-
-[[nodiscard]] inline constexpr vec operator*(float lhs, vec rhs)
-{
-	vec result(rhs);
-	result *= lhs;
-	return result;
-}
-
-// Component-wise product (like in GLSL)
-[[nodiscard]] inline constexpr vec operator*(vec lhs, vec rhs)
-{
-	return vec(lhs.x * rhs.x, lhs.y * rhs.y);
-}
-
-[[nodiscard]] inline constexpr vec operator-(vec lhs, vec rhs)
-{
-	vec result(lhs);
-	result -= rhs;
-	return result;
-}
-
-[[nodiscard]] inline constexpr vec operator+(vec lhs, vec rhs)
-{
-	vec result(lhs);
-	result += rhs;
-	return result;
-}
-
-[[nodiscard]] inline constexpr vec operator/(vec lhs, float rhs)
-{
-	vec result(lhs);
-	result /= rhs;
-	return result;
-}
-
-[[nodiscard]] inline constexpr vec operator/(vec lhs, vec rhs)
-{
-	vec result(lhs);
-	result /= rhs;
-	return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////// veci operator overloads
 
 [[nodiscard]] inline constexpr veci operator+(veci lhs, veci rhs)
 {
@@ -481,7 +502,6 @@ inline vec vec::Normalized() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
 
 //treats a window as a toroid
 inline void WrapAround(vec &pos, float MaxX, float MaxY)
@@ -556,6 +576,12 @@ namespace Mates {
 //-----------------------------------------------------------------------------
 
 inline std::ostream& operator<<(std::ostream& os, vec rhs)
+{
+	os << rhs.x << "," << rhs.y;
+	return os;
+}
+
+inline std::ostream& operator<<(std::ostream& os, veci rhs)
 {
 	os << rhs.x << "," << rhs.y;
 	return os;
