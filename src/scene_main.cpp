@@ -342,10 +342,11 @@ void UpdatePlayer(GameData* gd, float dt, int id)
 	{
 		stick_R = vec(0, 0);
 	}
+	vec stickLNorm = stick_L.Normalized();
+	vec stickRNorm = stick_R.Normalized();
 
-	vec stick = vec(stick_L.x, stick_L.y).Normalized();
-	gd->ent_spd_x[id] += stick.x * GameConstants::PLAYER_ACCEL * dt;
-	gd->ent_spd_y[id] += stick.y * GameConstants::PLAYER_ACCEL * dt;
+	gd->ent_spd_x[id] += stickLNorm.x * GameConstants::PLAYER_ACCEL * dt;
+	gd->ent_spd_y[id] += stickLNorm.y * GameConstants::PLAYER_ACCEL * dt;
 
 	// Limit speed
 	vec speed(gd->ent_spd_x[id], gd->ent_spd_y[id]);
@@ -367,6 +368,9 @@ void UpdatePlayer(GameData* gd, float dt, int id)
 	gd->ent_x[id] = gd->ent_x[id] + gd->ent_spd_x[id] * dt;
 	gd->ent_y[id] = gd->ent_y[id] + gd->ent_spd_y[id] * dt;
 
+	gd->is_moving[id] = length_L > 30 && (
+		length_R < 30 || stickLNorm.Dot(stickRNorm) > 0.5
+		);
 
 	//Out of Screen
 	if (gd->ent_x[id] < 0)
@@ -388,7 +392,7 @@ void UpdatePlayer(GameData* gd, float dt, int id)
 	}
 
 
-	gd->is_moving[id] = false;
+	bool is_moving = false;
 
 	if (std::abs(stick_R.x) > 0 || std::abs(stick_R.y) > 0)
 	{
@@ -397,14 +401,14 @@ void UpdatePlayer(GameData* gd, float dt, int id)
 	}
 	else if (std::abs(stick_L.x) > 0 || std::abs(stick_L.y) > 0)
 	{
-		gd->is_moving[id] = true;
+		is_moving = true;
 
 		float rot = (atan2(stick_L.y, stick_L.x) * 180 / 3.1415f + 90.0f);
 		if (rot < 0.0f) rot += 360.0f;
 
 		EntityRotateTo(gd, id, dt, rot);
 	}
-	if (!gd->is_moving[id])
+	if (!is_moving)
 	{
 		gd->ent_spd_x[id] = Lerp(gd->ent_spd_x[id], 0, 3.0f * dt);
 		gd->ent_spd_y[id] = Lerp(gd->ent_spd_y[id], 0, 3.0f * dt);
