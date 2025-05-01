@@ -17,11 +17,11 @@ ImVec4 im(SDL_Color c) {
 namespace ImGui {
 	// Deprecated, call within Begin
 	void SetWindowPosInGameCoords(vec pos, vec unscaledOffset = vec::Zero, ImGuiCond cond = 0) {
-		ImGui::SetWindowPos(im(Window::GetViewportMarginsScaled() + pos * Window::GetViewportScale() + unscaledOffset), cond);
+		ImGui::SetWindowPos(im(Window::GetViewportMarginsScaled()/ImGui::GetIO().DisplayFramebufferScale.x + pos * Window::GetViewportScale()/ImGui::GetIO().DisplayFramebufferScale.x + unscaledOffset), cond);
 	}
 
 	// Call before Begin
 	void SetNextWindowPosInGameCoords(vec pos, vec unscaledOffset = vec::Zero, ImGuiCond cond = 0) {
-		ImGui::SetNextWindowPos(im(Window::GetViewportMarginsScaled() + pos * Window::GetViewportScale() + unscaledOffset), cond);
+		ImGui::SetNextWindowPos(im(Window::GetViewportMarginsScaled()/ImGui::GetIO().DisplayFramebufferScale.x + pos * Window::GetViewportScale()/ImGui::GetIO().DisplayFramebufferScale.x + unscaledOffset), cond);
 	}
 }
