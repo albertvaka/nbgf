@@ -334,7 +334,7 @@ void DrawMinionStats(Minion* m)
 	if (m->state == MinionState::EGG) return;
 
 	ImGui::SetNextWindowPosInGameCoords(vec(m->pos.x * 32 + 40, m->pos.y * 32));
-	ImGui::Begin("stats", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+	ImGui::Begin("stats", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Hunger");
 	ImGui::ProgressBar(m->satiation / 10000.f);
 	ImGui::Text("Mining");
@@ -517,6 +517,11 @@ void SceneMain::Update(float actual_dt)
 {
 	// Update happens in draw
 	dt = actual_dt * 1000;
+
+	// Handle window resizes by scaling the font
+	// This only affects the font, though, not any images, paddings, etc.
+	// And because of this we need to pass ImGuiWindowFlags_AlwaysAutoResize to all windows we create
+	ImGui::GetIO().FontGlobalScale = Window::GetViewportScale();
 }
 
 void SceneMain::Draw()
@@ -532,7 +537,7 @@ void SceneMain::Draw()
 
 #if _DEBUG
 	static bool dbg_target_pos = false;
-	ImGui::Begin("Cosas");
+	ImGui::Begin("Cosas", NULL, ImGuiWindowFlags_AlwaysAutoResize);
 
 	if (ImGui::Button("$500 PAVITOS"))
 	{
@@ -1189,7 +1194,7 @@ void SceneMain::Draw()
 		else if (foodShopUnderMouse)
 		{
 			ImGui::SetNextWindowPosInGameCoords(vec(tileMousePos.x * 32, tileMousePos.y * 32 + 40));
-			ImGui::Begin("moneys food", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+			ImGui::Begin("moneys food", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 			static string price_food_tag = "FOOD - $" + to_string(PRICE_FOOD);
 			ImGui::Text(price_food_tag.c_str());
 			ImGui::End();
@@ -1209,7 +1214,7 @@ void SceneMain::Draw()
 			static string price_egg_tag;
 			price_egg_tag = "EGG - $" + to_string(PRICE_EGG + gdata.minions_purchased * PRICE_EGG_INCREMENT);
 			ImGui::SetNextWindowPosInGameCoords(vec(tileMousePos.x * 32, tileMousePos.y * 32 + 40));
-			ImGui::Begin(price_egg_tag.c_str(), 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+			ImGui::Begin(price_egg_tag.c_str(), 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 			ImGui::Text(price_egg_tag.c_str());
 			ImGui::End();
 
@@ -1231,7 +1236,7 @@ void SceneMain::Draw()
 			static string price_egg_tag;
 			price_egg_tag = "KEY - $" + to_string(PRICE_KEY + gdata.keys_purchased * PRICE_KEY_INCREMENT);
 			ImGui::SetNextWindowPosInGameCoords(vec(tileMousePos.x * 32, tileMousePos.y * 32 + 40));
-			ImGui::Begin(price_egg_tag.c_str(), 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+			ImGui::Begin(price_egg_tag.c_str(), 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 			ImGui::Text(price_egg_tag.c_str());
 			ImGui::End();
 
