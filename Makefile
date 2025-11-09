@@ -48,7 +48,8 @@ else
 	OUT_FILE=$(EXEC)
 	ifeq ($(shell uname),Darwin) # MacOS
 		OS_CFLAGS=-DSDL_GPU_DISABLE_OPENGL_4
-		OS_LDFLAGS=-framework OpenGL
+		OS_LDFLAGS=-framework OpenGL -framework Foundation
+		MACOS_BRIDGE=$(OBJ_DIR)/engine/macos_bridge.mm.o
 	else # Linux
 		OS_CFLAGS=
 		OS_LDFLAGS=-lGL
@@ -68,10 +69,16 @@ ifeq ($(strip $(IMGUI)),1)
 	IMGUIFLAGS=-D_IMGUI
 endif
 
-$(EXEC): $(OBJ) $(ENGINE_OBJ) $(GENERATED_OBJ) $(DEP_OBJ) Makefile
-	$(CXX) $(OBJ) $(GENERATED_OBJ) $(ENGINE_OBJ) $(DEP_OBJ) $(LDFLAGS) -o $(OUT_FILE)
+$(EXEC): $(OBJ) $(ENGINE_OBJ) $(GENERATED_OBJ) $(DEP_OBJ) $(MACOS_BRIDGE) Makefile
+	$(CXX) $(OBJ) $(GENERATED_OBJ) $(ENGINE_OBJ) $(DEP_OBJ) $(LDFLAGS) $(MACOS_BRIDGE) -o $(OUT_FILE)
 
 $(OBJ_DIR)/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/scene_entrypoint.h src/window_conf.h Makefile
+	@mkdir -p $(OBJ_DIR)/engine
+	$(call time_begin,$@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(call time_end,$@)
+
+$(MACOS_BRIDGE): engine/macos_bridge.mm engine/*.h src/window_conf.h Makefile
 	@mkdir -p $(OBJ_DIR)/engine
 	$(call time_begin,$@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
