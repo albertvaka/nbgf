@@ -521,7 +521,11 @@ void SceneMain::Update(float actual_dt)
 	// Handle window resizes by scaling the font
 	// This only affects the font, though, not any images, paddings, etc.
 	// And because of this we need to pass ImGuiWindowFlags_AlwaysAutoResize to all windows we create
-	ImGui::GetIO().FontGlobalScale = Window::GetViewportScale();
+	// Note that we can't use Window::GetViewportScale, because on macOS that is affected by hidpi scaling
+	// while SDL_GetWindowSize isn't, and the ImGUI SDL implementation uses SDL_GetWindowSize.
+	int w, h;
+	SDL_GetWindowSize(Window::window, &w, &h);
+	ImGui::GetIO().FontGlobalScale = (float)w / Window::GAME_WIDTH;
 }
 
 void SceneMain::Draw()
