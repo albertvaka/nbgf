@@ -7,6 +7,7 @@
 #include "vec.h"
 #include "bounds.h"
 #include "window_drawprimitive.h"
+#include "window_conf.h"
 
 namespace Debug {
 	DebugStream out;
@@ -83,6 +84,8 @@ void AfterSceneDraw()
 
     //Debug::out << std::to_string(debugvecs.size() + debugarrows.size() + debugbounds.size());
 
+    GPU_bool oldDepthTest = Window::currentDrawTarget->use_depth_test;
+    Window::currentDrawTarget->use_depth_test = false;
     if (Debug::Draw) {
 
         for (const debugvec& v : debugvecs) {
@@ -100,6 +103,7 @@ void AfterSceneDraw()
             }
         }
     }
+    Window::currentDrawTarget->use_depth_test = oldDepthTest;
 
     // shrink to erase draws added after the Update, since they will be added again next frame
     debugvecs.resize(debugvecs_before_draw);

@@ -1546,14 +1546,14 @@ DECLSPEC void SDLCALL GPU_ClearRGBA(GPU_Target* target, Uint8 r, Uint8 g, Uint8 
     * \param src_rect The region of the source image to use.  Pass NULL for the entire image.
     * \param x Destination x-position
     * \param y Destination y-position */
-DECLSPEC void SDLCALL GPU_Blit(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y);
+DECLSPEC void SDLCALL GPU_Blit(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z);
 
 /*! Rotates and draws the given image to the given render target.
     * \param src_rect The region of the source image to use.  Pass NULL for the entire image.
     * \param x Destination x-position
     * \param y Destination y-position
     * \param degrees Rotation angle (in degrees) */
-DECLSPEC void SDLCALL GPU_BlitRotate(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float degrees);
+DECLSPEC void SDLCALL GPU_BlitRotate(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float degrees);
 
 /*! Scales and draws the given image to the given render target.
     * \param src_rect The region of the source image to use.  Pass NULL for the entire image.
@@ -1561,7 +1561,7 @@ DECLSPEC void SDLCALL GPU_BlitRotate(GPU_Image* image, GPU_Rect* src_rect, GPU_T
     * \param y Destination y-position
     * \param scaleX Horizontal stretch factor
     * \param scaleY Vertical stretch factor */
-DECLSPEC void SDLCALL GPU_BlitScale(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float scaleX, float scaleY);
+DECLSPEC void SDLCALL GPU_BlitScale(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float scaleX, float scaleY);
 
 /*! Scales, rotates, and draws the given image to the given render target.
     * \param src_rect The region of the source image to use.  Pass NULL for the entire image.
@@ -1570,7 +1570,7 @@ DECLSPEC void SDLCALL GPU_BlitScale(GPU_Image* image, GPU_Rect* src_rect, GPU_Ta
     * \param degrees Rotation angle (in degrees)
     * \param scaleX Horizontal stretch factor
     * \param scaleY Vertical stretch factor */
-DECLSPEC void SDLCALL GPU_BlitTransform(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float degrees, float scaleX, float scaleY);
+DECLSPEC void SDLCALL GPU_BlitTransform(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float degrees, float scaleX, float scaleY);
 
 /*! Scales, rotates around a pivot point, and draws the given image to the given render target.  The drawing point (x, y) coincides with the pivot point on the src image (pivot_x, pivot_y).
 	* \param src_rect The region of the source image to use.  Pass NULL for the entire image.
@@ -1581,13 +1581,13 @@ DECLSPEC void SDLCALL GPU_BlitTransform(GPU_Image* image, GPU_Rect* src_rect, GP
 	* \param degrees Rotation angle (in degrees)
 	* \param scaleX Horizontal stretch factor
 	* \param scaleY Vertical stretch factor */
-DECLSPEC void SDLCALL GPU_BlitTransformX(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float pivot_x, float pivot_y, float degrees, float scaleX, float scaleY);
+DECLSPEC void SDLCALL GPU_BlitTransformX(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float pivot_x, float pivot_y, float degrees, float scaleX, float scaleY);
 
 /*! Draws the given image to the given render target, scaling it to fit the destination region.
     * \param src_rect The region of the source image to use.  Pass NULL for the entire image.
     * \param dest_rect The region of the destination target image to draw upon.  Pass NULL for the entire target.
     */
-DECLSPEC void SDLCALL GPU_BlitRect(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, GPU_Rect* dest_rect);
+DECLSPEC void SDLCALL GPU_BlitRect(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, GPU_Rect* dest_rect, float z);
 
 /*! Draws the given image to the given render target, scaling it to fit the destination region.
     * \param src_rect The region of the source image to use.  Pass NULL for the entire image.
@@ -1597,7 +1597,7 @@ DECLSPEC void SDLCALL GPU_BlitRect(GPU_Image* image, GPU_Rect* src_rect, GPU_Tar
 	* \param pivot_y Pivot y-position (in image coordinates)
 	* \param flip_direction A GPU_FlipEnum value (or bitwise OR'd combination) that specifies which direction the image should be flipped.
     */
-DECLSPEC void SDLCALL GPU_BlitRectX(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, GPU_Rect* dest_rect, float degrees, float pivot_x, float pivot_y, GPU_FlipEnum flip_direction);
+DECLSPEC void SDLCALL GPU_BlitRectX(GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, GPU_Rect* dest_rect, float degrees, float pivot_x, float pivot_y, float z, GPU_FlipEnum flip_direction);
 
 
 /*! Renders triangles from the given set of vertices.  This lets you render arbitrary geometry.  It is a direct path to the GPU, so the format is different than typical SDL_gpu calls.
@@ -1652,7 +1652,7 @@ DECLSPEC void SDLCALL GPU_Flip(GPU_Target* target);
  * \param y y-coord of the point
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Pixel(GPU_Target* target, float x, float y, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Pixel(GPU_Target* target, float x, float y, float z, SDL_Color color);
 
 /*! Renders a colored line.
  * \param target The destination render target
@@ -1662,7 +1662,7 @@ DECLSPEC void SDLCALL GPU_Pixel(GPU_Target* target, float x, float y, SDL_Color 
  * \param y2 y-coord of ending point
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Line(GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Line(GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color);
 
 /*! Renders a colored arc curve (circle segment).
  * \param target The destination render target
@@ -1673,7 +1673,7 @@ DECLSPEC void SDLCALL GPU_Line(GPU_Target* target, float x1, float y1, float x2,
  * \param end_angle The angle to end at, in degrees.  Measured clockwise from the positive x-axis.
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Arc(GPU_Target* target, float x, float y, float radius, float start_angle, float end_angle, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Arc(GPU_Target* target, float x, float y, float z, float radius, float start_angle, float end_angle, SDL_Color color);
 
 /*! Renders a colored filled arc (circle segment / pie piece).
  * \param target The destination render target
@@ -1684,7 +1684,7 @@ DECLSPEC void SDLCALL GPU_Arc(GPU_Target* target, float x, float y, float radius
  * \param end_angle The angle to end at, in degrees.  Measured clockwise from the positive x-axis.
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_ArcFilled(GPU_Target* target, float x, float y, float radius, float start_angle, float end_angle, SDL_Color color);
+DECLSPEC void SDLCALL GPU_ArcFilled(GPU_Target* target, float x, float y, float z, float radius, float start_angle, float end_angle, SDL_Color color);
 
 /*! Renders a colored circle outline.
  * \param target The destination render target
@@ -1693,7 +1693,7 @@ DECLSPEC void SDLCALL GPU_ArcFilled(GPU_Target* target, float x, float y, float 
  * \param radius The radius of the circle / distance from the center point that rendering will occur
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Circle(GPU_Target* target, float x, float y, float radius, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Circle(GPU_Target* target, float x, float y, float z, float radius, SDL_Color color);
 
 /*! Renders a colored filled circle.
  * \param target The destination render target
@@ -1702,7 +1702,7 @@ DECLSPEC void SDLCALL GPU_Circle(GPU_Target* target, float x, float y, float rad
  * \param radius The radius of the circle / distance from the center point that rendering will occur
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_CircleFilled(GPU_Target* target, float x, float y, float radius, SDL_Color color);
+DECLSPEC void SDLCALL GPU_CircleFilled(GPU_Target* target, float x, float y, float z, float radius, SDL_Color color);
 
 /*! Renders a colored ellipse outline.
  * \param target The destination render target
@@ -1713,7 +1713,7 @@ DECLSPEC void SDLCALL GPU_CircleFilled(GPU_Target* target, float x, float y, flo
  * \param degrees The angle to rotate the ellipse
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Ellipse(GPU_Target* target, float x, float y, float rx, float ry, float degrees, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Ellipse(GPU_Target* target, float x, float y, float z, float rx, float ry, float degrees, SDL_Color color);
 
 /*! Renders a colored filled ellipse.
  * \param target The destination render target
@@ -1724,7 +1724,7 @@ DECLSPEC void SDLCALL GPU_Ellipse(GPU_Target* target, float x, float y, float rx
  * \param degrees The angle to rotate the ellipse
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_EllipseFilled(GPU_Target* target, float x, float y, float rx, float ry, float degrees, SDL_Color color);
+DECLSPEC void SDLCALL GPU_EllipseFilled(GPU_Target* target, float x, float z, float rx, float ry, float y, float degrees, SDL_Color color);
 
 /*! Renders a colored annular sector outline (ring segment).
  * \param target The destination render target
@@ -1736,7 +1736,7 @@ DECLSPEC void SDLCALL GPU_EllipseFilled(GPU_Target* target, float x, float y, fl
  * \param end_angle The angle to end at, in degrees.  Measured clockwise from the positive x-axis.
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Sector(GPU_Target* target, float x, float y, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Sector(GPU_Target* target, float x, float y, float z, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color);
 
 /*! Renders a colored filled annular sector (ring segment).
  * \param target The destination render target
@@ -1748,7 +1748,7 @@ DECLSPEC void SDLCALL GPU_Sector(GPU_Target* target, float x, float y, float inn
  * \param end_angle The angle to end at, in degrees.  Measured clockwise from the positive x-axis.
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_SectorFilled(GPU_Target* target, float x, float y, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color);
+DECLSPEC void SDLCALL GPU_SectorFilled(GPU_Target* target, float x, float y, float z, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color);
 
 /*! Renders a colored triangle outline.
  * \param target The destination render target
@@ -1760,7 +1760,7 @@ DECLSPEC void SDLCALL GPU_SectorFilled(GPU_Target* target, float x, float y, flo
  * \param y3 y-coord of third point
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Tri(GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Tri(GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, float z, SDL_Color color);
 
 /*! Renders a colored filled triangle.
  * \param target The destination render target
@@ -1772,7 +1772,7 @@ DECLSPEC void SDLCALL GPU_Tri(GPU_Target* target, float x1, float y1, float x2, 
  * \param y3 y-coord of third point
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_TriFilled(GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, SDL_Color color);
+DECLSPEC void SDLCALL GPU_TriFilled(GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, float z, SDL_Color color);
 
 /*! Renders a colored rectangle outline.
  * \param target The destination render target
@@ -1782,14 +1782,14 @@ DECLSPEC void SDLCALL GPU_TriFilled(GPU_Target* target, float x1, float y1, floa
  * \param y2 y-coord of bottom-right corner
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Rectangle(GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Rectangle(GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color);
 
 /*! Renders a colored rectangle outline.
  * \param target The destination render target
  * \param rect The rectangular area to draw
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Rectangle2(GPU_Target* target, GPU_Rect rect, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Rectangle2(GPU_Target* target, GPU_Rect rect, float z, SDL_Color color);
 
 /*! Renders a colored filled rectangle.
  * \param target The destination render target
@@ -1799,14 +1799,14 @@ DECLSPEC void SDLCALL GPU_Rectangle2(GPU_Target* target, GPU_Rect rect, SDL_Colo
  * \param y2 y-coord of bottom-right corner
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_RectangleFilled(GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color);
+DECLSPEC void SDLCALL GPU_RectangleFilled(GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color);
 
 /*! Renders a colored filled rectangle.
  * \param target The destination render target
  * \param rect The rectangular area to draw
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_RectangleFilled2(GPU_Target* target, GPU_Rect rect, SDL_Color color);
+DECLSPEC void SDLCALL GPU_RectangleFilled2(GPU_Target* target, GPU_Rect rect, float z, SDL_Color color);
 
 /*! Renders a colored rounded (filleted) rectangle outline.
  * \param target The destination render target
@@ -1817,7 +1817,7 @@ DECLSPEC void SDLCALL GPU_RectangleFilled2(GPU_Target* target, GPU_Rect rect, SD
  * \param radius The radius of the corners
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_RectangleRound(GPU_Target* target, float x1, float y1, float x2, float y2, float radius, SDL_Color color);
+DECLSPEC void SDLCALL GPU_RectangleRound(GPU_Target* target, float x1, float y1, float x2, float y2, float z, float radius, SDL_Color color);
 
 /*! Renders a colored rounded (filleted) rectangle outline.
  * \param target The destination render target
@@ -1825,7 +1825,7 @@ DECLSPEC void SDLCALL GPU_RectangleRound(GPU_Target* target, float x1, float y1,
  * \param radius The radius of the corners
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_RectangleRound2(GPU_Target* target, GPU_Rect rect, float radius, SDL_Color color);
+DECLSPEC void SDLCALL GPU_RectangleRound2(GPU_Target* target, GPU_Rect rect, float radius, float z, SDL_Color color);
 
 /*! Renders a colored filled rounded (filleted) rectangle.
  * \param target The destination render target
@@ -1836,7 +1836,7 @@ DECLSPEC void SDLCALL GPU_RectangleRound2(GPU_Target* target, GPU_Rect rect, flo
  * \param radius The radius of the corners
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_RectangleRoundFilled(GPU_Target* target, float x1, float y1, float x2, float y2, float radius, SDL_Color color);
+DECLSPEC void SDLCALL GPU_RectangleRoundFilled(GPU_Target* target, float x1, float y1, float x2, float y2, float z, float radius, SDL_Color color);
 
 /*! Renders a colored filled rounded (filleted) rectangle.
  * \param target The destination render target
@@ -1844,7 +1844,7 @@ DECLSPEC void SDLCALL GPU_RectangleRoundFilled(GPU_Target* target, float x1, flo
  * \param radius The radius of the corners
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_RectangleRoundFilled2(GPU_Target* target, GPU_Rect rect, float radius, SDL_Color color);
+DECLSPEC void SDLCALL GPU_RectangleRoundFilled2(GPU_Target* target, GPU_Rect rect, float z, float radius, SDL_Color color);
 
 /*! Renders a colored polygon outline.  The vertices are expected to define a convex polygon.
  * \param target The destination render target
@@ -1852,7 +1852,7 @@ DECLSPEC void SDLCALL GPU_RectangleRoundFilled2(GPU_Target* target, GPU_Rect rec
  * \param vertices An array of vertex positions stored as interlaced x and y coords, e.g. {x1, y1, x2, y2, ...}
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_Polygon(GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color);
+DECLSPEC void SDLCALL GPU_Polygon(GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color);
 
 /*! Renders a colored sequence of line segments.
  * \param target The destination render target
@@ -1861,7 +1861,7 @@ DECLSPEC void SDLCALL GPU_Polygon(GPU_Target* target, unsigned int num_vertices,
  * \param color The color of the shape to render
  * \param close_loop Make a closed polygon by drawing a line at the end back to the start point
  */
-DECLSPEC void SDLCALL GPU_Polyline(GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color, GPU_bool close_loop);
+DECLSPEC void SDLCALL GPU_Polyline(GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color, GPU_bool close_loop);
 	
 /*! Renders a colored filled polygon.  The vertices are expected to define a convex polygon.
  * \param target The destination render target
@@ -1869,7 +1869,7 @@ DECLSPEC void SDLCALL GPU_Polyline(GPU_Target* target, unsigned int num_vertices
  * \param vertices An array of vertex positions stored as interlaced x and y coords, e.g. {x1, y1, x2, y2, ...}
  * \param color The color of the shape to render
  */
-DECLSPEC void SDLCALL GPU_PolygonFilled(GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color);
+DECLSPEC void SDLCALL GPU_PolygonFilled(GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color);
 
 // End of Shapes
 /*! @} */

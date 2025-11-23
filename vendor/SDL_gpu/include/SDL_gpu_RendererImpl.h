@@ -104,19 +104,19 @@ typedef struct GPU_RendererImpl
 	void (SDLCALL *FreeTarget)(GPU_Renderer* renderer, GPU_Target* target);
 
 	/*! \see GPU_Blit() */
-	void (SDLCALL *Blit)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y);
+	void (SDLCALL *Blit)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z);
 	
 	/*! \see GPU_BlitRotate() */
-	void (SDLCALL *BlitRotate)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float degrees);
+	void (SDLCALL *BlitRotate)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float degrees);
 	
 	/*! \see GPU_BlitScale() */
-	void (SDLCALL *BlitScale)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float scaleX, float scaleY);
+	void (SDLCALL *BlitScale)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float scaleX, float scaleY);
 	
 	/*! \see GPU_BlitTransform */
-	void (SDLCALL *BlitTransform)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float degrees, float scaleX, float scaleY);
+	void (SDLCALL *BlitTransform)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float degrees, float scaleX, float scaleY);
 	
 	/*! \see GPU_BlitTransformX() */
-	void (SDLCALL *BlitTransformX)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float pivot_x, float pivot_y, float degrees, float scaleX, float scaleY);
+	void (SDLCALL *BlitTransformX)(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float pivot_x, float pivot_y, float degrees, float scaleX, float scaleY);
 	
 	/*! \see GPU_PrimitiveBatchV() */
 	void (SDLCALL *PrimitiveBatchV)(GPU_Renderer* renderer, GPU_Image* image, GPU_Target* target, GPU_PrimitiveEnum primitive_type, unsigned short num_vertices, void* values, unsigned int num_indices, unsigned short* indices, GPU_BatchFlagEnum flags);
@@ -259,61 +259,61 @@ typedef struct GPU_RendererImpl
 	float (SDLCALL *GetLineThickness)(GPU_Renderer* renderer);
 	
     /*! \see GPU_Pixel() */
-	void (SDLCALL *Pixel)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, SDL_Color color);
+	void (SDLCALL *Pixel)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, SDL_Color color);
 
     /*! \see GPU_Line() */
-	void (SDLCALL *Line)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color);
+	void (SDLCALL *Line)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color);
 
     /*! \see GPU_Arc() */
-	void (SDLCALL *Arc)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, float start_angle, float end_angle, SDL_Color color);
+	void (SDLCALL *Arc)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, float start_angle, float end_angle, SDL_Color color);
 	
     /*! \see GPU_ArcFilled() */
-	void (SDLCALL *ArcFilled)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, float start_angle, float end_angle, SDL_Color color);
+	void (SDLCALL *ArcFilled)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, float start_angle, float end_angle, SDL_Color color);
 
     /*! \see GPU_Circle() */
-	void (SDLCALL *Circle)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, SDL_Color color);
+	void (SDLCALL *Circle)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, SDL_Color color);
 
     /*! \see GPU_CircleFilled() */
-	void (SDLCALL *CircleFilled)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, SDL_Color color);
+	void (SDLCALL *CircleFilled)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, SDL_Color color);
 	
 	/*! \see GPU_Ellipse() */
-	void (SDLCALL *Ellipse)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float rx, float ry, float degrees, SDL_Color color);
+	void (SDLCALL *Ellipse)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float rx, float ry, float degrees, SDL_Color color);
 	
 	/*! \see GPU_EllipseFilled() */
-	void (SDLCALL *EllipseFilled)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float rx, float ry, float degrees, SDL_Color color);
+	void (SDLCALL *EllipseFilled)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float rx, float ry, float z, float degrees, SDL_Color color);
 
     /*! \see GPU_Sector() */
-	void (SDLCALL *Sector)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color);
+	void (SDLCALL *Sector)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color);
 
     /*! \see GPU_SectorFilled() */
-	void (SDLCALL *SectorFilled)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color);
+	void (SDLCALL *SectorFilled)(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color);
     
     /*! \see GPU_Tri() */
-	void (SDLCALL *Tri)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, SDL_Color color);
+	void (SDLCALL *Tri)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, float z, SDL_Color color);
 
     /*! \see GPU_TriFilled() */
-	void (SDLCALL *TriFilled)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, SDL_Color color);
+	void (SDLCALL *TriFilled)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, float z, SDL_Color color);
 
     /*! \see GPU_Rectangle() */
-	void (SDLCALL *Rectangle)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color);
+	void (SDLCALL *Rectangle)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color);
 
     /*! \see GPU_RectangleFilled() */
-	void (SDLCALL *RectangleFilled)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color);
+	void (SDLCALL *RectangleFilled)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color);
 
     /*! \see GPU_RectangleRound() */
-	void (SDLCALL *RectangleRound)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float radius, SDL_Color color);
+	void (SDLCALL *RectangleRound)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, float radius, SDL_Color color);
 
     /*! \see GPU_RectangleRoundFilled() */
-	void (SDLCALL *RectangleRoundFilled)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float radius, SDL_Color color);
+	void (SDLCALL *RectangleRoundFilled)(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, float radius, SDL_Color color);
 
     /*! \see GPU_Polygon() */
-	void (SDLCALL *Polygon)(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color);
+	void (SDLCALL *Polygon)(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color);
 
 	/*! \see GPU_Polyline() */
-	void (SDLCALL *Polyline)(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color, GPU_bool close_loop);
+	void (SDLCALL *Polyline)(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color, GPU_bool close_loop);
 	
     /*! \see GPU_PolygonFilled() */
-	void (SDLCALL *PolygonFilled)(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color);
+	void (SDLCALL *PolygonFilled)(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color);
 	
 } GPU_RendererImpl;
 

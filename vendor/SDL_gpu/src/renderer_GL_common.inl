@@ -102,14 +102,14 @@ See a particular renderer's *.c file for specifics. */
 #define GPU_INDEX_BUFFER_ABSOLUTE_MAX_VERTICES 4000000000u
 
 
-// x, y, s, t, r, g, b, a
-#define GPU_BLIT_BUFFER_FLOATS_PER_VERTEX 8
+// x, y, z, s, t, r, g, b, a
+#define GPU_BLIT_BUFFER_FLOATS_PER_VERTEX 9
 
 // bytes per vertex
 #define GPU_BLIT_BUFFER_STRIDE (sizeof(float)*GPU_BLIT_BUFFER_FLOATS_PER_VERTEX)
 #define GPU_BLIT_BUFFER_VERTEX_OFFSET 0
-#define GPU_BLIT_BUFFER_TEX_COORD_OFFSET 2
-#define GPU_BLIT_BUFFER_COLOR_OFFSET 4
+#define GPU_BLIT_BUFFER_TEX_COORD_OFFSET 3
+#define GPU_BLIT_BUFFER_COLOR_OFFSET 5
 
 
 
@@ -3343,7 +3343,7 @@ static GPU_Image* gpu_copy_image_pixels_only(GPU_Renderer* renderer, GPU_Image* 
                     GPU_UnsetImageVirtualResolution(image);
                 }
 
-                renderer->impl->Blit(renderer, image, NULL, target, (float)(image->w / 2), (float)(image->h / 2));
+                renderer->impl->Blit(renderer, image, NULL, target, (float)(image->w / 2), (float)(image->h / 2), 0.f);
 
                 // Restore the saved settings
                 GPU_SetColor(image, color);
@@ -4162,9 +4162,10 @@ static void FreeTarget(GPU_Renderer* renderer, GPU_Target* target)
 
 
 
-#define SET_TEXTURED_VERTEX(x, y, s, t, r, g, b, a) \
+#define SET_TEXTURED_VERTEX(x, y, z, s, t, r, g, b, a) \
     blit_buffer[vert_index] = x; \
     blit_buffer[vert_index+1] = y; \
+    blit_buffer[vert_index+2] = z; \
     blit_buffer[tex_index] = s; \
     blit_buffer[tex_index+1] = t; \
     blit_buffer[color_index] = r; \
@@ -4176,9 +4177,10 @@ static void FreeTarget(GPU_Renderer* renderer, GPU_Target* target)
     tex_index += GPU_BLIT_BUFFER_FLOATS_PER_VERTEX; \
     color_index += GPU_BLIT_BUFFER_FLOATS_PER_VERTEX;
 
-#define SET_TEXTURED_VERTEX_UNINDEXED(x, y, s, t, r, g, b, a) \
+#define SET_TEXTURED_VERTEX_UNINDEXED(x, y, z, s, t, r, g, b, a) \
     blit_buffer[vert_index] = x; \
     blit_buffer[vert_index+1] = y; \
+    blit_buffer[vert_index+2] = z; \
     blit_buffer[tex_index] = s; \
     blit_buffer[tex_index+1] = t; \
     blit_buffer[color_index] = r; \
@@ -4189,9 +4191,10 @@ static void FreeTarget(GPU_Renderer* renderer, GPU_Target* target)
     tex_index += GPU_BLIT_BUFFER_FLOATS_PER_VERTEX; \
     color_index += GPU_BLIT_BUFFER_FLOATS_PER_VERTEX;
 
-#define SET_UNTEXTURED_VERTEX(x, y, r, g, b, a) \
+#define SET_UNTEXTURED_VERTEX(x, y, z, r, g, b, a) \
     blit_buffer[vert_index] = x; \
     blit_buffer[vert_index+1] = y; \
+    blit_buffer[vert_index+2] = z; \
     blit_buffer[color_index] = r; \
     blit_buffer[color_index+1] = g; \
     blit_buffer[color_index+2] = b; \
@@ -4200,9 +4203,10 @@ static void FreeTarget(GPU_Renderer* renderer, GPU_Target* target)
     vert_index += GPU_BLIT_BUFFER_FLOATS_PER_VERTEX; \
     color_index += GPU_BLIT_BUFFER_FLOATS_PER_VERTEX;
 
-#define SET_UNTEXTURED_VERTEX_UNINDEXED(x, y, r, g, b, a) \
+#define SET_UNTEXTURED_VERTEX_UNINDEXED(x, y, z, r, g, b, a) \
     blit_buffer[vert_index] = x; \
     blit_buffer[vert_index+1] = y; \
+    blit_buffer[vert_index+2] = z; \
     blit_buffer[color_index] = r; \
     blit_buffer[color_index+1] = g; \
     blit_buffer[color_index+2] = b; \
@@ -4218,15 +4222,15 @@ static void FreeTarget(GPU_Renderer* renderer, GPU_Target* target)
 
 
 
-#define BEGIN_UNTEXTURED_SEGMENTS(x1, y1, x2, y2, r, g, b, a) \
-    SET_UNTEXTURED_VERTEX(x1, y1, r, g, b, a); \
-    SET_UNTEXTURED_VERTEX(x2, y2, r, g, b, a);
+#define BEGIN_UNTEXTURED_SEGMENTS(x1, y1, x2, y2, z, r, g, b, a) \
+    SET_UNTEXTURED_VERTEX(x1, y1, z, r, g, b, a); \
+    SET_UNTEXTURED_VERTEX(x2, y2, z, r, g, b, a);
 
 // Finish previous triangles and start the next one
-#define SET_UNTEXTURED_SEGMENTS(x1, y1, x2, y2, r, g, b, a) \
-    SET_UNTEXTURED_VERTEX(x1, y1, r, g, b, a); \
+#define SET_UNTEXTURED_SEGMENTS(x1, y1, x2, y2, z, r, g, b, a) \
+    SET_UNTEXTURED_VERTEX(x1, y1, z, r, g, b, a); \
     SET_RELATIVE_INDEXED_VERTEX(-2); \
-    SET_UNTEXTURED_VERTEX(x2, y2, r, g, b, a); \
+    SET_UNTEXTURED_VERTEX(x2, y2, z, r, g, b, a); \
     SET_RELATIVE_INDEXED_VERTEX(-2); \
     SET_RELATIVE_INDEXED_VERTEX(-2); \
     SET_RELATIVE_INDEXED_VERTEX(-1);
@@ -4238,15 +4242,15 @@ static void FreeTarget(GPU_Renderer* renderer, GPU_Target* target)
     SET_INDEXED_VERTEX(1); \
     SET_INDEXED_VERTEX(0);
 
-#define END_UNTEXTURED_SEGMENTS(x1, y1, x2, y2, r, g, b, a) \
-    SET_UNTEXTURED_VERTEX(x1, y1, r, g, b, a); \
+#define END_UNTEXTURED_SEGMENTS(x1, y1, x2, y2, z, r, g, b, a) \
+    SET_UNTEXTURED_VERTEX(x1, y1, z, r, g, b, a); \
     SET_RELATIVE_INDEXED_VERTEX(-2); \
-    SET_UNTEXTURED_VERTEX(x2, y2, r, g, b, a); \
+    SET_UNTEXTURED_VERTEX(x2, y2, z, r, g, b, a); \
     SET_RELATIVE_INDEXED_VERTEX(-2);
 
 
 
-static void Blit(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y)
+static void Blit(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z)
 {
     Uint32 tex_w, tex_h;
     float w;
@@ -4399,10 +4403,10 @@ static void Blit(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, G
     }
 
     // 4 Quad vertices
-    SET_TEXTURED_VERTEX_UNINDEXED(dx1, dy1, x1, y1, r, g, b, a);
-    SET_TEXTURED_VERTEX_UNINDEXED(dx2, dy1, x2, y1, r, g, b, a);
-    SET_TEXTURED_VERTEX_UNINDEXED(dx2, dy2, x2, y2, r, g, b, a);
-    SET_TEXTURED_VERTEX_UNINDEXED(dx1, dy2, x1, y2, r, g, b, a);
+    SET_TEXTURED_VERTEX_UNINDEXED(dx1, dy1, z, x1, y1, r, g, b, a);
+    SET_TEXTURED_VERTEX_UNINDEXED(dx2, dy1, z, x2, y1, r, g, b, a);
+    SET_TEXTURED_VERTEX_UNINDEXED(dx2, dy2, z, x2, y2, r, g, b, a);
+    SET_TEXTURED_VERTEX_UNINDEXED(dx1, dy2, z, x1, y2, r, g, b, a);
 
     // 6 Triangle indices
     SET_INDEXED_VERTEX(0);
@@ -4417,7 +4421,7 @@ static void Blit(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, G
 }
 
 
-static void BlitRotate(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float degrees)
+static void BlitRotate(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float degrees)
 {
     float w, h;
     if(image == NULL)
@@ -4433,10 +4437,10 @@ static void BlitRotate(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_r
 
     w = (src_rect == NULL? image->w : src_rect->w);
     h = (src_rect == NULL? image->h : src_rect->h);
-    renderer->impl->BlitTransformX(renderer, image, src_rect, target, x, y, w*image->anchor_x, h*image->anchor_y, degrees, 1.0f, 1.0f);
+    renderer->impl->BlitTransformX(renderer, image, src_rect, target, x, y, z, w*image->anchor_x, h*image->anchor_y, degrees, 1.0f, 1.0f);
 }
 
-static void BlitScale(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float scaleX, float scaleY)
+static void BlitScale(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float scaleX, float scaleY)
 {
     float w, h;
     if(image == NULL)
@@ -4452,10 +4456,10 @@ static void BlitScale(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_re
 
     w = (src_rect == NULL? image->w : src_rect->w);
     h = (src_rect == NULL? image->h : src_rect->h);
-    renderer->impl->BlitTransformX(renderer, image, src_rect, target, x, y, w*image->anchor_x, h*image->anchor_y, 0.0f, scaleX, scaleY);
+    renderer->impl->BlitTransformX(renderer, image, src_rect, target, x, y, z, w*image->anchor_x, h*image->anchor_y, 0.0f, scaleX, scaleY);
 }
 
-static void BlitTransform(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float degrees, float scaleX, float scaleY)
+static void BlitTransform(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float degrees, float scaleX, float scaleY)
 {
     float w, h;
     if(image == NULL)
@@ -4471,10 +4475,10 @@ static void BlitTransform(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* sr
 
     w = (src_rect == NULL? image->w : src_rect->w);
     h = (src_rect == NULL? image->h : src_rect->h);
-    renderer->impl->BlitTransformX(renderer, image, src_rect, target, x, y, w*image->anchor_x, h*image->anchor_y, degrees, scaleX, scaleY);
+    renderer->impl->BlitTransformX(renderer, image, src_rect, target, x, y, z, w*image->anchor_x, h*image->anchor_y, degrees, scaleX, scaleY);
 }
 
-static void BlitTransformX(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float pivot_x, float pivot_y, float degrees, float scaleX, float scaleY)
+static void BlitTransformX(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* src_rect, GPU_Target* target, float x, float y, float z, float pivot_x, float pivot_y, float degrees, float scaleX, float scaleY)
 {
     Uint32 tex_w, tex_h;
     float x1, y1, x2, y2;
@@ -4677,10 +4681,10 @@ static void BlitTransformX(GPU_Renderer* renderer, GPU_Image* image, GPU_Rect* s
     }
 
     // 4 Quad vertices
-    SET_TEXTURED_VERTEX_UNINDEXED(dx1, dy1, x1, y1, r, g, b, a);
-    SET_TEXTURED_VERTEX_UNINDEXED(dx3, dy3, x2, y1, r, g, b, a);
-    SET_TEXTURED_VERTEX_UNINDEXED(dx2, dy2, x2, y2, r, g, b, a);
-    SET_TEXTURED_VERTEX_UNINDEXED(dx4, dy4, x1, y2, r, g, b, a);
+    SET_TEXTURED_VERTEX_UNINDEXED(dx1, dy1, z, x1, y1, r, g, b, a);
+    SET_TEXTURED_VERTEX_UNINDEXED(dx3, dy3, z, x2, y1, r, g, b, a);
+    SET_TEXTURED_VERTEX_UNINDEXED(dx2, dy2, z, x2, y2, r, g, b, a);
+    SET_TEXTURED_VERTEX_UNINDEXED(dx4, dy4, z, x1, y2, r, g, b, a);
 
     // 6 Triangle indices
     SET_INDEXED_VERTEX(0);
@@ -5590,7 +5594,7 @@ static void DoPartialFlush(GPU_Renderer* renderer, GPU_Target* dest, GPU_Context
             if(context->current_shader_block.position_loc >= 0)
             {
                 glEnableVertexAttribArray(context->current_shader_block.position_loc);  // Tell GL to use client-side attribute data
-                glVertexAttribPointer(context->current_shader_block.position_loc, 2, GL_FLOAT, GL_FALSE, GPU_BLIT_BUFFER_STRIDE, 0);  // Tell how the data is formatted
+                glVertexAttribPointer(context->current_shader_block.position_loc, 3, GL_FLOAT, GL_FALSE, GPU_BLIT_BUFFER_STRIDE, 0);  // Tell how the data is formatted
             }
             if(context->current_shader_block.texcoord_loc >= 0)
             {
@@ -5687,7 +5691,7 @@ static void DoUntexturedFlush(GPU_Renderer* renderer, GPU_Target* dest, GPU_Cont
         if(context->current_shader_block.position_loc >= 0)
         {
             glEnableVertexAttribArray(context->current_shader_block.position_loc);  // Tell GL to use client-side attribute data
-            glVertexAttribPointer(context->current_shader_block.position_loc, 2, GL_FLOAT, GL_FALSE, GPU_BLIT_BUFFER_STRIDE, 0);  // Tell how the data is formatted
+            glVertexAttribPointer(context->current_shader_block.position_loc, 3, GL_FLOAT, GL_FALSE, GPU_BLIT_BUFFER_STRIDE, 0);  // Tell how the data is formatted
         }
         if(context->current_shader_block.color_loc >= 0)
         {

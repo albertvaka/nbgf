@@ -102,14 +102,14 @@ static float GetLineThickness(GPU_Renderer* renderer)
     return renderer->current_context_target->context->line_thickness;
 }
 
-static void Pixel(GPU_Renderer* renderer, GPU_Target* target, float x, float y, SDL_Color color)
+static void Pixel(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, SDL_Color color)
 {
     BEGIN_UNTEXTURED("GPU_Pixel", GL_POINTS, 1, 1);
     
-    SET_UNTEXTURED_VERTEX(x, y, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x, y, z, r, g, b, a);
 }
 
-static void Line(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color)
+static void Line(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color)
 {
     float thickness = GetLineThickness(renderer);
 
@@ -120,19 +120,19 @@ static void Line(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1,
 
     BEGIN_UNTEXTURED("GPU_Line", GL_TRIANGLES, 4, 6);
     
-    SET_UNTEXTURED_VERTEX(x1 + ts, y1 - tc, r, g, b, a);
-    SET_UNTEXTURED_VERTEX(x1 - ts, y1 + tc, r, g, b, a);
-    SET_UNTEXTURED_VERTEX(x2 + ts, y2 - tc, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x1 + ts, y1 - tc, z, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x1 - ts, y1 + tc, z, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x2 + ts, y2 - tc, z, r, g, b, a);
     
     SET_INDEXED_VERTEX(1);
     SET_INDEXED_VERTEX(2);
-    SET_UNTEXTURED_VERTEX(x2 - ts, y2 + tc, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x2 - ts, y2 + tc, z, r, g, b, a);
 }
 
 // Arc() might call Circle()
-static void Circle(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, SDL_Color color);
+static void Circle(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, SDL_Color color);
 
-static void Arc(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, float start_angle, float end_angle, SDL_Color color)
+static void Arc(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, float start_angle, float end_angle, SDL_Color color)
 {
     float dx, dy;
     int i;
@@ -162,7 +162,7 @@ static void Arc(GPU_Renderer* renderer, GPU_Target* target, float x, float y, fl
     // Big angle
     if(end_angle - start_angle >= 360)
     {
-        Circle(renderer, target, x, y, radius, color);
+        Circle(renderer, target, x, y, z, radius, color);
         return;
     }
 
@@ -196,28 +196,28 @@ static void Arc(GPU_Renderer* renderer, GPU_Target* target, float x, float y, fl
         dx = cosf(start_angle);
         dy = sinf(start_angle);
 
-        BEGIN_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+        BEGIN_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
 
         for (i = 1; i < numSegments; i++)
         {
             tempx = c * dx - s * dy;
             dy = s * dx + c * dy;
             dx = tempx;
-            SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+            SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
         }
 
         // Last point
         end_angle *= RAD_PER_DEG;
         dx = cosf(end_angle);
         dy = sinf(end_angle);
-        END_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+        END_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
     }
 }
 
 // ArcFilled() might call CircleFilled()
-static void CircleFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, SDL_Color color);
+static void CircleFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, SDL_Color color);
 
-static void ArcFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, float start_angle, float end_angle, SDL_Color color)
+static void ArcFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, float start_angle, float end_angle, SDL_Color color)
 {
     float dx, dy;
     int i;
@@ -240,7 +240,7 @@ static void ArcFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float
     // Big angle
     if(end_angle - start_angle >= 360)
     {
-        CircleFilled(renderer, target, x, y, radius, color);
+        CircleFilled(renderer, target, x, y, z, radius, color);
         return;
     }
 
@@ -274,13 +274,13 @@ static void ArcFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float
         dy = sinf(start_angle);
 
         // First triangle
-        SET_UNTEXTURED_VERTEX(x, y, r, g, b, a);
-        SET_UNTEXTURED_VERTEX(x + radius*dx, y + radius*dy, r, g, b, a); // first point
-        
+        SET_UNTEXTURED_VERTEX(x, y, z, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x + radius*dx, y + radius*dy, z, r, g, b, a); // first point
+
         tempx = c * dx - s * dy;
         dy = s * dx + c * dy;
         dx = tempx;
-        SET_UNTEXTURED_VERTEX(x + radius*dx, y + radius*dy, r, g, b, a); // new point
+        SET_UNTEXTURED_VERTEX(x + radius*dx, y + radius*dy, z, r, g, b, a); // new point
 
         for (i = 2; i < numSegments + 1; i++)
         {
@@ -289,7 +289,7 @@ static void ArcFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float
             dx = tempx;
             SET_INDEXED_VERTEX(0);  // center
             SET_INDEXED_VERTEX(i);  // last point
-            SET_UNTEXTURED_VERTEX(x + radius*dx, y + radius*dy, r, g, b, a); // new point
+            SET_UNTEXTURED_VERTEX(x + radius*dx, y + radius*dy, z, r, g, b, a); // new point
         }
 
         // Last triangle
@@ -298,7 +298,7 @@ static void ArcFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float
         dy = sinf(end_angle);
         SET_INDEXED_VERTEX(0);  // center
         SET_INDEXED_VERTEX(i);  // last point
-        SET_UNTEXTURED_VERTEX(x + radius*dx, y + radius*dy, r, g, b, a); // new point
+        SET_UNTEXTURED_VERTEX(x + radius*dx, y + radius*dy, z, r, g, b, a); // new point
     }
 }
 
@@ -307,7 +307,7 @@ static void ArcFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float
 Incremental rotation circle algorithm
 */
 
-static void Circle(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, SDL_Color color)
+static void Circle(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, SDL_Color color)
 {
     float thickness = GetLineThickness(renderer);
     float dx, dy;
@@ -330,7 +330,7 @@ static void Circle(GPU_Renderer* renderer, GPU_Target* target, float x, float y,
     dx = 1.0f;
     dy = 0.0f;
     
-    BEGIN_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+    BEGIN_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
     
     for(i = 1; i < numSegments; i++)
     {
@@ -338,13 +338,13 @@ static void Circle(GPU_Renderer* renderer, GPU_Target* target, float x, float y,
         dy = s * dx + c * dy;
         dx = tempx;
 
-        SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+        SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
     }
     
     LOOP_UNTEXTURED_SEGMENTS();  // back to the beginning
 }
 
-static void CircleFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float radius, SDL_Color color)
+static void CircleFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float radius, SDL_Color color)
 {
     float dt = (1.25f/sqrtf(radius));  // s = rA, so dA = ds/r.  ds of 1.25*sqrt(radius) is good, use A in degrees.
     float dx, dy;
@@ -358,16 +358,16 @@ static void CircleFilled(GPU_Renderer* renderer, GPU_Target* target, float x, fl
     BEGIN_UNTEXTURED("GPU_CircleFilled", GL_TRIANGLES, 3 + (numSegments-2), 3 + (numSegments-2)*3 + 3);
     
     // First triangle
-    SET_UNTEXTURED_VERTEX(x, y, r, g, b, a);  // Center
+    SET_UNTEXTURED_VERTEX(x, y, z, r, g, b, a);  // Center
     
     dx = 1.0f;
     dy = 0.0f;
-    SET_UNTEXTURED_VERTEX(x+radius*dx, y+radius*dy, r, g, b, a); // first point
+    SET_UNTEXTURED_VERTEX(x+radius*dx, y+radius*dy, z, r, g, b, a); // first point
     
     tempx = c * dx - s * dy;
     dy = s * dx + c * dy;
     dx = tempx;
-    SET_UNTEXTURED_VERTEX(x+radius*dx, y+radius*dy, r, g, b, a); // new point
+    SET_UNTEXTURED_VERTEX(x+radius*dx, y+radius*dy, z, r, g, b, a); // new point
     
     for(i = 2; i < numSegments; i++)
     {
@@ -376,7 +376,7 @@ static void CircleFilled(GPU_Renderer* renderer, GPU_Target* target, float x, fl
         dx = tempx;
         SET_INDEXED_VERTEX(0);  // center
         SET_INDEXED_VERTEX(i);  // last point
-        SET_UNTEXTURED_VERTEX(x+radius*dx, y+radius*dy, r, g, b, a); // new point
+        SET_UNTEXTURED_VERTEX(x+radius*dx, y+radius*dy, z, r, g, b, a); // new point
     }
     
     SET_INDEXED_VERTEX(0);  // center
@@ -384,7 +384,7 @@ static void CircleFilled(GPU_Renderer* renderer, GPU_Target* target, float x, fl
     SET_INDEXED_VERTEX(1);  // first point
 }
 
-static void Ellipse(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float rx, float ry, float degrees, SDL_Color color)
+static void Ellipse(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float rx, float ry, float degrees, SDL_Color color)
 {
     float thickness = GetLineThickness(renderer);
     float dx, dy;
@@ -419,7 +419,7 @@ static void Ellipse(GPU_Renderer* renderer, GPU_Target* target, float x, float y
     inner_trans_y = rot_y * inner_radius_x*dx + rot_x * inner_radius_y*dy;
     outer_trans_x = rot_x * outer_radius_x*dx - rot_y * outer_radius_y*dy;
     outer_trans_y = rot_y * outer_radius_x*dx + rot_x * outer_radius_y*dy;
-    BEGIN_UNTEXTURED_SEGMENTS(x+inner_trans_x, y+inner_trans_y, x+outer_trans_x, y+outer_trans_y, r, g, b, a);
+    BEGIN_UNTEXTURED_SEGMENTS(x+inner_trans_x, y+inner_trans_y, x+outer_trans_x, y+outer_trans_y, z, r, g, b, a);
     
     for(i = 1; i < numSegments; i++)
     {
@@ -431,13 +431,13 @@ static void Ellipse(GPU_Renderer* renderer, GPU_Target* target, float x, float y
         inner_trans_y = rot_y * inner_radius_x*dx + rot_x * inner_radius_y*dy;
         outer_trans_x = rot_x * outer_radius_x*dx - rot_y * outer_radius_y*dy;
         outer_trans_y = rot_y * outer_radius_x*dx + rot_x * outer_radius_y*dy;
-        SET_UNTEXTURED_SEGMENTS(x+inner_trans_x, y+inner_trans_y, x+outer_trans_x, y+outer_trans_y, r, g, b, a);
+        SET_UNTEXTURED_SEGMENTS(x+inner_trans_x, y+inner_trans_y, x+outer_trans_x, y+outer_trans_y, z, r, g, b, a);
     }
     
     LOOP_UNTEXTURED_SEGMENTS();  // back to the beginning
 }
 
-static void EllipseFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float rx, float ry, float degrees, SDL_Color color)
+static void EllipseFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float rx, float ry, float z, float degrees, SDL_Color color)
 {
     float dx, dy;
     int i;
@@ -454,13 +454,13 @@ static void EllipseFilled(GPU_Renderer* renderer, GPU_Target* target, float x, f
     BEGIN_UNTEXTURED("GPU_EllipseFilled", GL_TRIANGLES, 3 + (numSegments-2), 3 + (numSegments-2)*3 + 3);
     
     // First triangle
-    SET_UNTEXTURED_VERTEX(x, y, r, g, b, a);  // Center
+    SET_UNTEXTURED_VERTEX(x, y, z, r, g, b, a);  // Center
     
     dx = 1.0f;
     dy = 0.0f;
     trans_x = rot_x * rx*dx - rot_y * ry*dy;
     trans_y = rot_y * rx*dx + rot_x * ry*dy;
-    SET_UNTEXTURED_VERTEX(x+trans_x, y+trans_y, r, g, b, a); // first point
+    SET_UNTEXTURED_VERTEX(x+trans_x, y+trans_y, z, r, g, b, a); // first point
     
     tempx = c * dx - s * dy;
     dy = s * dx + c * dy;
@@ -468,7 +468,7 @@ static void EllipseFilled(GPU_Renderer* renderer, GPU_Target* target, float x, f
     
     trans_x = rot_x * rx*dx - rot_y * ry*dy;
     trans_y = rot_y * rx*dx + rot_x * ry*dy;
-    SET_UNTEXTURED_VERTEX(x+trans_x, y+trans_y, r, g, b, a); // new point
+    SET_UNTEXTURED_VERTEX(x+trans_x, y+trans_y, z, r, g, b, a); // new point
     
     for(i = 2; i < numSegments; i++)
     {
@@ -481,7 +481,7 @@ static void EllipseFilled(GPU_Renderer* renderer, GPU_Target* target, float x, f
         
         SET_INDEXED_VERTEX(0);  // center
         SET_INDEXED_VERTEX(i);  // last point
-        SET_UNTEXTURED_VERTEX(x+trans_x, y+trans_y, r, g, b, a); // new point
+        SET_UNTEXTURED_VERTEX(x+trans_x, y+trans_y, z, r, g, b, a); // new point
     }
     
     SET_INDEXED_VERTEX(0);  // center
@@ -489,7 +489,7 @@ static void EllipseFilled(GPU_Renderer* renderer, GPU_Target* target, float x, f
     SET_INDEXED_VERTEX(1);  // first point
 }
 
-static void Sector(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color)
+static void Sector(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color)
 {
     GPU_bool circled;
     float dx1, dy1, dx2, dy2, dx3, dy3, dx4, dy4;
@@ -517,13 +517,13 @@ static void Sector(GPU_Renderer* renderer, GPU_Target* target, float x, float y,
     
     if(inner_radius == outer_radius)
     {
-        Arc(renderer, target, x, y, inner_radius, start_angle, end_angle, color);
+        Arc(renderer, target, x, y, z, inner_radius, start_angle, end_angle, color);
         return;
     }
     
     circled = (end_angle - start_angle >= 360);
     // Composited shape...  But that means error codes may be confusing. :-/
-    Arc(renderer, target, x, y, inner_radius, start_angle, end_angle, color);
+    Arc(renderer, target, x, y, z, inner_radius, start_angle, end_angle, color);
     
     if(!circled)
     {
@@ -531,22 +531,22 @@ static void Sector(GPU_Renderer* renderer, GPU_Target* target, float x, float y,
         dy1 = inner_radius*sinf(end_angle*RAD_PER_DEG);
         dx2 = outer_radius*cosf(end_angle*RAD_PER_DEG);
         dy2 = outer_radius*sinf(end_angle*RAD_PER_DEG);
-        Line(renderer, target, x+dx1, y+dy1, x+dx2, y+dy2, color);
+        Line(renderer, target, x+dx1, y+dy1, x+dx2, y+dy2, z, color);
     }
-    
-    Arc(renderer, target, x, y, outer_radius, start_angle, end_angle, color);
-    
+
+    Arc(renderer, target, x, y, z, outer_radius, start_angle, end_angle, color);
+
     if(!circled)
     {
         dx3 = inner_radius*cosf(start_angle*RAD_PER_DEG);
         dy3 = inner_radius*sinf(start_angle*RAD_PER_DEG);
         dx4 = outer_radius*cosf(start_angle*RAD_PER_DEG);
         dy4 = outer_radius*sinf(start_angle*RAD_PER_DEG);
-        Line(renderer, target, x+dx3, y+dy3, x+dx4, y+dy4, color);
+        Line(renderer, target, x+dx3, y+dy3, x+dx4, y+dy4, z, color);
     }
 }
 
-static void SectorFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color)
+static void SectorFilled(GPU_Renderer* renderer, GPU_Target* target, float x, float y, float z, float inner_radius, float outer_radius, float start_angle, float end_angle, SDL_Color color)
 {
     float t;
     float dt;
@@ -568,7 +568,7 @@ static void SectorFilled(GPU_Renderer* renderer, GPU_Target* target, float x, fl
     
     if(inner_radius == outer_radius)
     {
-        Arc(renderer, target, x, y, inner_radius, start_angle, end_angle, color);
+        Arc(renderer, target, x, y, z, inner_radius, start_angle, end_angle, color);
         return;
     }
     
@@ -603,15 +603,15 @@ static void SectorFilled(GPU_Renderer* renderer, GPU_Target* target, float x, fl
         // First triangle
         dx = inner_radius*cosf(t*RAD_PER_DEG);
         dy = inner_radius*sinf(t*RAD_PER_DEG);
-        SET_UNTEXTURED_VERTEX(x + dx, y + dy, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x + dx, y + dy, z, r, g, b, a);
 
         dx = outer_radius*cosf(t*RAD_PER_DEG);
         dy = outer_radius*sinf(t*RAD_PER_DEG);
-        SET_UNTEXTURED_VERTEX(x + dx, y + dy, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x + dx, y + dy, z, r, g, b, a);
         t += dt;
         dx = inner_radius*cosf(t*RAD_PER_DEG);
         dy = inner_radius*sinf(t*RAD_PER_DEG);
-        SET_UNTEXTURED_VERTEX(x + dx, y + dy, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x + dx, y + dy, z, r, g, b, a);
         t += dt;
 
         for (i = 2; i < numSegments + 1; i++)
@@ -628,7 +628,7 @@ static void SectorFilled(GPU_Renderer* renderer, GPU_Target* target, float x, fl
                 dx = outer_radius*cosf(t*RAD_PER_DEG);
                 dy = outer_radius*sinf(t*RAD_PER_DEG);
             }
-            SET_UNTEXTURED_VERTEX(x + dx, y + dy, r, g, b, a); // new point
+            SET_UNTEXTURED_VERTEX(x + dx, y + dy, z, r, g, b, a); // new point
             t += dt;
             use_inner = !use_inner;
         }
@@ -647,7 +647,7 @@ static void SectorFilled(GPU_Renderer* renderer, GPU_Target* target, float x, fl
         }
         SET_INDEXED_VERTEX(i - 1);
         SET_INDEXED_VERTEX(i);
-        SET_UNTEXTURED_VERTEX(x + dx, y + dy, r, g, b, a); // new point
+        SET_UNTEXTURED_VERTEX(x + dx, y + dy, z, r, g, b, a); // new point
         use_inner = !use_inner;
         i++;
 
@@ -663,34 +663,34 @@ static void SectorFilled(GPU_Renderer* renderer, GPU_Target* target, float x, fl
         }
         SET_INDEXED_VERTEX(i - 1);
         SET_INDEXED_VERTEX(i);
-        SET_UNTEXTURED_VERTEX(x + dx, y + dy, r, g, b, a); // new point
+        SET_UNTEXTURED_VERTEX(x + dx, y + dy, z, r, g, b, a); // new point
     }
 }
 
-static void Tri(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, SDL_Color color)
+static void Tri(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, float z, SDL_Color color)
 {
     BEGIN_UNTEXTURED("GPU_Tri", GL_LINES, 3, 6);
-    
-    SET_UNTEXTURED_VERTEX(x1, y1, r, g, b, a);
-    SET_UNTEXTURED_VERTEX(x2, y2, r, g, b, a);
+
+    SET_UNTEXTURED_VERTEX(x1, y1, z, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x2, y2, z, r, g, b, a);
     
     SET_INDEXED_VERTEX(1);
-    SET_UNTEXTURED_VERTEX(x3, y3, r, g, b, a);
-    
+    SET_UNTEXTURED_VERTEX(x3, y3, z, r, g, b, a);
+
     SET_INDEXED_VERTEX(2);
     SET_INDEXED_VERTEX(0);
 }
 
-static void TriFilled(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, SDL_Color color)
+static void TriFilled(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float x3, float y3, float z, SDL_Color color)
 {
     BEGIN_UNTEXTURED("GPU_TriFilled", GL_TRIANGLES, 3, 3);
-    
-    SET_UNTEXTURED_VERTEX(x1, y1, r, g, b, a);
-    SET_UNTEXTURED_VERTEX(x2, y2, r, g, b, a);
-    SET_UNTEXTURED_VERTEX(x3, y3, r, g, b, a);
+
+    SET_UNTEXTURED_VERTEX(x1, y1, z, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x2, y2, z, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x3, y3, z, r, g, b, a);
 }
 
-static void Rectangle(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color)
+static void Rectangle(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color)
 {
     if(y2 < y1)
     {
@@ -724,51 +724,51 @@ static void Rectangle(GPU_Renderer* renderer, GPU_Target* target, float x1, floa
             inner_y = (y2 - y1)/2;
 
         // First triangle
-        SET_UNTEXTURED_VERTEX(x1 - outer, y1 - outer, r, g, b, a); // 0
-        SET_UNTEXTURED_VERTEX(x1 - outer, y1 + inner_y, r, g, b, a); // 1
-        SET_UNTEXTURED_VERTEX(x2 + outer, y1 - outer, r, g, b, a); // 2
+        SET_UNTEXTURED_VERTEX(x1 - outer, y1 - outer, z, r, g, b, a); // 0
+        SET_UNTEXTURED_VERTEX(x1 - outer, y1 + inner_y, z, r, g, b, a); // 1
+        SET_UNTEXTURED_VERTEX(x2 + outer, y1 - outer, z, r, g, b, a); // 2
 
         SET_INDEXED_VERTEX(2);
         SET_INDEXED_VERTEX(1);
-        SET_UNTEXTURED_VERTEX(x2 + outer, y1 + inner_y, r, g, b, a); // 3
+        SET_UNTEXTURED_VERTEX(x2 + outer, y1 + inner_y, z, r, g, b, a); // 3
 
         SET_INDEXED_VERTEX(3);
-        SET_UNTEXTURED_VERTEX(x2 - inner_x, y1 + inner_y, r, g, b, a); // 4
-        SET_UNTEXTURED_VERTEX(x2 - inner_x, y2 - inner_y, r, g, b, a); // 5
+        SET_UNTEXTURED_VERTEX(x2 - inner_x, y1 + inner_y, z, r, g, b, a); // 4
+        SET_UNTEXTURED_VERTEX(x2 - inner_x, y2 - inner_y, z, r, g, b, a); // 5
 
         SET_INDEXED_VERTEX(3);
         SET_INDEXED_VERTEX(5);
-        SET_UNTEXTURED_VERTEX(x2 + outer, y2 - inner_y, r, g, b, a); // 6
+        SET_UNTEXTURED_VERTEX(x2 + outer, y2 - inner_y, z, r, g, b, a); // 6
 
         SET_INDEXED_VERTEX(6);
-        SET_UNTEXTURED_VERTEX(x1 - outer, y2 - inner_y, r, g, b, a); // 7
-        SET_UNTEXTURED_VERTEX(x2 + outer, y2 + outer, r, g, b, a); // 8
+        SET_UNTEXTURED_VERTEX(x1 - outer, y2 - inner_y, z, r, g, b, a); // 7
+        SET_UNTEXTURED_VERTEX(x2 + outer, y2 + outer, z, r, g, b, a); // 8
 
         SET_INDEXED_VERTEX(7);
-        SET_UNTEXTURED_VERTEX(x1 - outer, y2 + outer, r, g, b, a); // 9
+        SET_UNTEXTURED_VERTEX(x1 - outer, y2 + outer, z, r, g, b, a); // 9
         SET_INDEXED_VERTEX(8);
 
         SET_INDEXED_VERTEX(7);
-        SET_UNTEXTURED_VERTEX(x1 + inner_x, y2 - inner_y, r, g, b, a); // 10
+        SET_UNTEXTURED_VERTEX(x1 + inner_x, y2 - inner_y, z, r, g, b, a); // 10
         SET_INDEXED_VERTEX(1);
 
         SET_INDEXED_VERTEX(1);
         SET_INDEXED_VERTEX(10);
-        SET_UNTEXTURED_VERTEX(x1 + inner_x, y1 + inner_y, r, g, b, a); // 11
+        SET_UNTEXTURED_VERTEX(x1 + inner_x, y1 + inner_y, z, r, g, b, a); // 11
     }
 }
 
-static void RectangleFilled(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, SDL_Color color)
+static void RectangleFilled(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, SDL_Color color)
 {
     BEGIN_UNTEXTURED("GPU_RectangleFilled", GL_TRIANGLES, 4, 6);
 
-    SET_UNTEXTURED_VERTEX(x1, y1, r, g, b, a);
-    SET_UNTEXTURED_VERTEX(x1, y2, r, g, b, a);
-    SET_UNTEXTURED_VERTEX(x2, y1, r, g, b, a);
-    
+    SET_UNTEXTURED_VERTEX(x1, y1, z, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x1, y2, z, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x2, y1, z, r, g, b, a);
+
     SET_INDEXED_VERTEX(1);
     SET_INDEXED_VERTEX(2);
-    SET_UNTEXTURED_VERTEX(x2, y2, r, g, b, a);
+    SET_UNTEXTURED_VERTEX(x2, y2, z, r, g, b, a);
 }
 
 #define INCREMENT_CIRCLE \
@@ -777,7 +777,7 @@ static void RectangleFilled(GPU_Renderer* renderer, GPU_Target* target, float x1
     dx = tempx; \
     ++i;
 
-static void RectangleRound(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float radius, SDL_Color color)
+static void RectangleRound(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, float radius, SDL_Color color)
 {
     if(y2 < y1)
     {
@@ -840,57 +840,57 @@ static void RectangleRound(GPU_Renderer* renderer, GPU_Target* target, float x1,
             
             x = x2;
             y = y2;
-            BEGIN_UNTEXTURED_SEGMENTS(x+inner_radius, y, x+outer_radius, y, r, g, b, a);
+            BEGIN_UNTEXTURED_SEGMENTS(x+inner_radius, y, x+outer_radius, y, z, r, g, b, a);
             while(i < go_to_second-1)
             {
                 INCREMENT_CIRCLE;
 
-                SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+                SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
             }
             INCREMENT_CIRCLE;
-            
-            SET_UNTEXTURED_SEGMENTS(x, y+inner_radius, x, y+outer_radius, r, g, b, a);
+
+            SET_UNTEXTURED_SEGMENTS(x, y+inner_radius, x, y+outer_radius, z, r, g, b, a);
             x = x1;
             y = y2;
-            SET_UNTEXTURED_SEGMENTS(x, y+inner_radius, x, y+outer_radius, r, g, b, a);
+            SET_UNTEXTURED_SEGMENTS(x, y+inner_radius, x, y+outer_radius, z, r, g, b, a);
             while(i < go_to_third-1)
             {
                 INCREMENT_CIRCLE;
 
-                SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+                SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
             }
             INCREMENT_CIRCLE;
-            
-            SET_UNTEXTURED_SEGMENTS(x-inner_radius, y, x-outer_radius, y, r, g, b, a);
+
+            SET_UNTEXTURED_SEGMENTS(x-inner_radius, y, x-outer_radius, y, z, r, g, b, a);
             x = x1;
             y = y1;
-            SET_UNTEXTURED_SEGMENTS(x-inner_radius, y, x-outer_radius, y, r, g, b, a);
+            SET_UNTEXTURED_SEGMENTS(x-inner_radius, y, x-outer_radius, y, z, r, g, b, a);
             while(i < go_to_fourth-1)
             {
                 INCREMENT_CIRCLE;
 
-                SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+                SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
             }
             INCREMENT_CIRCLE;
-            
-            SET_UNTEXTURED_SEGMENTS(x, y-inner_radius, x, y-outer_radius, r, g, b, a);
+
+            SET_UNTEXTURED_SEGMENTS(x, y-inner_radius, x, y-outer_radius, z, r, g, b, a);
             x = x2;
             y = y1;
-            SET_UNTEXTURED_SEGMENTS(x, y-inner_radius, x, y-outer_radius, r, g, b, a);
+            SET_UNTEXTURED_SEGMENTS(x, y-inner_radius, x, y-outer_radius, z, r, g, b, a);
             while(i < numSegments-1)
             {
                 INCREMENT_CIRCLE;
 
-                SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, r, g, b, a);
+                SET_UNTEXTURED_SEGMENTS(x+inner_radius*dx, y+inner_radius*dy, x+outer_radius*dx, y+outer_radius*dy, z, r, g, b, a);
             }
-            SET_UNTEXTURED_SEGMENTS(x+inner_radius, y, x+outer_radius, y, r, g, b, a);
-            
+            SET_UNTEXTURED_SEGMENTS(x+inner_radius, y, x+outer_radius, y, z, r, g, b, a);
+
             LOOP_UNTEXTURED_SEGMENTS();  // back to the beginning
         }
     }
 }
 
-static void RectangleRoundFilled(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float radius, SDL_Color color)
+static void RectangleRoundFilled(GPU_Renderer* renderer, GPU_Target* target, float x1, float y1, float x2, float y2, float z, float radius, SDL_Color color)
 {
     if(y2 < y1)
     {
@@ -925,50 +925,50 @@ static void RectangleRoundFilled(GPU_Renderer* renderer, GPU_Target* target, flo
 
 
         // First triangle
-        SET_UNTEXTURED_VERTEX((x2 + x1) / 2, (y2 + y1) / 2, r, g, b, a);  // Center
-        SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, r, g, b, a);
+        SET_UNTEXTURED_VERTEX((x2 + x1) / 2, (y2 + y1) / 2, z, r, g, b, a);  // Center
+        SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, z, r, g, b, a);
         angle += corner_angle_increment;
-        SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, z, r, g, b, a);
         angle += corner_angle_increment;
 
         for (i = 2; i < verts_per_corner; i++)
         {
             SET_INDEXED_VERTEX(0);
             SET_INDEXED_VERTEX(last_index++);
-            SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, r, g, b, a);
+            SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, z, r, g, b, a);
             angle += corner_angle_increment;
         }
 
         SET_INDEXED_VERTEX(0);
         SET_INDEXED_VERTEX(last_index++);
-        SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y2 - radius + sinf(angle)*radius, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y2 - radius + sinf(angle)*radius, z, r, g, b, a);
         for (i = 1; i < verts_per_corner; i++)
         {
             SET_INDEXED_VERTEX(0);
             SET_INDEXED_VERTEX(last_index++);
-            SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y2 - radius + sinf(angle)*radius, r, g, b, a);
+            SET_UNTEXTURED_VERTEX(x2 - radius + cosf(angle)*radius, y2 - radius + sinf(angle)*radius, z, r, g, b, a);
             angle += corner_angle_increment;
         }
 
         SET_INDEXED_VERTEX(0);
         SET_INDEXED_VERTEX(last_index++);
-        SET_UNTEXTURED_VERTEX(x1 + radius + cosf(angle)*radius, y2 - radius + sinf(angle)*radius, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x1 + radius + cosf(angle)*radius, y2 - radius + sinf(angle)*radius, z, r, g, b, a);
         for (i = 1; i < verts_per_corner; i++)
         {
             SET_INDEXED_VERTEX(0);
             SET_INDEXED_VERTEX(last_index++);
-            SET_UNTEXTURED_VERTEX(x1 + radius + cosf(angle)*radius, y2 - radius + sinf(angle)*radius, r, g, b, a);
+            SET_UNTEXTURED_VERTEX(x1 + radius + cosf(angle)*radius, y2 - radius + sinf(angle)*radius, z, r, g, b, a);
             angle += corner_angle_increment;
         }
 
         SET_INDEXED_VERTEX(0);
         SET_INDEXED_VERTEX(last_index++);
-        SET_UNTEXTURED_VERTEX(x1 + radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x1 + radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, z, r, g, b, a);
         for (i = 1; i < verts_per_corner; i++)
         {
             SET_INDEXED_VERTEX(0);
             SET_INDEXED_VERTEX(last_index++);
-            SET_UNTEXTURED_VERTEX(x1 + radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, r, g, b, a);
+            SET_UNTEXTURED_VERTEX(x1 + radius + cosf(angle)*radius, y1 + radius + sinf(angle)*radius, z, r, g, b, a);
             angle += corner_angle_increment;
         }
 
@@ -979,7 +979,7 @@ static void RectangleRoundFilled(GPU_Renderer* renderer, GPU_Target* target, flo
     }
 }
 
-static void Polygon(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color)
+static void Polygon(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color)
 {
     if(num_vertices < 3)
         return;
@@ -991,10 +991,10 @@ static void Polygon(GPU_Renderer* renderer, GPU_Target* target, unsigned int num
 
         BEGIN_UNTEXTURED("GPU_Polygon", GL_LINES, num_vertices, numSegments);
 
-        SET_UNTEXTURED_VERTEX(vertices[0], vertices[1], r, g, b, a);
+        SET_UNTEXTURED_VERTEX(vertices[0], vertices[1], z, r, g, b, a);
         for (i = 2; i < numSegments; i += 2)
         {
-            SET_UNTEXTURED_VERTEX(vertices[i], vertices[i + 1], r, g, b, a);
+            SET_UNTEXTURED_VERTEX(vertices[i], vertices[i + 1], z, r, g, b, a);
             last_index++;
             SET_INDEXED_VERTEX(last_index);  // Double the last one for the next line
         }
@@ -1002,7 +1002,7 @@ static void Polygon(GPU_Renderer* renderer, GPU_Target* target, unsigned int num
     }
 }
 
-static void Polyline(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color, GPU_bool close_loop)
+static void Polyline(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color, GPU_bool close_loop)
 {
     if (num_vertices < 2) return;
     
@@ -1043,10 +1043,10 @@ static void Polyline(GPU_Renderer* renderer, GPU_Target* target, unsigned int nu
         tc = t * cosf(line_angle);
         ts = t * sinf(line_angle);
         
-        SET_UNTEXTURED_VERTEX(x1 + ts, y1 - tc, r, g, b, a);
-        SET_UNTEXTURED_VERTEX(x1 - ts, y1 + tc, r, g, b, a);
-        SET_UNTEXTURED_VERTEX(x2 + ts, y2 - tc, r, g, b, a);
-        SET_UNTEXTURED_VERTEX(x2 - ts, y2 + tc, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x1 + ts, y1 - tc, z, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x1 - ts, y1 + tc, z, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x2 + ts, y2 - tc, z, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(x2 - ts, y2 + tc, z, r, g, b, a);
         
     } while ( i < last_vert );
     
@@ -1058,7 +1058,7 @@ static void Polyline(GPU_Renderer* renderer, GPU_Target* target, unsigned int nu
     
 }
 
-static void PolygonFilled(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, SDL_Color color)
+static void PolygonFilled(GPU_Renderer* renderer, GPU_Target* target, unsigned int num_vertices, float* vertices, float z, SDL_Color color)
 {
     if(num_vertices < 3)
         return;
@@ -1070,9 +1070,9 @@ static void PolygonFilled(GPU_Renderer* renderer, GPU_Target* target, unsigned i
         BEGIN_UNTEXTURED("GPU_PolygonFilled", GL_TRIANGLES, num_vertices, 3 + (num_vertices - 3) * 3);
 
         // First triangle
-        SET_UNTEXTURED_VERTEX(vertices[0], vertices[1], r, g, b, a);
-        SET_UNTEXTURED_VERTEX(vertices[2], vertices[3], r, g, b, a);
-        SET_UNTEXTURED_VERTEX(vertices[4], vertices[5], r, g, b, a);
+        SET_UNTEXTURED_VERTEX(vertices[0], vertices[1], z, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(vertices[2], vertices[3], z, r, g, b, a);
+        SET_UNTEXTURED_VERTEX(vertices[4], vertices[5], z, r, g, b, a);
 
         if (num_vertices > 3)
         {
@@ -1083,7 +1083,7 @@ static void PolygonFilled(GPU_Renderer* renderer, GPU_Target* target, unsigned i
             {
                 SET_INDEXED_VERTEX(0);  // Start from the first vertex
                 SET_INDEXED_VERTEX(last_index);  // Double the last one
-                SET_UNTEXTURED_VERTEX(vertices[i], vertices[i + 1], r, g, b, a);
+                SET_UNTEXTURED_VERTEX(vertices[i], vertices[i + 1], z, r, g, b, a);
                 last_index++;
             }
         }

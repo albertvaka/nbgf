@@ -81,12 +81,17 @@ namespace Window {
 			return withScale(v.x, v.y);
 		}
 
+		constexpr Draw& withZ(float z) {
+			this->z = z;
+			return *this;
+		}
+
 		~Draw() {
 			if (hasColor) {
 				t->color = c;
 			}
 			// We pass origin as rotation pivot. We could change that to a different variable.
-			GPU_BlitTransformX(t, &src, Window::currentDrawTarget, dest.x, dest.y, origin.x, origin.y, rotation, scale.x, scale.y);
+			GPU_BlitTransformX(t, &src, Window::currentDrawTarget, dest.x, dest.y, z, origin.x, origin.y, rotation, scale.x, scale.y);
 			if (hasColor) {
 				t->color = { 255, 255, 255, 255 };
 			}
@@ -106,6 +111,7 @@ namespace Window {
 		vec dest;
 		GPU_Rect src = {};
 		float rotation = 0;
+		float z = 0.f;
 		vec scale = vec(1.f, 1.f);
 		vec origin = vec(0.f, 0.f);
 		SDL_Color c = {};
