@@ -34,6 +34,9 @@ SceneMain::SceneMain()
 	//, alienPartSys(Assets::invadersTexture)
 	, scoreText(Assets::font_30, Assets::font_30_outline)
 {
+	GPU_AddDepthBuffer(Window::screenTarget);
+	GPU_SetDepthFunction(Window::screenTarget, GPU_LEQUAL);
+
 	map.LoadFromTiled<Tiled::TileMap>();
 
 	scoreText.SetFillColor(0, 0, 0);
@@ -130,20 +133,26 @@ void SceneMain::Draw()
 		map.Draw();
 	}
 
-	std::vector<BoxEntity*> draws;
-	draws.reserve(Doctor::GetAll().size() + Patient::GetAll().size() + 1);
-	draws.push_back(&player);
-	draws.insert(draws.end(), Doctor::GetAll().begin(), Doctor::GetAll().end());
-	draws.insert(draws.end(), Patient::GetAll().begin(), Patient::GetAll().end());
-	std::sort(draws.begin(), draws.end(), [](const BoxEntity* a, const BoxEntity* b)
-	{
-		return a->sortY < b->sortY;
-	});
-	for (const BoxEntity* a : draws) {
+	// Draw the things that need depth testing
+	GPU_SetDepthTest(Window::screenTarget, GPU_TRUE);
+
+	// Shader valid for z-testing since it sets the z in the vertex and it discards transparent pixels in the fragment
+	Assets::tintShader.Activate();
+
+	player.Draw();
+
+	for (Doctor* a : Doctor::GetAll()) {
 		a->Draw();
-		a->Bounds().DebugDraw(255, 0, 0);
 	}
 
+	for (Patient* a : Patient::GetAll()) {
+		a->Draw();
+	}
+
+	Assets::tintShader.Deactivate();
+
+	// Everything else can be drawn in sequential order
+	GPU_SetDepthTest(Window::screenTarget, GPU_FALSE);
 
 	Bullet::DrawAll();
 

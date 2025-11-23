@@ -12,5 +12,5 @@ struct Player : BoxEntity, SingleInstance<Player>
 	Player(int num = 0);
 
 	void Update(float dt);
-	void Draw() const override;
+	void Draw() const;
 };

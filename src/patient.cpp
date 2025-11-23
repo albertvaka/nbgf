@@ -169,10 +169,12 @@ bool Patient::beingDamaged() const {
 
 void Patient::Draw() const
 {
+	const float maxY = (Tiled::TileMap::Size.y * 16);
+	Assets::tintShader.SetUniform("z", (sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we use 2*maxY because posY can go negative.
+
 	float shakeMagnitude = movementState == MovementState::BEING_MOVED ? 1 : 0;
 	float shakerinoY = sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight;
 	float shakerinoRot = sin(offset + mainClock * shakeHorizontalSpeed * shakeMagnitude) * shakeHorizontalDegrees;
-
 
 	// Screen
 
@@ -219,7 +221,6 @@ void Patient::Draw() const
 		highvalue = 0.f;
 	}
 	// Screen bar inside
-	Assets::tintShader.Activate();
 	if (gasState == GasState::NARCOSIS) {
 		Assets::tintShader.SetUniform("flashColor", 0.f, 1.f, 0.f, 0.7f);
 	} else {
@@ -230,7 +231,7 @@ void Patient::Draw() const
 		.withScale(imageScale)
 		//.withRotationDegs(shakerinoRot)
 		.withOrigin(0, shakerinoY);
-	Shader::Deactivate();
+	Assets::tintShader.SetUniform("flashColor", 0.f, 0.f, 0.f, 0.0f);
 
 	// Screen bar outline
 	Window::Draw(Assets::barOutline, pos + screenOffset + barOffset)
@@ -241,7 +242,6 @@ void Patient::Draw() const
 	// Patient
 
 	if (hitTimer > 0.f) {
-		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 0.8f, 1.f, 0.f, 0.5f);
 	}
 	GPU_Image* tex;
@@ -256,7 +256,6 @@ void Patient::Draw() const
 		.withScale(imageScale)
 		.withRotationDegs(shakerinoRot)
 		.withOrigin(tex->base_w / 2, tex->base_h / 2 + shakerinoY);
-	
-	Shader::Deactivate();
 
+	Assets::tintShader.SetUniform("flashColor", 0.f, 0.f, 0.f, 0.0f);
 }

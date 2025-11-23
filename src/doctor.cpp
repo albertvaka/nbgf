@@ -304,8 +304,10 @@ void Doctor::StartSurgery() {
 
 void Doctor::Draw() const
 {
+	const float maxY = (Tiled::TileMap::Size.y * 16);
+	Assets::tintShader.SetUniform("z", (sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we use 2*maxY because posY can go negative.
+
 	if (hitTimer > 0.f) {
-		Assets::tintShader.Activate();
 		Assets::tintShader.SetUniform("flashColor", 0.8f, 1.f, 0.f, 0.5f);
 	}
 	float shakeMagnitude = vel.Normalized().Length();
@@ -313,7 +315,8 @@ void Doctor::Draw() const
 		.withRotationDegs(sin(offset + mainClock* shakeHorizontalSpeed *shakeMagnitude)*shakeHorizontalDegrees)
 		.withOrigin(Assets::doctorTexture->base_w/2, Assets::doctorTexture->base_h / 2 + sin(offset + mainClock*shakeVerticalSpeed)*shakeMagnitude* shakeHeight)
 		.withScale(lookingLeft ? imageScale : -imageScale, imageScale);
-	Shader::Deactivate();
+
+	Assets::tintShader.SetUniform("flashColor", 0.f, 0.f, 0.f, 0.f);
 
 	if (state == WANDERING) wanderTarget.DebugDrawAsArrow(pos);
 }

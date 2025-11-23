@@ -39,7 +39,7 @@ struct Patient: BoxEntity, SelfRegister<Patient>
 	bool beingDamaged() const;
 
 	void Update(float dt);
-	void Draw() const override;
+	void Draw() const;
 	
 	static vec FindEmptySpot();
 };

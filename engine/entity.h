@@ -25,8 +25,6 @@ struct BoxEntity : Entity {
 	}
 
 	float sortY = 0.f;
-	virtual void Draw() const = 0;
-	virtual ~BoxEntity() = default;
 };
 
 struct CircleEntity : Entity {

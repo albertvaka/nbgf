@@ -29,7 +29,7 @@ struct Doctor: BoxEntity, SelfRegister<Doctor>
 	Doctor(vec pos);
 
 	void Update(float dt);
-	void Draw() const override;
+	void Draw() const;
 
 	void RandomState();
 	void StartWaiting();
