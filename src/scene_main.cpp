@@ -144,10 +144,8 @@ void SceneMain::Draw()
 		a->Bounds().DebugDraw(255, 0, 0);
 	}
 
-	for (const Bullet* b : Bullet::GetAll()) {
-		b->Draw();
-		b->Bounds().DebugDraw(255, 0, 0);
-	}
+
+	Bullet::DrawAll();
 
 	//Draw GUI
 	Camera::InScreenCoords::Begin();

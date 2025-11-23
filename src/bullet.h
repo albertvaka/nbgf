@@ -63,14 +63,22 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 
 	void Draw() const
 	{
-		Assets::tintShader.Activate();
-		Assets::tintShader.SetUniform("flashColor", 0.8f, 0.8f, 0.f, 0.3f);
 		const GPU_Rect& animRect = anim.CurrentFrameRect();
 		Window::Draw(Assets::spritesheetTexture, pos)
 			.withOrigin(vec(animRect.w, animRect.h)/2)
 			.withRect(animRect)
 			.withRotationDegs(roationOffset + mainClock*rotationSpeed)
 			.withScale(gasScale);
-		Shader::Deactivate();
+	}
+
+	static void DrawAll() {
+		Assets::tintShader.Activate();
+		Assets::tintShader.SetUniform("flashColor", 0.8f, 0.8f, 0.f, 0.3f);
+		for (const Bullet* b : Bullet::GetAll()) {
+			b->Draw();
+			b->Bounds().DebugDraw(255, 0, 0);
+		}
+		Assets::tintShader.SetUniform("flashColor", 0.f, 0.f, 0.f, 0.f);
+		Assets::tintShader.Deactivate();
 	}
 };
