@@ -42,6 +42,8 @@ struct Assets
 	static inline TTF_Font* font_30_outline;
 
 	static inline Shader tintShader;
+	static inline int tintShaderColor;
+	static inline int tintShaderZ;
 
 	static inline MultiSound<4> doctorLaughing;
 	static inline MultiSound<4> patientScreaming;

@@ -170,7 +170,7 @@ bool Patient::beingDamaged() const {
 void Patient::Draw() const
 {
 	const float maxY = (Tiled::TileMap::Size.y * 16);
-	Assets::tintShader.SetUniform("z", (sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we use 2*maxY because posY can go negative.
+	Assets::tintShader.SetUniform(Assets::tintShaderZ, (sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we add maxY because posY can go negative.
 
 	float shakeMagnitude = movementState == MovementState::BEING_MOVED ? 1 : 0;
 	float shakerinoY = sin(offset + mainClock * shakeVerticalSpeed) * shakeMagnitude * shakeHeight;
@@ -222,16 +222,16 @@ void Patient::Draw() const
 	}
 	// Screen bar inside
 	if (gasState == GasState::NARCOSIS) {
-		Assets::tintShader.SetUniform("flashColor", 0.f, 1.f, 0.f, 0.7f);
+		Assets::tintShader.SetUniform(Assets::tintShaderColor, 0.f, 1.f, 0.f, 0.7f);
 	} else {
-		Assets::tintShader.SetUniform("flashColor", 1.f, 0.f, 0.f, 0.7f);
+		Assets::tintShader.SetUniform(Assets::tintShaderColor, 1.f, 0.f, 0.f, 0.7f);
 	}
 	Window::Draw(Assets::bar, pos + screenOffset + barOffset)
 		.withRect(0,0, Assets::bar->base_w* highvalue /100.f, Assets::bar->base_h)
 		.withScale(imageScale)
 		//.withRotationDegs(shakerinoRot)
 		.withOrigin(0, shakerinoY);
-	Assets::tintShader.SetUniform("flashColor", 0.f, 0.f, 0.f, 0.0f);
+	Assets::tintShader.SetUniform(Assets::tintShaderColor, 0.f, 0.f, 0.f, 0.0f);
 
 	// Screen bar outline
 	Window::Draw(Assets::barOutline, pos + screenOffset + barOffset)
@@ -242,7 +242,7 @@ void Patient::Draw() const
 	// Patient
 
 	if (hitTimer > 0.f) {
-		Assets::tintShader.SetUniform("flashColor", 0.8f, 1.f, 0.f, 0.5f);
+		Assets::tintShader.SetUniform(Assets::tintShaderColor, 0.8f, 1.f, 0.f, 0.5f);
 	}
 	GPU_Image* tex;
 	switch (gasState) {
@@ -257,5 +257,5 @@ void Patient::Draw() const
 		.withRotationDegs(shakerinoRot)
 		.withOrigin(tex->base_w / 2, tex->base_h / 2 + shakerinoY);
 
-	Assets::tintShader.SetUniform("flashColor", 0.f, 0.f, 0.f, 0.0f);
+	Assets::tintShader.SetUniform(Assets::tintShaderColor, 0.f, 0.f, 0.f, 0.0f);
 }

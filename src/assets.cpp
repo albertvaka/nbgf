@@ -35,6 +35,8 @@ void Assets::LoadAll() {
     font_30_outline = LoadFontOutline("data/PressStart2P.ttf", 30, 3);
 
     tintShader.Load("data/z.vert", nullptr, "data/tint.frag");
+    tintShaderZ = tintShader.GetUniformLocation("z");
+    tintShaderColor = tintShader.GetUniformLocation("flashColor");
 
     menuMusic = LoadMusic("data/jaunty.ogg");
 

@@ -91,7 +91,7 @@ void Player::Update(float dt)
 void Player::Draw() const
 {
 	const float maxY = (Tiled::TileMap::Size.y * 16);
-	Assets::tintShader.SetUniform("z", (sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we use 2*maxY because posY can go negative.
+	Assets::tintShader.SetUniform(Assets::tintShaderZ, (sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we add maxY because posY can go negative.
 
 	float shakeMagnitude = vel.Normalized().Length();
 	auto a = Window::Draw(Assets::playerTexture, pos)
