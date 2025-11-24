@@ -73,12 +73,12 @@ struct Bullet : CircleEntity, SelfRegister<Bullet>
 
 	static void DrawAll() {
 		Assets::tintShader.Activate();
-		Assets::tintShader.SetUniform(Assets::tintShaderColor, 0.8f, 0.8f, 0.f, 0.3f);
+		Assets::tintShaderColor.Set(0.8f, 0.8f, 0.f, 0.3f);
 		for (const Bullet* b : Bullet::GetAll()) {
 			b->Draw();
 			b->Bounds().DebugDraw(255, 0, 0);
 		}
-		Assets::tintShader.SetUniform(Assets::tintShaderColor, 0.f, 0.f, 0.f, 0.f);
+		Assets::tintShaderColor.Set(0.f, 0.f, 0.f, 0.f);
 		Assets::tintShader.Deactivate();
 	}
 };

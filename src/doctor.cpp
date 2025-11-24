@@ -305,18 +305,19 @@ void Doctor::StartSurgery() {
 void Doctor::Draw() const
 {
 	const float maxY = (Tiled::TileMap::Size.y * 16);
-	Assets::tintShader.SetUniform(Assets::tintShaderZ, (sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we add maxY because posY can go negative.
+	const float sortZ = ((sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we use 2*maxY because posY can go negative.
 
 	if (hitTimer > 0.f) {
-		Assets::tintShader.SetUniform(Assets::tintShaderColor, 0.8f, 1.f, 0.f, 0.5f);
+		Assets::tintShaderColor.Set(0.8f, 1.f, 0.f, 0.5f);
 	}
 	float shakeMagnitude = vel.Normalized().Length();
 	Window::Draw(highness > highThreshold ? Assets::doctorHighTexture : Assets::doctorTexture, pos)
 		.withRotationDegs(sin(offset + mainClock* shakeHorizontalSpeed *shakeMagnitude)*shakeHorizontalDegrees)
 		.withOrigin(Assets::doctorTexture->base_w/2, Assets::doctorTexture->base_h / 2 + sin(offset + mainClock*shakeVerticalSpeed)*shakeMagnitude* shakeHeight)
+		.withZ(sortZ)
 		.withScale(lookingLeft ? imageScale : -imageScale, imageScale);
 
-	Assets::tintShader.SetUniform(Assets::tintShaderColor, 0.f, 0.f, 0.f, 0.f);
+	Assets::tintShaderColor.Set(0.f, 0.f, 0.f, 0.f);
 
 	if (state == WANDERING) wanderTarget.DebugDrawAsArrow(pos);
 }

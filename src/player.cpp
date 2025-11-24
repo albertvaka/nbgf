@@ -91,12 +91,13 @@ void Player::Update(float dt)
 void Player::Draw() const
 {
 	const float maxY = (Tiled::TileMap::Size.y * 16);
-	Assets::tintShader.SetUniform(Assets::tintShaderZ, (sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we add maxY because posY can go negative.
+	const float sortZ = ((sortY + maxY) / (2 * maxY)); // Needs to be between 0 (close) and 1 (far), we use 2*maxY because posY can go negative.
 
 	float shakeMagnitude = vel.Normalized().Length();
 	auto a = Window::Draw(Assets::playerTexture, pos)
 		.withRotationDegs(sin(mainClock* shakeHorizontalSpeed *shakeMagnitude)*shakeHorizontalDegrees)
 		.withOrigin(Assets::playerTexture->base_w/2 + playerSimmetryOffsetX, Assets::playerTexture->base_h / 2 + playerDisplacementY + sin(mainClock*shakeVerticalSpeed)*shakeMagnitude* shakeHeight)
+		.withZ(sortZ)
 		.withScale(lookingLeft ? -imageScale : imageScale, imageScale);
 
 	Bounds().DebugDraw();
