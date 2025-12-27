@@ -8,10 +8,10 @@
 
 struct Alien : CircleEntity, SelfRegister<Alien>
 {
-	const float vel = 2.f;
-	const float vel_vertical = 10.f;
-	const float timeToSwitchDirection = 10; //seconds
-	
+	const inline static float vel = 2.f;
+	const inline static float vel_vertical = 10.f;
+	const inline static float timeToSwitchDirection = 10; //seconds
+
 	float angle;
 	float distance;
 
