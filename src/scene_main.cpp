@@ -41,7 +41,7 @@ void SceneMain::EnterScene()
 
 void SceneMain::SpawnAliens() {
 	for (float angle = 0.f; angle < 360.f; angle += 360.f/currentLevel) {
-		new Alien(angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
+		Alien::Create(angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
 	}
 }
 
@@ -71,13 +71,13 @@ void SceneMain::Update(float dt)
 
 	player.Update(dt);
 
-	for (Alien* a : Alien::GetAll()) {
+	for (auto a : Alien::GetAll()) {
 		a->Update(dt);
 	}
 
-	for (Bullet* b : Bullet::GetAll()) {
+	for (auto b : Bullet::GetAll()) {
 		b->Update(dt);
-		for (Alien* a  : Alien::GetAll()) {
+		for (auto a : Alien::GetAll()) {
 			if (Collide(a,b)) {
 				Debug::out << "KABOOM " << a->pos;
 
@@ -109,12 +109,12 @@ void SceneMain::Draw()
 
 	player.Draw();
 
-	for (const Alien* a : Alien::GetAll()) {
+	for (const auto a : Alien::GetAll()) {
 		a->Draw();
 		a->Bounds().DebugDraw(255,0,0);
 	}
 
-	for (const Bullet* b : Bullet::GetAll()) {
+	for (const auto b : Bullet::GetAll()) {
 		b->Draw();
 		b->Bounds().DebugDraw(255, 0, 0);
 	}
