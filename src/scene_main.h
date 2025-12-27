@@ -9,7 +9,7 @@ struct SceneMain : Scene {
 
 	Player player;
 	PartSys alienPartSys;
-	int currentLevel = 1;
+	int currentLevel;
 	int deadAliens = 0;
 	Text deadAliensText;
 

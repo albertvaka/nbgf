@@ -17,10 +17,13 @@ SceneMain::SceneMain()
 	, alienPartSys(Assets::invadersTexture)
 	, deadAliensText(Assets::font_30, Assets::font_30_outline)
 {
+	currentLevel = 8000;
+
 	deadAliensText.SetString("Kill the invaders");
 	deadAliensText.SetFillColor(0, 0, 0);
 	deadAliensText.SetOutlineColor(255, 255, 0);
 
+	//Alien::Reserve(currentLevel);
 	alienPartSys.AddSprite(AnimLib::ALIEN_1[0].rect);
 	alienPartSys.AddSprite(AnimLib::ALIEN_2[0].rect);
 	alienPartSys.min_scale = 0.15f;
@@ -75,6 +78,11 @@ void SceneMain::Update(float dt)
 		a->Update(dt);
 	}
 
+	CollideSelf(Alien::GetAll(), [](Alien& a, Alien& b) {
+		a.direction = -a.direction;
+		b.direction = -b.direction;
+	});
+
 	for (auto b : Bullet::GetAll()) {
 		b->Update(dt);
 		for (auto a : Alien::GetAll()) {
@@ -109,9 +117,8 @@ void SceneMain::Draw()
 
 	player.Draw();
 
-	for (const auto a : Alien::GetAll()) {
-		a->Draw();
-		a->Bounds().DebugDraw(255,0,0);
+	for (const auto b : Alien::GetAll()) {
+		b->Draw();
 	}
 
 	for (const auto b : Bullet::GetAll()) {

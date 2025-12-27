@@ -41,14 +41,18 @@ struct Alien : CircleEntity, HandlePool<Alien>
 		if (anim.current_frame != prev_frame) {
 			angle += vel * direction; // Move each animation frame
 		}
-
+/*
 		switchDirectionTimer -= dt;
 		if (switchDirectionTimer < 0.f) {
 			switchDirectionTimer += timeToSwitchDirection;
 			direction = -direction;
 			distance -= vel_vertical;
 		}
+*/
+		UpdatePos();
+	}
 
+	void UpdatePos() {
 		pos = Camera::Center() + vec::FromAngleDegs(angle, distance);
 	}
 

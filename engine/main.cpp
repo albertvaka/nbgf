@@ -29,6 +29,8 @@
 #ifdef _DEBUG
 #define _FPS_COUNTER
 #endif
+#define _FPS_COUNTER
+
 
 bool mainClockPaused = false;
 float mainClock;

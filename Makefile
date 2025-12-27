@@ -17,8 +17,8 @@ DEP_SRC = $(shell find vendor -type f \( -name '*.cpp' -o -name '*.c' \) -not -p
 DEP_OBJ = $(patsubst vendor/%, $(OBJ_DIR)/vendor/%.o, $(DEP_SRC))
 DEP_INCLUDE = $(patsubst vendor/%, -I vendor/%, $(shell find vendor -maxdepth 2 -path \*\include -not -path vendor/SDL2/include) $(shell find vendor -mindepth 1 -maxdepth 1 -not -path vendor/glew -type d -not -exec test -e "{}/include" ';' -print ))
 
-OPTIM     ?= 0
-DEBUG     ?= 1
+OPTIM     ?= 3
+DEBUG     ?= 0
 PROFILE   ?= 0
 IMGUI     ?= $(DEBUG)
 
