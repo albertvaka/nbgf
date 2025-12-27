@@ -6,7 +6,7 @@
 #include "rand.h"
 #include "assets.h"
 
-struct Alien : CircleEntity, SelfRegister<Alien>
+struct Alien : CircleEntity, HandlePool<Alien>
 {
 	const inline static float vel = 2.f;
 	const inline static float vel_vertical = 10.f;

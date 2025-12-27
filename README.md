@@ -43,7 +43,7 @@ Compiles to Windows, Mac, Linux and HTML for the web browser (emscripten).
 	- [The Scene class](#the-scene-class)
 	- [EntryPointScene](#entrypointscene)
 	- [Changing scenes](#changing-scenes-scenemanager)
-- [Entities and SelfRegister](#entities-and-selfregister)
+- [Entities and HandlePools](#entities-and-handlepools)
 - [Points and vectors: the vec struct](#points-and-vectors-the-vec-struct)
 - [Bounding boxes and collisions](#bounding-boxes-and-collisions)
 	- [BoxEntity and CircleEntity](#boxentity-and-circleentity)
@@ -232,28 +232,30 @@ Use `SceneManager::ChangeScene(new MyAwesomeScene())` to change to a new scene a
 
 Note the constructor of the new scene runs right away, while the current scene is still active. Because of this, don't put your scene initialization logic in the scene constructor (use `EnterScene` for that), and specifically don't instantiate any self-registering (see below) entities there, since they would show up from your current scene.
 
-## Entities and SelfRegister
+## Entities and HandlePools
 
-You can organize your game code however you like but, if I were you, I would define classes for my different game entities (enemies, powerups, bullets, player...) and make them extend `Entity` and `SelfRegister`.
+You can organize your game code however you like but, if I were you, I would define classes for my different game entities (enemies, powerups, bullets, player...) and make them extend `Entity` and `HandlePool<T>`.
 
-Inheriting `MyClass` from `SelfRegister<MyClass>`, will give you a `MyClass::GetAll()` method that will return all the instances of `MyClass` you have created (and not destroyed yet). Use it as follows:
+Inheriting `MyClass` from `HandlePool<MyClass>`, will give you a `HandlePool::GetAll()` method that will return all the instances of `MyClass` you have created (and not destroyed yet). Use it as follows:
 
 ```C++
-new Enemy(1);
-new Enemy(2); // No need to store these anywhere
+Enemy::Create(1);
+Enemy::Create(2); // No need to store these anywhere
 
 for (Enemy* e : Enemy::GetAll()) {
 	e->Update(dt);
 }
 ```
 
-`SelfRegister<MyClass>` also provides the `MyClass::DeleteAll()` and `MyClass::DeleteNotAlive()` methods, meant to be used on `ExitScene` and at the end of each frame, respectively. To use `DeleteNotAlive` your class must contain an `alive` boolean, and will destroy your objects if it is `true`. Waiting to delete your entities until the end of the frame can help you avoid use-after-free bugs: just make sure to let go any pointers to entities where `alive` is `false`.
+HandlePools store the elements in compact, cache-friendly arrays and provide pointer-like `Handle<T>` objects that can detect when the underlying element has been deleted by doing `if (!myHandle) ...`.
 
-Inheriting from `Entity` already gives you an `alive` boolean in your class, as well as two vectors `pos` and `vel` (which you probably want to have on all objects). It's a good idea to edit this class to add any other properties in common to all your game entities.
+`HandlePool<MyClass>` also provides the `MyClass::DeleteAll()` and `MyClass::DeleteNotAlive()` methods, meant to be used on `ExitScene` and at the end of each frame respectively. To use `DeleteNotAlive` your class must contain an `alive` boolean, and it will destroy objects with it set to `true`.
+
+Inheriting from `Entity` already gives you an `alive` boolean in your class, as well as two vectors `pos` and `vel` (which you probably want to have on all objects anyway). It's a good idea to edit this class to add any other properties in common to all your game entities.
 
 ## Points and vectors: the [`vec`](engine/vec.h) struct
 
-You will be using lots of (x,y) pairs when making your game. If you are lazy like me, you will appreciate this struct is only 3 letters long.
+You will be using lots of (x,y) pairs when making your game. If you are lazy like me, you will appreciate the name of the struct for them is only 3 letters long.
 
 The `vec` struct has all the goodies you might want: `+`, `-`, `/` and `*` operators, methods to rotate, normalize, get the lenght... See the definitions in the [`engine/vec.h`](engine/vec.h) header.
 
@@ -272,12 +274,12 @@ The collision primitives are rectangles (`BoxBounds`) and circles (`CircleBounds
 
 ### Collisions
 
-Use the `Collide(a,b)` function defined in [`engine/collide.h`](engine/collide.h) to check if two bounds or two `BoxEntity`/`CircleEntity` collide. See this example, which makes use of `SelfRegister` class to check if any `Enemy` collides with any `Bullet`:
+Use the `Collide(a,b)` function defined in [`engine/collide.h`](engine/collide.h) to check if two bounds or two `BoxEntity`/`CircleEntity` collide. See this example, which makes use of `HandlePool` class to check if any `Enemy` collides with any `Bullet`:
 
 ```C++
-for (Bullet* bullet, Bullet::GetAll())
+for (Handle<Bullet> bullet, Bullet::GetAll())
 {
-	for (Enemy* enemy, Enemy::GetAll())
+	for (Handle<Enemy> enemy, Enemy::GetAll())
 	{
 		if (Collide(bullet, enemy))
 		{
@@ -392,7 +394,7 @@ Particles can be spawned based on a timer using `partSys.Spawn(float dt)` and `p
 
 The [`PartSys`](engine/partsys.h) class contains a bunch of public fields that let you configure the range of velocities, accelerations, scales, etc that particles will be spawned with. You should set these fields directly after instantiating the class.
 
-Finally, you should `partSys.Draw()` your particle system. `PartSys` is a `SelfRegister` class, so you can use `PartSys::GetAll()` to iterate through your particle systems.
+Finally, you should `partSys.Draw()` your particle system.
 
 To test different values without having to rebuild you game after each change, you can use `partSys.DrawImGUI()` to draw an interactive ImGUI window which lets you change all the parameters at runtime (but doesn't store them, you still need to set them by code).
 

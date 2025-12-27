@@ -2,14 +2,14 @@
 
 #include "entity.h"
 #include "anim_lib.h"
-#include "selfregister.h"
+#include "handlepool.h"
 #include "assets.h"
 #include "window.h"
 #include "camera.h"
 
 extern float mainClock;
 
-struct Bullet : CircleEntity, SelfRegister<Bullet>
+struct Bullet : CircleEntity, HandlePool<Bullet>
 {
 	vec vel;
 

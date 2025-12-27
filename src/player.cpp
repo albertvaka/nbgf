@@ -21,9 +21,8 @@ void Player::Update(float dt)
 	pos = Camera::Center() + mouseFromCenter.Normalized() * distance;
 	
 	if (Input::IsJustPressed(0, GameKeys::SHOOT)) {
-		new Bullet(pos, mouseFromCenter.Normalized() * bulletSpeed);
+		Bullet::Create(pos, mouseFromCenter.Normalized() * bulletSpeed);
 	}
-	
 }
 
 void Player::Draw() const
