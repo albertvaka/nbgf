@@ -40,7 +40,7 @@ void SceneMain::EnterScene()
 }
 
 void SceneMain::SpawnAliens() {
-	for (int angle = 0; angle < 360; angle += 360/currentLevel) {
+	for (float angle = 0.f; angle < 360.f; angle += 360.f/currentLevel) {
 		new Alien(angle, Rand::rollf(kAlienMinDistance, kAlienMaxDistance));
 	}
 }
