@@ -22,7 +22,7 @@ public:
 		GetAll().push_back((T*)this);
 	}
 
-	static std::vector<T*>& GetAll()
+	static std::span<T*>& GetAll()
 	{
 		static std::vector<T*> instancies;
 		return instancies;

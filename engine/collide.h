@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <span>
 
 #include "bounds.h"
 #include "entity.h"
@@ -31,6 +32,18 @@ inline bool Collide(const BoxBounds& a, const CircleBounds& b)
 
 
 // Entities
+inline bool Collide(const BoxEntity& a, const BoxEntity& b) {
+    return Collide(a.Bounds(), b.Bounds());
+}
+inline bool Collide(const CircleEntity& a, const CircleEntity& b) {
+    return Collide(a.Bounds(), b.Bounds());
+}
+inline bool Collide(const CircleEntity& a, const BoxEntity& b) {
+    return Collide(a.Bounds(), b.Bounds());
+}
+inline bool Collide(const BoxEntity& a, const CircleEntity& b) {
+    return Collide(a.Bounds(), b.Bounds());
+}
 inline bool Collide(const BoxEntity* a, const BoxEntity* b) {
     return Collide(a->Bounds(), b->Bounds());
 }
@@ -67,21 +80,26 @@ void CollideWithCallback(const std::vector<A*>& setA, const std::vector<B*>& set
 
 // Calls callback for each pair of colliding objects
 template <typename T, typename F>
-void CollideSelf(const std::vector<T*>& setA, F callback)
+void CollideSelf(std::span<T> setA, F callback)
 {
     size_t sa = setA.size();
     for (size_t i = 0; i < sa; ++i)
     {
-        T* a = setA[i];
+        T& a = setA[i];
         for (size_t j = i+1; j < sa; ++j)
         {
-            T* b = setA[j];
+            T& b = setA[j];
             if (Collide(a, b))
             {
                 callback(a, b);
             }
         }
     }
+}
+
+template <typename T, typename F>
+void CollideSelf(T setA, F callback) {
+    CollideSelf(setA.AsSpan(), callback);
 }
 
 template <typename T>
@@ -92,17 +110,17 @@ struct SelfColliding
 
     static void SelfCollide()
     {
-        const std::vector<T*>& setA = T::GetAll();
+        std::span<T> setA = T::GetAll();
         size_t sa = setA.size();
         for (size_t i = 0; i < sa; ++i) {
-            setA[i]->collidingWith = nullptr;
+            setA[i].collidingWith = nullptr;
         }
         for (size_t i = 0; i < sa; ++i)
         {
-            T* a = setA[i];
+            T& a = setA[i];
             for (size_t j = i + 1; j < sa; ++j)
             {
-                T* b = setA[j];
+                T& b = setA[j];
                 if (Collide(a, b))
                 {
                     a->collidingWith = b;
