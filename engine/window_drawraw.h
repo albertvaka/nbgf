@@ -193,6 +193,55 @@ namespace Window {
 			};
 		}
 
+		//Colors between 0 and 1
+		inline void BatchRGBQuad(vec p2, vec p3, vec p1, vec p4, float r, float g, float b)
+		{
+			const int COMPONENTS_PER_VERTEX = 5; // GPU_BATCH_XY_RGB
+			unsigned int i = vertex_count * COMPONENTS_PER_VERTEX;
+
+			//bottom left
+			vertices[i++] = p1.x;
+			vertices[i++] = p1.y;
+			vertices[i++] = r;
+			vertices[i++] = g;
+			vertices[i++] = b;
+
+			//top left
+			vertices[i++] = p2.x;
+			vertices[i++] = p2.y;
+			vertices[i++] = r;
+			vertices[i++] = g;
+			vertices[i++] = b;
+
+			//top right
+			vertices[i++] = p3.x;
+			vertices[i++] = p3.y;
+			vertices[i++] = r;
+			vertices[i++] = g;
+			vertices[i++] = b;
+
+			//bottom right
+			vertices[i++] = p4.x;
+			vertices[i++] = p4.y;
+			vertices[i++] = r;
+			vertices[i++] = g;
+			vertices[i++] = b;
+
+			indices[index_count++] = vertex_count;
+			indices[index_count++] = vertex_count + 1;
+			indices[index_count++] = vertex_count + 2;
+			indices[index_count++] = vertex_count;
+			indices[index_count++] = vertex_count + 2;
+			indices[index_count++] = vertex_count + 3;
+
+			vertex_count += 4;
+
+			if (vertex_count + 4 >= MAX_VERTICES) {
+				// Flush what we have so we don't go over MAX_VERTICES
+				FlushRGBQuads();
+			};
+		}
+
 	}
 
 
