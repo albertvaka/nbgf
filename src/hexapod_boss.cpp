@@ -39,16 +39,43 @@ constexpr float kMinFootSeparationSq = kMinFootSeparation * kMinFootSeparation;
 constexpr float kHeadSpeed = 60.f;             // px/s — deliberate, threatening pace
 
 // --- Stepping
-constexpr float kStepSpeed = 300.f;            // px/s — constant foot speed regardless of step length
+constexpr float kStepSpeed = 200.f;            // px/s — constant foot speed regardless of step length
 constexpr float kMinStepDuration = 0.12f;      // sanity cap so tiny steps don't snap instantly
 constexpr float kMaxStepDuration = 0.6f;       // sanity cap so very long steps don't drag forever
 constexpr float kBaseStepArcHeight = 18.f;
 constexpr float kStepDiscomfortThreshold = 12.f;
-constexpr float kStepMinImprovement = 4.f;
+constexpr float kStepMinImprovement = 14.f;
 constexpr int kFootSearchRange = 12;           // ~192px sweep per leg — easily across the screen
-constexpr float kStepLookaheadTime = 0.15f;
+constexpr float kStepLookaheadTime = 0.5f;     // foot anticipates well ahead of the head — predator over-stride
 constexpr float kStepCooldown = 0.2f;          // minimum dwell after a step before a comfort-driven re-step
                                                 // (urgent stretch/compression triggers bypass this)
+// Minimum step distance — any candidate closer than this to the current foot
+// is rejected outright, so a leg won't lift just to land one or two tiles over.
+constexpr float kMinStepDistance = 3.f * float(Tile::Size);
+constexpr float kMinStepDistanceSq = kMinStepDistance * kMinStepDistance;
+// Each leg has an assigned side of the body. Left-side feet (rest offset
+// x < 0) may never sit to the right of their shoulder, and vice versa —
+// shoulder.x is the exact line the elbow would otherwise want to flip
+// around. This margin is the dead zone around shoulder.x before "wrong
+// side" urgency kicks in, so a foot near the shoulder vertical doesn't
+// chatter.
+constexpr float kFootSideMargin = 4.f;
+
+// Feet may only anchor in the top portion of the world (this fraction down
+// from the world top). Keeps feet consistently above the head and prevents
+// the above-head ↔ below-head transition that would flip bendSign at step
+// start. The head can descend further than the feet — the legs just stretch.
+constexpr float kFootAnchorMaxYFraction = 0.5f;
+
+// --- Head wobble: visual-only spring on the head/shoulders. Each foot plant
+// pushes the body briefly toward the newly-loaded foot, then it springs back.
+// Slow heave (~2.4 s period) with peak displacement ~3–5 px — body sloshes
+// rather than snaps. Impulses are small to match; the same damping ratio
+// (under-critical) is preserved, so it still rings instead of dragging.
+constexpr float kWobbleStiffness = 7.f;        // px/s² per px (ω ≈ 2.65 rad/s, ~1/6 of the previous speed)
+constexpr float kWobbleDamping = 1.5f;         // 1/s (scaled 1/6 from the previous value to keep ζ ≈ 0.28)
+constexpr float kWobbleImpulseMin = 6.f;       // px/s (scaled 1/6 to keep peak amplitude similar)
+constexpr float kWobbleImpulseMax = 12.f;
 
 // --- Layout
 constexpr vec kShoulderOffsets[HexapodBoss::NumLegs] = {
@@ -61,14 +88,16 @@ constexpr vec kShoulderOffsets[HexapodBoss::NumLegs] = {
 };
 
 // Wide rest offsets — adjacent rest positions are >= kMinFootSeparation apart so
-// the default stance is naturally spread.
+// the default stance is naturally spread. All six rests sit ~164 px from the
+// head (~78% of max reach) so the body occupies more of the screen without
+// pinning the legs at full stretch.
 constexpr vec kFootRestOffsets[HexapodBoss::NumLegs] = {
-	vec(-100.f,  75.f),
-	vec( -65.f, 110.f),
-	vec( -25.f, 125.f),
-	vec(  25.f, 125.f),
-	vec(  65.f, 110.f),
-	vec( 100.f,  75.f),
+	vec(-130.f, 100.f),
+	vec( -85.f, 140.f),
+	vec( -30.f, 160.f),
+	vec(  30.f, 160.f),
+	vec(  85.f, 140.f),
+	vec( 130.f, 100.f),
 };
 
 // ----------------------------------------------------------------------------
@@ -80,9 +109,15 @@ std::optional<vec> HexapodBoss::FindFootTarget(int legIndex) const
 	const Leg& leg = legs[legIndex];
 	vec shoulder = headPos + leg.shoulderOffset;
 	vec rest = headPos + leg.footRestOffset + headVel * kStepLookaheadTime;
+	// Each leg is locked to one side of the body. This is the single rule that
+	// keeps the elbow from needing to flip as the head moves around.
+	bool isLeftLeg = (leg.footRestOffset.x < 0.f);
 
 	GaemTileMap* map = GaemTileMap::instance();
 	if (!map) return std::nullopt;
+
+	BoxBounds mapBounds = map->BoundsInWorld();
+	float footMaxY = mapBounds.Top() + (mapBounds.Bottom() - mapBounds.Top()) * kFootAnchorMaxYFraction;
 
 	int restTx = Tile::ToTiles(rest.x);
 	int headTy = Tile::ToTiles(headPos.y);
@@ -120,7 +155,10 @@ std::optional<vec> HexapodBoss::FindFootTarget(int legIndex) const
 				float yOffset = (side == 0) ? 0.f : float(Tile::Size);
 				vec candidate(Tile::Left(tx) + Tile::Size * 0.5f, Tile::Top(ty) + yOffset);
 
-				if (candidate.DistanceSq(leg.footPos) < 1.f) continue; // already here
+				if (candidate.y > footMaxY) continue;                                 // feet only anchor in the top half of the world
+				if (isLeftLeg  && candidate.x >= shoulder.x) continue;                // left  legs stay left  of the shoulder
+				if (!isLeftLeg && candidate.x <= shoulder.x) continue;                // right legs stay right of the shoulder
+				if (candidate.DistanceSq(leg.footPos) < kMinStepDistanceSq) continue; // step too short — don't lift just to land next door
 				float dsq = candidate.DistanceSq(shoulder);
 				if (dsq < minReachSq || dsq > maxReachSq) continue;     // out of leg range
 
@@ -140,14 +178,16 @@ std::optional<vec> HexapodBoss::FindFootTarget(int legIndex) const
 				}
 				if (rejected) continue;
 
-				float d = candidate.DistanceSq(rest);
+				// Score by X-distance from rest only. The boss can stand on
+				// floors or hang from ceilings, so a tile being above vs below
+				// the head should not be a tiebreaker — only horizontal drift
+				// matters for "keeping up with the body".
+				float dx = candidate.x - rest.x;
+				float d = dx * dx;
 				// Anchor preference: a tile above the head is naturally hung
 				// from (use its bottom), a tile below the head is naturally
-				// stood on (use its top). Penalise the "wrong" anchor so it's
-				// only picked when the natural one is out of reach. The 4×
-				// factor on squared distance ≈ 2× linear, so the natural
-				// anchor wins as long as it's within twice the rest-distance
-				// of the unnatural one.
+				// stood on (use its top). Penalise the "wrong" anchor side of
+				// each tile so we still pick the sensible attachment point.
 				bool unnatural = (ty < headTy && side == 0) || (ty > headTy && side == 1);
 				if (unnatural) d *= 4.f;
 				if (d < bestDistSq) {
@@ -161,14 +201,16 @@ std::optional<vec> HexapodBoss::FindFootTarget(int legIndex) const
 
 	// The map's upper edge is a hangable surface too — the boss can dangle
 	// from the world roof even where no tile is present. One virtual candidate
-	// per column, located at the top of the map bounds.
-	BoxBounds mapBounds = map->BoundsInWorld();
+	// per column, located at the top of the map bounds. (Always above footMaxY
+	// by construction, so no top-half filter needed here.)
 	float ceilingY = mapBounds.Top();
 	for (int dx = -kFootSearchRange; dx <= kFootSearchRange; dx++) {
 		int tx = restTx + dx;
 		if (tx < 0 || tx >= map->Width()) continue;
 		vec candidate(Tile::Left(tx) + Tile::Size * 0.5f, ceilingY);
-		if (candidate.DistanceSq(leg.footPos) < 1.f) continue;
+		if (isLeftLeg  && candidate.x >= shoulder.x) continue;
+		if (!isLeftLeg && candidate.x <= shoulder.x) continue;
+		if (candidate.DistanceSq(leg.footPos) < kMinStepDistanceSq) continue; // step too short
 		float dsq = candidate.DistanceSq(shoulder);
 		if (dsq < minReachSq || dsq > maxReachSq) continue;
 
@@ -184,7 +226,9 @@ std::optional<vec> HexapodBoss::FindFootTarget(int legIndex) const
 
 		// The world ceiling sits above any possible head position, so it's
 		// always the natural ceiling anchor — no unnatural penalty needed.
-		float d = candidate.DistanceSq(rest);
+		// Score by X-distance only, matching the tile path above.
+		float ddx = candidate.x - rest.x;
+		float d = ddx * ddx;
 		if (d < bestDistSq) {
 			bestDistSq = d;
 			best = candidate;
@@ -204,11 +248,13 @@ bool HexapodBoss::TryStartStep(int legIndex)
 
 	if (leg.isPlanted) {
 		// Only step if the candidate is materially better, OR if the leg is
-		// already at the edge of its reach and *must* lift.
+		// already at the edge of its reach and *must* lift. "Better" is
+		// measured in X drift only — Y doesn't favour either above- or
+		// below-head anchors.
 		vec rest = headPos + leg.footRestOffset;
 		vec shoulder = headPos + leg.shoulderOffset;
-		float currentDist = leg.footPos.Distance(rest);
-		float newDist = tile->Distance(rest);
+		float currentDist = fabsf(leg.footPos.x - rest.x);
+		float newDist = fabsf(tile->x - rest.x);
 		bool improvement = (newDist <= currentDist - kStepMinImprovement);
 		if (!improvement) {
 			float D = leg.footPos.Distance(shoulder);
@@ -228,7 +274,7 @@ bool HexapodBoss::TryStartStep(int legIndex)
 	// inversion still work.)
 	{
 		vec stepShoulder = headPos + leg.shoulderOffset;
-		leg.bendSign = NaturalBendSign(stepShoulder, leg.stepTarget, headPos);
+		leg.bendSign = DownwardBendSign(stepShoulder, leg.stepTarget);
 	}
 	// Constant-speed steps: duration scales with distance so a short hop and a
 	// long stretch move the foot at the same px/s. ±8% jitter for organic variety.
@@ -247,6 +293,8 @@ HexapodBoss::HexapodBoss(vec pos)
 	: headPos(pos)
 	, headVel(0.f, 0.f)
 	, moveTarget(pos)
+	, headWobble(0.f, 0.f)
+	, headWobbleVel(0.f, 0.f)
 {
 	// If we happen to spawn inside a solid tile, walk outward to find air. The
 	// boss has no map of its own anymore — it just queries the tilemap.
@@ -295,7 +343,7 @@ HexapodBoss::HexapodBoss(vec pos)
 		legs[i].stepStart = legs[i].footPos;
 		legs[i].stepTarget = legs[i].footPos;
 		vec spawnShoulder = headPos + legs[i].shoulderOffset;
-		legs[i].bendSign = NaturalBendSign(spawnShoulder, legs[i].footPos, headPos);
+		legs[i].bendSign = DownwardBendSign(spawnShoulder, legs[i].footPos);
 	}
 	moveTarget = headPos;
 
@@ -337,6 +385,11 @@ void HexapodBoss::Update(float dt)
 		headPos.x = std::clamp(headPos.x, bounds.Left() + kHeadRadius, bounds.Right() - kHeadRadius);
 		headPos.y = std::clamp(headPos.y, bounds.Top()  + kHeadRadius, bounds.Bottom() - kHeadRadius);
 	}
+
+	// --- Head wobble spring integration. Impulses are added later this frame
+	// when feet plant; they kick in on the next integration step.
+	headWobbleVel += (-kWobbleStiffness * headWobble - kWobbleDamping * headWobbleVel) * dt;
+	headWobble += headWobbleVel * dt;
 
 	// --- Tile-validity check: a foothold can be on top of a tile (floor),
 	// underneath one (ceiling), or hung from the map's upper edge (world
@@ -395,6 +448,14 @@ void HexapodBoss::Update(float dt)
 			if (leg.stepProgress >= 1.f) {
 				leg.isPlanted = true;
 				leg.stepCooldown = 0.f;
+				// Newly-loaded foot pulls the body toward it — small mass-shift
+				// impulse on the visual wobble. Direction is foot-from-head so
+				// floor plants sag the body down, ceiling plants tug it up.
+				vec dir = leg.footPos - headPos;
+				float dirLen = dir.Length();
+				if (dirLen > 0.0001f) {
+					headWobbleVel += (dir / dirLen) * Rand::rollf(kWobbleImpulseMin, kWobbleImpulseMax);
+				}
 			} else {
 				activeSteps++;
 			}
@@ -420,7 +481,9 @@ void HexapodBoss::Update(float dt)
 	for (int i = 0; i < NumLegs; i++) {
 		if (legs[i].stepProgress < 1.f) continue;
 		vec rest = headPos + legs[i].footRestOffset;
-		float discomfort = legs[i].footPos.Distance(rest);
+		// Discomfort measures X drift only. Above/below the head are both fine
+		// (the leg can stand or hang), so Y offset isn't a reason to step.
+		float discomfort = fabsf(legs[i].footPos.x - rest.x);
 		bool offCooldown = (legs[i].stepCooldown >= kStepCooldown);
 		if (legs[i].isPlanted) {
 			vec shoulder = headPos + legs[i].shoulderOffset;
@@ -433,11 +496,24 @@ void HexapodBoss::Update(float dt)
 			float compressUrgency = D < minReach * kCompressionLiftoffFactor
 				? (minReach * kCompressionLiftoffFactor - D) + 40.f
 				: 0.f;
-			bool urgent = (stretchUrgency > 0.f || compressUrgency > 0.f);
+			// Side urgency: each leg is locked to its side of its shoulder,
+			// but the head (and so the shoulder) can drift across a foot.
+			// When that happens, step now — FindFootTarget's side filter
+			// guarantees the new target lands back on the correct side,
+			// restoring the bend without a flip.
+			float sideUrgency = 0.f;
+			bool isLeftLeg = (legs[i].footRestOffset.x < 0.f);
+			float wrongSideOffset = isLeftLeg
+				? (legs[i].footPos.x - shoulder.x)
+				: (shoulder.x - legs[i].footPos.x);
+			if (wrongSideOffset > kFootSideMargin) {
+				sideUrgency = wrongSideOffset + 40.f;
+			}
+			bool urgent = (stretchUrgency > 0.f || compressUrgency > 0.f || sideUrgency > 0.f);
 			bool soft = (discomfort > kStepDiscomfortThreshold && offCooldown);
 			if (urgent || soft) {
 				candidates[numCandidates] = i;
-				candidatePriority[numCandidates] = std::max({ discomfort, stretchUrgency, compressUrgency });
+				candidatePriority[numCandidates] = std::max({ discomfort, stretchUrgency, compressUrgency, sideUrgency });
 				numCandidates++;
 			}
 		} else {
@@ -467,15 +543,15 @@ void HexapodBoss::Update(float dt)
 	}
 }
 
-int HexapodBoss::NaturalBendSign(vec shoulder, vec foot, vec head)
+int HexapodBoss::DownwardBendSign(vec shoulder, vec foot)
 {
-	// Knee should sit on the side of the shoulder→foot line away from the
-	// head — so a leg standing on the floor curls one way and a leg hanging
-	// from the ceiling curls the other. The 2D cross between (foot − shoulder)
-	// and (head − shoulder) tells which side the head is on.
-	float headSide = (foot.x - shoulder.x) * (head.y - shoulder.y)
-	               - (foot.y - shoulder.y) * (head.x - shoulder.x);
-	return (headSide > 0.f) ? -1 : +1;
+	// Knee should sit on the +Y (downward) side of the shoulder→foot line so
+	// a hanging leg never bends upward against gravity. With down reference
+	// (shoulder.x, shoulder.y + 1), the 2D cross of (foot − shoulder) and
+	// (down − shoulder) simplifies to (foot.x − shoulder.x). Returning the
+	// same sign as that cross (rather than its opposite, which is what an
+	// "away from X" bend would use) puts the knee on the same side as down.
+	return (foot.x > shoulder.x) ? +1 : -1;
 }
 
 vec HexapodBoss::ComputeKnee(vec shoulder, vec foot, float upperLen, float lowerLen, int bendSign)
@@ -496,18 +572,33 @@ vec HexapodBoss::ComputeKnee(vec shoulder, vec foot, float upperLen, float lower
 	// bendSign is latched at step start so the elbow can't snap mid-arc
 	// when the foot crosses the (otherwise dynamic) flip line.
 	if (bendSign < 0) perp = -perp;
-	return shoulder + upperLen * (cosAlpha * dir + sinAlpha * perp);
+	vec knee = shoulder + upperLen * (cosAlpha * dir + sinAlpha * perp);
+
+	// Tight-bend bias: when the leg is heavily folded (foot close to the
+	// shoulder), the geometric knee swings opposite to the foot direction
+	// and can land on the far side of the head — the elbow would visually
+	// fold across the body. Blend toward a knee straight down from the
+	// shoulder so a folded elbow drops under the head instead of crossing it.
+	if (D < upperLen) {
+		float t = std::clamp((upperLen - D) / (upperLen - minD), 0.f, 1.f);
+		vec downKnee = shoulder + vec(0.f, upperLen);
+		knee = Mates::Lerp(knee, downKnee, t);
+	}
+	return knee;
 }
 
 void HexapodBoss::Draw() const
 {
+	// Visual head/shoulder position includes wobble. Feet stay where they were
+	// planted, so the legs flex to absorb the body's mass-shift motion.
+	vec drawHead = headPos + headWobble;
 	for (int i = 0; i < NumLegs; i++) {
 		const Leg& leg = legs[i];
 		// A leg is only skipped during the brief unplanted interval (spawn or
 		// tile-just-destroyed) before its re-step starts — no permanent
 		// "tucked" state.
 		if (!leg.isPlanted && leg.stepProgress >= 1.f) continue;
-		vec shoulder = headPos + leg.shoulderOffset;
+		vec shoulder = drawHead + leg.shoulderOffset;
 		vec foot = leg.footPos;
 		vec knee = ComputeKnee(shoulder, foot, leg.upperLen, leg.lowerLen, leg.bendSign);
 		Window::DrawPrimitive::Line(shoulder, knee, kLegThickness, 120, 40, 50, 255);
@@ -516,18 +607,18 @@ void HexapodBoss::Draw() const
 		Window::DrawPrimitive::Circle(foot, kFootRadius, -1.f, 40, 40, 40, 255);
 	}
 
-	Window::DrawPrimitive::Circle(headPos, kHeadRadius, -1.f, 180, 50, 50, 255);
-	Window::DrawPrimitive::Circle(headPos, kHeadRadius, 1.5f, 60, 10, 20, 255);
-	Window::DrawPrimitive::Circle(headPos + vec( 4.f, -2.f), 2.f, -1.f, 240, 240, 240, 255);
-	Window::DrawPrimitive::Circle(headPos + vec(-4.f, -2.f), 2.f, -1.f, 240, 240, 240, 255);
-	Window::DrawPrimitive::Circle(headPos + vec( 4.f, -2.f), 1.f, -1.f, 20, 20, 20, 255);
-	Window::DrawPrimitive::Circle(headPos + vec(-4.f, -2.f), 1.f, -1.f, 20, 20, 20, 255);
+	Window::DrawPrimitive::Circle(drawHead, kHeadRadius, -1.f, 180, 50, 50, 255);
+	Window::DrawPrimitive::Circle(drawHead, kHeadRadius, 1.5f, 60, 10, 20, 255);
+	Window::DrawPrimitive::Circle(drawHead + vec( 4.f, -2.f), 2.f, -1.f, 240, 240, 240, 255);
+	Window::DrawPrimitive::Circle(drawHead + vec(-4.f, -2.f), 2.f, -1.f, 240, 240, 240, 255);
+	Window::DrawPrimitive::Circle(drawHead + vec( 4.f, -2.f), 1.f, -1.f, 20, 20, 20, 255);
+	Window::DrawPrimitive::Circle(drawHead + vec(-4.f, -2.f), 1.f, -1.f, 20, 20, 20, 255);
 
 #ifdef _DEBUG
 	if (Debug::Draw) {
 		// Move target + line from head.
 		Window::DrawPrimitive::Circle(moveTarget, 3.f, -1.f, 0, 255, 255, 255);
-		Window::DrawPrimitive::Line(headPos, moveTarget, 1.f, 0, 200, 200, 200);
+		Window::DrawPrimitive::Line(drawHead, moveTarget, 1.f, 0, 200, 200, 200);
 
 		// Planted feet get a purple ring.
 		for (int i = 0; i < NumLegs; i++) {
@@ -537,7 +628,8 @@ void HexapodBoss::Draw() const
 		}
 
 		// Each leg's stretch state: a small ring around the shoulder shaded by D/maxReach
-		// (so we can see at a glance which legs are pinning the head).
+		// (so we can see at a glance which legs are pinning the head). Uses the
+		// un-wobbled headPos because step triggering is what's being visualised.
 		for (int i = 0; i < NumLegs; i++) {
 			const Leg& leg = legs[i];
 			vec shoulder = headPos + leg.shoulderOffset;

@@ -29,6 +29,12 @@ struct HexapodBoss : SelfRegister<HexapodBoss>
 	vec headPos;
 	vec headVel;
 	vec moveTarget;
+	// Visual-only spring-damped offset added to head and shoulders at draw time.
+	// Pulsed by foot-plant impulses so the body settles toward each newly-loaded
+	// foot. Does not affect step logic — leg comfort still measures against the
+	// un-wobbled headPos.
+	vec headWobble;
+	vec headWobbleVel;
 	Leg legs[NumLegs];
 
 	HexapodBoss(vec pos);
@@ -40,5 +46,8 @@ private:
 	std::optional<vec> FindFootTarget(int legIndex) const;
 	bool TryStartStep(int legIndex);
 	static vec ComputeKnee(vec shoulder, vec foot, float upperLen, float lowerLen, int bendSign);
-	static int NaturalBendSign(vec shoulder, vec foot, vec head);
+	// Picks the bend sign so the knee sits on the +Y (downward) side of the
+	// shoulder→foot line — i.e., the knee never points upward against gravity.
+	// Used by a hanging hexapod where feet anchor above the body.
+	static int DownwardBendSign(vec shoulder, vec foot);
 };
