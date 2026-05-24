@@ -13,6 +13,7 @@
 #include "assets_sounds.h"
 #include "simplexnoise.h"
 #include "bat.h"
+#include "hexapod_boss.h"
 #include "health.h"
 #include "debug.h"
 #include "collide.h"
@@ -142,6 +143,10 @@ void HellCrossScene::EnterScene()
 		}
 	}
 
+	// Spawn the hexapod boss above the cleared starting floor so it's reliably on the nav graph
+	// and visibly distinct from the player at startup.
+	new HexapodBoss(playerStartPosition + vec(40.f, 8.f));
+
 	player.Reset(playerStartPosition, kInitialPlayerHealth);
 	skillTree.Enable(Skill::GUN);
 	//skillTree.Enable(Skill::WALLJUMP);
@@ -164,6 +169,7 @@ void HellCrossScene::ExitScene()
 	Particles::ClearAll();
 	Bullet::DeleteAll();
 	Bat::DeleteAll();
+	HexapodBoss::DeleteAll();
 	BackgroundOneShotAnim::DeleteAll();
 	ForegroundOneShotAnim::DeleteAll();
 	destroyedTiles.Clear();
@@ -240,6 +246,10 @@ void HellCrossScene::Update(float dt)
 		e->Update(dt);
 	}
 
+	for (HexapodBoss* e : HexapodBoss::GetAll()) {
+		e->Update(dt);
+	}
+
 #ifdef _DEBUG
 	if (Debug::Draw && Keyboard::IsKeyPressed(SDL_SCANCODE_LSHIFT)) {
 		map.DebugEdit();
@@ -275,6 +285,7 @@ void HellCrossScene::Draw()
 		BackgroundOneShotAnim::GetAll(),
 		&Particles::dust,
 		Bat::GetAll(),
+		HexapodBoss::GetAll(),
 		&Particles::bullet,
 		Bullet::GetAll(),
 		Health::GetAll(),
