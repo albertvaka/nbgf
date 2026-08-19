@@ -25,12 +25,6 @@ IMGUI     ?= $(DEBUG)
 # Bash so we can use curly braces expansion
 SHELL = bash
 
-ifeq ($(shell uname),Darwin) # MacOS
-	date=gdate
-else
-	date=date
-endif
-
 #NOTE: Dynamic casts are disabled by fno-rtti
 CFLAGS = -pipe -I./engine -I./generated $(DEP_INCLUDE) -Wall -Wno-unused-parameter -Werror=return-type $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
 CXXFLAGS = $(CFLAGS) -std=c++20 -fno-rtti -fno-exceptions -Wno-reorder
@@ -111,9 +105,9 @@ run: $(EXEC)
 	@$(EXEC)
 
 define time_begin
-	@$(date) +%s%3N > $(1).time
+	@date +%s%N > $(1).time
 endef
 
 define time_end
-	@echo "Built $(1) in $$(($$($(date) +%s%3N)-$$(cat $(1).time))) ms"
+	@echo "Built $(1) in $$((($$(date +%s%N)-$$(cat $(1).time))/1000000)) ms"
 endef
