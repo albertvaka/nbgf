@@ -26,8 +26,8 @@ IMGUI     ?= $(DEBUG)
 SHELL = bash
 
 #NOTE: Dynamic casts are disabled by fno-rtti
-CFLAGS = -pipe -I./engine -I./generated $(DEP_INCLUDE) -Wall -Wno-unused-parameter -Werror=return-type $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
-CXXFLAGS = $(CFLAGS) -std=c++20 -fno-rtti -fno-exceptions -Wno-reorder
+CFLAGS = -pipe -I./engine -I./generated $(DEP_INCLUDE) -Wall -Wno-unused-parameter -Wno-unused-function -Wmissing-field-initializers -Wformat=2 -Werror=return-type $(PROFILEFLAGS) $(DEBUGFLAGS) $(IMGUIFLAGS) -O$(strip $(OPTIM)) $(PLATFORM_CFLAGS)
+CXXFLAGS = $(CFLAGS) -std=c++20 -fno-rtti -fno-exceptions -Wno-reorder -Wsuggest-override
 LDFLAGS	 = $(CXXFLAGS) -lSDL2_ttf -lSDL2_mixer $(PLATFORM_LDFLAGS)
 
 ifdef EMSCRIPTEN
