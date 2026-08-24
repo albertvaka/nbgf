@@ -9,6 +9,9 @@
 #include <android/log.h>
 #endif
 
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+
 #ifdef _MSC_VER
     #define __func__ __FUNCTION__
     #pragma warning(push)

@@ -30,7 +30,7 @@ void emscripten_sync_to_persistent_storage()
 
 inline std::string osConfigDir()
 {
-#if _WIN32
+#ifdef _WIN32
 	return getenv("LOCALAPPDATA");
 #elif defined(__APPLE__)
 	return std::filesystem::path(getenv("HOME")) / "Library" / "Preferences";
