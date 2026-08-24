@@ -33,10 +33,10 @@ struct HellCrossScene : Scene
 
 	void RandomizeMap();
 
-	void EnterScene();
-	void ExitScene();
-	void Update(float dt);
+	void EnterScene() override;
+	void ExitScene() override;
+	void Update(float dt) override;
 	void UpdateCamera();
-	void Draw();
+	void Draw() override;
 	void UpdateScores();
 };
