@@ -49,7 +49,7 @@ SDL_Surface* Text::MultiLineRender() {
 		std::stringstream columnss(str);
 		while (std::getline(columnss, str, TextColor::MagicSeparator)) {
 			if (str.size() == 4 && str[0] == TextColor::MagicIndicator) { // Did we find a color indicator?
-				fg = { (Uint8)str[1], (Uint8)str[2], (Uint8)str[3] };
+				fg = { (Uint8)str[1], (Uint8)str[2], (Uint8)str[3], 255 };
 				continue;
 			}
 			SDL_Surface* s = Render(fg);

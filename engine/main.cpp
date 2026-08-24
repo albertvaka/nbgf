@@ -97,13 +97,13 @@ int main(int argc, char* argv[])
 
 }
 
-#if _WIN32
+#ifdef _WIN32
 #pragma comment(lib, "Shcore.lib")
 #include <ShellScalingApi.h>
 #endif
 
 void init() {
-#if _WIN32
+#ifdef _WIN32
 	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 #endif
 
