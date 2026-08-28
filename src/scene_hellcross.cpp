@@ -38,7 +38,7 @@ const static vec playerStartPosition = vec(160, 160);
 
 HellCrossScene::HellCrossScene()
 	: map(map_size.x, map_size.y, Assets::spritesheetTexture)
-	, lava(BoxBounds(0, map_size.y*16 - 20, map_size.x*16, 200))
+	, lava(BoxBounds(0, map_size.y*16 - 20, (map_size.x+1)*16, 200))
 	, scoreText(Assets::font_30)
 	, lastScoreText(Assets::font_30)
 	, bestScoreText(Assets::font_30)
