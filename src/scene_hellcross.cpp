@@ -255,6 +255,7 @@ void HellCrossScene::Update(float dt)
 	for (Lava* l : Lava::GetAll()) {
 		l->Update(dt);
 	}
+	player.SaveSafeGround();
 }
 
 void HellCrossScene::Draw()

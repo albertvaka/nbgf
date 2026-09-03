@@ -40,6 +40,7 @@ struct Player : Entity, SingleInstance<Player>
     void TakeDamage(vec src);
     void DealDamage(vec target);
     void ToSafeGround();
+    void SaveSafeGround();
     vec SafeGroundPos() const {
         return Tile::FromTiles(lastSafeTilePos) + vec(Tile::Size / 2, 0);
     }
@@ -66,7 +67,8 @@ struct Player : Entity, SingleInstance<Player>
     vec acc;
     bool lookingLeft;
     CircleEntity playerAttack;
-    Tile groundTile;
+    veci groundTilePos;
+    Tile groundTileType;
     veci lastSafeTilePos;
     bool onWall;
     float initialJumpY;

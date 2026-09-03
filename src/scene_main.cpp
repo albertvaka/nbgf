@@ -942,6 +942,8 @@ void MainScene::Update(float dt)
 		l->Update(dt);
 	}
 
+	player.SaveSafeGround();
+
 	rotoText.Update(dt);
 
 	// Enable waves shader in lava cave

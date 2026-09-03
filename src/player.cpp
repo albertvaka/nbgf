@@ -126,6 +126,7 @@ Player::Player()
 	, playerAttack(vec::Zero, kSwordAttackRadius)
 	, size(kStandingSize)
 	, lastSafeTilePos(-1,-1)
+	, groundTilePos(-1,-1)
 {
 }
 
@@ -147,12 +148,12 @@ void Player::DealDamage(vec target) {
 		vel.y += kDoDamageUpKnockbackVel;
 	} else {
 		// Note: This gets called multiple times when the enemy doesn't die on a single frame, so you get a bigger knockback
-		float knockback = groundTile != Tile::NONE ? kDoDamageKnockbackVelGrounded : kDoDamageKnockbackVel;
+		float knockback = groundTileType != Tile::NONE ? kDoDamageKnockbackVelGrounded : kDoDamageKnockbackVel;
 		if (pos.x < target.x) {
 			knockback = -knockback;
 		}
 		float newVelX = vel.x / 2 + knockback;
-		//if (groundTile == Tile::NONE || !IsGoingToRunOffPlatform(CenterPos(), size, vec(newVelX, vel.y), 1 / 60.f))
+		//if (groundTileType == Tile::NONE || !IsGoingToRunOffPlatform(CenterPos(), size, vec(newVelX, vel.y), 1 / 60.f))
 		vel.x = newVelX;
 	}
 	initialJumpY = Mates::MaxFloat;
@@ -166,7 +167,7 @@ void Player::Reset(vec position, int maxHp) {
 	pos = position;
 	bfgPos = position + bfgOffset();
 	vel = vec(0.f, 0.f);
-	lastSafeTilePos = Tile::ToTiles(position);
+	lastSafeTilePos = groundTilePos = Tile::ToTiles(position);
 	invencibleTimer = -1.f;
 	bfgCooldownTimer = 0.f;
 	healthAnimationOldHealth = health = maxHealth = maxHp;
@@ -177,7 +178,7 @@ void Player::Reset(vec position, int maxHp) {
 	onWall = false;
 	sinkingInLava = nullptr;
 	alive = true;
-	groundTile = Tile::NONE;
+	groundTileType = Tile::NONE;
 	canDash = true;
 	diving = false;
 	dashing = false;
@@ -196,7 +197,7 @@ void Player::Reset(vec position, int maxHp) {
 
 void Player::UpdateMoving(float dt) 
 {
-	crouched = (groundTile != Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH));
+	crouched = (groundTileType != Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH));
 	if (crouched) {
 		crouchedTime += dt;
 	}
@@ -207,7 +208,7 @@ void Player::UpdateMoving(float dt)
 	acc = vec(0, 0);
 	if (Input::IsPressed(0,GameKeys::LEFT)) {
 		if (!attacking) lookingLeft = true;
-		if (groundTile != Tile::NONE) {
+		if (groundTileType != Tile::NONE) {
 			if (!crouched) acc.x -= kRunAcc;
 		}
 		else {
@@ -216,7 +217,7 @@ void Player::UpdateMoving(float dt)
 	}
 	if (Input::IsPressed(0,GameKeys::RIGHT)) {
 		if (!attacking) lookingLeft = false;
-		if (groundTile != Tile::NONE) {
+		if (groundTileType != Tile::NONE) {
 			if (!crouched) acc.x += kRunAcc;
 		}
 		else {
@@ -239,7 +240,7 @@ void Player::UpdateMoving(float dt)
 
 	// Calculate friction
 	vec fri = vec(0, 0);
-	if (groundTile != Tile::NONE)
+	if (groundTileType != Tile::NONE)
 	{
 		if (crouched)
 		{
@@ -340,11 +341,11 @@ void Player::Update(float dt)
 	bool animationNewFrame = (prev_frame != anim.current_frame);
 
 
-	if (groundTile != Tile::NONE || onWall) {
+	if (groundTileType != Tile::NONE || onWall) {
 		canDash = true;
 	}
 
-	if (groundTile != Tile::NONE) {
+	if (groundTileType != Tile::NONE) {
 		onWall = false;
 	}
 
@@ -369,7 +370,7 @@ void Player::Update(float dt)
 	}
 
 	if (!dashing && !diving && SkillTree::instance()->IsEnabled(Skill::DIVE) && divingRestTimer <= 0.f) {
-		if (groundTile == Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, kIsJustPressedIntervalTime)) {
+		if (groundTileType == Tile::NONE && Input::IsPressed(0, GameKeys::CROUCH) && Input::IsJustPressed(0, GameKeys::ATTACK, kIsJustPressedIntervalTime)) {
 			Input::ConsumeJustPressed(0, GameKeys::ATTACK);
 			diving = true;
 			Sound::Stop(voiceSoundChannel);
@@ -467,7 +468,7 @@ void Player::Update(float dt)
 		jumpFromWallTimer -= dt;
 	}
 
-	if (groundTile != Tile::NONE) {
+	if (groundTileType != Tile::NONE) {
 		timeAfterBeingGrounded = 0.f;
 	}
 	else {
@@ -496,9 +497,9 @@ void Player::Update(float dt)
 				}
 				vel.x = lookingLeft ? -kVelWalljump : kVelWalljump;
 				Particles::DoDustWallJump(pos, vel.x < 0);
-			} else if (groundTile.isSlope()) {
+			} else if (groundTileType.isSlope()) {
 				// Jump a bit sideways when on slope
-				if (groundTile.isRightSlope()) {
+				if (groundTileType.isRightSlope()) {
 					if (vel.x >= -kVelSlopejump) {
 						vel.x = -kVelSlopejump;
 					}
@@ -527,7 +528,7 @@ void Player::Update(float dt)
 					bool hasBlockAbove = topLeft.isSolid() || topRight.isSolid();
 					if (!hasBlockAbove) {
 						Particles::DoDustJump(pos);
-						groundTile = Tile::NONE;
+						groundTileType = Tile::NONE;
 					}
 				}
 				crouched = false;
@@ -536,7 +537,7 @@ void Player::Update(float dt)
 
 		UpdateMoving(dt);
 	}
-	else if (diving && groundTile == Tile::NONE) {
+	else if (diving && groundTileType == Tile::NONE) {
 		if (Input::IsPressed(0, GameKeys::LEFT)) {
 			vel.x -= kDiveHorizontalAcc * dt;
 		}
@@ -565,7 +566,7 @@ void Player::Update(float dt)
 		dashing = false;
 		lookingLeft = true;
 
-		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.leftWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
+		if ((onWall || groundTileType == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.leftWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
 			if (vel.y > 0) {
 				if (!onWall && attacking && anim.current_frame > 0) {
 					attacking = false;
@@ -583,7 +584,7 @@ void Player::Update(float dt)
 		vel.x = 0;
 		dashing = false;
 		lookingLeft = false;
-		if ((onWall || groundTile == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.rightWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
+		if ((onWall || groundTileType == Tile::NONE) && !isHit() && SkillTree::instance()->IsEnabled(Skill::WALLJUMP) && !moved.rightWallCollision.isBreakable(Tile::BreakResistance::SOFT)) {
 			if (vel.y > 0) {
 				if (!onWall && attacking && anim.current_frame > 0) {
 					attacking = false;
@@ -629,7 +630,7 @@ void Player::Update(float dt)
 			pos.y += 3.f;
 			vel.y = 0;
 			crouched = false;
-			groundTile = Tile::NONE;
+			groundTileType = Tile::NONE;
 		}
 		else if (!destroyingGround) {
 			if (vel.y > 50) {
@@ -638,10 +639,9 @@ void Player::Update(float dt)
 			}
 			vel.y = 0;
 			onWall = false;
-			groundTile = moved.groundCollision;
-			if (moved.groundCollision.isSafeGround()) {
-				lastSafeTilePos = moved.groundCollisionPos;
-			}
+			groundTilePos = moved.groundCollisionPos;
+			groundTileType = moved.groundCollision;
+
 		}
 	}
 	else {
@@ -652,11 +652,12 @@ void Player::Update(float dt)
 			Tile tile = GaemTileMap::instance()->GetTile(tilePos);
 			bool oneWayCollision = (tile.isOneWay() && pos.y - 1.f < (tilePos.y * Tile::Size));
 			if (tile.isSolid() || oneWayCollision) {
-				groundTile = tile;
+				groundTilePos = tilePos;
+				groundTileType = tile;
 			}
 		}
 		else {
-			groundTile = Tile::NONE;
+			groundTileType = Tile::NONE;
 		}
 	}
 
@@ -667,7 +668,7 @@ void Player::Update(float dt)
 	else if (dashing || attacking) 
 	{
 		size = kStandingSize;
-		if (dashing && groundTile != Tile::NONE) {
+		if (dashing && groundTileType != Tile::NONE) {
 			Particles::DoDustRun(pos, dt, lookingLeft, true);
 		}
 	} 
@@ -684,7 +685,7 @@ void Player::Update(float dt)
 		{
 
 			size = kStandingSize;
-			if (groundTile != Tile::NONE && vel.y >= 0) // if vel.y < 0 we reached ground from below, we are jumping and not actually grounded
+			if (groundTileType != Tile::NONE && vel.y >= 0) // if vel.y < 0 we reached ground from below, we are jumping and not actually grounded
 			{
 				if (Input::IsPressed(0, GameKeys::LEFT) && !Input::IsPressed(0, GameKeys::RIGHT))
 				{
@@ -769,7 +770,7 @@ void Player::Update(float dt)
 			new Bullet(tipOfTheGun, gunDirection*kBulletVel);
 			float oldVelY = vel.y;
 			vec recoil = -kBfgPushBack*gunDirection;
-			if (recoil.y < 0 && groundTile == Tile::NONE) {
+			if (recoil.y < 0 && groundTileType == Tile::NONE) {
 				recoil.y *= kBfgPushDownFactor; // make it a bit stronger on the negative y axis
 			}
 			vel += recoil;
@@ -777,7 +778,7 @@ void Player::Update(float dt)
 			if (onWall) {
 				vel.x = 0; // Will let wall go if we shoot and we aren't explicitly moving towards the wall
 			}
-			if (groundTile != Tile::NONE) {
+			if (groundTileType != Tile::NONE) {
 				vel.y = oldVelY; // Do not push towards the ground to prevent playing the "land" sound & particles
 				if (abs(vel.x) < 0.1f) {
 					Particles::DoDustLand(pos);
@@ -797,6 +798,13 @@ void Player::Update(float dt)
 	// We use mainClock so it also counts while the screen is frozen, when you are hit. Otherwise, when hit the animation would last longer.
 	if (healthAnimationTimer < mainClock) {
 		healthAnimationOldHealth = health;
+	}
+
+}
+
+void Player::SaveSafeGround() {
+	if (alive && health > 0 && !sinkingInLava && groundTileType.isStaticGround()) {
+		lastSafeTilePos = groundTilePos;
 	}
 }
 
@@ -851,7 +859,7 @@ void Player::TakeDamage(vec src) {
 	else {
 		vel.x = -kTakeDamageKnockbackVel.x;
 	}
-	if (groundTile != Tile::NONE) {
+	if (groundTileType != Tile::NONE) {
 		vel.y = kTakeDamageKnockbackVel.y;
 	}
 	initialJumpY = Mates::MaxFloat;
@@ -979,7 +987,7 @@ void Player::DrawGUI(bool discreteHealth)
 		ImGui::Text("vel %f,%f", vel.x, vel.y);
 		ImGui::Text("acc %f,%f", acc.x, acc.y);
 		ImGui::Text("divingRestTimer: %f", divingRestTimer);
-		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTile != Tile::NONE, onWall, attacking, diving, dashing, groundTile.isSlope());
+		ImGui::Text("ground: %d wall: %d attacking: %d diving: %d dashing: %d slope: %d", groundTileType != Tile::NONE, onWall, attacking, diving, dashing, groundTileType.isSlope());
 		ImGui::End();
 	}
 #endif
