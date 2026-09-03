@@ -92,11 +92,10 @@ void Lava::Update(float dt) {
 			if (player->TakeDamageFallingInLava(this)) {
 				Plof(player->pos.x);
 			}
-			// we don't need this because we never lower the lava level, but if we did we would have
-			// to do something like this to prevent it lowering after killing us and suddently us not being inside
-			//if (targetY > CurrentLevel()) {
-				//targetY = CurrentLevel();
-			//}
+			// Prevent lava from lowering away after killing us
+			if (targetY > CurrentLevel()) {
+				targetY = CurrentLevel();
+			}
 		}
 	}
 }
