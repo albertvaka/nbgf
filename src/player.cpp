@@ -16,6 +16,7 @@
 #include "common_tilemapcharacter.h"
 #include "common_bullet.h"
 #include "skilltree.h"
+#include "tweeny.h"
 #ifdef _IMGUI
 #include "imgui.h"
 #endif
@@ -808,7 +809,6 @@ void Player::SaveSafeGround() {
 	}
 }
 
-static float toSafeGroundLambdaTimer;
 void Player::ToSafeGround() {
 	initialJumpY = Mates::MaxFloat;
 	onWall = false;
@@ -816,12 +816,14 @@ void Player::ToSafeGround() {
 	if (health > 0) {
 		anim.Ensure(AnimLib::WARRIOR_FALL, false);
 		vec newPos = SafeGroundPos();
-		toSafeGroundLambdaTimer = 0.f;
 		auto previousUpdateWhileFrozen = Fx::FreezeImage::GetAlternativeUpdateFnWhileFrozen();
-		Fx::FreezeImage::Freeze(0.5f);
-		Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([this, newPos, previousUpdateWhileFrozen](float dt) {
-			toSafeGroundLambdaTimer += dt;
-			pos = Mates::Lerp(pos, newPos, toSafeGroundLambdaTimer);
+		const float totalTime = 0.5f;
+		Fx::FreezeImage::Freeze(totalTime);
+		Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([this, startPos = pos, newPos, totalTime, previousUpdateWhileFrozen, elapsed = 0.0f](float dt) mutable {
+			elapsed += dt;
+			float progress = Mates::Clamped(elapsed / totalTime, 0.0f, 1.0f);
+			float t = tweeny::easing::cubicOut.run(progress, 0.0f, 1.0f); // start fast, end slow
+			pos = Mates::Lerp(startPos, newPos, t);
 			if (previousUpdateWhileFrozen) {
 				previousUpdateWhileFrozen(dt);
 			}
