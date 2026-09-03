@@ -920,6 +920,8 @@ void Player::Draw() const {
 
 	Shader::Deactivate();
 
+	CircleBounds(Tile::FromTiles(lastSafeTilePos) + Tile::Sizes/2, 5).DebugDraw(0,255,0);
+
 	// Debug-only
 	HitBoxBounds().DebugDraw();
 	//Input::GetAnalog(0, AnalogInput::AIM).DebugDraw();
