@@ -80,6 +80,7 @@ struct Tile : Tiled::Tile
 		return value >= BREAKABLE_HARD_1 && value < BREAKABLE_GND_1; // Exclude soft and ground breakable tiles
 	}
 
+	// Tiles that can break by hitting them
 	bool isBreakable(BreakResistance breakPower) const {
 		if (breakPower == BreakResistance::NONE) return false;
 		if (breakPower == BreakResistance::SOFT) return value >= BREAKABLE_1 && value < BREAKABLE_HARD_1; // Exclude hard breakable tiles
@@ -87,6 +88,7 @@ struct Tile : Tiled::Tile
 		return value >= BREAKABLE_1 && value < BREAKABLE_GND_1; // Soft and hard breakable tiles
 	}
 
+	// Tiles that can break by ground-pounding them
 	bool isBreakableGround() const {
 		return value >= BREAKABLE_GND_1 && value < SOLID_TRANSPARENT;
 	}
