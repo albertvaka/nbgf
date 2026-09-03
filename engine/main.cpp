@@ -210,6 +210,19 @@ void main_loop() {
 	{
 		Mouse::_UpdateInputState();
 	}
+
+#ifdef _IMGUI
+	static bool textInputMode = true;
+	if (io.WantTextInput != textInputMode) {
+		if (io.WantTextInput) {
+			SDL_StartTextInput();
+		} else {
+			SDL_StopTextInput();
+		}
+		textInputMode = io.WantTextInput;
+	}
+#endif
+
 	GamePad::_UpdateInputState();
 	Input::Update(dt);
 
