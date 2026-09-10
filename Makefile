@@ -69,7 +69,9 @@ ifeq ($(strip $(IMGUI)),1)
 endif
 
 $(EXEC): $(OBJ) $(ENGINE_OBJ) $(GENERATED_OBJ) $(DEP_OBJ) Makefile
+	$(call link_time_begin,$@)
 	$(CXX) $(OBJ) $(GENERATED_OBJ) $(ENGINE_OBJ) $(DEP_OBJ) $(LDFLAGS) -o $(OUT_FILE)
+	$(call link_time_end,$@)
 
 $(OBJ_DIR)/engine/%.cpp.o: engine/%.cpp engine/*.h src/assets.h src/scene_entrypoint.h src/window_conf.h Makefile
 	@mkdir -p $(OBJ_DIR)/engine
@@ -116,4 +118,12 @@ endef
 
 define time_end
 	@echo "Built $(1) in $$(($$($(date) +%s%3N)-$$(cat $(1).time))) ms"
+endef
+
+define link_time_begin
+	@date +%s%3N > obj/gaem.linktime
+endef
+
+define link_time_end
+	@echo "Linked $(1) in $$(($$($(date) +%s%3N)-$$(cat obj/gaem.linktime))) ms"
 endef
