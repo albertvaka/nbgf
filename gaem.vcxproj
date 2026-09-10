@@ -157,6 +157,7 @@
     <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu_renderer.c" />
     <ClCompile Include="vendor\SDL_gpu\src\SDL_gpu_shapes.c" />
     <ClCompile Include="vendor\stb_image\stb_image.c" />
+    <ClCompile Include="vendor\box2d\src\*.c" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="asset_src\tiled.tmx">
@@ -377,6 +378,11 @@ exit /b 0</Command>
       <AdditionalDependencies>opengl32.lib;SDL2main.lib;SDL2.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\vendor\box2d\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
