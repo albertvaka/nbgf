@@ -3,14 +3,20 @@
 #include "vec.h"
 #include "bounds.h"
 
-struct Entity
+// State shared by ordinary and physics-backed game objects. SelfRegister only
+// requires this field, so physics entities do not need to duplicate pos/vel.
+struct Lifecycle
+{
+	bool alive = true;
+};
+
+struct Entity : Lifecycle
 {
 	constexpr Entity() : pos(0.f,0.f) {}
 	constexpr Entity(vec pos) : pos(pos) {}
 	constexpr Entity(vec pos, vec vel) : pos(pos), vel(vel) {}
 	vec pos;
 	vec vel = vec(0.f, 0.f);
-	bool alive = true;
 };
 
 struct BoxEntity : Entity {
