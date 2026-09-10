@@ -22,6 +22,8 @@
 
 #include <cmath>
 
+const bool crazyTaxyMode = false;
+
 const int kInitialLives = 3;
 
 extern float mainClock;
@@ -43,7 +45,7 @@ void SceneMain::EnterScene()
 
 	Chunks::SpawnInitial(veci(0, 0));
 
-	goals.Reset();
+	goals.Reset(crazyTaxyMode);
 
 	Fx::ScreenTransition::Start(Assets::fadeInDiamondsShader);
 	Fx::FreezeImage::SetAlternativeUpdateFnWhileFrozen([](float dt) {

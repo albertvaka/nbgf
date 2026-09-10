@@ -96,13 +96,13 @@ Goals::Goals()
 	restartText.SetString("Press start to try again");
 }
 
-void Goals::Reset() {
+void Goals::Reset(bool enabled) {
 	Ship* ship = Ship::instance();
 	activeGoal.color = kActiveColor;
 	activeGoal.pos = FindNextPos(ship->pos, ship->heading);
 	inactiveGoal.pos = FindNextPos(activeGoal.pos, ship->heading);
 	movementEnabled = true;
-	state = State::NOT_ACTIVE;
+	state = enabled ? State::NOT_ACTIVE : State::DISABLED;
 }
 
 void DrawScreenEdgeArrow(BoxBounds& cameraBounds, vec pos, SDL_Color color) {
@@ -139,6 +139,7 @@ void Goals::GotGoal() {
 		countdown += kCountdownGoalIncrease;
 		countdown = (int)countdown + 1; // round up
 		break;
+	case State::DISABLED:
 	case State::GAME_OVER:
 		SDL_assert(false);
 		break;
@@ -155,7 +156,7 @@ bool Goals::Update(float dt)
 	UpdateParticles(activeGoal, dt);
 	UpdateParticles(inactiveGoal, dt);
 
-	if (state != State::GAME_OVER) {
+	if (state == State::ACTIVE || state == State::NOT_ACTIVE) {
 		CircleBounds activeBounds(activeGoal.pos, kGoalRadius);
 		if (Collide(shipBounds, activeBounds)) {
 			GotGoal();
@@ -168,7 +169,7 @@ bool Goals::Update(float dt)
 			}
 			countdownText.SetString(Mates::ToStringWithPrecision(countdown, 1));
 		}
-	} else { // game over
+	} else if (state == State::GAME_OVER) {
 		gameOverRotoText.Update(dt);
 		if (restartTimer > 0.f) {
 			restartTimer -= dt;
@@ -184,6 +185,11 @@ bool Goals::Update(float dt)
 
 void Goals::Draw() const
 {
+	if (state == State::DISABLED) {
+		// FIXME: This method draws the active goal when we are in game over :D
+		return;
+	}
+
 	activeGoal.Draw();
 	if (state != State::GAME_OVER) {
 		inactiveGoal.Draw();

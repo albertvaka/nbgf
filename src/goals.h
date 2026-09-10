@@ -13,6 +13,7 @@ struct Goals : CircleEntity {
 	Goals();
 
 	enum class State {
+		DISABLED,
 		NOT_ACTIVE,
 		ACTIVE,
 		GAME_OVER,
@@ -20,7 +21,7 @@ struct Goals : CircleEntity {
 
 	State state;
 
-	void Reset();
+	void Reset(bool enabled);
 	bool Update(float dt);
 	void Draw() const;
 	void DrawGui() const;
