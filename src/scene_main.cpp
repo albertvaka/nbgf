@@ -16,7 +16,9 @@
 
 #include "goals.h"
 #include "fish.h"
+#include "tower.h"
 #include "rock.h"
+#include "bullet.h"
 #include "chunks.h"
 #include "bullet.h"
 
@@ -52,7 +54,7 @@ void SceneMain::EnterScene()
 
 	});
 
-	//new Enemy(vec(100, 100));
+	new Enemy(vec(100, 100));
 }
 
 void SceneMain::ExitScene()
@@ -61,6 +63,7 @@ void SceneMain::ExitScene()
 	Rock::DeleteAll();
 	Fish::DeleteAll();
 	Enemy::DeleteAll();
+	Tower::DeleteAll();
 }
 
 void SceneMain::Update(float dt)
@@ -84,7 +87,7 @@ void SceneMain::Update(float dt)
 	}
 
 	veci lastChunk = Chunks::GetChunk(ship.pos);
-	
+
 	bool hitRock = ship.Update(dt);
 
 	if (hitRock) {
@@ -99,6 +102,15 @@ void SceneMain::Update(float dt)
 	for (Enemy* e : Enemy::GetAll()) {
 		e->Update(dt);
 	}
+
+	for (Tower* e : Tower::GetAll()) {
+		e->Update(dt);
+	}
+
+	for (Bullet* e : Bullet::GetAll()) {
+		e->Update(dt);
+	}
+
 
 	if (goals.Update(dt)) {
 		// Will restart the scene
@@ -157,7 +169,15 @@ void SceneMain::Draw()
 		e->Draw();
 	}
 
+	for (Tower* e : Tower::GetAll()) {
+		e->Draw();
+	}
+
 	ship.Draw();
+
+	for (Bullet * e : Bullet::GetAll()) {
+		e->Draw();
+	}
 
 	Camera::InScreenCoords::Begin();
 	for (int i = 0; i < lives; i++) {

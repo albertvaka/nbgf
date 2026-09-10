@@ -19,9 +19,9 @@ const GPU_Rect ROCKS_FOAM_RECTS[] = {
 };
 const int ROCKS_FOAM_RECTS_COUNT = 9;
 
-float hash(float x, float y)
+static float hash(float x, float y)
 {
-    return abs(std::fmod(std::sin(x * 12.9898f + y * 78.233f) * 43758.5453f, 1.0f));
+    return std::abs(std::fmod(std::sin(x * 12.9898f + y * 78.233f) * 43758.5453f, 1.0f));
 }
 
 Rock::Rock(const vec& position)
@@ -30,7 +30,7 @@ Rock::Rock(const vec& position)
 {
 }
 
-bool CanSpawn(float x, float y)
+static bool CanSpawn(float x, float y)
 {
     for (Rock* rock : Rock::GetAll()) {
         if (rock->pos.DistanceSq(vec(x, y)) < 8*rockRadius*rockRadius) {

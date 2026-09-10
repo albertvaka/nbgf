@@ -2,6 +2,7 @@
 
 #include "rock.h"
 #include "fish.h"
+#include "tower.h"
 
 namespace Chunks {
     
@@ -41,12 +42,14 @@ namespace Chunks {
 		BoxBounds bounds(chunkX * chunkSize, chunkY * chunkSize, chunkSize, chunkSize);
         Rock::SpawnInChunk(bounds);
         Fish::SpawnInChunk(bounds);
+        Tower::SpawnInChunk(bounds);
     }
 
     void DespawnFarFromChunk(veci currentChunk, int distance)
     {
         Rock::DespawnFarFromChunk(currentChunk, distance);
         Fish::DespawnFarFromChunk(currentChunk, distance);
+        Tower::DespawnFarFromChunk(currentChunk, distance);
     }
 
 	void Update(veci lastChunk, veci currentChunk) {
