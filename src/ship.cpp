@@ -17,12 +17,21 @@ SDL_Color foamColor = { Uint8(0.7 * 255), Uint8(0.8 * 255), Uint8(0.9 * 255), 25
 SDL_Color surfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 255 };
 SDL_Color alphaSurfaceColor = { Uint8(0.1 * 255), Uint8(0.45 * 255), Uint8(0.73 * 255), 0 };
 
-const float kImmunityTime = 2.0f;
+//#define NERFED
+#ifdef NERFED
 float kAcceleration = 90.f;
 float kMaxSpeed = 220.f;
 float kRotationSpeedCoef = 0.0035f;
 float kRotationSpeedCoefDrifting = kRotationSpeedCoef * 1.1f;
 float kRotationSpeed = 25.f;
+#else
+float kAcceleration = 200.f;
+float kMaxSpeed = 400.f;
+float kRotationSpeedCoef = 0.0035f;
+float kRotationSpeedCoefDrifting = kRotationSpeedCoef * 1.1f;
+float kRotationSpeed = 30.f;
+#endif
+const float kImmunityTime = 2.0f;
 float kIgnoreCollisionTimer = 0.2f;
 const float kShipFrontRadius = 15.f;
 const float kShipBackRadius = 25.f;
