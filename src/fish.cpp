@@ -71,7 +71,7 @@ void Fish::UpdateAll(float dt) {
 		std::span<Fish* const> group = std::span<Fish* const>(fishes.begin() + i * numFishPerGroup, fishes.begin() + (i+1) * numFishPerGroup);
 
 		vec centerOfMass = SteeringBehavior::GetCenterOfMass(group);
-		vec ship = Ship::instance()->pos;
+		vec ship = Ship::instance()->Position();
 		float distToShip = Distance(ship, centerOfMass);
 		if (distToShip < kShipRepulsionRadius) {
 			vec awayFromShip = (centerOfMass - ship).Normalized();
@@ -88,7 +88,7 @@ void Fish::UpdateAll(float dt) {
 
 void Fish::Update(float dt, vec centerOfMass, std::span<Fish* const> neighbours)
 {
-	vec ship = Ship::instance()->pos;
+	vec ship = Ship::instance()->Position();
 
 	vec flee = steering.Flee(ship) * 15.f;
 	vec separation = steering.Separation(neighbours) * 300.0f;

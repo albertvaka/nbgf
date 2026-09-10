@@ -20,7 +20,7 @@ b2ShapeDef ShapeDefinition(void* userData)
 	definition.userData = userData;
 	definition.density = 1.0f;
 	definition.material.friction = 0.0f;
-	definition.material.restitution = 0.0f;
+	definition.material.restitution = 0.3f;
 	return definition;
 }
 

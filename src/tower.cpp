@@ -64,7 +64,7 @@ static bool CanSpawn(float x, float y)
         }
     }
     for (Rock* rock : Rock::GetAll()) {
-        if (rock->pos.DistanceSq(vec(x, y)) < 8*towerRadius*towerRadius) {
+        if (rock->Position().DistanceSq(vec(x, y)) < 8*towerRadius*towerRadius) {
             return false;
         }
     }

@@ -13,6 +13,7 @@
 #include "musicplayer.h"
 #include "fx.h"
 #include "debug.h"
+#include "physics_world.h"
 
 #include "goals.h"
 #include "fish.h"
@@ -86,9 +87,11 @@ void SceneMain::Update(float dt)
 		return;
 	}
 
-	veci lastChunk = Chunks::GetChunk(ship.pos);
+	veci lastChunk = Chunks::GetChunk(ship.Position());
 
-	bool hitRock = ship.Update(dt);
+	ship.Update(dt);
+	PhysicsWorld::Instance().Step(dt);
+	bool hitRock = ship.PostPhysicsUpdate(dt);
 
 	if (hitRock) {
 		lives--;
@@ -114,7 +117,7 @@ void SceneMain::Update(float dt)
 
 	if (goals.Update(dt)) {
 		// Will restart the scene
-		vec normalizedPlayerPos = Camera::WorldToScreen(ship.pos) / Camera::InScreenCoords::Size();
+		vec normalizedPlayerPos = Camera::WorldToScreen(ship.Position()) / Camera::InScreenCoords::Size();
 		Assets::fadeOutCircleShader.Activate(); // Must be active to set uniforms
 		Assets::fadeOutCircleShader.SetUniform("normalizedTarget", normalizedPlayerPos);
 		Assets::fadeOutDiamondsShader.Deactivate();
@@ -123,7 +126,7 @@ void SceneMain::Update(float dt)
 
 	Particles::UpdateAll(dt);
 
-	veci currentChunk = Chunks::GetChunk(ship.pos);
+	veci currentChunk = Chunks::GetChunk(ship.Position());
 	Chunks::Update(lastChunk, currentChunk);
 }
 

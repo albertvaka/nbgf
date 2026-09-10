@@ -74,7 +74,7 @@ retry:
 	vec newSpawnPosition = pos + direction.RotatedAroundOriginRads(Rand::rollf(-Angles::Tau / 4, Angles::Tau / 4)) * Rand::rollf(kMinDistanceToNewGoal, kMaxDistanceToNewGoal);
 	CircleBounds b = CircleBounds(newSpawnPosition, kGoalRadius);
 	for (Rock* rock : Rock::GetAll()) {
-		if (b.Contains(rock->pos)) {
+		if (b.Contains(rock->Position())) {
 			goto retry;
 		}
 	}
@@ -99,7 +99,7 @@ Goals::Goals()
 void Goals::Reset(bool enabled) {
 	Ship* ship = Ship::instance();
 	activeGoal.color = kActiveColor;
-	activeGoal.pos = FindNextPos(ship->pos, ship->heading);
+	activeGoal.pos = FindNextPos(ship->Position(), ship->heading);
 	inactiveGoal.pos = FindNextPos(activeGoal.pos, ship->heading);
 	movementEnabled = true;
 	state = enabled ? State::NOT_ACTIVE : State::DISABLED;
@@ -129,7 +129,7 @@ void Goals::GotGoal() {
 	}
 	activeGoal.pos = inactiveGoal.pos;
 	Ship* ship = Ship::instance();
-	inactiveGoal.pos = FindNextPos(activeGoal.pos, (activeGoal.pos - ship->pos).Normalized());
+	inactiveGoal.pos = FindNextPos(activeGoal.pos, (activeGoal.pos - ship->Position()).Normalized());
 	switch (state) {
 	case State::NOT_ACTIVE:
 		countdown = kCountdownInitialTime;

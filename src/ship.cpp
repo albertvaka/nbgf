@@ -6,7 +6,6 @@
 #include "debug.h"
 #include "camera.h"
 #include "tweeny.h"
-#include "collide.h"
 #include "rock.h"
 #include "input.h"
 #include "stroke.h"
@@ -33,7 +32,6 @@ float kRotationSpeed = 30.f;
 #endif
 const float kImmunityTime = 2.0f;
 float kIgnoreCollisionTimer = 0.2f;
-const float kShipFrontRadius = 15.f;
 const float kShipBackRadius = 25.f;
 const float kShipFrontBoundsOffset = 45.f;
 const float kShipBackBoundsOffset = 50.f;
@@ -41,17 +39,21 @@ float kDecelerationCoef = 0.3f;
 float kDecelerationCoefDrifting = 0.3f;
 float kParticlesSpeed = 110.f;
 float kTimeBetweenStrokeSegments = 0.05f;
-const float kRotationWhenCrashingDegs = 45.f;
+const float kCollisionDamageConeDegs = 45.f;
 const float kMinColisionAngleToDamageDegs = 10.f;
-const float kSlowDownWhenHit = 0.9f;
 const float kZoomSailingFast = 0.6f;
 float kZoomSailingSlow = 0.9f;
 vec kShipSpawnPos = vec(200, 200);
 float kDriftRecoveryRate = 2.0f; // How quickly velocity aligns with heading when not turning
+float kAngularDamping = 8.0f;
 
 extern float mainClock;
 
-Ship::Ship() {
+Ship::Ship()
+	: PhysicsCapsuleEntity(kShipSpawnPos, vec(-kShipBackBoundsOffset, 0.f), vec(kShipFrontBoundsOffset, 0.f), kShipBackRadius, b2_dynamicBody, PhysicsCategory::Ship)
+{
+	SetFixedRotation(false);
+	SetAngularDamping(kAngularDamping);
 	outerStroke.SetMaxJoints(100);
 	outerStroke.SetJointLifetime(4.5f);
 	outerStroke.SetStartInnerColor(foamColor);
@@ -76,40 +78,39 @@ Ship::Ship() {
 void Ship::Reset() {
 	immunityTimer = 0.f;
 	ignoreCollisionTimer = 0.f;
-	pos = kShipSpawnPos;
-	vel = vec::Zero;
+	SetPosition(kShipSpawnPos);
+	SetVelocity(vec::Zero);
+	SetAngularVelocity(0.f);
 	heading = vec(1,0);
+	SetRotationRads(0.f);
 	timer = 0.f;
 	Camera::SetZoom(kZoomSailingSlow);
 	previousZoomDiff = 0;
 	distanceSailed = 0.f;
 	innerStroke.Clear();
 	outerStroke.Clear();
-	Camera::SetCenter(pos);
+	Camera::SetCenter(Position());
 }
 
 
-bool Ship::Update(float dt) {
-	bool retHitRock = false;
-
+void Ship::Update(float dt) {
 	bool isDrifting = Input::IsPressed(0, GameKeys::DRIFT);
 
-	float speed = vel.Length();
+	float speed = Velocity().Length();
 	// The actual direction in which the ship is moving, can be different from heading if drifting
-	vec velDir = speed > 0 ? vel.Normalized() : heading;
+	vec velDir = speed > 0 ? Velocity().Normalized() : heading;
 
 	bool isTurning = false;
+	float turnVelocity = 0.f;
 	// TODO: Use Input::GetAnalog to support diagonals in gamepad? or decide this is a mobile game and replace with touch controls.
 	if (Input::IsPressed(0, GameKeys::LEFT)) {
 		float coef = isDrifting? kRotationSpeedCoefDrifting : kRotationSpeedCoef;
-		heading = heading.RotatedAroundOriginRads(-coef*(speed+kRotationSpeed)*dt);
-		heading.Normalize();
+		turnVelocity -= coef * (speed + kRotationSpeed);
 		isTurning = true;
 	}
 	if (Input::IsPressed(0, GameKeys::RIGHT)) {
 		float coef = isDrifting? kRotationSpeedCoefDrifting : kRotationSpeedCoef;
-		heading = heading.RotatedAroundOriginRads(coef*(speed+kRotationSpeed)*dt);
-		heading.Normalize();
+		turnVelocity += coef * (speed + kRotationSpeed);
 		isTurning = true;
 	}
 
@@ -143,35 +144,40 @@ bool Ship::Update(float dt) {
 	if (immunityTimer > 0) {
 		immunityTimer -= dt;
 	}
-
 	if (ignoreCollisionTimer > 0) {
 		ignoreCollisionTimer -= dt;
-	} else {
-		for (Rock* rock : Rock::GetAll()) {
-			rock->pos.DebugDraw();
-			auto [frontBounds, middleBounds, backBounds] = AccurateBounds();
-			if (Collide(frontBounds, rock->Bounds()) || Collide(backBounds, rock->Bounds()) || Collide(middleBounds, rock->Bounds())) {
-				vec rockFromShip = rock->pos-pos;
-				float angle = heading.AngleRadsBetween(rockFromShip.Normalized()); // Always between 0 and 180
-				float mag = Angles::DegsToRads(kRotationWhenCrashingDegs) - fabs(angle);
-				if (mag > 0.f) { // Ignores hits on the sides or the back
-					int sign = angle > 0 ? -1 : 1;
-					heading.RotateAroundOriginRads(mag * sign);
-					ignoreCollisionTimer = kIgnoreCollisionTimer;
-					if (immunityTimer <= 0.f && mag > Angles::DegsToRads(kMinColisionAngleToDamageDegs)) {
-						immunityTimer = kImmunityTime;
-						speed *= kSlowDownWhenHit;
-						retHitRock = true;
-					}
+	}
+
+	Mates::Clamp(speed, 0.f, kMaxSpeed);
+	SetVelocity(velDir * speed);
+	if (isTurning) {
+		SetAngularVelocity(turnVelocity);
+	}
+}
+
+bool Ship::PostPhysicsUpdate(float dt) {
+	// The collision solver, rather than gameplay code, now determines this angle.
+	heading = vec::FromAngleRads(RotationRads());
+	bool retHitRock = false;
+	float speed = Velocity().Length();
+
+	// Box2D supplies the collision response. Contacts only drive gameplay damage.
+	if (ignoreCollisionTimer <= 0) {
+		const PhysicsEntity* hitEntity = FindTouching(PhysicsCategory::Rock);
+		if (hitEntity != nullptr) {
+			const Rock* rock = static_cast<const Rock*>(hitEntity);
+			vec rockFromShip = rock->Position() - Position();
+			float angle = heading.AngleRadsBetween(rockFromShip.Normalized());
+			float damageAngle = Angles::DegsToRads(kCollisionDamageConeDegs) - fabs(angle);
+			if (damageAngle > 0.f) { // Ignores hits on the sides or the back
+				ignoreCollisionTimer = kIgnoreCollisionTimer;
+				if (immunityTimer <= 0.f && damageAngle > Angles::DegsToRads(kMinColisionAngleToDamageDegs)) {
+					immunityTimer = kImmunityTime;
+					retHitRock = true;
 				}
 			}
 		}
 	}
-
-	Mates::Clamp(speed, 0.f, kMaxSpeed);
-	vel = velDir * speed;
-
-	pos += vel * dt;
 
 	distanceSailed += speed;
 
@@ -183,12 +189,12 @@ bool Ship::Update(float dt) {
 		timer -= kTimeBetweenStrokeSegments;
 		float thickness = std::max(speed / kMaxSpeed, 0.3f) * 3.5f;
 		float wobblyness = sin(distanceSailed * 0.008f) * 2.f;
-		innerStroke.AddJoint(pos, thickness * 15.f + wobblyness);
-		outerStroke.AddJoint(pos, thickness * 20.f + wobblyness);
+		innerStroke.AddJoint(Position(), thickness * 15.f + wobblyness);
+		outerStroke.AddJoint(Position(), thickness * 20.f + wobblyness);
 	}
 
 	if (speed > kParticlesSpeed) {
-		Particles::waterTrail.pos = pos;
+		Particles::waterTrail.pos = Position();
 		Particles::waterTrail.Spawn(dt);
 	}
 
@@ -201,13 +207,18 @@ bool Ship::Update(float dt) {
 	float newZoom = currentZoom + smoothenedZoomDiff * 0.7 * dt;
 	Camera::SetZoom(newZoom);
 
-	vec camTarget = pos + heading * 300.f * speed / kMaxSpeed;
+	vec camTarget = Position() + heading * 300.f * speed / kMaxSpeed;
 	vec camPos = Camera::Center();
 	vec camDiff = camTarget - camPos;
 	vec camMovement = camDiff / 20.f;
 	Camera::SetCenter(camPos + camMovement);
-	
+
 	return retHitRock;
+}
+
+CircleBounds Ship::ApproxBounds() const
+{
+	return CircleBounds(Position(), kShipBackRadius * 2);
 }
 
 void Ship::Draw() {
@@ -219,28 +230,24 @@ void Ship::Draw() {
 	}
 
 	float angle = heading.AngleDegs();
-	Window::Draw(Assets::shipTexture, pos)
+	Window::Draw(Assets::shipTexture, Position())
 		.withOrigin(Assets::shipTexture->w / 2, Assets::shipTexture->h / 2)
 		.withRotationDegs(angle)
 		.withScale(0.5f);
 
 	Assets::tintShader.Deactivate();
 
-	ApproxBounds().DebugDraw();
-
-	auto [frontBounds, middleBounds, backBounds] = AccurateBounds();
-	frontBounds.DebugDraw();
-	middleBounds.DebugDraw();
-	backBounds.DebugDraw();
-
 #ifdef _IMGUI
 	{
 		ImGui::Begin("ship");
-		ImGui::Text("Speed: %f", vel.Length());
+		ImGui::Text("Speed: %f", Velocity().Length());
 		ImGui::SliderFloat("kAcceleration", &kAcceleration, 0.f, 500.f);
 		ImGui::SliderFloat("kMaxSpeed", &kMaxSpeed, 0.f, 1000.f);
 		ImGui::SliderFloat("kRotationSpeed", &kRotationSpeed, 0.f, 100.f);
 		ImGui::SliderFloat("kRotationSpeedCoef", &kRotationSpeedCoef, 0.f, 0.01f);
+		if (ImGui::SliderFloat("kAngularDamping", &kAngularDamping, 0.f, 20.f)) {
+			SetAngularDamping(kAngularDamping);
+		}
 		ImGui::SliderFloat("kDecelerationCoef", &kDecelerationCoef, 0.f, 1.f);
 		ImGui::SliderFloat("kDecelerationCoefDrifting", &kDecelerationCoefDrifting, 0.f, 1.f);
 		ImGui::SliderFloat("kIgnoreCollisionTimer", &kIgnoreCollisionTimer, 0.f, 10.f);
@@ -250,17 +257,4 @@ void Ship::Draw() {
 
 	//Particles::waterTrail.DrawImGUI();
 #endif
-}
-
-CircleBounds Ship::ApproxBounds() const 
-{
-	return CircleBounds(pos, kShipBackRadius * 2);
-}
-
-std::tuple<CircleBounds, CircleBounds, CircleBounds> Ship::AccurateBounds() const {
-	return std::make_tuple(
-		CircleBounds(pos + heading * kShipFrontBoundsOffset, kShipFrontRadius),
-		CircleBounds(pos, kShipBackRadius),
-		CircleBounds(pos - heading * kShipBackBoundsOffset, kShipBackRadius)
-	);
 }

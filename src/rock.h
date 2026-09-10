@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entity.h"
+#include "physics_entity.h"
 #include "selfregister.h"
 #include "assets.h"
 #include "window.h"
@@ -8,14 +8,14 @@
 
 extern float mainClock;
 
-struct Rock : CircleEntity, SelfRegister<Rock>
+struct Rock : PhysicsCircleEntity, SelfRegister<Rock>
 {
 	GPU_Rect sprite;
 	Rock(const vec& position);
 
 	void Draw() const
 	{
-		Window::Draw(Assets::rockTexture, pos)
+		Window::Draw(Assets::rockTexture, Position())
 			.withRect(sprite)
 			.withOrigin(sprite.w/2, sprite.h/2)
 			.withScale(0.25);
@@ -25,7 +25,7 @@ struct Rock : CircleEntity, SelfRegister<Rock>
 
 	void DrawFoam() const
 	{
-		Window::Draw(Assets::rockFoamTexture, pos)
+		Window::Draw(Assets::rockFoamTexture, Position())
 			.withRect(sprite)
 			.withOrigin(sprite.w/2, sprite.h/2)
 			.withScale(0.25);

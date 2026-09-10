@@ -25,7 +25,7 @@ static float hash(float x, float y)
 }
 
 Rock::Rock(const vec& position)
-    : CircleEntity(position, rockRadius)
+    : PhysicsCircleEntity(position, rockRadius, b2_staticBody, PhysicsCategory::Rock)
     , sprite(ROCKS_FOAM_RECTS[int(hash(position.y, position.x)*ROCKS_FOAM_RECTS_COUNT)])
 {
 }
@@ -33,7 +33,7 @@ Rock::Rock(const vec& position)
 static bool CanSpawn(float x, float y)
 {
     for (Rock* rock : Rock::GetAll()) {
-        if (rock->pos.DistanceSq(vec(x, y)) < 8*rockRadius*rockRadius) {
+        if (rock->Position().DistanceSq(vec(x, y)) < 8*rockRadius*rockRadius) {
             return false;
         }
     }
@@ -56,7 +56,7 @@ void Rock::DespawnFarFromChunk(veci currentChunk, int distance)
     std::vector<Rock*>& rocks = Rock::GetAll();
     for (int i = rocks.size() - 1; i >= 0; i--) {
         Rock* rock = rocks[i];
-        veci rockChunk = Chunks::GetChunk(rock->pos);
+        veci rockChunk = Chunks::GetChunk(rock->Position());
         if (std::abs(rockChunk.x - currentChunk.x) >= distance || std::abs(rockChunk.y - currentChunk.y) >= distance) {
             delete rock;
         }

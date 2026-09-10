@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entity.h"
+#include "physics_entity.h"
 #include "assets.h"
 #include "window_draw.h"
 #include "debug.h"
@@ -12,7 +12,7 @@
 #include "stroke.h"
 #include "particles.h"
 
-class Ship : public Entity, public SingleInstance<Ship> {
+class Ship : public PhysicsCapsuleEntity, public SingleInstance<Ship> {
 public:
 	vec heading; // it's always normalized
 	float immunityTimer;
@@ -20,15 +20,15 @@ public:
 
     Ship();
 	void Reset();
-	bool Update(float dt);
+	void Update(float dt);
+	bool PostPhysicsUpdate(float dt);
 	void Draw();
+	CircleBounds ApproxBounds() const;
 	void DrawStroke() {
 		innerStroke.Draw();
 		outerStroke.DrawExcluding(innerStroke);
 	}
 
-	CircleBounds ApproxBounds() const;
-	std::tuple<CircleBounds, CircleBounds, CircleBounds> AccurateBounds() const;
 
 private:
 	float previousZoomDiff;

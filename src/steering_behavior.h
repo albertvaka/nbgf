@@ -153,7 +153,7 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
     float realBoxLength = steeringEntity->radius + margin; //FIXME: Take into account current speed
 
     //this will keep track of the closest intersecting obstacle (CIB)
-    const CircleEntity* ClosestIntersectingObstacle = nullptr;
+    const T* ClosestIntersectingObstacle = nullptr;
 
     //this will be used to track the distance to the CIB
     float DistToClosestIP = Mates::MaxFloat;
@@ -161,15 +161,13 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
     //this will record the transformed local coordinates of the CIB
     vec LocalPosOfClosestObstacle;
 
-    for (const CircleEntity* obst : obstacles)
+    for (const T* obst : obstacles)
     {
-        if (obst == steeringEntity) continue;
-
-        vec to = obst->pos - steeringEntity->pos;
+        vec to = obst->Position() - steeringEntity->pos;
 
         //the bounding radius of the other is taken into account by adding it 
         //to the range
-        float range = realBoxLength + obst->radius;
+        float range = realBoxLength + obst->Radius();
 
         //if entity within range, tag for further consideration. (working in
         //distance-squared space to avoid sqrts)
@@ -177,7 +175,7 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
         {
 
             //calculate this obstacle's position in local space
-            vec LocalPos = PointToLocalSpace(obst->pos, steeringEntity->Heading(), steeringEntity->pos);
+            vec LocalPos = PointToLocalSpace(obst->Position(), steeringEntity->Heading(), steeringEntity->pos);
 
             //if the local position has a negative x value then it must lay
             //behind the agent. (in which case it can be ignored)
@@ -186,7 +184,7 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
                 //if the distance from the x axis to the object's position is less
                 //than its radius + half the width of the detection box then there
                 //is a potential intersection.
-                float ExpandedRadius = obst->radius + steeringEntity->radius;
+                float ExpandedRadius = obst->Radius() + steeringEntity->radius;
 
                 /*if (fabs(LocalPos.y) < ExpandedRadius)
                 {*/
@@ -232,13 +230,13 @@ vec SteeringBehavior::ObstacleAvoidance(const std::vector<T*>& obstacles, float 
         float multiplier = 1.0f + (realBoxLength - LocalPosOfClosestObstacle.x) / realBoxLength;
 
         //calculate the lateral force
-        SteeringForce.y = (ClosestIntersectingObstacle->radius - LocalPosOfClosestObstacle.y) * multiplier;
+        SteeringForce.y = (ClosestIntersectingObstacle->Radius() - LocalPosOfClosestObstacle.y) * multiplier;
 
         //apply a braking force proportional to the obstacles distance from
         //the SteeringEntity. 
         constexpr float BrakingWeight = 0.2f;
 
-        SteeringForce.x = (ClosestIntersectingObstacle->radius - LocalPosOfClosestObstacle.x) * BrakingWeight;
+        SteeringForce.x = (ClosestIntersectingObstacle->Radius() - LocalPosOfClosestObstacle.x) * BrakingWeight;
     }
 
     //finally, convert the steering vector from local to world space
