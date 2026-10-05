@@ -282,6 +282,13 @@
     <ClInclude Include="src\fx.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="engine\imgui_convert.h" />
+    <ClInclude Include="src\scene_intro.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tower.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vendor\glew\glew.c">
@@ -438,9 +445,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\fx.cpp">
-          <Filter>src</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\enemy.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_intro.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tower.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
